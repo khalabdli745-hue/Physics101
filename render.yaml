@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: physics101
+    runtime: static
+    buildCommand: ""
+    staticPublishPath: .
