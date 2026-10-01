@@ -4,11 +4,11 @@
  * البيانات تُحفظ في جدول Google Sheets داخل حساب المدرب فقط.
  * لا تعدّل هذا الملف؛ انسخه كاملًا كما هو.
  */
-const VERSION = 1;
+const VERSION = 2;
 const TOKEN_DAYS = 30;
 
 function doGet() {
-  return out_({ ok: true, app: 'physics101', version: VERSION, teacherReady: !!prop_('TPW'), teacherUser: !!prop_('TUSER'), ai: !!prop_('AIKEY') });
+  return out_({ ok: true, app: 'physics101', version: VERSION, teacherReady: !!prop_('TPW'), teacherUser: !!prop_('TUSER'), ai: !!prop_('AIKEY'), tts: !!prop_('TTSKEY') });
 }
 
 function doPost(e) {
@@ -128,6 +128,33 @@ function sectionName_(sid) {
 function cleanId_(v) { const s = String(v == null ? '' : v).replace(/[٠-٩]/g, function (d) { return '٠١٢٣٤٥٦٧٨٩'.indexOf(d); }).trim(); return /^demo$/i.test(s) ? 'DEMO' : s; }
 
 /* ---------------- الإجراءات ---------------- */
+/* ---------------- الصوت الطبيعي (Microsoft Azure Speech — الخطة المجانية F0) ---------------- */
+const TTS_VOICES = { 'ar-SA-HamedNeural': 'm', 'ar-SA-ZariyahNeural': 'f', 'ar-AE-HamdanNeural': 'm', 'ar-AE-FatimaNeural': 'f' };
+const TTS_EN = { m: 'en-US-GuyNeural', f: 'en-US-JennyNeural' };
+const TTS_MONTH_CAP = 480000;   // أقل من الحد المجاني الشهري (٥٠٠ ألف حرف)
+const TTS_USER_HOUR = 80;       // مقاطع جديدة لكل مستخدم في الساعة
+function xml_(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;'); }
+function ttsFolder_() {
+  const id = prop_('TTSDIR');
+  if (id) { try { return DriveApp.getFolderById(id); } catch (e) {} }
+  const f = DriveApp.createFolder('منصة فيزياء ١٠١ — ملفات الصوت');
+  props_().setProperty('TTSDIR', f.getId());
+  return f;
+}
+function ttsMonth_() {
+  const m = Utilities.formatDate(new Date(), 'UTC', 'yyyy-MM');
+  const v = String(prop_('TTSUSE') || '').split('|');
+  return { month: m, used: v[0] === m ? (+v[1] || 0) : 0 };
+}
+function ttsAddUse_(n) { const u = ttsMonth_(); props_().setProperty('TTSUSE', u.month + '|' + (u.used + n)); }
+function ttsCall_(key, region, ssml) {
+  return UrlFetchApp.fetch('https://' + region + '.tts.speech.microsoft.com/cognitiveservices/v1', {
+    method: 'post', contentType: 'application/ssml+xml; charset=utf-8', muteHttpExceptions: true,
+    headers: { 'Ocp-Apim-Subscription-Key': key, 'X-Microsoft-OutputFormat': 'audio-24khz-48kbitrate-mono-mp3', 'User-Agent': 'physics101' },
+    payload: Utilities.newBlob(ssml, 'application/ssml+xml', 'a.xml').getBytes()
+  });
+}
+
 const ACTIONS = {
   /* ===== المتدرب ===== */
   login: function (r) {
@@ -370,6 +397,61 @@ const ACTIONS = {
     props_().setProperty('AIKEY', k);
     return { ok: true, ai: true };
   },
+  tts: function (r) {
+    let who = '';
+    try { who = readToken_(r.token, 's'); } catch (e) { readToken_(r.token, 't'); who = 'TEACHER'; }
+    const key = prop_('TTSKEY'), region = prop_('TTSREGION') || 'uaenorth';
+    if (!key) return { ok: false, error: 'tts_off' };
+    const voice = TTS_VOICES[r.voice] ? String(r.voice) : 'ar-SA-HamedNeural';
+    const rate = Math.max(-30, Math.min(30, Math.round(+r.rate || 0)));
+    const segs = [], src = Array.isArray(r.segs) ? r.segs.slice(0, 40) : [];
+    let chars = 0;
+    src.forEach(function (x) {
+      if (!x) return;
+      const t = String(x.t || '').replace(/\s+/g, ' ').trim().slice(0, 1800);
+      if (!t || chars + t.length > 2000) return;
+      chars += t.length; segs.push({ l: x.l === 'en' ? 'en' : 'ar', t: t });
+    });
+    if (!segs.length) return { ok: false, error: 'empty' };
+    const sig = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, voice + '|' + rate + '|' + JSON.stringify(segs), Utilities.Charset.UTF_8)
+      .map(function (b) { return ('0' + (b & 255).toString(16)).slice(-2); }).join('');
+    const name = 'a_' + sig + '.mp3';
+    const folder = ttsFolder_();
+    const it = folder.getFilesByName(name);
+    if (it.hasNext()) return { ok: true, audio: Utilities.base64Encode(it.next().getBlob().getBytes()), cached: true };
+    const c = CacheService.getScriptCache(), ck = 'tts_' + who, n = +(c.get(ck) || 0);
+    if (who !== 'TEACHER' && n >= TTS_USER_HOUR) return { ok: false, error: 'tts_limit' };
+    if (ttsMonth_().used + chars > TTS_MONTH_CAP) return { ok: false, error: 'tts_quota' };
+    const en = TTS_EN[TTS_VOICES[voice]], pr = (rate >= 0 ? '+' : '') + rate + '%';
+    const ssml = '<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="ar-SA">' + segs.map(function (x) {
+      return '<voice name="' + (x.l === 'en' ? en : voice) + '"><prosody rate="' + pr + '">' + xml_(x.t) + '</prosody></voice>';
+    }).join('') + '</speak>';
+    const res = ttsCall_(key, region, ssml), code = res.getResponseCode();
+    if (code !== 200) return { ok: false, error: code === 401 ? 'tts_key' : code === 429 ? 'tts_busy' : code === 403 ? 'tts_quota' : 'tts_error', detail: code };
+    c.put(ck, String(n + 1), 3600);
+    ttsAddUse_(chars);
+    const blob = res.getBlob().setName(name).setContentType('audio/mpeg');
+    try { folder.createFile(blob); } catch (e) {}
+    return { ok: true, audio: Utilities.base64Encode(blob.getBytes()), cached: false };
+  },
+  tttskey: function (r) {
+    readToken_(r.token, 't');
+    const k = String(r.key || '').trim(), region = String(r.region || 'uaenorth').trim().toLowerCase();
+    if (!k) { props_().deleteProperty('TTSKEY'); return { ok: true, tts: false }; }
+    if (!/^[A-Za-z0-9]{20,100}$/.test(k)) return { ok: false, error: 'tts_bad_key' };
+    if (!/^[a-z0-9]{3,30}$/.test(region)) return { ok: false, error: 'tts_region' };
+    const res = UrlFetchApp.fetch('https://' + region + '.tts.speech.microsoft.com/cognitiveservices/voices/list', { headers: { 'Ocp-Apim-Subscription-Key': k }, muteHttpExceptions: true });
+    const code = res.getResponseCode();
+    if (code !== 200) return { ok: false, error: code === 401 ? 'tts_key' : 'tts_region', detail: code };
+    ttsFolder_();
+    props_().setProperties({ TTSKEY: k, TTSREGION: region });
+    return { ok: true, tts: true };
+  },
+  ttsinfo: function (r) {
+    readToken_(r.token, 't');
+    const u = ttsMonth_();
+    return { ok: true, tts: !!prop_('TTSKEY'), region: prop_('TTSREGION') || '', used: u.used, cap: TTS_MONTH_CAP };
+  },
   tquestions: function (r) {
     readToken_(r.token, 't');
     const sid = r.sectionId ? String(r.sectionId) : '';
@@ -486,5 +568,6 @@ function recordLogin_(st, device) {
 /** شغّل هذه الدالة مرة واحدة من المحرر لمنح الصلاحيات وإنشاء جدول البيانات */
 function setup() {
   const ss = ss_();
+  DriveApp.getRootFolder(); // صلاحية حفظ ملفات الصوت في Google Drive
   Logger.log('تم إنشاء جدول البيانات: ' + ss.getUrl());
 }

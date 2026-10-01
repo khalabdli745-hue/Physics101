@@ -386,23 +386,30 @@ function md(src){
 const TTS=(()=>{
   const ok='speechSynthesis' in window&&'SpeechSynthesisUtterance' in window;
   let voices=[],voice=null,pitch=1,opts=[],rate=store.get('p101-rate',0.95),queue=[],playing=false,btn=null,btnHTML='';
+  /* الصوت الطبيعي من الخادم (Microsoft Azure) */
+  const AZV=[['ar-SA-HamedNeural','رجل','حامد'],['ar-SA-ZariyahNeural','امرأة','زارية'],['ar-AE-HamdanNeural','رجل','حمدان'],['ar-AE-FatimaNeural','امرأة','فاطمة']];
+  const tok=()=>(AUTH&&AUTH.token)||TAUTH||'';
+  let SRV=!!(API&&tok()&&store.get('p101-srvtts',false)),az=null;
+  const valOf=o=>o.az?'az|'+o.az:o.v.name+'|'+o.p;
   const MALE=/maged|majed|tarik|tariq|naayf|hamed|hamdan|shakir|omar|fahed|zayd|ahmed|khalid|male|رجل/i,FEMALE=/laila|layla|mariam|maryam|hoda|salma|zariyah|amina|fatima|noura|reem|female|امرأة/i;
   const gender=v=>MALE.test(v.name)?'رجل':FEMALE.test(v.name)?'امرأة':'';
-  function pick(){if(!ok)return;voices=speechSynthesis.getVoices().filter(v=>/^ar/i.test(v.lang));
+  function pick(){voices=ok?speechSynthesis.getVoices().filter(v=>/^ar/i.test(v.lang)):[];
     const q=v=>(/enhanced|premium|neural|natural|محس|ممتاز/i.test(v.name)?4:0)+(/^ar[-_]SA/i.test(v.lang)?2:0)+(/google|microsoft/i.test(v.name)?1:0);voices.sort((a,b)=>q(b)-q(a));
     opts=voices.map((v,i)=>({v,p:1,g:gender(v),label:(gender(v)||'صوت '+(i+1))+(/enhanced|premium|neural|natural/i.test(v.name)?' ⭐ عالي الجودة':'')+' — '+v.name.replace(/\s*\(.*\)$/,'').replace(/^(Microsoft|Google)\s*/,'').slice(0,20)}));
     if(voices.length){const base=voices[0];
       if(!opts.some(o=>o.g==='رجل'))opts.push({v:base,p:0.85,g:'رجل',label:'رجل — صوت أعمق'});
       if(!opts.some(o=>o.g==='امرأة'))opts.push({v:base,p:1.22,g:'امرأة',label:'امرأة — صوت أنعم'});}
-    const want=store.get('p101-voice','');const o=opts.find(o=>o.v.name+'|'+o.p===want)||opts[0];
-    voice=o?o.v:null;pitch=o?o.p:1;}
+    if(SRV)opts=AZV.map(([n,g,l])=>({az:n,g,label:l+' ⭐ صوت طبيعي'})).concat(opts);
+    const want=store.get('p101-voice','');const o=opts.find(o=>valOf(o)===want)||opts[0];
+    az=o&&o.az||null;if(o&&!o.az){voice=o.v;pitch=o.p}else{voice=voices[0]||null;pitch=o&&o.az&&/Zariyah|Fatima/.test(o.az)?1.2:1}}
   let enVoices=[];
   const EN_M=/alex|daniel|fred|aaron|arthur|tom|oliver|rishi|evan|nathan|guy|david|mark|james|male/i,EN_F=/samantha|karen|moira|tessa|victoria|serena|ava|allison|susan|zoe|nicky|kate|aria|jenny|zira|female/i;
-  function pickEn(){enVoices=speechSynthesis.getVoices().filter(v=>/^en/i.test(v.lang));
+  function pickEn(){if(!ok)return;enVoices=speechSynthesis.getVoices().filter(v=>/^en/i.test(v.lang));
     const q=v=>(/enhanced|premium|neural|natural/i.test(v.name)?4:0)+(/^en[-_](US|GB)/i.test(v.lang)?2:0)+(v.localService?1:0);enVoices.sort((a,b)=>q(b)-q(a))}
   function enVoice(){if(!enVoices.length)return null;const male=pitch<1||MALE.test(voice?voice.name:'');
     return enVoices.find(v=>(male?EN_M:EN_F).test(v.name))||enVoices[0]}
-  if(ok){pick();pickEn();speechSynthesis.onvoiceschanged=()=>{pick();pickEn();refreshNotes()}}
+  pick();if(ok){pickEn();speechSynthesis.onvoiceschanged=()=>{pick();pickEn();refreshNotes()}}
+  if(API&&tok())fetch(API,{redirect:'follow'}).then(r=>r.json()).then(j=>{const v=!!(j&&j.tts);store.set('p101-srvtts',v);if(v!==SRV){SRV=v;pick();refreshNotes()}}).catch(()=>{});
   const SUP={'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9'};
   const SUB={'₀':' صفر','₁':' واحد','₂':' اثنين','₃':' ثلاثة'};
   const UNIT=[
@@ -518,7 +525,45 @@ const TTS=(()=>{
     for(let x of sents){while(x.length>240){let i=x.lastIndexOf('،',240)>80?x.lastIndexOf('،',240)+1:x.lastIndexOf(' ',240);if(i<20)i=240;out.push((cur+' '+x.slice(0,i)).trim());cur='';x=x.slice(i).trim()}
       if((cur+' '+x).length>240){out.push(cur.trim());cur=x}else cur=(cur+' '+x).trim()}
     if(cur)out.push(cur);return out.filter(Boolean)}
-  function stop(){if(!ok)return;queue=[];playing=false;speechSynthesis.cancel();if(btn){btn.classList.remove('on');btn.innerHTML=btnHTML}btn=null}
+  function stop(){GEN++;queue=[];playing=false;if(ok)speechSynthesis.cancel();if(AUD){AUD.onended=AUD.onerror=null;try{AUD.pause()}catch(e){}}
+    if(btn){btn.classList.remove('on');btn.innerHTML=btnHTML}btn=null}
+  /* ===== تشغيل الصوت الطبيعي: نرسل المقاطع للخادم، والخادم يحفظ كل مقطع فلا يُولَّد مرة أخرى ===== */
+  let GEN=0,AUD=null,warned=false;const MEM=new Map();
+  function note(m){const d=document.createElement('div');d.textContent=m;d.setAttribute('role','status');
+    d.style.cssText='position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#1f2937;color:#fff;padding:10px 16px;border-radius:10px;z-index:99;font-size:14px;max-width:90vw;text-align:center;box-shadow:0 4px 14px #0004';
+    document.body.appendChild(d);setTimeout(()=>d.remove(),4500)}
+  const SILENT='data:audio/mpeg;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjYwLjE2LjEwMAAAAAAAAAAAAAAA//OEwAAAAAAAAAAAAEluZm8AAAAPAAAACQAABCAARUVFRUVFRUVFRUVdXV1dXV1dXV1dXXR0dHR0dHR0dHR0i4uLi4uLi4uLi4uioqKioqKioqKiorq6urq6urq6urq60dHR0dHR0dHR0dHo6Ojo6Ojo6Ojo6P//////////////AAAAAExhdmM2MC4zMQAAAAAAAAAAAAAAACQD8AAAAAAAAAQgDeb0IwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//NExAAAAANIAAAAAExBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMu//NExFMAAANIAAAAADEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMu//NExKYAAANIAAAAADEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMu//NExKwAAANIAAAAADEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMu//NExKwAAANIAAAAADEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMu//NExKwAAANIAAAAADEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMu//NExKwAAANIAAAAADEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//NExKwAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//NExKwAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV';
+  function chunksAz(text){
+    const items=[];for(const sg of segments(text)){if(sg.l==='en')items.push(sg);else split(sg.t).forEach(t=>items.push({l:'ar',t}))}
+    const out=[];let cur=[],n=0;
+    for(const it of items){if(cur.length&&(n+it.t.length>900||cur.length>=30)){out.push(cur);cur=[];n=0}cur.push(it);n+=it.t.length}
+    if(cur.length)out.push(cur);return out}
+  function getAz(segs,voiceName){const r=Math.round((rate-1)*100),k=voiceName+'|'+r+'|'+JSON.stringify(segs);
+    if(MEM.has(k))return Promise.resolve(MEM.get(k));
+    return SYNC.post({a:'tts',token:tok(),voice:voiceName,rate:r,segs}).then(x=>{if(!x||!x.ok)throw x||{};
+      const bin=atob(x.audio),u8=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u8[i]=bin.charCodeAt(i);
+      const url=URL.createObjectURL(new Blob([u8],{type:'audio/mpeg'}));MEM.set(k,url);
+      if(MEM.size>60){const f=MEM.keys().next().value;URL.revokeObjectURL(MEM.get(f));MEM.delete(f)}return url})}
+  function playUrl(url,g){return new Promise((res,rej)=>{if(g!==GEN)return res();AUD.onended=()=>res();AUD.onerror=()=>rej({error:'audio'});AUD.src=url;const p=AUD.play();if(p&&p.catch)p.catch(rej)})}
+  async function playAz(text,b){const g=GEN;
+    if(!AUD){AUD=new Audio();AUD.preload='auto'}
+    AUD.src=SILENT;try{const p=AUD.play();if(p&&p.catch)p.catch(()=>{})}catch(e){}
+    const chunks=chunksAz(text);if(!chunks.length)return stop();
+    let i=0;
+    try{let pr=getAz(chunks[0],az);
+      for(i=0;i<chunks.length;i++){
+        if(b&&g===GEN&&i===0)b.innerHTML='⏳ تجهيز الصوت…';
+        const url=await pr;if(g!==GEN)return;
+        if(b&&i===0)b.innerHTML='■ إيقاف';
+        pr=i+1<chunks.length?getAz(chunks[i+1],az):null;if(pr)pr.catch(()=>{});
+        await playUrl(url,g);if(g!==GEN)return}
+      if(g===GEN)stop()}
+    catch(err){if(g!==GEN)return;
+      const e=err&&err.error;
+      if(!warned){warned=true;note(e==='tts_quota'?'انتهت الحصة الشهرية للصوت الطبيعي، سيُستخدم صوت الجهاز.':e==='tts_limit'?'استخدمت الصوت الطبيعي كثيرًا هذه الساعة، سيُستخدم صوت الجهاز مؤقتًا.':'تعذّر الصوت الطبيعي الآن، سيُستخدم صوت الجهاز.')}
+      if(!ok)return stop();
+      queue=[];chunks.slice(i).forEach(c=>c.forEach(x=>{if(x.l==='en')queue.push(x);else split(x.t).forEach(t=>queue.push({l:'ar',t}))}));
+      if(b)b.innerHTML='■ إيقاف';next()}}
   function next(){if(!queue.length){stop();return}
     const item=queue.shift();const en=item.l==='en';const ev=en?enVoice():null;
     const u=new SpeechSynthesisUtterance(item.t);
@@ -531,20 +576,23 @@ const TTS=(()=>{
       const parts=split(s.t);const L=out[out.length-1];
       parts.forEach((p,i)=>{if(i===0&&L&&L.l==='ar'&&(L.t+' '+p).length<=240)L.t+=' '+p;else out.push({l:'ar',t:p})})}
     return out}
-  function play(text,b){if(!ok)return;const same=btn===b;stop();if(same)return;
-    btn=b;btnHTML=b.innerHTML;b.classList.add('on');b.innerHTML='■ إيقاف';queue=build(text);playing=true;next()}
+  function play(text,b){const useAz=SRV&&az&&tok();if(!ok&&!useAz)return;const same=btn===b;stop();if(same)return;
+    btn=b;btnHTML=b.innerHTML;b.classList.add('on');b.innerHTML='■ إيقاف';playing=true;
+    if(useAz)return playAz(text,b);
+    queue=build(text);next()}
   function voiceSelect(){
     const s=document.createElement('select');s.className='voiceSel';s.setAttribute('aria-label','اختر الصوت');
-    const fill=()=>{s.innerHTML='';opts.forEach(op=>{const o=document.createElement('option');o.value=op.v.name+'|'+op.p;
-      o.textContent=(op.g==='رجل'?'👨 ':op.g==='امرأة'?'👩 ':'🔈 ')+op.label;if(voice&&op.v.name===voice.name&&op.p===pitch)o.selected=true;s.appendChild(o)});
+    const fill=()=>{s.innerHTML='';opts.forEach(op=>{const o=document.createElement('option');o.value=valOf(op);
+      o.textContent=(op.g==='رجل'?'👨 ':op.g==='امرأة'?'👩 ':'🔈 ')+op.label;if(op.az?op.az===az:(!az&&voice&&op.v.name===voice.name&&op.p===pitch))o.selected=true;s.appendChild(o)});
       s.hidden=!opts.length};
     fill();s._fill=fill;
-    s.onchange=()=>{const op=opts.find(o=>o.v.name+'|'+o.p===s.value);if(op){voice=op.v;pitch=op.p}store.set('p101-voice',s.value);document.querySelectorAll('.voiceSel').forEach(x=>{if(x!==s)x.value=s.value});
-      stop();const u=new SpeechSynthesisUtterance('مرحبًا، هذا هو الصوت المختار');u.lang=voice.lang;u.voice=voice;u.rate=rate;u.pitch=pitch;speechSynthesis.speak(u)};
+    s.onchange=()=>{const op=opts.find(o=>valOf(o)===s.value);if(op){az=op.az||null;if(!op.az){voice=op.v;pitch=op.p}}store.set('p101-voice',s.value);document.querySelectorAll('.voiceSel').forEach(x=>{if(x!==s)x.value=s.value});
+      stop();if(az){play('مرحبًا، هذا هو الصوت المختار لشرح الدروس.',document.createElement('button'));return}
+      if(!ok||!voice)return;const u=new SpeechSynthesisUtterance('مرحبًا، هذا هو الصوت المختار');u.lang=voice.lang;u.voice=voice;u.rate=rate;u.pitch=pitch;speechSynthesis.speak(u)};
     return s}
   function controls(getText,opt={}){
     const w=document.createElement('div');w.className='speak'+(opt.compact?' compact':'');
-    if(!ok){if(!opt.compact)w.innerHTML='<span class="note">المتصفح لا يدعم القراءة الصوتية.</span>';return w}
+    if(!ok&&!SRV){if(!opt.compact)w.innerHTML='<span class="note">المتصفح لا يدعم القراءة الصوتية.</span>';return w}
     const b=document.createElement('button');b.innerHTML=opt.label||'🔊 استمع';b.setAttribute('aria-label',opt.aria||'استمع');b.onclick=()=>play(getText(),b);
     w.appendChild(b);
     if(!opt.compact){
@@ -554,10 +602,10 @@ const TTS=(()=>{
       const n=document.createElement('span');n.className='note ttsNote';
       w.append(s,voiceSelect(),n)}
     return w}
-  function refreshNotes(){document.querySelectorAll('.ttsNote').forEach(n=>{n.textContent=voice?'':'لا يوجد صوت عربي على هذا الجهاز'});
+  function refreshNotes(){document.querySelectorAll('.ttsNote').forEach(n=>{n.textContent=voice||SRV?'':'لا يوجد صوت عربي على هذا الجهاز'});
     document.querySelectorAll('.voiceSel').forEach(s=>s._fill&&s._fill());
-    document.querySelectorAll('.ttsWarn').forEach(n=>n.hidden=!!voice||!ok)}
-  return{play,stop,controls,refreshNotes,spoken,segments,build,has:()=>!!voice,ok}
+    document.querySelectorAll('.ttsWarn').forEach(n=>n.hidden=!!voice||SRV||!ok);document.querySelectorAll('.ttsTip').forEach(n=>n.hidden=!!(SRV&&az))}
+  return{play,stop,controls,refreshNotes,spoken,segments,build,chunksAz,has:()=>!!voice||SRV,ok,busy:()=>!!(playing||(AUD&&!AUD.paused))}
 })();
 const TTS_HELP=`<details class="ttsWarn" hidden><summary><b>لا يعمل الصوت؟ اضغط هنا لتفعيل الصوت العربي على جهازك</b></summary>آيفون/آيباد: الإعدادات ← تسهيلات الاستخدام ← المحتوى المنطوق ← الأصوات ← العربية. أندرويد: الإعدادات ← تحويل النص إلى كلام ← محرك Google ← تثبيت العربية. ويندوز: الإعدادات ← الوقت واللغة ← الكلام ← إضافة صوت عربي. متصفح Chrome على الكمبيوتر غالبًا يحتوي صوتًا عربيًا جاهزًا.</details><details class="ttsTip"><summary>🎧 لصوت أوضح وأكثر سلاسة</summary>آيفون/آيباد: الإعدادات ← تسهيلات الاستخدام ← المحتوى المنطوق ← الأصوات ← العربية ← نزّل صوتًا مكتوبًا بجانبه <b>(محسّن)</b> أو <b>(ممتاز)</b> مثل «ماجد»، ثم أعد فتح المنصة واختره من قائمة الأصوات (يظهر بجانبه ⭐). الصوت المحسّن أنقى بكثير من الصوت الافتراضي.</details>`;
 
@@ -926,7 +974,7 @@ const SYNC=(()=>{
   function result(kind,lessonKey,lessonTitle,score,max,detail){if(!API||!AUTH)return;const q=queue();q.push({kind,lessonKey,lessonTitle,score,max,detail:detail||''});store.set('p101-queue',q.slice(-200));flush()}
   function beat(final){if(!API||!AUTH)return;const sec=Math.round(active);if(sec<5&&!final)return;active=0;post({a:'hb',token:AUTH.token,sec:Math.min(sec,180)},final).catch(()=>{})}
   ['pointerdown','keydown','scroll','touchstart'].forEach(e=>addEventListener(e,()=>{lastAct=Date.now()},{passive:true,capture:true}));
-  setInterval(()=>{if(document.visibilityState==='visible'&&(Date.now()-lastAct<5*60e3||speechSynthesis&&speechSynthesis.speaking))active+=1},1000);
+  setInterval(()=>{if(document.visibilityState==='visible'&&(Date.now()-lastAct<5*60e3||TTS.busy()))active+=1},1000);
   setInterval(()=>{beat();flush()},60e3);
   document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')beat(true);else lastAct=Date.now()});
   function logout(expired){try{localStorage.removeItem('p101-auth')}catch(e){}if(!expired)beat(true);location.reload()}
