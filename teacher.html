@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>لوحة المدرب — فيزياء ١٠١</title>
+<meta name="theme-color" content="#0B7A70">
+<meta name="robots" content="noindex">
+<link rel="icon" href="icon.svg">
+<link rel="apple-touch-icon" href="icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#F4F6F8;--panel:#FFFFFF;--ink:#172033;--muted:#5B6479;--line:#DDE2EA;--soft:#EEF2F6;--accent:#0B7A70;--accent-soft:#E0F2EF;--accent-ink:#fff;--good:#1E7A3C;--mid:#A86A00;--bad:#B42330;--warnc:#C4542B;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#11151D;--panel:#181D27;--ink:#E7EAF0;--muted:#9AA3B5;--line:#2A3140;--soft:#222935;--accent:#3CC2B2;--accent-soft:#16312F;--accent-ink:#0B1413;--good:#5FCB85;--mid:#E5B454;--bad:#F2737E;--warnc:#F08A62;color-scheme:dark}}
+:root[data-theme="dark"]{--paper:#11151D;--panel:#181D27;--ink:#E7EAF0;--muted:#9AA3B5;--line:#2A3140;--soft:#222935;--accent:#3CC2B2;--accent-soft:#16312F;--accent-ink:#0B1413;--good:#5FCB85;--mid:#E5B454;--bad:#F2737E;--warnc:#F08A62;color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}[hidden]{display:none!important}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"IBM Plex Sans Arabic",Tahoma,"Segoe UI",Arial,sans-serif;font-size:15.5px;line-height:1.6}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:var(--accent)}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+header{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 16px;padding-top:calc(10px + env(safe-area-inset-top,0px));background:var(--panel);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+header b{font-size:18px}
+header .sp{margin-inline-start:auto;display:flex;gap:6px;flex-wrap:wrap}
+.btn{border:0;background:var(--accent);color:var(--accent-ink);border-radius:8px;padding:7px 14px;font-weight:600;font-size:14.5px;white-space:nowrap}
+.btn.ghost{background:var(--soft);color:var(--ink)}
+.btn.danger{background:transparent;color:var(--bad);border:1px solid var(--bad)}
+.btn.sm{padding:4px 10px;font-size:13.5px}
+.btn:disabled{opacity:.5;cursor:default}
+nav.tabs{display:flex;gap:2px;overflow-x:auto;background:var(--panel);border-bottom:1px solid var(--line);padding:0 10px;scrollbar-width:none;position:sticky;top:var(--hh,57px);z-index:4}
+nav.tabs button{border:0;background:none;padding:10px 14px;font-weight:600;color:var(--muted);border-bottom:3px solid transparent;white-space:nowrap}
+nav.tabs button[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent)}
+main{max-width:1200px;margin:0 auto;padding:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px}
+.card h2{margin:0 0 6px;font-size:17px}
+.sub{color:var(--muted);font-size:14px;margin:0 0 10px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+input[type=text],input[type=password],input[type=search],select{border:1.5px solid var(--line);border-radius:8px;padding:7px 10px;background:var(--paper);min-width:0}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.stat small{color:var(--muted);display:block;font-size:13px}
+.stat b{font-size:24px;font-variant-numeric:tabular-nums}
+.tableWrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th{background:var(--soft);font-weight:600;position:sticky;top:0;cursor:pointer;user-select:none}
+th.sorted::after{content:" ▾"}th.sorted.asc::after{content:" ▴"}
+tbody tr{cursor:pointer}tbody tr:hover{background:var(--accent-soft)}
+td.num{font-variant-numeric:tabular-nums;direction:ltr;text-align:right}
+.pct{display:inline-block;min-width:46px;text-align:center;border-radius:6px;padding:1px 6px;font-weight:600;font-variant-numeric:tabular-nums}
+.pct.g{background:color-mix(in srgb,var(--good) 15%,transparent);color:var(--good)}
+.pct.m{background:color-mix(in srgb,var(--mid) 18%,transparent);color:var(--mid)}
+.pct.b{background:color-mix(in srgb,var(--bad) 14%,transparent);color:var(--bad)}
+.pct.n{color:var(--muted)}
+.tag{font-size:12px;border-radius:999px;padding:1px 8px;background:var(--soft);color:var(--muted)}
+.tag.warn{background:color-mix(in srgb,var(--mid) 18%,transparent);color:var(--mid)}
+.bars{display:grid;gap:6px}
+.bar{display:grid;grid-template-columns:minmax(90px,170px) 1fr 52px;gap:8px;align-items:center;font-size:13.5px}
+.bar .lab{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar .trk{height:14px;background:var(--soft);border-radius:4px;overflow:hidden}
+.bar .fil{height:100%;border-radius:4px;background:var(--accent)}
+.bar .fil.g{background:var(--good)}.bar .fil.m{background:var(--mid)}.bar .fil.b{background:var(--bad)}
+.bar .val{font-variant-numeric:tabular-nums;text-align:left;direction:ltr}
+.days{display:flex;align-items:flex-end;gap:2px;height:120px;border-bottom:1px solid var(--line);padding-top:6px}
+.days div{flex:1;background:var(--accent);border-radius:3px 3px 0 0;min-height:1px;position:relative}
+.days div:hover::after{content:attr(data-t);position:absolute;bottom:100%;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--paper);font-size:12px;padding:2px 6px;border-radius:4px;white-space:nowrap}
+.dayAxis{display:flex;justify-content:space-between;color:var(--muted);font-size:12px;margin-top:4px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px}
+.qrow{border-bottom:1px solid var(--line);padding:8px 0;font-size:14px}
+.qrow small{color:var(--muted)}
+.empty{color:var(--muted);text-align:center;padding:30px 10px}
+.msg{font-size:14px;margin:8px 0 0}.msg.bad{color:var(--bad)}.msg.good{color:var(--good)}
+/* login */
+.auth{min-height:100vh;display:grid;place-items:center;padding:20px}
+.auth form{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:24px;width:100%;max-width:380px;display:grid;gap:12px}
+.auth h1{margin:0;font-size:21px;text-align:center}
+.auth label{display:grid;gap:4px;font-weight:600;font-size:14px}
+.auth input{font-size:17px;padding:10px;text-align:center;direction:ltr}
+/* drawer */
+.drawer{position:fixed;inset:0;z-index:20;background:rgba(0,0,0,.4);display:flex;justify-content:flex-start}
+.drawer>div{background:var(--paper);width:min(720px,100%);height:100%;overflow:auto;padding:16px;padding-top:calc(16px + env(safe-area-inset-top,0px))}
+.dhead{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px}
+.dhead h2{margin:0;font-size:20px}
+.dhead .x{margin-inline-start:auto}
+.unitGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}
+.unitGrid div{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:13px}
+.unitGrid b{display:block;font-size:13.5px}
+details.res{border-bottom:1px solid var(--line);padding:8px 0}
+details.res summary{cursor:pointer;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+details.res .when{color:var(--muted);font-size:12.5px;margin-inline-start:auto}
+.det{font-size:13.5px;margin:6px 0 0;padding-inline-start:16px}
+.det li{margin:2px 0}.det .ok{color:var(--good)}.det .no{color:var(--bad)}
+.drop{border:2px dashed var(--line);border-radius:12px;padding:22px;text-align:center;color:var(--muted)}
+.drop.on{border-color:var(--accent);background:var(--accent-soft)}
+.credit{text-align:center;font-size:13px;color:var(--muted);padding:14px 10px 6px;line-height:1.6}
+.credit b{color:var(--accent);font-weight:600}
+.toast{position:fixed;bottom:calc(16px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:9px 16px;border-radius:10px;font-size:14px;z-index:50;max-width:90vw}
+.spin{display:inline-block;width:16px;height:16px;border:2px solid var(--line);border-top-color:var(--accent);border-radius:50%;animation:sp 1s linear infinite;vertical-align:middle}
+@keyframes sp{to{transform:rotate(360deg)}}
+@media (max-width:640px){main{padding:10px}header b{font-size:16px}.stat b{font-size:20px}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="config.js"></script>
+<script src="data.js"></script>
+<script src="excel.js"></script>
+<script>
+const API=(window.P101_API||'').trim();
+const UNITS=window.UNITS||[];
+const ORD=['الأولى','الثانية','الثالثة','الرابعة','الخامسة'];
+const LESSONS=[];UNITS.forEach((u,ui)=>u.l.forEach((l,li)=>LESSONS.push({k:ui+'-'+li,u:ui,t:l.t})));
+const LT=Object.fromEntries(LESSONS.map(x=>[x.k,x.t]));
+const TOTAL=LESSONS.length;
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const AR=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+const ls={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
+let TOKEN=ls.get('p101-tauth',null);
+let DATA=null,tab=ls.get('p101-ttab','students'),secFilter=ls.get('p101-tsec','all'),sortBy={k:'name',asc:true},q='';
+const ERR={bad_key:'المفتاح غير صحيح الشكل. يبدأ بـ gsk_',ai_key:'المفتاح غير صالح أو منتهي. أنشئ مفتاحًا جديدًا.',wrong_user:'اسم المستخدم غير صحيح.',short_user:'اسم المستخدم قصير (٣ أحرف على الأقل).',bad_user:'اختر اسم مستخدم آخر (ليس demo ولا أرقامًا فقط).',wrong_password:'كلمة المرور غير صحيحة.',short_password:'كلمة المرور قصيرة (٦ أحرف على الأقل).',already_set:'تم إنشاء كلمة مرور المدرب مسبقًا. استخدم «دخول».',not_setup:'لم تُنشأ كلمة مرور المدرب بعد.',section_not_empty:'لا يمكن حذف شعبة فيها متدربون. انقلهم أو احذفهم أولًا.',name_required:'اكتب اسم الشعبة.',not_found:'غير موجود.',auth:'انتهت الجلسة، سجّل الدخول مرة أخرى.'};
+const errText=e=>ERR[e]||('حدث خطأ: '+e);
+function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2600)}
+async function api(o){const r=await fetch(API,{method:'POST',body:JSON.stringify(o),redirect:'follow'});const j=await r.json();if(j.error==='auth'&&o.token){ls.del('p101-tauth');TOKEN=null;toast(ERR.auth);boot()}return j}
+const xd=d=>{if(!d)return '';const x=new Date(d),z=n=>String(n).padStart(2,'0');return `${x.getFullYear()}-${z(x.getMonth()+1)}-${z(x.getDate())} ${z(x.getHours())}:${z(x.getMinutes())}`};
+const fmtTime=s=>{s=+s||0;const h=Math.floor(s/3600),m=Math.round(s%3600/60);return h?`${h} س ${m} د`:`${m} د`};
+const fmtDate=d=>{if(!d)return '—';const x=new Date(d);return x.toLocaleDateString('ar-SA-u-ca-gregory',{day:'numeric',month:'short'})+' '+x.toLocaleTimeString('ar-SA',{hour:'2-digit',minute:'2-digit'})};
+const pctCls=v=>v==null?'n':v>=80?'g':v>=50?'m':'b';
+const pct=v=>`<span class="pct ${pctCls(v)}">${v==null?'—':Math.round(v)+'٪'}</span>`;
+const avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null;
+function probByLesson(prob){const g={};Object.entries(prob||{}).forEach(([k,v])=>{const l=k.split('.')[0];(g[l]=g[l]||[]).push(+v)});const o={};Object.entries(g).forEach(([l,a])=>o[l]=avg(a));return o}
+function enrich(s){const pl=probByLesson(s.prob);s.quizAvg=avg(Object.values(s.quiz||{}).map(Number));s.probAvg=avg(Object.values(pl));s.probL=pl;s.doneN=(s.done||[]).length;s.progress=Math.round(s.doneN/TOTAL*100);
+  const both=[s.quizAvg,s.probAvg].filter(x=>x!=null);s.overall=both.length?avg(both):null;return s}
+const secName=id=>(DATA&&DATA.sections.find(s=>s.id===id)||{}).name||'بدون شعبة';
+
+/* ---------- المصادقة ---------- */
+function boot(){
+  const root=$('#root');
+  if(!API){root.innerHTML=`<div class="auth"><div class="card" style="max-width:420px"><h2>لم يتم ربط المنصة بعد</h2><p class="sub">لاستخدام لوحة المدرب، اربط المنصة بجدول Google مرة واحدة من صفحة الإعداد.</p><a class="btn" href="setup.html">افتح صفحة الإعداد</a></div></div>`;return}
+  if(!TOKEN)return authScreen();
+  root.innerHTML=`<header><b>لوحة المدرب</b><span class="tag" id="sheetLink"></span><div class="sp">
+    <button class="btn ghost sm" id="reload">↻ تحديث</button><a class="btn ghost sm" href="index.html">المنصة</a><button class="btn ghost sm" id="logout">خروج</button></div></header>
+  <nav class="tabs" role="tablist">${[['students','المتدربون والدرجات'],['stats','الإحصائيات'],['ai','أسئلة المساعد الذكي'],['sections','الشعب'],['import','استيراد Excel'],['export','تصدير Excel'],['demo','حسابي التجريبي'],['settings','الإعدادات']].map(([k,n])=>`<button role="tab" data-t="${k}" aria-selected="${tab===k}">${n}</button>`).join('')}</nav>
+  <main id="main"><p class="empty"><span class="spin"></span> جارٍ تحميل البيانات…</p></main>`;
+  document.documentElement.style.setProperty('--hh',$('header').offsetHeight+'px');
+  document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>{tab=b.dataset.t;ls.set('p101-ttab',tab);document.querySelectorAll('nav.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b));draw()});
+  $('#reload').onclick=()=>load();
+  $('#logout').onclick=()=>{ls.del('p101-tauth');TOKEN=null;boot()};
+  load();
+}
+async function authScreen(){
+  const root=$('#root');
+  root.innerHTML=`<div class="auth"><form id="af"><h1>لوحة المدرب</h1><p class="sub" id="asub" style="text-align:center"><span class="spin"></span></p>
+    <label>اسم المستخدم<input type="text" id="u1" autocomplete="username" autocapitalize="off" autocorrect="off" spellcheck="false" required></label>
+    <label id="l1">كلمة المرور<input type="password" id="p1" autocomplete="current-password" required></label>
+    <label id="l2" hidden>أعد كتابة كلمة المرور<input type="password" id="p2" autocomplete="new-password"></label>
+    <p class="msg" id="am"></p><button class="btn" id="ab" type="submit" disabled>دخول</button><a href="index.html" style="text-align:center;font-size:13.5px">العودة إلى المنصة</a><div class="credit">إعداد وتطوير المدرب / <b>خليل موسى المالكي</b></div></form></div>`;
+  let ready=true;
+  try{const r=await fetch(API).then(r=>r.json());ready=!!r.teacherReady}catch(e){$('#asub').textContent='تعذّر الاتصال بالخادم. تحقق من الرابط في config.js أو من الإنترنت.';return}
+  if(!ready){$('#asub').textContent='أول دخول: أنشئ حساب المدرب. اختر اسم مستخدم (٣ أحرف إنجليزية على الأقل) وكلمة مرور (٦ أحرف على الأقل) واحفظهما جيدًا.';$('#l2').hidden=false;$('#p1').autocomplete='new-password';$('#ab').textContent='إنشاء حساب المدرب والدخول'}
+  else $('#asub').textContent='أدخل اسم المستخدم وكلمة المرور';
+  $('#ab').disabled=false;
+  $('#af').onsubmit=async e=>{e.preventDefault();const pw=$('#p1').value;$('#ab').disabled=true;$('#am').className='msg';$('#am').textContent='جارٍ التحقق…';
+    if(!ready&&pw!==$('#p2').value){$('#am').className='msg bad';$('#am').textContent='كلمتا المرور غير متطابقتين.';$('#ab').disabled=false;return}
+    try{const r=await api({a:ready?'tlogin':'tsetup',user:$('#u1').value,pw});if(r.ok){TOKEN=r.token;ls.set('p101-tauth',TOKEN);boot()}else{$('#am').className='msg bad';$('#am').textContent=errText(r.error);$('#ab').disabled=false}}
+    catch(e){$('#am').className='msg bad';$('#am').textContent='تعذّر الاتصال بالخادم.';$('#ab').disabled=false}};
+}
+async function load(){
+  const m=$('#main');if(!DATA)m.innerHTML='<p class="empty"><span class="spin"></span> جارٍ تحميل البيانات…</p>';
+  try{const r=await api({a:'tdata',token:TOKEN});if(!r.ok){if(r.error!=='auth')m.innerHTML=`<p class="empty">${esc(errText(r.error))}</p>`;return}
+    DATA=r;DATA.students.forEach(enrich);STATS=null;
+    $('#sheetLink').innerHTML=r.sheetUrl?`<a href="${esc(r.sheetUrl)}" target="_blank" rel="noopener">جدول Google ↗</a>`:'';
+    draw()}catch(e){m.innerHTML='<p class="empty">تعذّر الاتصال بالخادم. تحقق من الإنترنت ثم اضغط «تحديث».</p>'}
+}
+function draw(){if(!DATA)return;({students:drawStudents,stats:drawStats,ai:drawAI,sections:drawSections,import:drawImport,export:drawExport,demo:drawDemo,settings:drawSettings}[tab]||drawStudents)()}
+
+/* ---------- المتدربون ---------- */
+function filtered(){return DATA.students.filter(s=>(secFilter==='all'||s.sectionId===secFilter)&&(!q||s.name.includes(q)||s.id.includes(q)))}
+function drawStudents(){
+  const m=$('#main'),list=filtered();
+  const opts=`<option value="all">كل الشعب (${AR(DATA.students.length)})</option>`+DATA.sections.map(s=>`<option value="${esc(s.id)}" ${secFilter===s.id?'selected':''}>${esc(s.name)} (${AR(DATA.students.filter(x=>x.sectionId===s.id).length)})</option>`).join('');
+  const real=list.filter(s=>s.id!=='DEMO');const logged=real.filter(s=>s.loginCount>0);
+  const qa=avg(real.map(s=>s.quizAvg).filter(x=>x!=null)),pa=avg(real.map(s=>s.probAvg).filter(x=>x!=null));
+  const tt=real.reduce((a,s)=>a+s.totalSec,0);
+  const cols=[['#',''],['id','الرقم'],['name','الاسم'],['sectionId','الشعبة'],['loginCount','مرات الدخول'],['lastLogin','آخر دخول'],['totalSec','الوقت'],['quizAvg','الاختبارات'],['probAvg','التمارين'],['overall','المعدل'],['doneN','الدروس'],['hasPw','الحساب']];
+  const sorted=list.slice().sort((a,b)=>{const k=sortBy.k;let x=a[k],y=b[k];if(k==='sectionId'){x=secName(x);y=secName(y)}
+    if(x==null)x=-1;if(y==null)y=-1;const c=typeof x==='string'?x.localeCompare(y,'ar'):x-y;return sortBy.asc?c:-c});
+  m.innerHTML=`<div class="row" style="margin-bottom:12px"><select id="sf">${opts}</select><input type="search" id="qs" placeholder="بحث بالاسم أو الرقم" value="${esc(q)}" style="flex:1;min-width:160px"><button class="btn sm" id="addSt">+ متدرب</button></div>
+  <div class="stats"><div class="stat"><small>المتدربون</small><b>${AR(real.length)}</b></div><div class="stat"><small>دخلوا المنصة</small><b>${AR(logged.length)}</b></div>
+  <div class="stat"><small>متوسط الاختبارات</small><b>${qa==null?'—':AR(Math.round(qa))+'٪'}</b></div><div class="stat"><small>متوسط التمارين</small><b>${pa==null?'—':AR(Math.round(pa))+'٪'}</b></div><div class="stat"><small>مجموع وقت الاستخدام</small><b style="font-size:18px">${fmtTime(tt)}</b></div></div>
+  ${list.length?`<div class="tableWrap"><table><thead><tr>${cols.map(([k,n])=>`<th data-k="${k}" class="${sortBy.k===k?'sorted'+(sortBy.asc?' asc':''):''}">${n}</th>`).join('')}</tr></thead><tbody>
+  ${sorted.map((s,i)=>`<tr data-id="${esc(s.id)}"><td class="num">${i+1}</td><td class="num">${esc(s.id)}</td><td>${esc(s.name)}</td><td>${esc(secName(s.sectionId))}</td><td class="num">${s.loginCount}</td><td>${fmtDate(s.lastLogin)}</td><td>${fmtTime(s.totalSec)}</td><td>${pct(s.quizAvg)}</td><td>${pct(s.probAvg)}</td><td>${pct(s.overall)}</td><td class="num">${s.doneN} / ${TOTAL}</td><td>${s.hasPw?'<span class="tag">مفعّل</span>':'<span class="tag warn">لم يدخل</span>'}</td></tr>`).join('')}
+  </tbody></table></div><p class="sub" style="margin-top:8px">نسبة الاختبارات والتمارين = متوسط أفضل نتيجة للمتدرب في كل درس حلّه. اضغط على أي متدرب لعرض التفاصيل.</p>`
+  :`<div class="card empty">لا يوجد متدربون${secFilter!=='all'?' في هذه الشعبة':''}. أضفهم من تبويب «استيراد Excel» أو زر «+ متدرب».</div>`}`;
+  $('#sf').onchange=e=>{secFilter=e.target.value;ls.set('p101-tsec',secFilter);drawStudents()};
+  $('#qs').oninput=e=>{q=e.target.value.trim();const p=e.target.selectionStart;drawStudents();const n=$('#qs');n.focus();n.setSelectionRange(p,p)};
+  $('#addSt').onclick=addStudent;
+  m.querySelectorAll('th[data-k]').forEach(th=>th.onclick=()=>{const k=th.dataset.k;if(k==='#')return;sortBy=sortBy.k===k?{k,asc:!sortBy.asc}:{k,asc:k==='name'||k==='id'};drawStudents()});
+  m.querySelectorAll('tbody tr').forEach(tr=>tr.onclick=()=>openStudent(tr.dataset.id));
+}
+async function addStudent(){
+  const id=prompt('الرقم التدريبي:');if(!id)return;const name=prompt('اسم المتدرب:');if(!name)return;
+  let sec=secFilter!=='all'?secName(secFilter):(prompt('اسم الشعبة (اتركه فارغًا إن لم توجد):')||'');
+  const r=await api({a:'tstudents',token:TOKEN,op:'import',rows:[{id,name,section:sec}]});
+  if(r.ok){toast(r.added?'تمت إضافة المتدرب':'تم تحديث بيانات المتدرب');load()}else toast(errText(r.error));
+}
+async function openStudent(id){
+  const s=DATA.students.find(x=>x.id===id);if(!s)return;
+  const d=document.createElement('div');d.className='drawer';d.innerHTML=`<div role="dialog" aria-label="تفاصيل المتدرب"><div class="dhead"><div><h2>${esc(s.name)}</h2><span class="sub">الرقم ${esc(s.id)} · ${esc(secName(s.sectionId))}</span></div><button class="btn ghost sm x">إغلاق ✕</button></div><div id="dbody"></div></div>`;
+  document.body.appendChild(d);const close=()=>d.remove();d.onclick=e=>{if(e.target===d)close()};d.querySelector('.x').onclick=close;
+  const b=d.querySelector('#dbody');
+  const units=UNITS.map((u,ui)=>{const ks=u.l.map((_,li)=>ui+'-'+li);const qz=avg(ks.map(k=>s.quiz[k]).filter(v=>v!=null).map(Number));const pr=avg(ks.map(k=>s.probL[k]).filter(v=>v!=null));const dn=ks.filter(k=>s.done.includes(k)).length;
+    return `<div><b>الوحدة ${ORD[ui]}</b>اختبارات ${pct(qz)}<br>تمارين ${pct(pr)}<br>دروس ${dn}/${ks.length}</div>`}).join('');
+  b.innerHTML=`<div class="stats"><div class="stat"><small>مرات الدخول</small><b>${AR(s.loginCount)}</b></div><div class="stat"><small>مجموع الوقت</small><b style="font-size:18px">${fmtTime(s.totalSec)}</b></div><div class="stat"><small>المعدل</small><b>${s.overall==null?'—':AR(Math.round(s.overall))+'٪'}</b></div><div class="stat"><small>التقدم</small><b>${AR(s.progress)}٪</b></div></div>
+  <div class="card"><h2>بيانات الدخول</h2><p class="sub">أول دخول: ${fmtDate(s.firstLogin)} · آخر دخول: ${fmtDate(s.lastLogin)} · آخر نشاط: ${fmtDate(s.lastSeen)}</p>
+  <div class="row"><button class="btn ghost sm" id="eName">تعديل الاسم</button><select id="eSec"><option value="">نقل إلى شعبة…</option>${DATA.sections.map(x=>`<option value="${esc(x.id)}">${esc(x.name)}</option>`).join('')}</select><button class="btn ghost sm" id="rPw">إعادة تعيين كلمة المرور</button><button class="btn danger sm" id="del">حذف المتدرب</button></div></div>
+  <div class="card"><h2>الدرجات حسب الوحدة</h2><div class="unitGrid">${units}</div></div>
+  <div class="card"><h2>الاختبارات والتمارين</h2><div id="resList"><p class="empty"><span class="spin"></span></p></div></div>
+  <div class="card"><h2>سجل الدخول</h2><div id="logList"></div></div>`;
+  b.querySelector('#eName').onclick=async()=>{const n=prompt('الاسم الجديد:',s.name);if(!n)return;const r=await api({a:'tstudents',token:TOKEN,op:'update',id:s.id,name:n});if(r.ok){toast('تم التعديل');close();load()}else toast(errText(r.error))};
+  b.querySelector('#eSec').onchange=async e=>{if(!e.target.value)return;const r=await api({a:'tstudents',token:TOKEN,op:'update',id:s.id,sectionId:e.target.value});if(r.ok){toast('تم النقل');close();load()}else toast(errText(r.error))};
+  b.querySelector('#rPw').onclick=async()=>{if(!confirm('إعادة تعيين كلمة مرور '+s.name+'؟ سيختار كلمة مرور جديدة عند دخوله القادم.'))return;const r=await api({a:'tstudents',token:TOKEN,op:'resetpw',id:s.id});toast(r.ok?'تمت إعادة التعيين':errText(r.error));if(r.ok)load()};
+  b.querySelector('#del').onclick=async()=>{if(!confirm('حذف '+s.name+' نهائيًا؟ تبقى نتائجه في جدول Google.'))return;const r=await api({a:'tstudents',token:TOKEN,op:'delete',id:s.id});if(r.ok){toast('تم الحذف');close();load()}else toast(errText(r.error))};
+  try{const r=await api({a:'tstudent',token:TOKEN,id:s.id});if(!r.ok)return;
+    const res=r.results.filter(x=>x.kind!=='done').sort((a,b)=>b.time.localeCompare(a.time));
+    b.querySelector('#resList').innerHTML=res.length?res.map(x=>{let det=[];try{det=JSON.parse(x.detail)}catch(e){}
+      const kind=x.kind==='quiz'?'اختبار':'تمرين حسابي';const lk=String(x.lessonKey).split('.')[0];
+      let body='';
+      if(Array.isArray(det)&&det.length)body='<ol class="det">'+det.map(a=>`<li class="${a.ok?'ok':'no'}">${a.ok?'✓':'✗'} ${esc(a.q)}<br><small>إجابته: ${esc(a.chosen||'—')}</small></li>`).join('')+'</ol>';
+      else if(det&&det.q)body=`<ul class="det"><li>${esc(det.q)}</li><li class="${det.correct?'ok':'no'}">ناتجه: ${esc(det.answer||'—')} ${det.correct?'✓':'✗ (الصحيح '+esc(det.expected)+')'}</li></ul>`;
+      return `<details class="res"><summary><span class="tag">${kind}</span> ${esc(LT[lk]||x.lessonTitle)} ${pct(+x.percent)} <span class="num">${x.score}/${x.max}</span><span class="when">${fmtDate(x.time)}</span></summary>${body}</details>`}).join(''):'<p class="empty">لم يحل أي اختبار أو تمرين بعد.</p>';
+    b.querySelector('#logList').innerHTML=r.logins.length?'<ul class="det">'+r.logins.slice().reverse().slice(0,50).map(l=>`<li>${fmtDate(l.time)} — ${esc(l.device)}</li>`).join('')+'</ul>':'<p class="empty">لم يدخل المنصة بعد.</p>';
+  }catch(e){b.querySelector('#resList').innerHTML='<p class="empty">تعذّر تحميل التفاصيل.</p>'}
+}
+
+
+/* ---------- الإحصائيات ---------- */
+let STATS=null,statsSec=null;
+async function drawStats(){
+  const m=$('#main');const sec=secFilter;
+  if(!STATS||statsSec!==sec){m.innerHTML='<p class="empty"><span class="spin"></span> جارٍ حساب الإحصائيات…</p>';
+    try{const r=await api({a:'tstats',token:TOKEN,sectionId:sec==='all'?'':sec});if(!r.ok){m.innerHTML=`<p class="empty">${esc(errText(r.error))}</p>`;return}STATS=r;statsSec=sec}
+    catch(e){m.innerHTML='<p class="empty">تعذّر الاتصال بالخادم.</p>';return}
+    if(tab!=='stats')return}
+  const st=DATA.students.filter(s=>(sec==='all'||s.sectionId===sec)&&s.id!=='DEMO');
+  const now=Date.now(),wk=7*864e5;
+  const active7=st.filter(s=>s.lastSeen&&now-new Date(s.lastSeen)<wk).length,never=st.filter(s=>!s.loginCount);
+  const ov=st.map(s=>s.overall).filter(v=>v!=null),avgOv=avg(ov);
+  const totDone=st.reduce((a,s)=>a+s.doneN,0),compl=st.length?Math.round(totDone/(st.length*TOTAL)*100):0;
+  const tt=st.reduce((a,s)=>a+s.totalSec,0),avgT=st.length?tt/st.length:0;
+  /* توزيع الدرجات */
+  const bins=[['ممتاز ٨٥–١٠٠',85,101,'g'],['جيد جدًا ٧٥–٨٤',75,85,'g'],['جيد ٦٥–٧٤',65,75,'m'],['مقبول ٥٠–٦٤',50,65,'m'],['ضعيف أقل من ٥٠',0,50,'b']];
+  const binN=bins.map(b=>ov.filter(v=>v>=b[1]&&v<b[2]).length),maxB=Math.max(1,...binN);
+  const bar=(lab,val,max,cls,txt)=>`<div class="bar"><span class="lab" title="${esc(lab)}">${esc(lab)}</span><span class="trk"><span class="fil ${cls||''}" style="width:${max?Math.max(1,val/max*100):0}%;display:block"></span></span><span class="val">${txt!=null?txt:val}</span></div>`;
+  /* النشاط اليومي */
+  const days=[];for(let i=29;i>=0;i--){const d=new Date(now-i*864e5);const k=d.toISOString().slice(0,10);days.push([k,STATS.loginsByDay[k]||0])}
+  const maxD=Math.max(1,...days.map(d=>d[1]));
+  /* الوحدات */
+  const unitRows=UNITS.map((u,ui)=>{const ks=u.l.map((_,li)=>ui+'-'+li);
+    const q=avg(st.flatMap(s=>ks.map(k=>s.quiz[k]).filter(v=>v!=null).map(Number))),p=avg(st.flatMap(s=>ks.map(k=>s.probL[k]).filter(v=>v!=null)));
+    const dn=st.length?Math.round(st.reduce((a,s)=>a+ks.filter(k=>s.done.includes(k)).length,0)/(st.length*ks.length)*100):0;return {n:'الوحدة '+ORD[ui]+': '+u.t,q,p,dn}});
+  /* الدروس */
+  const L=STATS.lessons;
+  const lessonRows=LESSONS.map(l=>({...l,...(L[l.k]||{})})).filter(l=>l.quizAttempts||l.probAttempts);
+  lessonRows.sort((a,b)=>(avg([a.quizFirst,a.probFirst].filter(v=>v!=null))??101)-(avg([b.quizFirst,b.probFirst].filter(v=>v!=null))??101));
+  /* الشعب */
+  const secRows=DATA.sections.map(s=>{const x=DATA.students.filter(y=>y.sectionId===s.id&&y.id!=='DEMO');return{n:s.name,c:x.length,a:avg(x.map(y=>y.overall).filter(v=>v!=null)),t:x.reduce((q,y)=>q+y.totalSec,0)/(x.length||1)}}).filter(s=>s.c);
+  /* متابعة */
+  const risk=st.map(s=>{const why=[];if(!s.loginCount)why.push('لم يدخل المنصة أبدًا');else if(!s.lastSeen||now-new Date(s.lastSeen)>wk)why.push('لم يدخل منذ أكثر من أسبوع');
+    if(s.overall!=null&&s.overall<50)why.push('المعدل '+Math.round(s.overall)+'٪');if(s.loginCount&&!s.attempts)why.push('دخل ولم يحل أي اختبار');return{s,why}}).filter(x=>x.why.length);
+  const opts=`<option value="all">كل الشعب</option>`+DATA.sections.map(s=>`<option value="${esc(s.id)}" ${sec===s.id?'selected':''}>${esc(s.name)}</option>`).join('');
+  m.innerHTML=`<div class="row" style="margin-bottom:12px"><select id="ssf">${opts}</select><button class="btn ghost sm" id="sref">↻ إعادة الحساب</button><button class="btn sm" id="sexp">⬇ تصدير الإحصائيات Excel</button></div>
+  <div class="stats"><div class="stat"><small>المتدربون</small><b>${AR(st.length)}</b></div><div class="stat"><small>نشطون آخر ٧ أيام</small><b>${AR(active7)}</b></div><div class="stat"><small>لم يدخلوا أبدًا</small><b>${AR(never.length)}</b></div>
+  <div class="stat"><small>متوسط المعدل</small><b>${avgOv==null?'—':AR(Math.round(avgOv))+'٪'}</b></div><div class="stat"><small>نسبة إنجاز الدروس</small><b>${AR(compl)}٪</b></div><div class="stat"><small>متوسط وقت المتدرب</small><b style="font-size:18px">${fmtTime(avgT)}</b></div></div>
+  <div class="grid2">
+   <div class="card"><h2>الدخول اليومي — آخر ٣٠ يومًا</h2><div class="days" role="img" aria-label="عدد مرات الدخول يوميًا">${days.map(([k,v])=>`<div style="height:${v/maxD*100}%" data-t="${k.slice(5)}: ${v}"></div>`).join('')}</div><div class="dayAxis"><span>${days[0][0].slice(5)}</span><span>اليوم</span></div><p class="sub" style="margin-top:6px">مجموع مرات الدخول: ${AR(days.reduce((a,d)=>a+d[1],0))}</p></div>
+   <div class="card"><h2>توزيع المعدلات</h2><p class="sub">${AR(ov.length)} متدربًا لهم درجات</p><div class="bars">${bins.map((b,i)=>bar(b[0],binN[i],maxB,b[3])).join('')}</div></div>
+  </div>
+  <div class="card"><h2>الأداء حسب الوحدة</h2><div class="tableWrap"><table><thead><tr><th>الوحدة</th><th>متوسط الاختبارات</th><th>متوسط التمارين</th><th>إنجاز الدروس</th></tr></thead><tbody>${unitRows.map(u=>`<tr style="cursor:default"><td>${esc(u.n)}</td><td>${pct(u.q)}</td><td>${pct(u.p)}</td><td class="num">${u.dn}٪</td></tr>`).join('')}</tbody></table></div></div>
+  <div class="card"><h2>صعوبة الدروس (الأصعب أولًا)</h2><p class="sub">«أول محاولة» يقيس الفهم الأولي، و«أفضل محاولة» يقيس الإتقان بعد التدريب.</p>
+  ${lessonRows.length?`<div class="tableWrap" style="max-height:420px;overflow:auto"><table><thead><tr><th>الدرس</th><th>متدربون (اختبار)</th><th>اختبار: أول محاولة</th><th>اختبار: أفضل</th><th>متدربون (تمارين)</th><th>تمارين: أول محاولة</th><th>تمارين: أفضل</th><th>المحاولات</th></tr></thead><tbody>
+  ${lessonRows.map(l=>`<tr style="cursor:default"><td>${esc(l.t)}</td><td class="num">${l.quizStudents||0}</td><td>${pct(l.quizFirst)}</td><td>${pct(l.quizBest)}</td><td class="num">${l.probStudents||0}</td><td>${pct(l.probFirst)}</td><td>${pct(l.probBest)}</td><td class="num">${(l.quizAttempts||0)+(l.probAttempts||0)}</td></tr>`).join('')}</tbody></table></div>`:'<p class="empty">لا توجد محاولات بعد.</p>'}</div>
+  <div class="card"><h2>الأسئلة الأكثر خطأ</h2><p class="sub">نسبة من أجابوا صحيحًا عن كل سؤال في الاختبارات، مع أكثر إجابة خاطئة تكرارًا.</p>
+  ${STATS.questions.length?STATS.questions.slice(0,25).map(x=>`<div class="qrow">${pct(x.pct)} <b>${esc(x.q)}</b><br><small>${esc(LT[x.lessonKey]||'')} · ${AR(x.correct)} صحيحة من ${AR(x.total)}${x.commonWrong?` · أكثر خطأ: «${esc(x.commonWrong)}» (${AR(x.commonWrongN)})`:''}</small></div>`).join(''):'<p class="empty">لا توجد إجابات بعد.</p>'}</div>
+  ${secRows.length>1?`<div class="card"><h2>مقارنة الشعب</h2><div class="bars">${secRows.map(s=>bar(s.n+' ('+s.c+')',s.a||0,100,pctCls(s.a),s.a==null?'—':Math.round(s.a)+'٪')).join('')}</div></div>`:''}
+  <div class="card"><h2>متدربون يحتاجون متابعة (${AR(risk.length)})</h2>${risk.length?`<div class="tableWrap"><table><thead><tr><th>الرقم</th><th>الاسم</th><th>الشعبة</th><th>السبب</th><th>المعدل</th></tr></thead><tbody>${risk.map(x=>`<tr data-id="${esc(x.s.id)}"><td class="num">${esc(x.s.id)}</td><td>${esc(x.s.name)}</td><td>${esc(secName(x.s.sectionId))}</td><td>${x.why.map(esc).join('، ')}</td><td>${pct(x.s.overall)}</td></tr>`).join('')}</tbody></table></div>`:'<p class="empty">لا يوجد. كل المتدربين نشطون ومعدلاتهم جيدة.</p>'}</div>`;
+  $('#ssf').onchange=e=>{secFilter=e.target.value;ls.set('p101-tsec',secFilter);drawStats()};
+  $('#sref').onclick=async()=>{STATS=null;await load()};
+  m.querySelectorAll('tr[data-id]').forEach(tr=>tr.onclick=()=>openStudent(tr.dataset.id));
+  $('#sexp').onclick=()=>saveBook([
+    ['ملخص',[['المؤشر','القيمة'],['عدد المتدربين',st.length],['نشطون آخر 7 أيام',active7],['لم يدخلوا أبدًا',never.length],['متوسط المعدل %',avgOv==null?'':Math.round(avgOv)],['نسبة إنجاز الدروس %',compl],['متوسط وقت المتدرب (دقيقة)',Math.round(avgT/60)],...bins.map((b,i)=>['عدد: '+b[0],binN[i]])],[30,14]],
+    ['الوحدات',[['الوحدة','متوسط الاختبارات %','متوسط التمارين %','إنجاز الدروس %'],...unitRows.map(u=>[u.n,u.q==null?'':Math.round(u.q),u.p==null?'':Math.round(u.p),u.dn])],[40,16,16,14]],
+    ['الدروس',[['الدرس','متدربون اختبار','اختبار أول محاولة %','اختبار أفضل %','متدربون تمارين','تمارين أول محاولة %','تمارين أفضل %','المحاولات'],...lessonRows.map(l=>[l.t,l.quizStudents||0,l.quizFirst??'',l.quizBest??'',l.probStudents||0,l.probFirst??'',l.probBest??'',(l.quizAttempts||0)+(l.probAttempts||0)])],[36,12,14,12,12,14,12,10]],
+    ['الأسئلة',[['الدرس','السؤال','صحيحة','المجموع','النسبة %','أكثر إجابة خاطئة','تكرارها'],...STATS.questions.map(x=>[LT[x.lessonKey]||x.lessonKey,x.q,x.correct,x.total,x.pct,x.commonWrong,x.commonWrongN])],[30,60,8,8,8,30,8]],
+    ['يحتاجون متابعة',[['الرقم','الاسم','الشعبة','السبب','المعدل %'],...risk.map(x=>[x.s.id,x.s.name,secName(x.s.sectionId),x.why.join('، '),x.s.overall==null?'':Math.round(x.s.overall)])],[14,26,16,40,10]]
+  ],'إحصائيات-'+(sec==='all'?'كل-الشعب':secName(sec))+'.xlsx');
+}
+
+
+/* ---------- المساعد الذكي ---------- */
+async function drawAI(){
+  const m=$('#main');m.innerHTML='<p class="empty"><span class="spin"></span></p>';
+  let r;try{r=await api({a:'tquestions',token:TOKEN,sectionId:secFilter==='all'?'':secFilter})}catch(e){m.innerHTML='<p class="empty">تعذّر الاتصال بالخادم.</p>';return}
+  if(!r.ok){m.innerHTML=`<p class="empty">${esc(errText(r.error))}</p>`;return}
+  const nm=Object.fromEntries(DATA.students.map(s=>[s.id,s.name]));nm.TEACHER='المدرب';
+  const opts=`<option value="all">كل الشعب</option>`+DATA.sections.map(s=>`<option value="${esc(s.id)}" ${secFilter===s.id?'selected':''}>${esc(s.name)}</option>`).join('');
+  const byLesson={};r.questions.forEach(q=>{const k=LT[q.lessonKey]||q.lessonTitle||'—';byLesson[k]=(byLesson[k]||0)+1});
+  const top=Object.entries(byLesson).sort((a,b)=>b[1]-a[1]).slice(0,8),mx=Math.max(1,...top.map(x=>x[1]));
+  m.innerHTML=`<div class="card"><h2>تفعيل المساعد الذكي (مجاني)</h2>
+   <p class="sub">الحالة: ${r.ai?'<b style="color:var(--good)">✓ مفعّل</b>':'<b style="color:var(--bad)">غير مفعّل</b>'} · يعمل بخدمة Groq المجانية، وحصتها المجانية تكفي حوالي ١٥٠–٢٠٠ سؤال يوميًا للمنصة كلها، و١٥ سؤالًا لكل متدرب كل ٦ ساعات.</p>
+   <ol class="sub" style="padding-inline-start:1.2em"><li>افتح <a href="https://console.groq.com/keys" target="_blank" rel="noopener">console.groq.com/keys</a> وسجّل دخولك بحساب Google.</li><li>اضغط <b>Create API Key</b>، اكتب أي اسم، ثم انسخ المفتاح (يبدأ بـ <span dir="ltr">gsk_</span>).</li><li>الصقه هنا واضغط «حفظ وتفعيل».</li></ol>
+   <div class="row"><input type="password" id="aik" placeholder="gsk_…" style="flex:1;min-width:200px;direction:ltr" autocomplete="off"><button class="btn" id="aisv">حفظ وتفعيل</button>${r.ai?'<button class="btn danger" id="aioff">إيقاف المساعد</button>':''}</div><p class="msg" id="aim"></p></div>
+  <div class="row" style="margin-bottom:12px"><select id="aqs">${opts}</select><span class="sub" style="margin:0">${AR(r.questions.length)} سؤالًا (آخر ٣٠٠)</span>${r.questions.length?'<button class="btn ghost sm" id="aexp">⬇ تصدير Excel</button>':''}</div>
+  ${top.length?`<div class="card"><h2>أكثر الدروس سؤالًا</h2><div class="bars">${top.map(([k,v])=>`<div class="bar"><span class="lab" title="${esc(k)}">${esc(k)}</span><span class="trk"><span class="fil" style="width:${v/mx*100}%;display:block"></span></span><span class="val">${v}</span></div>`).join('')}</div></div>`:''}
+  <div class="card"><h2>أسئلة المتدربين</h2>${r.questions.length?r.questions.map(q=>`<details class="res"><summary><b>${esc(nm[q.studentId]||q.studentId)}</b> <span class="tag">${esc(LT[q.lessonKey]||q.lessonTitle||'')}</span> ${esc(q.question.slice(0,90))}${q.question.length>90?'…':''}<span class="when">${fmtDate(q.time)}</span></summary><div class="det"><p style="white-space:pre-wrap;margin:6px 0"><b>السؤال:</b> ${esc(q.question)}</p><p style="white-space:pre-wrap;margin:6px 0;color:var(--muted)"><b>إجابة المساعد:</b> ${esc(q.answer)}</p></div></details>`).join(''):'<p class="empty">لم يسأل أحد بعد.</p>'}</div>`;
+  $('#aqs').onchange=e=>{secFilter=e.target.value;ls.set('p101-tsec',secFilter);drawAI()};
+  $('#aisv').onclick=async()=>{const k=$('#aik').value.trim();if(!k)return;$('#aim').className='msg';$('#aim').innerHTML='<span class="spin"></span> جارٍ التحقق من المفتاح…';
+    const x=await api({a:'tkey',token:TOKEN,key:k});$('#aim').className='msg '+(x.ok?'good':'bad');$('#aim').textContent=x.ok?'✓ تم تفعيل المساعد الذكي لكل المتدربين.':errText(x.error);if(x.ok)setTimeout(drawAI,1200)};
+  if(r.ai)$('#aioff').onclick=async()=>{if(!confirm('إيقاف المساعد الذكي لكل المتدربين؟'))return;const x=await api({a:'tkey',token:TOKEN,key:''});toast(x.ok?'تم الإيقاف':errText(x.error));drawAI()};
+  if(r.questions.length)$('#aexp').onclick=()=>saveBook([['أسئلة المساعد',[['التاريخ','الرقم','الاسم','الدرس','السؤال','إجابة المساعد'],...r.questions.map(q=>[xd(q.time),q.studentId,nm[q.studentId]||'',LT[q.lessonKey]||q.lessonTitle,q.question,q.answer])],[18,12,24,30,60,80]]],'أسئلة-المساعد.xlsx');
+}
+
+/* ---------- الشعب ---------- */
+function drawSections(){
+  const m=$('#main');
+  m.innerHTML=`<div class="card"><h2>إضافة شعبة</h2><div class="row"><input type="text" id="ns" placeholder="مثال: شعبة 101 — الفصل الأول" style="flex:1;min-width:180px"><button class="btn" id="addS">إضافة</button></div></div>
+  ${DATA.sections.length?`<div class="tableWrap"><table><thead><tr><th>الشعبة</th><th>المتدربون</th><th>دخلوا</th><th>متوسط الاختبارات</th><th>متوسط التمارين</th><th>مجموع الوقت</th><th></th></tr></thead><tbody>
+  ${DATA.sections.map(s=>{const st=DATA.students.filter(x=>x.sectionId===s.id&&x.id!=='DEMO');return `<tr data-id="${esc(s.id)}"><td><b>${esc(s.name)}</b></td><td class="num">${st.length}</td><td class="num">${st.filter(x=>x.loginCount).length}</td><td>${pct(avg(st.map(x=>x.quizAvg).filter(v=>v!=null)))}</td><td>${pct(avg(st.map(x=>x.probAvg).filter(v=>v!=null)))}</td><td>${fmtTime(st.reduce((a,x)=>a+x.totalSec,0))}</td><td><button class="btn ghost sm ren">تعديل</button> <button class="btn danger sm del">حذف</button></td></tr>`}).join('')}
+  </tbody></table></div>`:'<div class="card empty">لا توجد شعب بعد. أضف شعبة، أو استورد ملف Excel فيه عمود «الشعبة» فتُنشأ الشعب تلقائيًا.</div>'}`;
+  $('#addS').onclick=async()=>{const n=$('#ns').value.trim();if(!n)return toast(ERR.name_required);const r=await api({a:'tsection',token:TOKEN,op:'add',name:n});if(r.ok){toast('تمت إضافة الشعبة');load()}else toast(errText(r.error))};
+  m.querySelectorAll('tbody tr').forEach(tr=>{const id=tr.dataset.id;
+    tr.onclick=e=>{if(e.target.closest('button'))return;secFilter=id;ls.set('p101-tsec',id);tab='students';boot()};
+    tr.querySelector('.ren').onclick=async()=>{const n=prompt('الاسم الجديد للشعبة:',secName(id));if(!n)return;const r=await api({a:'tsection',token:TOKEN,op:'rename',id,name:n});if(r.ok){toast('تم التعديل');load()}else toast(errText(r.error))};
+    tr.querySelector('.del').onclick=async()=>{if(!confirm('حذف شعبة «'+secName(id)+'»؟'))return;const r=await api({a:'tsection',token:TOKEN,op:'delete',id});if(r.ok){toast('تم الحذف');load()}else toast(errText(r.error))}});
+}
+
+/* ---------- Excel ---------- */
+function saveBook(sheets,name){try{EXCEL.write(sheets,name);toast('تم إنشاء الملف: '+name)}catch(e){toast('تعذّر إنشاء ملف Excel.')}return Promise.resolve()}
+const HEAD={id:['الرقم التدريبي','الرقم','رقم المتدرب','رقم','id','ID','student id','StudentID','الرقم الأكاديمي','رقم الهوية'],name:['الاسم','اسم المتدرب','الاسم الكامل','name','Name','student name'],section:['الشعبة','الشعبه','رقم الشعبة','section','Section','class','المجموعة']};
+const norm=s=>String(s||'').trim().toLowerCase().replace(/[ـ]/g,'');
+function drawImport(){
+  const m=$('#main');
+  m.innerHTML=`<div class="card"><h2>١. حمّل النموذج</h2><p class="sub">ملف Excel بثلاثة أعمدة: <b>الرقم التدريبي</b>، <b>الاسم</b>، <b>الشعبة</b>. يمكنك أيضًا استخدام أي ملف لديك فيه هذه الأعمدة.</p><button class="btn ghost" id="tpl">⬇ تحميل نموذج Excel</button></div>
+  <div class="card"><h2>٢. اختر الملف</h2><label class="drop" id="drop"><input type="file" id="file" accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv" hidden>اضغط لاختيار ملف Excel أو CSV<br><small>من الجوال: يفتح تطبيق «الملفات»</small></label>
+  <div class="row" style="margin-top:10px"><span>شعبة المتدربين الذين ليس لهم شعبة في الملف:</span><select id="defSec"><option value="">بدون شعبة</option>${DATA.sections.map(s=>`<option value="${esc(s.name)}">${esc(s.name)}</option>`).join('')}</select></div></div>
+  <div id="prev"></div>`;
+  $('#tpl').onclick=()=>saveBook([['المتدربون',[['الرقم التدريبي','الاسم','الشعبة'],['441001','أحمد محمد','شعبة 101'],['441002','خالد سعد','شعبة 101'],['441003','فهد علي','شعبة 102']],[18,28,18]]],'نموذج-المتدربين.xlsx');
+  const dr=$('#drop');dr.ondragover=e=>{e.preventDefault();dr.classList.add('on')};dr.ondragleave=()=>dr.classList.remove('on');dr.ondrop=e=>{e.preventDefault();dr.classList.remove('on');if(e.dataTransfer.files[0])readFile(e.dataTransfer.files[0])};
+  $('#file').onchange=e=>{if(e.target.files[0])readFile(e.target.files[0])};
+}
+async function readFile(f){
+  const p=$('#prev');p.innerHTML='<p class="empty"><span class="spin"></span> جارٍ قراءة الملف…</p>';
+  let rows;
+  try{rows=await EXCEL.read(f)}catch(e){p.innerHTML=`<p class="empty">${e.message==='old_xls'?'هذا ملف Excel قديم (.xls). افتحه واحفظه بصيغة .xlsx ثم أعد المحاولة.':e.message==='no_inflate'?'متصفحك قديم ولا يدعم قراءة ملفات Excel. حدّث النظام أو احفظ الملف بصيغة CSV.':'تعذّرت قراءة الملف. تأكد أنه ملف Excel (.xlsx) أو CSV.'}</p>`;return}
+  rows=rows.map(r=>(r||[]).map(c=>c==null?'':c));
+  rows=rows.filter(r=>r.some(c=>String(c).trim()));
+  if(!rows.length){p.innerHTML='<p class="empty">الملف فارغ.</p>';return}
+  let hi=rows.findIndex(r=>r.some(c=>HEAD.id.map(norm).includes(norm(c))||HEAD.name.map(norm).includes(norm(c))));
+  let ci={id:0,name:1,section:2};
+  if(hi>=0){const h=rows[hi].map(norm);ci={id:h.findIndex(c=>HEAD.id.map(norm).includes(c)),name:h.findIndex(c=>HEAD.name.map(norm).includes(c)),section:h.findIndex(c=>HEAD.section.map(norm).includes(c))};rows=rows.slice(hi+1)}
+  if(ci.id<0||ci.name<0){p.innerHTML='<div class="card"><p class="msg bad">لم أجد عمودي «الرقم التدريبي» و«الاسم» في الملف. استخدم النموذج.</p></div>';return}
+  const def=$('#defSec').value;
+  const data=rows.map(r=>({id:String(r[ci.id]||'').replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).trim(),name:String(r[ci.name]||'').trim(),section:ci.section>=0?String(r[ci.section]||'').trim()||def:def}));
+  const good=data.filter(x=>x.id&&x.name),bad=data.length-good.length;
+  const ids=new Set(DATA.students.map(s=>s.id));const nw=good.filter(x=>!ids.has(x.id)).length;
+  const secs=[...new Set(good.map(x=>x.section).filter(Boolean))];const newSecs=secs.filter(s=>!DATA.sections.some(x=>x.name===s));
+  p.innerHTML=`<div class="card"><h2>٣. راجع ثم ارفع</h2><p class="sub">${AR(good.length)} متدربًا صالحًا (${AR(nw)} جديد، ${AR(good.length-nw)} موجود وسيُحدَّث)${bad?` · ${AR(bad)} صفًا ناقصًا سيُتجاهل`:''}${newSecs.length?` · شعب جديدة ستُنشأ: ${newSecs.map(esc).join('، ')}`:''}</p>
+  <div class="tableWrap" style="max-height:320px;overflow:auto"><table><thead><tr><th>الرقم التدريبي</th><th>الاسم</th><th>الشعبة</th></tr></thead><tbody>${good.slice(0,200).map(x=>`<tr><td class="num">${esc(x.id)}</td><td>${esc(x.name)}</td><td>${esc(x.section||'—')}</td></tr>`).join('')}</tbody></table></div>
+  <div class="row" style="margin-top:12px"><button class="btn" id="up" ${good.length?'':'disabled'}>رفع ${AR(good.length)} متدربًا</button><span class="msg" id="upm"></span></div></div>`;
+  $('#up').onclick=async()=>{const b=$('#up');b.disabled=true;let a=0,u=0;
+    for(let i=0;i<good.length;i+=150){$('#upm').innerHTML=`<span class="spin"></span> ${AR(Math.min(i+150,good.length))} / ${AR(good.length)}`;
+      const r=await api({a:'tstudents',token:TOKEN,op:'import',rows:good.slice(i,i+150)});if(!r.ok){$('#upm').className='msg bad';$('#upm').textContent=errText(r.error);b.disabled=false;return}a+=r.added;u+=r.updated}
+    $('#upm').className='msg good';$('#upm').textContent=`تم: أُضيف ${AR(a)} وحُدِّث ${AR(u)}.`;toast('تم الاستيراد');await load();tab='import'};
+}
+function drawExport(){
+  const m=$('#main');
+  m.innerHTML=`<div class="card"><h2>تصدير إلى Excel</h2><p class="sub">اختر الشعبة ثم نوع التقرير. يُحفظ الملف في «الملفات» على الجوال أو «التنزيلات» على الكمبيوتر.</p>
+  <div class="row" style="margin-bottom:12px"><select id="es"><option value="all">كل الشعب</option>${DATA.sections.map(s=>`<option value="${esc(s.id)}">${esc(s.name)}</option>`).join('')}</select></div>
+  <div class="row"><button class="btn" id="e1">⬇ ملخص الدرجات والحضور</button><button class="btn ghost" id="e2">⬇ درجات كل درس (جدول تفصيلي)</button><button class="btn ghost" id="e3">⬇ سجل كل المحاولات</button><button class="btn ghost" id="e4">⬇ قائمة المتدربين فقط</button></div><p class="msg" id="em"></p></div>`;
+  const sel=()=>$('#es').value,stu=()=>DATA.students.filter(s=>sel()==='all'||s.sectionId===sel()),tag=()=>sel()==='all'?'كل-الشعب':secName(sel());
+  const r0=v=>v==null?'':Math.round(v);
+  $('#e1').onclick=()=>saveBook([['الملخص',[['الرقم التدريبي','الاسم','الشعبة','مرات الدخول','أول دخول','آخر دخول','مجموع الوقت (دقيقة)','متوسط الاختبارات %','متوسط التمارين %','المعدل %','الدروس المكتملة','نسبة التقدم %'],
+    ...stu().map(s=>[s.id,s.name,secName(s.sectionId),s.loginCount,xd(s.firstLogin),xd(s.lastLogin),Math.round(s.totalSec/60),r0(s.quizAvg),r0(s.probAvg),r0(s.overall),s.doneN,s.progress])],[16,26,16,10,20,20,14,14,14,10,12,10]]],`درجات-${tag()}.xlsx`);
+  $('#e2').onclick=()=>{const head=['الرقم التدريبي','الاسم','الشعبة'];LESSONS.forEach(l=>{head.push('اختبار: '+l.t);head.push('تمارين: '+l.t)});
+    saveBook([['درجات الدروس',[head,...stu().map(s=>{const r=[s.id,s.name,secName(s.sectionId)];LESSONS.forEach(l=>{r.push(r0(s.quiz[l.k]));r.push(r0(s.probL[l.k]))});return r})]]],`درجات-الدروس-${tag()}.xlsx`)};
+  $('#e3').onclick=async()=>{$('#em').innerHTML='<span class="spin"></span> جارٍ جلب السجل…';const r=await api({a:'tresults',token:TOKEN,sectionId:sel()==='all'?'':sel()});if(!r.ok){$('#em').textContent=errText(r.error);return}
+    const nm=Object.fromEntries(DATA.students.map(s=>[s.id,s.name]));
+    await saveBook([['المحاولات',[['التاريخ','الرقم التدريبي','الاسم','الشعبة','النوع','الدرس','الدرجة','من','النسبة %'],...r.results.map(x=>[xd(x.time),x.studentId,nm[x.studentId]||'',secName(x.sectionId),x.kind==='quiz'?'اختبار':'تمرين',LT[String(x.lessonKey).split('.')[0]]||x.lessonTitle,x.score,x.max,x.percent])],[20,16,26,16,10,34,8,6,10]]],`سجل-المحاولات-${tag()}.xlsx`);$('#em').textContent=''};
+  $('#e4').onclick=()=>saveBook([['المتدربون',[['الرقم التدريبي','الاسم','الشعبة'],...stu().map(s=>[s.id,s.name,secName(s.sectionId)])],[16,26,16]]],`المتدربون-${tag()}.xlsx`);
+}
+function drawDemo(){
+  const m=$('#main'),s=DATA.students.find(x=>x.id==='DEMO');
+  m.innerHTML=`<div class="card"><h2>بيانات دخول الحساب التجريبي</h2><p class="sub">ادخل بها من شاشة دخول المتدربين على أي جهاز، تمامًا كما يدخل متدربوك.</p>
+  <div class="stats" style="margin-bottom:8px"><div class="stat"><small>اسم المستخدم</small><b class="en" style="direction:ltr;display:block;text-align:right">demo</b></div><div class="stat"><small>كلمة المرور</small><b style="font-size:16px">${s&&s.hasPw?'✓ محددة':'لم تُحدد بعد'}</b></div></div>
+  <div class="row"><input type="password" id="dpw" placeholder="كلمة مرور الحساب التجريبي (٤ أحرف على الأقل)" autocomplete="new-password" style="flex:1;min-width:200px"><button class="btn" id="dsp">${s&&s.hasPw?'تغيير كلمة المرور':'تعيين كلمة المرور'}</button></div><p class="msg" id="dpm"></p></div>
+  <div class="card"><h2>دخول سريع</h2><p class="sub">ادخل المنصة كمتدرب تجريبي مباشرة من هذا الجهاز دون كتابة كلمة المرور، ثم ارجع هنا لترى كيف تظهر نتائجك في لوحة المدرب.</p>
+  ${s?`<p class="sub">دخلت ${AR(s.loginCount)} مرة · الوقت ${fmtTime(s.totalSec)} · الاختبارات ${pct(s.quizAvg)} · التمارين ${pct(s.probAvg)}</p>`:''}
+  <div class="row"><button class="btn" id="go">▶ ادخل المنصة كمتدرب تجريبي</button>${s?'<button class="btn ghost" id="see">عرض نتائجي التجريبية</button><button class="btn danger" id="rs">مسح بياناتي التجريبية</button>':''}</div><p class="msg" id="dm"></p></div>`;
+  $('#dsp').onclick=async()=>{const pw=$('#dpw').value;if(pw.length<4){$('#dpm').className='msg bad';$('#dpm').textContent=ERR.short_password.replace('٦','٤');return}
+    const r=await api({a:'tdemo',token:TOKEN,op:'setpw',pw});$('#dpm').className='msg '+(r.ok?'good':'bad');$('#dpm').textContent=r.ok?'✓ تم الحفظ. ادخل الآن من شاشة المتدربين: اسم المستخدم demo وكلمة المرور التي اخترتها.':errText(r.error);if(r.ok){$('#dpw').value='';toast('تم حفظ كلمة مرور الحساب التجريبي');setTimeout(load,1500)}};
+  $('#go').onclick=async()=>{$('#dm').innerHTML='<span class="spin"></span>';const r=await api({a:'tdemo',token:TOKEN});if(!r.ok){$('#dm').textContent=errText(r.error);return}
+    localStorage.setItem('p101-auth',JSON.stringify({id:r.id,token:r.token,name:r.name,section:r.section,demo:true}));location.href='index.html'};
+  if(s){$('#see').onclick=()=>openStudent('DEMO');
+    $('#rs').onclick=async()=>{if(!confirm('مسح كل نتائج حسابك التجريبي؟'))return;const r=await api({a:'tdemo',token:TOKEN,op:'reset'});toast(r.ok?'تم المسح':errText(r.error));
+      try{Object.keys(localStorage).filter(k=>/-DEMO$/.test(k)).forEach(k=>localStorage.removeItem(k))}catch(e){}load()}}
+}
+function drawSettings(){
+  const m=$('#main');
+  m.innerHTML=`<div class="card"><h2>تغيير اسم المستخدم أو كلمة المرور</h2><div class="row"><input type="text" id="nu" placeholder="اسم مستخدم جديد (اختياري)" autocapitalize="off" style="flex:1;min-width:160px;direction:ltr"><input type="password" id="np" placeholder="كلمة مرور جديدة (اختياري)" style="flex:1;min-width:160px" autocomplete="new-password"><button class="btn" id="cp">حفظ</button></div></div>
+  <div class="card"><h2>جدول البيانات</h2><p class="sub">كل البيانات محفوظة في جدول Google داخل حسابك. يمكنك فتحه، أو تنزيله Excel من: ملف ← تنزيل.</p>${DATA.sheetUrl?`<a class="btn ghost" href="${esc(DATA.sheetUrl)}" target="_blank" rel="noopener">فتح جدول Google ↗</a>`:''}</div>
+  <div class="card"><h2>رابط المنصة للمتدربين</h2><p class="sub">أرسل هذا الرابط لمتدربيك، ويدخل كل منهم برقمه التدريبي:</p><div class="row"><input type="text" readonly value="${esc(location.href.replace(/teacher\.html.*$/,''))}" style="flex:1;direction:ltr" id="lnk"><button class="btn ghost" id="cpl">نسخ</button></div></div>`;
+  $('#cp').onclick=async()=>{const pw=$('#np').value,user=$('#nu').value.trim();if(!pw&&!user)return;const r=await api({a:'tpw',token:TOKEN,pw,user});toast(r.ok?'تم الحفظ':errText(r.error));if(r.ok){$('#np').value='';$('#nu').value=''}};
+  $('#cpl').onclick=()=>{navigator.clipboard.writeText($('#lnk').value).then(()=>toast('تم النسخ'),()=>{$('#lnk').select()})};
+}
+boot();
+</script>
+</body>
+</html>

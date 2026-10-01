@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>إعداد قسم المدرب — فيزياء ١٠١</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#F4F6F8;--panel:#fff;--ink:#172033;--muted:#5B6479;--line:#DDE2EA;--soft:#EEF2F6;--accent:#0B7A70;--accent-soft:#E0F2EF;--good:#1E7A3C;--bad:#B42330;--warn:#A86A00;color-scheme:light}
+@media (prefers-color-scheme:dark){:root{--paper:#11151D;--panel:#181D27;--ink:#E7EAF0;--muted:#9AA3B5;--line:#2A3140;--soft:#222935;--accent:#3CC2B2;--accent-soft:#16312F;--good:#5FCB85;--bad:#F2737E;--warn:#E5B454;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"IBM Plex Sans Arabic",Tahoma,Arial,sans-serif;line-height:1.75;font-size:16px}
+main{max-width:640px;margin:0 auto;padding:18px 14px 60px;padding-top:calc(18px + env(safe-area-inset-top,0px))}
+h1{font-size:22px;margin:0 0 4px}
+.lead{color:var(--muted);margin:0 0 18px}
+.step{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:12px;position:relative}
+.step h2{font-size:17px;margin:0 0 8px;display:flex;gap:10px;align-items:center}
+.n{width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-size:15px;flex:none}
+.step ol,.step ul{margin:6px 0;padding-inline-start:1.3em}.step li{margin:4px 0}
+.btn{border:0;background:var(--accent);color:#fff;border-radius:10px;padding:10px 16px;font:inherit;font-weight:600;font-size:15px;cursor:pointer;display:inline-block;text-decoration:none}
+.btn.ghost{background:var(--soft);color:var(--ink)}
+.k{background:var(--soft);border-radius:6px;padding:0 6px;font-weight:600;white-space:nowrap}
+.en{direction:ltr;unicode-bidi:isolate;font-family:Arial,sans-serif}
+.note{background:color-mix(in srgb,var(--warn) 14%,transparent);border-radius:10px;padding:10px 12px;font-size:14.5px;margin:8px 0}
+input{width:100%;font:inherit;font-size:15px;padding:10px;border:1.5px solid var(--line);border-radius:10px;background:var(--paper);color:var(--ink);direction:ltr;margin:6px 0}
+.msg{font-size:14.5px;margin:6px 0 0}.good{color:var(--good)}.bad{color:var(--bad)}
+pre{background:var(--soft);border-radius:10px;padding:10px;direction:ltr;text-align:left;font-size:13px;overflow-x:auto;white-space:pre-wrap;word-break:break-all}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.credit{text-align:center;font-size:13px;color:var(--muted);padding:14px 10px 6px;line-height:1.6}
+.credit b{color:var(--accent);font-weight:600}
+</style>
+</head>
+<body>
+<main>
+<h1>إعداد قسم المدرب</h1>
+<p class="lead">تُنفَّذ هذه الخطوات مرة واحدة فقط، وتستغرق حوالي ١٠ دقائق من الجوال. بعدها تُحفظ بيانات المتدربين في جدول Google داخل حسابك.</p>
+
+<div class="step"><h2><span class="n">١</span>انسخ كود الخادم</h2>
+<p>اضغط الزر لنسخ الكود كاملًا، ولا تعدّل فيه شيئًا.</p>
+<button class="btn" id="copyCode">📋 نسخ الكود</button><p class="msg" id="cm"></p></div>
+
+<div class="step"><h2><span class="n">٢</span>افتح Google Apps Script</h2>
+<ol><li>اضغط الزر لفتح الموقع في Safari، وسجّل دخولك بحساب Google.</li>
+<li><b>مهم على الآيفون:</b> اضغط زر <span class="k">aA</span> في شريط العنوان ← <span class="k">طلب موقع سطح المكتب</span>، لأن الموقع لا يعمل بنسخة الجوال.</li>
+<li>اضغط <span class="k en">New project</span> (مشروع جديد).</li></ol>
+<a class="btn" href="https://script.google.com/home/projects/create" target="_blank" rel="noopener">فتح Google Apps Script ↗</a></div>
+
+<div class="step"><h2><span class="n">٣</span>الصق الكود واحفظه</h2>
+<ol><li>اضغط داخل مساحة الكود، ثم حدّد كل الموجود فيه (اضغط مطوّلًا ← <span class="k">تحديد الكل</span>) واحذفه.</li>
+<li>اضغط مطوّلًا ← <span class="k">لصق</span>.</li>
+<li>اضغط أيقونة الحفظ 💾 في الأعلى.</li>
+<li>يمكنك تغيير اسم المشروع من أعلى الصفحة إلى <span class="k">فيزياء 101</span> (اختياري).</li></ol></div>
+
+<div class="step"><h2><span class="n">٤</span>امنح الصلاحيات</h2>
+<ol><li>في الشريط العلوي، اختر الدالة <span class="k en">setup</span> من القائمة، ثم اضغط <span class="k en">Run</span> (تشغيل).</li>
+<li>تظهر نافذة <span class="k en">Authorization required</span> ← اضغط <span class="k en">Review permissions</span> واختر حسابك.</li>
+<li>تظهر رسالة <span class="en">“Google hasn’t verified this app”</span>. هذا طبيعي لأن الكود خاص بك: اضغط <span class="k en">Advanced</span> ثم <span class="k en">Go to … (unsafe)</span>.</li>
+<li>اضغط <span class="k en">Allow</span> (سماح).</li></ol>
+<div class="note">يطلب الكود صلاحيتين فقط: إنشاء جدول Google في حسابك ليحفظ فيه بيانات المتدربين، والاتصال بخدمة خارجية ليعمل المساعد الذكي.</div></div>
+
+<div class="step"><h2><span class="n">٥</span>انشره كتطبيق ويب</h2>
+<ol><li>اضغط الزر الأزرق <span class="k en">Deploy</span> ← <span class="k en">New deployment</span>.</li>
+<li>اضغط أيقونة الترس ⚙️ بجانب <span class="en">Select type</span> واختر <span class="k en">Web app</span>.</li>
+<li><span class="en">Execute as</span>: اختر <span class="k en">Me</span>.</li>
+<li><span class="en">Who has access</span>: اختر <span class="k en">Anyone</span> ← <b>مهم جدًا</b> حتى يستطيع المتدربون الدخول.</li>
+<li>اضغط <span class="k en">Deploy</span>، ثم انسخ الرابط تحت <span class="en">Web app URL</span>. ينتهي الرابط بـ <span class="en">/exec</span>.</li></ol></div>
+
+<div class="step"><h2><span class="n">٦</span>الصق الرابط واختبره</h2>
+<input id="url" placeholder="https://script.google.com/macros/s/…/exec" autocomplete="off" spellcheck="false">
+<button class="btn" id="test">اختبار الرابط</button><p class="msg" id="tm"></p></div>
+
+<div class="step" id="s7" hidden><h2><span class="n">٧</span>أضف الرابط إلى موقعك في GitHub</h2>
+<ol><li>اضغط <span class="k">نسخ محتوى config.js</span>.</li>
+<li>اضغط <span class="k">فتح ملف config.js في GitHub</span> وسجّل دخولك إن طُلب منك.</li>
+<li>احذف كل النص الموجود في الملف، والصق المنسوخ.</li>
+<li>اضغط <span class="k en">Commit changes</span> مرتين.</li>
+<li>انتظر دقيقة حتى يحدّث Render الموقع.</li></ol>
+<pre id="cfg"></pre>
+<div class="row"><button class="btn" id="copyCfg">📋 نسخ محتوى config.js</button><a class="btn ghost" href="https://github.com/khalabdli745-hue/Physics101/edit/main/config.js" target="_blank" rel="noopener">فتح ملف config.js في GitHub ↗</a></div>
+<p class="msg" id="cfm"></p></div>
+
+<div class="step"><h2><span class="n">٨</span>ابدأ</h2>
+<p>افتح لوحة المدرب وأنشئ كلمة مرورك، ثم أضف الشعب واستورد أسماء المتدربين من Excel. جرّب المنصة بنفسك من تبويب «حسابي التجريبي».</p>
+<a class="btn" href="teacher.html">فتح لوحة المدرب</a></div>
+
+<div class="step"><h2><span class="n">٩</span>فعّل المساعد الذكي (مجاني)</h2>
+<ol><li>افتح <a href="https://console.groq.com/keys" target="_blank" rel="noopener">console.groq.com/keys</a> وسجّل بحساب Google.</li>
+<li>اضغط <span class="k en">Create API Key</span> وانسخ المفتاح (يبدأ بـ <span class="en">gsk_</span>).</li>
+<li>في لوحة المدرب افتح تبويب <span class="k">أسئلة المساعد الذكي</span>، والصق المفتاح، ثم اضغط <span class="k">حفظ وتفعيل</span>.</li></ol>
+<p>بعدها يظهر المساعد في نهاية كل درس لكل المتدربين.</p></div>
+
+<p class="lead" style="font-size:13.5px">إذا عدّلت الكود لاحقًا في Google Apps Script، انشره من <span class="en">Deploy ← Manage deployments ← ✏️ ← Version: New version</span>، فيبقى الرابط نفسه.</p>
+</main>
+<script>
+const $=s=>document.querySelector(s);
+async function copy(text,el,ok){try{await navigator.clipboard.writeText(text);el.className='msg good';el.textContent=ok}catch(e){
+  const t=document.createElement('textarea');t.value=text;t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);t.focus();t.select();
+  try{document.execCommand('copy');el.className='msg good';el.textContent=ok}catch(e2){el.className='msg bad';el.textContent='تعذّر النسخ تلقائيًا.'}t.remove()}}
+let CODE='';fetch('code.gs',{cache:'no-store'}).then(r=>r.text()).then(t=>CODE=t).catch(()=>{});
+$('#copyCode').onclick=async()=>{if(!CODE){try{CODE=await (await fetch('code.gs')).text()}catch(e){}}if(!CODE){$('#cm').className='msg bad';$('#cm').textContent='تعذّر تحميل الكود. تحقق من الإنترنت.';return}
+  copy(CODE,$('#cm'),'✓ تم نسخ الكود ('+CODE.split('\n').length+' سطرًا). انتقل للخطوة ٢.')};
+$('#test').onclick=async()=>{const u=$('#url').value.trim();const m=$('#tm');
+  if(!/^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec$/.test(u)){m.className='msg bad';m.textContent='الرابط غير صحيح. يجب أن يبدأ بـ https://script.google.com/macros/s/ وينتهي بـ /exec';return}
+  m.className='msg';m.textContent='جارٍ الاختبار…';
+  try{const r=await fetch(u).then(r=>r.json());if(r.ok&&r.app==='physics101'){m.className='msg good';m.textContent='✓ الرابط يعمل. انتقل للخطوة ٧.';
+    $('#cfg').textContent="window.P101_API = '"+u+"';";$('#s7').hidden=false;$('#s7').scrollIntoView({behavior:'smooth'})}
+    else{m.className='msg bad';m.textContent='الرابط يعمل لكنه لا يعود لهذا الكود. تأكد أنك نسخت الكود كاملًا.'}}
+  catch(e){m.className='msg bad';m.textContent='لم يستجب الرابط. تأكد من اختيار Who has access = Anyone ثم أعد النشر.'}};
+$('#copyCfg').onclick=()=>copy($('#cfg').textContent,$('#cfm'),'✓ تم النسخ. الصقه في ملف config.js على GitHub.');
+</script>
+</body>
+</html>
