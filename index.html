@@ -396,7 +396,13 @@ const TTS=(()=>{
       if(!opts.some(o=>o.g==='امرأة'))opts.push({v:base,p:1.22,g:'امرأة',label:'امرأة — صوت أنعم'});}
     const want=store.get('p101-voice','');const o=opts.find(o=>o.v.name+'|'+o.p===want)||opts[0];
     voice=o?o.v:null;pitch=o?o.p:1;}
-  if(ok){pick();speechSynthesis.onvoiceschanged=()=>{pick();refreshNotes()}}
+  let enVoices=[];
+  const EN_M=/alex|daniel|fred|aaron|arthur|tom|oliver|rishi|evan|nathan|guy|david|mark|james|male/i,EN_F=/samantha|karen|moira|tessa|victoria|serena|ava|allison|susan|zoe|nicky|kate|aria|jenny|zira|female/i;
+  function pickEn(){enVoices=speechSynthesis.getVoices().filter(v=>/^en/i.test(v.lang));
+    const q=v=>(/enhanced|premium|neural|natural/i.test(v.name)?4:0)+(/^en[-_](US|GB)/i.test(v.lang)?2:0)+(v.localService?1:0);enVoices.sort((a,b)=>q(b)-q(a))}
+  function enVoice(){if(!enVoices.length)return null;const male=pitch<1||MALE.test(voice?voice.name:'');
+    return enVoices.find(v=>(male?EN_M:EN_F).test(v.name))||enVoices[0]}
+  if(ok){pick();pickEn();speechSynthesis.onvoiceschanged=()=>{pick();pickEn();refreshNotes()}}
   const SUP={'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9'};
   const SUB={'₀':' صفر','₁':' واحد','₂':' اثنين','₃':' ثلاثة'};
   const UNIT=[
@@ -413,7 +419,13 @@ const TTS=(()=>{
   function vocWord(w){const V=window.VOCAB;if(!V)return w;const k=w.replace(DIA,'');if(V[k])return V[k];
     const m=k.match(/^([وفبلك])(.+)$/);if(m&&m[2].length>1){if(V[m[2]])return m[1]+V[m[2]];if(m[1]==='ل'&&m[2][0]==='ل'&&V['ا'+m[2]])return 'لِ'+V['ا'+m[2]].slice(1)}
     return w}
-  function vocal(t){return t.replace(/[\u0621-\u064A\u064B-\u0652]+/g,vocWord)}
+  /* بدون تنوين: نحذف التنوين ونقف على آخر الكلمة بالسكون حتى لا يضيفه القارئ الآلي */
+  function pausal(w){w=w.replace(/[\u064B-\u064D]/g,'');
+    if(w.replace(DIA,'').length<2)return w;
+    const last=w[w.length-1];if(/[\u064E-\u0652]/.test(last))return w;
+    if(/[اىويآ]/.test(last))return w;
+    return w+'\u0652'}
+  function vocal(t){return t.replace(/[\u0621-\u064A\u064B-\u0652]+/g,w=>pausal(vocWord(w)))}
   function parens(t){let prev;do{prev=t;t=t.replace(/\(([^()]*)\)/g,(m,inner)=>/[+×÷*\/·]|\s[−-]\s/.test(inner)?' قوس، '+inner+' ، إغلاق القوس، ':' '+inner+' ')}while(t!==prev);return t}
   function spoken(t){
     t=t.replace(/^#+\s*/gm,'').replace(/\*\*/g,'').replace(/`/g,'').replace(/^[-•]\s*/gm,'').replace(/[✓✗⚠️]/g,'').replace(/[✦⚗🔊■]/g,'');
@@ -441,6 +453,65 @@ const TTS=(()=>{
     t=t.replace(/[|]/g,' ').replace(/\s+([،.:؟])/g,'$1').replace(/\s+/g,' ');
     return t.trim();
   }
+  /* ===== الرموز والوحدات والمعادلات تُقرأ بصوت إنجليزي ===== */
+  const EN_UNIT=[['J/(kg·°C)','joules per kilogram degree Celsius'],['J/(kg·K)','joules per kilogram kelvin'],['J/kg·°C','joules per kilogram degree Celsius'],['J/kg·K','joules per kilogram kelvin'],['N·m²/C²','newton meter squared per coulomb squared'],
+    ['m/s²','meters per second squared'],['m/s','meters per second'],['mm/s','millimeters per second'],['km/h','kilometers per hour'],['A/m²','amperes per square meter'],['kg/m³','kilograms per cubic meter'],['m⁻³','per cubic meter'],
+    ['N/C','newtons per coulomb'],['V/m','volts per meter'],['F/m','farads per meter'],['J/°C','joules per degree Celsius'],['J/K','joules per kelvin'],['J/kg','joules per kilogram'],['J/C','joules per coulomb'],['J/s','joules per second'],['C/s','coulombs per second'],['V/A','volts per ampere'],['N·m','newton meters'],['Ω·m','ohm meters'],['°C⁻¹','per degree Celsius'],['K⁻¹','per kelvin'],
+    ['°C','degrees Celsius'],['°F','degrees Fahrenheit'],['kWh','kilowatt hours'],['mAh','milliamp hours'],['mm²','square millimeters'],['cm²','square centimeters'],['km²','square kilometers'],['m²','square meters'],['m³','cubic meters'],['cm³','cubic centimeters'],
+    ['µF','microfarads'],['μF','microfarads'],['µC','microcoulombs'],['μC','microcoulombs'],['µm','micrometers'],['μm','micrometers'],['µA','microamperes'],['nC','nanocoulombs'],['nF','nanofarads'],['pF','picofarads'],['nm','nanometers'],['mA','milliamperes'],['mV','millivolts'],['kV','kilovolts'],['MΩ','megaohms'],['kΩ','kilo ohms'],
+    ['mJ','millijoules'],['kJ','kilojoules'],['MJ','megajoules'],['kW','kilowatts'],['MW','megawatts'],['kg','kilograms'],['km','kilometers'],['cm','centimeters'],['mm','millimeters'],['mg','milligrams'],['ms','milliseconds'],['Hz','hertz'],['cal','calories'],['mol','moles'],['cd','candela'],['Ω','ohms'],['min','minutes']];
+  const EN_ONE={m:'meters',s:'seconds',h:'hours',g:'grams',N:'newtons',J:'joules',W:'watts',V:'volts',A:'amperes',C:'coulombs',F:'farads',K:'kelvin',L:'liters'};
+  const EN_LET={a:'ay',b:'bee',c:'see',d:'dee',e:'ee',f:'eff',g:'gee',h:'aitch',i:'eye',j:'jay',k:'kay',l:'el',m:'em',n:'en',o:'oh',p:'pee',q:'cue',r:'ar',s:'ess',t:'tee',u:'you',v:'vee',w:'double you',x:'ex',y:'why',z:'zee'};
+  const EN_SUP={'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9'};
+  const EN_SUB={'₀':' naught','₁':' one','₂':' two','₃':' three','ₓ':' x','ᵧ':' y'};
+  const EN_WORD={KE:'kinetic energy',PE:'potential energy',ME:'mechanical energy',SI:'S I',DC:'D C',AC:'A C',LED:'L E D',GPS:'G P S',PhET:'fet',cos:'cosine',sin:'sine',tan:'tangent',max:'maximum',min:'minimum',total:'total',known:'known'};
+  function enParens(t){let prev;do{prev=t;t=t.replace(/\(([^()]*)\)/g,(m,inner)=>/[+×÷*\/·]|\s[−-]\s/.test(inner)?' open bracket, '+inner+', close bracket, ':' '+inner+' ')}while(t!==prev);return t}
+  function spokenEn(t){
+    const P=[];const ph=w=>{P.push(w);return ' \u0001'+(P.length-1)+'\u0002 '};
+    t=t.replace(/v_f/g,'v'+ph('final')).replace(/v_i/g,'v'+ph('initial')).replace(/v_d/g,'v'+ph('drift')).replace(/v̄/g,'v'+ph('average')).replace(/T_f/g,'T'+ph('final')).replace(/T_i/g,'T'+ph('initial')).replace(/_total/g,ph('total')).replace(/_known/g,ph('known')).replace(/_x/g,' x').replace(/_y/g,' y').replace(/_/g,' ');
+    t=t.replace(/î/g,' i'+ph('hat')).replace(/ĵ/g,' j'+ph('hat')).replace(/k̂/g,' k'+ph('hat'));
+    t=t.replace(/10([⁻]?[⁰¹²³⁴⁵⁶⁷⁸⁹]+)/g,(m,e)=>ph('ten to the power of '+(e[0]==='⁻'?'minus ':'')+e.replace('⁻','').split('').map(c=>EN_SUP[c]).join('')));
+    t=t.replace(/(\d)e([-+]?\d+)/g,(m,d,e)=>d+ph('times ten to the power of '+(e[0]==='-'?'minus '+e.slice(1):e.replace('+',''))));
+    for(const[u,w]of EN_UNIT)t=t.split(u).join(ph(w));
+    t=t.replace(/(\d|\u0002)\s*([mshgNJWVACFKL])(?![A-Za-z])/g,(m,d,u)=>d+ph(EN_ONE[u]));
+    t=t.replace(/\b(KE|PE|ME|SI|DC|AC|LED|GPS|PhET|cos|sin|tan|max|min|total|known)\b/g,m=>ph(EN_WORD[m]));
+    t=t.replace(/\s·\s/g,', ').replace(/…/g,ph(', and so on')).replace(/(\d)\s*\(/g,'$1×(').replace(/\)\s*\(/g,')×(');
+    let prev;do{prev=t;t=t.replace(/\(([^()]*)\)/g,(m,inner)=>/[+×÷*\/·]|\s[−-]\s/.test(inner)?ph('open bracket,')+inner+ph(', close bracket,'):' '+inner+' ')}while(t!==prev);
+    t=t.replace(/[()]/g,' ');
+    t=t.replace(/⁻¹/g,ph('to the minus one')).replace(/²/g,ph('squared')).replace(/³/g,ph('cubed')).replace(/½/g,ph('one half'));
+    t=t.replace(/[₀₁₂₃ₓᵧ]/g,c=>ph(EN_SUB[c].trim()));
+    const OPS=[[/√/g,'square root of'],[/≈/g,'approximately equals'],[/≠/g,'does not equal'],[/=/g,'equals'],[/[×·*]/g,'times'],[/÷/g,'divided by'],[/\//g,'over'],[/\+/g,'plus'],[/(^|\s)[−-](?=\d)/g,' minus'],[/[−-]/g,'minus'],[/[←⇐→⇒]/g,', so,'],[/∝/g,'is proportional to'],[/%/g,'percent'],[/°/g,'degrees'],[/</g,'less than'],[/>/g,'greater than'],
+      [/θ/g,'theta'],[/Δ/g,'delta'],[/[μµ]/g,'mu'],[/ρ/g,'rho'],[/α/g,'alpha'],[/β/g,'beta'],[/σ/g,'sigma'],[/ε/g,'epsilon'],[/π/g,'pi'],[/Σ/g,'sum of'],[/τ/g,'tau'],[/λ/g,'lambda'],[/ω/g,'omega'],[/Ω/g,'ohms']];
+    for(const[re,w]of OPS)t=t.replace(re,()=>ph(w));
+    t=t.replace(/(\d)([A-Za-z])/g,'$1 $2').replace(/([A-Za-z])(\d)/g,'$1 $2');
+    t=t.replace(/\b[A-Za-z]{1,3}\b/g,w=>w.split('').map(c=>EN_LET[c.toLowerCase()]||c).join(' '));
+    t=t.replace(/\u0001(\d+)\u0002/g,(m,i)=>P[+i]);
+    t=t.replace(/(^|[^\d.])(1|one)\s+([a-z]*(meter|gram|second|joule|watt|volt|ampere|coulomb|farad|ohm|newton|liter|hour|minute|calorie|degree|mole)s)\b/g,(m,a,n,u)=>a+n+' '+u.slice(0,-1));
+    t=t.replace(/[|[\]{}"'`«»]/g,' ').replace(/\s+([,.:])/g,'$1').replace(/,(\s*,)+/g,',').replace(/\s+/g,' ');
+    return t.trim().replace(/^[,.\s]+|[,\s]+$/g,'');
+  }
+  function arPart(t){t=t.replace(/[←⇐]/g,'، إذن ').replace(/[→⇒]/g,' إلى ').replace(/[()«»]/g,' ').replace(/\s·\s|^\s*·|·\s*$/g,'، ').replace(/\s[—–]\s/g,'، ');t=vocal(t);return t.replace(/\s+([،.:؟])/g,'$1').replace(/\s+/g,' ')}
+  const AR_CH=/[؀-ۿ]/;
+  function segments(raw){
+    let t=raw.replace(/^#+\s*/gm,'').replace(/\*\*/g,'').replace(/`/g,'').replace(/^[-•]\s*/gm,'').replace(/[✓✗⚠️]/g,'').replace(/[✦⚗🔊■]/g,'');
+    t=t.replace(/([^.:؟!،\n])[ \t]*\n+/g,'$1.\n').replace(/\n+/g,' ');
+    /* نقسم النص إلى كلمات عربية وما بينها */
+    const toks=t.match(/[؀-ۿً-ْ]+|[^؀-ۿ]+/g)||[];
+    const segs=[];
+    for(const k of toks){
+      if(AR_CH.test(k)){segs.push({l:'ar',t:k});continue}
+      const isMath=/[A-Za-zͰ-Ͽ=×÷√²³⁻⁰¹⁴⁵⁶⁷⁸⁹₀₁₂₃°%∝≈µΩ+·\/]|\d\s*[−-]|[−]/.test(k);
+      if(!isMath){segs.push({l:'ar',t:k});continue}
+      /* علامات الترقيم في الطرفين تبقى مع العربي */
+      const m=k.match(/^([\s،.:؛؟!«»·\-—–]*)([\s\S]*?)([\s،.:؛؟!«»·\-—–]*)$/);
+      if(m[1])segs.push({l:'ar',t:m[1]});
+      segs.push({l:'en',t:m[2]});
+      if(m[3])segs.push({l:'ar',t:m[3]});
+    }
+    /* دمج المتجاور من نفس اللغة */
+    const out=[];for(const s of segs){const L=out[out.length-1];if(L&&L.l===s.l)L.t+=s.t;else out.push({l:s.l,t:s.t})}
+    return out.map(s=>({l:s.l,t:s.l==='en'?spokenEn(s.t):arPart(s.t)})).filter(s=>/[A-Za-z0-9ء-ي]/.test(s.t));
+  }
   function split(t){
     const sents=t.replace(/\n+/g,'. ').split(/(?<=[.؟!؛])\s+/).map(x=>x.trim()).filter(x=>x.length>1);
     const out=[];let cur='';
@@ -449,10 +520,19 @@ const TTS=(()=>{
     if(cur)out.push(cur);return out.filter(Boolean)}
   function stop(){if(!ok)return;queue=[];playing=false;speechSynthesis.cancel();if(btn){btn.classList.remove('on');btn.innerHTML=btnHTML}btn=null}
   function next(){if(!queue.length){stop();return}
-    const u=new SpeechSynthesisUtterance(queue.shift());u.lang=voice?voice.lang:'ar-SA';if(voice)u.voice=voice;u.rate=rate;u.pitch=pitch;
-    u.onend=()=>{if(playing)next()};u.onerror=()=>{if(playing)next()};speechSynthesis.speak(u)}
+    const item=queue.shift();const en=item.l==='en';const ev=en?enVoice():null;
+    const u=new SpeechSynthesisUtterance(item.t);
+    if(en&&ev){u.voice=ev;u.lang=ev.lang;u.pitch=1}else{u.lang=voice?voice.lang:'ar-SA';if(voice)u.voice=voice;u.pitch=pitch}
+    u.rate=rate;u.onend=()=>{if(playing)next()};u.onerror=()=>{if(playing)next()};speechSynthesis.speak(u)}
+  function build(text){
+    if(!enVoices.length)return split(spoken(text)).map(t=>({l:'ar',t}));
+    const out=[];for(const s of segments(text)){
+      if(s.l==='en'){out.push({l:'en',t:s.t});continue}
+      const parts=split(s.t);const L=out[out.length-1];
+      parts.forEach((p,i)=>{if(i===0&&L&&L.l==='ar'&&(L.t+' '+p).length<=240)L.t+=' '+p;else out.push({l:'ar',t:p})})}
+    return out}
   function play(text,b){if(!ok)return;const same=btn===b;stop();if(same)return;
-    btn=b;btnHTML=b.innerHTML;b.classList.add('on');b.innerHTML='■ إيقاف';queue=split(spoken(text));playing=true;next()}
+    btn=b;btnHTML=b.innerHTML;b.classList.add('on');b.innerHTML='■ إيقاف';queue=build(text);playing=true;next()}
   function voiceSelect(){
     const s=document.createElement('select');s.className='voiceSel';s.setAttribute('aria-label','اختر الصوت');
     const fill=()=>{s.innerHTML='';opts.forEach(op=>{const o=document.createElement('option');o.value=op.v.name+'|'+op.p;
@@ -477,7 +557,7 @@ const TTS=(()=>{
   function refreshNotes(){document.querySelectorAll('.ttsNote').forEach(n=>{n.textContent=voice?'':'لا يوجد صوت عربي على هذا الجهاز'});
     document.querySelectorAll('.voiceSel').forEach(s=>s._fill&&s._fill());
     document.querySelectorAll('.ttsWarn').forEach(n=>n.hidden=!!voice||!ok)}
-  return{play,stop,controls,refreshNotes,spoken,has:()=>!!voice,ok}
+  return{play,stop,controls,refreshNotes,spoken,segments,build,has:()=>!!voice,ok}
 })();
 const TTS_HELP=`<details class="ttsWarn" hidden><summary><b>لا يعمل الصوت؟ اضغط هنا لتفعيل الصوت العربي على جهازك</b></summary>آيفون/آيباد: الإعدادات ← تسهيلات الاستخدام ← المحتوى المنطوق ← الأصوات ← العربية. أندرويد: الإعدادات ← تحويل النص إلى كلام ← محرك Google ← تثبيت العربية. ويندوز: الإعدادات ← الوقت واللغة ← الكلام ← إضافة صوت عربي. متصفح Chrome على الكمبيوتر غالبًا يحتوي صوتًا عربيًا جاهزًا.</details><details class="ttsTip"><summary>🎧 لصوت أوضح وأكثر سلاسة</summary>آيفون/آيباد: الإعدادات ← تسهيلات الاستخدام ← المحتوى المنطوق ← الأصوات ← العربية ← نزّل صوتًا مكتوبًا بجانبه <b>(محسّن)</b> أو <b>(ممتاز)</b> مثل «ماجد»، ثم أعد فتح المنصة واختره من قائمة الأصوات (يظهر بجانبه ⭐). الصوت المحسّن أنقى بكثير من الصوت الافتراضي.</details>`;
 
