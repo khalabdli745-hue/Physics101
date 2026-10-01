@@ -443,7 +443,7 @@ const TTS=(()=>{
     t=t.replace(/10([⁻]?[⁰¹²³⁴⁵⁶⁷⁸⁹]+)/g,(m,e)=>' عشرة أس '+(e[0]==='⁻'?'سالب ':'')+e.replace('⁻','').split('').map(c=>SUP[c]).join('')+' ');
     t=t.replace(/(\d)e([-+]?\d+)/g,(m,d,e)=>d+' ضرب عشرة أس '+(e[0]==='-'?'سالب '+e.slice(1):e.replace('+','')));
     for(const[u,w]of UNIT)t=t.split(u).join(' '+w+' ');
-    t=t.replace(/(\d)\s*([mshgNJWVACFKL])(?![A-Za-z])/g,(m,d,u)=>d+' '+AFTER_NUM[u]);
+    t=t.replace(/(\d)\s+([mshgNJWVACFKL])(?![A-Za-z])/g,(m,d,u)=>d+' '+AFTER_NUM[u]);
     t=t.replace(/\b(KE|PE|ME|SI|DC|AC|LED|GPS|PhET)\b/g,m=>' '+ACR[m]+' ');
     t=t.replace(/\bcos\b/g,' جتا ').replace(/\bsin\b/g,' جا ').replace(/\btan\b/g,' ظا ');
     t=t.replace(/\s·\s/g,'، ').replace(/\s[—–]\s/g,'، ');
@@ -479,8 +479,9 @@ const TTS=(()=>{
     t=t.replace(/î/g,' i'+ph('hat')).replace(/ĵ/g,' j'+ph('hat')).replace(/k̂/g,' k'+ph('hat'));
     t=t.replace(/10([⁻]?[⁰¹²³⁴⁵⁶⁷⁸⁹]+)/g,(m,e)=>ph('ten to the power of '+(e[0]==='⁻'?'minus ':'')+e.replace('⁻','').split('').map(c=>EN_SUP[c]).join('')));
     t=t.replace(/(\d)e([-+]?\d+)/g,(m,d,e)=>d+ph('times ten to the power of '+(e[0]==='-'?'minus '+e.slice(1):e.replace('+',''))));
+    t=t.replace(/=\s*F\/m\b/g,'= F'+ph('over')+'m');
     for(const[u,w]of EN_UNIT)t=t.split(u).join(ph(w));
-    t=t.replace(/(\d|\u0002)\s*([mshgNJWVACFKL])(?![A-Za-z])/g,(m,d,u)=>d+ph(EN_ONE[u]));
+    t=t.replace(/(\d\s+|\u0002\s*)([mshgNJWVACFKL])(?![A-Za-z])/g,(m,d,u)=>d+ph(EN_ONE[u]));
     t=t.replace(/\b(KE|PE|ME|SI|DC|AC|LED|GPS|PhET|cos|sin|tan|max|min|total|known)\b/g,m=>ph(EN_WORD[m]));
     t=t.replace(/\s·\s/g,', ').replace(/…/g,ph(', and so on')).replace(/(\d)\s*\(/g,'$1×(').replace(/\)\s*\(/g,')×(');
     let prev;do{prev=t;t=t.replace(/\(([^()]*)\)/g,(m,inner)=>/[+×÷*\/·]|\s[−-]\s/.test(inner)?ph('open bracket,')+inner+ph(', close bracket,'):' '+inner+' ')}while(t!==prev);
@@ -507,7 +508,7 @@ const TTS=(()=>{
     const segs=[];
     for(const k of toks){
       if(AR_CH.test(k)){segs.push({l:'ar',t:k});continue}
-      const isMath=/[A-Za-zͰ-Ͽ=×÷√²³⁻⁰¹⁴⁵⁶⁷⁸⁹₀₁₂₃°%∝≈µΩ+·\/]|\d\s*[−-]|[−]/.test(k);
+      const isMath=/[A-Za-z\u00C0-\u024F\u0300-\u036FͰ-Ͽ=×÷√²³⁻⁰¹⁴⁵⁶⁷⁸⁹₀₁₂₃°%∝≈µΩ+·\/]|\d\s*[−-]|[−]/.test(k);
       if(!isMath){segs.push({l:'ar',t:k});continue}
       /* علامات الترقيم في الطرفين تبقى مع العربي */
       const m=k.match(/^([\s،.:؛؟!«»·\-—–]*)([\s\S]*?)([\s،.:؛؟!«»·\-—–]*)$/);
