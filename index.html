@@ -428,7 +428,7 @@ const TTS=(()=>{
     return w}
   /* بدون تنوين: نحذف التنوين ونقف على آخر الكلمة بالسكون حتى لا يضيفه القارئ الآلي */
   function pausal(w){w=w.replace(/[\u064B-\u064D]/g,'');
-    if(w.replace(DIA,'').length<2)return w;
+    if(w.replace(DIA,'').length<2||!/[\u064E-\u0652]/.test(w))return w;
     const last=w[w.length-1];if(/[\u064E-\u0652]/.test(last))return w;
     if(/[اىويآ]/.test(last))return w;
     return w+'\u0652'}
