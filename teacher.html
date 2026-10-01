@@ -169,7 +169,7 @@ async function authScreen(){
 async function load(){
   const m=$('#main');if(!DATA)m.innerHTML='<p class="empty"><span class="spin"></span> جارٍ تحميل البيانات…</p>';
   try{const r=await api({a:'tdata',token:TOKEN});if(!r.ok){if(r.error!=='auth')m.innerHTML=`<p class="empty">${esc(errText(r.error))}</p>`;return}
-    DATA=r;DATA.students.forEach(enrich);STATS=null;
+    DATA=r;DATA.students.forEach(enrich);DATA.demo=DATA.students.find(x=>x.id==='DEMO')||null;DATA.students=DATA.students.filter(x=>x.id!=='DEMO');DATA.sections=DATA.sections.filter(x=>DATA.students.some(y=>y.sectionId===x.id)||!(DATA.demo&&DATA.demo.sectionId===x.id));STATS=null;
     $('#sheetLink').innerHTML=r.sheetUrl?`<a href="${esc(r.sheetUrl)}" target="_blank" rel="noopener">جدول Google ↗</a>`:'';
     draw()}catch(e){m.innerHTML='<p class="empty">تعذّر الاتصال بالخادم. تحقق من الإنترنت ثم اضغط «تحديث».</p>'}
 }
@@ -206,7 +206,7 @@ async function addStudent(){
   if(r.ok){toast(r.added?'تمت إضافة المتدرب':'تم تحديث بيانات المتدرب');load()}else toast(errText(r.error));
 }
 async function openStudent(id){
-  const s=DATA.students.find(x=>x.id===id);if(!s)return;
+  const s=DATA.students.find(x=>x.id===id)||(id==='DEMO'?DATA.demo:null);if(!s)return;
   const d=document.createElement('div');d.className='drawer';d.innerHTML=`<div role="dialog" aria-label="تفاصيل المتدرب"><div class="dhead"><div><h2>${esc(s.name)}</h2><span class="sub">الرقم ${esc(s.id)} · ${esc(secName(s.sectionId))}</span></div><button class="btn ghost sm x">إغلاق ✕</button></div><div id="dbody"></div></div>`;
   document.body.appendChild(d);const close=()=>d.remove();d.onclick=e=>{if(e.target===d)close()};d.querySelector('.x').onclick=close;
   const b=d.querySelector('#dbody');
@@ -303,7 +303,7 @@ async function drawAI(){
   const m=$('#main');m.innerHTML='<p class="empty"><span class="spin"></span></p>';
   let r;try{r=await api({a:'tquestions',token:TOKEN,sectionId:secFilter==='all'?'':secFilter})}catch(e){m.innerHTML='<p class="empty">تعذّر الاتصال بالخادم.</p>';return}
   if(!r.ok){m.innerHTML=`<p class="empty">${esc(errText(r.error))}</p>`;return}
-  const nm=Object.fromEntries(DATA.students.map(s=>[s.id,s.name]));nm.TEACHER='المدرب';
+  const nm=Object.fromEntries(DATA.students.map(s=>[s.id,s.name]));nm.TEACHER='المدرب';nm.DEMO='الحساب التجريبي';
   const opts=`<option value="all">كل الشعب</option>`+DATA.sections.map(s=>`<option value="${esc(s.id)}" ${secFilter===s.id?'selected':''}>${esc(s.name)}</option>`).join('');
   const byLesson={};r.questions.forEach(q=>{const k=LT[q.lessonKey]||q.lessonTitle||'—';byLesson[k]=(byLesson[k]||0)+1});
   const top=Object.entries(byLesson).sort((a,b)=>b[1]-a[1]).slice(0,8),mx=Math.max(1,...top.map(x=>x[1]));
@@ -390,7 +390,7 @@ function drawExport(){
   $('#e4').onclick=()=>saveBook([['المتدربون',[['الرقم التدريبي','الاسم','الشعبة'],...stu().map(s=>[s.id,s.name,secName(s.sectionId)])],[16,26,16]]],`المتدربون-${tag()}.xlsx`);
 }
 function drawDemo(){
-  const m=$('#main'),s=DATA.students.find(x=>x.id==='DEMO');
+  const m=$('#main'),s=DATA.demo;
   m.innerHTML=`<div class="card"><h2>بيانات دخول الحساب التجريبي</h2><p class="sub">ادخل بها من شاشة دخول المتدربين على أي جهاز، تمامًا كما يدخل متدربوك.</p>
   <div class="stats" style="margin-bottom:8px"><div class="stat"><small>اسم المستخدم</small><b class="en" style="direction:ltr;display:block;text-align:right">demo</b></div><div class="stat"><small>كلمة المرور</small><b style="font-size:16px">${s&&s.hasPw?'✓ محددة':'لم تُحدد بعد'}</b></div></div>
   <div class="row"><input type="password" id="dpw" placeholder="كلمة مرور الحساب التجريبي (٤ أحرف على الأقل)" autocomplete="new-password" style="flex:1;min-width:200px"><button class="btn" id="dsp">${s&&s.hasPw?'تغيير كلمة المرور':'تعيين كلمة المرور'}</button></div><p class="msg" id="dpm"></p></div>
