@@ -260,7 +260,7 @@ const ACTIONS = {
   tstats: function (r) {
     readToken_(r.token, 't');
     const sid = r.sectionId ? String(r.sectionId) : '';
-    const inSec = function (x) { return !sid || String(x.sectionId) === sid; };
+    const inSec = function (x) { return String(x.studentId) !== 'DEMO' && (!sid || String(x.sectionId) === sid); };
     const lessons = {}, questions = {}, perStudent = {};
     rows_('Results').forEach(function (x) {
       if (!inSec(x) || x.kind === 'done') return;
