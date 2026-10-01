@@ -109,8 +109,9 @@ main{display:flex;flex-direction:column;min-height:0;min-width:0}
 .listenAll .speak>button.on{background:var(--warnc);border-color:var(--warnc)}
 .voiceSel{max-width:190px}
 .speak .note{font-size:13px;color:var(--muted)}
-.ttsWarn summary{cursor:pointer}
-.ttsWarn{font-size:13.5px;color:var(--muted);background:var(--soft);border-radius:8px;padding:8px 12px;margin-bottom:12px}
+.ttsWarn summary,.ttsTip summary{cursor:pointer}
+.ttsTip{font-size:13.5px;color:var(--muted);background:var(--soft);border-radius:8px;padding:8px 12px;margin-bottom:12px}
+.ttsTip{font-size:.85rem;margin:.4rem 0;opacity:.9}.ttsTip summary{cursor:pointer;color:var(--accent)}.ttsWarn{font-size:13.5px;color:var(--muted);background:var(--soft);border-radius:8px;padding:8px 12px;margin-bottom:12px}
 .sentence-on{background:var(--accent-soft);border-radius:4px}
 /* figure */
 .fig{margin:14px 0 6px;text-align:center}
@@ -387,11 +388,11 @@ const TTS=(()=>{
   const MALE=/maged|majed|tarik|tariq|naayf|hamed|hamdan|shakir|omar|fahed|zayd|ahmed|khalid|male|رجل/i,FEMALE=/laila|layla|mariam|maryam|hoda|salma|zariyah|amina|fatima|noura|reem|female|امرأة/i;
   const gender=v=>MALE.test(v.name)?'رجل':FEMALE.test(v.name)?'امرأة':'';
   function pick(){if(!ok)return;voices=speechSynthesis.getVoices().filter(v=>/^ar/i.test(v.lang));
-    voices.sort((a,b)=>(/^ar[-_]SA/i.test(b.lang)-/^ar[-_]SA/i.test(a.lang))||(b.localService-a.localService));
-    opts=voices.map((v,i)=>({v,p:1,g:gender(v),label:(gender(v)||'صوت '+(i+1))+' — '+v.name.replace(/\s*\(.*\)$/,'').replace(/^(Microsoft|Google)\s*/,'').slice(0,20)}));
+    const q=v=>(/enhanced|premium|neural|natural|محس|ممتاز/i.test(v.name)?4:0)+(/^ar[-_]SA/i.test(v.lang)?2:0)+(/google|microsoft/i.test(v.name)?1:0);voices.sort((a,b)=>q(b)-q(a));
+    opts=voices.map((v,i)=>({v,p:1,g:gender(v),label:(gender(v)||'صوت '+(i+1))+(/enhanced|premium|neural|natural/i.test(v.name)?' ⭐ عالي الجودة':'')+' — '+v.name.replace(/\s*\(.*\)$/,'').replace(/^(Microsoft|Google)\s*/,'').slice(0,20)}));
     if(voices.length){const base=voices[0];
-      if(!opts.some(o=>o.g==='رجل'))opts.push({v:base,p:0.72,g:'رجل',label:'رجل — صوت أعمق'});
-      if(!opts.some(o=>o.g==='امرأة'))opts.push({v:base,p:1.4,g:'امرأة',label:'امرأة — صوت أنعم'});}
+      if(!opts.some(o=>o.g==='رجل'))opts.push({v:base,p:0.85,g:'رجل',label:'رجل — صوت أعمق'});
+      if(!opts.some(o=>o.g==='امرأة'))opts.push({v:base,p:1.22,g:'امرأة',label:'امرأة — صوت أنعم'});}
     const want=store.get('p101-voice','');const o=opts.find(o=>o.v.name+'|'+o.p===want)||opts[0];
     voice=o?o.v:null;pitch=o?o.p:1;}
   if(ok){pick();speechSynthesis.onvoiceschanged=()=>{pick();refreshNotes()}}
@@ -405,10 +406,29 @@ const TTS=(()=>{
     ['µF','ميكروفاراد'],['µC','ميكروكولوم'],['µm','ميكرومتر'],['nC','نانوكولوم'],['nm','نانومتر'],['pF','بيكوفاراد'],['nF','نانوفاراد'],['mJ','مللي جول'],['kJ','كيلو جول'],['kW','كيلوواط'],['kg','كيلوجرام'],['km','كيلومتر'],['cm','سنتيمتر'],['mm','مليمتر'],['mg','مليجرام'],['Gg','جيجا جرام'],['Hz','هيرتز'],['Ω','أوم'],['cal','سُعر']];
   const AFTER_NUM={m:'متر',s:'ثانية',h:'ساعة',g:'جرام',N:'نيوتن',J:'جول',W:'واط',V:'فولت',A:'أمبير',C:'كولوم',F:'فاراد',K:'كلفن',L:'لتر'};
   const ACR={KE:'الطاقة الحركية',PE:'طاقة الوضع',ME:'الطاقة الميكانيكية',SI:'النظام الدولي',DC:'دي سي',AC:'إيه سي',LED:'إل إي دي',GPS:'جي بي إس',PhET:'فيت',SA:''};
-  const LET={a:'إيه',b:'بي',c:'سي',d:'دي',e:'إي',f:'إف',g:'جي',h:'إتش',i:'آي',j:'جيه',k:'كيه',l:'إل',m:'إم',n:'إن',o:'أو',p:'بي',q:'كيو',r:'آر',s:'إس',t:'تي',u:'يو',v:'في',w:'دبليو',x:'إكس',y:'واي',z:'زد'};
+  const LET={a:'إيه',b:'بي',c:'سي',d:'دي',e:'إي',f:'إف',g:'جي',h:'إتش',i:'آي',j:'جيه',k:'كيه',l:'إل',m:'إم',n:'إن',o:'أو',p:'بي',q:'كيو',r:'آر',s:'إس',t:'تي',u:'يو',v:'ڤِي',w:'دبليو',x:'إكس',y:'واي',z:'زد'};
+  /* تشكيل المصطلحات العلمية حتى تُنطق بمعناها الفيزيائي الصحيح */
+  const VOC=('الجهد=الجُهْد|جهد=جُهْد|وجهده=وجُهْدُه|بجهد=بِجُهْد|الشغل=الشُّغْل|شغل=شُغْل|السعة=السَّعَة|سعة=سَعَة|سعته=سَعَتُه|سعتها=سَعَتُها|الشحنة=الشِّحْنَة|شحنة=شِحْنَة|شحنته=شِحْنَتُه|شحنتها=شِحْنَتُها|الشحنات=الشِّحْنات|شحنتان=شِحْنَتان|شحنتين=شِحْنَتَيْن|الشحن=الشَّحْن'
+   +'|كمية=كَمِّيَّة|الكمية=الكَمِّيَّة|الكميات=الكَمِّيّات|القدرة=القُدْرَة|قدرته=قُدْرَتُه|الكتلة=الكُتْلَة|كتلة=كُتْلَة|كتلته=كُتْلَتُه|كتلتها=كُتْلَتُها'
+   +'|مكثف=مُكَثِّف|المكثف=المُكَثِّف|المكثفات=المُكَثِّفات|مكثفان=مُكَثِّفان|متجه=مُتَّجِه|المتجه=المُتَّجِه|متجهة=مُتَّجِهَة|المتجهات=المُتَّجِهات|متجهان=مُتَّجِهان|لمتجه=لِمُتَّجِه|لمتجهين=لِمُتَّجِهَيْن'
+   +'|القياسي=القِياسِيّ|قياسية=قِياسِيَّة|القياسية=القِياسِيَّة|الاتجاهي=الاتِّجاهِيّ|الاتجاهية=الاتِّجاهِيَّة|المحصلة=المُحَصِّلَة|محصلة=مُحَصِّلَة|المركبة=المُرَكِّبَة|مركبة=مُرَكِّبَة|المركبات=المُرَكِّبات'
+   +'|التوالي=التَّوالي|توالي=تَوالي|التوازي=التَّوازي|توازي=تَوازي|الحمل=الحَمْل|حمل=حَمْل|الموصل=المُوَصِّل|موصل=مُوَصِّل|الموصلة=المُوَصِّلَة|الموصلات=المُوَصِّلات|العازل=العازِل|عازل=عازِل'
+   +'|النوعية=النَّوْعِيَّة|الكامنة=الكامِنَة|المختزنة=المُخْتَزَنَة|المقاومية=المُقاوَمِيَّة|مقاوميته=مُقاوَمِيَّتُه|المقاومة=المُقاوَمَة|مقاومة=مُقاوَمَة|مقاومته=مُقاوَمَتُه|مقاومتان=مُقاوَمَتان|المقاومات=المُقاوَمات|مقاومات=مُقاوَمات'
+   +'|المتردد=المُتَرَدِّد|متردد=مُتَرَدِّد|المستمر=المُسْتَمِرّ|مستمر=مُسْتَمِرّ|الإزاحة=الإِزاحَة|إزاحة=إِزاحَة|المجال=المَجال|مجال=مَجال|شدة=شِدَّة|الشدة=الشِّدَّة|شدته=شِدَّتُه|كثافة=كَثافَة|الكثافة=الكَثافَة'
+   +'|معامل=مُعامِل|المكافئة=المُكافِئَة|مقطع=مَقْطَع|مقطعه=مَقْطَعُه|الأميتر=الأَمِّيتَر|الفولتميتر=الفُولْتْمِيتَر|الترمومتر=التِّرْمومِتْر|الكلفن=الكِلْفِن|كلفن=كِلْفِن|بالكلفن=بِالكِلْفِن|بالفهرنهايت=بِالفَهْرِنْهايْت|فهرنهايت=فَهْرِنْهايْت'
+   +'|كولوم=كُولوم|الكولوم=الكُولوم|الجول=الجُول|جول=جُول|بالجول=بِالجُول|الأوم=الأُوم|أوم=أُوم|الواط=الواط|السينية=السِّينِيَّة|السيني=السِّينِيّ|الصادية=الصّادِيَّة|الصادي=الصّادِيّ|المئوي=المِئَوِيّ|بالمئوي=بِالمِئَوِيّ|مئوية=مِئَوِيَّة'
+   +'|الاتزان=الاتِّزان|الحركية=الحَرَكِيَّة|حركية=حَرَكِيَّة|ذيل=ذَيْل|طردي=طَرْدِيّ|عكسي=عَكْسِيّ|قطعت=قَطَعَت|الحث=الحَثّ|اللوحين=اللَّوْحَيْن|لوحي=لَوْحَي|متعادل=مُتَعادِل|نقطية=نُقَطِيَّة|أوجد=أَوْجِد|احسب=اِحْسِب'
+   +'|السكون=السُّكون|ثوان=ثَوانٍ|مشتقة=مُشْتَقَّة|المشتقة=المُشْتَقَّة|الانصهار=الانْصِهار|التبخر=التَّبَخُّر|الإشعاع=الإِشْعاع|إشعاع=إِشْعاع|الحرارية=الحَرارِيَّة|المؤثرة=المُؤَثِّرَة|تؤثر=تُؤَثِّر|يؤثر=يُؤَثِّر'
+   +'|القصور=القُصور|الذاتي=الذّاتِيّ|الدولي=الدَّوْلِيّ|المتوسطة=المُتَوَسِّطَة|النهائية=النِّهائِيَّة|الابتدائية=الابْتِدائِيَّة|المنتظم=المُنْتَظِم|منتظم=مُنْتَظِم|الانجراف=الانْجِراف|المستهلكة=المُسْتَهْلَكَة|الاصطلاحي=الاصْطِلاحِيّ'
+   +'|تتضاعف=تَتَضاعَف|تضاعفت=تَضاعَفَت|المسطرة=المِسْطَرَة|بعدين=بُعْدَيْن|بعدان=بُعْدان|أبعاد=أَبْعاد|الأبعاد=الأَبْعاد|مقدار=مِقْدار|مقداره=مِقْدارُه|المقدار=المِقْدار|كهروستاتيكية=كَهْروسْتاتيكِيَّة|الكهربائية=الكَهْرَبائِيَّة')
+    .split('|').map(x=>x.split('='));
+  const VOCRE=VOC.map(([w,v])=>{const alts=[[w,v]];if(w.startsWith('ال'))alts.push(['لل'+w.slice(2),'لِل'+v.slice(2)]);
+    return alts.map(([a,b])=>[new RegExp('(^|[^\\u0621-\\u0652])([وفبك]?)'+a+'(?![\\u0621-\\u0652])','g'),b])}).flat();
+  function vocal(t){for(const[re,b]of VOCRE)t=t.replace(re,(m,pre,c)=>pre+c+b);return t}
   function parens(t){let prev;do{prev=t;t=t.replace(/\(([^()]*)\)/g,(m,inner)=>/[+×÷*\/·]|\s[−-]\s/.test(inner)?' قوس، '+inner+' ، إغلاق القوس، ':' '+inner+' ')}while(t!==prev);return t}
   function spoken(t){
     t=t.replace(/^#+\s*/gm,'').replace(/\*\*/g,'').replace(/`/g,'').replace(/^[-•]\s*/gm,'').replace(/[✓✗⚠️]/g,'').replace(/[✦⚗🔊■]/g,'');
+    t=t.replace(/([^.:؟!،\n])[ \t]*\n+/g,'$1.\n');
     t=t.replace(/v_f/g,'السرعة النهائية').replace(/v_i/g,'السرعة الابتدائية').replace(/v_d/g,'سرعة الانجراف').replace(/v̄/g,'السرعة المتوسطة').replace(/T_f/g,'درجة الحرارة النهائية')
       .replace(/R_total|C_total/g,m=>m[0]==='R'?'المقاومة الكلية':'السعة الكلية').replace(/R_x/g,'المقاومة المجهولة').replace(/R_known/g,'المقاومة المعلومة').replace(/q_total/g,'الشحنة الكلية');
     t=t.replace(/î/g,' آي ').replace(/ĵ/g,' جيه ').replace(/k̂/g,' كيه ');
@@ -418,6 +438,7 @@ const TTS=(()=>{
     t=t.replace(/(\d)\s*([mshgNJWVACFKL])(?![A-Za-z])/g,(m,d,u)=>d+' '+AFTER_NUM[u]);
     t=t.replace(/\b(KE|PE|ME|SI|DC|AC|LED|GPS|PhET)\b/g,m=>' '+ACR[m]+' ');
     t=t.replace(/\bcos\b/g,' جتا ').replace(/\bsin\b/g,' جا ').replace(/\btan\b/g,' ظا ');
+    t=t.replace(/\s·\s/g,'، ').replace(/\s[—–]\s/g,'، ');
     t=parens(t);
     t=t.replace(/([A-Za-z])²/g,'$1 تربيع').replace(/([A-Za-z])³/g,'$1 تكعيب').replace(/²/g,' تربيع').replace(/³/g,' تكعيب');
     t=t.replace(/[₀₁₂₃]/g,c=>SUB[c]);
@@ -425,11 +446,18 @@ const TTS=(()=>{
     t=t.replace(/√/g,' الجذر التربيعي لـ ').replace(/≈/g,' تقريبًا يساوي ').replace(/=/g,' يساوي ').replace(/[×·]/g,' ضرب ').replace(/÷/g,' على ').replace(/\s\/\s|\//g,' على ')
       .replace(/\+/g,' زائد ').replace(/\s[−-]\s/g,' ناقص ').replace(/(^|[\s(])[−-](?=\d)/g,'$1سالب ').replace(/←/g,'، إذن ').replace(/→/g,' إلى ').replace(/∝/g,' يتناسب مع ').replace(/%/g,' بالمئة ').replace(/°/g,' درجة ')
       .replace(/θ/g,' ثيتا ').replace(/Δ/g,' دلتا ').replace(/[μµ]/g,' ميو ').replace(/ρ/g,' رو ').replace(/α/g,' ألفا ').replace(/σ/g,' سيجما ').replace(/ε/g,' إبسلون ').replace(/π/g,' باي ').replace(/Σ/g,' مجموع ').replace(/τ/g,' تاو ');
+    t=t.replace(/(\d)([A-Za-z])/g,'$1 $2');
     t=t.replace(/\b[A-Za-z]{1,3}\b/g,w=>' '+w.split('').map(c=>LET[c.toLowerCase()]||c).join(' ')+' ');
+    t=vocal(t);
     t=t.replace(/[|]/g,' ').replace(/\s+([،.:؟])/g,'$1').replace(/\s+/g,' ');
     return t.trim();
   }
-  function split(t){return t.split(/(?<=[.:؟!؛\n])\s+|\n+/).map(s=>s.trim()).filter(s=>s.length>1).flatMap(s=>s.length<220?[s]:s.match(/.{1,200}(\s|$)/g))}
+  function split(t){
+    const sents=t.replace(/\n+/g,'. ').split(/(?<=[.؟!؛])\s+/).map(x=>x.trim()).filter(x=>x.length>1);
+    const out=[];let cur='';
+    for(let x of sents){while(x.length>240){let i=x.lastIndexOf('،',240)>80?x.lastIndexOf('،',240)+1:x.lastIndexOf(' ',240);if(i<20)i=240;out.push((cur+' '+x.slice(0,i)).trim());cur='';x=x.slice(i).trim()}
+      if((cur+' '+x).length>240){out.push(cur.trim());cur=x}else cur=(cur+' '+x).trim()}
+    if(cur)out.push(cur);return out.filter(Boolean)}
   function stop(){if(!ok)return;queue=[];playing=false;speechSynthesis.cancel();if(btn){btn.classList.remove('on');btn.innerHTML=btnHTML}btn=null}
   function next(){if(!queue.length){stop();return}
     const u=new SpeechSynthesisUtterance(queue.shift());u.lang=voice?voice.lang:'ar-SA';if(voice)u.voice=voice;u.rate=rate;u.pitch=pitch;
@@ -462,7 +490,7 @@ const TTS=(()=>{
     document.querySelectorAll('.ttsWarn').forEach(n=>n.hidden=!!voice||!ok)}
   return{play,stop,controls,refreshNotes,spoken,has:()=>!!voice,ok}
 })();
-const TTS_HELP=`<details class="ttsWarn" hidden><summary><b>لا يعمل الصوت؟ اضغط هنا لتفعيل الصوت العربي على جهازك</b></summary>آيفون/آيباد: الإعدادات ← تسهيلات الاستخدام ← المحتوى المنطوق ← الأصوات ← العربية. أندرويد: الإعدادات ← تحويل النص إلى كلام ← محرك Google ← تثبيت العربية. ويندوز: الإعدادات ← الوقت واللغة ← الكلام ← إضافة صوت عربي. متصفح Chrome على الكمبيوتر غالبًا يحتوي صوتًا عربيًا جاهزًا.</details>`;
+const TTS_HELP=`<details class="ttsWarn" hidden><summary><b>لا يعمل الصوت؟ اضغط هنا لتفعيل الصوت العربي على جهازك</b></summary>آيفون/آيباد: الإعدادات ← تسهيلات الاستخدام ← المحتوى المنطوق ← الأصوات ← العربية. أندرويد: الإعدادات ← تحويل النص إلى كلام ← محرك Google ← تثبيت العربية. ويندوز: الإعدادات ← الوقت واللغة ← الكلام ← إضافة صوت عربي. متصفح Chrome على الكمبيوتر غالبًا يحتوي صوتًا عربيًا جاهزًا.</details><details class="ttsTip"><summary>🎧 لصوت أوضح وأكثر سلاسة</summary>آيفون/آيباد: الإعدادات ← تسهيلات الاستخدام ← المحتوى المنطوق ← الأصوات ← العربية ← نزّل صوتًا مكتوبًا بجانبه <b>(محسّن)</b> أو <b>(ممتاز)</b> مثل «ماجد»، ثم أعد فتح المنصة واختره من قائمة الأصوات (يظهر بجانبه ⭐). الصوت المحسّن أنقى بكثير من الصوت الافتراضي.</details>`;
 
 /* ---------- الفهرس ---------- */
 function buildNav(){
