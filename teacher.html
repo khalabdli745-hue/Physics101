@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#0B7A70">
 <meta name="robots" content="noindex">
 <link rel="icon" href="icon.svg">
-<link rel="apple-touch-icon" href="icon.svg">
+<link rel="apple-touch-icon" href="icon-180.png"><link rel="manifest" href="manifest.json"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="فيزياء ١٠١">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -98,6 +98,46 @@ details.res .when{color:var(--muted);font-size:12.5px;margin-inline-start:auto}
 .toast{position:fixed;bottom:calc(16px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:9px 16px;border-radius:10px;font-size:14px;z-index:50;max-width:90vw}
 .spin{display:inline-block;width:16px;height:16px;border:2px solid var(--line);border-top-color:var(--accent);border-radius:50%;animation:sp 1s linear infinite;vertical-align:middle}
 @keyframes sp{to{transform:rotate(360deg)}}
+
+/* ===== التقارير (إنفوجرافيك) ===== */
+.rp-hero{background:linear-gradient(135deg,var(--accent),color-mix(in srgb,var(--accent) 55%,#0B1E3A));color:#fff;border-radius:16px;padding:18px 20px;margin-bottom:14px;position:relative;overflow:hidden}
+.rp-hero::after{content:"";position:absolute;inset-inline-end:-40px;top:-40px;width:180px;height:180px;border-radius:50%;background:#ffffff14}
+.rp-hero small{opacity:.85;display:block}.rp-hero h2{margin:2px 0 4px;font-size:22px}.rp-hero .meta{font-size:13.5px;opacity:.9}
+.rp-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.rp-kpi{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:flex;gap:10px;align-items:center}
+.rp-kpi .ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-size:20px;background:var(--accent-soft);flex:none}
+.rp-kpi small{color:var(--muted);font-size:12.5px;display:block;line-height:1.4}.rp-kpi b{font-size:22px;font-variant-numeric:tabular-nums;line-height:1.2}
+.rp-kpi em{font-style:normal;font-size:12px;color:var(--muted);display:block}
+.rp-ring{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.rp-ring svg{flex:none}.rp-ring .t{font-size:13.5px;color:var(--muted)}
+.rp-funnel{display:grid;gap:8px}
+.rp-step{display:grid;grid-template-columns:minmax(88px,170px) 1fr 66px;gap:10px;align-items:center;font-size:14px}
+.rp-step .trk{height:22px;background:var(--soft);border-radius:6px;overflow:hidden}
+.rp-step .fil{height:100%;border-radius:6px;background:var(--accent);opacity:var(--o,1)}
+.rp-step .v{font-variant-numeric:tabular-nums;direction:ltr;text-align:left;font-weight:600}
+.rp-map{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:6px}
+.rp-tile{border:1px solid var(--line);border-radius:10px;padding:7px 8px;font-size:12.5px;line-height:1.35;background:var(--panel);cursor:pointer;text-align:start;min-height:70px;display:flex;flex-direction:column;justify-content:space-between}
+.rp-tile:hover{border-color:var(--accent)}
+.rp-tile b{font-size:16px;font-variant-numeric:tabular-nums}
+.rp-tile.g{background:color-mix(in srgb,var(--good) 14%,var(--panel))}.rp-tile.m{background:color-mix(in srgb,var(--mid) 16%,var(--panel))}.rp-tile.b{background:color-mix(in srgb,var(--bad) 13%,var(--panel))}.rp-tile.n{color:var(--muted)}
+.rp-legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin:8px 0 0}
+.rp-legend i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-2px;margin-inline-end:4px;border:1px solid var(--line)}
+.rp-cmp{display:flex;align-items:flex-end;gap:18px;height:150px;padding:0 10px;border-bottom:1px solid var(--line)}
+.rp-cmp div{flex:1;max-width:90px;border-radius:6px 6px 0 0;background:var(--accent);position:relative;min-height:2px}
+.rp-cmp div.f{opacity:.45}
+.rp-cmp span{position:absolute;bottom:100%;left:0;right:0;text-align:center;font-weight:700;font-variant-numeric:tabular-nums;font-size:14px;margin-bottom:2px}
+.rp-cmpx{display:flex;gap:18px;padding:4px 10px 0;font-size:12.5px;color:var(--muted)}.rp-cmpx span{flex:1;max-width:90px;text-align:center}
+.rp-badge{display:inline-block;border-radius:999px;padding:2px 10px;font-size:13px;font-weight:600}
+.rp-q{padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}.rp-q .trk{height:8px;background:var(--soft);border-radius:4px;overflow:hidden;margin:4px 0}.rp-q .fil{height:100%;border-radius:4px}
+.rp-note{background:var(--accent-soft);border-radius:12px;padding:12px 14px;font-size:14px;margin-bottom:14px}
+.rp-note li{margin:3px 0}
+.rp-off{display:none}
+.rp-form{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.rp-form label{display:grid;gap:3px;font-size:13px;color:var(--muted)}
+.rp-form input,.rp-form select,.rp-form textarea{border:1.5px solid var(--line);border-radius:8px;padding:7px 9px;background:var(--paper);font:inherit;color:inherit;min-width:0}
+.rp-sign{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:30px;font-size:14px}.rp-sign div{border-top:1px dashed var(--muted);padding-top:6px;text-align:center}
+@media print{.rp-off{display:block}.rp-edit{display:none!important}}
+@media print{header,nav.tabs,.rp-ctl,.toast{display:none!important}body{background:#fff}main{max-width:none;padding:0}.card,.rp-kpi,.rp-hero{break-inside:avoid}.tableWrap{overflow:visible;max-height:none!important}.rp-hero{-webkit-print-color-adjust:exact;print-color-adjust:exact}.rp-tile,.rp-step .fil,.rp-cmp div,.pct{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 @media (max-width:640px){main{padding:10px}header b{font-size:16px}.stat b{font-size:20px}}
 </style>
 </head>
@@ -141,7 +181,7 @@ function boot(){
   if(!TOKEN)return authScreen();
   root.innerHTML=`<header><b>لوحة المدرب</b><span class="tag" id="sheetLink"></span><div class="sp">
     <button class="btn ghost sm" id="reload">↻ تحديث</button><a class="btn ghost sm" href="index.html">المنصة</a><button class="btn ghost sm" id="logout">خروج</button></div></header>
-  <nav class="tabs" role="tablist">${[['students','المتدربون والدرجات'],['stats','الإحصائيات'],['ai','المساعد الذكي والصوت'],['sections','الشعب'],['import','استيراد Excel'],['export','تصدير Excel'],['demo','حسابي التجريبي'],['settings','الإعدادات']].map(([k,n])=>`<button role="tab" data-t="${k}" aria-selected="${tab===k}">${n}</button>`).join('')}</nav>
+  <nav class="tabs" role="tablist">${[['students','المتدربون والدرجات'],['stats','الإحصائيات'],['reports','التقارير'],['ai','المساعد الذكي والصوت'],['sections','الشعب'],['import','استيراد Excel'],['export','تصدير Excel'],['demo','حسابي التجريبي'],['settings','الإعدادات']].map(([k,n])=>`<button role="tab" data-t="${k}" aria-selected="${tab===k}">${n}</button>`).join('')}</nav>
   <main id="main"><p class="empty"><span class="spin"></span> جارٍ تحميل البيانات…</p></main>`;
   document.documentElement.style.setProperty('--hh',$('header').offsetHeight+'px');
   document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>{tab=b.dataset.t;ls.set('p101-ttab',tab);document.querySelectorAll('nav.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b));draw()});
@@ -173,7 +213,7 @@ async function load(){
     $('#sheetLink').innerHTML=r.sheetUrl?`<a href="${esc(r.sheetUrl)}" target="_blank" rel="noopener">جدول Google ↗</a>`:'';
     draw()}catch(e){m.innerHTML='<p class="empty">تعذّر الاتصال بالخادم. تحقق من الإنترنت ثم اضغط «تحديث».</p>'}
 }
-function draw(){if(!DATA)return;({students:drawStudents,stats:drawStats,ai:drawAI,sections:drawSections,import:drawImport,export:drawExport,demo:drawDemo,settings:drawSettings}[tab]||drawStudents)()}
+function draw(){if(!DATA)return;({students:drawStudents,stats:drawStats,reports:drawReports,ai:drawAI,sections:drawSections,import:drawImport,export:drawExport,demo:drawDemo,settings:drawSettings}[tab]||drawStudents)()}
 
 /* ---------- المتدربون ---------- */
 function filtered(){return DATA.students.filter(s=>(secFilter==='all'||s.sectionId===secFilter)&&(!q||s.name.includes(q)||s.id.includes(q)))}
@@ -333,6 +373,147 @@ async function drawAI(){
     const x=await api({a:'tkey',token:TOKEN,key:k});$('#aim').className='msg '+(x.ok?'good':'bad');$('#aim').textContent=x.ok?'✓ تم تفعيل المساعد الذكي لكل المتدربين.':errText(x.error);if(x.ok)setTimeout(drawAI,1200)};
   if(r.ai)$('#aioff').onclick=async()=>{if(!confirm('إيقاف المساعد الذكي لكل المتدربين؟'))return;const x=await api({a:'tkey',token:TOKEN,key:''});toast(x.ok?'تم الإيقاف':errText(x.error));drawAI()};
   if(r.questions.length)$('#aexp').onclick=()=>saveBook([['أسئلة المساعد',[['التاريخ','الرقم','الاسم','الدرس','السؤال','إجابة المساعد'],...r.questions.map(q=>[xd(q.time),q.studentId,nm[q.studentId]||'',LT[q.lessonKey]||q.lessonTitle,q.question,q.answer])],[18,12,24,30,60,80]]],'أسئلة-المساعد.xlsx');
+}
+
+
+/* ---------- التقارير (إنفوجرافيك) ---------- */
+let RPL=ls.get('p101-rpl','all');
+function ring(v,size){const r=size/2-9,c=2*Math.PI*r,o=v==null?c:c*(1-Math.max(0,Math.min(100,v))/100);
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" role="img" aria-label="${v==null?'لا توجد بيانات':Math.round(v)+'٪'}"><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="var(--soft)" stroke-width="12"/><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="var(--accent)" stroke-width="12" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${o}" transform="rotate(-90 ${size/2} ${size/2})"/><text x="50%" y="52%" text-anchor="middle" dominant-baseline="middle" font-size="${size/4.6}" font-weight="700" fill="var(--ink)" style="font-family:inherit">${v==null?'—':AR(Math.round(v))+'٪'}</text></svg>`}
+const kpi=(ic,lab,val,sub)=>`<div class="rp-kpi"><span class="ic" aria-hidden="true">${ic}</span><div><small>${lab}</small><b>${val}</b>${sub?`<em>${sub}</em>`:''}</div></div>`;
+const step=(lab,n,tot,o)=>`<div class="rp-step"><span>${lab}</span><span class="trk"><span class="fil" style="width:${tot?Math.max(n?2:0,n/tot*100):0}%;display:block;--o:${o||1}"></span></span><span class="v">${AR(n)} <small style="color:var(--muted);font-weight:400">${tot?'('+AR(Math.round(n/tot*100))+'٪)':''}</small></span></div>`;
+const band=v=>v==null?'لم يُختبر':v>=80?'متقن':v>=50?'مقبول':'ضعيف';
+async function drawReports(){
+  const m=$('#main');const sec=secFilter;
+  if(!STATS||statsSec!==sec){m.innerHTML='<p class="empty"><span class="spin"></span> جارٍ إعداد التقرير…</p>';
+    try{const r=await api({a:'tstats',token:TOKEN,sectionId:sec==='all'?'':sec});if(!r.ok){m.innerHTML=`<p class="empty">${esc(errText(r.error))}</p>`;return}STATS=r;statsSec=sec}
+    catch(e){m.innerHTML='<p class="empty">تعذّر الاتصال بالخادم.</p>';return}
+    if(tab!=='reports')return}
+  const st=DATA.students.filter(s=>sec==='all'||s.sectionId===sec);
+  const secLabel=sec==='all'?'كل الشعب':'الشعبة '+secName(sec);
+  const today=new Date().toLocaleDateString('ar-SA-u-ca-gregory',{day:'numeric',month:'long',year:'numeric'});
+  const sOpts=`<option value="all">كل الشعب</option>`+DATA.sections.map(s=>`<option value="${esc(s.id)}" ${sec===s.id?'selected':''}>${esc(s.name)}</option>`).join('');
+  const lOpts=`<option value="all">📊 تقرير الشعبة العام</option><option value="trainer" ${RPL==='trainer'?'selected':''}>👨‍🏫 إنجاز المدرب (تقرير رسمي)</option>`+UNITS.map((u,ui)=>`<optgroup label="الوحدة ${ORD[ui]}: ${esc(u.t)}">${u.l.map((l,li)=>{const k=ui+'-'+li;return `<option value="${k}" ${RPL===k?'selected':''}>${esc(l.t)}</option>`}).join('')}</optgroup>`).join('');
+  const ctl=`<div class="row rp-ctl" style="margin-bottom:12px"><select id="rps">${sOpts}</select><select id="rpl" style="flex:1;min-width:180px">${lOpts}</select><button class="btn ghost sm" id="rpr">↻</button><button class="btn sm" id="rpp">🖨️ طباعة / PDF</button><button class="btn ghost sm" id="rpx">⬇ Excel</button></div>`;
+  const n=st.length,logged=st.filter(s=>s.loginCount).length;
+  let html='',xls=null;
+  if(!n){m.innerHTML=ctl+'<div class="card empty">لا يوجد متدربون في هذه الشعبة.</div>';bindR();return}
+  if(RPL==='trainer'){await drawTrainer(m,ctl,st,sec,secLabel,today,n,logged);return}
+  if(RPL==='all'||!LT[RPL]){
+    /* ===== التقرير العام للشعبة ===== */
+    const ov=st.map(s=>s.overall).filter(v=>v!=null),avgOv=avg(ov);
+    const compl=Math.round(st.reduce((a,s)=>a+s.doneN,0)/(n*TOTAL)*100);
+    const tt=st.reduce((a,s)=>a+s.totalSec,0),wk=7*864e5,act=st.filter(s=>s.lastSeen&&Date.now()-new Date(s.lastSeen)<wk).length;
+    const per=LESSONS.map(l=>{const q=st.map(s=>s.quiz[l.k]).filter(v=>v!=null).map(Number),p=st.map(s=>s.probL[l.k]).filter(v=>v!=null),both=[...q,...p];
+      return {...l,q:avg(q),p:avg(p),v:avg(both),nq:q.length,done:st.filter(s=>s.done.includes(l.k)).length}});
+    const tried=per.filter(x=>x.v!=null),hard=tried.slice().sort((a,b)=>a.v-b.v).slice(0,3),easy=tried.slice().sort((a,b)=>b.v-a.v).slice(0,3);
+    const top=st.filter(s=>s.overall!=null).sort((a,b)=>b.overall-a.overall).slice(0,5);
+    const weak=st.filter(s=>!s.loginCount||(s.overall!=null&&s.overall<50));
+    const units=UNITS.map((u,ui)=>{const ks=per.filter(x=>x.u===ui);return{t:u.t,ui,v:avg(ks.map(x=>x.v).filter(v=>v!=null)),d:Math.round(ks.reduce((a,x)=>a+x.done,0)/(n*ks.length)*100)}});
+    const ins=[];
+    if(n-logged)ins.push(`${AR(n-logged)} متدربًا لم يدخلوا المنصة بعد (${AR(Math.round((n-logged)/n*100))}٪).`);
+    if(hard[0])ins.push(`أصعب درس حتى الآن: «${esc(hard[0].t)}» بمتوسط ${AR(Math.round(hard[0].v))}٪.`);
+    if(easy[0]&&easy[0]!==hard[0])ins.push(`أفضل أداء في درس «${esc(easy[0].t)}» بمتوسط ${AR(Math.round(easy[0].v))}٪.`);
+    if(avgOv!=null)ins.push(`متوسط المعدل العام ${AR(Math.round(avgOv))}٪ — مستوى «${band(avgOv)}».`);
+    if(!tried.length)ins.push('لم يحل أي متدرب اختبارًا أو تمرينًا بعد؛ ستظهر الرسوم تلقائيًا مع بدء الحل.');
+    html=`<div class="rp-hero"><small>تقرير أداء — ${esc(secLabel)}</small><h2>نظرة عامة على الشعبة</h2><div class="meta">${AR(n)} متدربًا · ${AR(TOTAL)} درسًا · ${today}</div></div>
+    <div class="rp-kpis">${kpi('👥','دخلوا المنصة',AR(logged)+' من '+AR(n),AR(Math.round(logged/n*100))+'٪ من الشعبة')}${kpi('🟢','نشطون آخر ٧ أيام',AR(act))}${kpi('🎯','متوسط المعدل',avgOv==null?'—':AR(Math.round(avgOv))+'٪',avgOv==null?'':band(avgOv))}${kpi('📚','إنجاز الدروس',AR(compl)+'٪')}${kpi('⏱️','وقت الاستخدام',fmtTime(tt),'متوسط '+fmtTime(tt/n)+' للمتدرب')}${kpi('✍️','محاولات الحل',AR(st.reduce((a,s)=>a+s.attempts,0)))}</div>
+    ${ins.length?`<div class="rp-note"><b>💡 أبرز الملاحظات</b><ul style="margin:6px 0 0;padding-inline-start:1.2em">${ins.map(x=>`<li>${x}</li>`).join('')}</ul></div>`:''}
+    <div class="grid2"><div class="card"><h2>الإنجاز العام</h2><div class="rp-ring">${ring(compl,130)}<div class="t">نسبة الدروس التي أنهاها متدربو ${esc(secLabel)} من مجموع ${AR(TOTAL*n)} درسًا مطلوبًا.</div></div></div>
+    <div class="card"><h2>الأداء حسب الوحدة</h2><div class="rp-funnel">${units.map(u=>`<div class="rp-step" title="إنجاز ${u.d}٪"><span>الوحدة ${ORD[u.ui]}</span><span class="trk"><span class="fil" style="width:${u.v==null?0:Math.max(2,u.v)}%;display:block"></span></span><span class="v">${u.v==null?'—':AR(Math.round(u.v))+'٪'}</span></div>`).join('')}</div><p class="sub" style="margin-top:8px">متوسط أفضل درجة في اختبارات وتمارين كل وحدة.</p></div></div>
+    <div class="card"><h2>خريطة الدروس</h2><p class="sub">كل مربع درس: متوسط الشعبة فيه (الاختبارات والتمارين) وعدد من حلّه. اضغط أي درس لفتح تقريره المفصّل.</p>
+      ${UNITS.map((u,ui)=>`<h3 style="font-size:14px;margin:12px 0 6px;color:var(--muted)">الوحدة ${ORD[ui]}: ${esc(u.t)}</h3><div class="rp-map">${per.filter(x=>x.u===ui).map(x=>`<button class="rp-tile ${pctCls(x.v)}" data-k="${x.k}" title="${esc(x.t)} — ${x.v==null?'لم يُحل بعد':Math.round(x.v)+'٪'}"><span>${esc(x.t)}</span><span><b>${x.v==null?'—':AR(Math.round(x.v))+'٪'}</b> <small>${AR(x.nq)} حلّ</small></span></button>`).join('')}</div>`).join('')}
+      <div class="rp-legend"><span><i style="background:color-mix(in srgb,var(--good) 30%,var(--panel))"></i>متقن ٨٠٪ فأكثر</span><span><i style="background:color-mix(in srgb,var(--mid) 30%,var(--panel))"></i>مقبول ٥٠–٧٩٪</span><span><i style="background:color-mix(in srgb,var(--bad) 28%,var(--panel))"></i>ضعيف أقل من ٥٠٪</span><span><i style="background:var(--panel)"></i>لم يُحل بعد</span></div></div>
+    <div class="grid2"><div class="card"><h2>🏆 الأعلى أداءً</h2>${top.length?top.map((s,i)=>`<div class="qrow" data-id="${esc(s.id)}" style="cursor:pointer">${['🥇','🥈','🥉','④','⑤'][i]} <b>${esc(s.name)}</b> ${pct(s.overall)} <small>· ${AR(s.doneN)} درسًا</small></div>`).join(''):'<p class="empty">لا توجد درجات بعد.</p>'}</div>
+    <div class="card"><h2>⚠️ يحتاجون متابعة (${AR(weak.length)})</h2>${weak.length?`<div style="max-height:260px;overflow:auto">${weak.map(s=>`<div class="qrow" data-id="${esc(s.id)}" style="cursor:pointer"><b>${esc(s.name)}</b> ${s.loginCount?pct(s.overall):'<span class="tag warn">لم يدخل</span>'}</div>`).join('')}</div>`:'<p class="empty">لا يوجد. ممتاز!</p>'}</div></div>`;
+    xls=[['ملخص الشعبة',[['المؤشر','القيمة'],['الشعبة',secLabel],['عدد المتدربين',n],['دخلوا المنصة',logged],['نشطون آخر 7 أيام',act],['متوسط المعدل %',avgOv==null?'':Math.round(avgOv)],['إنجاز الدروس %',compl],['الوقت الكلي (دقيقة)',Math.round(tt/60)]],[28,20]],
+      ['الدروس',[['الوحدة','الدرس','متوسط الاختبار %','متوسط التمارين %','المتوسط %','عدد من حل الاختبار','أنهوا الدرس'],...per.map(x=>['الوحدة '+ORD[x.u],x.t,x.q==null?'':Math.round(x.q),x.p==null?'':Math.round(x.p),x.v==null?'':Math.round(x.v),x.nq,x.done])],[14,34,14,14,10,14,12]],
+      ['المتدربون',[['الرقم','الاسم','المعدل %','الاختبارات %','التمارين %','الدروس المنجزة','مرات الدخول','الوقت (دقيقة)'],...st.map(s=>[s.id,s.name,s.overall==null?'':Math.round(s.overall),s.quizAvg==null?'':Math.round(s.quizAvg),s.probAvg==null?'':Math.round(s.probAvg),s.doneN,s.loginCount,Math.round(s.totalSec/60)])],[14,30,10,12,12,12,10,12]]];
+  }else{
+    /* ===== تقرير درس ===== */
+    const k=RPL,ui=+k.split('-')[0],L=STATS.lessons[k]||{};
+    const rows=st.map(s=>({s,q:s.quiz[k]!=null?+s.quiz[k]:null,p:s.probL[k]!=null?s.probL[k]:null,d:s.done.includes(k)}));
+    const qs=rows.filter(r=>r.q!=null),ps=rows.filter(r=>r.p!=null),dn=rows.filter(r=>r.d).length;
+    const pass=qs.filter(r=>r.q>=50).length,mast=qs.filter(r=>r.q>=80).length,qa=avg(qs.map(r=>r.q)),pa=avg(ps.map(r=>r.p));
+    const bins=[['٨٠–١٠٠٪ متقن',80,101],['٦٥–٧٩٪',65,80],['٥٠–٦٤٪',50,65],['أقل من ٥٠٪',0,50]],bn=bins.map(b=>qs.filter(r=>r.q>=b[1]&&r.q<b[2]).length),bm=Math.max(1,...bn);
+    const qq=(STATS.questions||[]).filter(x=>x.lessonKey===k).sort((a,b)=>a.pct-b.pct);
+    const first=L.quizFirst,best=L.quizBest,gain=first!=null&&best!=null?best-first:null;
+    const ins=[];
+    if(!qs.length&&!ps.length)ins.push('لم يحل أي متدرب اختبار هذا الدرس أو تمارينه بعد.');
+    else{ins.push(`${AR(qs.length)} من ${AR(n)} حلّوا اختبار الدرس، ونجح ${AR(pass)} منهم (٥٠٪ فأكثر).`);
+      if(gain!=null&&gain>0)ins.push(`تحسّن متوسط الاختبار من ${AR(first)}٪ في أول محاولة إلى ${AR(best)}٪ بعد إعادة المحاولة (+${AR(Math.round(gain))}).`);
+      if(qq[0]&&qq[0].pct<60)ins.push(`أصعب سؤال: «${esc(qq[0].q.slice(0,90))}» — أجاب عنه صحيحًا ${AR(qq[0].pct)}٪ فقط.`);
+      const no=n-qs.length;if(no)ins.push(`${AR(no)} متدربًا لم يحلّوا الاختبار بعد.`)}
+    html=`<div class="rp-hero"><small>تقرير درس — ${esc(secLabel)} · الوحدة ${ORD[ui]}</small><h2>${esc(LT[k])}</h2><div class="meta">${AR(n)} متدربًا · ${today}</div></div>
+    <div class="rp-kpis">${kpi('📘','أنهوا الدرس',AR(dn)+' من '+AR(n),AR(Math.round(dn/n*100))+'٪')}${kpi('📝','حلّوا الاختبار',AR(qs.length),AR(Math.round(qs.length/n*100))+'٪ من الشعبة')}${kpi('🎯','متوسط الاختبار',qa==null?'—':AR(Math.round(qa))+'٪',qa==null?'':band(qa))}${kpi('🧮','متوسط التمارين',pa==null?'—':AR(Math.round(pa))+'٪',AR(ps.length)+' متدربًا')}${kpi('✅','نسبة النجاح',qs.length?AR(Math.round(pass/qs.length*100))+'٪':'—','٥٠٪ فأكثر')}${kpi('🔁','المحاولات',AR((L.quizAttempts||0)+(L.probAttempts||0)))}</div>
+    ${ins.length?`<div class="rp-note"><b>💡 أبرز الملاحظات</b><ul style="margin:6px 0 0;padding-inline-start:1.2em">${ins.map(x=>`<li>${x}</li>`).join('')}</ul></div>`:''}
+    <div class="grid2"><div class="card"><h2>مسار المتدربين في الدرس</h2><div class="rp-funnel">${step('في الشعبة',n,n)}${step('دخلوا المنصة',logged,n,.9)}${step('أنهوا الدرس',dn,n,.8)}${step('حلّوا الاختبار',qs.length,n,.7)}${step('نجحوا (٥٠٪+)',pass,n,.6)}${step('أتقنوا (٨٠٪+)',mast,n,.5)}</div></div>
+    <div class="card"><h2>توزيع درجات الاختبار</h2>${qs.length?`<div class="bars">${bins.map((b,i)=>`<div class="bar"><span class="lab">${b[0]}</span><span class="trk"><span class="fil ${['g','g','m','b'][i]}" style="width:${bn[i]/bm*100}%;display:block"></span></span><span class="val">${AR(bn[i])}</span></div>`).join('')}</div><p class="sub" style="margin-top:8px">حسب أفضل محاولة لكل متدرب.</p>`:'<p class="empty">لا توجد درجات بعد.</p>'}</div></div>
+    <div class="grid2"><div class="card"><h2>أثر إعادة المحاولة</h2>${first!=null?`<div class="rp-cmp" role="img" aria-label="أول محاولة ${first}٪ وأفضل محاولة ${best}٪"><div class="f" style="height:${first}%"><span>${AR(first)}٪</span></div><div style="height:${best}%"><span>${AR(best)}٪</span></div></div><div class="rp-cmpx"><span>أول محاولة</span><span>أفضل محاولة</span></div>${gain!=null?`<p class="sub" style="margin-top:8px">التحسن: <b>${gain>=0?'+':''}${AR(Math.round(gain))}</b> نقطة.</p>`:''}`:'<p class="empty">لا توجد محاولات بعد.</p>'}</div>
+    <div class="card"><h2>الأسئلة الأكثر خطأ</h2>${qq.length?qq.slice(0,6).map(x=>`<div class="rp-q"><b>${esc(x.q)}</b><div class="trk"><div class="fil" style="width:${x.pct}%;background:var(--${pctCls(x.pct)==='g'?'good':pctCls(x.pct)==='m'?'mid':'bad'})"></div></div><small style="color:var(--muted)">${AR(x.pct)}٪ أجابوا صحيحًا (${AR(x.correct)} من ${AR(x.total)})${x.commonWrong?` · أكثر خطأ: «${esc(x.commonWrong)}»`:''}</small></div>`).join(''):'<p class="empty">لا توجد إجابات بعد.</p>'}</div></div>
+    <div class="card"><h2>نتائج المتدربين في الدرس</h2><div class="tableWrap" style="max-height:480px;overflow:auto"><table><thead><tr><th>الاسم</th><th>الاختبار</th><th>التمارين</th><th>أنهى الدرس</th><th>المستوى</th></tr></thead><tbody>
+    ${rows.slice().sort((a,b)=>(b.q??-1)-(a.q??-1)||a.s.name.localeCompare(b.s.name,'ar')).map(r=>`<tr data-id="${esc(r.s.id)}"><td>${esc(r.s.name)}</td><td>${pct(r.q)}</td><td>${pct(r.p)}</td><td>${r.d?'✓':'—'}</td><td><span class="tag ${r.q!=null&&r.q<50?'warn':''}">${band(r.q)}</span></td></tr>`).join('')}</tbody></table></div></div>`;
+    xls=[['تقرير الدرس',[['المؤشر','القيمة'],['الدرس',LT[k]],['الشعبة',secLabel],['عدد المتدربين',n],['أنهوا الدرس',dn],['حلّوا الاختبار',qs.length],['متوسط الاختبار %',qa==null?'':Math.round(qa)],['متوسط التمارين %',pa==null?'':Math.round(pa)],['نجحوا',pass],['أتقنوا',mast],['أول محاولة %',first??''],['أفضل محاولة %',best??'']],[26,34]],
+      ['المتدربون',[['الرقم','الاسم','الاختبار %','التمارين %','أنهى الدرس','المستوى'],...rows.map(r=>[r.s.id,r.s.name,r.q==null?'':Math.round(r.q),r.p==null?'':Math.round(r.p),r.d?'نعم':'لا',band(r.q)])],[14,30,12,12,12,12]],
+      ['الأسئلة',[['السؤال','صحيحة','المجموع','النسبة %','أكثر إجابة خاطئة'],...qq.map(x=>[x.q,x.correct,x.total,x.pct,x.commonWrong])],[60,8,8,8,30]]];
+  }
+  m.innerHTML=ctl+html;bindR();
+  function bindR(){
+    $('#rps').onchange=e=>{secFilter=e.target.value;ls.set('p101-tsec',secFilter);drawReports()};
+    $('#rpl').onchange=e=>{RPL=e.target.value;ls.set('p101-rpl',RPL);drawReports();scrollTo(0,0)};
+    $('#rpr').onclick=async()=>{STATS=null;await load()};
+    $('#rpp').onclick=()=>print();
+    $('#rpx').onclick=()=>xls&&saveBook(xls,'تقرير-'+(RPL==='all'?'الشعبة':LT[RPL]).replace(/[\\/:*?"<>|]/g,'')+'-'+(sec==='all'?'كل-الشعب':secName(sec))+'.xlsx');
+    m.querySelectorAll('.rp-tile').forEach(b=>b.onclick=()=>{RPL=b.dataset.k;ls.set('p101-rpl',RPL);drawReports();scrollTo(0,0)});
+    m.querySelectorAll('[data-id]').forEach(t=>t.onclick=()=>openStudent(t.dataset.id));
+  }
+}
+
+/* ---------- إنجاز المدرب ---------- */
+const CONTENT={lessons:51,quiz:540,probs:194,gens:40,examples:51,figs:51,tables:29,sims:53,pages:123,apps:40,theory:11};
+const METHODS=['محاضرة','تطبيق عملي','مراجعة','اختبار قصير','تطبيق على المنصة','حل تمارين'];
+let TLOG=null;
+async function drawTrainer(m,ctl,st,sec,secLabel,today,n,logged){
+  if(!TLOG){m.innerHTML=ctl+'<p class="empty"><span class="spin"></span> جارٍ تحميل سجل الإنجاز…</p>';
+    try{const r=await api({a:'tlog',token:TOKEN});if(!r.ok){m.innerHTML=ctl+`<p class="empty">${r.error==='unknown_action'?'هذه الميزة تحتاج تحديث كود الخادم (code.gs) ونشر إصدار جديد.':esc(errText(r.error))}</p>`;bindT();return}TLOG=r}
+    catch(e){m.innerHTML=ctl+'<p class="empty">تعذّر الاتصال بالخادم.</p>';bindT();return}
+    if(tab!=='reports'||RPL!=='trainer')return}
+  const P=Object.assign({name:'خليل موسى المالكي',course:'فيزياء ١٠١'},TLOG.profile||{});
+  const log=TLOG.log.filter(x=>sec==='all'||!x.sectionId||x.sectionId===sec).sort((a,b)=>a.date<b.date?1:-1);
+  const covered=new Set(log.map(x=>x.lessonKey)),hrs=log.reduce((a,x)=>a+x.hours,0),cov=Math.round(covered.size/TOTAL*100);
+  const T=TLOG.totals||{};
+  const ov=st.map(s=>s.overall).filter(v=>v!=null),avgOv=avg(ov),compl=n?Math.round(st.reduce((a,s)=>a+s.doneN,0)/(n*TOTAL)*100):0;
+  const qAll=st.flatMap(s=>Object.values(s.quiz||{}).map(Number)),passR=qAll.length?Math.round(qAll.filter(v=>v>=50).length/qAll.length*100):null;
+  const unitCov=UNITS.map((u,ui)=>{const ks=u.l.map((_,li)=>ui+'-'+li);return{ui,c:ks.filter(k=>covered.has(k)).length,t:ks.length}});
+  const dToday=new Date(),iso=`${dToday.getFullYear()}-${String(dToday.getMonth()+1).padStart(2,'0')}-${String(dToday.getDate()).padStart(2,'0')}`;
+  const lessonOpts=UNITS.map((u,ui)=>`<optgroup label="الوحدة ${ORD[ui]}">${u.l.map((l,li)=>`<option value="${ui}-${li}">${esc(l.t)}${covered.has(ui+'-'+li)?' ✓':''}</option>`).join('')}</optgroup>`).join('');
+  const field=(k,lab,ph)=>`<label>${lab}<input id="pf_${k}" value="${esc(P[k]||'')}" placeholder="${ph||''}"></label>`;
+  const html=`<div class="rp-hero"><small>تقرير إنجاز المدرب — ${esc(P.course||'فيزياء ١٠١')}${P.term?' · '+esc(P.term):''}</small><h2>${esc(P.name||'المدرب')}</h2><div class="meta">${[P.college,P.dept].filter(Boolean).map(esc).join(' · ')}${P.college||P.dept?' · ':''}${esc(secLabel)} · ${today}</div></div>
+  <div class="card rp-edit"><h2>بيانات التقرير</h2><p class="sub">تظهر في رأس التقرير المطبوع. تُحفظ مرة واحدة.</p><div class="rp-form">${field('name','اسم المدرب')}${field('college','الكلية / المنشأة','الكلية التقنية بـ…')}${field('dept','القسم','العلوم العامة')}${field('course','المقرر')}${field('term','الفصل التدريبي','الأول 1448هـ')}${field('head','رئيس القسم')}</div><div class="row" style="margin-top:8px"><button class="btn sm" id="pfs">حفظ البيانات</button></div></div>
+  <h3 style="margin:4px 0 8px">📦 المحتوى الذي أعدّه المدرب على المنصة</h3>
+  <div class="rp-kpis">${kpi('📘','دروس تفاعلية',AR(CONTENT.lessons),'ملخص وشرح صوتي لكل درس')}${kpi('📝','أسئلة اختبارات',AR(CONTENT.quiz),'اختيار من متعدد')}${kpi('🧮','مسائل حسابية تفاعلية',AR(CONTENT.probs),'بأربع خطوات')}${kpi('🎲','مولّدات تمارين متجددة',AR(CONTENT.gens),'تمارين لا تنتهي')}${kpi('💡','أمثلة محلولة',AR(CONTENT.examples))}${kpi('🖼️','رسوم توضيحية',AR(CONTENT.figs))}${kpi('📋','جداول تعليمية',AR(CONTENT.tables))}${kpi('🔬','تجارب ومحاكاة',AR(CONTENT.sims),'PhET بالعربية')}${kpi('📄','صفحات الحقيبة',AR(CONTENT.pages))}</div>
+  <h3 style="margin:4px 0 8px">👥 أثر المنصة على المتدربين</h3>
+  <div class="rp-kpis">${kpi('🎓','متدربون مستفيدون',AR(n),AR(logged)+' دخلوا المنصة')}${kpi('🔑','مرات الدخول',AR(T.logins||0))}${kpi('✍️','محاولات حل',AR(T.results||0))}${kpi('🤖','أسئلة أجاب عنها المساعد',AR(T.questions||0))}${kpi('🎯','متوسط معدل المتدربين',avgOv==null?'—':AR(Math.round(avgOv))+'٪',avgOv==null?'':band(avgOv))}${kpi('✅','نسبة النجاح في الاختبارات',passR==null?'—':AR(passR)+'٪')}${kpi('📚','إنجاز الدروس',AR(compl)+'٪')}</div>
+  <h3 style="margin:4px 0 8px">🗓️ التدريس الفعلي</h3>
+  <div class="grid2"><div class="card"><h2>تغطية المقرر</h2><div class="rp-ring">${ring(cov,130)}<div class="t">${AR(covered.size)} من ${AR(TOTAL)} درسًا مُدرَّسًا<br>${AR(log.length)} لقاءً · ${AR(hrs)} ساعة تدريبية</div></div></div>
+  <div class="card"><h2>التغطية حسب الوحدة</h2><div class="rp-funnel">${unitCov.map(u=>`<div class="rp-step"><span>الوحدة ${ORD[u.ui]}</span><span class="trk"><span class="fil" style="width:${u.c/u.t*100}%;display:block"></span></span><span class="v">${AR(u.c)}/${AR(u.t)}</span></div>`).join('')}</div></div></div>
+  <div class="card rp-edit"><h2>➕ تسجيل لقاء تدريبي</h2><div class="rp-form"><label>التاريخ<input type="date" id="tl_d" value="${iso}"></label><label>الدرس<select id="tl_l">${lessonOpts}</select></label><label>الشعبة<select id="tl_s"><option value="">—</option>${DATA.sections.map(s=>`<option value="${esc(s.id)}" ${sec===s.id?'selected':''}>${esc(s.name)}</option>`).join('')}</select></label><label>الساعات<input type="number" id="tl_h" value="2" min="0" max="12" step="0.5"></label><label>طريقة التنفيذ<select id="tl_m">${METHODS.map(x=>`<option>${x}</option>`).join('')}</select></label><label style="grid-column:1/-1">ملاحظات<input id="tl_n" placeholder="مثال: نُفّذ مع تجربة عملية في المعمل"></label></div><div class="row" style="margin-top:8px"><button class="btn" id="tl_add">إضافة إلى السجل</button><span class="msg" id="tl_msg"></span></div></div>
+  <div class="card"><h2>سجل اللقاءات التدريبية (${AR(log.length)})</h2>${log.length?`<div class="tableWrap"><table><thead><tr><th>التاريخ</th><th>الوحدة</th><th>الدرس</th><th>الشعبة</th><th>الساعات</th><th>التنفيذ</th><th>ملاحظات</th><th class="rp-edit"></th></tr></thead><tbody>${log.map(x=>`<tr style="cursor:default"><td class="num">${esc(x.date)}</td><td>${ORD[+x.lessonKey.split('-')[0]]||''}</td><td>${esc(LT[x.lessonKey]||x.lessonKey)}</td><td>${esc(x.sectionId?secName(x.sectionId):'—')}</td><td class="num">${AR(x.hours)}</td><td>${esc(x.method)}</td><td style="white-space:normal;min-width:140px">${esc(x.notes)}</td><td class="rp-edit"><button class="btn danger sm" data-del="${esc(x.id)}">حذف</button></td></tr>`).join('')}</tbody></table></div>`:'<p class="empty">لم تُسجَّل لقاءات بعد. أضف أول لقاء من النموذج أعلاه.</p>'}</div>
+  <div class="rp-off"><div class="rp-sign"><div>المدرب: ${esc(P.name||'')}<br><br>التوقيع: ................</div><div>رئيس القسم: ${esc(P.head||'')}<br><br>التوقيع: ................</div></div></div>`;
+  m.innerHTML=ctl+html;bindT();
+  $('#pfs').onclick=async()=>{const o={};['name','college','dept','course','term','head'].forEach(k=>o[k]=$('#pf_'+k).value.trim());const r=await api({a:'tlog',token:TOKEN,op:'profile',profile:o});if(r.ok){TLOG.profile=r.profile;toast('تم حفظ البيانات');drawReports()}else toast(errText(r.error))};
+  $('#tl_add').onclick=async()=>{const b=$('#tl_add');b.disabled=true;const e={date:$('#tl_d').value,lessonKey:$('#tl_l').value,sectionId:$('#tl_s').value,hours:+$('#tl_h').value,method:$('#tl_m').value,notes:$('#tl_n').value.trim()};
+    const r=await api({a:'tlog',token:TOKEN,op:'add',entry:e});b.disabled=false;if(r.ok){TLOG.log.push(Object.assign({id:r.id},e));toast('تمت الإضافة إلى السجل');drawReports()}else{$('#tl_msg').className='msg bad';$('#tl_msg').textContent=r.error==='bad_entry'?'اختر التاريخ والدرس.':errText(r.error)}};
+  m.querySelectorAll('[data-del]').forEach(b=>b.onclick=async()=>{if(!confirm('حذف هذا اللقاء من السجل؟'))return;const r=await api({a:'tlog',token:TOKEN,op:'delete',id:b.dataset.del});if(r.ok){TLOG.log=TLOG.log.filter(x=>x.id!==b.dataset.del);drawReports()}else toast(errText(r.error))});
+  function bindT(){
+    $('#rps').onchange=e=>{secFilter=e.target.value;ls.set('p101-tsec',secFilter);drawReports()};
+    $('#rpl').onchange=e=>{RPL=e.target.value;ls.set('p101-rpl',RPL);drawReports();scrollTo(0,0)};
+    $('#rpr').onclick=async()=>{STATS=null;TLOG=null;await load()};
+    $('#rpp').onclick=()=>print();
+    $('#rpx').onclick=()=>{if(!TLOG)return;saveBook([
+      ['إنجاز المدرب',[['البند','القيمة'],['المدرب',P.name||''],['الكلية',P.college||''],['القسم',P.dept||''],['المقرر',P.course||''],['الفصل',P.term||''],['الشعبة',secLabel],['دروس تفاعلية',CONTENT.lessons],['أسئلة اختبارات',CONTENT.quiz],['مسائل تفاعلية',CONTENT.probs],['مولدات تمارين',CONTENT.gens],['رسوم توضيحية',CONTENT.figs],['جداول تعليمية',CONTENT.tables],['تجارب ومحاكاة',CONTENT.sims],['متدربون مستفيدون',n],['دخلوا المنصة',logged],['مرات الدخول',T.logins||0],['محاولات الحل',T.results||0],['أسئلة المساعد',T.questions||0],['متوسط المعدل %',avgOv==null?'':Math.round(avgOv)],['إنجاز الدروس %',compl],['الدروس المدرّسة',covered.size],['تغطية المقرر %',cov],['عدد اللقاءات',log.length],['الساعات التدريبية',hrs]],[26,34]],
+      ['سجل اللقاءات',[['التاريخ','الوحدة','الدرس','الشعبة','الساعات','التنفيذ','ملاحظات'],...log.map(x=>[x.date,'الوحدة '+(ORD[+x.lessonKey.split('-')[0]]||''),LT[x.lessonKey]||x.lessonKey,x.sectionId?secName(x.sectionId):'',x.hours,x.method,x.notes])],[12,14,34,14,8,16,40]]
+    ],'تقرير-إنجاز-المدرب.xlsx')}}
 }
 
 /* ---------- الشعب ---------- */

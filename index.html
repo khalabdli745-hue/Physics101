@@ -7,7 +7,7 @@
 <meta name="description" content="منصة مجانية لشرح حقيبة فيزياء ١٠١: صفحات الحقيبة، ملخصات، أمثلة محلولة، اختبارات، شرح صوتي بالعربية وتجارب تفاعلية">
 <meta name="theme-color" content="#0B7A70">
 <link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon.svg">
+<link rel="apple-touch-icon" href="icon-180.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="فيزياء ١٠١">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Ccircle cx=%2216%22 cy=%2216%22 r=%2215%22 fill=%22%230B7A70%22/%3E%3Ctext x=%2216%22 y=%2222%22 font-size=%2216%22 text-anchor=%22middle%22 fill=%22white%22 font-family=%22Arial%22%3E%CF%86%3C/text%3E%3C/svg%3E">
@@ -115,6 +115,14 @@ main{display:flex;flex-direction:column;min-height:0;min-width:0}
 .sentence-on{background:var(--accent-soft);border-radius:4px}
 /* figure */
 .fig{margin:14px 0 6px;text-align:center}
+.summCard{border:2px solid var(--accent);background:linear-gradient(180deg,var(--accent-soft),var(--panel) 120px)}
+.summCard .md li{margin:4px 0}
+.ltWrap{overflow-x:auto;border-radius:10px;border:1px solid var(--line)}
+table.lt{border-collapse:collapse;width:100%;font-size:14.5px}
+table.lt th{background:var(--accent);color:var(--accent-ink);padding:8px 10px;font-weight:600;text-align:center;white-space:nowrap}
+table.lt td .eqn{white-space:nowrap;direction:ltr;unicode-bidi:isolate;font-weight:500}
+table.lt td{padding:7px 10px;border-top:1px solid var(--line);text-align:center;unicode-bidi:plaintext}
+table.lt tbody tr:nth-child(even) td{background:var(--accent-soft)}
 .fig svg{direction:ltr;width:100%;max-width:420px;height:auto;overflow:visible}
 .fig text{unicode-bidi:plaintext}
 .fig .lb{fill:var(--ink);font-size:15px;font-family:"IBM Plex Sans Arabic",Tahoma,sans-serif;font-weight:600}
@@ -299,7 +307,7 @@ details.card summary{cursor:pointer}
       <div class="crumb" id="crumb"></div>
       <div class="hrow"><h1 id="lessonTitle"></h1><button class="doneBtn" id="doneBtn" aria-pressed="false">أنهيت الدرس</button></div>
       <div class="tabs" role="tablist" id="tabs">
-        <button role="tab" data-t="sum">الملخص</button>
+        <button role="tab" data-t="sum">الدرس</button>
         <button role="tab" data-t="page">صفحات الحقيبة</button>
         <button role="tab" data-t="ex">أمثلة وتمارين</button>
         <button role="tab" data-t="quiz">اختبر نفسك</button>
@@ -344,6 +352,7 @@ details.card summary{cursor:pointer}
 <script src="theory.js"></script>
 <script src="gens.js"></script>
 <script src="art.js"></script>
+<script src="more.js"></script>
 <script>
 const UNITS=window.UNITS,STUDY=window.STUDY,EXTRA=window.EXTRA||{},FIGS=window.FIGS||{};
 window.PAGES=window.PAGES||{};
@@ -369,6 +378,8 @@ const extra=()=>EXTRA[key(pos.u,pos.l)]||{};
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 const NU=/(?:[A-Za-zθαρμΔ][A-Za-z₀-₉]*\s*=\s*)?[-−]?\d[\d.]*(?:\s*×\s*10[⁻⁰¹²³⁴⁵⁶⁷⁸⁹]+)?(?:\s?(?:[A-Za-zµΩ°][A-Za-zµΩ°²³⁻¹/·]*))?/g;
 function inl(s){return String(s).split(/(`[^`]+`)/).map(seg=>seg.startsWith('`')&&seg.endsWith('`')&&seg.length>1?'<span class="eq">'+esc(seg.slice(1,-1))+'</span>':esc(seg).replace(NU,m=>/[A-Za-zµΩ°×]/.test(m)?'<span class="nu">'+m+'</span>':m)).join('').replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>')}
+function cellHTML(c){c=String(c);if(/`/.test(c))return inl(c);
+  return c.split(/([A-Za-z0-9\u2080-\u2089\u00B2\u00B3\u207B\u00B9\u2070-\u2079ΔρεθμΩπ°%][A-Za-z0-9\u2080-\u2089\u00B2\u00B3\u207B\u00B9\u2070-\u2079ΔρεθμΩπ°% =+\/()·×÷.,−\-]*[A-Za-z0-9\u2080-\u2089\u00B2\u00B3\u00B9\u2070-\u2079ΩΔ°%)])/).map((x,i)=>i%2?`<bdi class="eqn">${esc(x)}</bdi>`:inl(x)).join('')}
 function md(src){
   const out=[];let list=null;
   const flush=()=>{if(list){out.push(`<${list.t}>${list.i.map(x=>'<li>'+inl(x)+'</li>').join('')}</${list.t}>`);list=null}};
@@ -681,13 +692,19 @@ function renderSum(v){
   const art=(window.ART||{})[key(pos.u,pos.l)];
   if(art){const b=document.createElement('div');b.className='artBanner';b.setAttribute('role','img');b.setAttribute('aria-label',art[3]);
     b.innerHTML=`<div class="artIcons"><span>${art[0]}</span><span>${art[1]}</span><span>${art[2]}</span></div><div class="artText"><small>الوحدة ${ORD[pos.u]}</small><b>${esc(art[3])}</b></div>`;i.appendChild(b)}
-  const c=card('ملخص الدرس','');
-  c.appendChild(TTS.controls(()=>s.s,{compact:true,label:'🔊 استمع للملخص'}));
+  const c=card('الدرس','');
+  c.appendChild(TTS.controls(()=>s.s,{compact:true,label:'🔊 استمع للدرس'}));
   const body=document.createElement('div');body.className='md';body.innerHTML=md(s.s);c.appendChild(body);
   if(art)body.querySelectorAll('h3').forEach((h,n)=>{const e=document.createElement('span');e.className='hIcon';e.setAttribute('aria-hidden','true');e.textContent=art[n%3];h.prepend(e)});
   if(x.fig&&FIGS[x.fig])c.insertAdjacentHTML('beforeend',FIGS[x.fig]);
+  ((window.FIGMAP||{})[key(pos.u,pos.l)]||[]).forEach(f=>{if(FIGS[f]&&f!==x.fig)c.insertAdjacentHTML('beforeend',FIGS[f])});
   i.appendChild(c);
+  ((window.TABLES||{})[key(pos.u,pos.l)]||[]).forEach(t=>{const tc=card('📋 '+t.t);const w=document.createElement('div');w.className='ltWrap';
+    w.innerHTML=`<table class="lt"><thead><tr>${t.h.map(h=>`<th>${inl(h)}</th>`).join('')}</tr></thead><tbody>${t.r.map(r=>`<tr>${r.map(c=>`<td>${cellHTML(c)}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+    tc.appendChild(w);if(t.n){const n=document.createElement('p');n.className='note';n.innerHTML=inl(t.n);tc.appendChild(n)}i.appendChild(tc)});
   if(x.ap){const a=card('تطبيقات من الحياة');a.appendChild(TTS.controls(()=>'تطبيقات من الحياة.\n'+x.ap,{compact:true,label:'🔊 استمع للتطبيقات'}));const b=document.createElement('div');b.className='md';b.innerHTML=md(x.ap);a.appendChild(b);i.appendChild(a)}
+  const sm=(window.SUMM||{})[key(pos.u,pos.l)];
+  if(sm){const sc=card('📝 ملخص الدرس');sc.classList.add('summCard');sc.appendChild(TTS.controls(()=>'ملخص الدرس.\n'+sm,{compact:true,label:'🔊 استمع للملخص'}));const b=document.createElement('div');b.className='md';b.innerHTML=md(sm);sc.appendChild(b);i.appendChild(sc)}
   i.appendChild(aiCard());
   nextLessonBtn(i);
 }
@@ -1026,6 +1043,27 @@ else{
   }
   buildNav();updateProgress();render();
 }
+</script>
+<div id="instBar" hidden style="position:fixed;inset-inline:12px;bottom:14px;z-index:90;background:#fff;color:#1f2937;border-radius:16px;box-shadow:0 8px 28px #0003;padding:12px 14px;display:flex;gap:12px;align-items:center;max-width:520px;margin:auto;font-size:14.5px;line-height:1.6;border:1px solid #e5e7eb">
+<img src="icon-180.png" alt="" width="46" height="46" style="border-radius:11px;flex:none">
+<div style="flex:1"><b>📲 ثبّت المنصة على جوالك</b><div id="instTxt" style="color:#4b5563"></div></div>
+<div style="display:flex;flex-direction:column;gap:6px"><button id="instGo" hidden style="background:#0B7A70;color:#fff;border:0;border-radius:10px;padding:7px 14px;font:inherit;font-weight:700">تثبيت</button><button id="instX" aria-label="إغلاق" style="background:none;border:0;color:#6b7280;font:inherit">لاحقًا</button></div></div>
+<script>
+(()=>{const standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone;if(standalone)return;
+  let hide=0;try{hide=+localStorage.getItem('p101-inst-hide')||0}catch(e){}if(Date.now()<hide)return;
+  const bar=document.getElementById('instBar'),txt=document.getElementById('instTxt'),go=document.getElementById('instGo');
+  const ios=/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+  const mobile=ios||/Android/i.test(navigator.userAgent);if(!mobile)return;
+  let deferred=null;
+  if(ios){const safari=/Safari/.test(navigator.userAgent)&&!/CriOS|FxiOS|EdgiOS/.test(navigator.userAgent);
+    txt.innerHTML=safari?'اضغط <b>☰</b> أو زر المشاركة <b>⬆️</b> في Safari، ثم <b>«إضافة إلى الشاشة الرئيسية»</b>.':'افتح هذا الرابط في <b>Safari</b>، ثم زر المشاركة <b>⬆️</b> ← <b>«إضافة إلى الشاشة الرئيسية»</b>.';
+    setTimeout(()=>bar.hidden=false,2500)}
+  else{txt.innerHTML='من قائمة المتصفح <b>⋮</b> اختر <b>«تثبيت التطبيق»</b> أو <b>«إضافة إلى الشاشة الرئيسية»</b>.';setTimeout(()=>bar.hidden=false,2500)}
+  addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferred=e;txt.textContent='افتحها كتطبيق بأيقونة على شاشتك الرئيسية.';go.hidden=false;bar.hidden=false});
+  go.onclick=async()=>{if(!deferred)return;deferred.prompt();const r=await deferred.userChoice.catch(()=>({}));deferred=null;if(r&&r.outcome==='accepted')bar.hidden=true};
+  document.getElementById('instX').onclick=()=>{bar.hidden=true;try{localStorage.setItem('p101-inst-hide',String(Date.now()+3*864e5))}catch(e){}};
+  addEventListener('appinstalled',()=>bar.hidden=true);
+})();
 </script>
 </body>
 </html>

@@ -4,7 +4,7 @@
  * البيانات تُحفظ في جدول Google Sheets داخل حساب المدرب فقط.
  * لا تعدّل هذا الملف؛ انسخه كاملًا كما هو.
  */
-const VERSION = 2;
+const VERSION = 3;
 const TOKEN_DAYS = 30;
 
 function doGet() {
@@ -68,7 +68,8 @@ const SHEETS = {
   Students: ['id', 'name', 'sectionId', 'pwHash', 'salt', 'createdAt', 'firstLogin', 'lastLogin', 'loginCount', 'totalSec', 'lastSeen'],
   Logins: ['time', 'studentId', 'sectionId', 'device'],
   Results: ['time', 'studentId', 'sectionId', 'kind', 'lessonKey', 'lessonTitle', 'score', 'max', 'percent', 'detail'],
-  Questions: ['time', 'studentId', 'sectionId', 'lessonKey', 'lessonTitle', 'question', 'answer', 'model']
+  Questions: ['time', 'studentId', 'sectionId', 'lessonKey', 'lessonTitle', 'question', 'answer', 'model'],
+  TeachLog: ['id', 'date', 'lessonKey', 'sectionId', 'hours', 'method', 'notes', 'createdAt']
 };
 const AI_MODELS = [
   { id: 'openai/gpt-oss-120b', extra: { reasoning_effort: 'low', include_reasoning: false } },
@@ -76,7 +77,7 @@ const AI_MODELS = [
   { id: 'openai/gpt-oss-20b', extra: { reasoning_effort: 'low', include_reasoning: false } }
 ];
 const AI_LIMIT = 15;      // أسئلة لكل متدرب كل ٦ ساعات
-const AR_NAMES = { Sections: 'الشعب', Students: 'المتدربون', Logins: 'سجل الدخول', Results: 'النتائج', Questions: 'أسئلة المساعد' };
+const AR_NAMES = { Sections: 'الشعب', Students: 'المتدربون', Logins: 'سجل الدخول', Results: 'النتائج', Questions: 'أسئلة المساعد', TeachLog: 'سجل التدريس' };
 function ss_() {
   let id = prop_('SSID'), ss = null;
   if (id) { try { ss = SpreadsheetApp.openById(id); } catch (e) { ss = null; } }
@@ -451,6 +452,40 @@ const ACTIONS = {
     readToken_(r.token, 't');
     const u = ttsMonth_();
     return { ok: true, tts: !!prop_('TTSKEY'), region: prop_('TTSREGION') || '', used: u.used, cap: TTS_MONTH_CAP };
+  },
+  tlog: function (r) {
+    readToken_(r.token, 't');
+    const op = String(r.op || 'list');
+    if (op === 'profile') {
+      const p = r.profile || {}, o = {};
+      ['name', 'college', 'dept', 'course', 'term', 'head'].forEach(function (k) { o[k] = String(p[k] || '').slice(0, 120); });
+      props_().setProperty('TPROFILE', JSON.stringify(o));
+      return { ok: true, profile: o };
+    }
+    if (op === 'add') {
+      const e = r.entry || {};
+      const lk = String(e.lessonKey || '').slice(0, 10), d = String(e.date || '').slice(0, 10);
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(d) || !lk) return { ok: false, error: 'bad_entry' };
+      const id = 'L' + Date.now().toString(36) + Math.floor(Math.random() * 1e3);
+      return lock_(function () {
+        append_('TeachLog', { id: id, date: d, lessonKey: lk, sectionId: String(e.sectionId || ''), hours: Math.max(0, Math.min(12, +e.hours || 0)), method: String(e.method || '').slice(0, 60), notes: String(e.notes || '').slice(0, 500), createdAt: now_() });
+        return { ok: true, id: id };
+      });
+    }
+    if (op === 'delete') {
+      return lock_(function () {
+        const x = rows_('TeachLog').filter(function (y) { return String(y.id) === String(r.id); })[0];
+        if (!x) return { ok: false, error: 'not_found' };
+        sh_('TeachLog').deleteRow(x._row); return { ok: true };
+      });
+    }
+    const fmt = function (v) { return v instanceof Date ? Utilities.formatDate(v, Session.getScriptTimeZone(), 'yyyy-MM-dd') : String(v); };
+    const log = rows_('TeachLog').map(function (x) { return { id: String(x.id), date: fmt(x.date), lessonKey: String(x.lessonKey), sectionId: String(x.sectionId), hours: +x.hours || 0, method: String(x.method || ''), notes: String(x.notes || '') }; });
+    const real = function (x) { return String(x.studentId) !== 'DEMO' && String(x.studentId) !== 'TEACHER'; };
+    let prof = {}; try { prof = JSON.parse(prop_('TPROFILE') || '{}'); } catch (e) {}
+    return { ok: true, log: log, profile: prof, totals: {
+      results: rows_('Results').filter(real).length, logins: rows_('Logins').filter(real).length,
+      questions: rows_('Questions').filter(real).length, tts: ttsMonth_().used } };
   },
   tquestions: function (r) {
     readToken_(r.token, 't');
