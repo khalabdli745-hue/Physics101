@@ -150,7 +150,7 @@ details.res .when{color:var(--muted);font-size:12.5px;margin-inline-start:auto}
 const API=(window.P101_API||'').trim();
 const UNITS=window.UNITS||[];
 const ORD=['الأولى','الثانية','الثالثة','الرابعة','الخامسة'];
-const LESSONS=[];UNITS.forEach((u,ui)=>u.l.forEach((l,li)=>LESSONS.push({k:ui+'-'+li,u:ui,t:l.t})));
+const LESSONS=[];UNITS.forEach((u,ui)=>u.l.forEach((l,li)=>{if(!l.hide)LESSONS.push({k:ui+'-'+li,u:ui,t:l.t})}));
 const LT=Object.fromEntries(LESSONS.map(x=>[x.k,x.t]));
 const TOTAL=LESSONS.length;
 const $=s=>document.querySelector(s);
@@ -250,7 +250,7 @@ async function openStudent(id){
   const d=document.createElement('div');d.className='drawer';d.innerHTML=`<div role="dialog" aria-label="تفاصيل المتدرب"><div class="dhead"><div><h2>${esc(s.name)}</h2><span class="sub">الرقم ${esc(s.id)} · ${esc(secName(s.sectionId))}</span></div><button class="btn ghost sm x">إغلاق ✕</button></div><div id="dbody"></div></div>`;
   document.body.appendChild(d);const close=()=>d.remove();d.onclick=e=>{if(e.target===d)close()};d.querySelector('.x').onclick=close;
   const b=d.querySelector('#dbody');
-  const units=UNITS.map((u,ui)=>{const ks=u.l.map((_,li)=>ui+'-'+li);const qz=avg(ks.map(k=>s.quiz[k]).filter(v=>v!=null).map(Number));const pr=avg(ks.map(k=>s.probL[k]).filter(v=>v!=null));const dn=ks.filter(k=>s.done.includes(k)).length;
+  const units=UNITS.map((u,ui)=>{const ks=u.l.map((_,li)=>ui+'-'+li).filter((_,li)=>!u.l[li].hide);const qz=avg(ks.map(k=>s.quiz[k]).filter(v=>v!=null).map(Number));const pr=avg(ks.map(k=>s.probL[k]).filter(v=>v!=null));const dn=ks.filter(k=>s.done.includes(k)).length;
     return `<div><b>الوحدة ${ORD[ui]}</b>اختبارات ${pct(qz)}<br>تمارين ${pct(pr)}<br>دروس ${dn}/${ks.length}</div>`}).join('');
   b.innerHTML=`<div class="stats"><div class="stat"><small>مرات الدخول</small><b>${AR(s.loginCount)}</b></div><div class="stat"><small>مجموع الوقت</small><b style="font-size:18px">${fmtTime(s.totalSec)}</b></div><div class="stat"><small>المعدل</small><b>${s.overall==null?'—':AR(Math.round(s.overall))+'٪'}</b></div><div class="stat"><small>التقدم</small><b>${AR(s.progress)}٪</b></div></div>
   <div class="card"><h2>بيانات الدخول</h2><p class="sub">أول دخول: ${fmtDate(s.firstLogin)} · آخر دخول: ${fmtDate(s.lastLogin)} · آخر نشاط: ${fmtDate(s.lastSeen)}</p>
@@ -297,7 +297,7 @@ async function drawStats(){
   const days=[];for(let i=29;i>=0;i--){const d=new Date(now-i*864e5);const k=d.toISOString().slice(0,10);days.push([k,STATS.loginsByDay[k]||0])}
   const maxD=Math.max(1,...days.map(d=>d[1]));
   /* الوحدات */
-  const unitRows=UNITS.map((u,ui)=>{const ks=u.l.map((_,li)=>ui+'-'+li);
+  const unitRows=UNITS.map((u,ui)=>{const ks=u.l.map((_,li)=>ui+'-'+li).filter((_,li)=>!u.l[li].hide);
     const q=avg(st.flatMap(s=>ks.map(k=>s.quiz[k]).filter(v=>v!=null).map(Number))),p=avg(st.flatMap(s=>ks.map(k=>s.probL[k]).filter(v=>v!=null)));
     const dn=st.length?Math.round(st.reduce((a,s)=>a+ks.filter(k=>s.done.includes(k)).length,0)/(st.length*ks.length)*100):0;return {n:'الوحدة '+ORD[ui]+': '+u.t,q,p,dn}});
   /* الدروس */
@@ -393,7 +393,7 @@ async function drawReports(){
   const secLabel=sec==='all'?'كل الشعب':'الشعبة '+secName(sec);
   const today=new Date().toLocaleDateString('ar-SA-u-ca-gregory',{day:'numeric',month:'long',year:'numeric'});
   const sOpts=`<option value="all">كل الشعب</option>`+DATA.sections.map(s=>`<option value="${esc(s.id)}" ${sec===s.id?'selected':''}>${esc(s.name)}</option>`).join('');
-  const lOpts=`<option value="all">📊 تقرير الشعبة العام</option><option value="trainer" ${RPL==='trainer'?'selected':''}>👨‍🏫 إنجاز المدرب (تقرير رسمي)</option>`+UNITS.map((u,ui)=>`<optgroup label="الوحدة ${ORD[ui]}: ${esc(u.t)}">${u.l.map((l,li)=>{const k=ui+'-'+li;return `<option value="${k}" ${RPL===k?'selected':''}>${esc(l.t)}</option>`}).join('')}</optgroup>`).join('');
+  const lOpts=`<option value="all">📊 تقرير الشعبة العام</option><option value="trainer" ${RPL==='trainer'?'selected':''}>👨‍🏫 إنجاز المدرب (تقرير رسمي)</option>`+UNITS.map((u,ui)=>`<optgroup label="الوحدة ${ORD[ui]}: ${esc(u.t)}">${u.l.map((l,li)=>{const k=ui+'-'+li;if(l.hide)return '';return `<option value="${k}" ${RPL===k?'selected':''}>${esc(l.t)}</option>`}).join('')}</optgroup>`).join('');
   const ctl=`<div class="row rp-ctl" style="margin-bottom:12px"><select id="rps">${sOpts}</select><select id="rpl" style="flex:1;min-width:180px">${lOpts}</select><button class="btn ghost sm" id="rpr">↻</button><button class="btn sm" id="rpp">🖨️ طباعة / PDF</button><button class="btn ghost sm" id="rpx">⬇ Excel</button></div>`;
   const n=st.length,logged=st.filter(s=>s.loginCount).length;
   let html='',xls=null;
@@ -470,7 +470,7 @@ async function drawReports(){
 }
 
 /* ---------- إنجاز المدرب ---------- */
-const CONTENT={lessons:51,quiz:540,probs:194,gens:40,examples:51,figs:51,tables:29,sims:53,pages:123,apps:40,theory:11};
+const CONTENT={lessons:50,quiz:540,probs:194,gens:40,examples:51,figs:51,tables:29,sims:53,pages:123,apps:40,theory:11};
 const METHODS=['محاضرة','تطبيق عملي','مراجعة','اختبار قصير','تطبيق على المنصة','حل تمارين'];
 let TLOG=null;
 async function drawTrainer(m,ctl,st,sec,secLabel,today,n,logged){
@@ -484,9 +484,9 @@ async function drawTrainer(m,ctl,st,sec,secLabel,today,n,logged){
   const T=TLOG.totals||{};
   const ov=st.map(s=>s.overall).filter(v=>v!=null),avgOv=avg(ov),compl=n?Math.round(st.reduce((a,s)=>a+s.doneN,0)/(n*TOTAL)*100):0;
   const qAll=st.flatMap(s=>Object.values(s.quiz||{}).map(Number)),passR=qAll.length?Math.round(qAll.filter(v=>v>=50).length/qAll.length*100):null;
-  const unitCov=UNITS.map((u,ui)=>{const ks=u.l.map((_,li)=>ui+'-'+li);return{ui,c:ks.filter(k=>covered.has(k)).length,t:ks.length}});
+  const unitCov=UNITS.map((u,ui)=>{const ks=u.l.map((_,li)=>ui+'-'+li).filter((_,li)=>!u.l[li].hide);return{ui,c:ks.filter(k=>covered.has(k)).length,t:ks.length}});
   const dToday=new Date(),iso=`${dToday.getFullYear()}-${String(dToday.getMonth()+1).padStart(2,'0')}-${String(dToday.getDate()).padStart(2,'0')}`;
-  const lessonOpts=UNITS.map((u,ui)=>`<optgroup label="الوحدة ${ORD[ui]}">${u.l.map((l,li)=>`<option value="${ui}-${li}">${esc(l.t)}${covered.has(ui+'-'+li)?' ✓':''}</option>`).join('')}</optgroup>`).join('');
+  const lessonOpts=UNITS.map((u,ui)=>`<optgroup label="الوحدة ${ORD[ui]}">${u.l.map((l,li)=>l.hide?'':`<option value="${ui}-${li}">${esc(l.t)}${covered.has(ui+'-'+li)?' ✓':''}</option>`).join('')}</optgroup>`).join('');
   const field=(k,lab,ph)=>`<label>${lab}<input id="pf_${k}" value="${esc(P[k]||'')}" placeholder="${ph||''}"></label>`;
   const html=`<div class="rp-hero"><small>تقرير إنجاز المدرب — ${esc(P.course||'فيزياء ١٠١')}${P.term?' · '+esc(P.term):''}</small><h2>${esc(P.name||'المدرب')}</h2><div class="meta">${[P.college,P.dept].filter(Boolean).map(esc).join(' · ')}${P.college||P.dept?' · ':''}${esc(secLabel)} · ${today}</div></div>
   <div class="card rp-edit"><h2>بيانات التقرير</h2><p class="sub">تظهر في رأس التقرير المطبوع. تُحفظ مرة واحدة.</p><div class="rp-form">${field('name','اسم المدرب')}${field('college','الكلية / المنشأة','الكلية التقنية بـ…')}${field('dept','القسم','العلوم العامة')}${field('course','المقرر')}${field('term','الفصل التدريبي','الأول 1448هـ')}${field('head','رئيس القسم')}</div><div class="row" style="margin-top:8px"><button class="btn sm" id="pfs">حفظ البيانات</button></div></div>

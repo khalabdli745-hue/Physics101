@@ -287,6 +287,11 @@ details.card summary{cursor:pointer}
   .pager{padding-bottom:calc(10px + env(safe-area-inset-bottom,0px))}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.eqblock.one{white-space:nowrap;overflow-x:auto;scrollbar-width:none;padding-inline:8px}
+h3 .eqn{direction:ltr;unicode-bidi:isolate;white-space:nowrap}
+.fig.photo img{display:block;width:100%;max-width:440px;margin:0 auto;border-radius:12px;border:1px solid var(--line);background:var(--soft)}
+span.mu{font-size:1.25em;line-height:0}
+sub.ss{font-size:.6em;line-height:0;vertical-align:-.25em}
 </style>
 </head>
 <body>
@@ -309,7 +314,7 @@ details.card summary{cursor:pointer}
       <div class="tabs" role="tablist" id="tabs">
         <button role="tab" data-t="sum">الدرس</button>
         <button role="tab" data-t="page">صفحات الحقيبة</button>
-        <button role="tab" data-t="ex">أمثلة وتمارين</button>
+        <button role="tab" data-t="ex">أمثلة وتمارين تفاعلية</button>
         <button role="tab" data-t="quiz">اختبر نفسك</button>
         <button role="tab" data-t="lab">تجارب وتطبيقات</button>
       </div>
@@ -370,7 +375,9 @@ let best=store.get('p101-best',{});
 let pos=store.get('p101-pos',{u:0,l:0,p:0,t:'sum'});
 if(!UNITS[pos.u]||!UNITS[pos.u].l[pos.l])pos={u:0,l:0,p:0,t:'sum'};
 if(!UNITS[pos.u].l[pos.l].p[pos.p])pos.p=0;
-const total=UNITS.reduce((s,u)=>s+u.l.length,0);
+const HID=(u,l)=>!!(UNITS[u]&&UNITS[u].l[l]&&UNITS[u].l[l].hide);
+if(HID(pos.u,pos.l))pos={u:pos.u,l:Math.max(0,pos.l-1),p:0,t:'sum'};
+const total=UNITS.reduce((s,u)=>s+u.l.filter(l=>!l.hide).length,0);
 const key=(u,l)=>u+'-'+l;
 const lesson=()=>UNITS[pos.u].l[pos.l];
 const study=()=>(STUDY[pos.u]||[])[pos.l]||null;
@@ -379,16 +386,19 @@ function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','
 const NU=/(?:[A-Za-zθαρμΔ][A-Za-z₀-₉]*\s*=\s*)?[-−]?\d[\d.]*(?:\s*×\s*10[⁻⁰¹²³⁴⁵⁶⁷⁸⁹]+)?(?:\s?(?:[A-Za-zµΩ°][A-Za-zµΩ°²³⁻¹/·]*))?/g;
 function inl(s){return String(s).split(/(`[^`]+`)/).map(seg=>seg.startsWith('`')&&seg.endsWith('`')&&seg.length>1?'<span class="eq">'+esc(seg.slice(1,-1))+'</span>':esc(seg).replace(NU,m=>/[A-Za-zµΩ°×]/.test(m)?'<span class="nu">'+m+'</span>':m)).join('').replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>')}
 function cellHTML(c){c=String(c);if(/`/.test(c))return inl(c);
-  return c.split(/([A-Za-z0-9\u2080-\u2089\u00B2\u00B3\u207B\u00B9\u2070-\u2079ΔρεθμΩπ°%][A-Za-z0-9\u2080-\u2089\u00B2\u00B3\u207B\u00B9\u2070-\u2079ΔρεθμΩπ°% =+\/()·×÷.,−\-]*[A-Za-z0-9\u2080-\u2089\u00B2\u00B3\u00B9\u2070-\u2079ΩΔ°%)])/).map((x,i)=>i%2?`<bdi class="eqn">${esc(x)}</bdi>`:inl(x)).join('')}
+  return c.split(/([A-Za-z0-9\u2080-\u2089\u00B2\u00B3\u207B\u00B9\u2070-\u2079ΔρεθμΩπ°%îĵ][A-Za-z0-9\u2080-\u2089\u00B2\u00B3\u207B\u00B9\u2070-\u2079ΔρεθμΩπ°%îĵ\u0302 =+\/()·×÷.,−\-]*[A-Za-z0-9\u2080-\u2089\u00B2\u00B3\u00B9\u2070-\u2079ΩΔ°%)îĵ\u0302])/).map((x,i)=>i%2?`<bdi class="eqn">${esc(x)}</bdi>`:inl(x)).join('')}
+function photoFail(im){const f=im.closest('figure'),k=im.dataset.fb;if(f)f.outerHTML=(k&&(window.FIGS||{})[k])||''}
 function md(src){
   const out=[];let list=null;
   const flush=()=>{if(list){out.push(`<${list.t}>${list.i.map(x=>'<li>'+inl(x)+'</li>').join('')}</${list.t}>`);list=null}};
   for(const raw of src.split('\n')){const l=raw.trim();let m;
     if(!l){flush();continue}
-    if(m=l.match(/^#{1,4}\s+(.*)/)){flush();out.push('<h3>'+inl(m[1])+'</h3>');continue}
+    if(m=l.match(/^\[\[img:([^|\]]+)\|(\w*)\|([^\]]*)\]\]$/)){flush();const src=m[1].startsWith('@')?((window.PHOTOS||{})[m[1].slice(1)]||''):m[1];out.push(`<figure class="fig photo"><img src="${esc(src)}" alt="${esc(m[3])}" loading="lazy" referrerpolicy="no-referrer" data-fb="${m[2]}" onerror="photoFail(this)"><figcaption>${esc(m[3])}</figcaption></figure>`);continue}
+    if(m=l.match(/^\[\[fig:(\w+)\]\]$/)){flush();out.push((window.FIGS||{})[m[1]]||'');continue}
+    if(m=l.match(/^#{1,4}\s+(.*)/)){flush();out.push('<h3><span>'+cellHTML(m[1])+'</span></h3>');continue}
     if(m=l.match(/^[-*•]\s+(.*)/)){if(!list||list.t!=='ul'){flush();list={t:'ul',i:[]}}list.i.push(m[1]);continue}
     if(m=l.match(/^\d+[.)]\s+(.*)/)){if(!list||list.t!=='ol'){flush();list={t:'ol',i:[]}}list.i.push(m[1]);continue}
-    if(m=l.match(/^`([^`]+)`(.*)$/)){flush();out.push('<div class="eqblock">'+esc(m[1])+'</div>'+(m[2].trim()?'<p>'+inl(m[2].trim())+'</p>':''));continue}
+    if(m=l.match(/^`([^`]+)`(.*)$/)){flush();out.push('<div class="eqblock'+(/\u00a0/.test(m[1])?' one':'')+'">'+esc(m[1])+'</div>'+(m[2].trim()?'<p>'+inl(m[2].trim())+'</p>':''));continue}
     flush();out.push('<p>'+inl(l)+'</p>');}
   flush();return out.join('');
 }
@@ -448,7 +458,7 @@ const TTS=(()=>{
   function spoken(t){
     t=t.replace(/^#+\s*/gm,'').replace(/\*\*/g,'').replace(/`/g,'').replace(/^[-•]\s*/gm,'').replace(/[✓✗⚠️]/g,'').replace(/[✦⚗🔊■]/g,'');
     t=t.replace(/([^.:؟!،\n])[ \t]*\n+/g,'$1.\n');
-    t=t.replace(/v_f/g,'السرعة النهائية').replace(/v_i/g,'السرعة الابتدائية').replace(/v_d/g,'سرعة الانجراف').replace(/v̄/g,'السرعة المتوسطة').replace(/T_f/g,'درجة الحرارة النهائية')
+    t=t.replace(/\bV_?f\b/g,'السرعة النهائية').replace(/\bV_?i\b/g,'السرعة الابتدائية').replace(/v_f/g,'السرعة النهائية').replace(/v_i/g,'السرعة الابتدائية').replace(/v_d/g,'سرعة الانجراف').replace(/v̄/g,'السرعة المتوسطة').replace(/T_f/g,'درجة الحرارة النهائية')
       .replace(/R_total|C_total/g,m=>m[0]==='R'?'المقاومة الكلية':'السعة الكلية').replace(/R_x/g,'المقاومة المجهولة').replace(/R_known/g,'المقاومة المعلومة').replace(/q_total/g,'الشحنة الكلية');
     t=t.replace(/î/g,' آي ').replace(/ĵ/g,' جيه ').replace(/k̂/g,' كيه ');
     t=t.replace(/10([⁻]?[⁰¹²³⁴⁵⁶⁷⁸⁹]+)/g,(m,e)=>' عشرة أس '+(e[0]==='⁻'?'سالب ':'')+e.replace('⁻','').split('').map(c=>SUP[c]).join('')+' ');
@@ -486,7 +496,7 @@ const TTS=(()=>{
   function enParens(t){let prev;do{prev=t;t=t.replace(/\(([^()]*)\)/g,(m,inner)=>/[+×÷*\/·]|\s[−-]\s/.test(inner)?' open bracket, '+inner+', close bracket, ':' '+inner+' ')}while(t!==prev);return t}
   function spokenEn(t){
     const P=[];const ph=w=>{P.push(w);return ' \u0001'+(P.length-1)+'\u0002 '};
-    t=t.replace(/v_f/g,'v'+ph('final')).replace(/v_i/g,'v'+ph('initial')).replace(/v_d/g,'v'+ph('drift')).replace(/v̄/g,'v'+ph('average')).replace(/T_f/g,'T'+ph('final')).replace(/T_i/g,'T'+ph('initial')).replace(/_total/g,ph('total')).replace(/_known/g,ph('known')).replace(/_x/g,' x').replace(/_y/g,' y').replace(/_/g,' ');
+    t=t.replace(/\(max\)/g,ph(' maximum')).replace(/μ([sk]?)N\b/g,(m,y)=>ph('mu'+(y?(y=='k'?' kinetic':' static'):'')+' en')).replace(/μmg\b/g,ph('mu em gee')).replace(/(?<![\d.]\s?)\bmg\b/g,ph('em gee')).replace(/μ([sk])(?![a-z])/g,(m,y)=>'μ'+ph(y=='k'?'kinetic':'static')).replace(/\b([VF]|KE|PE)([fisk])\b/g,(m,x,y)=>(x=='V'?'v':x)+ph({f:'final',i:'initial',s:'static',k:'kinetic'}[y])).replace(/v_f/g,'v'+ph('final')).replace(/v_i/g,'v'+ph('initial')).replace(/v_d/g,'v'+ph('drift')).replace(/v̄/g,'v'+ph('average')).replace(/T_f/g,'T'+ph('final')).replace(/T_i/g,'T'+ph('initial')).replace(/_total/g,ph('total')).replace(/_known/g,ph('known')).replace(/_x/g,' x').replace(/_y/g,' y').replace(/_/g,' ');
     t=t.replace(/î/g,' i'+ph('hat')).replace(/ĵ/g,' j'+ph('hat')).replace(/k̂/g,' k'+ph('hat'));
     t=t.replace(/10([⁻]?[⁰¹²³⁴⁵⁶⁷⁸⁹]+)/g,(m,e)=>ph('ten to the power of '+(e[0]==='⁻'?'minus ':'')+e.replace('⁻','').split('').map(c=>EN_SUP[c]).join('')));
     t=t.replace(/(\d)e([-+]?\d+)/g,(m,d,e)=>d+ph('times ten to the power of '+(e[0]==='-'?'minus '+e.slice(1):e.replace('+',''))));
@@ -631,7 +641,7 @@ function buildNav(){
     b.querySelector('.ut').textContent=u.t;b.querySelector('.ue').textContent=u.en;
     b.onclick=()=>{d.classList.toggle('open');b.setAttribute('aria-expanded',d.classList.contains('open'))};
     const ol=document.createElement('ol');
-    u.l.forEach((l,li)=>{
+    u.l.forEach((l,li)=>{if(l.hide)return;
       const it=document.createElement('li');if(done.has(key(ui,li)))it.classList.add('done');
       const lb=document.createElement('button');lb.innerHTML='<span class="tick"></span><span></span>';lb.lastChild.textContent=l.t;
       if(ui===pos.u&&li===pos.l&&pos.t!=='refs')lb.setAttribute('aria-current','true');
@@ -644,7 +654,7 @@ function buildNav(){
   $('refsBtn').onclick=()=>{pos.t='refs';closeNav();render()};
   $('themeBtn').onclick=()=>{const r=document.documentElement;const dark=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches;r.dataset.theme=dark?'light':'dark';store.set('p101-theme',r.dataset.theme)};
 }
-function updateProgress(){const pct=Math.round(done.size/total*100);$('progTxt').textContent=AR(pct)+'٪ مكتمل';$('progBar').style.width=pct+'%'}
+function updateProgress(){const pct=Math.min(100,Math.round([...done].filter(k=>{const[a,b]=k.split('-').map(Number);return !HID(a,b)}).length/total*100));$('progTxt').textContent=AR(pct)+'٪ مكتمل';$('progBar').style.width=pct+'%'}
 
 /* ---------- التحميل الكسول للصفحات ---------- */
 const loading={};
@@ -681,19 +691,19 @@ function nextLessonBtn(i){
   if(nx){const b=document.createElement('button');b.className='btn ghost';b.textContent='الدرس التالي: '+UNITS[nx[0]].l[nx[1]].t;b.onclick=()=>go(nx[0],nx[1],0,pos.t);r.appendChild(b)}
   i.appendChild(r);
 }
-function nextLesson(){if(pos.l<UNITS[pos.u].l.length-1)return[pos.u,pos.l+1];if(pos.u<UNITS.length-1)return[pos.u+1,0];return null}
+function nextLesson(){let u=pos.u,l=pos.l;do{if(l<UNITS[u].l.length-1)l++;else if(u<UNITS.length-1){u++;l=0}else return null}while(HID(u,l));return[u,l]}
 function renderSum(v){
   const i=wrap(v),s=study(),x=extra();
   if(!s){i.innerHTML='<p class="empty">لا يوجد ملخص لهذا الدرس.</p>';return}
   i.insertAdjacentHTML('beforeend',TTS_HELP);
-  const full=()=>{const l=lesson();let txt='درس '+l.t+'.\n'+s.s+(x.ap?'\nتطبيقات من الحياة.\n'+x.ap:'');
+  const full=()=>{const l=lesson();let txt='درس '+l.t+'.\n'+s.s.replace(/^\[\[(fig|img):[^\n]*\]\]$/gm,'')+(x.ap?'\nتطبيقات من الحياة.\n'+x.ap:'');
     if(s.ex)txt+='\nمثال محلول.\n'+s.ex.q+'\nالحل.\n'+s.ex.st.join('\n')+'\nالإجابة: '+s.ex.a;return txt};
   const top=document.createElement('div');top.className='listenAll';top.appendChild(TTS.controls(full,{label:'🎧 استمع للدرس كاملًا',aria:'استمع للدرس كاملًا'}));i.appendChild(top);
   const art=(window.ART||{})[key(pos.u,pos.l)];
   if(art){const b=document.createElement('div');b.className='artBanner';b.setAttribute('role','img');b.setAttribute('aria-label',art[3]);
     b.innerHTML=`<div class="artIcons"><span>${art[0]}</span><span>${art[1]}</span><span>${art[2]}</span></div><div class="artText"><small>الوحدة ${ORD[pos.u]}</small><b>${esc(art[3])}</b></div>`;i.appendChild(b)}
   const c=card('الدرس','');
-  c.appendChild(TTS.controls(()=>s.s,{compact:true,label:'🔊 استمع للدرس'}));
+  c.appendChild(TTS.controls(()=>s.s.replace(/^\[\[(fig|img):[^\n]*\]\]$/gm,''),{compact:true,label:'🔊 استمع للدرس'}));
   const body=document.createElement('div');body.className='md';body.innerHTML=md(s.s);c.appendChild(body);
   if(art)body.querySelectorAll('h3').forEach((h,n)=>{const e=document.createElement('span');e.className='hIcon';e.setAttribute('aria-hidden','true');e.textContent=art[n%3];h.prepend(e)});
   if(x.fig&&FIGS[x.fig])c.insertAdjacentHTML('beforeend',FIGS[x.fig]);
@@ -973,7 +983,7 @@ $('nextBtn').onclick=()=>{const l=lesson();
   const nx=nextLesson();if(nx)go(nx[0],nx[1],0,'page')};
 $('prevBtn').onclick=()=>{
   if(pos.p>0){pos.p--;return render()}
-  if(pos.l>0)return go(pos.u,pos.l-1,UNITS[pos.u].l[pos.l-1].p.length-1,'page');
+  if(pos.l>0){let l=pos.l-1;while(l>0&&HID(pos.u,l))l--;return go(pos.u,l,UNITS[pos.u].l[l].p.length-1,'page')}
   if(pos.u>0){const pu=UNITS[pos.u-1];go(pos.u-1,pu.l.length-1,pu.l[pu.l.length-1].p.length-1,'page')}};
 $('doneBtn').onclick=()=>{const k=key(pos.u,pos.l);if(done.has(k))done.delete(k);else{done.add(k);SYNC.result('done',k,lesson().t,1,1)}store.set('p101-done',[...done]);buildNav();updateProgress();render()};
 function openNav(){$('nav').classList.add('show');$('scrim').classList.add('show')}
@@ -1043,6 +1053,16 @@ else{
   }
   buildNav();updateProgress();render();
 }
+/* الرموز السفلية: Vi ← V<sub>i</sub> */
+(()=>{const RX=/([A-Za-zΔμ]+)_([A-Za-z0-9]+)|(?<![A-Za-z])(V|F|KE|PE|μ)([ifsk])(?![a-z0-9])|(μ)/g,NS='http://www.w3.org/2000/svg',SKIP=/^(SCRIPT|STYLE|TEXTAREA|INPUT|SUB|tspan|OPTION|TITLE)$/;
+function fix(root){if(!root||root.nodeType!==1&&root.nodeType!==9)return;const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT),L=[];let n;
+  while(n=w.nextNode()){RX.lastIndex=0;if(RX.test(n.nodeValue)&&n.parentNode&&!SKIP.test(n.parentNode.nodeName)&&!(n.parentNode.closest&&n.parentNode.closest('[contenteditable],sub,.mu')))L.push(n)}
+  for(const t of L){const svg=t.parentNode.namespaceURI===NS,f=document.createDocumentFragment(),s=t.nodeValue;let i=0,m;RX.lastIndex=0;
+    while(m=RX.exec(s)){f.append(s.slice(i,m.index));const base=m[1]||m[3]||m[5];if(base==='μ'){let b;if(svg){b=document.createElementNS(NS,'tspan');b.setAttribute('font-size','125%')}else{b=document.createElement('span');b.className='mu'}b.textContent='μ';f.append(b)}else f.append(base);if(m[5]){i=m.index+1;continue}let e;if(svg){e=document.createElementNS(NS,'tspan');e.setAttribute('baseline-shift','sub');e.setAttribute('font-size','70%')}else{e=document.createElement('sub');e.className='ss'}e.textContent=m[2]||m[4];f.append(e);if(svg){const r=document.createElementNS(NS,'tspan');r.textContent='​';f.append(r)}i=m.index+m[0].length}
+    f.append(s.slice(i));t.parentNode.replaceChild(f,t)}}
+const fit=()=>document.querySelectorAll('.eqblock.one').forEach(e=>{if(!e.offsetWidth)return;e.style.fontSize='';let f=parseFloat(getComputedStyle(e).fontSize),k=0;while(e.scrollWidth>e.clientWidth+1&&f>10&&k++<40){f-=0.5;e.style.fontSize=f+'px'}});
+let ft=0;const qfit=()=>{cancelAnimationFrame(ft);ft=requestAnimationFrame(fit)};addEventListener('resize',qfit);
+fix(document.body);qfit();new MutationObserver(ms=>{for(const m of ms)for(const a of m.addedNodes)fix(a.nodeType===3?a.parentNode:a);qfit()}).observe(document.body,{childList:true,subtree:true});})();
 </script>
 <div id="instBar" hidden style="position:fixed;inset-inline:12px;bottom:14px;z-index:90;background:#fff;color:#1f2937;border-radius:16px;box-shadow:0 8px 28px #0003;padding:12px 14px;display:flex;gap:12px;align-items:center;max-width:520px;margin:auto;font-size:14.5px;line-height:1.6;border:1px solid #e5e7eb">
 <img src="icon-180.png" alt="" width="46" height="46" style="border-radius:11px;flex:none">
