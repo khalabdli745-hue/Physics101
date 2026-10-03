@@ -844,7 +844,7 @@ function theoryCard(t,ex){
   const w=document.createElement('div');w.className='opts';let tr=0;
   const items=shuffle(t.o.map((x,i)=>({x,ok:i===t.a})));
   const expl=document.createElement('div');expl.hidden=true;
-  if(ex){expl.innerHTML='<ol class="steps">'+ex.st.map(s=>'<li>'+inl(s)+'</li>').join('')+'</ol><div class="ans">'+inl(ex.a)+'</div>'}
+  if(ex){expl.innerHTML=(ex.fig&&FIGS[ex.fig]?FIGS[ex.fig]:'')+'<ol class="steps">'+ex.st.map(s=>'<li>'+inl(s)+'</li>').join('')+'</ol><div class="ans">'+inl(ex.a)+'</div>'}
   const f=document.createElement('div');f.className='pfb';
   items.forEach(it=>{const b=document.createElement('button');b.innerHTML=inl(it.x);it.el=b;
     b.onclick=()=>{if(c.dataset.lock)return;
@@ -866,7 +866,7 @@ function renderEx(v){
     const upd=()=>{prog.textContent=fin?`أنجزت ${AR(fin)} من ${AR(probs.length)} — الخطوات الصحيحة من أول محاولة: ${AR(pts)} من ${AR(max)}`:''};
     probs.forEach((p,n)=>i.appendChild(problemCard(p,n===0?'مثال تفاعلي':'تمرين حسابي '+AR(n),(sc,det)=>{fin++;pts+=sc;upd();SYNC.result('prob',k+'.'+n,lesson().t,sc,5,det);if(fin===probs.length){const b=best['p'+k];if(b==null||pts>b){best['p'+k]=pts;store.set('p101-best',best)}}})));
     if(s&&s.ex){const d=document.createElement('details');d.className='card';d.innerHTML='<summary><b>مثال محلول للمراجعة</b></summary>';d.appendChild(TTS.controls(()=>'مثال محلول. '+s.ex.q+'\nالحل.\n'+s.ex.st.join('\n')+'\nالإجابة: '+s.ex.a,{compact:true,label:'🔊 استمع للمثال'}));
-      d.insertAdjacentHTML('beforeend','<p class="pq">'+inl(s.ex.q)+'</p><ol class="steps">'+s.ex.st.map(x=>'<li>'+inl(x)+'</li>').join('')+'</ol><div class="ans">'+inl(s.ex.a)+'</div>');i.appendChild(d)}
+      d.insertAdjacentHTML('beforeend','<p class="pq">'+inl(s.ex.q)+'</p>'+(s.ex.fig&&FIGS[s.ex.fig]?FIGS[s.ex.fig]:'')+'<ol class="steps">'+s.ex.st.map(x=>'<li>'+inl(x)+'</li>').join('')+'</ol><div class="ans">'+inl(s.ex.a)+'</div>');i.appendChild(d)}
   }else if(th){i.appendChild(theoryCard(th,s&&s.ex))}
 
   else if(s&&s.ex){i.appendChild(theoryCard({q:s.ex.q,o:[s.ex.a],a:0},s.ex))}
