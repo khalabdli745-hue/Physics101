@@ -1364,3 +1364,52 @@ FG.capParallel=svg('0 60 390 280',
   T(200,316,'q_total = q₁ + q₂ + q₃','var(--accent)','xs')+T(200,332,'الجهد V نفسه على كل مكثف','var(--ink)','xs'),
   'المكثفات على التوازي: الجهد متساوٍ والشحنة تتوزع');
 })();
+/* قانون كولوم: التنافر والتجاذب */
+(function(){const FG=window.FIGS;
+const A=(id,c)=>`<marker id="${id}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="${c}"/></marker>`;
+const T=(x,y,s,c='var(--ink)',k='sm')=>`<text x="${x}" y="${y}" class="lb ${k}" text-anchor="middle" style="fill:${c}">${s}</text>`;
+const Q=(x,y,s,c)=>`<circle cx="${x}" cy="${y}" r="17" fill="color-mix(in srgb,${c} 25%,var(--panel))" stroke="${c}" stroke-width="2.5"/>`+T(x,y+6,s,c,'');
+const L=(x1,y,x2,c='var(--accent)')=>`<line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="${c}" stroke-width="3" marker-end="url(#cl)"/>`;
+const D=(x1,x2,y)=>`<line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="var(--muted)" stroke-width="1.5" stroke-dasharray="4 4"/>`;
+FG.coulomb=`<figure class="fig"><svg viewBox="0 0 380 250" role="img" aria-label="قانون كولوم">${'<defs>'+A('cl','var(--accent)')+'</defs>'}`+
+ T(190,22,'شحنتان متشابهتان: تنافر')+Q(140,60,'+','var(--warnc)')+Q(240,60,'+','var(--warnc)')+L(122,60,62)+L(258,60,318)+T(92,48,'F','var(--accent)')+T(288,48,'F','var(--accent)')+
+ D(140,240,95)+T(190,112,'r','var(--ink)','xs')+
+ T(190,150,'شحنتان مختلفتان: تجاذب')+Q(110,190,'+','var(--warnc)')+Q(270,190,'−','var(--fig2)')+L(128,190,178)+L(252,190,202)+T(152,178,'F','var(--accent)')+T(228,178,'F','var(--accent)')+
+ D(110,270,225)+T(190,242,'r','var(--ink)','xs')+
+ `</svg><figcaption>القوتان متساويتان في المقدار ومتعاكستان في الاتجاه: F = kq₁q₂/r²</figcaption></figure>`;
+})();
+/* كولوم: ثلاث شحنات على خط واحد */
+(function(){const FG=window.FIGS;
+const A=(id,c)=>`<marker id="${id}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="${c}"/></marker>`;
+const defs='<defs>'+A('c3a','var(--accent)')+A('c3w','var(--warnc)')+A('c3g','var(--good)')+'</defs>';
+const T=(x,y,s,c='var(--ink)',k='sm')=>`<text x="${x}" y="${y}" class="lb ${k}" text-anchor="middle" style="fill:${c}">${s}</text>`;
+const Q=(x,s)=>{const pos=s.startsWith('+');const c=pos?'var(--warnc)':'var(--fig2)';return `<circle cx="${x}" cy="90" r="17" fill="color-mix(in srgb,${c} 25%,var(--panel))" stroke="${c}" stroke-width="2.5"/>`+T(x,96,pos?'+':'−',c,'')};
+const AR=(x1,x2,y,lab,c,m)=>`<line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="${c}" stroke-width="3" marker-end="url(#${m})"/>`+T((x1+x2)/2,y-12,lab,c,'xs');
+/* xs: مواقع الشحنات، qs: نصوصها، ds: نصوص المسافات، arrows: أسهم القوى على الشحنة المطلوبة */
+const fig=(xs,qs,names,ds,arrows,cap)=>`<figure class="fig"><svg viewBox="0 -22 380 197" role="img" aria-label="${cap}">${defs}`+
+  `<line x1="${xs[0]}" y1="90" x2="${xs[2]}" y2="90" stroke="var(--muted)" stroke-width="1.5"/>`+
+  xs.map((x,i)=>Q(x,qs[i])+T(x,128,names[i])+T(x,146,qs[i].replace(/^\+/,''),'var(--ink)','xs')).join('')+
+  `<line x1="${xs[0]}" y1="162" x2="${xs[2]}" y2="162" stroke="var(--muted)" stroke-width="1" stroke-dasharray="4 4"/>`+T((xs[0]+xs[1])/2,172,ds[0],'var(--ink)','xs')+T((xs[1]+xs[2])/2,172,ds[1],'var(--ink)','xs')+
+  arrows.join('')+`</svg><figcaption>${cap}</figcaption></figure>`;
+FG.c3a=fig([60,150,330],['+4 µC','−5 µC','+6 µC'],['q₁','q₂','q₃'],['2 m','4 m'],[AR(132,82,52,'F₁ = 0.045 N','var(--accent)','c3a'),AR(168,198,30,'F₃ = 0.017 N','var(--warnc)','c3w'),AR(132,104,4,'F_total = 0.028 N','var(--good)','c3g')],'القوة على q₂: تجذبها q₁ لليسار وتجذبها q₃ لليمين، والمحصلة نحو اليسار');
+FG.c3b=fig([60,190,320],['+2 µC','+3 µC','−4 µC'],['q₁','q₂','q₃'],['1 m','1 m'],[AR(302,232,52,'F₂₃ = 0.108 N','var(--accent)','c3a'),AR(302,282,26,'F₁₃ = 0.018 N','var(--warnc)','c3w')],'القوة على q₃: q₁ و q₂ تجذبانها في الاتجاه نفسه (لليسار)');
+FG.c3c=fig([70,190,310],['+3 µC','+1 µC','+3 µC'],['q₁','q₂','q₃'],['0.3 m','0.3 m'],[AR(208,258,52,'F₁ = 0.3 N','var(--accent)','c3a'),AR(172,122,52,'F₃ = 0.3 N','var(--warnc)','c3w')],'القوة على q₂: قوتا التنافر متساويتان ومتعاكستان فالمحصلة صفر');
+})();
+/* كولوم: اتجاه القوى لكل شحنتين */
+(function(){const FG=window.FIGS;
+const A=(id,c)=>`<marker id="${id}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="${c}"/></marker>`;
+const defs='<defs>'+A('pa','var(--accent)')+A('pm','var(--muted)')+'</defs>';
+const T=(x,y,s,c='var(--ink)',k='sm')=>`<text x="${x}" y="${y}" class="lb ${k}" text-anchor="middle" style="fill:${c}">${s}</text>`;
+const Q=(x,s,dim)=>{const pos=s.startsWith('+');const c=pos?'var(--warnc)':'var(--fig2)';return `<circle cx="${x}" cy="70" r="17" fill="color-mix(in srgb,${c} 25%,var(--panel))" stroke="${c}" stroke-width="2.5" ${dim?'stroke-dasharray="4 3" opacity=".45"':''}/>`+T(x,76,pos?'+':'−',c,'')};
+const AR=(x1,x2,lab,main)=>`<line x1="${x1}" y1="70" x2="${x2}" y2="70" stroke="${main?'var(--accent)':'var(--muted)'}" stroke-width="${main?3.5:2}" marker-end="url(#${main?'pa':'pm'})"/>`+T((x1+x2)/2,58,lab,main?'var(--accent)':'var(--muted)','xs');
+/* زوج q₁ و q₂ */
+FG.c3p12=`<figure class="fig"><svg viewBox="0 35 380 100" role="img" aria-label="q1 وq2">${defs}`+
+ Q(50,'+')+Q(220,'−')+Q(340,'+',1)+T(50,104,'q₁ (+)')+T(220,104,'q₂ (−)')+T(340,104,'q₃','var(--muted)')+
+ AR(68,118,'على q₁',0)+AR(202,148,'F₁ على q₂',1)+T(135,124,'تجاذب: كل شحنة تسحب الأخرى نحوها','var(--ink)','xs')+
+ `</svg><figcaption>الزوج q₁ و q₂: مختلفتان فتتجاذبان، فتُسحب q₂ نحو اليسار</figcaption></figure>`;
+/* زوج q₃ و q₂ */
+FG.c3p32=`<figure class="fig"><svg viewBox="0 35 380 100" role="img" aria-label="q3 وq2">${defs}`+
+ Q(60,'+',1)+Q(150,'−')+Q(330,'+')+T(60,104,'q₁','var(--muted)')+T(150,104,'q₂ (−)')+T(330,104,'q₃ (+)')+
+ AR(168,220,'F₃ على q₂',1)+AR(312,262,'على q₃',0)+T(240,124,'تجاذب: كل شحنة تسحب الأخرى نحوها','var(--ink)','xs')+
+ `</svg><figcaption>الزوج q₃ و q₂: مختلفتان فتتجاذبان، فتُسحب q₂ نحو اليمين</figcaption></figure>`;
+})();
