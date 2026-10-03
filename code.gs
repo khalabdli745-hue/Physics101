@@ -4,7 +4,7 @@
  * البيانات تُحفظ في جدول Google Sheets داخل حساب المدرب فقط.
  * لا تعدّل هذا الملف؛ انسخه كاملًا كما هو.
  */
-const VERSION = 3;
+const VERSION = 4;
 const TOKEN_DAYS = 30;
 
 function doGet() {
@@ -77,7 +77,7 @@ const AI_MODELS = [
   { id: 'openai/gpt-oss-20b', extra: { reasoning_effort: 'low', include_reasoning: false } }
 ];
 const AI_LIMIT = 15;      // أسئلة لكل متدرب كل ٦ ساعات
-const AR_NAMES = { Sections: 'الشعب', Students: 'المتدربون', Logins: 'سجل الدخول', Results: 'النتائج', Questions: 'أسئلة المساعد', TeachLog: 'سجل التدريس' };
+const AR_NAMES = { Sections: 'الشعب', Students: 'المتدربون', Logins: 'سجل الدخول', Results: 'النتائج', Questions: 'أسئلة المساعد', TeachLog: 'تقرير إنجاز المدرب' };
 function ss_() {
   let id = prop_('SSID'), ss = null;
   if (id) { try { ss = SpreadsheetApp.openById(id); } catch (e) { ss = null; } }
@@ -130,7 +130,7 @@ function cleanId_(v) { const s = String(v == null ? '' : v).replace(/[٠-٩]/g, 
 
 /* ---------------- الإجراءات ---------------- */
 /* ---------------- الصوت الطبيعي (Microsoft Azure Speech — الخطة المجانية F0) ---------------- */
-const TTS_VOICES = { 'ar-SA-HamedNeural': 'm', 'ar-SA-ZariyahNeural': 'f', 'ar-AE-HamdanNeural': 'm', 'ar-AE-FatimaNeural': 'f' };
+const TTS_VOICES = { 'ar-SA-HamedNeural': 'm', 'ar-SA-ZariyahNeural': 'f', 'ar-AE-HamdanNeural': 'm', 'ar-AE-FatimaNeural': 'f', 'en-US-AndrewMultilingualNeural': 'mm', 'en-US-AvaMultilingualNeural': 'fm', 'en-US-BrianMultilingualNeural': 'mm', 'en-US-EmmaMultilingualNeural': 'fm' };
 const TTS_EN = { m: 'en-US-GuyNeural', f: 'en-US-JennyNeural' };
 const TTS_MONTH_CAP = 480000;   // أقل من الحد المجاني الشهري (٥٠٠ ألف حرف)
 const TTS_USER_HOUR = 80;       // مقاطع جديدة لكل مستخدم في الساعة
@@ -411,7 +411,9 @@ const ACTIONS = {
       if (!x) return;
       const t = String(x.t || '').replace(/\s+/g, ' ').trim().slice(0, 1800);
       if (!t || chars + t.length > 2000) return;
-      chars += t.length; segs.push({ l: x.l === 'en' ? 'en' : 'ar', t: t });
+      chars += t.length;
+      const l = x.l === 'en' ? 'en' : 'ar', last = segs[segs.length - 1];
+      if (last && last.l === l) last.t += ' ' + t; else segs.push({ l: l, t: t });   // دمج المتجاور من نفس اللغة = قراءة متصلة
     });
     if (!segs.length) return { ok: false, error: 'empty' };
     const sig = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, voice + '|' + rate + '|' + JSON.stringify(segs), Utilities.Charset.UTF_8)
@@ -424,9 +426,14 @@ const ACTIONS = {
     if (who !== 'TEACHER' && n >= TTS_USER_HOUR) return { ok: false, error: 'tts_limit' };
     if (ttsMonth_().used + chars > TTS_MONTH_CAP) return { ok: false, error: 'tts_quota' };
     const en = TTS_EN[TTS_VOICES[voice]], pr = (rate >= 0 ? '+' : '') + rate + '%';
-    const ssml = '<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="ar-SA">' + segs.map(function (x) {
-      return '<voice name="' + (x.l === 'en' ? en : voice) + '"><prosody rate="' + pr + '">' + xml_(x.t) + '</prosody></voice>';
-    }).join('') + '</speak>';
+    const multi = /Multilingual/.test(voice);
+    const ssml = '<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="https://www.w3.org/2001/mstts" xml:lang="ar-SA">' + (multi
+      ? '<voice name="' + voice + '">' + segs.map(function (x) {
+          return '<lang xml:lang="' + (x.l === 'en' ? 'en-US' : 'ar-SA') + '"><prosody rate="' + pr + '">' + xml_(x.t) + '</prosody></lang>';
+        }).join(' ') + '</voice>'
+      : segs.map(function (x) {
+          return '<voice name="' + (x.l === 'en' ? en : voice) + '"><prosody rate="' + pr + '">' + xml_(x.t) + '</prosody></voice>';
+        }).join('')) + '</speak>';
     const res = ttsCall_(key, region, ssml), code = res.getResponseCode();
     if (code !== 200) return { ok: false, error: code === 401 ? 'tts_key' : code === 429 ? 'tts_busy' : code === 403 ? 'tts_quota' : 'tts_error', detail: code };
     c.put(ck, String(n + 1), 3600);

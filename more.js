@@ -661,9 +661,10 @@ n:'في جميع الطرق تنتقل الإلكترونات فقط، والش�
 n:'في الهواء: C = ε₀·A/d حيث ε₀ = 8.85 × 10⁻¹² F/m.'}],
 '3-6':[
 {t:'توصيل المكثفات: التوالي مقابل التوازي',h:['الكمية','التوالي','التوازي'],r:[
-['الشحنة','متساوية: q = q₁ = q₂','تتوزع: q = q₁ + q₂'],
-['الجهد','يتوزع: V = V₁ + V₂','متساوٍ: V = V₁ = V₂'],
-['السعة المكافئة','1/C = 1/C₁ + 1/C₂','C = C₁ + C₂'],
+['الشحنة','متساوية: q = q₁ = q₂ = q₃','تتوزع: q = q₁ + q₂ + q₃'],
+['الجهد','يتوزع: V = V₁ + V₂ + V₃','متساوٍ: V = V₁ = V₂ = V₃'],
+['السعة المكافئة','1/C = 1/C₁ + 1/C₂ + 1/C₃','C = C₁ + C₂ + C₃'],
+['مكثفان فقط','C = C₁C₂ / (C₁ + C₂)','C = C₁ + C₂'],
 ['مقدار المكافئة','أصغر من أصغر سعة','أكبر من أكبر سعة'],
 ['الاستخدام','تحمّل جهد أعلى','الحصول على سعة أكبر']]}],
 '3-9':[
@@ -1053,11 +1054,11 @@ window.SUMM=Object.assign(window.SUMM||{},{
 - المجال بين اللوحين منتظم: \`V = E·d\`.
 - السعة تزيد بزيادة المساحة، وتقل بزيادة المسافة، وتتأثر بالوسط العازل.
 - من فوائد المكثفات: تخزين الطاقة وتوليد الذبذبات وإزالة التشويش.`,
-'3-6':`- التوازي: الجهد متساوٍ على المكثفات و \`C_total = C₁ + C₂ + C₃ + …\`.
-- في التوازي: \`q_total = q₁ + q₂ + …\` والسعة المكافئة أكبر من أكبر سعة.
-- التوالي: الشحنة متساوية و \`1/C_total = 1/C₁ + 1/C₂ + …\`.
+'3-6':`- التوازي: الجهد متساوٍ على المكثفات و \`C_total = C₁ + C₂ + C₃\`.
+- في التوازي: \`q_total = q₁ + q₂ + q₃\` والسعة المكافئة أكبر من أكبر سعة.
+- التوالي: الشحنة متساوية و \`1/C_total = 1/C₁ + 1/C₂ + 1/C₃\`.
 - لمكثفين على التوالي: \`C = C₁C₂ / (C₁ + C₂)\` والسعة أصغر من أصغر سعة.
-- في التوالي: \`V_total = V₁ + V₂ + …\` حيث \`V = q/C\`.`,
+- في التوالي: \`V_total = V₁ + V₂ + V₃\` حيث \`V = q/C\`.`,
 '3-7':`- الطاقة المختزنة: \`E = ½·C·V²\`.
 - بدلالة الشحنة والجهد: \`E = ½·q·V\`.
 - بدلالة الشحنة والسعة: \`E = q² / (2C)\`.
@@ -1107,9 +1108,9 @@ window.SUMM=Object.assign(window.SUMM||{},{
 - الطاقة المستهلكة: \`E = P·t\` وتقاس تجاريًا بالكيلوواط·ساعة.
 - التحويل: \`1 kWh = 3.6 × 10⁶ J\`.`,
 '4-8':`- التوالي: التيار واحد والجهد يتجزأ \`V = V₁ + V₂ + V₃\`.
-- المقاومة المكافئة على التوالي: \`R_total = R₁ + R₂ + R₃ + …\`.
+- المقاومة المكافئة على التوالي: \`R_total = R₁ + R₂ + R₃\`.
 - التوازي: الجهد واحد والتيار يتوزع \`I = I₁ + I₂ + I₃\`.
-- على التوازي: \`1/R_total = 1/R₁ + 1/R₂ + …\` والمكافئة أصغر من أصغر مقاومة.
+- على التوازي: \`1/R_total = 1/R₁ + 1/R₂ + 1/R₃\` والمكافئة أصغر من أصغر مقاومة.
 - أجهزة المنزل توصل على التوازي لتعمل كلها على \`220 V\`.`,
 '4-9':`- التيار والكثافة: \`I = q/t\` و \`n = q/e\` و \`J = I/A\`.
 - أوم \`V = IR\` والمقاومة \`R = ρL/A\` والحرارة \`R = R₀(1 + αΔT)\`.
@@ -1279,4 +1280,87 @@ FG.nwGun=svg('0 0 380 170',
 if(S&&S[3]&&S[4]){S[3].qz=(S[3].qz||[]).concat(S[4].qz||[]);}
 if(P['1-4'])P['1-3']=(P['1-3']||[]).concat(P['1-4']);
 if(TB['1-4'])TB['1-3']=(TB['1-3']||[]).concat(TB['1-4']);
+})();
+/* دوائر التوالي والتوازي مع مصدر الجهد */
+(function(){const FG=window.FIGS;
+const A=(id,c)=>`<marker id="${id}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="${c}"/></marker>`;
+const defs=`<defs>${A('ca','var(--accent)')}${A('cw','var(--warnc)')}</defs>`;
+const svg=(vb,body,cap)=>`<figure class="fig"><svg viewBox="${vb}" role="img" aria-label="${cap}">${defs}${body}</svg><figcaption>${cap}</figcaption></figure>`;
+const T=(x,y,s,c='var(--ink)',k='sm',a='middle')=>`<text x="${x}" y="${y}" class="lb ${k}" text-anchor="${a}" style="fill:${c}">${s}</text>`;
+const W=(pts)=>`<polyline points="${pts}" fill="none" stroke="var(--ink)" stroke-width="2.5" stroke-linejoin="round"/>`;
+/* مقاومة أفقية من x إلى x+60 على y */
+const RH=(x,y)=>W(`${x},${y} ${x+8},${y} ${x+13},${y-9} ${x+21},${y+9} ${x+29},${y-9} ${x+37},${y+9} ${x+45},${y-9} ${x+52},${y} ${x+60},${y}`);
+/* بطارية رأسية عند x بين y1 و y2 (الموجب أعلى) */
+const BAT=(x,yc)=>`<line x1="${x-16}" y1="${yc-5}" x2="${x+16}" y2="${yc-5}" stroke="var(--ink)" stroke-width="3"/><line x1="${x-9}" y1="${yc+5}" x2="${x+9}" y2="${yc+5}" stroke="var(--ink)" stroke-width="5"/>`+T(x+24,yc-8,'+','var(--ink)','sm','middle')+T(x+24,yc+16,'−','var(--ink)','sm','middle');
+const arr=(x1,y1,x2,y2,c='var(--accent)',m='ca')=>`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${c}" stroke-width="2.5" marker-end="url(#${m})"/>`;
+const brace=(x1,x2,y)=>`<path d="M${x1},${y+6} L${x1},${y} L${x2},${y} L${x2},${y+6}" fill="none" stroke="var(--warnc)" stroke-width="1.8"/>`;
+const dot=(x,y)=>`<circle cx="${x}" cy="${y}" r="4.5" fill="var(--ink)"/>`;
+
+/* التوالي */
+const BATS=(xc,y)=>`<line x1="${xc-5}" y1="${y-16}" x2="${xc-5}" y2="${y+16}" stroke="var(--ink)" stroke-width="3"/><line x1="${xc+5}" y1="${y-9}" x2="${xc+5}" y2="${y+9}" stroke="var(--ink)" stroke-width="5"/>`+T(xc-14,y-20,'+')+T(xc+16,y-20,'−');
+FG.cirSeries=svg('0 20 380 250',
+  `<path d="M40,80 L70,80 M130,80 L160,80 M220,80 L250,80 M310,80 L340,80 L340,200 L195,200 M185,200 L40,200 L40,80" fill="none" stroke="var(--ink)" stroke-width="2.5"/>`+
+  RH(70,80)+RH(160,80)+RH(250,80)+
+  T(100,108,'R₁')+T(190,108,'R₂')+T(280,108,'R₃')+
+  brace(70,130,48)+brace(160,220,48)+brace(250,310,48)+
+  T(100,40,'V₁','var(--warnc)')+T(190,40,'V₂','var(--warnc)')+T(280,40,'V₃','var(--warnc)')+
+  BATS(190,200)+T(190,234,'V','var(--warnc)')+
+  arr(140,80,152,80)+arr(232,80,244,80)+arr(320,80,334,80)+arr(340,125,340,155)+arr(120,200,90,200)+arr(40,155,40,125)+
+  T(146,72,'I','var(--accent)')+T(238,72,'I','var(--accent)')+T(327,72,'I','var(--accent)')+T(354,145,'I','var(--accent)')+T(105,190,'I','var(--accent)')+T(26,145,'I','var(--accent)')+
+  T(190,252,'V = V₁ + V₂ + V₃','var(--warnc)','xs')+T(190,268,'التيار نفسه I في كل المقاومات','var(--ink)','xs'),
+  'التوصيل على التوالي: التيار واحد والجهد يتجزأ على المقاومات');
+
+/* التوازي */
+const BATH=(xc,y)=>`<line x1="${xc-5}" y1="${y-16}" x2="${xc-5}" y2="${y+16}" stroke="var(--ink)" stroke-width="3"/><line x1="${xc+5}" y1="${y-9}" x2="${xc+5}" y2="${y+9}" stroke="var(--ink)" stroke-width="5"/>`+T(xc-14,y-20,'+')+T(xc+16,y-20,'−');
+FG.cirParallel=svg('0 60 390 280',
+  `<path d="M130,95 L130,195 M330,95 L330,195 M130,145 L70,145 L70,265 L225,265 M235,265 L360,265 L360,145 L330,145" fill="none" stroke="var(--ink)" stroke-width="2.5"/>`+
+  `<path d="M130,95 L200,95 M260,95 L330,95 M130,145 L200,145 M260,145 L330,145 M130,195 L200,195 M260,195 L330,195" fill="none" stroke="var(--ink)" stroke-width="2.5"/>`+
+  RH(200,95)+RH(200,145)+RH(200,195)+
+  T(230,80,'R₁')+T(230,130,'R₂')+T(230,180,'R₃')+
+  T(300,87,'V','var(--warnc)','xs')+T(300,137,'V','var(--warnc)','xs')+T(300,187,'V','var(--warnc)','xs')+
+  dot(130,145)+dot(330,145)+
+  arr(150,95,175,95)+T(160,85,'I₁','var(--accent)')+
+  arr(150,145,175,145)+T(160,135,'I₂','var(--accent)')+
+  arr(150,195,175,195)+T(160,185,'I₃','var(--accent)')+
+  arr(130,135,130,112)+arr(130,155,130,178)+
+  arr(160,265,120,265)+T(140,255,'I','var(--accent)')+arr(70,215,70,180)+T(56,200,'I','var(--accent)')+
+  arr(360,180,360,215)+T(374,200,'I','var(--accent)')+
+  BATH(230,265)+T(230,298,'V','var(--warnc)')+
+  T(200,316,'I = I₁ + I₂ + I₃','var(--accent)','xs')+T(200,332,'الجهد V نفسه على كل فرع','var(--ink)','xs'),
+  'التوصيل على التوازي: الجهد واحد والتيار يتفرع على الفروع');
+})();
+/* دوائر المكثفات على التوالي والتوازي مع البطارية في الأسفل */
+(function(){const FG=window.FIGS;
+const A=(id,c)=>`<marker id="${id}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="${c}"/></marker>`;
+const defs=`<defs>${A('ka2','var(--accent)')}</defs>`;
+const svg=(vb,body,cap)=>`<figure class="fig"><svg viewBox="${vb}" role="img" aria-label="${cap}">${defs}${body}</svg><figcaption>${cap}</figcaption></figure>`;
+const T=(x,y,s,c='var(--ink)',k='sm')=>`<text x="${x}" y="${y}" class="lb ${k}" text-anchor="middle" style="fill:${c}">${s}</text>`;
+/* مكثف أفقي مركزه xc على y: لوحان رأسيان */
+const CAP=(xc,y)=>`<line x1="${xc-6}" y1="${y-16}" x2="${xc-6}" y2="${y+16}" stroke="var(--ink)" stroke-width="3.5"/><line x1="${xc+6}" y1="${y-16}" x2="${xc+6}" y2="${y+16}" stroke="var(--ink)" stroke-width="3.5"/>`+T(xc-14,y-20,'+','var(--warnc)','xs')+T(xc+14,y-20,'−','var(--fig2)','xs');
+const BAT=(xc,y)=>`<line x1="${xc-5}" y1="${y-16}" x2="${xc-5}" y2="${y+16}" stroke="var(--ink)" stroke-width="3"/><line x1="${xc+5}" y1="${y-9}" x2="${xc+5}" y2="${y+9}" stroke="var(--ink)" stroke-width="5"/>`+T(xc-14,y-20,'+')+T(xc+16,y-20,'−');
+const brace=(x1,x2,y)=>`<path d="M${x1},${y+6} L${x1},${y} L${x2},${y} L${x2},${y+6}" fill="none" stroke="var(--warnc)" stroke-width="1.8"/>`;
+const dot=(x,y)=>`<circle cx="${x}" cy="${y}" r="4.5" fill="var(--ink)"/>`;
+/* التوالي */
+FG.capSeries=svg('0 20 380 250',
+  `<path d="M40,80 L94,80 M106,80 L184,80 M196,80 L274,80 M286,80 L340,80 L340,200 L195,200 M185,200 L40,200 L40,80" fill="none" stroke="var(--ink)" stroke-width="2.5"/>`+
+  CAP(100,80)+CAP(190,80)+CAP(280,80)+
+  T(100,118,'C₁')+T(190,118,'C₂')+T(280,118,'C₃')+
+  T(100,136,'q','var(--accent)','xs')+T(190,136,'q','var(--accent)','xs')+T(280,136,'q','var(--accent)','xs')+
+  brace(75,125,44)+brace(165,215,44)+brace(255,305,44)+
+  T(100,36,'V₁','var(--warnc)')+T(190,36,'V₂','var(--warnc)')+T(280,36,'V₃','var(--warnc)')+
+  BAT(190,200)+T(190,234,'V','var(--warnc)')+
+  T(190,252,'V = V₁ + V₂ + V₃','var(--warnc)','xs')+T(190,268,'الشحنة q نفسها على كل المكثفات','var(--ink)','xs'),
+  'المكثفات على التوالي: الشحنة متساوية والجهد يتجزأ');
+/* التوازي */
+FG.capParallel=svg('0 60 390 280',
+  `<path d="M130,95 L130,195 M330,95 L330,195 M130,145 L70,145 L70,265 L225,265 M235,265 L360,265 L360,145 L330,145" fill="none" stroke="var(--ink)" stroke-width="2.5"/>`+
+  `<path d="M130,95 L224,95 M236,95 L330,95 M130,145 L224,145 M236,145 L330,145 M130,195 L224,195 M236,195 L330,195" fill="none" stroke="var(--ink)" stroke-width="2.5"/>`+
+  [95,145,195].map(y=>CAP(230,y).replace(/<text[^]*$/,'')).join('')+
+  T(200,88,'C₁')+T(200,138,'C₂')+T(200,188,'C₃')+
+  T(165,88,'q₁','var(--accent)','xs')+T(165,138,'q₂','var(--accent)','xs')+T(165,188,'q₃','var(--accent)','xs')+
+  T(300,87,'V','var(--warnc)','xs')+T(300,137,'V','var(--warnc)','xs')+T(300,187,'V','var(--warnc)','xs')+
+  dot(130,145)+dot(330,145)+
+  BAT(230,265)+T(230,298,'V','var(--warnc)')+
+  T(200,316,'q_total = q₁ + q₂ + q₃','var(--accent)','xs')+T(200,332,'الجهد V نفسه على كل مكثف','var(--ink)','xs'),
+  'المكثفات على التوازي: الجهد متساوٍ والشحنة تتوزع');
 })();

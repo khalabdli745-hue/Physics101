@@ -291,6 +291,7 @@ details.card summary{cursor:pointer}
 h3 .eqn{direction:ltr;unicode-bidi:isolate;white-space:nowrap}
 .fig.photo img{display:block;width:100%;max-width:440px;margin:0 auto;border-radius:12px;border:1px solid var(--line);background:var(--soft)}
 span.mu{font-size:1.25em;line-height:0}
+h3 .secListen{margin-inline-start:auto;flex:none}h3 .secListen button{padding:3px 10px;font-size:14px;min-height:0}
 sub.ss{font-size:.6em;line-height:0;vertical-align:-.25em}
 </style>
 </head>
@@ -408,7 +409,7 @@ const TTS=(()=>{
   const ok='speechSynthesis' in window&&'SpeechSynthesisUtterance' in window;
   let voices=[],voice=null,pitch=1,opts=[],rate=store.get('p101-rate',0.95),queue=[],playing=false,btn=null,btnHTML='';
   /* الصوت الطبيعي من الخادم (Microsoft Azure) */
-  const AZV=[['ar-SA-HamedNeural','رجل','حامد'],['ar-SA-ZariyahNeural','امرأة','زارية'],['ar-AE-HamdanNeural','رجل','حمدان'],['ar-AE-FatimaNeural','امرأة','فاطمة']];
+  const AZV=[['ar-SA-HamedNeural','رجل','حامد'],['ar-SA-ZariyahNeural','امرأة','زارية'],['ar-AE-HamdanNeural','رجل','حمدان'],['ar-AE-FatimaNeural','امرأة','فاطمة'],['en-US-AndrewMultilingualNeural','رجل','أندرو (متصل)'],['en-US-AvaMultilingualNeural','امرأة','آفا (متصلة)'],['en-US-BrianMultilingualNeural','رجل','براين (متصل)'],['en-US-EmmaMultilingualNeural','امرأة','إيما (متصلة)']];
   const tok=()=>(AUTH&&AUTH.token)||TAUTH||'';
   let SRV=!!(API&&tok()&&store.get('p101-srvtts',false)),az=null;
   const valOf=o=>o.az?'az|'+o.az:o.v.name+'|'+o.p;
@@ -496,6 +497,11 @@ const TTS=(()=>{
   function enParens(t){let prev;do{prev=t;t=t.replace(/\(([^()]*)\)/g,(m,inner)=>/[+×÷*\/·]|\s[−-]\s/.test(inner)?' open bracket, '+inner+', close bracket, ':' '+inner+' ')}while(t!==prev);return t}
   function spokenEn(t){
     const P=[];const ph=w=>{P.push(w);return ' \u0001'+(P.length-1)+'\u0002 '};
+    t=t.replace(/\(\s*$/,'').replace(/^\s*\)/,'');
+    t=t.replace(/\bv([fi])\b/g,'V$1').replace(/\b(cos|sin|tan)(?=\d|θ)/g,'$1 ').replace(/([AB])([xyz])(?=[AB][xyz])/g,'$1$2 ');
+    t=t.replace(/(?<![·\d]\s?)\bA\s?·\s?B\b(?!\s?·)/g,'A'+ph('dot')+'⁠B').replace(/\|([^|]+)\|/g,(m,x)=>ph('magnitude of')+'⁠'+x+' ');
+    t=t.replace(/\bmgh\b/g,ph('em gee aitch')).replace(/\bGg\b/g,ph('gigagrams')).replace(/_(ice|melted|melt|rest|total|known)\b/g,(m,w)=>ph(w)).replace(/_Fe\b/g,ph('iron'));
+    {const ps=t.split(/\s·\s/);if(ps.length>1){let o=ps[0];for(let i=1;i<ps.length;i++)o+=(/=/.test(ps[i-1])&&/=/.test(ps[i])?' ; ':'·')+ps[i];t=o}}
     t=t.replace(/\(max\)/g,ph(' maximum')).replace(/μ([sk]?)N\b/g,(m,y)=>ph('mu'+(y?(y=='k'?' kinetic':' static'):'')+' en')).replace(/μmg\b/g,ph('mu em gee')).replace(/(?<![\d.]\s?)\bmg\b/g,ph('em gee')).replace(/μ([sk])(?![a-z])/g,(m,y)=>'μ'+ph(y=='k'?'kinetic':'static')).replace(/\b([VF]|KE|PE)([fisk])\b/g,(m,x,y)=>(x=='V'?'v':x)+ph({f:'final',i:'initial',s:'static',k:'kinetic'}[y])).replace(/v_f/g,'v'+ph('final')).replace(/v_i/g,'v'+ph('initial')).replace(/v_d/g,'v'+ph('drift')).replace(/v̄/g,'v'+ph('average')).replace(/T_f/g,'T'+ph('final')).replace(/T_i/g,'T'+ph('initial')).replace(/_total/g,ph('total')).replace(/_known/g,ph('known')).replace(/_x/g,' x').replace(/_y/g,' y').replace(/_/g,' ');
     t=t.replace(/î/g,' i'+ph('hat')).replace(/ĵ/g,' j'+ph('hat')).replace(/k̂/g,' k'+ph('hat'));
     t=t.replace(/10([⁻]?[⁰¹²³⁴⁵⁶⁷⁸⁹]+)/g,(m,e)=>ph('ten to the power of '+(e[0]==='⁻'?'minus ':'')+e.replace('⁻','').split('').map(c=>EN_SUP[c]).join('')));
@@ -504,7 +510,7 @@ const TTS=(()=>{
     for(const[u,w]of EN_UNIT)t=t.split(u).join(ph(w));
     t=t.replace(/(\d\s+|\u0002\s*)([mshgNJWVACFKL])(?![A-Za-z])/g,(m,d,u)=>d+ph(EN_ONE[u]));
     t=t.replace(/\b(KE|PE|ME|SI|DC|AC|LED|GPS|PhET|cos|sin|tan|max|min|total|known)\b/g,m=>ph(EN_WORD[m]));
-    t=t.replace(/\s·\s/g,', ').replace(/…/g,ph(', and so on')).replace(/(\d)\s*\(/g,'$1×(').replace(/\)\s*\(/g,')×(');
+    t=t.replace(/\s;\s/g,', ').replace(/…/g,ph(', and so on')).replace(/(\d)\s*\(/g,'$1×(').replace(/\)\s*\(/g,')×(');
     let prev;do{prev=t;t=t.replace(/\(([^()]*)\)/g,(m,inner)=>/[+×÷*\/·]|\s[−-]\s/.test(inner)?ph('open bracket,')+inner+ph(', close bracket,'):' '+inner+' ')}while(t!==prev);
     t=t.replace(/[()]/g,' ');
     t=t.replace(/⁻¹/g,ph('to the minus one')).replace(/²/g,ph('squared')).replace(/³/g,ph('cubed')).replace(/½/g,ph('one half'));
@@ -514,8 +520,9 @@ const TTS=(()=>{
     for(const[re,w]of OPS)t=t.replace(re,()=>ph(w));
     t=t.replace(/(\d)([A-Za-z])/g,'$1 $2').replace(/([A-Za-z])(\d)/g,'$1 $2');
     t=t.replace(/\b[A-Za-z]{1,3}\b/g,w=>w.split('').map(c=>EN_LET[c.toLowerCase()]||c).join(' '));
+    t=t.replace(/\u2060/g,' ');
     t=t.replace(/\u0001(\d+)\u0002/g,(m,i)=>P[+i]);
-    t=t.replace(/(^|[^\d.])(1|one)\s+([a-z]*(meter|gram|second|joule|watt|volt|ampere|coulomb|farad|ohm|newton|liter|hour|minute|calorie|degree|mole)s)\b/g,(m,a,n,u)=>a+n+' '+u.slice(0,-1));
+    t=t.replace(/(^|[^\d.])(1|one)\s+((?:square |cubic |kilowatt |watt |newton )?[a-z]*(meter|gram|second|joule|watt|volt|ampere|coulomb|farad|ohm|newton|liter|hour|minute|calorie|degree|mole)s)\b/g,(m,a,n,u)=>a+n+' '+u.slice(0,-1));
     t=t.replace(/[|[\]{}"'`«»]/g,' ').replace(/\s+([,.:])/g,'$1').replace(/,(\s*,)+/g,',').replace(/\s+/g,' ');
     return t.trim().replace(/^[,.\s]+|[,\s]+$/g,'');
   }
@@ -559,7 +566,8 @@ const TTS=(()=>{
     const items=[];for(const sg of segments(text)){if(sg.l==='en')items.push(sg);else split(sg.t).forEach(t=>items.push({l:'ar',t}))}
     const out=[];let cur=[],n=0;
     for(const it of items){if(cur.length&&(n+it.t.length>900||cur.length>=30)){out.push(cur);cur=[];n=0}cur.push(it);n+=it.t.length}
-    if(cur.length)out.push(cur);return out}
+    if(cur.length)out.push(cur);
+    return out.map(c=>c.reduce((m,x)=>{const L=m[m.length-1];if(L&&L.l===x.l)L.t+=' '+x.t;else m.push({l:x.l,t:x.t});return m},[]))}
   function getAz(segs,voiceName){const r=Math.round((rate-1)*100),k=voiceName+'|'+r+'|'+JSON.stringify(segs);
     if(MEM.has(k))return Promise.resolve(MEM.get(k));
     return SYNC.post({a:'tts',token:tok(),voice:voiceName,rate:r,segs}).then(x=>{if(!x||!x.ok)throw x||{};
@@ -705,6 +713,9 @@ function renderSum(v){
   const c=card('الدرس','');
   c.appendChild(TTS.controls(()=>s.s.replace(/^\[\[(fig|img):[^\n]*\]\]$/gm,''),{compact:true,label:'🔊 استمع للدرس'}));
   const body=document.createElement('div');body.className='md';body.innerHTML=md(s.s);c.appendChild(body);
+  {const ch=[];let cur=null;for(const ln of s.s.split('\n')){if(/^#{1,4}\s/.test(ln)){cur=[ln];ch.push(cur)}else if(cur)cur.push(ln)}
+   body.querySelectorAll('h3').forEach((h,i)=>{const c2=ch[i];if(!c2)return;const txt=c2.filter(l=>!/^\[\[(fig|img):/.test(l)).join('\n');if(txt.split('\n').filter(l=>l.trim()).length<2)return;
+     const w=TTS.controls(()=>txt,{compact:true,label:'🔊',aria:'استمع لهذا الجزء'});w.classList.add('secListen');h.appendChild(w)})}
   if(art)body.querySelectorAll('h3').forEach((h,n)=>{const e=document.createElement('span');e.className='hIcon';e.setAttribute('aria-hidden','true');e.textContent=art[n%3];h.prepend(e)});
   if(x.fig&&FIGS[x.fig])c.insertAdjacentHTML('beforeend',FIGS[x.fig]);
   ((window.FIGMAP||{})[key(pos.u,pos.l)]||[]).forEach(f=>{if(FIGS[f]&&f!==x.fig)c.insertAdjacentHTML('beforeend',FIGS[f])});
