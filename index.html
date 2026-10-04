@@ -215,6 +215,65 @@ table.lt tbody tr:nth-child(even) td{background:var(--accent-soft)}
 .calc .ck:active{transform:translateY(1px);box-shadow:none}
 .calc .cuse{margin-top:10px;width:100%;font-size:16px}
 .calc .cuse:disabled{opacity:.45}
+.boardCard p{margin:.2em 0 .8em}
+body.boardOpen{overflow:hidden}
+.board{position:fixed;inset:0;z-index:1000;display:flex;flex-direction:column;background:#26313f;color:#1f2937}
+.board .bTop{display:flex;align-items:center;gap:10px;padding:8px 12px;padding-top:max(8px,env(safe-area-inset-top));background:var(--accent);color:var(--accent-ink)}
+.board .bTop b{flex:1;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.board .bNum{font-size:13px;opacity:.9;direction:rtl}
+.board .bX{background:none;border:0;color:inherit;font-size:22px;cursor:pointer;padding:0 4px}
+.board .bStage{flex:1;display:flex;flex-direction:column;padding:10px;min-height:0}
+.board .bSlide{flex:1;overflow:auto;-webkit-overflow-scrolling:touch;background:#fff;border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.35);position:relative;max-width:1000px;width:100%;margin:0 auto}
+.board .bPage{position:relative;min-height:100%;padding:18px 18px 40px}
+.board .bContent{font-size:19px;line-height:1.9}
+.board .bH{margin:0 0 12px;padding-bottom:8px;border-bottom:3px solid var(--accent);color:var(--accent);font-size:22px}
+.board .bContent h3{color:var(--accent);font-size:1.05em;margin:.4em 0}
+.board .bContent img{max-width:100%}
+.board .bStep{opacity:0;transform:translateY(14px);transition:opacity .45s,transform .45s;pointer-events:none}
+.board .bStep.in{opacity:1;transform:none;pointer-events:auto}
+.board .bStep:not(.in){height:0;overflow:hidden;margin:0}
+.board .bStep ul{margin:.2em 0}
+.board .bProg{height:4px;background:rgba(255,255,255,.15);border-radius:4px;margin:8px auto 0;max-width:1000px;width:100%}
+.board .bProg i{display:block;height:100%;background:#f2b84b;border-radius:4px;transition:width .3s}
+.board canvas{position:absolute;inset:0;touch-action:auto;pointer-events:none}
+.board.penOn canvas{pointer-events:auto;touch-action:none;cursor:crosshair}
+.board .bTitle{text-align:center;padding-top:5vh}.board .bTitle h1{font-size:28px;margin:.3em 0 .5em;color:var(--accent)}
+.board .bTitle small{color:#6b7280}.board .bOut{font-weight:700;margin:.5em 0 0}.board .bTitle ol{text-align:start;display:inline-block;font-size:18px}
+.board .bQ{padding-top:2vh}.board .bQh{display:inline-block;background:#fff4d6;color:#8a5a00;font-weight:700;padding:4px 12px;border-radius:20px;margin-bottom:10px}
+.board .bQq{font-size:21px;font-weight:600}
+.board .bOpts{display:grid;gap:10px;margin:14px 0}
+.board .bOpts button{font:500 18px inherit;font-family:inherit;text-align:start;padding:12px 14px;border-radius:12px;border:2px solid #dde2ea;background:#f7f8fa;color:#1f2937;cursor:pointer}
+.board .bOpts button.ok{border-color:#1e7a3c;background:#e6f4ea}.board .bOpts button.no{border-color:#b42330;background:#fbe9eb;opacity:.7}
+.board .bQf{font-size:17px;min-height:1.5em}.board .bQf.good{color:#1e7a3c}.board .bQf.bad{color:#b42330}
+.board .bBar{background:#fff;border-top:1px solid #dde2ea;padding:6px 8px;padding-bottom:max(6px,env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:6px}
+.board .bRow{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:center}
+.board .bRow[hidden]{display:none}
+.board .bRow button{min-width:38px;height:40px;border-radius:10px;border:1px solid #dde2ea;background:#f7f8fa;color:#1f2937;font:600 14px system-ui,sans-serif;cursor:pointer;padding:0 10px}
+.board .bRow button.on{background:var(--accent);color:var(--accent-ink);border-color:transparent}
+.board .bRow button.bMain{background:var(--accent);color:var(--accent-ink);border-color:transparent;padding:0 16px}
+.board .bRow button:disabled{opacity:.4}
+.board .bCol{width:30px;min-width:30px!important;height:30px!important;border-radius:50%!important;background:var(--c)!important;padding:0!important}
+.board .bCol.on{outline:3px solid #f59e0b;outline-offset:2px}
+.board .bSep{width:1px;height:26px;background:#dde2ea}
+.board .bTts .tts{margin:0}
+.board.full .bTop{display:none}
+.board.full .bStage{padding:4px 4px 0}
+.board.full .bSlide{border-width:6px;max-width:none}
+.board.full .bTeach{margin-top:6px}
+.board.full .bSay{max-height:3.4em;font-size:14px}
+.board.full .bAv{font-size:30px}
+.board .bContent .ltWrap{overflow-x:auto}
+.board .bContent svg{max-width:100%;height:auto}
+
+.board .bSlide{border:10px solid #3b4250;border-radius:12px;background:#fdfdfb;background-image:linear-gradient(#eef1f5 1px,transparent 1px),linear-gradient(90deg,#eef1f5 1px,transparent 1px);background-size:30px 30px}
+.board .bTeach{display:flex;align-items:flex-end;gap:10px;max-width:1000px;width:100%;margin:10px auto 0}
+.board .bAv{font-size:42px;line-height:1;filter:drop-shadow(0 3px 4px rgba(0,0,0,.4));transition:transform .3s}
+.board.talking .bAv{animation:bTalk .8s ease-in-out infinite}
+@keyframes bTalk{50%{transform:translateY(-4px) rotate(-3deg)}}
+.board .bSay{flex:1;background:#fff;color:#1f2937;border-radius:14px 14px 14px 4px;padding:8px 12px;font-size:15px;line-height:1.6;max-height:5.2em;overflow:auto;position:relative}
+.board .bSay b{display:block;font-size:12px;color:var(--accent)}
+.board .bSay span:empty::before{content:'اضغط ▶ تشغيل ليبدأ الشرح';color:#9ca3af}
+
 .ansrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px}
 .ansrow input{width:9em}
 .ansrow .unit{direction:ltr;unicode-bidi:isolate;font-weight:600}
@@ -456,7 +515,7 @@ const TTS=(()=>{
   /* الصوت الطبيعي من الخادم (Microsoft Azure) */
   const AZV=[['ar-SA-HamedNeural','رجل','حامد'],['ar-SA-ZariyahNeural','امرأة','زارية'],['ar-AE-HamdanNeural','رجل','حمدان'],['ar-AE-FatimaNeural','امرأة','فاطمة'],['en-US-AndrewMultilingualNeural','رجل','أندرو (متصل)'],['en-US-AvaMultilingualNeural','امرأة','آفا (متصلة)'],['en-US-BrianMultilingualNeural','رجل','براين (متصل)'],['en-US-EmmaMultilingualNeural','امرأة','إيما (متصلة)']];
   const tok=()=>(AUTH&&AUTH.token)||TAUTH||'';
-  let SRV=!!(API&&tok()&&store.get('p101-srvtts',false)),az=null;
+  let SRV=!!(API&&tok()&&store.get('p101-srvtts',false)),az=null,OV=null;
   const valOf=o=>o.az?'az|'+o.az:o.v.name+'|'+o.p;
   const MALE=/maged|majed|tarik|tariq|naayf|hamed|hamdan|shakir|omar|fahed|zayd|ahmed|khalid|male|رجل/i,FEMALE=/laila|layla|mariam|maryam|hoda|salma|zariyah|amina|fatima|noura|reem|female|امرأة/i;
   const gender=v=>MALE.test(v.name)?'رجل':FEMALE.test(v.name)?'امرأة':'';
@@ -499,7 +558,8 @@ const TTS=(()=>{
     const last=w[w.length-1];if(/[\u064E-\u0652]/.test(last))return w;
     if(/[اىويآ]/.test(last))return w;
     return w+'\u0652'}
-  function vocal(t){return t.replace(/[\u0621-\u064A\u064B-\u0652]+/g,w=>pausal(vocWord(w)))}
+  /* السكون للوقف فقط (قبل علامة ترقيم أو في آخر الجملة)، وفي وسط الجملة تُترك الحركة الأخيرة ليضبطها القارئ إعرابيًا */
+  function vocal(t){return t.replace(/[\u0621-\u064A\u064B-\u0652]+/g,(w,o,str)=>{const v=vocWord(w);return /^\s*(?:[،؛؟.:!\n]|$)/.test(str.slice(o+w.length,o+w.length+3))?pausal(v):v.replace(/[\u064B-\u064D]/g,'')})}
   /* التاء المربوطة في آخر الكلمة تُقرأ هاء، ونيوتن بتشكيل كامل */
   /* التاء المربوطة: هاء عند الوقف، وعند الوصل تاء بلا سكون ليختار القارئ حركتها، والمجرور قبل كلمة معرّفة يأخذ الكسرة */
   const PREP=new Set(['في','على','من','إلى','الى','عن','حتى','مع','بين','عند','نحو']);
@@ -642,12 +702,12 @@ const TTS=(()=>{
     AUD.src=SILENT;try{const p=AUD.play();if(p&&p.catch)p.catch(()=>{})}catch(e){}
     const chunks=raw?[raw]:chunksAz(text);if(!chunks.length)return stop();
     let i=0;
-    try{let pr=getAz(chunks[0],az);
+    try{const AV=OV||az;let pr=getAz(chunks[0],AV);
       for(i=0;i<chunks.length;i++){
         if(b&&g===GEN&&i===0)b.innerHTML='⏳ تجهيز الصوت…';
         const url=await pr;if(g!==GEN)return;
         if(b&&i===0)b.innerHTML='■ إيقاف';
-        pr=i+1<chunks.length?getAz(chunks[i+1],az):null;if(pr)pr.catch(()=>{});
+        pr=i+1<chunks.length?getAz(chunks[i+1],AV):null;if(pr)pr.catch(()=>{});
         await playUrl(url,g);if(g!==GEN)return}
       if(g===GEN)stop()}
     catch(err){if(g!==GEN)return;
@@ -668,7 +728,7 @@ const TTS=(()=>{
       const parts=split(s.t);const L=out[out.length-1];
       parts.forEach((p,i)=>{if(i===0&&L&&L.l==='ar'&&(L.t+' '+p).length<=240)L.t+=' '+p;else out.push({l:'ar',t:p})})}
     return out}
-  function play(text,b,raw){const useAz=SRV&&az&&tok();if(!ok&&!useAz)return;const same=btn===b;stop();if(same)return;
+  function play(text,b,raw){const useAz=(SRV||OV)&&(OV||az)&&tok()&&API;if(!ok&&!useAz)return;const same=btn===b;stop();if(same)return;
     btn=b;btnHTML=b.innerHTML;b.classList.add('on');b.innerHTML='■ إيقاف';playing=true;
     if(useAz)return playAz(text,b,raw);
     queue=raw?raw.map(x=>({l:x.l,t:x.t})):build(text);next()}
@@ -697,7 +757,7 @@ const TTS=(()=>{
   function refreshNotes(){document.querySelectorAll('.ttsNote').forEach(n=>{n.textContent=voice||SRV?'':'لا يوجد صوت عربي على هذا الجهاز'});
     document.querySelectorAll('.voiceSel').forEach(s=>s._fill&&s._fill());
     document.querySelectorAll('.ttsWarn').forEach(n=>n.hidden=!!voice||SRV||!ok);document.querySelectorAll('.ttsTip').forEach(n=>n.hidden=!!(SRV&&az))}
-  return{play,playRaw:(segs,b)=>play('',b,segs),stop,controls,refreshNotes,spoken,segments,build,chunksAz,has:()=>!!voice||SRV,ok,busy:()=>!!(playing||(AUD&&!AUD.paused))}
+  return{prefetch:t=>{try{if(!((SRV||OV)&&(OV||az)&&tok()&&API))return;chunksAz(t).forEach(c=>getAz(c,OV||az).catch(()=>{}))}catch(e){}},setOV:v=>{OV=v||null},canAz:()=>!!(API&&tok()),play,playRaw:(segs,b)=>play('',b,segs),stop,controls,refreshNotes,spoken,segments,build,chunksAz,has:()=>!!voice||SRV,ok,busy:()=>!!(playing||(AUD&&!AUD.paused))}
 })();
 const TTS_HELP=`<details class="ttsWarn" hidden><summary><b>لا يعمل الصوت؟ اضغط هنا لتفعيل الصوت العربي على جهازك</b></summary>آيفون/آيباد: الإعدادات ← تسهيلات الاستخدام ← المحتوى المنطوق ← الأصوات ← العربية. أندرويد: الإعدادات ← تحويل النص إلى كلام ← محرك Google ← تثبيت العربية. ويندوز: الإعدادات ← الوقت واللغة ← الكلام ← إضافة صوت عربي. متصفح Chrome على الكمبيوتر غالبًا يحتوي صوتًا عربيًا جاهزًا.</details><details class="ttsTip"><summary>🎧 لصوت أوضح وأكثر سلاسة</summary>آيفون/آيباد: الإعدادات ← تسهيلات الاستخدام ← المحتوى المنطوق ← الأصوات ← العربية ← نزّل صوتًا مكتوبًا بجانبه <b>(محسّن)</b> أو <b>(ممتاز)</b> مثل «ماجد»، ثم أعد فتح المنصة واختره من قائمة الأصوات (يظهر بجانبه ⭐). الصوت المحسّن أنقى بكثير من الصوت الافتراضي.</details>`;
 
@@ -763,10 +823,169 @@ function nextLessonBtn(i){
   i.appendChild(r);
 }
 function nextLesson(){let u=pos.u,l=pos.l;do{if(l<UNITS[u].l.length-1)l++;else if(u<UNITS.length-1){u++;l=0}else return null}while(HID(u,l));return[u,l]}
+/* ---------- شرح الدرس: سبورة ذكية يشرح عليها المدرب الذكي خطوة بخطوة ---------- */
+const BOARD_PUBLIC=false;
+function openBoard(){
+  const s=study(),l=lesson();if(!s||!l)return;
+  const K='p101-board-'+key(pos.u,pos.l);
+  /* الأقسام */
+  const secs=[];let pend='';
+  s.s.split(/^(?=### )/m).forEach(p=>{const body=p.replace(/^### .*\n?/,'').trim();if(/^### /.test(p)&&!body){pend+=p.trim()+'\n';return}if(!p.trim())return;secs.push(pend+p.trim());pend=''});
+  if(pend)secs.push(pend.trim());
+  const items=src=>{const out=[];let tbl=null;
+    src.split('\n').forEach(ln=>{const t=ln.trim();if(!t)return;
+      if(/^\|/.test(t)){if(tbl)tbl.push(t);else{tbl=[t];out.push({tbl})}return}tbl=null;
+      if(/^### /.test(t)){out.push({h:t.replace(/^### /,'')});return}
+      out.push({md:t})});return out.map(x=>x.tbl?x.tbl.join('\n'):x.h!==undefined?'#'+x.h:x.md)};
+  const slides=[];const heads=[];
+  secs.forEach(sec=>{const its=items(sec);let title='';if(its[0]&&its[0][0]==='#'&&!/^#\s/.test(its[0].slice(1,2))){title=its.shift().slice(1)}
+    if(title&&!/^مثال/.test(title))heads.push(title);
+    const sub=its.map(x=>x[0]==='#'?{h:x.slice(1)}:{md:x});
+    for(let j=0;j<sub.length||j===0;j+=6){slides.push({type:'c',title:title+(j?' (تابع)':''),steps:sub.slice(j,j+6)});if(!sub.length)break}});
+  const out=[{type:'t'}];slides.forEach(sl=>out.push(sl));
+  const K2=key(pos.u,pos.l),x=extra();
+  /* الرسومات التوضيحية */
+  const figs=[...new Set([x.fig,...((window.FIGMAP||{})[K2]||[])].filter(f=>f&&FIGS[f]))];
+  figs.forEach((f,j)=>out.push({type:'c',title:'رسم توضيحي'+(figs.length>1?' '+AR(j+1):''),steps:[{html:FIGS[f],say:'انظر معي إلى هذا الرسم التوضيحي على السبورة، وتأمل تفاصيله جيدًا.'}]}));
+  /* الجداول */
+  ((window.TABLES||{})[K2]||[]).forEach(t=>{const st=[{html:`<div class="ltWrap"><table class="lt"><thead><tr>${t.h.map(h=>`<th>${inl(h)}</th>`).join('')}</tr></thead><tbody>${t.r.map(r=>`<tr>${r.map(c=>`<td>${cellHTML(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`,
+      say:'لننظر إلى هذا الجدول ونقرأه معًا: '+t.r.map(r=>r.map(c=>String(c).replace(/`/g,'')).join('، ')).join('. ')+'.'}];
+    if(t.n)st.push({md:t.n});out.push({type:'c',title:t.t,steps:st})});
+  /* تطبيقات من الحياة */
+  if(x.ap){const st=x.ap.split('\n').filter(y=>y.trim()).map(y=>/^### /.test(y.trim())?{h:y.trim().slice(4)}:{md:y.trim()});for(let j=0;j<st.length;j+=6)out.push({type:'c',title:'تطبيقات من الحياة'+(j?' (تابع)':''),steps:st.slice(j,j+6)})}
+  /* المثال المحلول */
+  if(s.ex){const st=[{md:'**السؤال:** '+s.ex.q}];if(s.ex.fig&&FIGS[s.ex.fig])st.push({html:FIGS[s.ex.fig],say:'انظر إلى الرسم الذي يوضح المسألة.'});
+    s.ex.st.forEach(y=>st.push({md:'- '+y}));st.push({md:'**الإجابة:** '+s.ex.a});
+    for(let j=0;j<st.length;j+=6)out.push({type:'c',title:'مثال محلول'+(j?' (تابع)':''),steps:st.slice(j,j+6)})}
+  /* التمارين */
+  ((window.PROBS||{})[K2]||[]).forEach((p,j)=>{const val=p.s.replace(/\[([^\]]+)\]/g,(m,v)=>fmt(parseNum(v))),ans=fmt(p.a[0])+(p.a[1]?' '+p.a[1]:'');
+    out.push({type:'c',title:'تمرين '+AR(j+1),steps:[{md:'**السؤال:** '+p.q},{md:'**المعطيات:** '+p.g.map(g=>'`'+g+'`').join('، ')},{md:'**المطلوب:** '+p.r[0]},{md:'**القانون المستخدم:** `'+p.l[0]+'`'},{md:'**الحل:** `'+val+' = '+ans+'`'},{md:'**النتيجة:** `'+ans+'`'}]})});
+  const sm=(window.SUMM||{})[key(pos.u,pos.l)];
+  if(sm)out.push({type:'c',title:'ملخص الدرس',steps:sm.split('\n').filter(x=>x.trim()).map(x=>({md:x.trim()}))});
+  out.push({type:'e'});
+  let cur=0,step=0,VO='h';try{VO=localStorage.getItem('p101-bvo')==='z'?'z':'h'}catch(e){}
+  const B=document.createElement('div');B.className='board';B.setAttribute('role','dialog');B.setAttribute('aria-label','شرح الدرس');
+  B.innerHTML=`<div class="bTop"><b>📝 شرح الدرس: ${esc(l.t)}</b><span class="bNum"></span><button type="button" class="bX" aria-label="إغلاق">✕</button></div>
+  <div class="bStage"><div class="bSlide"><div class="bPage"><div class="bContent"></div></div></div><div class="bProg"><i></i></div><div class="bTeach"><span class="bAv" aria-hidden="true">👨‍🏫</span><div class="bSay" aria-live="polite"><b>المدرب الذكي</b><span></span></div></div></div>
+  <div class="bBar">
+    <div class="bRow">
+      <button type="button" class="bVo" title="تغيير صوت المدرب"></button><button type="button" class="bAuto bMain">⏸ إيقاف</button><button type="button" class="bFull" title="ملء الشاشة" aria-label="ملء الشاشة">⛶</button>
+      <span class="bSep"></span><button type="button" class="bPrev">→</button><button type="button" class="bNext bMain">التالي ←</button>
+    </div>
+  </div>`;
+  {const cs=getComputedStyle($('app'));['--accent','--accent-ink'].forEach(v=>{const x=cs.getPropertyValue(v);if(x)B.style.setProperty(v,x.trim())})}
+  document.body.appendChild(B);document.body.classList.add('boardOpen');
+  const slideEl=B.querySelector('.bSlide'),pg=B.querySelector('.bPage'),ct=B.querySelector('.bContent');
+  const nSteps=sl=>sl.type==='c'?sl.steps.length:sl.type==='q'?1:0;
+  /* عرض الشريحة */
+  const slideText=()=>{const sl=out[cur];if(sl.type==='t')return 'شرح الدرس. '+l.t+'. '+heads.join('. ');if(sl.type==='e')return 'انتهى شرح الدرس.';
+    if(sl.type==='q')return 'سؤال للمتدرب. '+sl.q.q+' '+sl.q.o.map((o,j)=>'الخيار '+(j+1)+': '+o).join('. ');
+    return (sl.title?sl.title+'.\n':'')+sl.steps.slice(0,step).map(x=>x.h||x.md||x.say||'').join('\n').replace(/^\[\[(fig|img):[^\n]*\]\]$/gm,'')};
+  const render=()=>{const sl=out[cur];let h='';
+    if(sl.type==='t')h=`<div class="bTitle"><small>الوحدة ${ORD[pos.u]} · ${esc(UNITS[pos.u].t)}</small><h1>${esc(l.t)}</h1>${heads.length?'<p class="bOut">محاور الدرس</p><ol>'+heads.map(x=>'<li>'+inl(x)+'</li>').join('')+'</ol>':''}</div>`;
+    else if(sl.type==='e')h=`<div class="bTitle"><h1>✓ انتهى شرح الدرس</h1><p>انتقل الآن إلى الأمثلة والتمارين التفاعلية واختبر نفسك.</p></div>`;
+    else if(sl.type==='q'){const q=sl.q;h=`<div class="bQ"><div class="bQh">🙋 سؤال للمتدرب</div><p class="bQq">${inl(q.q)}</p><div class="bOpts">${q.o.map((o,j)=>`<button type="button" data-j="${j}">${inl(o)}</button>`).join('')}</div><div class="bQf" aria-live="polite"></div></div>`}
+    else{h=(sl.title?`<h2 class="bH">${inl(sl.title)}</h2>`:'')+sl.steps.map((x,j)=>`<div class="bStep${j<step?' in':''}">${x.html?x.html:x.h!==undefined?'<h3>'+inl(x.h)+'</h3>':md(x.md)}</div>`).join('')}
+    ct.innerHTML=h;
+    if(sl.type==='q'){const q=sl.q,f=ct.querySelector('.bQf');let tries=0;ct.querySelectorAll('.bOpts button').forEach(b=>b.onclick=()=>{if(ct.querySelector('.bOpts').dataset.done)return;const j=+b.dataset.j;
+      if(j===q.a){b.classList.add('ok');ct.querySelector('.bOpts').dataset.done=1;f.className='bQf good';f.innerHTML='✓ إجابة صحيحة! '+(q.w?inl(q.w):'');step=1}
+      else{tries++;b.classList.add('no');b.disabled=true;if(tries>=2){ct.querySelector('.bOpts').dataset.done=1;ct.querySelectorAll('.bOpts button')[q.a].classList.add('ok');f.className='bQf bad';f.innerHTML='الإجابة الصحيحة مظللة بالأخضر. '+(q.w?inl(q.w):'');step=1}else{f.className='bQf bad';f.textContent='ليست هذه، فكّر مرة أخرى.'}}})}
+    upd()};
+  const upd=()=>{const sl=out[cur],n=nSteps(sl);
+    ct.querySelectorAll('.bStep').forEach((e,j)=>e.classList.toggle('in',j<step));
+    const last=ct.querySelectorAll('.bStep.in');if(last.length){const e=last[last.length-1];setTimeout(()=>{slideEl.scrollTo({top:Math.max(0,e.offsetTop+e.offsetHeight-slideEl.clientHeight+30),behavior:'smooth'})},30)}
+    B.querySelector('.bNum').textContent=AR(cur+1)+' / '+AR(out.length);
+    B.querySelector('.bProg i').style.width=((cur+(n?step/n:1))/out.length*100)+'%';
+    B.querySelector('.bPrev').disabled=cur===0&&step===0;
+    B.querySelector('.bNext').disabled=cur===out.length-1;
+    B.querySelector('.bNext').textContent=sl.type==='c'&&step<n?'أظهر التالي ←':'التالي ←'};
+  const next=()=>{const sl=out[cur];if(sl.type==='c'&&step<sl.steps.length){step++;TTS.stop();upd();return}
+    if(cur<out.length-1){cur++;step=out[cur].type==='c'&&!out[cur].steps.length?0:0;TTS.stop();slideEl.scrollTop=0;render()}};
+  const prev=()=>{const sl=out[cur];if(sl.type==='c'&&step>0){step--;upd();return}
+    if(cur>0){cur--;const p=out[cur];step=p.type==='c'?p.steps.length:0;TTS.stop();render()}};
+  B.querySelector('.bNext').onclick=()=>{stopAuto();next()};B.querySelector('.bPrev').onclick=()=>{stopAuto();prev()};
+  slideEl.addEventListener('click',e=>{if(e.target.closest('button,a,summary,details'))return;stopAuto();next()});
+  /* المدرب الذكي: يعرض كل خطوة ويشرحها بالصوت تلقائيًا، ويتوقف عند الأسئلة حتى يجيب المتدرب */
+  let auto=false,runId=0;
+  const plain=t=>String(t||'').replace(/^\[\[(fig|img):[^\]]*\]\]$/gm,'').replace(/\*\*/g,'').trim();
+  const wait=ms=>new Promise(r=>setTimeout(r,ms));
+  const cap=B.querySelector('.bSay span');
+  const say=async(t,id)=>{t=plain(t);if(!t||id!==runId)return;cap.innerHTML=inl(t.replace(/^[-•]\s*/,''));B.classList.add('talking');
+    try{let c=cur,st=step;for(let n=0;n<2;n++){const sl=out[c];if(sl&&sl.type==='c'&&st<sl.steps.length)st++;else{c++;st=0}if(!out[c])break;const nt=plain(narrAt(c,st));if(nt)TTS.prefetch(nt)}}catch(e){}
+    if(!TTS.has()){await wait(Math.min(9000,1200+t.length*55));B.classList.remove('talking');return}
+    const d=document.createElement('button');TTS.play(t,d);await wait(400);
+    while(id===runId&&TTS.busy())await wait(120);B.classList.remove('talking');await wait(150)};
+  /* أسلوب المدرب: عبارات انتقال وشرح متنوعة كأنه معلم حقيقي يخاطب المتدرب */
+  const pick=(arr,k)=>arr[Math.abs(k|0)%arr.length];
+  const ORDW=['أولًا','ثانيًا','ثالثًا','رابعًا','خامسًا','سادسًا'];
+  const LBL={'الموقف':['تخيّل معي هذا الموقف:','لنتأمل هذا الموقف:'],'التفسير':['والتفسير ببساطة:','فما الذي يحدث هنا؟','لاحظ ما يحدث:'],'القانون':['وهنا يظهر','وهذا بالضبط ما يقوله'],
+    'المعطيات':['لنكتب أولًا ما أُعطي لنا في السؤال:','نبدأ بالمعطيات:'],'المطلوب':['والمطلوب منا:','وما الذي نبحث عنه؟'],'القانون المستخدم':['نختار القانون المناسب:','نستخدم القانون:'],'السؤال':['اقرأ معي السؤال:','لدينا هذا السؤال:'],'الإجابة':['إذن الإجابة النهائية:','وهكذا تكون الإجابة:'],'الحل':['والآن نعوّض ونحسب:','نحل خطوة بخطوة:'],'النتيجة':['إذن النتيجة:','وبهذا نصل إلى النتيجة:'],
+    'ملاحظة':['انتبه لهذه الملاحظة:'],'تنبيه':['انتبه جيدًا:'],'تذكّر':['تذكّر دائمًا:']};
+  const teach=(t,k,n)=>{t=String(t||'').trim();
+    const img=t.match(/^\[\[img:[^|\]]*\|[^|\]]*\|([^\]]*)\]\]$/);if(img)return pick(['انظر معي إلى الصورة: ','لاحظ في هذه الصورة: '],k)+img[1]+'.';
+    if(/^\[\[(fig|img):/.test(t))return pick(['انظر إلى الرسم التوضيحي على السبورة.','تأمل هذا الرسم جيدًا.'],k);
+    if(/^\|/.test(t))return 'لننظر إلى هذا الجدول على السبورة، ونقرأه معًا: '+t.split('\n').map(r=>r.replace(/^\||\|$/g,'').split('|').map(c=>c.trim()).filter(c=>c&&!/^-+$/.test(c)).join('، ')).filter(Boolean).join('. ')+'.';
+    let b=t.replace(/^[-•]\s*/,'');
+    const lb=b.match(/^\*\*([^*:]+?):?\*\*:?\s*/);if(lb){const key=lb[1].trim();const ph=LBL[key];b=b.slice(lb[0].length);if(ph)return pick(ph,k)+' '+b}
+    if(/^`[^`]+`[.،]?$/.test(b))return pick(['اكتب معي هذا القانون المهم: ','انتبه لهذه العلاقة: ','وهذه هي الصيغة: '],k)+b;
+    const pre=n>1&&k>=0&&k<ORDW.length?ORDW[k]+'، ':'';
+    return pre+b};
+  const narr=()=>narrAt(cur,step);
+  const narrAt=(cur,step)=>{const sl=out[cur];
+    if(sl.type==='t')return 'مرحبًا بك. '+(VO==='z'?'أنا مدربتك الذكية':'أنا مدربك الذكي')+'، وسأشرح لك اليوم درس: '+l.t+'. '+(heads.length?'سنتعلم معًا: '+heads.join('، ')+'. ركّز معي، وهيا نبدأ.':'ركّز معي، وهيا نبدأ.');
+    if(sl.type==='e')return 'أحسنت. انتهينا من شرح الدرس. أنصحك الآن بحل الأمثلة والتمارين التفاعلية لتثبيت ما تعلمته.';
+    if(sl.type==='q')return 'والآن سؤال لك: '+sl.q.q;
+    if(step===0){if(!sl.title)return '';if(/\(تابع\)$/.test(sl.title))return 'نكمل معًا.';
+      if(sl.title==='ملخص الدرس')return 'قبل أن ننهي، لنلخص أهم ما تعلمناه في هذا الدرس.';
+      if(/^تمرين/.test(sl.title))return pick(['والآن لنحل معًا ','هيا نطبق ما تعلمناه في '],cur)+sl.title+'.';
+      if(sl.title==='مثال محلول')return 'لنحل معًا هذا المثال خطوة بخطوة.';
+      if(/^رسم توضيحي/.test(sl.title))return '';
+      if(/^مثال/.test(sl.title))return pick(['لنأخذ مثالًا يوضح الفكرة. ','والآن مثال: ','حتى تتضح الصورة، تأمل معي هذا المثال. '],cur)+sl.title.replace(/^مثال\s*[\d٠-٩]*\s*:?\s*/,'')+'.';
+      return pick(['ننتقل الآن إلى: ','والآن دعنا نتعرف على: ','الفكرة التالية هي: ','حسنًا، لنتحدث عن: '],cur)+sl.title+'.'}
+    const x=sl.steps[step-1];
+    if(x.html)return x.say||'';
+    if(x.h!==undefined)return /^مثال/.test(x.h)?'لنأخذ مثالًا: '+x.h.replace(/^مثال\s*[\d٠-٩]*\s*:?\s*/,'')+'.':pick(['والآن: ','ننتقل إلى: '],step)+x.h+'.';
+    const isB=y=>!!y.md&&/^[-•]/.test(y.md)&&!/^[-•]\s*\*\*/.test(y.md)&&!/^[-•]\s*`[^`]+`[.،]?$/.test(y.md);
+    const nb=sl.steps.filter(isB).length,idx=sl.steps.slice(0,step-1).filter(isB).length;
+    let t=teach(x.md,isB(x)?idx:-1,isB(x)?nb:0);
+    if(step===sl.steps.length&&sl.title!=='ملخص الدرس'&&sl.steps.length>1&&cur%3===0)t+=' '+pick(['هل الفكرة واضحة؟ ممتاز، لنكمل.','لاحظ كيف ترتبط الفكرة بما سبق.','جميل، احفظ هذه الفكرة جيدًا.'],cur);
+    return t};
+  async function run(){const id=++runId;
+    while(auto&&id===runId){const sl=out[cur];
+      if(sl.type==='c'&&step===0&&sl.title){await say(narr(),id);if(id!==runId)return}
+      if(sl.type==='c'&&step<sl.steps.length){next();await say(narr(),id);if(id!==runId)return;continue}
+      if(sl.type==='t'||sl.type==='e'){await say(narr(),id);if(id!==runId)return;if(sl.type==='e'){stopAuto();return}next();continue}
+      if(sl.type==='q'){await say(narr(),id);if(id!==runId)return;
+        while(id===runId&&step<1)await wait(300);if(id!==runId)return;
+        await say(ct.querySelector('.bQf').textContent,id);if(id!==runId)return;next();continue}
+      next()}}
+  const autoBtn=B.querySelector('.bAuto');
+  function stopAuto(){if(!auto)return;auto=false;runId++;TTS.stop();B.classList.remove('talking');autoBtn.textContent='▶ تشغيل'}
+  const startAuto=()=>{auto=true;autoBtn.textContent='⏸ إيقاف';run()};
+  autoBtn.onclick=()=>auto?stopAuto():startAuto();
+  /* صوت المدرب: حامد أو زارية (الصوت الطبيعي) */
+  const voBtn=B.querySelector('.bVo');
+  const setVo=v=>{VO=v;try{localStorage.setItem('p101-bvo',v)}catch(e){}TTS.setOV(v==='z'?'ar-SA-ZariyahNeural':'ar-SA-HamedNeural');
+    voBtn.textContent=v==='z'?'👩‍🏫 زارية':'👨‍🏫 حامد';B.querySelector('.bAv').textContent=v==='z'?'👩‍🏫':'👨‍🏫';B.querySelector('.bSay b').textContent=v==='z'?'المدربة الذكية':'المدرب الذكي'};
+  voBtn.onclick=()=>{const was=auto;stopAuto();setVo(VO==='z'?'h':'z');if(was)startAuto()};
+  setVo(VO);
+  const fullBtn=B.querySelector('.bFull');
+  const setFull=o=>{B.classList.toggle('full',o);fullBtn.textContent=o?'🗗':'⛶';fullBtn.title=o?'إنهاء ملء الشاشة':'ملء الشاشة';
+    try{if(o&&B.requestFullscreen&&!document.fullscreenElement)B.requestFullscreen().catch(()=>{});else if(!o&&document.fullscreenElement)document.exitFullscreen().catch(()=>{})}catch(e){}};
+  fullBtn.onclick=()=>setFull(!B.classList.contains('full'));
+  document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement&&B.classList.contains('full')&&B.isConnected){B.classList.remove('full');fullBtn.textContent='⛶'}});
+  const close=()=>{auto=false;runId++;TTS.stop();TTS.setOV(null);try{if(document.fullscreenElement)document.exitFullscreen()}catch(e){}B.remove();document.body.classList.remove('boardOpen');document.removeEventListener('keydown',kd)};
+  const kd=e=>{if(e.key==='Escape')close();else if(e.key==='ArrowLeft'||e.key===' ')next();else if(e.key==='ArrowRight')prev()};document.addEventListener('keydown',kd);
+  B.querySelector('.bX').onclick=close;
+  render();startAuto();
+}
 function renderSum(v){
   const i=wrap(v),s=study(),x=extra();
   if(!s){i.innerHTML='<p class="empty">لا يوجد ملخص لهذا الدرس.</p>';return}
   i.insertAdjacentHTML('beforeend',TTS_HELP);
+  /* شرح الدرس: يظهر للحساب التجريبي فقط حتى يعتمده المدرب (BOARD_PUBLIC=true لإظهاره للجميع) */
+  if(BOARD_PUBLIC||(typeof AUTH!=='undefined'&&AUTH&&AUTH.demo)||!API){const bc=card('📝 شرح الدرس');bc.classList.add('boardCard');bc.insertAdjacentHTML('beforeend','<p>سبورة ذكية يشرح عليها المدرب الذكي محتوى الدرس خطوة بخطوة بالصوت، مثل عرض البوربوينت.</p>');
+    const ob=document.createElement('button');ob.className='btn';ob.textContent='▶️ ابدأ الشرح';ob.onclick=openBoard;bc.appendChild(ob);i.appendChild(bc)}
   const full=()=>{const l=lesson();let txt='درس '+l.t+'.\n'+s.s.replace(/^\[\[(fig|img):[^\n]*\]\]$/gm,'')+(x.ap?'\nتطبيقات من الحياة.\n'+x.ap:'');
     if(s.ex)txt+='\nمثال محلول.\n'+s.ex.q+'\nالحل.\n'+s.ex.st.join('\n')+'\nالإجابة: '+s.ex.a;return txt};
   const top=document.createElement('div');top.className='listenAll';top.appendChild(TTS.controls(full,{label:'🎧 استمع للدرس كاملًا',aria:'استمع للدرس كاملًا'}));i.appendChild(top);
