@@ -548,7 +548,7 @@ const TTS=(()=>{
     ['µF','microfarads'],['μF','microfarads'],['µC','microcoulombs'],['μC','microcoulombs'],['µm','micrometers'],['μm','micrometers'],['µA','microamperes'],['nC','nanocoulombs'],['nF','nanofarads'],['pF','picofarads'],['nm','nanometers'],['mA','milliamperes'],['mV','millivolts'],['kV','kilovolts'],['MΩ','megaohms'],['kΩ','kilo ohms'],
     ['mJ','millijoules'],['kJ','kilojoules'],['MJ','megajoules'],['kW','kilowatts'],['MW','megawatts'],['kg','kilograms'],['km','kilometers'],['cm','centimeters'],['mm','millimeters'],['mg','milligrams'],['ms','milliseconds'],['Hz','hertz'],['cal','calories'],['mol','moles'],['cd','candela'],['Ω','ohms'],['min','minutes']];
   const EN_ONE={m:'meters',s:'seconds',h:'hours',g:'grams',N:'newtons',J:'joules',W:'watts',V:'volts',A:'amperes',C:'coulombs',F:'farads',K:'kelvin',L:'liters'};
-  const EN_LET={a:'ay',b:'bee',c:'see',d:'dee',e:'ee',f:'ef',g:'gee',h:'aitch',i:'eye',j:'jay',k:'kay',l:'el',m:'em',n:'en',o:'oh',p:'pee',q:'cue',r:'ar',s:'es',t:'tee',u:'you',v:'vee',w:'double you',x:'ex',y:'why',z:'zee'};
+  const EN_LET={a:'ay',b:'bee',c:'see',d:'dee',e:'ee',f:'F',g:'gee',h:'aitch',i:'eye',j:'jay',k:'kay',l:'el',m:'em',n:'en',o:'oh',p:'pee',q:'cue',r:'ar',s:'S',t:'tee',u:'you',v:'vee',w:'double you',x:'ex',y:'why',z:'zee'};
   const EN_SUP={'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9'};
   const EN_SUB={'₀':' naught','₁':' one','₂':' two','₃':' three','ₓ':' x','ᵧ':' y'};
   const EN_WORD={KE:'kinetic energy',PE:'potential energy',ME:'mechanical energy',SI:'S I',DC:'D C',AC:'A C',LED:'L E D',GPS:'G P S',PhET:'fet',cos:'cosine',sin:'sine',tan:'tangent',max:'maximum',min:'minimum',total:'total',known:'known'};
@@ -637,10 +637,10 @@ const TTS=(()=>{
       const url=URL.createObjectURL(new Blob([u8],{type:'audio/mpeg'}));MEM.set(k,url);
       if(MEM.size>60){const f=MEM.keys().next().value;URL.revokeObjectURL(MEM.get(f));MEM.delete(f)}return url})}
   function playUrl(url,g){return new Promise((res,rej)=>{if(g!==GEN)return res();AUD.onended=()=>res();AUD.onerror=()=>rej({error:'audio'});AUD.src=url;const p=AUD.play();if(p&&p.catch)p.catch(rej)})}
-  async function playAz(text,b){const g=GEN;
+  async function playAz(text,b,raw){const g=GEN;
     if(!AUD){AUD=new Audio();AUD.preload='auto'}
     AUD.src=SILENT;try{const p=AUD.play();if(p&&p.catch)p.catch(()=>{})}catch(e){}
-    const chunks=chunksAz(text);if(!chunks.length)return stop();
+    const chunks=raw?[raw]:chunksAz(text);if(!chunks.length)return stop();
     let i=0;
     try{let pr=getAz(chunks[0],az);
       for(i=0;i<chunks.length;i++){
@@ -668,10 +668,10 @@ const TTS=(()=>{
       const parts=split(s.t);const L=out[out.length-1];
       parts.forEach((p,i)=>{if(i===0&&L&&L.l==='ar'&&(L.t+' '+p).length<=240)L.t+=' '+p;else out.push({l:'ar',t:p})})}
     return out}
-  function play(text,b){const useAz=SRV&&az&&tok();if(!ok&&!useAz)return;const same=btn===b;stop();if(same)return;
+  function play(text,b,raw){const useAz=SRV&&az&&tok();if(!ok&&!useAz)return;const same=btn===b;stop();if(same)return;
     btn=b;btnHTML=b.innerHTML;b.classList.add('on');b.innerHTML='■ إيقاف';playing=true;
-    if(useAz)return playAz(text,b);
-    queue=build(text);next()}
+    if(useAz)return playAz(text,b,raw);
+    queue=raw?raw.map(x=>({l:x.l,t:x.t})):build(text);next()}
   function voiceSelect(){
     const s=document.createElement('select');s.className='voiceSel';s.setAttribute('aria-label','اختر الصوت');
     const fill=()=>{s.innerHTML='';opts.forEach(op=>{const o=document.createElement('option');o.value=valOf(op);
@@ -697,7 +697,7 @@ const TTS=(()=>{
   function refreshNotes(){document.querySelectorAll('.ttsNote').forEach(n=>{n.textContent=voice||SRV?'':'لا يوجد صوت عربي على هذا الجهاز'});
     document.querySelectorAll('.voiceSel').forEach(s=>s._fill&&s._fill());
     document.querySelectorAll('.ttsWarn').forEach(n=>n.hidden=!!voice||SRV||!ok);document.querySelectorAll('.ttsTip').forEach(n=>n.hidden=!!(SRV&&az))}
-  return{play,stop,controls,refreshNotes,spoken,segments,build,chunksAz,has:()=>!!voice||SRV,ok,busy:()=>!!(playing||(AUD&&!AUD.paused))}
+  return{play,playRaw:(segs,b)=>play('',b,segs),stop,controls,refreshNotes,spoken,segments,build,chunksAz,has:()=>!!voice||SRV,ok,busy:()=>!!(playing||(AUD&&!AUD.paused))}
 })();
 const TTS_HELP=`<details class="ttsWarn" hidden><summary><b>لا يعمل الصوت؟ اضغط هنا لتفعيل الصوت العربي على جهازك</b></summary>آيفون/آيباد: الإعدادات ← تسهيلات الاستخدام ← المحتوى المنطوق ← الأصوات ← العربية. أندرويد: الإعدادات ← تحويل النص إلى كلام ← محرك Google ← تثبيت العربية. ويندوز: الإعدادات ← الوقت واللغة ← الكلام ← إضافة صوت عربي. متصفح Chrome على الكمبيوتر غالبًا يحتوي صوتًا عربيًا جاهزًا.</details><details class="ttsTip"><summary>🎧 لصوت أوضح وأكثر سلاسة</summary>آيفون/آيباد: الإعدادات ← تسهيلات الاستخدام ← المحتوى المنطوق ← الأصوات ← العربية ← نزّل صوتًا مكتوبًا بجانبه <b>(محسّن)</b> أو <b>(ممتاز)</b> مثل «ماجد»، ثم أعد فتح المنصة واختره من قائمة الأصوات (يظهر بجانبه ⭐). الصوت المحسّن أنقى بكثير من الصوت الافتراضي.</details>`;
 
@@ -734,6 +734,19 @@ function loadUnit(ui){
 }
 
 /* ---------- العرض ---------- */
+
+/* صفحة اختبار النطق: افتح الرابط مع #voicetest */
+function voiceTest(){if(location.hash!=='#voicetest')return;
+  const V=[['١','بِوَحْدَةِ النِّيُوتِنْ'],['٢','بِوَحْدَةِ النِّيُوتُنْ'],['٣','بِوَحْدَةِ النِّيوتِن'],['٤','بوحدة النيوتن'],['٥','بِوَحْدَةِ النْيُوتَنْ'],['٦','بِوَحْدَةِ نِيُوتِنْ']];
+  const E=[['أ','F equals m times a'],['ب','ef equals em times ay'],['ج','eff equals em times ay']];
+  const c=document.createElement('div');c.className='card';c.style.cssText='margin:12px;border:3px solid var(--accent)';
+  c.innerHTML='<h2>🔊 اختبار النطق</h2><p>اختر الصوت الذي تستخدمه، ثم اضغط كل زر واسمع. أخبرني برقم النطق الصحيح لكلمة «النيوتن» وبحرف النطق الصحيح لـ F.</p>';
+  c.appendChild(TTS.controls(()=>'اختبار الصوت'));
+  const row=(arr,l)=>{const w=document.createElement('div');w.style.cssText='display:flex;flex-wrap:wrap;gap:8px;margin:10px 0';
+    arr.forEach(([n,t])=>{const b=document.createElement('button');b.className='btn';b.textContent=n+'  '+(l==='en'?'F = m·a':'');b.onclick=()=>TTS.playRaw(l==='en'?[{l:'en',t}]:[{l:'ar',t:'كَمِّيَّة مُتَّجِهَة '+t+'.'}],b);w.appendChild(b)});c.appendChild(w)};
+  const h1=document.createElement('h3');h1.textContent='«بوحدة النيوتن»';c.appendChild(h1);row(V,'ar');
+  const h2=document.createElement('h3');h2.textContent='F = m·a';c.appendChild(h2);row(E,'en');
+  const app=$('app');app.insertBefore(c,app.firstChild);c.scrollIntoView()}
 function render(){
   try{$('aiLink').href=CLAUDE_URL+'#l='+key(pos.u,pos.l)}catch(e){}
   $('app').dataset.unit=pos.t==='refs'?'0':String(pos.u);
@@ -1230,6 +1243,7 @@ else{
     SYNC.flush();
   }
   buildNav();updateProgress();render();
+  setTimeout(voiceTest,600);
 }
 /* الرموز السفلية: Vi ← V<sub>i</sub> */
 (()=>{const RX=/([A-Za-zΔμ]+)_([A-Za-z0-9]+)|(?<![A-Za-z])(V|F|KE|PE|μ)([ifsk])(?![a-z0-9])|(μ)/g,NS='http://www.w3.org/2000/svg',SKIP=/^(SCRIPT|STYLE|TEXTAREA|INPUT|SUB|tspan|OPTION|TITLE)$/;
