@@ -170,6 +170,51 @@ table.lt tbody tr:nth-child(even) td{background:var(--accent-soft)}
 .subst{direction:ltr;text-align:left;font-family:"Cambria Math","STIX Two Math","Times New Roman",serif;font-size:19px;background:var(--soft);border-radius:8px;padding:12px;line-height:2.3;margin-bottom:8px;overflow-x:auto}
 .subst input,.ansrow input{font:inherit;font-family:inherit;font-size:17px;text-align:center;border:1.5px solid var(--line);border-radius:6px;padding:2px 4px;background:var(--panel);color:var(--ink);margin:0 3px;direction:ltr}
 .subst input.good{border-color:var(--good)}.subst input.bad{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--panel))}.subst input.fixed{border-color:var(--warnc);color:var(--warnc)}
+.calcbtn{display:inline-flex;align-items:center;gap:6px;font:700 15px system-ui,sans-serif;padding:8px 12px;border-radius:10px;border:1.5px solid var(--accent);background:var(--panel);color:var(--accent);cursor:pointer}
+.calcbtn{font-size:22px}.calcbtn span{font-size:14px}
+.calcbtn.on{background:var(--accent);color:var(--accent-ink)}
+.ansrow input.filled{border-color:var(--good);box-shadow:0 0 0 3px color-mix(in srgb,var(--good) 25%,transparent)}
+.calc{margin:12px 0 4px;padding:10px;border-radius:16px;background:#1F2733;box-shadow:0 6px 18px rgba(0,0,0,.25);color:#E8EDF4}
+.calc .chead{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:15px}
+.calc .cx{background:none;border:0;color:#AEB8C6;font-size:20px;cursor:pointer;padding:0 6px}
+.calc .cscr{background:#C9D8C0;color:#1B2416;border-radius:8px;padding:6px 10px 8px;margin-bottom:10px;font-family:"Cambria Math","STIX Two Math","Times New Roman",serif;box-shadow:inset 0 2px 4px rgba(0,0,0,.25)}
+.calc .cind{display:flex;gap:6px;font:700 11px system-ui,sans-serif;min-height:14px}
+.calc .ish{background:#1B2416;color:#C9D8C0;padding:0 4px;border-radius:3px}.calc .ish:empty{display:none}
+.calc .cexp{font-size:20px;min-height:1.5em;white-space:nowrap;overflow-x:auto;text-align:left}
+.calc .cexp sup{font-size:.7em}
+.calc .cph{opacity:.35}
+.calc .cres{font-size:24px;font-weight:700;text-align:right;min-height:1.4em;white-space:nowrap;overflow-x:auto}
+.calc .cind{gap:6px}.calc .cind b{font:700 10px system-ui,sans-serif;padding:0 3px}
+.calc .ccur{display:inline-block;width:2px;height:1.05em;background:#1B2416;vertical-align:-.15em;margin:0 -1px;animation:cblink 1s steps(1) infinite}
+@keyframes cblink{50%{opacity:0}}
+.calc .cpw{display:inline-block;width:1px}
+.calc .cbx{opacity:.5}
+.calc .cres.cerr{font:700 18px system-ui,sans-serif}
+.calc .cfr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;font-size:.8em;line-height:1.1}
+.calc .cfr{margin:0 2px}.calc .cfr>span{padding:0 4px;min-width:.8em;text-align:center}.calc .cfr>span:first-child{border-bottom:2px solid currentColor}
+.calc .cexp .cfr{font-size:.85em;vertical-align:middle}
+.calc .cnav{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-bottom:8px}
+.calc .ck.cn{background:#2C3644;font-size:15px}
+.calc.hyped .ck.hh{outline:2px solid #7CC4FF}
+.calc .kfr{display:inline-flex;flex-direction:column;line-height:.9;font-size:12px}.calc .kfr i{font-style:normal}.calc .kfr i:first-child{border-bottom:1.5px solid currentColor}
+.calc .cfn{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:10px}
+.calc .cnum{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
+.calc .ck{display:flex;flex-direction:column;align-items:center;justify-content:center;font:600 14px/1.1 system-ui,sans-serif;padding:7px 0;min-height:40px;border-radius:8px;border:0;background:#3A4556;color:#F3F6FA;cursor:pointer;touch-action:manipulation;box-shadow:0 2px 0 rgba(0,0,0,.35)}
+.calc .ck small{font-size:10px;color:#F2B84B;margin-bottom:2px;min-height:11px}
+.calc.shifted .ck.hs{outline:2px solid #F2B84B}
+.calc.shifted .ck.hs span{opacity:.45}
+.calc .ck.csh{background:#F2B84B;color:#2A1F05;font-size:12px}
+.calc .cnum .ck small{color:#A35F00}
+.calc .cnum .ck.cd small{color:#FFE7A3}
+.calc .ck.cm{background:#2C3644;font-size:12px}
+.calc .cnum .ck{font-size:20px;min-height:48px;background:#E9EDF2;color:#1B2230}
+.calc .cnum .ck.co{background:#C9D1DC}
+.calc .cnum .ck.cf{font-size:14px;background:#C9D1DC}
+.calc .cnum .ck.cd{background:#D9534F;color:#fff;font-size:15px}
+.calc .cnum .ck.ce{background:var(--accent);color:var(--accent-ink);font-size:24px}
+.calc .ck:active{transform:translateY(1px);box-shadow:none}
+.calc .cuse{margin-top:10px;width:100%;font-size:16px}
+.calc .cuse:disabled{opacity:.45}
 .ansrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px}
 .ansrow input{width:9em}
 .ansrow .unit{direction:ltr;unicode-bidi:isolate;font-weight:600}
@@ -765,6 +810,121 @@ function fmt(v){
 }
 const near=(a,b,tol)=>isFinite(a)&&(b===0?Math.abs(a)<1e-9:Math.abs(a-b)/Math.abs(b)<=tol);
 
+/* ---------- الآلة الحاسبة العلمية ---------- */
+function makeCalc(onUse){
+  const D={'*':'×','/':'÷','-':'−','+':'+','q':'²','k':'³','i':'⁻¹','!':'!','%':'%','p':'π','x':'e','A':'Ans','M':'M','R':'Ran#',
+    's':'sin(','c':'cos(','t':'tan(','S':'sin⁻¹(','C':'cos⁻¹(','T':'tan⁻¹(','y':'sinh(','z':'cosh(','w':'tanh(',
+    'l':'log(','n':'ln(','r':'√(','u':'∛(','X':'10^(','Y':'e^(','a':'Abs(','P':'P','K':'C','(':'(',')':')','.':'.','E':'×10','^':'^'};
+  const FN='sctSCTyzwlnruXYa',OPD=/[\d.pxAMR({sctSCTyzwlnruXYa]/;
+  const P=document.createElement('div');P.className='calc';P.hidden=true;P.setAttribute('dir','ltr');
+  P.innerHTML=`<div class="chead" dir="rtl"><b>🧮 الآلة الحاسبة العلمية</b><button type="button" class="cx" aria-label="إغلاق">✕</button></div>
+  <div class="cscr"><div class="cind"></div><div class="cexp"></div><div class="cres"></div></div>
+  <div class="cnav"></div><div class="cfn"></div><div class="cnum"></div>
+  <button type="button" class="btn cuse" dir="rtl" disabled>✓ سجّل النتيجة في الخطوة ٤</button>`;
+  // [label, key, shiftLabel, shiftKey, class]
+  const NAV=[['SHIFT','sh','','','csh'],['MODE','mode','','','cm'],['◀','L','','','cn'],['▶','Rt','','','cn'],['▲','up','','','cn'],['▼','dn','','','cn']];
+  const F=[['<span class="kfr"><i>□</i><i>□</i></span>','frac'],['x⁻¹','i','x!','!'],['√','r','∛','u'],['x²','q','x³','k'],['xʸ','^'],['log','l','10ˣ','X'],['ln','n','eˣ','Y'],
+    ['(−)','-','Abs','a'],['hyp','hyp'],['sin','s','sin⁻¹','S'],['cos','c','cos⁻¹','C'],['tan','t','tan⁻¹','T'],['S⇔D','sd'],['ENG','eng','←ENG','engb'],
+    ['(','('],[')',')'],['π','p'],['e','x'],['%','%'],['M+','m+','M−','m-'],['MR','mr','MC','mc']];
+  const N=[['7','7'],['8','8'],['9','9'],['DEL','del','','','cd'],['AC','ac','','','cd'],
+    ['4','4'],['5','5'],['6','6'],['×','*','nPr','P','co'],['÷','/','nCr','K','co'],
+    ['1','1'],['2','2'],['3','3'],['+','+','','','co'],['−','-','','','co'],
+    ['0','0'],['.','.','Ran#','R'],['×10ˣ','E','','','cf'],['Ans','A','','','cf'],['=','eq','','','ce']];
+  const ex=P.querySelector('.cexp'),rs=P.querySelector('.cres'),use=P.querySelector('.cuse'),indE=P.querySelector('.cind');
+  let T=[],cur=0,ans=0,mem=0,last=null,shown=false,shift=false,hyp=false,mode=0,fmtM='n',engE=null,hist=[],hi=-1;
+  const MODES=['DEG','RAD','GRA'];
+  const SUP={'0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹','-':'⁻','.':'·'};
+  const sup=n=>String(n).split('').map(c=>SUP[c]||c).join('');
+  const esc2=t=>t.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  const match=i=>{let d=0,m=-1;for(let j=i;j<T.length;j++){const k=T[j];if(k==='{')d++;else if(k==='~'&&d===1&&m<0)m=j;else if(k==='}'){d--;if(d===0)return [m,j]}}return [m,T.length]};
+  const CUR='<span class="ccur"></span>';
+  const seg=(a,b)=>{let h='',inSup=false;
+    for(let i=a;i<=b;i++){
+      if(i===cur&&!shown)h+=CUR;
+      if(i===b)break;const k=T[i];
+      if(k==='{'){const [m,e]=match(i);const nu=seg(i+1,m),de=seg(m+1,e),bx='<span class="cbx">□</span>';
+        h+='<span class="cfr"><span>'+(m===i+1?(cur===m&&!shown?CUR:'')+bx:nu)+'</span><span>'+(e===m+1?(cur===e&&!shown?CUR:'')+bx:de)+'</span></span>';i=e;inSup=false;continue}
+      if(inSup&&!(/[\d.]/.test(k)||(k==='-'&&(T[i-1]==='^'||T[i-1]==='E'))))inSup=false;
+      if(k==='^'||k==='E'){const nx=T[i+1];if(nx===undefined||/[\d.\-]/.test(nx)){inSup=true;h+=k==='E'?'<span>×10</span>':'<span class="cpw"></span>';if(nx===undefined)h+='<sup class="cbx">□</sup>';continue}}
+      const bin='*/+PK'.includes(k)||(k==='-'&&i>a&&/[\d.pxAMRqki!%)}]/.test(T[i-1])&&!inSup);
+      const t=D[k]??k;h+=inSup?'<sup>'+esc2(SUP[k]||t)+'</sup>':'<span>'+esc2(bin?' '+t+' ':t)+'</span>'}
+    return h};
+  const show=()=>{
+    if(!T.length)ex.innerHTML=shown?'':CUR+'<span class="cph">0</span>';else ex.innerHTML=seg(0,T.length);
+    const c=ex.querySelector('.ccur');if(c)c.scrollIntoView({block:'nearest',inline:'nearest'});else ex.scrollLeft=ex.scrollWidth};
+  const ind=()=>{indE.innerHTML=(shift?'<b class="ish">S</b>':'')+(hyp?'<b>hyp</b>':'')+(mem!==0?'<b>M</b>':'')+'<b>'+'DRG'[mode]+'</b>'+(fmtM==='f'?'<b>a/b</b>':'')+(fmtM==='e'?'<b>ENG</b>':'')+(fmtM==='s'?'<b>SCI</b>':'');P.classList.toggle('shifted',shift);P.classList.toggle('hyped',hyp)};
+  const fact=n=>{if(n<0||n!==Math.floor(n)||n>170)throw 0;let r=1;for(let j=2;j<=n;j++)r*=j;return r};
+  const calc=str=>{let i=0;const pk=()=>str[i],R=[Math.PI/180,1,Math.PI/200][mode],cl=v=>Math.abs(v)<1e-12?0:+v.toFixed(12);
+    const num=()=>{const m=str.slice(i).match(/^(\d*\.?\d+\.?|\d+\.)/);if(!m)throw 0;i+=m[0].length;return parseFloat(m[0])};
+    const prim=()=>{const c=pk();
+      if(c===undefined)throw 0;
+      if(/[\d.]/.test(c))return num();
+      if(c==='p'){i++;return Math.PI}if(c==='x'){i++;return Math.E}if(c==='A'){i++;return ans}if(c==='M'){i++;return mem}if(c==='R'){i++;return Math.round(Math.random()*1000)/1000}
+      if(c==='('){i++;const v=expr();if(pk()===')')i++;return v}
+      if(c==='{'){i++;const n=expr();if(pk()!=='~')throw 0;i++;const d=expr();if(pk()!=='}')throw 0;i++;if(d===0)throw 0;return n/d}
+      if(FN.includes(c)){i++;const v=expr();if(pk()===')')i++;
+        switch(c){case's':return cl(Math.sin(v*R));case'c':return cl(Math.cos(v*R));case't':{if(mode===0&&Math.abs(((v%180)+180)%180-90)<1e-12)throw 0;return cl(Math.tan(v*R))}
+          case'S':if(Math.abs(v)>1)throw 0;return Math.asin(v)/R;case'C':if(Math.abs(v)>1)throw 0;return Math.acos(v)/R;case'T':return Math.atan(v)/R;
+          case'y':return Math.sinh(v);case'z':return Math.cosh(v);case'w':return Math.tanh(v);
+          case'l':if(v<=0)throw 0;return Math.log10(v);case'n':if(v<=0)throw 0;return Math.log(v);case'r':if(v<0)throw 0;return Math.sqrt(v);case'u':return Math.cbrt(v);
+          case'X':return Math.pow(10,v);case'Y':return Math.exp(v);case'a':return Math.abs(v)}}
+      throw 0};
+    const post=()=>{let v=prim();while(true){const c=pk();
+      if(c==='q'){i++;v=v*v}else if(c==='k'){i++;v=v*v*v}else if(c==='i'){i++;if(v===0)throw 0;v=1/v}else if(c==='!'){i++;v=fact(v)}else if(c==='%'){i++;v=v/100}
+      else if(c==='E'){i++;let sg=1;if(pk()==='-'){sg=-1;i++}const m=str.slice(i).match(/^\d+/);if(!m)throw 0;i+=m[0].length;v*=Math.pow(10,sg*+m[0])}else break}return v};
+    const pow=()=>{const b=post();if(pk()==='^'){i++;return Math.pow(b,un())}return b};
+    const un=()=>{if(pk()==='-'){i++;return -un()}if(pk()==='+'){i++;return un()}return pow()};
+    const pc=()=>{let v=un();while(pk()==='P'||pk()==='K'){const c=str[i++],r=un();const n=v;if(r<0||r>n)throw 0;let p=fact(n)/fact(n-r);v=c==='P'?p:Math.round(p/fact(r))}return v};
+    const term=()=>{let v=pc();while(true){const c=pk();if(c==='*'){i++;v*=pc()}else if(c==='/'){i++;const d=pc();if(d===0)throw 0;v/=d}
+      else if(c!==undefined&&OPD.test(c))v*=pc();else break}return v};
+    function expr(){let v=term();while(pk()==='+'||pk()==='-'){const c=str[i++];const t=term();v=c==='+'?v+t:v-t}return v}
+    const v=expr();if(i<str.length)throw 0;return v};
+  const frac=v=>{if(!isFinite(v)||Math.abs(v)>1e9||v===Math.round(v))return null;let h1=1,h0=0,k1=0,k0=1,b=v;
+    for(let j=0;j<30;j++){const a=Math.floor(b);[h1,h0]=[a*h1+h0,h1];[k1,k0]=[a*k1+k0,k1];if(k1>9999)return null;if(Math.abs(v-h1/k1)<1e-10*Math.max(1,Math.abs(v)))return [h1,k1];b=1/(b-a);if(!isFinite(b))break}return null};
+  const sciS=(v,e)=>{const m=+(v/Math.pow(10,e)).toPrecision(10);return m+' × 10'+sup(e)};
+  const out=v=>{const a=Math.abs(v);
+    if(fmtM==='f'){const f=frac(v);if(f)return {h:'<span class="cfr"><span>'+f[0]+'</span><span>'+f[1]+'</span></span>'}}
+    if(fmtM==='e'&&a!==0){if(engE===null)engE=Math.floor(Math.log10(a)/3)*3;return {t:sciS(v,engE)}}
+    if(fmtM==='s'||(a!==0&&(a>=1e10||a<1e-9))){if(a===0)return {t:'0'};let e=Math.floor(Math.log10(a)),m=+(v/Math.pow(10,e)).toPrecision(10);if(Math.abs(m)>=10){m=+(m/10).toPrecision(10);e++}return {t:m+' × 10'+sup(e)}}
+    return {t:String(+v.toPrecision(10))}};
+  const fill=v=>{const a=Math.abs(v);if(a!==0&&(a>=1e6||a<1e-3)){let e=Math.floor(Math.log10(a)),m=+(v/Math.pow(10,e)).toPrecision(4);if(Math.abs(m)>=10){m=+(m/10).toPrecision(4);e++}return m+'×10'+sup(e)}return String(+v.toPrecision(6))};
+  const paint=()=>{if(last==null)return;const o=out(last);rs.innerHTML=o.h?o.h:esc2(o.t);rs.classList.remove('cerr')};
+  const reset=()=>{shown=false;rs.textContent='';use.disabled=true;last=null;fmtM='n';engE=null};
+  const evalNow=()=>{if(!T.length)return false;try{const v=calc(T.join(''));if(!isFinite(v))throw 0;ans=v;last=v;shown=true;fmtM=(/[\/{]/.test(T.join(''))&&frac(v))?'f':'n';engE=null;paint();ind();use.disabled=false;
+      if(hist[hist.length-1]!==T.join('\u0001'))hist.push(T.join('\u0001'));hi=hist.length;return true}
+    catch(e){rs.textContent='Math ERROR';rs.classList.add('cerr');use.disabled=true;last=null;return false}};
+  const press=(k)=>{
+    if(k==='sh'){shift=!shift;ind();return}
+    if(k==='hyp'){hyp=!hyp;shift=false;ind();return}
+    const sh=shift;shift=false;
+    if(k==='mode'){mode=(mode+1)%3;ind();if(shown)evalNow();show();return}
+    if(k==='sd'){if(!shown&&!evalNow()){ind();show();return}fmtM=fmtM==='f'?'n':(frac(last)?'f':(fmtM==='s'?'n':'s'));paint();ind();show();return}
+    if(k==='eng'||k==='engb'){if(!shown&&!evalNow()){ind();show();return}if(last===0){ind();return}if(fmtM!=='e'){fmtM='e';engE=null;out(last)}else engE+=k==='eng'?-3:3;paint();ind();show();return}
+    if(k==='m+'||k==='m-'){if(!shown&&!evalNow()){ind();show();return}mem+=k==='m+'?last:-last;mem=+mem.toPrecision(12);ind();show();return}
+    if(k==='mc'){mem=0;ind();return}
+    if(k==='mr')k='M';
+    if(hyp&&'sct'.includes(k)&&k.length===1){k={s:'y',c:'z',t:'w'}[k];hyp=false}
+    ind();
+    if(k==='ac'){T=[];cur=0;reset();show();return}
+    if(k==='L'||k==='Rt'){if(shown){reset();cur=k==='L'?T.length:0;show();return}cur=k==='L'?(cur>0?cur-1:T.length):(cur<T.length?cur+1:0);show();return}
+    if(k==='up'||k==='dn'){if(!hist.length)return;hi=Math.max(0,Math.min(hist.length-1,hi+(k==='up'?-1:1)));T=hist[hi].split('\u0001');cur=T.length;reset();show();return}
+    if(k==='del'){if(shown){reset();cur=T.length;show();return}if(cur>0){const d=T[cur-1];
+        if(d==='{'||d==='~'||d==='}'){let st=cur-1;if(d!=='{'){let dp=0;for(let j=cur-2;j>=0;j--){if(T[j]==='}')dp++;else if(T[j]==='{'){if(dp===0){st=j;break}dp--}}}
+          const [m,e]=match(st);if(m===st+1&&e===m+1){T.splice(st,3);cur=st}else cur--}
+        else{T.splice(cur-1,1);cur--}}show();return}
+    if(k==='eq'){evalNow();show();return}
+    if(shown){const op=/^[*\/+^qki!%EPK]$/.test(k)||(k==='-'&&false);reset();T=op?['A']:[];cur=T.length}
+    if(k==='frac'){T.splice(cur,0,'{','~','}');cur+=1;show();return}
+    T.splice(cur,0,k);cur+=1;show()};
+  const mk=(box,arr)=>arr.forEach(([t,k,st,sk,c])=>{const b=document.createElement('button');b.type='button';b.className='ck'+(c?' '+c:'')+(st?' hs':'')+(k==='s'||k==='c'||k==='t'?' hh':'');
+    b.innerHTML='<small>'+(st||'&nbsp;')+'</small><span>'+t+'</span>';b.onclick=()=>press(shift&&sk?sk:k);box.appendChild(b)});
+  mk(P.querySelector('.cnav'),NAV);mk(P.querySelector('.cfn'),F);mk(P.querySelector('.cnum'),N);
+  const btn=document.createElement('button');btn.type='button';btn.className='calcbtn';btn.innerHTML='🧮<span>الآلة الحاسبة</span>';btn.setAttribute('aria-expanded','false');
+  const toggle=o=>{P.hidden=!o;btn.setAttribute('aria-expanded',o);btn.classList.toggle('on',o);if(o)P.scrollIntoView({block:'nearest',behavior:'smooth'})};
+  btn.onclick=()=>toggle(P.hidden);P.querySelector('.cx').onclick=()=>toggle(false);
+  use.onclick=()=>{if(last==null)return;onUse(fill(last));toggle(false)};
+  show();ind();return {btn,panel:P,close:()=>{toggle(false);btn.hidden=true}}}
+
 /* ---------- المسألة التفاعلية ---------- */
 function problemCard(p,title,onFinish){
   const c=document.createElement('div');c.className='card prob';
@@ -809,10 +969,12 @@ function problemCard(p,title,onFinish){
   const ansRow=document.createElement('div');ansRow.className='ansrow';
   ansRow.innerHTML=`<label>النتيجة: <input class="final" inputmode="text" autocomplete="off" aria-label="النتيجة"> <span class="unit"></span></label><button class="btn">تحقق من النتيجة</button>`;
   ansRow.querySelector('.unit').textContent=p.a[1];
-  s4.querySelector('.pbody').append(ansRow);
+  const CAL=makeCalc(v=>{const f=ansRow.querySelector('.final');if(f.disabled)return;f.value=v;f.classList.add('filled');setTimeout(()=>f.classList.remove('filled'),900)});
+  ansRow.insertBefore(CAL.btn,ansRow.querySelector('button.btn'));
+  s4.querySelector('.pbody').append(ansRow,CAL.panel);
   let t5=0;
-  const fin=ansRow.querySelector('.final'),bF=ansRow.querySelector('button');
-  const finish=(ok)=>{fin.disabled=true;bF.hidden=true;s4.classList.add(ok?'ok':'shown');s4.querySelector('.pstat').textContent=ok?'✓':'تم التصحيح';
+  const fin=ansRow.querySelector('.final'),bF=ansRow.querySelector('button.btn');
+  const finish=(ok)=>{fin.disabled=true;bF.hidden=true;CAL.close();s4.classList.add(ok?'ok':'shown');s4.querySelector('.pstat').textContent=ok?'✓':'تم التصحيح';
     const sol=document.createElement('div');sol.className='ans';sol.innerHTML='الحل:<div class="eqblock">'+esc(p.s.replace(/\[([^\]]+)\]/g,(m,x)=>fmt(parseNum(x))))+' = '+esc(fmt(p.a[0]))+(p.a[1]?' '+esc(p.a[1]):'')+'</div>'+(p.n?'<br><span class="nt">'+inl(p.n)+'</span>':'');
     c.appendChild(sol);sol.appendChild(TTS.controls(()=>'الحل. '+p.s.replace(/\[([^\]]+)\]/g,(m,x)=>fmt(parseNum(x)))+' = '+fmt(p.a[0])+' '+p.a[1]+(p.n?'. '+p.n:''),{compact:true,label:'🔊 استمع للحل'}));c.classList.add('finished');onFinish&&onFinish(Math.min(firstTry,5),{q:p.q.slice(0,100),answer:fin.value,correct:ok,expected:p.a[0]})};
   bF.onclick=()=>{const v=parseNum(fin.value);
