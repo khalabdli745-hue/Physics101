@@ -504,6 +504,7 @@ const TTS=(()=>{
   function arFix(t){return t.replace(/ة[\u064B-\u0652]*(?![\u0621-\u064A\u064B-\u0652])/g,'هْ').replace(/نيوتن(?![\u064B-\u0652])/g,'نِيُوتِنْ')}
   function parens(t){let prev;do{prev=t;t=t.replace(/\(([^()]*)\)/g,(m,inner)=>/[+×÷*\/·]|\s[−-]\s/.test(inner)?' قوس، '+inner+' ، إغلاق القوس، ':' '+inner+' ')}while(t!==prev);return t}
   function spoken(t){
+    t=markN(t).replace(/Ｎ/g,' نيوتن ').replace(/(\d\s*)Pa\b/g,'$1 باسكال ').replace(/\bPa\b/g,' باسكال ');
     t=t.replace(/^#+\s*/gm,'').replace(/\*\*/g,'').replace(/`/g,'').replace(/^[-•]\s*/gm,'').replace(/[✓✗⚠️]/g,'').replace(/[✦⚗🔊■]/g,'');
     t=t.replace(/([^.:؟!،\n])[ \t]*\n+/g,'$1.\n');
     t=t.replace(/\bV_?f\b/g,'السرعة النهائية').replace(/\bV_?i\b/g,'السرعة الابتدائية').replace(/v_f/g,'السرعة النهائية').replace(/v_i/g,'السرعة الابتدائية').replace(/v_d/g,'سرعة الانجراف').replace(/v̄/g,'السرعة المتوسطة').replace(/T_f/g,'درجة الحرارة النهائية')
@@ -530,7 +531,7 @@ const TTS=(()=>{
     return t.trim();
   }
   /* ===== الرموز والوحدات والمعادلات تُقرأ بصوت إنجليزي ===== */
-  const EN_UNIT=[['J/(kg·°C)','joules per kilogram degree Celsius'],['J/(kg·K)','joules per kilogram kelvin'],['J/kg·°C','joules per kilogram degree Celsius'],['J/kg·K','joules per kilogram kelvin'],['N·m²/C²','newton meter squared per coulomb squared'],
+  const EN_UNIT=[['N/m²','newtons per square meter'],['N/m','newtons per meter'],['J/(kg·°C)','joules per kilogram degree Celsius'],['J/(kg·K)','joules per kilogram kelvin'],['J/kg·°C','joules per kilogram degree Celsius'],['J/kg·K','joules per kilogram kelvin'],['N·m²/C²','newton meter squared per coulomb squared'],
     ['m/s²','meters per second squared'],['m/s','meters per second'],['mm/s','millimeters per second'],['km/h','kilometers per hour'],['A/m²','amperes per square meter'],['kg/m³','kilograms per cubic meter'],['m⁻³','per cubic meter'],
     ['N/C','newtons per coulomb'],['V/m','volts per meter'],['F/m','farads per meter'],['J/°C','joules per degree Celsius'],['J/K','joules per kelvin'],['J/kg','joules per kilogram'],['J/C','joules per coulomb'],['J/s','joules per second'],['C/s','coulombs per second'],['V/A','volts per ampere'],['N·m','newton meters'],['Ω·m','ohm meters'],['°C⁻¹','per degree Celsius'],['K⁻¹','per kelvin'],
     ['°C','degrees Celsius'],['°F','degrees Fahrenheit'],['kWh','kilowatt hours'],['mAh','milliamp hours'],['mm²','square millimeters'],['cm²','square centimeters'],['km²','square kilometers'],['m²','square meters'],['m³','cubic meters'],['cm³','cubic centimeters'],
@@ -542,8 +543,12 @@ const TTS=(()=>{
   const EN_SUB={'₀':' naught','₁':' one','₂':' two','₃':' three','ₓ':' x','ᵧ':' y'};
   const EN_WORD={KE:'kinetic energy',PE:'potential energy',ME:'mechanical energy',SI:'S I',DC:'D C',AC:'A C',LED:'L E D',GPS:'G P S',PhET:'fet',cos:'cosine',sin:'sine',tan:'tangent',max:'maximum',min:'minimum',total:'total',known:'known'};
   function enParens(t){let prev;do{prev=t;t=t.replace(/\(([^()]*)\)/g,(m,inner)=>/[+×÷*\/·]|\s[−-]\s/.test(inner)?' open bracket, '+inner+', close bracket, ':' '+inner+' ')}while(t!==prev);return t}
+  /* N وحدةً (نيوتن) لا رمزًا للقوة العمودية */
+  function markN(t){t=t.replace(/\(\s*N\s*\)/g,'(Ｎ)').replace(/((?:وحدة|وحدته|وحدتها|بوحدة|الوحدة|النيوتن|بالنيوتن|نيوتن)[\s`:«»]*)N(?![A-Za-z0-9·\/=_])/g,'$1Ｎ').replace(/(^|[\s`])N(\s*=\s*kg)/g,'$1Ｎ$2');
+    if(/^\s*`?N`?\s*$/.test(t))t=t.replace('N','Ｎ');return t}
   function spokenEn(t){
     const P=[];const ph=w=>{P.push(w);return ' \u0001'+(P.length-1)+'\u0002 '};
+    t=t.replace(/Ｎ/g,()=>ph('newton')).replace(/(\d\s*)Pa\b/g,(m,d)=>d+ph('pascals')).replace(/\bPa\b/g,()=>ph('pascal'));
     t=t.replace(/\(\s*$/,'').replace(/^\s*\)/,'');
     t=t.replace(/\bv([fi])\b/g,'V$1').replace(/\b(cos|sin|tan)(?=\d|θ)/g,'$1 ').replace(/([AB])([xyz])(?=[AB][xyz])/g,'$1$2 ');
     t=t.replace(/(?<![·\d]\s?)\bA\s?·\s?B\b(?!\s?·)/g,'A'+ph('dot')+'⁠B').replace(/\|([^|]+)\|/g,(m,x)=>ph('magnitude of')+'⁠'+x+' ');
@@ -576,14 +581,14 @@ const TTS=(()=>{
   function arPart(t){t=t.replace(/[←⇐]/g,'، إذن ').replace(/[→⇒]/g,' إلى ').replace(/[()«»]/g,' ').replace(/\s·\s|^\s*·|·\s*$/g,'، ').replace(/\s[—–]\s/g,'، ');t=arFix(vocal(t));return t.replace(/\s+([،.:؟])/g,'$1').replace(/\s+/g,' ')}
   const AR_CH=/[؀-ۿ]/;
   function segments(raw){
-    let t=raw.replace(/^#+\s*/gm,'').replace(/\*\*/g,'').replace(/`/g,'').replace(/^[-•]\s*/gm,'').replace(/[✓✗⚠️]/g,'').replace(/[✦⚗🔊■]/g,'');
+    let t=markN(raw).replace(/^#+\s*/gm,'').replace(/\*\*/g,'').replace(/`/g,'').replace(/^[-•]\s*/gm,'').replace(/[✓✗⚠️]/g,'').replace(/[✦⚗🔊■]/g,'');
     t=t.replace(/([^.:؟!،\n])[ \t]*\n+/g,'$1.\n').replace(/\n+/g,' ');
     /* نقسم النص إلى كلمات عربية وما بينها */
     const toks=t.match(/[؀-ۿً-ْ]+|[^؀-ۿ]+/g)||[];
     const segs=[];
     for(const k of toks){
       if(AR_CH.test(k)){segs.push({l:'ar',t:k});continue}
-      const isMath=/[A-Za-z\u00C0-\u024F\u0300-\u036FͰ-Ͽ=×÷√²³⁻⁰¹⁴⁵⁶⁷⁸⁹₀₁₂₃°%∝≈µΩ+·\/]|\d\s*[−-]|[−]/.test(k);
+      const isMath=/[\uFF2EA-Za-z\u00C0-\u024F\u0300-\u036FͰ-Ͽ=×÷√²³⁻⁰¹⁴⁵⁶⁷⁸⁹₀₁₂₃°%∝≈µΩ+·\/]|\d\s*[−-]|[−]/.test(k);
       if(!isMath){segs.push({l:'ar',t:k});continue}
       /* علامات الترقيم في الطرفين تبقى مع العربي */
       const m=k.match(/^([\s،.:؛؟!«»·\-—–]*)([\s\S]*?)([\s،.:؛؟!«»·\-—–]*)$/);
