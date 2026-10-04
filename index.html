@@ -579,7 +579,7 @@ const TTS=(()=>{
   /* التاء المربوطة: هاء عند الوقف، وعند الوصل تاء بلا سكون ليختار القارئ حركتها، والمجرور قبل كلمة معرّفة يأخذ الكسرة */
   const PREP=new Set(['في','على','من','إلى','الى','عن','حتى','مع','بين','عند','نحو']);
   function isPrefixed(bare){const V=window.VOCAB||{};const m=bare.match(/^[وف]?([بلك])(.{3,})$/);return !!m&&!!(V[m[2]]||V['ال'+m[2]]||/^ال/.test(m[2]))}
-  function arFix(t){t=t.replace(/ن[\u064B-\u0652]*ي[\u064B-\u0652]*و[\u064B-\u0652]*ت[\u064B-\u0652]*ن[\u064B-\u0652]*/g,(m,o,str)=>/ال[\u064B-\u0652]*$/.test(str.slice(Math.max(0,o-4),o))?'نْيُوتَنْ':'نِيُوتَنْ')
+  function arFix(t){t=t.replace(/ن[\u064B-\u0652]*ي[\u064B-\u0652]*و[\u064B-\u0652]*ت[\u064B-\u0652]*ن[\u064B-\u0652]*/g,(m,o,str)=>/ال[\u064B-\u0652]*$/.test(str.slice(Math.max(0,o-4),o))?'نْيُوتِنْ':'نِيُوتِنْ').replace(/(^|[^\u0621-\u064A\u064B-\u0652])([وف]?)لاحظ(?![\u0621-\u064A\u064B-\u0652])/g,'$1$2لاحِظ')
     .replace(/ة[ً-ْ]*(?=\s*(?:[،؛؟.:!\n]|$))/g,'هْ').replace(/ةْ(?![ء-ي])/g,'ة');
     const DI=/[ً-ْ]/g,W=t.split(/(\s+)/);
     for(let j=0;j<W.length;j+=2){const w=W[j];if(!/ة$/.test(w)||j+2>=W.length)continue;
