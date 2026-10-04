@@ -215,7 +215,22 @@ table.lt tbody tr:nth-child(even) td{background:var(--accent-soft)}
 .calc .ck:active{transform:translateY(1px);box-shadow:none}
 .calc .cuse{margin-top:10px;width:100%;font-size:16px}
 .calc .cuse:disabled{opacity:.45}
-.boardCard p{margin:.2em 0 .8em}
+.boardCard{margin:0 0 16px}
+.boardCard .sbFrame{background:linear-gradient(180deg,#d9dee5,#aeb6c2);border-radius:14px;padding:8px 10px 0;box-shadow:0 8px 20px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.7)}
+.boardCard .sbTop{display:flex;justify-content:center;height:10px;align-items:center}
+.boardCard .sbCam{width:6px;height:6px;border-radius:50%;background:#2b3441;box-shadow:0 0 0 2px #c3cad4}
+.boardCard .sbSurface{background:#fdfdfb;background-image:linear-gradient(#eef1f5 1px,transparent 1px),linear-gradient(90deg,#eef1f5 1px,transparent 1px);background-size:26px 26px;border:3px solid #3b4250;border-radius:6px;padding:16px 18px;color:#1f2937;box-shadow:inset 0 2px 6px rgba(0,0,0,.12)}
+.boardCard .sbSurface h2{margin:0 0 6px;color:var(--accent);font-size:20px}
+.boardCard .sbSurface p{margin:0 0 14px;font-size:17px;color:#1f2937}
+.boardCard .sbSurface h2.sbH{font-family:'Aref Ruqaa',serif;font-weight:700;font-size:34px;line-height:1.3;color:var(--accent);margin:0 0 2px;display:inline-block;border-bottom:3px solid currentColor;border-radius:0 0 40% 10%/0 0 8px 4px;padding-bottom:2px}
+.boardCard .sbSurface p.sbP{font-family:'Aref Ruqaa',serif;font-size:23px;line-height:1.7;color:#1d4ed8;margin:8px 0 14px}
+.boardCard .sbNo{white-space:nowrap}.boardCard .sbNo b{color:#dc2626;font-weight:700}
+.boardCard .sbRow{display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
+.boardCard .sbAv{font-size:46px;line-height:1;filter:drop-shadow(0 3px 3px rgba(0,0,0,.25))}
+.boardCard .sbTray{display:flex;align-items:center;gap:8px;height:16px;margin:0 10%;padding:0 12px;background:linear-gradient(180deg,#9aa3af,#7b8491);border-radius:0 0 8px 8px}
+.boardCard .sbTray i{width:34px;height:7px;border-radius:4px;background:var(--m);box-shadow:inset -8px 0 0 rgba(255,255,255,.35)}
+.boardCard .sbTray b{margin-inline-start:auto;width:30px;height:9px;border-radius:3px;background:#e5e7eb}
+
 body.boardOpen{overflow:hidden}
 .board{position:fixed;inset:0;z-index:1000;display:flex;flex-direction:column;background:#26313f;color:#1f2937}
 .board .bTop{display:flex;align-items:center;gap:10px;padding:8px 12px;padding-top:max(8px,env(safe-area-inset-top));background:var(--accent);color:var(--accent-ink)}
@@ -824,7 +839,7 @@ function nextLessonBtn(i){
 }
 function nextLesson(){let u=pos.u,l=pos.l;do{if(l<UNITS[u].l.length-1)l++;else if(u<UNITS.length-1){u++;l=0}else return null}while(HID(u,l));return[u,l]}
 /* ---------- شرح الدرس: سبورة ذكية يشرح عليها المدرب الذكي خطوة بخطوة ---------- */
-const BOARD_PUBLIC=false;
+const BOARD_PUBLIC=true;
 function openBoard(){
   const s=study(),l=lesson();if(!s||!l)return;
   const K='p101-board-'+key(pos.u,pos.l);
@@ -984,8 +999,10 @@ function renderSum(v){
   if(!s){i.innerHTML='<p class="empty">لا يوجد ملخص لهذا الدرس.</p>';return}
   i.insertAdjacentHTML('beforeend',TTS_HELP);
   /* شرح الدرس: يظهر للحساب التجريبي فقط حتى يعتمده المدرب (BOARD_PUBLIC=true لإظهاره للجميع) */
-  if(BOARD_PUBLIC||(typeof AUTH!=='undefined'&&AUTH&&AUTH.demo)||!API){const bc=card('📝 شرح الدرس');bc.classList.add('boardCard');bc.insertAdjacentHTML('beforeend','<p>سبورة ذكية يشرح عليها المدرب الذكي محتوى الدرس خطوة بخطوة بالصوت، مثل عرض البوربوينت.</p>');
-    const ob=document.createElement('button');ob.className='btn';ob.textContent='▶️ ابدأ الشرح';ob.onclick=openBoard;bc.appendChild(ob);i.appendChild(bc)}
+  if(BOARD_PUBLIC||(typeof AUTH!=='undefined'&&AUTH&&AUTH.demo)||!API){if(!document.getElementById('sbFont')){const lk=document.createElement('link');lk.id='sbFont';lk.rel='stylesheet';lk.href='https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&display=swap';document.head.appendChild(lk)}
+    const bc=document.createElement('div');bc.className='boardCard';
+    bc.innerHTML='<div class="sbFrame"><div class="sbTop"><span class="sbCam" aria-hidden="true"></span></div><div class="sbSurface"><h2 class="sbH">شرح الدرس</h2><p class="sbP">على السبورة الذكية <span class="sbNo">مع <b>المدرب الذكي</b></span></p><div class="sbRow"><span class="sbAv" aria-hidden="true">👨‍🏫</span></div></div><div class="sbTray" aria-hidden="true"><i style="--m:#1f2937"></i><i style="--m:#1d4ed8"></i><i style="--m:#dc2626"></i><i style="--m:#15803d"></i><b></b></div></div>';
+    const ob=document.createElement('button');ob.className='btn';ob.textContent='▶️ ابدأ الشرح';ob.onclick=openBoard;bc.querySelector('.sbRow').prepend(ob);i.appendChild(bc)}
   const full=()=>{const l=lesson();let txt='درس '+l.t+'.\n'+s.s.replace(/^\[\[(fig|img):[^\n]*\]\]$/gm,'')+(x.ap?'\nتطبيقات من الحياة.\n'+x.ap:'');
     if(s.ex)txt+='\nمثال محلول.\n'+s.ex.q+'\nالحل.\n'+s.ex.st.join('\n')+'\nالإجابة: '+s.ex.a;return txt};
   const top=document.createElement('div');top.className='listenAll';top.appendChild(TTS.controls(full,{label:'🎧 استمع للدرس كاملًا',aria:'استمع للدرس كاملًا'}));i.appendChild(top);
