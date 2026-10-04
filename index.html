@@ -504,7 +504,7 @@ const TTS=(()=>{
   /* التاء المربوطة: هاء عند الوقف، وعند الوصل تاء بلا سكون ليختار القارئ حركتها، والمجرور قبل كلمة معرّفة يأخذ الكسرة */
   const PREP=new Set(['في','على','من','إلى','الى','عن','حتى','مع','بين','عند','نحو']);
   function isPrefixed(bare){const V=window.VOCAB||{};const m=bare.match(/^[وف]?([بلك])(.{3,})$/);return !!m&&!!(V[m[2]]||V['ال'+m[2]]||/^ال/.test(m[2]))}
-  function arFix(t){t=t.replace(/النيوتن(?![ً-ْ])/g,'النِّيُوتِنْ').replace(/نيوتن(?![ً-ْ])/g,'نِيُوتِنْ')
+  function arFix(t){t=t.replace(/ن[\u064B-\u0652]*ي[\u064B-\u0652]*و[\u064B-\u0652]*ت[\u064B-\u0652]*ن[\u064B-\u0652]*/g,(m,o,str)=>/ال[\u064B-\u0652]*$/.test(str.slice(Math.max(0,o-4),o))?'نْيُوتَنْ':'نِيُوتَنْ')
     .replace(/ة[ً-ْ]*(?=\s*(?:[،؛؟.:!\n]|$))/g,'هْ').replace(/ةْ(?![ء-ي])/g,'ة');
     const DI=/[ً-ْ]/g,W=t.split(/(\s+)/);
     for(let j=0;j<W.length;j+=2){const w=W[j];if(!/ة$/.test(w)||j+2>=W.length)continue;
@@ -735,18 +735,6 @@ function loadUnit(ui){
 
 /* ---------- العرض ---------- */
 
-/* صفحة اختبار النطق: افتح الرابط مع #voicetest */
-function voiceTest(){if(location.hash!=='#voicetest')return;
-  const V=[['١','بِوَحْدَةِ النِّيُوتِنْ'],['٢','بِوَحْدَةِ النِّيُوتُنْ'],['٣','بِوَحْدَةِ النِّيوتِن'],['٤','بوحدة النيوتن'],['٥','بِوَحْدَةِ النْيُوتَنْ'],['٦','بِوَحْدَةِ نِيُوتِنْ']];
-  const E=[['أ','F equals m times a'],['ب','ef equals em times ay'],['ج','eff equals em times ay']];
-  const c=document.createElement('div');c.className='card';c.style.cssText='margin:12px;border:3px solid var(--accent)';
-  c.innerHTML='<h2>🔊 اختبار النطق</h2><p>اختر الصوت الذي تستخدمه، ثم اضغط كل زر واسمع. أخبرني برقم النطق الصحيح لكلمة «النيوتن» وبحرف النطق الصحيح لـ F.</p>';
-  c.appendChild(TTS.controls(()=>'اختبار الصوت'));
-  const row=(arr,l)=>{const w=document.createElement('div');w.style.cssText='display:flex;flex-wrap:wrap;gap:8px;margin:10px 0';
-    arr.forEach(([n,t])=>{const b=document.createElement('button');b.className='btn';b.textContent=n+'  '+(l==='en'?'F = m·a':'');b.onclick=()=>TTS.playRaw(l==='en'?[{l:'en',t}]:[{l:'ar',t:'كَمِّيَّة مُتَّجِهَة '+t+'.'}],b);w.appendChild(b)});c.appendChild(w)};
-  const h1=document.createElement('h3');h1.textContent='«بوحدة النيوتن»';c.appendChild(h1);row(V,'ar');
-  const h2=document.createElement('h3');h2.textContent='F = m·a';c.appendChild(h2);row(E,'en');
-  const app=$('app');app.insertBefore(c,app.firstChild);c.scrollIntoView()}
 function render(){
   try{$('aiLink').href=CLAUDE_URL+'#l='+key(pos.u,pos.l)}catch(e){}
   $('app').dataset.unit=pos.t==='refs'?'0':String(pos.u);
@@ -1243,7 +1231,6 @@ else{
     SYNC.flush();
   }
   buildNav();updateProgress();render();
-  setTimeout(voiceTest,600);
 }
 /* الرموز السفلية: Vi ← V<sub>i</sub> */
 (()=>{const RX=/([A-Za-zΔμ]+)_([A-Za-z0-9]+)|(?<![A-Za-z])(V|F|KE|PE|μ)([ifsk])(?![a-z0-9])|(μ)/g,NS='http://www.w3.org/2000/svg',SKIP=/^(SCRIPT|STYLE|TEXTAREA|INPUT|SUB|tspan|OPTION|TITLE)$/;
