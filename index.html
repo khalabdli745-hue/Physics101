@@ -490,7 +490,7 @@ const TTS=(()=>{
     ['µF','microfarads'],['μF','microfarads'],['µC','microcoulombs'],['μC','microcoulombs'],['µm','micrometers'],['μm','micrometers'],['µA','microamperes'],['nC','nanocoulombs'],['nF','nanofarads'],['pF','picofarads'],['nm','nanometers'],['mA','milliamperes'],['mV','millivolts'],['kV','kilovolts'],['MΩ','megaohms'],['kΩ','kilo ohms'],
     ['mJ','millijoules'],['kJ','kilojoules'],['MJ','megajoules'],['kW','kilowatts'],['MW','megawatts'],['kg','kilograms'],['km','kilometers'],['cm','centimeters'],['mm','millimeters'],['mg','milligrams'],['ms','milliseconds'],['Hz','hertz'],['cal','calories'],['mol','moles'],['cd','candela'],['Ω','ohms'],['min','minutes']];
   const EN_ONE={m:'meters',s:'seconds',h:'hours',g:'grams',N:'newtons',J:'joules',W:'watts',V:'volts',A:'amperes',C:'coulombs',F:'farads',K:'kelvin',L:'liters'};
-  const EN_LET={a:'ay',b:'bee',c:'see',d:'dee',e:'ee',f:'eff',g:'gee',h:'aitch',i:'eye',j:'jay',k:'kay',l:'el',m:'em',n:'en',o:'oh',p:'pee',q:'cue',r:'ar',s:'ess',t:'tee',u:'you',v:'vee',w:'double you',x:'ex',y:'why',z:'zee'};
+  const EN_LET={a:'ay',b:'bee',c:'see',d:'dee',e:'ee',f:'ef',g:'gee',h:'aitch',i:'eye',j:'jay',k:'kay',l:'el',m:'em',n:'en',o:'oh',p:'pee',q:'cue',r:'ar',s:'es',t:'tee',u:'you',v:'vee',w:'double you',x:'ex',y:'why',z:'zee'};
   const EN_SUP={'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9'};
   const EN_SUB={'₀':' naught','₁':' one','₂':' two','₃':' three','ₓ':' x','ᵧ':' y'};
   const EN_WORD={KE:'kinetic energy',PE:'potential energy',ME:'mechanical energy',SI:'S I',DC:'D C',AC:'A C',LED:'L E D',GPS:'G P S',PhET:'fet',cos:'cosine',sin:'sine',tan:'tangent',max:'maximum',min:'minimum',total:'total',known:'known'};
@@ -526,7 +526,7 @@ const TTS=(()=>{
     t=t.replace(/[|[\]{}"'`«»]/g,' ').replace(/\s+([,.:])/g,'$1').replace(/,(\s*,)+/g,',').replace(/\s+/g,' ');
     return t.trim().replace(/^[,.\s]+|[,\s]+$/g,'');
   }
-  function arPart(t){t=t.replace(/[←⇐]/g,'، إذن ').replace(/[→⇒]/g,' إلى ').replace(/[()«»]/g,' ').replace(/\s·\s|^\s*·|·\s*$/g,'، ').replace(/\s[—–]\s/g,'، ');t=vocal(t);return t.replace(/\s+([،.:؟])/g,'$1').replace(/\s+/g,' ')}
+  function arPart(t){t=t.replace(/[←⇐]/g,'، إذن ').replace(/[→⇒]/g,' إلى ').replace(/[()«»]/g,' ').replace(/\s·\s|^\s*·|·\s*$/g,'، ').replace(/\s[—–]\s/g,'، ');t=vocal(t);t=t.replace(/ة[\u064B-\u0652]*(?=[^\u0600-\u06FF]|$)/g,'هْ');return t.replace(/\s+([،.:؟])/g,'$1').replace(/\s+/g,' ')}
   const AR_CH=/[؀-ۿ]/;
   function segments(raw){
     let t=raw.replace(/^#+\s*/gm,'').replace(/\*\*/g,'').replace(/`/g,'').replace(/^[-•]\s*/gm,'').replace(/[✓✗⚠️]/g,'').replace(/[✦⚗🔊■]/g,'');
@@ -804,35 +804,23 @@ function problemCard(p,title,onFinish){
     s.querySelector('.pbody').appendChild(w);return s};
   mcStep(2,'استنتج المطلوب: ما الكمية المطلوب حسابها؟',p.r,'صحيح.',()=>reveal(2));
   mcStep(3,'اختر القانون الصحيح',p.l,'صحيح، هذا هو القانون المناسب.',()=>reveal(3));
-  /* 4: التعويض والحل */
-  const s4=mkStep(4,'عوّض بالأرقام في القانون، ثم احسب الناتج');
-  const parts=p.s.split(/\[([^\]]+)\]/);const slots=[];
-  const ex=document.createElement('div');ex.className='subst';
-  parts.forEach((part,i)=>{if(i%2===0){const sp=document.createElement('span');sp.textContent=part;ex.appendChild(sp)}
-    else{const inp=document.createElement('input');const val=parseNum(part);const sci=Math.abs(val)>=1e5||(val!==0&&Math.abs(val)<1e-3);
-      inp.inputMode=sci?'text':'decimal';inp.autocomplete='off';inp.setAttribute('aria-label','قيمة');inp.dataset.v=val;inp.style.width=Math.max(3.2,String(part).length*0.75+1.2)+'em';slots.push(inp);ex.appendChild(inp)}});
-  const hint=document.createElement('p');hint.className='hint';hint.innerHTML='للأعداد العلمية اكتب مثلًا <span class="eq">2e-6</span> بدل <span class="eq">2 × 10⁻⁶</span>، و <span class="eq">9e9</span> بدل <span class="eq">9 × 10⁹</span>.';
-  const b4=document.createElement('button');b4.className='btn';b4.textContent='تحقق من التعويض';
-  const ansRow=document.createElement('div');ansRow.className='ansrow';ansRow.hidden=true;
-  ansRow.innerHTML=`<label>الناتج النهائي: <input class="final" inputmode="text" autocomplete="off" aria-label="الناتج"> <span class="unit"></span></label><button class="btn">تحقق من الناتج</button>`;
+  /* 4: الحساب بالآلة الحاسبة */
+  const s4=mkStep(4,'احسب النتيجة بالآلة الحاسبة:');
+  const ansRow=document.createElement('div');ansRow.className='ansrow';
+  ansRow.innerHTML=`<label>النتيجة: <input class="final" inputmode="text" autocomplete="off" aria-label="النتيجة"> <span class="unit"></span></label><button class="btn">تحقق من النتيجة</button>`;
   ansRow.querySelector('.unit').textContent=p.a[1];
-  s4.querySelector('.pbody').append(ex,hint,b4,ansRow);
-  let t4=0,t5=0;
-  b4.onclick=()=>{let bad=0;slots.forEach(inp=>{const ok=near(parseNum(inp.value),+inp.dataset.v,0.005);inp.classList.toggle('bad',!ok);inp.classList.toggle('good',ok);if(!ok)bad++});
-    if(!bad){b4.hidden=true;hint.hidden=true;slots.forEach(i=>i.disabled=true);if(t4===0)firstTry++;fb(s4,'تعويض صحيح. احسب الآن واكتب الناتج.','good');ansRow.hidden=false;ansRow.querySelector('.final').focus();return}
-    t4++;
-    if(t4>=2){slots.forEach(i=>{i.value=fmt(+i.dataset.v);i.classList.remove('bad');i.classList.add('fixed');i.disabled=true});b4.hidden=true;hint.hidden=true;fb(s4,'هذا هو التعويض الصحيح (باللون المميز). احسب الآن واكتب الناتج.','bad');ansRow.hidden=false;return}
-    fb(s4,'بعض القيم في غير مكانها أو غير صحيحة (باللون الأحمر). تأكد من الوحدات والتحويلات.','bad')};
+  s4.querySelector('.pbody').append(ansRow);
+  let t5=0;
   const fin=ansRow.querySelector('.final'),bF=ansRow.querySelector('button');
   const finish=(ok)=>{fin.disabled=true;bF.hidden=true;s4.classList.add(ok?'ok':'shown');s4.querySelector('.pstat').textContent=ok?'✓':'تم التصحيح';
     const sol=document.createElement('div');sol.className='ans';sol.innerHTML='الحل:<div class="eqblock">'+esc(p.s.replace(/\[([^\]]+)\]/g,(m,x)=>fmt(parseNum(x))))+' = '+esc(fmt(p.a[0]))+(p.a[1]?' '+esc(p.a[1]):'')+'</div>'+(p.n?'<br><span class="nt">'+inl(p.n)+'</span>':'');
     c.appendChild(sol);sol.appendChild(TTS.controls(()=>'الحل. '+p.s.replace(/\[([^\]]+)\]/g,(m,x)=>fmt(parseNum(x)))+' = '+fmt(p.a[0])+' '+p.a[1]+(p.n?'. '+p.n:''),{compact:true,label:'🔊 استمع للحل'}));c.classList.add('finished');onFinish&&onFinish(Math.min(firstTry,5),{q:p.q.slice(0,100),answer:fin.value,correct:ok,expected:p.a[0]})};
   bF.onclick=()=>{const v=parseNum(fin.value);
-    if(near(v,p.a[0],0.02)){if(t5===0)firstTry++;fb(s4,'إجابة صحيحة! أحسنت.','good');finish(true);return}
+    if(near(v,p.a[0],0.02)){if(t5===0)firstTry+=2;fb(s4,'إجابة صحيحة! أحسنت.','good');finish(true);return}
     t5++;
-    if(!isFinite(v)){t5--;fb(s4,'اكتب رقمًا فقط، مثل 12.5 أو 3e-6.','bad');return}
-    if(t5>=3){fb(s4,'الناتج الصحيح: <span class="eq">'+esc(fmt(p.a[0]))+' '+esc(p.a[1])+'</span>','bad');finish(false);return}
-    fb(s4,'الناتج غير صحيح. أعد الحساب بالآلة الحاسبة'+(t5===2?' (محاولة أخيرة)':'')+'.','bad')};
+    if(!isFinite(v)){t5--;fb(s4,'اكتب رقمًا فقط، مثل 12.5','bad');return}
+    if(t5>=3){fb(s4,'النتيجة الصحيحة: <span class="eq">'+esc(fmt(p.a[0]))+' '+esc(p.a[1])+'</span>','bad');finish(false);return}
+    fb(s4,'النتيجة غير صحيحة. أعد الحساب بالآلة الحاسبة'+(t5===2?' (محاولة أخيرة)':'')+'.','bad')};
   fin.addEventListener('keydown',e=>{if(e.key==='Enter')bF.click()});
   s1.hidden=false;
   return c;
@@ -860,7 +848,7 @@ function renderEx(v){
   const probs=(window.PROBS||{})[k],th=(window.THEORY||{})[k];
   i.insertAdjacentHTML('beforeend',TTS_HELP);
   if(probs&&probs.length){
-    const head=card('أمثلة وتمارين حسابية تفاعلية','حل كل مسألة بأربع خطوات: المعطيات ← المطلوب ← القانون ← التعويض والناتج. يُصحَّح كل جواب فورًا.');
+    const head=card('أمثلة وتمارين حسابية تفاعلية','حل كل مسألة بأربع خطوات: المعطيات ← المطلوب ← القانون ← النتيجة بالآلة الحاسبة. يُصحَّح كل جواب فورًا.');
     const prog=document.createElement('div');prog.className='score';head.appendChild(prog);i.appendChild(head);
     let fin=0,pts=0;const max=probs.length*5;
     const upd=()=>{prog.textContent=fin?`أنجزت ${AR(fin)} من ${AR(probs.length)} — الخطوات الصحيحة من أول محاولة: ${AR(pts)} من ${AR(max)}`:''};
