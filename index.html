@@ -501,7 +501,17 @@ const TTS=(()=>{
     return w+'\u0652'}
   function vocal(t){return t.replace(/[\u0621-\u064A\u064B-\u0652]+/g,w=>pausal(vocWord(w)))}
   /* التاء المربوطة في آخر الكلمة تُقرأ هاء، ونيوتن بتشكيل كامل */
-  function arFix(t){return t.replace(/ة[\u064B-\u0652]*(?![\u0621-\u064A\u064B-\u0652])/g,'هْ').replace(/نيوتن(?![\u064B-\u0652])/g,'نِيُوتِنْ')}
+  /* التاء المربوطة: هاء عند الوقف، وعند الوصل تاء بلا سكون ليختار القارئ حركتها، والمجرور قبل كلمة معرّفة يأخذ الكسرة */
+  const PREP=new Set(['في','على','من','إلى','الى','عن','حتى','مع','بين','عند','نحو']);
+  function isPrefixed(bare){const V=window.VOCAB||{};const m=bare.match(/^[وف]?([بلك])(.{3,})$/);return !!m&&!!(V[m[2]]||V['ال'+m[2]]||/^ال/.test(m[2]))}
+  function arFix(t){t=t.replace(/النيوتن(?![ً-ْ])/g,'النِّيُوتِنْ').replace(/نيوتن(?![ً-ْ])/g,'نِيُوتِنْ')
+    .replace(/ة[ً-ْ]*(?=\s*(?:[،؛؟.:!\n]|$))/g,'هْ').replace(/ةْ(?![ء-ي])/g,'ة');
+    const DI=/[ً-ْ]/g,W=t.split(/(\s+)/);
+    for(let j=0;j<W.length;j+=2){const w=W[j];if(!/ة$/.test(w)||j+2>=W.length)continue;
+      const bare=w.replace(DI,''),nx=(W[j+2]||'').replace(DI,''),pv=j>=2?W[j-2].replace(DI,''):'';
+      if(!/^[وف]?ال/.test(nx))continue;
+      if(PREP.has(pv)||isPrefixed(bare))W[j]=w+'ِ'}
+    return W.join('')}
   function parens(t){let prev;do{prev=t;t=t.replace(/\(([^()]*)\)/g,(m,inner)=>/[+×÷*\/·]|\s[−-]\s/.test(inner)?' قوس، '+inner+' ، إغلاق القوس، ':' '+inner+' ')}while(t!==prev);return t}
   function spoken(t){
     t=markN(t).replace(/Ｎ/g,' نيوتن ').replace(/(\d\s*)Pa\b/g,'$1 باسكال ').replace(/\bPa\b/g,' باسكال ');
@@ -544,7 +554,7 @@ const TTS=(()=>{
   const EN_WORD={KE:'kinetic energy',PE:'potential energy',ME:'mechanical energy',SI:'S I',DC:'D C',AC:'A C',LED:'L E D',GPS:'G P S',PhET:'fet',cos:'cosine',sin:'sine',tan:'tangent',max:'maximum',min:'minimum',total:'total',known:'known'};
   function enParens(t){let prev;do{prev=t;t=t.replace(/\(([^()]*)\)/g,(m,inner)=>/[+×÷*\/·]|\s[−-]\s/.test(inner)?' open bracket, '+inner+', close bracket, ':' '+inner+' ')}while(t!==prev);return t}
   /* N وحدةً (نيوتن) لا رمزًا للقوة العمودية */
-  function markN(t){t=t.replace(/\(\s*N\s*\)/g,'(Ｎ)').replace(/((?:وحدة|وحدته|وحدتها|بوحدة|الوحدة|النيوتن|بالنيوتن|نيوتن)[\s`:«»]*)N(?![A-Za-z0-9·\/=_])/g,'$1Ｎ').replace(/(^|[\s`])N(\s*=\s*kg)/g,'$1Ｎ$2');
+  function markN(t){t=t.replace(/((?:النيوتن|بالنيوتن|نيوتن)[\s:]*)`?\(?\s*N\s*\)?`?(?!\s*[A-Za-z0-9·\/=_²³])/g,'$1').replace(/\(\s*N\s*\)/g,'(Ｎ)').replace(/((?:وحدة|وحدته|وحدتها|بوحدة|الوحدة|النيوتن|بالنيوتن|نيوتن)[\s`:«»]*)N(?![A-Za-z0-9·\/=_])/g,'$1Ｎ').replace(/(^|[\s`])N(\s*=\s*kg)/g,'$1Ｎ$2');
     if(/^\s*`?N`?\s*$/.test(t))t=t.replace('N','Ｎ');return t}
   function spokenEn(t){
     const P=[];const ph=w=>{P.push(w);return ' \u0001'+(P.length-1)+'\u0002 '};
