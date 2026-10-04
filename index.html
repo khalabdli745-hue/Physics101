@@ -580,7 +580,7 @@ const TTS=(()=>{
 
   /* التشكيل الكامل (tashkeel.js): كل جملة/عبارة مشكّلة تشكيلًا تامًا بالإعراب؛ وما لم يوجد يُشكَّل بالقاموس */
   const TNORM=x=>x.replace(/[ً-ْٰـ]/g,'').replace(/\s+/g,' ').trim();
-  function waqf(v){return v.replace(/([ء-يً-ْ]+)([^ء-ي]*)$/,(m,w,tail)=>{w=w.replace(/ًا$|اً$/,'ا').replace(/[ً-ْ]+$/,'');return pausal(w)+tail})}
+  function waqf(v){return v.replace(/([ء-يً-ْ]+)([^ء-ي]*)$/,(m,w,tail)=>{w=w.replace(/ًا$|اً$/,'ا').replace(/[ً-ْ]+$/,m=>m.includes('\u0651')?'\u0651':'');return pausal(w)+tail})}
   function tvocal(t){const T=window.TASHKEEL||{};
     return t.split(/([.،؛:؟!\n]+)/).map((p,j)=>{if(j%2)return p;const k=TNORM(p);if(!k)return p;if(window.__arLog)window.__arLog.add(k);
       const v=T[k];if(!v)return vocal(p);const lead=p.match(/^\s*/)[0],trail=p.match(/\s*$/)[0];return lead+waqf(v)+trail}).join('')}
