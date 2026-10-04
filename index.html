@@ -467,6 +467,7 @@ sub.ss{font-size:.6em;line-height:0;vertical-align:-.25em}
 </div>
 <script src="config.js"></script>
 <script src="voc.js" defer></script>
+<script src="tashkeel.js" defer></script>
 <script src="data.js"></script>
 <script src="study.js"></script>
 <script src="quiz2.js"></script>
@@ -576,10 +577,17 @@ const TTS=(()=>{
   /* السكون للوقف فقط (قبل علامة ترقيم أو في آخر الجملة)، وفي وسط الجملة تُترك الحركة الأخيرة ليضبطها القارئ إعرابيًا */
   function vocal(t){return t.replace(/[\u0621-\u064A\u064B-\u0652]+/g,(w,o,str)=>{const v=vocWord(w);return /^\s*(?:[،؛؟.:!\n]|$)/.test(str.slice(o+w.length,o+w.length+3))?pausal(v):v.replace(/[\u064B-\u064D]/g,'')})}
   /* التاء المربوطة في آخر الكلمة تُقرأ هاء، ونيوتن بتشكيل كامل */
+
+  /* التشكيل الكامل (tashkeel.js): كل جملة/عبارة مشكّلة تشكيلًا تامًا بالإعراب؛ وما لم يوجد يُشكَّل بالقاموس */
+  const TNORM=x=>x.replace(/[ً-ْٰـ]/g,'').replace(/\s+/g,' ').trim();
+  function waqf(v){return v.replace(/([ء-يً-ْ]+)([^ء-ي]*)$/,(m,w,tail)=>{w=w.replace(/ًا$|اً$/,'ا').replace(/[ً-ْ]+$/,'');return pausal(w)+tail})}
+  function tvocal(t){const T=window.TASHKEEL||{};
+    return t.split(/([.،؛:؟!\n]+)/).map((p,j)=>{if(j%2)return p;const k=TNORM(p);if(!k)return p;if(window.__arLog)window.__arLog.add(k);
+      const v=T[k];if(!v)return vocal(p);const lead=p.match(/^\s*/)[0],trail=p.match(/\s*$/)[0];return lead+waqf(v)+trail}).join('')}
   /* التاء المربوطة: هاء عند الوقف، وعند الوصل تاء بلا سكون ليختار القارئ حركتها، والمجرور قبل كلمة معرّفة يأخذ الكسرة */
   const PREP=new Set(['في','على','من','إلى','الى','عن','حتى','مع','بين','عند','نحو']);
   function isPrefixed(bare){const V=window.VOCAB||{};const m=bare.match(/^[وف]?([بلك])(.{3,})$/);return !!m&&!!(V[m[2]]||V['ال'+m[2]]||/^ال/.test(m[2]))}
-  function arFix(t){t=t.replace(/ن[\u064B-\u0652]*ي[\u064B-\u0652]*و[\u064B-\u0652]*ت[\u064B-\u0652]*ن[\u064B-\u0652]*/g,(m,o,str)=>/ال[\u064B-\u0652]*$/.test(str.slice(Math.max(0,o-4),o))?'نْيُوتَنْ':'نِيُوتَنْ').replace(/(^|[^\u0621-\u064A\u064B-\u0652])([وف]?)لاحظ(?![\u0621-\u064A\u064B-\u0652])/g,'$1$2لاحِظ')
+  function arFix(t){t=t.replace(/ن[\u064B-\u0652]*ي[\u064B-\u0652]*و[\u064B-\u0652]*ت[\u064B-\u0652]*ن[\u064B-\u0652]*/g,(m,o,str)=>/ال[\u064B-\u0652]*$/.test(str.slice(Math.max(0,o-4),o))?'نْيُوتَنْ':'نِيُوتَنْ').replace(/(^|[^\u0621-\u064A\u064B-\u0652])([وف]?)لاحظ(?![\u0621-\u064A\u064B-\u0652])/g,'$1$2لاحِظ').replace(/(^|[^\u0621-\u064A\u064B-\u0652])([وف]?)قل(?![\u0621-\u064A\u064B-\u0652])/g,'$1$2قَلَّ').replace(/(^|[^\u0621-\u064A\u064B-\u0652])((?:[وفبلك][\u064B-\u0652]*)?(?:ا[\u064B-\u0652]*ل[\u064B-\u0652]*)?)و[\u064B-\u0652]*ح[\u064B-\u0652]*د(?=[\u064B-\u0652]*(?:ة|ت|ا|ه))/g,'$1$2وِحْد').replace(/(^|[^\u0621-\u064A\u064B-\u0652])((?:[وفبلك][\u064B-\u0652]*)?(?:ا[\u064B-\u0652]*ل[\u064B-\u0652]*)?)ش[\u064B-\u0652]*ح[\u064B-\u0652]*ن[\u064B-\u0652]*(?=ة|ت|ا)/g,(m,a,b)=>a+b+(/ل[\u064B-\u0652]*$/.test(b)&&/ا/.test(b)?'شُّحْنَ':'شُحْنَ')).replace(/(^|[^\u0621-\u064A\u064B-\u0652])((?:[وفبلك][\u064B-\u0652]*)?(?:ا[\u064B-\u0652]*ل[\u064B-\u0652]*)?)س[\u064B-\u0652]*ع[\u064B-\u0652]*(?=ة|ت)/g,(m,a,b)=>a+b+(/ل[\u064B-\u0652]*$/.test(b)&&/ا/.test(b)?'سِّعَ':'سِعَ')).replace(/(^|[^\u0621-\u064A\u064B-\u0652])((?:[وفبلك][\u064B-\u0652]*)?(?:ا[\u064B-\u0652]*ل[\u064B-\u0652]*)?)ح[\u064B-\u0652]*م[\u064B-\u0652]*ل[\u064B-\u0652]*(?![\u0621-\u064A])/g,'$1$2حَمْل')
     .replace(/ة[ً-ْ]*(?=\s*(?:[،؛؟.:!\n]|$))/g,'هْ').replace(/ةْ(?![ء-ي])/g,'ة');
     const DI=/[ً-ْ]/g,W=t.split(/(\s+)/);
     for(let j=0;j<W.length;j+=2){const w=W[j];if(!/ة$/.test(w)||j+2>=W.length)continue;
@@ -611,7 +619,7 @@ const TTS=(()=>{
       .replace(/θ/g,' ثيتا ').replace(/Δ/g,' دلتا ').replace(/[μµ]/g,' ميو ').replace(/ρ/g,' رو ').replace(/α/g,' ألفا ').replace(/σ/g,' سيجما ').replace(/ε/g,' إبسلون ').replace(/π/g,' باي ').replace(/Σ/g,' مجموع ').replace(/τ/g,' تاو ');
     t=t.replace(/(\d)([A-Za-z])/g,'$1 $2');
     t=t.replace(/\b[A-Za-z]{1,3}\b/g,w=>' '+w.split('').map(c=>LET[c.toLowerCase()]||c).join(' ')+' ');
-    t=arFix(vocal(t));
+    t=arFix(tvocal(t));
     t=t.replace(/[|]/g,' ').replace(/\s+([،.:؟])/g,'$1').replace(/\s+/g,' ');
     return t.trim();
   }
@@ -663,7 +671,7 @@ const TTS=(()=>{
     t=t.replace(/[|[\]{}"'`«»]/g,' ').replace(/\s+([,.:])/g,'$1').replace(/,(\s*,)+/g,',').replace(/\s+/g,' ');
     return t.trim().replace(/^[,.\s]+|[,\s]+$/g,'');
   }
-  function arPart(t){t=t.replace(/[←⇐]/g,'، إذن ').replace(/[→⇒]/g,' إلى ').replace(/[()«»]/g,' ').replace(/\s·\s|^\s*·|·\s*$/g,'، ').replace(/\s[—–]\s/g,'، ');t=arFix(vocal(t));return t.replace(/\s+([،.:؟])/g,'$1').replace(/\s+/g,' ')}
+  function arPart(t){t=t.replace(/[←⇐]/g,'، إذن ').replace(/[→⇒]/g,' إلى ').replace(/[()«»]/g,' ').replace(/\s·\s|^\s*·|·\s*$/g,'، ').replace(/\s[—–]\s/g,'، ');t=arFix(tvocal(t));return t.replace(/\s+([،.:؟])/g,'$1').replace(/\s+/g,' ')}
   const AR_CH=/[؀-ۿ]/;
   function segments(raw){
     let t=markN(raw).replace(/^#+\s*/gm,'').replace(/\*\*/g,'').replace(/`/g,'').replace(/^[-•]\s*/gm,'').replace(/[✓✗⚠️]/g,'').replace(/[✦⚗🔊■]/g,'');
@@ -813,13 +821,14 @@ function loadUnit(ui){
 
 
 /* اختبار نطق نيوتن بكسر التاء: افتح الرابط مع #voicetest */
-function voiceTest(){if(location.hash!=='#voicetest')return;
+function voiceTest(){if(!/voicetest/i.test(location.hash+location.search)||document.getElementById('vtCard'))return;
   const V=[['١','نْيُوتِن'],['٢','نيوتِن'],['٣','نِّيوتِن'],['٤','نيوتين'],['٥','نْيُوتِين'],['٦','نِيُوتِنِ'],['٧','نيوتِنِ']];
-  const c=document.createElement('div');c.className='card';c.style.cssText='margin:12px;border:3px solid var(--accent)';
-  c.innerHTML='<h2>🔊 اختبار نطق «النيوتِن» بكسر التاء</h2><p>كل زر يقرأ بصوت حامد: «كمية متجهة بوحدة النيوتن. وقانون نيوتن الثاني». أخبرني برقم الزر الذي يقرأها بكسر التاء كاملة.</p>';
+  const c=document.createElement('div');c.id='vtCard';c.className='card';c.style.cssText='position:fixed;top:10px;left:10px;right:10px;z-index:2000;border:3px solid #0B7A70;max-height:80vh;overflow:auto;box-shadow:0 10px 30px rgba(0,0,0,.35)';
+  c.innerHTML='<button type="button" onclick="this.parentNode.remove()" style="float:left;font-size:20px;background:none;border:0;cursor:pointer">✕</button><h2>🔊 اختبار نطق «النيوتِن» بكسر التاء</h2><p>كل زر يقرأ بصوت حامد: «كمية متجهة بوحدة النيوتن. وقانون نيوتن الثاني». أخبرني برقم الزر الذي يقرأها بكسر التاء كاملة.</p>';
   const w=document.createElement('div');w.style.cssText='display:flex;flex-wrap:wrap;gap:8px;margin:10px 0';
   V.forEach(([n,t])=>{const b=document.createElement('button');b.className='btn';b.textContent=n;b.onclick=()=>{TTS.setOV('ar-SA-HamedNeural');const bare=t.replace(/^نّ/,'ن');TTS.playRaw([{l:'ar',t:'كَمِّيَّة مُتَّجِهَة بِوَحْدَةِ ال'+t+'. وقانون '+bare+' الثّانِي.'}],b)};w.appendChild(b)});
-  c.appendChild(w);const app=$('app');app.insertBefore(c,app.firstChild);c.scrollIntoView()}
+  c.appendChild(w);document.body.appendChild(c)}
+addEventListener('hashchange',voiceTest);
 function render(){
   try{$('aiLink').href=CLAUDE_URL+'#l='+key(pos.u,pos.l)}catch(e){}
   $('app').dataset.unit=pos.t==='refs'?'0':String(pos.u);
