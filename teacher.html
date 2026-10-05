@@ -478,7 +478,7 @@ async function drawTrainer(m,ctl,st,sec,secLabel,today,n,logged){
     try{const r=await api({a:'tlog',token:TOKEN});if(!r.ok){m.innerHTML=ctl+`<p class="empty">${r.error==='unknown_action'?'هذه الميزة تحتاج تحديث كود الخادم (code.gs) ونشر إصدار جديد.':esc(errText(r.error))}</p>`;bindT();return}TLOG=r}
     catch(e){m.innerHTML=ctl+'<p class="empty">تعذّر الاتصال بالخادم.</p>';bindT();return}
     if(tab!=='reports'||RPL!=='trainer')return}
-  const P=Object.assign({name:'خليل موسى المالكي',course:'فيزياء ١٠١'},TLOG.profile||{});
+  const P=Object.assign({name:'خليل موسى المالكي',course:'الفيزياء العامة ١٠١'},TLOG.profile||{});
   const log=TLOG.log.filter(x=>sec==='all'||!x.sectionId||x.sectionId===sec).sort((a,b)=>a.date<b.date?1:-1);
   const covered=new Set(log.map(x=>x.lessonKey)),hrs=log.reduce((a,x)=>a+x.hours,0),cov=Math.round(covered.size/TOTAL*100);
   const T=TLOG.totals||{};
@@ -488,7 +488,7 @@ async function drawTrainer(m,ctl,st,sec,secLabel,today,n,logged){
   const dToday=new Date(),iso=`${dToday.getFullYear()}-${String(dToday.getMonth()+1).padStart(2,'0')}-${String(dToday.getDate()).padStart(2,'0')}`;
   const lessonOpts=UNITS.map((u,ui)=>`<optgroup label="الوحدة ${ORD[ui]}">${u.l.map((l,li)=>l.hide?'':`<option value="${ui}-${li}">${esc(l.t)}${covered.has(ui+'-'+li)?' ✓':''}</option>`).join('')}</optgroup>`).join('');
   const field=(k,lab,ph)=>`<label>${lab}<input id="pf_${k}" value="${esc(P[k]||'')}" placeholder="${ph||''}"></label>`;
-  const html=`<div class="rp-hero"><small>تقرير إنجاز المدرب — ${esc(P.course||'فيزياء ١٠١')}${P.term?' · '+esc(P.term):''}</small><h2>${esc(P.name||'المدرب')}</h2><div class="meta">${[P.college,P.dept].filter(Boolean).map(esc).join(' · ')}${P.college||P.dept?' · ':''}${esc(secLabel)} · ${today}</div></div>
+  const html=`<div class="rp-hero"><small>تقرير إنجاز المدرب — ${esc(P.course||'الفيزياء العامة ١٠١')}${P.term?' · '+esc(P.term):''}</small><h2>${esc(P.name||'المدرب')}</h2><div class="meta">${[P.college,P.dept].filter(Boolean).map(esc).join(' · ')}${P.college||P.dept?' · ':''}${esc(secLabel)} · ${today}</div></div>
   <div class="card rp-edit"><h2>بيانات التقرير</h2><p class="sub">تظهر في رأس التقرير المطبوع. تُحفظ مرة واحدة.</p><div class="rp-form">${field('name','اسم المدرب')}${field('college','الكلية / المنشأة','الكلية التقنية بـ…')}${field('dept','القسم','العلوم العامة')}${field('course','المقرر')}${field('term','الفصل التدريبي','الأول 1448هـ')}${field('head','رئيس القسم')}</div><div class="row" style="margin-top:8px"><button class="btn sm" id="pfs">حفظ البيانات</button></div></div>
   <h3 style="margin:4px 0 8px">📦 المحتوى الذي أعدّه المدرب على المنصة</h3>
   <div class="rp-kpis">${kpi('📘','دروس تفاعلية',AR(CONTENT.lessons),'ملخص وشرح صوتي لكل درس')}${kpi('📝','أسئلة اختبارات',AR(CONTENT.quiz),'اختيار من متعدد')}${kpi('🧮','مسائل حسابية تفاعلية',AR(CONTENT.probs),'بأربع خطوات')}${kpi('🎲','مولّدات تمارين متجددة',AR(CONTENT.gens),'تمارين لا تنتهي')}${kpi('💡','أمثلة محلولة',AR(CONTENT.examples))}${kpi('🖼️','رسوم توضيحية',AR(CONTENT.figs))}${kpi('📋','جداول تعليمية',AR(CONTENT.tables))}${kpi('🔬','تجارب ومحاكاة',AR(CONTENT.sims),'PhET بالعربية')}${kpi('📄','صفحات الحقيبة',AR(CONTENT.pages))}</div>

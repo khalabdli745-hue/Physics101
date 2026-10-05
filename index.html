@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>فيزياء ١٠١ — منصة الشرح التفاعلي</title>
-<meta name="description" content="منصة مجانية لشرح حقيبة فيزياء ١٠١: صفحات الحقيبة، ملخصات، أمثلة محلولة، اختبارات، شرح صوتي بالعربية وتجارب تفاعلية">
-<meta name="theme-color" content="#0B7A70">
+<meta name="description" content="منصة مجانية لشرح حقيبة الفيزياء العامة ١٠١: صفحات الحقيبة، ملخصات، أمثلة محلولة، اختبارات، شرح صوتي بالعربية وتجارب تفاعلية">
+<meta name="theme-color" content="#0369A1">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-180.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -16,16 +16,16 @@
 <style>
 :root{
   --paper:#F7F8FA;--panel:#FFFFFF;--ink:#172033;--muted:#5B6479;--line:#DDE2EA;--grid:#E6EAF1;--soft:#EEF2F6;
-  --accent:#0B7A70;--accent-soft:#E0F2EF;--accent-ink:#FFFFFF;--fig2:#3559B5;--warnc:#C4542B;--good:#1E7A3C;--bad:#B42330;
+  --accent:#0369A1;--accent-soft:#E0F2FE;--accent-ink:#FFFFFF;--fig2:#3559B5;--warnc:#C4542B;--good:#1E7A3C;--bad:#B42330;
   --pageFilter:none;color-scheme:light;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --paper:#11151D;--panel:#181D27;--ink:#E7EAF0;--muted:#9AA3B5;--line:#2A3140;--grid:#1B212C;--soft:#222935;
-  --accent:#3CC2B2;--accent-soft:#16312F;--accent-ink:#0B1413;--fig2:#7D9BEA;--warnc:#F08A62;--good:#5FCB85;--bad:#F2737E;
+  --accent:#38BDF8;--accent-soft:#0C2A3D;--accent-ink:#04121C;--fig2:#7D9BEA;--warnc:#F08A62;--good:#5FCB85;--bad:#F2737E;
   --pageFilter:invert(.9) hue-rotate(180deg);color-scheme:dark;}}
 :root[data-theme="dark"]{
   --paper:#11151D;--panel:#181D27;--ink:#E7EAF0;--muted:#9AA3B5;--line:#2A3140;--grid:#1B212C;--soft:#222935;
-  --accent:#3CC2B2;--accent-soft:#16312F;--accent-ink:#0B1413;--fig2:#7D9BEA;--warnc:#F08A62;--good:#5FCB85;--bad:#F2737E;
+  --accent:#38BDF8;--accent-soft:#0C2A3D;--accent-ink:#04121C;--fig2:#7D9BEA;--warnc:#F08A62;--good:#5FCB85;--bad:#F2737E;
   --pageFilter:invert(.9) hue-rotate(180deg);color-scheme:dark;}
 *,*::before,*::after{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -316,22 +316,22 @@ details.card summary{cursor:pointer}
 .credit{text-align:center;font-size:13px;color:var(--muted);padding:14px 10px 6px;line-height:1.6}
 .credit b{color:var(--accent);font-weight:600}
 /* ---------- ألوان الوحدات ---------- */
-.app[data-unit="0"]{--accent:#0B7A70;--accent-soft:#DDF2EE;--u2:#0E9384}
+.app[data-unit="0"]{--accent:#0369A1;--accent-soft:#E0F2FE;--u2:#0284C7}
 .app[data-unit="1"]{--accent:#C2410C;--accent-soft:#FFEDD5;--u2:#EA580C}
 .app[data-unit="2"]{--accent:#BE123C;--accent-soft:#FFE4E9;--u2:#E11D48}
-.app[data-unit="3"]{--accent:#6D28D9;--accent-soft:#EDE7FE;--u2:#8B5CF6}
+.app[data-unit="3"]{--accent:#0B7A70;--accent-soft:#DDF2EE;--u2:#0E9384}
 .app[data-unit="4"]{--accent:#1D4ED8;--accent-soft:#DFE9FF;--u2:#3B82F6}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .app[data-unit="0"]{--accent:#3CC2B2;--accent-soft:#143431;--u2:#5EEAD4}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .app[data-unit="0"]{--accent:#38BDF8;--accent-soft:#0C2A3D;--u2:#7DD3FC}
 :root:not([data-theme="light"]) .app[data-unit="1"]{--accent:#FB923C;--accent-soft:#3A2414;--u2:#FDBA74}
 :root:not([data-theme="light"]) .app[data-unit="2"]{--accent:#FB7185;--accent-soft:#3B1820;--u2:#FDA4AF}
-:root:not([data-theme="light"]) .app[data-unit="3"]{--accent:#A78BFA;--accent-soft:#2A2145;--u2:#C4B5FD}
+:root:not([data-theme="light"]) .app[data-unit="3"]{--accent:#3CC2B2;--accent-soft:#143431;--u2:#5EEAD4}
 :root:not([data-theme="light"]) .app[data-unit="4"]{--accent:#60A5FA;--accent-soft:#16264A;--u2:#93C5FD}}
-:root[data-theme="dark"] .app[data-unit="0"]{--accent:#3CC2B2;--accent-soft:#143431;--u2:#5EEAD4}
+:root[data-theme="dark"] .app[data-unit="0"]{--accent:#38BDF8;--accent-soft:#0C2A3D;--u2:#7DD3FC}
 :root[data-theme="dark"] .app[data-unit="1"]{--accent:#FB923C;--accent-soft:#3A2414;--u2:#FDBA74}
 :root[data-theme="dark"] .app[data-unit="2"]{--accent:#FB7185;--accent-soft:#3B1820;--u2:#FDA4AF}
-:root[data-theme="dark"] .app[data-unit="3"]{--accent:#A78BFA;--accent-soft:#2A2145;--u2:#C4B5FD}
+:root[data-theme="dark"] .app[data-unit="3"]{--accent:#3CC2B2;--accent-soft:#143431;--u2:#5EEAD4}
 :root[data-theme="dark"] .app[data-unit="4"]{--accent:#60A5FA;--accent-soft:#16264A;--u2:#93C5FD}
-.unit[data-u="0"] .num{--c:#0B7A70}.unit[data-u="1"] .num{--c:#C2410C}.unit[data-u="2"] .num{--c:#BE123C}.unit[data-u="3"] .num{--c:#6D28D9}.unit[data-u="4"] .num{--c:#1D4ED8}
+.unit[data-u="0"] .num{--c:#0369A1}.unit[data-u="1"] .num{--c:#C2410C}.unit[data-u="2"] .num{--c:#BE123C}.unit[data-u="3"] .num{--c:#0B7A70}.unit[data-u="4"] .num{--c:#1D4ED8}
 .unit .num{border-color:var(--c,var(--accent));color:var(--c,var(--accent))}
 .unit.open .num{background:var(--c,var(--accent));color:#fff}
 .lessonHead{background:linear-gradient(120deg,var(--accent-soft) 0%,var(--panel) 75%);border-top:4px solid var(--accent)}
