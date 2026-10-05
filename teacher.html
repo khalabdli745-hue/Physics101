@@ -462,7 +462,7 @@ async function drawReports(){
     $('#rps').onchange=e=>{secFilter=e.target.value;ls.set('p101-tsec',secFilter);drawReports()};
     $('#rpl').onchange=e=>{RPL=e.target.value;ls.set('p101-rpl',RPL);drawReports();scrollTo(0,0)};
     $('#rpr').onclick=async()=>{STATS=null;await load()};
-    $('#rpp').onclick=()=>print();
+    $('#rpp').onclick=printReport;
     $('#rpx').onclick=()=>xls&&saveBook(xls,'تقرير-'+(RPL==='all'?'الشعبة':LT[RPL]).replace(/[\\/:*?"<>|]/g,'')+'-'+(sec==='all'?'كل-الشعب':secName(sec))+'.xlsx');
     m.querySelectorAll('.rp-tile').forEach(b=>b.onclick=()=>{RPL=b.dataset.k;ls.set('p101-rpl',RPL);drawReports();scrollTo(0,0)});
     m.querySelectorAll('[data-id]').forEach(t=>t.onclick=()=>openStudent(t.dataset.id));
@@ -509,7 +509,7 @@ async function drawTrainer(m,ctl,st,sec,secLabel,today,n,logged){
     $('#rps').onchange=e=>{secFilter=e.target.value;ls.set('p101-tsec',secFilter);drawReports()};
     $('#rpl').onchange=e=>{RPL=e.target.value;ls.set('p101-rpl',RPL);drawReports();scrollTo(0,0)};
     $('#rpr').onclick=async()=>{STATS=null;TLOG=null;await load()};
-    $('#rpp').onclick=()=>print();
+    $('#rpp').onclick=printReport;
     $('#rpx').onclick=()=>{if(!TLOG)return;saveBook([
       ['إنجاز المدرب',[['البند','القيمة'],['المدرب',P.name||''],['الكلية',P.college||''],['القسم',P.dept||''],['المقرر',P.course||''],['الفصل',P.term||''],['الشعبة',secLabel],['دروس تفاعلية',CONTENT.lessons],['أسئلة اختبارات',CONTENT.quiz],['مسائل تفاعلية',CONTENT.probs],['مولدات تمارين',CONTENT.gens],['رسوم توضيحية',CONTENT.figs],['جداول تعليمية',CONTENT.tables],['تجارب ومحاكاة',CONTENT.sims],['متدربون مستفيدون',n],['دخلوا المنصة',logged],['مرات الدخول',T.logins||0],['محاولات الحل',T.results||0],['أسئلة المساعد',T.questions||0],['متوسط المعدل %',avgOv==null?'':Math.round(avgOv)],['إنجاز الدروس %',compl],['الدروس المنفذة في التدريب',covered.size],['تغطية المقرر %',cov],['عدد اللقاءات',log.length],['الساعات التدريبية',hrs]],[26,34]],
       ['سجل اللقاءات',[['التاريخ','الوحدة','الدرس','الشعبة','الساعات','التنفيذ','ملاحظات'],...log.map(x=>[x.date,'الوحدة '+(ORD[+x.lessonKey.split('-')[0]]||''),LT[x.lessonKey]||x.lessonKey,x.sectionId?secName(x.sectionId):'',x.hours,x.method,x.notes])],[12,14,34,14,8,16,40]]
@@ -531,6 +531,20 @@ function drawSections(){
 }
 
 /* ---------- Excel ---------- */
+
+/* الطباعة لا تعمل داخل تطبيق الشاشة الرئيسية في الآيفون؛ نوجّه المدرب إلى Safari */
+function printReport(){
+  const standalone=navigator.standalone||matchMedia('(display-mode: standalone)').matches;
+  if(!standalone){print();return}
+  const url=location.origin+location.pathname;
+  const d=document.createElement('div');d.className='drawer';
+  d.innerHTML=`<div role="dialog" aria-label="حفظ التقرير PDF" style="max-width:460px;margin:auto;align-self:center"><div class="dhead"><div><h2>📄 حفظ التقرير PDF</h2></div><button class="x" aria-label="إغلاق">✕</button></div>
+  <div style="padding:14px 16px;line-height:1.9"><p>الطباعة وحفظ PDF لا يعملان داخل أيقونة المنصة على الشاشة الرئيسية. افتح لوحة المدرب في <b>Safari</b>:</p>
+  <ol style="padding-inline-start:1.3em;margin:6px 0"><li>انسخ الرابط بالزر أدناه.</li><li>افتح Safari والصق الرابط، ثم سجّل الدخول.</li><li>افتح التقارير واضغط «طباعة / PDF»، ثم اختر <b>حفظ في الملفات</b> أو شارك الملف.</li></ol>
+  <div class="row" style="margin-top:10px"><input readonly value="${url}" style="flex:1;direction:ltr" id="prU"><button class="btn sm" id="prC">نسخ الرابط</button></div></div></div>`;
+  document.body.appendChild(d);const close=()=>d.remove();d.onclick=e=>{if(e.target===d)close()};d.querySelector('.x').onclick=close;
+  d.querySelector('#prC').onclick=async()=>{const i=d.querySelector('#prU');try{await navigator.clipboard.writeText(url);toast('تم نسخ الرابط')}catch(e){i.select();document.execCommand('copy');toast('تم نسخ الرابط')}};
+}
 function saveBook(sheets,name){try{EXCEL.write(sheets,name);toast('تم إنشاء الملف: '+name)}catch(e){toast('تعذّر إنشاء ملف Excel.')}return Promise.resolve()}
 const HEAD={id:['الرقم التدريبي','الرقم','رقم المتدرب','رقم','id','ID','student id','StudentID','الرقم الأكاديمي','رقم الهوية'],name:['الاسم','اسم المتدرب','الاسم الكامل','name','Name','student name'],section:['الشعبة','الشعبه','رقم الشعبة','section','Section','class','المجموعة']};
 const norm=s=>String(s||'').trim().toLowerCase().replace(/[ـ]/g,'');
