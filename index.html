@@ -169,6 +169,8 @@ table.lt tbody tr:nth-child(even) td{background:var(--accent-soft)}
 .rate .rlab{font-size:14px;color:var(--muted);margin:8px 0 4px;font-weight:700}
 .rate .chips{display:flex;flex-wrap:wrap;gap:6px}
 .rate textarea{width:100%;box-sizing:border-box;border:1.5px solid var(--line);border-radius:10px;padding:8px;font:inherit;background:var(--paper);color:var(--ink);min-height:54px;margin-top:4px}
+.rate .r3{border-bottom:1px solid var(--line);padding:6px 0}.rate .r3 .rq{margin:0;text-align:center}.rate .r3 .stars{margin:2px 0 4px}
+.rate .r3d{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--line);font-weight:700}.rate .r3d span:last-child{font-size:20px;direction:ltr}
 .rate .rmsg{margin-top:8px;font-weight:700}.rate .rmsg.good{color:var(--good)}.rate .rmsg.bad{color:var(--bad)}
 .rate .rdone{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .board .rate{margin-top:14px;text-align:right}
@@ -449,6 +451,8 @@ sub.ss{font-size:.6em;line-height:0;vertical-align:-.25em}
         <button role="tab" data-t="ex">أمثلة وتمارين تفاعلية</button>
         <button role="tab" data-t="quiz">اختبر نفسك</button>
         <button role="tab" data-t="lab">تجارب وتطبيقات</button>
+        <button role="tab" data-t="rate">⭐ قيّم الدرس</button>
+        <button role="tab" data-t="survey">📝 استبانة الرضا</button>
       </div>
     </div>
     <div class="view" id="view"></div>
@@ -856,20 +860,21 @@ function render(){
   const u=UNITS[pos.u],l=lesson();
   const refs=GT(pos.t);
   $('crumb').textContent=refs?'المقرر كاملًا':`الوحدة ${ORD[pos.u]} · ${u.t}`;
-  $('lessonTitle').textContent=refs?(pos.t==='survey'?'استبانة رضا المتدرب':'المراجع العربية والمصادر'):l.t;
+  $('lessonTitle').textContent=refs?'المراجع العربية والمصادر':l.t;
   $('doneBtn').hidden=refs;$('tabs').hidden=refs;
   const isDone=done.has(key(pos.u,pos.l));
   $('doneBtn').setAttribute('aria-pressed',isDone);$('doneBtn').textContent=isDone?'✓ مكتمل':'أنهيت الدرس';
   document.querySelectorAll('#tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.t===pos.t));
+  try{const sel=document.querySelector('#tabs button[aria-selected="true"]');if(sel)sel.scrollIntoView({block:'nearest',inline:'nearest'})}catch(e){}
   $('pager').hidden=pos.t!=='page';
   const v=$('view');v.scrollTop=0;
-  ({sum:renderSum,page:renderPage,ex:renderEx,quiz:renderQuiz,lab:renderLab,refs:renderRefs,survey:renderSurvey}[pos.t]||renderSum)(v);
+  ({sum:renderSum,page:renderPage,ex:renderEx,quiz:renderQuiz,rate:renderRate,lab:renderLab,refs:renderRefs,survey:renderSurvey}[pos.t]||renderSum)(v);
   TTS.refreshNotes();
   store.set('p101-pos',pos);
 }
 function card(title,sub){const c=document.createElement('div');c.className='card';c.innerHTML=`<h2>${title}</h2>${sub?`<p class="sub">${sub}</p>`:''}`;return c}
 function wrap(v){v.innerHTML='';const i=document.createElement('div');i.className='inner';v.appendChild(i);return i}
-const GT=t=>t==='refs'||t==='survey';
+const GT=t=>t==='refs';
 /* ---------- استبانة رضا المتدرب ---------- */
 const SURVEY=[['الدروس والشرح',['محتوى الدروس واضح ومنظم','الشرح على السبورة مع المدرب الذكي ساعدني على الفهم','الصوت ونطق المصطلحات واضح','صفحات الحقيبة في المنصة مفيدة']],
  ['الأمثلة والتمارين',['الأمثلة المحلولة واضحة ومفيدة','خطوات الحل (المعطيات ← المطلوب ← القانون ← النتيجة) ساعدتني على حل المسائل','الآلة الحاسبة العلمية سهلة الاستخدام','التمارين التفاعلية مناسبة لمستواي']],
@@ -926,6 +931,33 @@ function rateCard(stage,k,title){
   const done_=(n,fresh)=>{c.innerHTML=`<div class="rdone"><b>${fresh?'✓ شكرًا، وصل تقييمك للمدرب.':'قيّمت هذا سابقًا:'}</b><span style="color:#F5B301;font-size:20px">${'★'.repeat(n)}</span><span style="color:var(--line);font-size:20px">${'★'.repeat(5-n)}</span><button type="button" class="btn ghost sm">تعديل التقييم</button></div>`;c.querySelector('button').onclick=form};
   if(saved[sk])done_(saved[sk],false);else form();
   return c}
+/* تبويب «قيّم الدرس»: تقييم واحد يشمل الشرح والأمثلة والاختبار */
+const RATE3=[['board','شرح الدرس على السبورة'],['ex','الأمثلة والتمارين التفاعلية'],['quiz','اختبر نفسك']];
+function rateLink(){const r=document.createElement('div');r.className='btnrow';const b=document.createElement('button');b.className='btn';b.textContent='⭐ قيّم الدرس';b.onclick=()=>setTab('rate');r.appendChild(b);return r}
+function renderRate(v){
+  const i=wrap(v),k=key(pos.u,pos.l),title=lesson().t,c=document.createElement('div');c.className='card rate';i.appendChild(c);
+  const form=()=>{const sv=store.get('p101-rate',{}),st={};RATE3.forEach(([g])=>st[g]=sv[g+':'+k]||0);let level=store.get('p101-ratelv',{})[k]||'';
+    c.innerHTML=`<h2>⭐ قيّم الدرس</h2><p class="sub">قيّم الدرس كاملًا من خمس نجوم، ويصل تقييمك إلى المدرب لتطوير المنصة.</p>`+
+      RATE3.map(([g,t])=>`<div class="r3" data-g="${g}"><p class="rq">${t}</p><div class="stars" role="radiogroup" aria-label="${t}: التقييم من خمس نجوم">${[1,2,3,4,5].map(n=>`<button type="button" data-n="${n}" aria-label="${n} من 5">★</button>`).join('')}</div></div>`).join('')+
+      `<div class="rlab">مستوى صعوبة الدرس</div><div class="chips lv">${['سهل','متوسط','صعب'].map(x=>`<button type="button" class="chip" aria-pressed="${x===level}">${x}</button>`).join('')}</div>`+
+      `<div class="rlab">ملاحظة (اختياري)</div><textarea maxlength="500" placeholder="اكتب ملاحظتك للمدرب…"></textarea><div class="btnrow"><button type="button" class="btn rsend">إرسال التقييم</button></div><div class="rmsg" aria-live="polite"></div>`;
+    const sb=c.querySelector('.rsend'),msg=c.querySelector('.rmsg');
+    const paint=()=>{c.querySelectorAll('.r3').forEach(r=>r.querySelectorAll('.stars button').forEach(b=>b.classList.toggle('on',+b.dataset.n<=st[r.dataset.g])));const m=RATE3.filter(([g])=>!st[g]).length;sb.textContent=m?`إرسال التقييم (بقي ${AR(m)})`:'إرسال التقييم'};paint();
+    c.querySelectorAll('.r3').forEach(r=>r.querySelectorAll('.stars button').forEach(b=>b.onclick=()=>{st[r.dataset.g]=+b.dataset.n;paint()}));
+    c.querySelectorAll('.lv .chip').forEach(b=>b.onclick=()=>{c.querySelectorAll('.lv .chip').forEach(x=>x.setAttribute('aria-pressed','false'));b.setAttribute('aria-pressed','true');level=b.textContent});
+    sb.onclick=()=>{if(RATE3.some(([g])=>!st[g])){msg.className='rmsg bad';msg.textContent='اختر النجوم للأقسام الثلاثة قبل الإرسال.';return}
+      sb.disabled=true;msg.className='rmsg';msg.textContent='جارٍ الإرسال…';const note=c.querySelector('textarea').value.trim();
+      const ok=()=>{const s2=store.get('p101-rate',{});RATE3.forEach(([g])=>s2[g+':'+k]=st[g]);store.set('p101-rate',s2);const lv=store.get('p101-ratelv',{});lv[k]=level;store.set('p101-ratelv',lv);done_(true)};
+      const fail=e=>{sb.disabled=false;msg.className='rmsg bad';msg.textContent=e==='auth'?'انتهت الجلسة، سجّل الدخول من جديد.':e==='net'?'تعذّر الاتصال. تحقق من الإنترنت ثم حاول مرة أخرى.':'تعذّر إرسال التقييم، حاول مرة أخرى.'};
+      if(!API||!AUTH||AUTH.demo){ok();return}
+      Promise.all(RATE3.map(([g])=>SYNC.post({a:'rate',token:AUTH.token,stage:g,lessonKey:k,lessonTitle:title,stars:st[g],level:g==='board'?'':level,tags:[],note:g==='quiz'?note:''})))
+        .then(rs=>{const bad=rs.find(r=>!r.ok);bad?fail(bad.error):ok()}).catch(()=>fail('net'))}};
+  const done_=fresh=>{const sv=store.get('p101-rate',{});
+    c.innerHTML=`<h2>⭐ قيّم الدرس</h2><div class="rdone"><b>${fresh?'✓ شكرًا، وصل تقييمك للمدرب.':'قيّمت هذا الدرس سابقًا:'}</b></div>`+RATE3.map(([g,t])=>{const n=sv[g+':'+k]||0;return `<div class="r3d"><span>${t}</span><span><span style="color:#F5B301">${'★'.repeat(n)}</span><span style="color:var(--line)">${'★'.repeat(5-n)}</span></span></div>`}).join('')+
+      `<div class="btnrow"><button type="button" class="btn ghost sm" id="rEdit">تعديل التقييم</button>${store.get('p101-survey',null)?'':'<button type="button" class="btn sm" id="rSv">📝 استبانة رضا المتدرب</button>'}</div>`;
+    c.querySelector('#rEdit').onclick=form;const sv2=c.querySelector('#rSv');if(sv2)sv2.onclick=()=>setTab('survey')};
+  const sv=store.get('p101-rate',{});RATE3.every(([g])=>sv[g+':'+k])?done_(false):form();
+}
 function nextLessonBtn(i){
   const r=document.createElement('div');r.className='btnrow';
   const nx=nextLesson();
@@ -998,7 +1030,6 @@ function openBoard(){
     else if(sl.type==='q'){const q=sl.q;h=`<div class="bQ"><div class="bQh">🙋 سؤال للمتدرب</div><p class="bQq">${inl(q.q)}</p><div class="bOpts">${q.o.map((o,j)=>`<button type="button" data-j="${j}">${inl(o)}</button>`).join('')}</div><div class="bQf" aria-live="polite"></div></div>`}
     else{h=(sl.title?`<h2 class="bH">${inl(sl.title)}</h2>`:'')+sl.steps.map((x,j)=>`<div class="bStep${j<step?' in':''}">${x.html?x.html:x.h!==undefined?'<h3>'+inl(x.h)+'</h3>':md(x.md)}</div>`).join('')}
     ct.innerHTML=h;
-    if(sl.type==='e')ct.appendChild(rateCard('board',key(pos.u,pos.l),l.t));
     if(sl.type==='q'){const q=sl.q,f=ct.querySelector('.bQf');let tries=0;ct.querySelectorAll('.bOpts button').forEach(b=>b.onclick=()=>{if(ct.querySelector('.bOpts').dataset.done)return;const j=+b.dataset.j;
       if(j===q.a){b.classList.add('ok');ct.querySelector('.bOpts').dataset.done=1;f.className='bQf good';f.innerHTML='✓ إجابة صحيحة! '+(q.w?inl(q.w):'');step=1}
       else{tries++;b.classList.add('no');b.disabled=true;if(tries>=2){ct.querySelector('.bOpts').dataset.done=1;ct.querySelectorAll('.bOpts button')[q.a].classList.add('ok');f.className='bQf bad';f.innerHTML='الإجابة الصحيحة مظللة بالأخضر. '+(q.w?inl(q.w):'');step=1}else{f.className='bQf bad';f.textContent='ليست هذه، فكّر مرة أخرى.'}}})}
@@ -1365,7 +1396,7 @@ function renderEx(v){
     const prog=document.createElement('div');prog.className='score';head.appendChild(prog);i.appendChild(head);
     let fin=0,pts=0;const max=probs.length*5;
     const upd=()=>{prog.textContent=fin?`أنجزت ${AR(fin)} من ${AR(probs.length)} — الخطوات الصحيحة من أول محاولة: ${AR(pts)} من ${AR(max)}`:''};
-    probs.forEach((p,n)=>i.appendChild(problemCard(p,n===0?'مثال تفاعلي':'تمرين حسابي '+AR(n),(sc,det)=>{fin++;pts+=sc;upd();SYNC.result('prob',k+'.'+n,lesson().t,sc,5,det);if(fin===probs.length){const b=best['p'+k];if(b==null||pts>b){best['p'+k]=pts;store.set('p101-best',best)}rslot.appendChild(rateCard('ex',k,lesson().t))}})));
+    probs.forEach((p,n)=>i.appendChild(problemCard(p,n===0?'مثال تفاعلي':'تمرين حسابي '+AR(n),(sc,det)=>{fin++;pts+=sc;upd();SYNC.result('prob',k+'.'+n,lesson().t,sc,5,det);if(fin===probs.length){const b=best['p'+k];if(b==null||pts>b){best['p'+k]=pts;store.set('p101-best',best)}rslot.appendChild(rateLink())}})));
     const rslot=document.createElement('div');i.appendChild(rslot);
     if(s&&s.ex){const d=document.createElement('details');d.className='card';d.innerHTML='<summary><b>مثال محلول للمراجعة</b></summary>';d.appendChild(TTS.controls(()=>'مثال محلول. '+s.ex.q+'\nالحل.\n'+s.ex.st.join('\n')+'\nالإجابة: '+s.ex.a,{compact:true,label:'🔊 استمع للمثال'}));
       d.insertAdjacentHTML('beforeend','<p class="pq">'+inl(s.ex.q)+'</p>'+(s.ex.fig&&FIGS[s.ex.fig]?FIGS[s.ex.fig]:'')+'<ol class="steps">'+s.ex.st.map(x=>'<li>'+inl(x)+'</li>').join('')+'</ol><div class="ans">'+inl(s.ex.a)+'</div>');i.appendChild(d)}
@@ -1452,7 +1483,7 @@ function renderQuiz(v){
           SYNC.result('quiz',k,lesson().t,right,qs.length,qs.map((qq,n)=>({q:qq.q.slice(0,80),chosen:chosen[n]!=null?qq.o[chosen[n]].slice(0,60):'',ok:chosen[n]===qq.a})));
           if(right===qs.length&&!done.has(k))SYNC.result('done',k,lesson().t,1,1);
           if(right===qs.length&&!done.has(k)){done.add(k);store.set('p101-done',[...done]);buildNav();updateProgress();$('doneBtn').setAttribute('aria-pressed',true);$('doneBtn').textContent='✓ مكتمل'}
-          rb.hidden=false;i.insertBefore(rateCard('quiz',k,lesson().t),r);
+          rb.hidden=false;i.insertBefore(rateLink(),r);
         }};
       opts.appendChild(b)});
     i.appendChild(d);
