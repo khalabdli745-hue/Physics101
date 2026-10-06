@@ -160,6 +160,18 @@ table.lt tbody tr:nth-child(even) td{background:var(--accent-soft)}
 .pstep.ok .pstat{color:var(--good);font-weight:700}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
 .chip,.opts button{unicode-bidi:plaintext}
+.rate{border-top:4px solid var(--accent)}
+.svq{padding:8px 0;border-bottom:1px solid var(--line)}.svq:last-child{border-bottom:0}.svq .rq{font-size:15.5px;font-weight:700;margin:0 0 6px}.svq .chip{font-size:13.5px;padding:5px 10px}
+.rate .rq{font-weight:800;font-size:17px;margin:0 0 8px}
+.rate .stars{display:flex;gap:6px;direction:ltr;justify-content:center;margin:4px 0 10px}
+.rate .stars button{background:none;border:0;font-size:34px;line-height:1;color:var(--line);cursor:pointer;padding:2px}
+.rate .stars button.on{color:#F5B301}
+.rate .rlab{font-size:14px;color:var(--muted);margin:8px 0 4px;font-weight:700}
+.rate .chips{display:flex;flex-wrap:wrap;gap:6px}
+.rate textarea{width:100%;box-sizing:border-box;border:1.5px solid var(--line);border-radius:10px;padding:8px;font:inherit;background:var(--paper);color:var(--ink);min-height:54px;margin-top:4px}
+.rate .rmsg{margin-top:8px;font-weight:700}.rate .rmsg.good{color:var(--good)}.rate .rmsg.bad{color:var(--bad)}
+.rate .rdone{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.board .rate{margin-top:14px;text-align:right}
 .chip{border:1.5px solid var(--line);background:var(--paper);border-radius:999px;padding:5px 14px;font-size:15px}
 .chip[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);color:var(--accent);font-weight:600}
 .chip.right{border-color:var(--good);background:var(--panel);color:var(--good);font-weight:600}
@@ -605,7 +617,8 @@ const TTS=(()=>{
     t=t.replace(/î/g,' آي ').replace(/ĵ/g,' جيه ').replace(/k̂/g,' كيه ');
     t=t.replace(/10([⁻]?[⁰¹²³⁴⁵⁶⁷⁸⁹]+)/g,(m,e)=>' عشرة أس '+(e[0]==='⁻'?'سالب ':'')+e.replace('⁻','').split('').map(c=>SUP[c]).join('')+' ');
     t=t.replace(/(\d)e([-+]?\d+)/g,(m,d,e)=>d+' ضرب عشرة أس '+(e[0]==='-'?'سالب '+e.slice(1):e.replace('+','')));
-    for(const[u,w]of UNIT)t=t.split(u).join(' '+w+' ');
+    t=t.replace(/\)\s*\(/g,')×(').replace(/(\d)\(/g,'$1×(');
+    for(const[u,w]of UNIT)t=u==='mg'?t.replace(/(\d\s*)mg(?![A-Za-z])/g,'$1 '+w+' '):t.split(u).join(' '+w+' ');
     t=t.replace(/(\d)\s+([mshgNJWVACFKL])(?![A-Za-z])/g,(m,d,u)=>d+' '+AFTER_NUM[u]);
     t=t.replace(/\b(KE|PE|ME|SI|DC|AC|LED|GPS|PhET)\b/g,m=>' '+ACR[m]+' ');
     t=t.replace(/\bcos\b/g,' جتا ').replace(/\bsin\b/g,' جا ').replace(/\btan\b/g,' ظا ');
@@ -618,6 +631,7 @@ const TTS=(()=>{
       .replace(/\+/g,' زائد ').replace(/\s[−-]\s/g,' ناقص ').replace(/(^|[\s(])[−-](?=\d)/g,'$1سالب ').replace(/←/g,'، إذن ').replace(/→/g,' إلى ').replace(/∝/g,' يتناسب مع ').replace(/%/g,' بالمئة ').replace(/°/g,' درجة ')
       .replace(/θ/g,' ثيتا ').replace(/Δ/g,' دلتا ').replace(/[μµ]/g,' ميو ').replace(/ρ/g,' رو ').replace(/α/g,' ألفا ').replace(/σ/g,' سيجما ').replace(/ε/g,' إبسلون ').replace(/π/g,' باي ').replace(/Σ/g,' مجموع ').replace(/τ/g,' تاو ');
     t=t.replace(/(\d)([A-Za-z])/g,'$1 $2');
+    t=t.replace(/(الطاقة الحركية|طاقة الوضع|الطاقة الميكانيكية|السرعة النهائية|السرعة الابتدائية|القوة المحصلة|القدرة)(\s+)يساوي/g,'$1$2تساوي');
     t=t.replace(/\b[A-Za-z]{1,3}\b/g,w=>' '+w.split('').map(c=>LET[c.toLowerCase()]||c).join(' ')+' ');
     t=arFix(tvocal(t));
     t=t.replace(/[|]/g,' ').replace(/\s+([،.:؟])/g,'$1').replace(/\s+/g,' ');
@@ -802,14 +816,15 @@ function buildNav(){
     u.l.forEach((l,li)=>{if(l.hide)return;
       const it=document.createElement('li');if(done.has(key(ui,li)))it.classList.add('done');
       const lb=document.createElement('button');lb.innerHTML='<span class="tick"></span><span></span>';lb.lastChild.textContent=l.t;
-      if(ui===pos.u&&li===pos.l&&pos.t!=='refs')lb.setAttribute('aria-current','true');
-      lb.onclick=()=>{go(ui,li,0,pos.t==='refs'?'sum':pos.t);closeNav()};
+      if(ui===pos.u&&li===pos.l&&!GT(pos.t))lb.setAttribute('aria-current','true');
+      lb.onclick=()=>{go(ui,li,0,GT(pos.t)?'sum':pos.t);closeNav()};
       it.appendChild(lb);ol.appendChild(it)});
     d.append(b,ol);nav.appendChild(d)});
   const f=document.createElement('div');f.className='navfoot';
-  f.innerHTML='<button id="refsBtn">📚 المراجع العربية للمقرر</button><button id="themeBtn">◐ تبديل الوضع الفاتح/الداكن</button>';
+  f.innerHTML='<button id="survBtn">📝 استبانة رضا المتدرب</button><button id="refsBtn">📚 المراجع العربية للمقرر</button><button id="themeBtn">◐ تبديل الوضع الفاتح/الداكن</button>';
   nav.appendChild(f);
   $('refsBtn').onclick=()=>{pos.t='refs';closeNav();render()};
+  $('survBtn').onclick=()=>{pos.t='survey';closeNav();render()};
   $('themeBtn').onclick=()=>{const r=document.documentElement;const dark=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches;r.dataset.theme=dark?'light':'dark';store.set('p101-theme',r.dataset.theme)};
 }
 function updateProgress(){const pct=Math.min(100,Math.round([...done].filter(k=>{const[a,b]=k.split('-').map(Number);return !HID(a,b)}).length/total*100));$('progTxt').textContent=AR(pct)+'٪ مكتمل';$('progBar').style.width=pct+'%'}
@@ -836,24 +851,81 @@ function voiceTest(){if(!/voicetest/i.test(location.hash+location.search)||docum
 addEventListener('hashchange',voiceTest);
 function render(){
   try{$('aiLink').href=CLAUDE_URL+'#l='+key(pos.u,pos.l)}catch(e){}
-  $('app').dataset.unit=pos.t==='refs'?'0':String(pos.u);
+  $('app').dataset.unit=GT(pos.t)?'0':String(pos.u);
   TTS.stop();
   const u=UNITS[pos.u],l=lesson();
-  const refs=pos.t==='refs';
+  const refs=GT(pos.t);
   $('crumb').textContent=refs?'المقرر كاملًا':`الوحدة ${ORD[pos.u]} · ${u.t}`;
-  $('lessonTitle').textContent=refs?'المراجع العربية والمصادر':l.t;
+  $('lessonTitle').textContent=refs?(pos.t==='survey'?'استبانة رضا المتدرب':'المراجع العربية والمصادر'):l.t;
   $('doneBtn').hidden=refs;$('tabs').hidden=refs;
   const isDone=done.has(key(pos.u,pos.l));
   $('doneBtn').setAttribute('aria-pressed',isDone);$('doneBtn').textContent=isDone?'✓ مكتمل':'أنهيت الدرس';
   document.querySelectorAll('#tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.t===pos.t));
   $('pager').hidden=pos.t!=='page';
   const v=$('view');v.scrollTop=0;
-  ({sum:renderSum,page:renderPage,ex:renderEx,quiz:renderQuiz,lab:renderLab,refs:renderRefs}[pos.t]||renderSum)(v);
+  ({sum:renderSum,page:renderPage,ex:renderEx,quiz:renderQuiz,lab:renderLab,refs:renderRefs,survey:renderSurvey}[pos.t]||renderSum)(v);
   TTS.refreshNotes();
   store.set('p101-pos',pos);
 }
 function card(title,sub){const c=document.createElement('div');c.className='card';c.innerHTML=`<h2>${title}</h2>${sub?`<p class="sub">${sub}</p>`:''}`;return c}
 function wrap(v){v.innerHTML='';const i=document.createElement('div');i.className='inner';v.appendChild(i);return i}
+const GT=t=>t==='refs'||t==='survey';
+/* ---------- استبانة رضا المتدرب ---------- */
+const SURVEY=[['الدروس والشرح',['محتوى الدروس واضح ومنظم','الشرح على السبورة مع المدرب الذكي ساعدني على الفهم','الصوت ونطق المصطلحات واضح','صفحات الحقيبة في المنصة مفيدة']],
+ ['الأمثلة والتمارين',['الأمثلة المحلولة واضحة ومفيدة','خطوات الحل (المعطيات ← المطلوب ← القانون ← النتيجة) ساعدتني على حل المسائل','الآلة الحاسبة العلمية سهلة الاستخدام','التمارين التفاعلية مناسبة لمستواي']],
+ ['الاختبارات',['أسئلة الاختبارات مرتبطة بمحتوى الدروس','مستوى صعوبة الاختبارات مناسب','التصحيح الفوري وشرح الإجابة مفيد']],
+ ['المنصة بشكل عام',['المنصة سهلة الاستخدام على الجوال','المنصة ساعدتني على فهم مقرر الفيزياء','أنصح زملائي باستخدام المنصة']]];
+const LIK=['غير موافق بشدة','غير موافق','محايد','موافق','موافق بشدة'];
+function renderSurvey(v){
+  const i=wrap(v);const items=SURVEY.flatMap(g=>g[1]);const ans=new Array(items.length).fill(0);
+  const sent=store.get('p101-survey',null);
+  const c=card('📝 استبانة رضا المتدرب','شاركنا رأيك في محتوى المنصة من دروس وأمثلة واختبارات. تصل إجاباتك إلى المدرب لتطوير المنصة.'+(sent?' <b>سبق أن أرسلت الاستبانة، ويمكنك تعديل إجاباتك وإرسالها مرة أخرى.</b>':''));
+  c.classList.add('rate');i.appendChild(c);
+  let n=0;
+  SURVEY.forEach(([g,qs])=>{const gc=card(g);qs.forEach(q=>{const qi=n++;const d=document.createElement('div');d.className='svq';
+    d.innerHTML=`<p class="rq">${AR(qi+1)}. ${q}</p><div class="chips">${LIK.map((t,j)=>`<button type="button" class="chip" aria-pressed="false" data-v="${j+1}">${t}</button>`).join('')}</div>`;
+    d.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{d.querySelectorAll('.chip').forEach(x=>x.setAttribute('aria-pressed','false'));b.setAttribute('aria-pressed','true');ans[qi]=+b.dataset.v;upd()});
+    if(sent&&sent[qi]){const b=d.querySelector(`[data-v="${sent[qi]}"]`);if(b){b.setAttribute('aria-pressed','true');ans[qi]=sent[qi]}}
+    gc.appendChild(d)});i.appendChild(gc)});
+  const f=card('ملاحظاتك (اختياري)');f.classList.add('rate');
+  f.insertAdjacentHTML('beforeend','<div class="rlab">ما أكثر ما أعجبك في المنصة؟</div><textarea class="sb" maxlength="500"></textarea><div class="rlab">ما الذي تقترح تحسينه؟</div><textarea class="si" maxlength="500"></textarea><div class="btnrow"><button type="button" class="btn rsend">إرسال الاستبانة</button></div><div class="rmsg" aria-live="polite"></div>');
+  i.appendChild(f);
+  const sb=f.querySelector('.rsend'),msg=f.querySelector('.rmsg');
+  const upd=()=>{const k=ans.filter(x=>x).length;sb.textContent=k<items.length?`إرسال الاستبانة (${AR(k)} من ${AR(items.length)})`:'إرسال الاستبانة'};upd();
+  sb.onclick=()=>{const k=ans.filter(x=>x).length;if(k<items.length){msg.className='rmsg bad';msg.textContent='أجب عن جميع العبارات قبل الإرسال.';return}
+    sb.disabled=true;msg.className='rmsg';msg.textContent='جارٍ الإرسال…';
+    const ok=()=>{store.set('p101-survey',ans);msg.className='rmsg good';msg.textContent='✓ شكرًا لك، وصلت إجاباتك إلى المدرب.';sb.disabled=false};
+    if(!API||!AUTH||AUTH.demo){ok();return}
+    SYNC.post({a:'survey',token:AUTH.token,answers:ans,best:f.querySelector('.sb').value.trim(),improve:f.querySelector('.si').value.trim()}).then(r=>{if(r.ok)ok();else{sb.disabled=false;msg.className='rmsg bad';msg.textContent=r.error==='auth'?'انتهت الجلسة، سجّل الدخول من جديد.':'تعذّر الإرسال، حاول مرة أخرى.'}})
+      .catch(()=>{sb.disabled=false;msg.className='rmsg bad';msg.textContent='تعذّر الاتصال. تحقق من الإنترنت ثم حاول مرة أخرى.'})};
+}
+/* ---------- تقييم الدرس ---------- */
+const RATE={board:{t:'⭐ قيّم شرح الدرس',q:'هل كان شرح المدرب الذكي على السبورة واضحًا؟',tags:['واضح','سريع','بطيء','أحتاج إعادة الشرح']},
+  ex:{t:'⭐ قيّم الأمثلة والتمارين',q:'ما مدى فائدة الأمثلة والتمارين التفاعلية؟',lv:['سهلة','متوسطة','صعبة'],tags:['مفيدة','الآلة الحاسبة سهلة الاستخدام','أحتاج أمثلة أكثر']},
+  quiz:{t:'⭐ قيّم الدرس',q:'قيّم الدرس بشكل عام',lv:['سهل','متوسط','صعب'],tags:['استفدت من الدرس','أحتاج مراجعة الدرس']}};
+function rateCard(stage,k,title){
+  const C=RATE[stage],saved=store.get('p101-rate',{}),sk=stage+':'+k;
+  const c=document.createElement('div');c.className='card rate';
+  const form=()=>{let stars=0,level='';const tags=new Set();
+    c.innerHTML=`<h2>${C.t}</h2><p class="rq">${C.q}</p><div class="stars" role="radiogroup" aria-label="التقييم من خمس نجوم">${[1,2,3,4,5].map(n=>`<button type="button" data-n="${n}" aria-label="${n} من 5">★</button>`).join('')}</div>`+
+      (C.lv?`<div class="rlab">مستوى الصعوبة</div><div class="chips lv">${C.lv.map(x=>`<button type="button" class="chip" aria-pressed="false">${x}</button>`).join('')}</div>`:'')+
+      `<div class="rlab">اختر ما ينطبق (اختياري)</div><div class="chips tg">${C.tags.map(x=>`<button type="button" class="chip" aria-pressed="false">${x}</button>`).join('')}</div>`+
+      `<div class="rlab">ملاحظة (اختياري)</div><textarea maxlength="500" placeholder="اكتب ملاحظتك للمدرب…"></textarea><div class="btnrow"><button type="button" class="btn rsend" disabled>إرسال التقييم</button></div><div class="rmsg" aria-live="polite"></div>`;
+    const sb=c.querySelector('.rsend'),msg=c.querySelector('.rmsg');
+    const paint=()=>c.querySelectorAll('.stars button').forEach(b=>b.classList.toggle('on',+b.dataset.n<=stars));
+    c.querySelectorAll('.stars button').forEach(b=>b.onclick=()=>{stars=+b.dataset.n;paint();sb.disabled=false});
+    c.querySelectorAll('.lv .chip').forEach(b=>b.onclick=()=>{c.querySelectorAll('.lv .chip').forEach(x=>x.setAttribute('aria-pressed','false'));b.setAttribute('aria-pressed','true');level=b.textContent});
+    c.querySelectorAll('.tg .chip').forEach(b=>b.onclick=()=>{const on=b.getAttribute('aria-pressed')!=='true';b.setAttribute('aria-pressed',on);on?tags.add(b.textContent):tags.delete(b.textContent)});
+    sb.onclick=()=>{if(!stars)return;sb.disabled=true;msg.className='rmsg';msg.textContent='جارٍ الإرسال…';
+      const note=c.querySelector('textarea').value.trim();
+      const ok=()=>{const sv=store.get('p101-rate',{});sv[sk]=stars;store.set('p101-rate',sv);done_(stars,true)};
+      if(!API||!AUTH||AUTH.demo){ok();return}
+      SYNC.post({a:'rate',token:AUTH.token,stage,lessonKey:k,lessonTitle:title,stars,level,tags:[...tags],note}).then(r=>{
+        if(r.ok)ok();else{sb.disabled=false;msg.className='rmsg bad';msg.textContent=r.error==='auth'?'انتهت الجلسة، سجّل الدخول من جديد.':'تعذّر إرسال التقييم، حاول مرة أخرى.'}
+      }).catch(()=>{sb.disabled=false;msg.className='rmsg bad';msg.textContent='تعذّر الاتصال. تحقق من الإنترنت ثم حاول مرة أخرى.'})}};
+  const done_=(n,fresh)=>{c.innerHTML=`<div class="rdone"><b>${fresh?'✓ شكرًا، وصل تقييمك للمدرب.':'قيّمت هذا سابقًا:'}</b><span style="color:#F5B301;font-size:20px">${'★'.repeat(n)}</span><span style="color:var(--line);font-size:20px">${'★'.repeat(5-n)}</span><button type="button" class="btn ghost sm">تعديل التقييم</button></div>`;c.querySelector('button').onclick=form};
+  if(saved[sk])done_(saved[sk],false);else form();
+  return c}
 function nextLessonBtn(i){
   const r=document.createElement('div');r.className='btnrow';
   const nx=nextLesson();
@@ -926,6 +998,7 @@ function openBoard(){
     else if(sl.type==='q'){const q=sl.q;h=`<div class="bQ"><div class="bQh">🙋 سؤال للمتدرب</div><p class="bQq">${inl(q.q)}</p><div class="bOpts">${q.o.map((o,j)=>`<button type="button" data-j="${j}">${inl(o)}</button>`).join('')}</div><div class="bQf" aria-live="polite"></div></div>`}
     else{h=(sl.title?`<h2 class="bH">${inl(sl.title)}</h2>`:'')+sl.steps.map((x,j)=>`<div class="bStep${j<step?' in':''}">${x.html?x.html:x.h!==undefined?'<h3>'+inl(x.h)+'</h3>':md(x.md)}</div>`).join('')}
     ct.innerHTML=h;
+    if(sl.type==='e')ct.appendChild(rateCard('board',key(pos.u,pos.l),l.t));
     if(sl.type==='q'){const q=sl.q,f=ct.querySelector('.bQf');let tries=0;ct.querySelectorAll('.bOpts button').forEach(b=>b.onclick=()=>{if(ct.querySelector('.bOpts').dataset.done)return;const j=+b.dataset.j;
       if(j===q.a){b.classList.add('ok');ct.querySelector('.bOpts').dataset.done=1;f.className='bQf good';f.innerHTML='✓ إجابة صحيحة! '+(q.w?inl(q.w):'');step=1}
       else{tries++;b.classList.add('no');b.disabled=true;if(tries>=2){ct.querySelector('.bOpts').dataset.done=1;ct.querySelectorAll('.bOpts button')[q.a].classList.add('ok');f.className='bQf bad';f.innerHTML='الإجابة الصحيحة مظللة بالأخضر. '+(q.w?inl(q.w):'');step=1}else{f.className='bQf bad';f.textContent='ليست هذه، فكّر مرة أخرى.'}}})}
@@ -1292,7 +1365,8 @@ function renderEx(v){
     const prog=document.createElement('div');prog.className='score';head.appendChild(prog);i.appendChild(head);
     let fin=0,pts=0;const max=probs.length*5;
     const upd=()=>{prog.textContent=fin?`أنجزت ${AR(fin)} من ${AR(probs.length)} — الخطوات الصحيحة من أول محاولة: ${AR(pts)} من ${AR(max)}`:''};
-    probs.forEach((p,n)=>i.appendChild(problemCard(p,n===0?'مثال تفاعلي':'تمرين حسابي '+AR(n),(sc,det)=>{fin++;pts+=sc;upd();SYNC.result('prob',k+'.'+n,lesson().t,sc,5,det);if(fin===probs.length){const b=best['p'+k];if(b==null||pts>b){best['p'+k]=pts;store.set('p101-best',best)}}})));
+    probs.forEach((p,n)=>i.appendChild(problemCard(p,n===0?'مثال تفاعلي':'تمرين حسابي '+AR(n),(sc,det)=>{fin++;pts+=sc;upd();SYNC.result('prob',k+'.'+n,lesson().t,sc,5,det);if(fin===probs.length){const b=best['p'+k];if(b==null||pts>b){best['p'+k]=pts;store.set('p101-best',best)}rslot.appendChild(rateCard('ex',k,lesson().t))}})));
+    const rslot=document.createElement('div');i.appendChild(rslot);
     if(s&&s.ex){const d=document.createElement('details');d.className='card';d.innerHTML='<summary><b>مثال محلول للمراجعة</b></summary>';d.appendChild(TTS.controls(()=>'مثال محلول. '+s.ex.q+'\nالحل.\n'+s.ex.st.join('\n')+'\nالإجابة: '+s.ex.a,{compact:true,label:'🔊 استمع للمثال'}));
       d.insertAdjacentHTML('beforeend','<p class="pq">'+inl(s.ex.q)+'</p>'+(s.ex.fig&&FIGS[s.ex.fig]?FIGS[s.ex.fig]:'')+'<ol class="steps">'+s.ex.st.map(x=>'<li>'+inl(x)+'</li>').join('')+'</ol><div class="ans">'+inl(s.ex.a)+'</div>');i.appendChild(d)}
   }else if(th){i.appendChild(theoryCard(th,s&&s.ex))}
@@ -1378,7 +1452,7 @@ function renderQuiz(v){
           SYNC.result('quiz',k,lesson().t,right,qs.length,qs.map((qq,n)=>({q:qq.q.slice(0,80),chosen:chosen[n]!=null?qq.o[chosen[n]].slice(0,60):'',ok:chosen[n]===qq.a})));
           if(right===qs.length&&!done.has(k))SYNC.result('done',k,lesson().t,1,1);
           if(right===qs.length&&!done.has(k)){done.add(k);store.set('p101-done',[...done]);buildNav();updateProgress();$('doneBtn').setAttribute('aria-pressed',true);$('doneBtn').textContent='✓ مكتمل'}
-          rb.hidden=false;
+          rb.hidden=false;i.insertBefore(rateCard('quiz',k,lesson().t),r);
         }};
       opts.appendChild(b)});
     i.appendChild(d);
@@ -1414,7 +1488,7 @@ function renderRefs(v){
   s.insertAdjacentHTML('beforeend',`<div class="md"><ul><li><a href="https://phet.colorado.edu/ar/" target="_blank" rel="noopener">PhET — محاكاة فيزيائية تفاعلية بالعربية</a> (جامعة كولورادو)</li><li><a href="https://claude.ai/artifact/9BRKRrSsZcDSEQSbLHPzec" target="_blank" rel="noopener">المساعد الذكي للمقرر</a> — يجيب عن أسئلتك ويشرح أي صفحة (يحتاج حساب Claude مجاني)</li></ul></div>`);
   i.appendChild(s);
 }
-function go(u,l,p,t){pos={u,l,p,t:t||pos.t};if(pos.t==='refs')pos.t='sum';buildNav();render()}
+function go(u,l,p,t){pos={u,l,p,t:t||pos.t};if(GT(pos.t))pos.t='sum';buildNav();render()}
 function setTab(t){pos.t=t;render()}
 document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>setTab(b.dataset.t));
 $('nextBtn').onclick=()=>{const l=lesson();

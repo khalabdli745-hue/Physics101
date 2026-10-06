@@ -181,7 +181,7 @@ function boot(){
   if(!TOKEN)return authScreen();
   root.innerHTML=`<header><b>لوحة المدرب</b><span class="tag" id="sheetLink"></span><div class="sp">
     <button class="btn ghost sm" id="reload">↻ تحديث</button><a class="btn ghost sm" href="index.html">المنصة</a><button class="btn ghost sm" id="logout">خروج</button></div></header>
-  <nav class="tabs" role="tablist">${[['students','المتدربون والدرجات'],['stats','الإحصائيات'],['reports','التقارير'],['ai','المساعد الذكي والصوت'],['sections','الشعب'],['import','استيراد Excel'],['export','تصدير Excel'],['demo','حسابي التجريبي'],['settings','الإعدادات']].map(([k,n])=>`<button role="tab" data-t="${k}" aria-selected="${tab===k}">${n}</button>`).join('')}</nav>
+  <nav class="tabs" role="tablist">${[['students','المتدربون والدرجات'],['stats','الإحصائيات'],['reports','التقارير'],['ratings','تقييم المتدربين للمنصة'],['ai','المساعد الذكي والصوت'],['sections','الشعب'],['import','استيراد Excel'],['export','تصدير Excel'],['demo','حسابي التجريبي'],['settings','الإعدادات']].map(([k,n])=>`<button role="tab" data-t="${k}" aria-selected="${tab===k}">${n}</button>`).join('')}</nav>
   <main id="main"><p class="empty"><span class="spin"></span> جارٍ تحميل البيانات…</p></main>`;
   document.documentElement.style.setProperty('--hh',$('header').offsetHeight+'px');
   document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>{tab=b.dataset.t;ls.set('p101-ttab',tab);document.querySelectorAll('nav.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b));draw()});
@@ -213,7 +213,7 @@ async function load(){
     $('#sheetLink').innerHTML=r.sheetUrl?`<a href="${esc(r.sheetUrl)}" target="_blank" rel="noopener">جدول Google ↗</a>`:'';
     draw()}catch(e){m.innerHTML='<p class="empty">تعذّر الاتصال بالخادم. تحقق من الإنترنت ثم اضغط «تحديث».</p>'}
 }
-function draw(){if(!DATA)return;({students:drawStudents,stats:drawStats,reports:drawReports,ai:drawAI,sections:drawSections,import:drawImport,export:drawExport,demo:drawDemo,settings:drawSettings}[tab]||drawStudents)()}
+function draw(){if(!DATA)return;({students:drawStudents,stats:drawStats,reports:drawReports,ratings:drawRatings,ai:drawAI,sections:drawSections,import:drawImport,export:drawExport,demo:drawDemo,settings:drawSettings}[tab]||drawStudents)()}
 
 /* ---------- المتدربون ---------- */
 function filtered(){return DATA.students.filter(s=>(secFilter==='all'||s.sectionId===secFilter)&&(!q||s.name.includes(q)||s.id.includes(q)))}
@@ -338,6 +338,50 @@ async function drawStats(){
 }
 
 
+/* ---------- تقييم المتدربين للمنصة ---------- */
+const SV_ITEMS=['محتوى الدروس واضح ومنظم','الشرح على السبورة مع المدرب الذكي ساعدني على الفهم','الصوت ونطق المصطلحات واضح','صفحات الحقيبة في المنصة مفيدة','الأمثلة المحلولة واضحة ومفيدة','خطوات الحل ساعدتني على حل المسائل','الآلة الحاسبة العلمية سهلة الاستخدام','التمارين التفاعلية مناسبة لمستواي','أسئلة الاختبارات مرتبطة بمحتوى الدروس','مستوى صعوبة الاختبارات مناسب','التصحيح الفوري وشرح الإجابة مفيد','المنصة سهلة الاستخدام على الجوال','المنصة ساعدتني على فهم مقرر الفيزياء','أنصح زملائي باستخدام المنصة'];
+const SV_GROUPS=[['الدروس والشرح',0,4],['الأمثلة والتمارين',4,8],['الاختبارات',8,11],['المنصة بشكل عام',11,14]];
+const RT_STAGE={board:'شرح الدرس',ex:'الأمثلة والتمارين',quiz:'الدرس كاملًا (بعد الاختبار)'};
+const P5=v=>v==null?null:Math.round(v/5*100);
+const rbar=(lab,val,max,cls,txt)=>`<div class="bar"><span class="lab" title="${esc(lab)}">${esc(lab)}</span><span class="trk"><span class="fil ${cls||''}" style="width:${max?Math.max(1,val/max*100):0}%;display:block"></span></span><span class="val">${txt!=null?txt:val}</span></div>`;
+let RT=null;
+async function drawRatings(){
+  const m=$('#main');m.innerHTML='<p class="empty"><span class="spin"></span></p>';
+  let r;try{r=await api({a:'tratings',token:TOKEN,sectionId:secFilter==='all'?'':secFilter})}catch(e){m.innerHTML='<p class="empty">تعذّر الاتصال بالخادم.</p>';return}
+  if(!r.ok){m.innerHTML=`<p class="empty">${esc(r.error==='unknown_action'?'حدّث ملف الخادم code.gs إلى الإصدار ٦ لتفعيل التقييمات.':errText(r.error))}</p>`;return}
+  RT=r;const R=r.ratings||[],S=r.surveys||[];
+  const opts=`<option value="all">كل الشعب</option>`+DATA.sections.map(s=>`<option value="${esc(s.id)}" ${secFilter===s.id?'selected':''}>${esc(s.name)}</option>`).join('');
+  const st=k=>{const a=R.filter(x=>x.stage===k).map(x=>x.stars);return {n:a.length,p:P5(avg(a))}};
+  const all=P5(avg(R.map(x=>x.stars))),svAvg=avg(S.map(x=>x.avg));
+  const byL={};R.forEach(x=>{const L=byL[x.lessonKey]||(byL[x.lessonKey]={k:x.lessonKey,t:LT[x.lessonKey]||x.lessonTitle,board:[],ex:[],quiz:[],hard:0,lv:0,tags:{},notes:[]});L[x.stage].push(x.stars);
+    if(x.level){L.lv++;if(/صعب/.test(x.level))L.hard++}String(x.tags||'').split('،').map(t=>t.trim()).filter(Boolean).forEach(t=>L.tags[t]=(L.tags[t]||0)+1);if(x.note)L.notes.push(x)});
+  const lessons=Object.values(byL).map(L=>({...L,pb:P5(avg(L.board)),pe:P5(avg(L.ex)),pq:P5(avg(L.quiz)),pa:P5(avg([...L.board,...L.ex,...L.quiz])),n:L.board.length+L.ex.length+L.quiz.length})).sort((a,b)=>a.pa-b.pa);
+  const low=lessons.filter(L=>L.pa!=null&&L.pa<60);
+  const items=SV_ITEMS.map((t,i)=>({t,p:P5(avg(S.map(x=>x.answers[i]).filter(v=>v>0))),agree:S.length?Math.round(S.filter(x=>x.answers[i]>=4).length/S.length*100):null}));
+  const gp=SV_GROUPS.map(([g,a,b])=>({g,p:P5(avg(S.flatMap(x=>x.answers.slice(a,b)).filter(v=>v>0)))}));
+  const notes=R.filter(x=>x.note).sort((a,b)=>b.time.localeCompare(a.time));
+  m.innerHTML=`<div class="rp-ctl" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px"><select id="rtf">${opts}</select><button class="btn ghost" id="rtr">↻ تحديث</button><button class="btn" id="rtx">⬇️ تصدير Excel</button></div>
+  <div class="stats"><div class="stat"><small>متوسط تقييم الدروس</small><b>${all==null?'—':AR(all)+'٪'}</b></div><div class="stat"><small>عدد التقييمات</small><b>${AR(R.length)}</b></div>
+   <div class="stat"><small>شرح الدرس</small><b>${st('board').p==null?'—':AR(st('board').p)+'٪'}</b></div><div class="stat"><small>الأمثلة والتمارين</small><b>${st('ex').p==null?'—':AR(st('ex').p)+'٪'}</b></div>
+   <div class="stat"><small>الدرس كاملًا</small><b>${st('quiz').p==null?'—':AR(st('quiz').p)+'٪'}</b></div><div class="stat"><small>رضا المتدربين (الاستبانة)</small><b>${svAvg==null?'—':AR(Math.round(svAvg))+'٪'}</b></div><div class="stat"><small>أجابوا الاستبانة</small><b>${AR(S.length)}</b></div></div>
+  ${low.length?`<div class="card" style="border-right:4px solid var(--bad)"><h2>⚠️ دروس تحتاج مراجعة (أقل من ٦٠٪)</h2>${low.map(L=>`<div>• <b>${esc(L.t)}</b> — ${pct(L.pa)}</div>`).join('')}</div>`:''}
+  <div class="card"><h2>تقييم الدروس</h2><p class="sub">النسبة = متوسط النجوم ÷ ٥. مرتبة من الأقل تقييمًا.</p>
+  ${lessons.length?`<div class="tableWrap" style="max-height:460px;overflow:auto"><table><thead><tr><th>الدرس</th><th>المقيّمون</th><th>شرح الدرس</th><th>الأمثلة والتمارين</th><th>الدرس كاملًا</th><th>المتوسط</th><th>رأوه صعبًا</th><th>أكثر الاختيارات</th></tr></thead><tbody>${lessons.map(L=>{const tg=Object.entries(L.tags).sort((a,b)=>b[1]-a[1]).slice(0,2).map(([t,n])=>esc(t)+' ('+AR(n)+')').join('، ');
+    return `<tr style="cursor:default"><td>${esc(L.t)}</td><td class="num">${AR(L.n)}</td><td>${pct(L.pb)}</td><td>${pct(L.pe)}</td><td>${pct(L.pq)}</td><td>${pct(L.pa)}</td><td class="num">${L.lv?AR(Math.round(L.hard/L.lv*100))+'٪':'—'}</td><td><small>${tg||'—'}</small></td></tr>`}).join('')}</tbody></table></div>`:'<p class="empty">لا توجد تقييمات بعد. تظهر هنا عندما يقيّم المتدربون الدروس بعد الشرح والأمثلة والاختبار.</p>'}</div>
+  <div class="card"><h2>📝 استبانة رضا المتدرب</h2>${S.length?`<p class="sub">النسبة = متوسط الإجابات ÷ ٥، و«الموافقون» = نسبة من اختار موافق أو موافق بشدة.</p>
+   <div class="bars" style="margin-bottom:12px">${gp.map(g=>rbar(g.g,g.p||0,100,pctCls(g.p),g.p==null?'—':AR(g.p)+'٪')).join('')}</div>
+   <div class="tableWrap"><table><thead><tr><th>#</th><th>العبارة</th><th>الرضا</th><th>الموافقون</th></tr></thead><tbody>${items.map((x,i)=>`<tr style="cursor:default"><td class="num">${AR(i+1)}</td><td>${esc(x.t)}</td><td>${pct(x.p)}</td><td class="num">${x.agree==null?'—':AR(x.agree)+'٪'}</td></tr>`).join('')}</tbody></table></div>
+   ${S.filter(x=>x.best||x.improve).length?`<h3 style="margin:14px 0 6px">ملاحظات الاستبانة</h3>${S.filter(x=>x.best||x.improve).map(x=>`<div class="qrow"><b>${esc(x.name||x.studentId)}</b> <small>${esc(x.studentId)} · ${pct(x.avg)}</small>${x.best?`<br>👍 ${esc(x.best)}`:''}${x.improve?`<br>💡 ${esc(x.improve)}`:''}</div>`).join('')}`:''}`
+   :'<p class="empty">لم يُجب أي متدرب عن الاستبانة بعد. يجدها المتدرب في الفهرس: «📝 استبانة رضا المتدرب».</p>'}</div>
+  <div class="card"><h2>ملاحظات المتدربين على الدروس (${AR(notes.length)})</h2>${notes.length?notes.slice(0,100).map(x=>`<div class="qrow"><b>${esc(x.name||x.studentId)}</b> <small>${esc(x.studentId)} · ${esc(LT[x.lessonKey]||x.lessonTitle)} · ${RT_STAGE[x.stage]||''} · ${'★'.repeat(x.stars)} · ${fmtDate(x.time)}</small><br>${esc(x.note)}</div>`).join(''):'<p class="empty">لا توجد ملاحظات بعد.</p>'}</div>`;
+  $('#rtf').onchange=e=>{secFilter=e.target.value;ls.set('p101-tsec',secFilter);drawRatings()};
+  $('#rtr').onclick=drawRatings;
+  $('#rtx').onclick=()=>{const sn=id=>{const s=DATA.sections.find(x=>x.id===id);return s?s.name:id};
+    saveBook([['تقييم الدروس',[['التاريخ','الرقم التدريبي','الاسم','الشعبة','الدرس','المرحلة','النجوم','النسبة٪','الصعوبة','الاختيارات','الملاحظة'],...R.map(x=>[fmtDate(x.time),x.studentId,x.name,sn(x.sectionId),LT[x.lessonKey]||x.lessonTitle,RT_STAGE[x.stage]||x.stage,x.stars,P5(x.stars),x.level||'',x.tags||'',x.note||''])]],
+      ['ملخص الدروس',[['الدرس','المقيّمون','شرح الدرس٪','الأمثلة والتمارين٪','الدرس كاملًا٪','المتوسط٪','رأوه صعبًا٪'],...lessons.map(L=>[L.t,L.n,L.pb??'',L.pe??'',L.pq??'',L.pa??'',L.lv?Math.round(L.hard/L.lv*100):''])]],
+      ['استبانة الرضا',[['التاريخ','الرقم التدريبي','الاسم','الشعبة','متوسط الرضا٪',...SV_ITEMS,'ما أعجبه','مقترح التحسين'],...S.map(x=>[fmtDate(x.time),x.studentId,x.name,sn(x.sectionId),x.avg,...SV_ITEMS.map((_,i)=>x.answers[i]||''),x.best||'',x.improve||''])]],
+      ['ملخص الاستبانة',[['العبارة','الرضا٪','الموافقون٪'],...items.map(x=>[x.t,x.p??'',x.agree??''])]]],'تقييم المتدربين للمنصة.xlsx')};
+}
 /* ---------- المساعد الذكي ---------- */
 async function drawAI(){
   const m=$('#main');m.innerHTML='<p class="empty"><span class="spin"></span></p>';
