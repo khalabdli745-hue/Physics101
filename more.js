@@ -1430,3 +1430,8 @@ for(const k in D){const[u,l]=k.split('-').map(Number);const x=D[k];if(!S[u]||!S[
   let fig=x.fig&&F[x.fig]?x.fig:'';
   if(x.svg){fig='exr_'+k;F[fig]=`<figure class="fig"><svg viewBox="${x.vb}" role="img" aria-label="${x.cap}">${defs}${x.svg}</svg><figcaption>${x.cap}</figcaption></figure>`}
   S[u][l].ex={q:x.q,st:x.st,a:x.a,fig}}})();
+
+/* دمج درس «قانون نيوتن الثالث» (مخفي) في درس «القوة وقوانين نيوتن للحركة»: التطبيقات والرسم */
+(function(){const E=window.EXTRA||{},M=window.FIGMAP=window.FIGMAP||{},a=E['1-3'],b=E['1-4'];
+  if(a&&b&&b.ap&&a.ap&&a.ap.indexOf(b.ap)<0)a.ap=a.ap+'\n'+b.ap;
+  if(b&&b.fig&&(window.FIGS||{})[b.fig]){M['1-3']=M['1-3']||[];if(a.fig!==b.fig&&M['1-3'].indexOf(b.fig)<0)M['1-3'].push(b.fig)}})();

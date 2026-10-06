@@ -281,6 +281,8 @@ body.boardOpen{overflow:hidden}
 .board .bRow button.on{background:var(--accent);color:var(--accent-ink);border-color:transparent}
 .board .bRow button.bMain{background:var(--accent);color:var(--accent-ink);border-color:transparent;padding:0 16px}
 .board .bRow button:disabled{opacity:.4}
+.board .bRow button.bSp{padding:0 8px;font-size:13px}
+@media (max-width:430px){.board .bRow{gap:4px}.board .bSep{display:none}.board .bRow button{padding:0 7px;font-size:13px;min-width:34px}.board .bRow button.bMain{padding:0 11px}}.board .bRow button.bSp::before{content:'⏱';margin-left:3px}
 .board .bCol{width:30px;min-width:30px!important;height:30px!important;border-radius:50%!important;background:var(--c)!important;padding:0!important}
 .board .bCol.on{outline:3px solid #f59e0b;outline-offset:2px}
 .board .bSep{width:1px;height:26px;background:#dde2ea}
@@ -543,7 +545,9 @@ function md(src){
 /* ---------- الصوت ---------- */
 const TTS=(()=>{
   const ok='speechSynthesis' in window&&'SpeechSynthesisUtterance' in window;
-  let voices=[],voice=null,pitch=1,opts=[],rate=store.get('p101-rate',0.95),queue=[],playing=false,btn=null,btnHTML='';
+  let voices=[],voice=null,pitch=1,opts=[],rate=0.95,queue=[],playing=false,btn=null,btnHTML='';
+  /* سرعة القراءة في p101-rate؛ نقل تقييمات النجوم المحفوظة خطأً بالمفتاح نفسه إلى p101-stars */
+  {let r0=store.get('p101-rate',0.95);if(r0&&typeof r0==='object'){store.set('p101-stars',Object.assign(store.get('p101-stars',{}),r0));r0=0.95;store.set('p101-rate',r0)}rate=typeof r0==='number'&&r0>=0.5&&r0<=2?r0:0.95}
   /* الصوت الطبيعي من الخادم (Microsoft Azure) */
   const AZV=[['ar-SA-HamedNeural','رجل','حامد'],['ar-SA-ZariyahNeural','امرأة','زارية'],['ar-AE-HamdanNeural','رجل','حمدان'],['ar-AE-FatimaNeural','امرأة','فاطمة'],['en-US-AndrewMultilingualNeural','رجل','أندرو (متصل)'],['en-US-AvaMultilingualNeural','امرأة','آفا (متصلة)'],['en-US-BrianMultilingualNeural','رجل','براين (متصل)'],['en-US-EmmaMultilingualNeural','امرأة','إيما (متصلة)']];
   const tok=()=>(AUTH&&AUTH.token)||TAUTH||'';
@@ -803,7 +807,7 @@ const TTS=(()=>{
   function refreshNotes(){document.querySelectorAll('.ttsNote').forEach(n=>{n.textContent=voice||SRV?'':'لا يوجد صوت عربي على هذا الجهاز'});
     document.querySelectorAll('.voiceSel').forEach(s=>s._fill&&s._fill());
     document.querySelectorAll('.ttsWarn').forEach(n=>n.hidden=!!voice||SRV||!ok);document.querySelectorAll('.ttsTip').forEach(n=>n.hidden=!!(SRV&&az))}
-  return{prefetch:t=>{try{if(!((SRV||OV)&&(OV||az)&&tok()&&API))return;chunksAz(t).forEach(c=>getAz(c,OV||az).catch(()=>{}))}catch(e){}},setOV:v=>{OV=v||null},canAz:()=>!!(API&&tok()),play,playRaw:(segs,b)=>play('',b,segs),stop,controls,refreshNotes,spoken,segments,build,chunksAz,has:()=>!!voice||SRV,ok,busy:()=>!!(playing||(AUD&&!AUD.paused))}
+  return{prefetch:t=>{try{if(!((SRV||OV)&&(OV||az)&&tok()&&API))return;chunksAz(t).forEach(c=>getAz(c,OV||az).catch(()=>{}))}catch(e){}},setOV:v=>{OV=v||null},setRate:v=>{rate=v;store.set('p101-rate',v);document.querySelectorAll('.rateSel').forEach(x=>x.value=v)},getRate:()=>rate,canAz:()=>!!(API&&tok()),play,playRaw:(segs,b)=>play('',b,segs),stop,controls,refreshNotes,spoken,segments,build,chunksAz,has:()=>!!voice||SRV,ok,busy:()=>!!(playing||(AUD&&!AUD.paused))}
 })();
 const TTS_HELP=`<details class="ttsWarn" hidden><summary><b>لا يعمل الصوت؟ اضغط هنا لتفعيل الصوت العربي على جهازك</b></summary>آيفون/آيباد: الإعدادات ← تسهيلات الاستخدام ← المحتوى المنطوق ← الأصوات ← العربية. أندرويد: الإعدادات ← تحويل النص إلى كلام ← محرك Google ← تثبيت العربية. ويندوز: الإعدادات ← الوقت واللغة ← الكلام ← إضافة صوت عربي. متصفح Chrome على الكمبيوتر غالبًا يحتوي صوتًا عربيًا جاهزًا.</details><details class="ttsTip"><summary>🎧 لصوت أوضح وأكثر سلاسة</summary>آيفون/آيباد: الإعدادات ← تسهيلات الاستخدام ← المحتوى المنطوق ← الأصوات ← العربية ← نزّل صوتًا مكتوبًا بجانبه <b>(محسّن)</b> أو <b>(ممتاز)</b> مثل «ماجد»، ثم أعد فتح المنصة واختره من قائمة الأصوات (يظهر بجانبه ⭐). الصوت المحسّن أنقى بكثير من الصوت الافتراضي.</details>`;
 
@@ -909,7 +913,7 @@ const RATE={board:{t:'⭐ قيّم شرح الدرس',q:'هل كان شرح ال
   ex:{t:'⭐ قيّم الأمثلة والتمارين',q:'ما مدى فائدة الأمثلة والتمارين التفاعلية؟',lv:['سهلة','متوسطة','صعبة'],tags:['مفيدة','الآلة الحاسبة سهلة الاستخدام','أحتاج أمثلة أكثر']},
   quiz:{t:'⭐ قيّم الدرس',q:'قيّم الدرس بشكل عام',lv:['سهل','متوسط','صعب'],tags:['استفدت من الدرس','أحتاج مراجعة الدرس']}};
 function rateCard(stage,k,title){
-  const C=RATE[stage],saved=store.get('p101-rate',{}),sk=stage+':'+k;
+  const C=RATE[stage],saved=store.get('p101-stars',{}),sk=stage+':'+k;
   const c=document.createElement('div');c.className='card rate';
   const form=()=>{let stars=0,level='';const tags=new Set();
     c.innerHTML=`<h2>${C.t}</h2><p class="rq">${C.q}</p><div class="stars" role="radiogroup" aria-label="التقييم من خمس نجوم">${[1,2,3,4,5].map(n=>`<button type="button" data-n="${n}" aria-label="${n} من 5">★</button>`).join('')}</div>`+
@@ -923,7 +927,7 @@ function rateCard(stage,k,title){
     c.querySelectorAll('.tg .chip').forEach(b=>b.onclick=()=>{const on=b.getAttribute('aria-pressed')!=='true';b.setAttribute('aria-pressed',on);on?tags.add(b.textContent):tags.delete(b.textContent)});
     sb.onclick=()=>{if(!stars)return;sb.disabled=true;msg.className='rmsg';msg.textContent='جارٍ الإرسال…';
       const note=c.querySelector('textarea').value.trim();
-      const ok=()=>{const sv=store.get('p101-rate',{});sv[sk]=stars;store.set('p101-rate',sv);done_(stars,true)};
+      const ok=()=>{const sv=store.get('p101-stars',{});sv[sk]=stars;store.set('p101-stars',sv);done_(stars,true)};
       if(!API||!AUTH||AUTH.demo){ok();return}
       SYNC.post({a:'rate',token:AUTH.token,stage,lessonKey:k,lessonTitle:title,stars,level,tags:[...tags],note}).then(r=>{
         if(r.ok)ok();else{sb.disabled=false;msg.className='rmsg bad';msg.textContent=r.error==='auth'?'انتهت الجلسة، سجّل الدخول من جديد.':'تعذّر إرسال التقييم، حاول مرة أخرى.'}
@@ -936,7 +940,7 @@ const RATE3=[['board','شرح الدرس على السبورة'],['ex','الأم
 function rateLink(){const r=document.createElement('div');r.className='btnrow';const b=document.createElement('button');b.className='btn';b.textContent='⭐ قيّم الدرس';b.onclick=()=>setTab('rate');r.appendChild(b);return r}
 function renderRate(v){
   const i=wrap(v),k=key(pos.u,pos.l),title=lesson().t,c=document.createElement('div');c.className='card rate';i.appendChild(c);
-  const form=()=>{const sv=store.get('p101-rate',{}),st={};RATE3.forEach(([g])=>st[g]=sv[g+':'+k]||0);let level=store.get('p101-ratelv',{})[k]||'';
+  const form=()=>{const sv=store.get('p101-stars',{}),st={};RATE3.forEach(([g])=>st[g]=sv[g+':'+k]||0);let level=store.get('p101-ratelv',{})[k]||'';
     c.innerHTML=`<h2>⭐ قيّم الدرس</h2><p class="sub">قيّم الدرس كاملًا من خمس نجوم، ويصل تقييمك إلى المدرب لتطوير المنصة.</p>`+
       RATE3.map(([g,t])=>`<div class="r3" data-g="${g}"><p class="rq">${t}</p><div class="stars" role="radiogroup" aria-label="${t}: التقييم من خمس نجوم">${[1,2,3,4,5].map(n=>`<button type="button" data-n="${n}" aria-label="${n} من 5">★</button>`).join('')}</div></div>`).join('')+
       `<div class="rlab">مستوى صعوبة الدرس</div><div class="chips lv">${['سهل','متوسط','صعب'].map(x=>`<button type="button" class="chip" aria-pressed="${x===level}">${x}</button>`).join('')}</div>`+
@@ -947,16 +951,16 @@ function renderRate(v){
     c.querySelectorAll('.lv .chip').forEach(b=>b.onclick=()=>{c.querySelectorAll('.lv .chip').forEach(x=>x.setAttribute('aria-pressed','false'));b.setAttribute('aria-pressed','true');level=b.textContent});
     sb.onclick=()=>{if(RATE3.some(([g])=>!st[g])){msg.className='rmsg bad';msg.textContent='اختر النجوم للأقسام الثلاثة قبل الإرسال.';return}
       sb.disabled=true;msg.className='rmsg';msg.textContent='جارٍ الإرسال…';const note=c.querySelector('textarea').value.trim();
-      const ok=()=>{const s2=store.get('p101-rate',{});RATE3.forEach(([g])=>s2[g+':'+k]=st[g]);store.set('p101-rate',s2);const lv=store.get('p101-ratelv',{});lv[k]=level;store.set('p101-ratelv',lv);done_(true)};
+      const ok=()=>{const s2=store.get('p101-stars',{});RATE3.forEach(([g])=>s2[g+':'+k]=st[g]);store.set('p101-stars',s2);const lv=store.get('p101-ratelv',{});lv[k]=level;store.set('p101-ratelv',lv);done_(true)};
       const fail=e=>{sb.disabled=false;msg.className='rmsg bad';msg.textContent=e==='auth'?'انتهت الجلسة، سجّل الدخول من جديد.':e==='net'?'تعذّر الاتصال. تحقق من الإنترنت ثم حاول مرة أخرى.':'تعذّر إرسال التقييم، حاول مرة أخرى.'};
       if(!API||!AUTH||AUTH.demo){ok();return}
       Promise.all(RATE3.map(([g])=>SYNC.post({a:'rate',token:AUTH.token,stage:g,lessonKey:k,lessonTitle:title,stars:st[g],level:g==='board'?'':level,tags:[],note:g==='quiz'?note:''})))
         .then(rs=>{const bad=rs.find(r=>!r.ok);bad?fail(bad.error):ok()}).catch(()=>fail('net'))}};
-  const done_=fresh=>{const sv=store.get('p101-rate',{});
+  const done_=fresh=>{const sv=store.get('p101-stars',{});
     c.innerHTML=`<h2>⭐ قيّم الدرس</h2><div class="rdone"><b>${fresh?'✓ شكرًا، وصل تقييمك للمدرب.':'قيّمت هذا الدرس سابقًا:'}</b></div>`+RATE3.map(([g,t])=>{const n=sv[g+':'+k]||0;return `<div class="r3d"><span>${t}</span><span><span style="color:#F5B301">${'★'.repeat(n)}</span><span style="color:var(--line)">${'★'.repeat(5-n)}</span></span></div>`}).join('')+
       `<div class="btnrow"><button type="button" class="btn ghost sm" id="rEdit">تعديل التقييم</button>${store.get('p101-survey',null)?'':'<button type="button" class="btn sm" id="rSv">📝 استبانة رضا المتدرب</button>'}</div>`;
     c.querySelector('#rEdit').onclick=form;const sv2=c.querySelector('#rSv');if(sv2)sv2.onclick=()=>setTab('survey')};
-  const sv=store.get('p101-rate',{});RATE3.every(([g])=>sv[g+':'+k])?done_(false):form();
+  const sv=store.get('p101-stars',{});RATE3.every(([g])=>sv[g+':'+k])?done_(false):form();
 }
 function nextLessonBtn(i){
   const r=document.createElement('div');r.className='btnrow';
@@ -1012,7 +1016,7 @@ function openBoard(){
   <div class="bStage"><div class="bSlide"><div class="bPage"><div class="bContent"></div></div></div><div class="bProg"><i></i></div><div class="bTeach"><span class="bAv" aria-hidden="true">👨‍🏫</span><div class="bSay" aria-live="polite"><b>المدرب الذكي</b><span></span></div></div></div>
   <div class="bBar">
     <div class="bRow">
-      <button type="button" class="bVo" title="تغيير صوت المدرب"></button><button type="button" class="bAuto bMain">⏸ إيقاف</button><button type="button" class="bFull" title="ملء الشاشة" aria-label="ملء الشاشة">⛶</button>
+      <button type="button" class="bVo" title="تغيير صوت المدرب"></button><button type="button" class="bSp" title="سرعة صوت المدرب" aria-label="سرعة صوت المدرب"></button><button type="button" class="bAuto bMain">⏸ إيقاف</button><button type="button" class="bFull" title="ملء الشاشة" aria-label="ملء الشاشة">⛶</button>
       <span class="bSep"></span><button type="button" class="bPrev">→</button><button type="button" class="bNext bMain">التالي ←</button>
     </div>
   </div>`;
@@ -1112,6 +1116,11 @@ function openBoard(){
     voBtn.textContent=v==='z'?'👩‍🏫 زارية':'👨‍🏫 حامد';B.querySelector('.bAv').textContent=v==='z'?'👩‍🏫':'👨‍🏫';B.querySelector('.bSay b').textContent=v==='z'?'المدربة الذكية':'المدرب الذكي'};
   voBtn.onclick=()=>{const was=auto;stopAuto();setVo(VO==='z'?'h':'z');if(was)startAuto()};
   setVo(VO);
+  /* سرعة صوت المدرب: بطيء ← عادي ← سريع */
+  const SP=[[0.75,'بطيء'],[0.95,'عادي'],[1.15,'سريع']],spBtn=B.querySelector('.bSp');
+  const spIdx=()=>{const r=TTS.getRate();let b=0;SP.forEach((x,i)=>{if(Math.abs(x[0]-r)<Math.abs(SP[b][0]-r))b=i});return b};
+  const showSp=()=>{spBtn.textContent=SP[spIdx()][1]};showSp();
+  spBtn.onclick=()=>{const was=auto;stopAuto();TTS.setRate(SP[(spIdx()+1)%SP.length][0]);showSp();if(was)startAuto()};
   const fullBtn=B.querySelector('.bFull');
   const setFull=o=>{B.classList.toggle('full',o);fullBtn.textContent=o?'🗗':'⛶';fullBtn.title=o?'إنهاء ملء الشاشة':'ملء الشاشة';
     try{if(o&&B.requestFullscreen&&!document.fullscreenElement)B.requestFullscreen().catch(()=>{});else if(!o&&document.fullscreenElement)document.exitFullscreen().catch(()=>{})}catch(e){}};

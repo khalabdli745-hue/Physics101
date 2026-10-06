@@ -167,7 +167,7 @@ const xd=d=>{if(!d)return '';const x=new Date(d),z=n=>String(n).padStart(2,'0');
 const fmtTime=s=>{s=+s||0;const h=Math.floor(s/3600),m=Math.round(s%3600/60);return h?`${h} س ${m} د`:`${m} د`};
 const fmtDate=d=>{if(!d)return '—';const x=new Date(d);return x.toLocaleDateString('ar-SA-u-ca-gregory',{day:'numeric',month:'short'})+' '+x.toLocaleTimeString('ar-SA',{hour:'2-digit',minute:'2-digit'})};
 const pctCls=v=>v==null?'n':v>=80?'g':v>=50?'m':'b';
-const pct=v=>`<span class="pct ${pctCls(v)}">${v==null?'—':Math.round(v)+'٪'}</span>`;
+const pct=v=>`<span class="pct ${pctCls(v)}">${v==null?'—':AR(Math.round(v))+'٪'}</span>`;
 const avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null;
 function probByLesson(prob){const g={};Object.entries(prob||{}).forEach(([k,v])=>{const l=k.split('.')[0];(g[l]=g[l]||[]).push(+v)});const o={};Object.entries(g).forEach(([l,a])=>o[l]=avg(a));return o}
 function enrich(s){const pl=probByLesson(s.prob);s.quizAvg=avg(Object.values(s.quiz||{}).map(Number));s.probAvg=avg(Object.values(pl));s.probL=pl;s.doneN=(s.done||[]).length;s.progress=Math.round(s.doneN/TOTAL*100);
@@ -308,7 +308,7 @@ async function drawStats(){
   const secRows=DATA.sections.map(s=>{const x=DATA.students.filter(y=>y.sectionId===s.id&&y.id!=='DEMO');return{n:s.name,c:x.length,a:avg(x.map(y=>y.overall).filter(v=>v!=null)),t:x.reduce((q,y)=>q+y.totalSec,0)/(x.length||1)}}).filter(s=>s.c);
   /* متابعة */
   const risk=st.map(s=>{const why=[];if(!s.loginCount)why.push('لم يدخل المنصة أبدًا');else if(!s.lastSeen||now-new Date(s.lastSeen)>wk)why.push('لم يدخل منذ أكثر من أسبوع');
-    if(s.overall!=null&&s.overall<50)why.push('المعدل '+Math.round(s.overall)+'٪');if(s.loginCount&&!s.attempts)why.push('دخل ولم يحل أي اختبار');return{s,why}}).filter(x=>x.why.length);
+    if(s.overall!=null&&s.overall<50)why.push('المعدل '+AR(Math.round(s.overall))+'٪');if(s.loginCount&&!s.attempts)why.push('دخل ولم يحل أي اختبار');return{s,why}}).filter(x=>x.why.length);
   const opts=`<option value="all">كل الشعب</option>`+DATA.sections.map(s=>`<option value="${esc(s.id)}" ${sec===s.id?'selected':''}>${esc(s.name)}</option>`).join('');
   m.innerHTML=`<div class="row" style="margin-bottom:12px"><select id="ssf">${opts}</select><button class="btn ghost sm" id="sref">↻ إعادة الحساب</button><button class="btn sm" id="sexp">⬇ تصدير الإحصائيات Excel</button></div>
   <div class="stats"><div class="stat"><small>المتدربون</small><b>${AR(st.length)}</b></div><div class="stat"><small>نشطون آخر ٧ أيام</small><b>${AR(active7)}</b></div><div class="stat"><small>لم يدخلوا أبدًا</small><b>${AR(never.length)}</b></div>
@@ -323,7 +323,7 @@ async function drawStats(){
   ${lessonRows.map(l=>`<tr style="cursor:default"><td>${esc(l.t)}</td><td class="num">${l.quizStudents||0}</td><td>${pct(l.quizFirst)}</td><td>${pct(l.quizBest)}</td><td class="num">${l.probStudents||0}</td><td>${pct(l.probFirst)}</td><td>${pct(l.probBest)}</td><td class="num">${(l.quizAttempts||0)+(l.probAttempts||0)}</td></tr>`).join('')}</tbody></table></div>`:'<p class="empty">لا توجد محاولات بعد.</p>'}</div>
   <div class="card"><h2>الأسئلة الأكثر خطأ</h2><p class="sub">نسبة من أجابوا صحيحًا عن كل سؤال في الاختبارات، مع أكثر إجابة خاطئة تكرارًا.</p>
   ${STATS.questions.length?STATS.questions.slice(0,25).map(x=>`<div class="qrow">${pct(x.pct)} <b>${esc(x.q)}</b><br><small>${esc(LT[x.lessonKey]||'')} · ${AR(x.correct)} صحيحة من ${AR(x.total)}${x.commonWrong?` · أكثر خطأ: «${esc(x.commonWrong)}» (${AR(x.commonWrongN)})`:''}</small></div>`).join(''):'<p class="empty">لا توجد إجابات بعد.</p>'}</div>
-  ${secRows.length>1?`<div class="card"><h2>مقارنة الشعب</h2><div class="bars">${secRows.map(s=>bar(s.n+' ('+s.c+')',s.a||0,100,pctCls(s.a),s.a==null?'—':Math.round(s.a)+'٪')).join('')}</div></div>`:''}
+  ${secRows.length>1?`<div class="card"><h2>مقارنة الشعب</h2><div class="bars">${secRows.map(s=>bar(s.n+' ('+s.c+')',s.a||0,100,pctCls(s.a),s.a==null?'—':AR(Math.round(s.a))+'٪')).join('')}</div></div>`:''}
   <div class="card"><h2>متدربون يحتاجون متابعة (${AR(risk.length)})</h2>${risk.length?`<div class="tableWrap"><table><thead><tr><th>الرقم</th><th>الاسم</th><th>الشعبة</th><th>السبب</th><th>المعدل</th></tr></thead><tbody>${risk.map(x=>`<tr data-id="${esc(x.s.id)}"><td class="num">${esc(x.s.id)}</td><td>${esc(x.s.name)}</td><td>${esc(secName(x.s.sectionId))}</td><td>${x.why.map(esc).join('، ')}</td><td>${pct(x.s.overall)}</td></tr>`).join('')}</tbody></table></div>`:'<p class="empty">لا يوجد. كل المتدربين نشطون ومعدلاتهم جيدة.</p>'}</div>`;
   $('#ssf').onchange=e=>{secFilter=e.target.value;ls.set('p101-tsec',secFilter);drawStats()};
   $('#sref').onclick=async()=>{STATS=null;await load()};
