@@ -589,7 +589,7 @@ const TTS=(()=>{
     const m=k.match(/^([وفبلك])(.+)$/);if(m&&m[2].length>1){if(V[m[2]])return m[1]+V[m[2]];if(m[1]==='ل'&&m[2][0]==='ل'&&V['ا'+m[2]])return 'لِ'+V['ا'+m[2]].slice(1)}
     return w}
   /* بدون تنوين: نحذف التنوين ونقف على آخر الكلمة بالسكون حتى لا يضيفه القارئ الآلي */
-  function pausal(w){w=w.replace(/[\u064B-\u064D]/g,'');
+  function pausal(w){if(/\u0652[\u0621-\u064A][\u064E-\u0650]$/.test(w))return w.replace(/[\u064B-\u064D]/g,'');w=w.replace(/[\u064B-\u064D]/g,'');
     if(w.replace(DIA,'').length<2||!/[\u064E-\u0652]/.test(w))return w;
     const last=w[w.length-1];if(/[\u064E-\u0652]/.test(last))return w;
     if(/[اىويآ]/.test(last))return w;
@@ -600,7 +600,9 @@ const TTS=(()=>{
 
   /* التشكيل الكامل (tashkeel.js): كل جملة/عبارة مشكّلة تشكيلًا تامًا بالإعراب؛ وما لم يوجد يُشكَّل بالقاموس */
   const TNORM=x=>x.replace(/[ً-ْٰـ]/g,'').replace(/\s+/g,' ').trim();
-  function waqf(v){return v.replace(/([ء-يً-ْ]+)([^ء-ي]*)$/,(m,w,tail)=>{w=w.replace(/ًا$|اً$/,'ا').replace(/[ً-ْ]+$/,m=>m.includes('\u0651')?'\u0651':'');return pausal(w)+tail})}
+  /* كلمة تنتهي بساكنين (مثل الشُّغْل، الدَّرْس): القارئ الآلي يُسقط أحدهما عند الوقف، فنُبقي حركة آخرها */
+  const CLUSTER=/\u0652[\u0621-\u064A][\u064B-\u0650]*$/;
+  function waqf(v){return v.replace(/([ء-يً-ْ]+)([^ء-ي]*)$/,(m,w,tail)=>{if(CLUSTER.test(w)&&!/ًا$|اً$/.test(w))return w.replace(/\u064B$/,'\u064E').replace(/\u064C$/,'\u064F').replace(/\u064D$/,'\u0650')+tail;w=w.replace(/ًا$|اً$/,'ا').replace(/[ً-ْ]+$/,m=>m.includes('\u0651')?'\u0651':'');return pausal(w)+tail})}
   function tvocal(t){const T=window.TASHKEEL||{};
     return t.split(/([.،؛:؟!\n]+)/).map((p,j)=>{if(j%2)return p;const k=TNORM(p);if(!k)return p;if(window.__arLog)window.__arLog.add(k);
       const v=T[k];if(!v)return vocal(p);const lead=p.match(/^\s*/)[0],trail=p.match(/\s*$/)[0];return lead+waqf(v)+trail}).join('')}
@@ -1006,7 +1008,7 @@ function openBoard(){
     for(let j=0;j<st.length;j+=6)out.push({type:'c',title:'مثال محلول'+(j?' (تابع)':''),steps:st.slice(j,j+6)})}
   /* التمارين */
   ((window.PROBS||{})[K2]||[]).forEach((p,j)=>{const val=p.s.replace(/\[([^\]]+)\]/g,(m,v)=>fmt(parseNum(v))),ans=fmt(p.a[0])+(p.a[1]?' '+p.a[1]:'');
-    out.push({type:'c',title:'تمرين '+AR(j+1),steps:[{md:'**السؤال:** '+p.q},{md:'**المعطيات:** '+p.g.map(g=>'`'+g+'`').join('، ')},{md:'**المطلوب:** '+p.r[0]},{md:'**القانون المستخدم:** `'+p.l[0]+'`'},{md:'**الحل:** `'+val+' = '+ans+'`'},{md:'**النتيجة:** `'+ans+'`'}]})});
+    out.push({type:'c',title:'تمرين '+AR(j+1),steps:[{md:'**السؤال:** '+p.q},{md:'**المعطيات:** '+p.g.map(g=>'`'+g+'`').join('، ')},{md:'**المطلوب:** '+p.r[0]},{md:'**القانون المستخدم:** `'+p.l[0]+'`'},{md:'**الحل:** `'+val+' = '+ans+'`'},{md:'**النتيجة:** `'+ans+'`'}].concat(p.n?[{md:'**ملاحظة:** '+p.n}]:[])})});
   const sm=(window.SUMM||{})[key(pos.u,pos.l)];
   if(sm)out.push({type:'c',title:'ملخص الدرس',steps:sm.split('\n').filter(x=>x.trim()).map(x=>({md:x.trim()}))});
   out.push({type:'e'});
