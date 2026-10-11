@@ -256,6 +256,7 @@ body.boardOpen{overflow:hidden}
 .board .bPage{position:relative;min-height:100%;padding:18px 18px 40px}
 .board .bContent{font-size:19px;line-height:1.9}
 .board .bSlide{--paper:#F7F8FA;--panel:#FFFFFF;--ink:#172033;--muted:#5B6479;--line:#DDE2EA;--grid:#E6EAF1;--soft:#EEF2F6;--fig2:#3559B5;--warnc:#C4542B;--good:#1E7A3C;--bad:#B42330;--accent-soft:color-mix(in srgb,var(--accent) 13%,#fff);--pageFilter:none;color-scheme:light;color:var(--ink)}
+li.sym{margin-inline-start:1.6em;font-size:.92em;list-style:none}.md ul li.sym::before{width:6px;height:6px;border-radius:50%;transform:none;background:var(--muted);top:.8em}
 .board .bH{margin:0 0 12px;padding-bottom:8px;border-bottom:3px solid var(--accent);color:var(--accent);font-size:22px}
 .board .bContent h3{color:var(--accent);font-size:1.05em;margin:.4em 0}
 .board .bContent img{max-width:100%}
@@ -530,7 +531,7 @@ function cellHTML(c){c=String(c);if(/`/.test(c))return inl(c);
 function photoFail(im){const f=im.closest('figure'),k=im.dataset.fb;if(f)f.outerHTML=(k&&(window.FIGS||{})[k])||''}
 function md(src){
   const out=[];let list=null;
-  const flush=()=>{if(list){out.push(`<${list.t}>${list.i.map(x=>'<li>'+inl(x)+'</li>').join('')}</${list.t}>`);list=null}};
+  const flush=()=>{if(list){out.push(`<${list.t}>${list.i.map(x=>'<li'+(/^\s*`[^`=\s]{1,3}`\s/.test(x)?' class="sym"':'')+'>'+inl(x)+'</li>').join('')}</${list.t}>`);list=null}};
   for(const raw of src.split('\n')){const l=raw.trim();let m;
     if(!l){flush();continue}
     if(m=l.match(/^\[\[img:([^|\]]+)\|(\w*)\|([^\]]*)\]\]$/)){flush();const src=m[1].startsWith('@')?((window.PHOTOS||{})[m[1].slice(1)]||''):m[1];out.push(`<figure class="fig photo"><img src="${esc(src)}" alt="${esc(m[3])}" loading="lazy" referrerpolicy="no-referrer" data-fb="${m[2]}" onerror="photoFail(this)"><figcaption>${esc(m[3])}</figcaption></figure>`);continue}
@@ -671,6 +672,7 @@ const TTS=(()=>{
     if(/^\s*`?N`?\s*$/.test(t))t=t.replace('N','Ｎ');return t}
   function spokenEn(t){
     const P=[];const ph=w=>{P.push(w);return ' \u0001'+(P.length-1)+'\u0002 '};
+    t=t.replace(/^\s*J\s*=\s*N\s*[·.]\s*m\s*$/,()=>ph('joule equals newton meter'));
     t=t.replace(/Ｎ/g,()=>ph('newton')).replace(/(\d\s*)Pa\b/g,(m,d)=>d+ph('pascals')).replace(/\bPa\b/g,()=>ph('pascal'));
     t=t.replace(/\(\s*$/,'').replace(/^\s*\)/,'');
     t=t.replace(/\bv([fi])\b/g,'V$1').replace(/\b(cos|sin|tan)(?=\d|θ)/g,'$1 ').replace(/([AB])([xyz])(?=[AB][xyz])/g,'$1$2 ');
@@ -998,14 +1000,15 @@ function openBoard(){
   /* حل المثال بأربع خطوات: تقسيم الشرائح عند حدود الخطوات */
   const S4RX=/^\*\*(أولًا|ثانيًا|ثالثًا|رابعًا):/;
   const isS4=st=>st.some(y=>S4RX.test(y.md||''));
-  const pack=st=>{if(!isS4(st)){if(!st.length)return [[]];const U=[];st.forEach(y=>{const sy=/^[-•]\s*`[^`=\s]{1,3}`\s/.test(y.md||'');if(sy&&U.length&&U[U.length-1].g)U[U.length-1].push(y);else{const u=[y];u.g=(y.md||'').trim()==='حيث:';U.push(u)}});
+  const pack=st=>{if(!isS4(st)){if(!st.length)return [[]];const U=[];st.forEach(y=>{const sy=/^[-•]\s*`[^`=\s]{1,3}`\s/.test(y.md||'');const hy=(y.md||'').trim()==='حيث:';if(sy&&U.length&&U[U.length-1].g)U[U.length-1].push(y);else if(hy&&U.length&&U[U.length-1].length===1){U[U.length-1].push(y);U[U.length-1].g=true}else{const u=[y];u.g=hy;U.push(u)}});
     const r=[];U.forEach(u=>{const L=r[r.length-1];if(L&&L.length+u.length<=6)L.push(...u);else r.push(u.slice())});return r}
     const r=[];st.forEach(y=>{const m=(y.md||'').match(S4RX);if(!r.length||(m&&m[1]!=='أولًا'&&m[1]!=='رابعًا'))r.push([]);r[r.length-1].push(y)});return r};
+  const isBul=y=>!!y.md&&/^[-•]/.test(y.md)&&!/^[-•]\s*`[^`=\s]{1,3}`\s/.test(y.md)&&!/^[-•]\s*\*\*/.test(y.md)&&!/^[-•]\s*`[^`]+`[.،]?$/.test(y.md);
   const slides=[];const heads=[];
   secs.forEach(sec=>{const its=items(sec);let title='';if(its[0]&&its[0][0]==='#'&&!/^#\s/.test(its[0].slice(1,2))){title=its.shift().slice(1)}
     if(title&&!/^مثال/.test(title))heads.push(title);
     const sub=its.map(x=>x[0]==='#'?{h:x.slice(1)}:{md:x});
-    const s4=isS4(sub);pack(sub).forEach((ch,j)=>slides.push({type:'c',title:title+(j?' (تابع)':''),steps:ch,s4}))});
+    const s4=isS4(sub);let b0=0;const bn=sub.filter(isBul).length;pack(sub).forEach((ch,j)=>{slides.push({type:'c',title:title+(j?' (تابع)':''),steps:ch,s4,b0,bn});b0+=ch.filter(isBul).length})});
   const out=[{type:'t'}];slides.forEach(sl=>out.push(sl));
   const K2=key(pos.u,pos.l),x=extra();
   /* الرسومات التوضيحية */
@@ -1031,7 +1034,7 @@ function openBoard(){
     if(P4.has(K2)){const sym=String(p.l[0]).split('=')[0].trim(),bt=v=>'`'+v+'`';
       const giv=p.g.map((g,k)=>{const n=SYMN[g.split('=')[0].trim()];return (k?'و':'')+(n?n+(SYMM.has(g.split('=')[0].trim())?' مقداره ':' مقدارها '):'')+bt(g)}).join('، ');
       const used=[...new Set((String(p.l[0]).match(/[A-Za-zθ]/g)||[]).filter(c=>SYMN[c]))];
-      const st=[{md:'**السؤال:** '+p.q},{md:'**أولًا: المعطيات والمطلوب**'},{md:'**المعطيات:** '+giv+'.'},{md:'**المطلوب:** '+p.r[0]+'.'},
+      const st=[{md:'**السؤال:** '+p.q},{md:'**أولًا: المعطيات والمطلوب**'},{md:'**المعطيات:** '+giv},{md:'**المطلوب:** '+p.r[0]},
         {md:'**ثانيًا: القانون**'},{md:bt(p.l[0])}];
       if(used.length){st.push({md:'حيث:'});used.forEach(c=>st.push({md:'- '+bt(c)+' '+SYMN[c]}))}
       st.push({md:'**ثالثًا: التعويض**'});
@@ -1128,7 +1131,7 @@ function openBoard(){
     if(x.html)return x.say||'';
     if(x.h!==undefined)return /^مثال/.test(x.h)?'لنأخذ مثالًا: '+x.h.replace(/^مثال\s*[\d٠-٩]*\s*:?\s*/,'')+'.':pick(['والآن: ','ننتقل إلى: '],step)+x.h+'.';
     const isB=y=>!!y.md&&/^[-•]/.test(y.md)&&!/^[-•]\s*`[^`=\s]{1,3}`\s/.test(y.md)&&!/^[-•]\s*\*\*/.test(y.md)&&!/^[-•]\s*`[^`]+`[.،]?$/.test(y.md);
-    const nb=sl.steps.filter(isB).length,idx=sl.steps.slice(0,step-1).filter(isB).length;
+    const nb=sl.bn!=null?sl.bn:sl.steps.filter(isB).length,idx=(sl.b0||0)+sl.steps.slice(0,step-1).filter(isB).length;
     if(sl.s4&&x.md){const m4=x.md.match(/^\*\*((?:أولًا|ثانيًا|ثالثًا|رابعًا):[^*]+)\*\*\s*(.*)$/);
       if(m4)return (/^أولًا/.test(m4[1])?'لنحل '+(/^تمرين/.test(sl.title)?'هذا التمرين':'هذا المثال')+' خطوة بخطوة، والحل في أربع خطوات: المعطيات والمطلوب، ثم القانون، ثم التعويض، ثم النتيجة. ':'')+m4[1]+'.'+(m4[2]?' '+m4[2]:'');
       const m5=x.md.match(/^\*\*(المعطيات|المطلوب):?\*\*:?\s*(.*)$/);if(m5)return m5[1]+': '+m5[2];
