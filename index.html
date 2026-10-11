@@ -591,7 +591,7 @@ const TTS=(()=>{
     const m=k.match(/^([وفبلك])(.+)$/);if(m&&m[2].length>1){if(V[m[2]])return m[1]+V[m[2]];if(m[1]==='ل'&&m[2][0]==='ل'&&V['ا'+m[2]])return 'لِ'+V['ا'+m[2]].slice(1)}
     return w}
   /* بدون تنوين: نحذف التنوين ونقف على آخر الكلمة بالسكون حتى لا يضيفه القارئ الآلي */
-  function pausal(w){if(/ا[\u064B-\u0652]?ت[\u064B-\u0652]*$/.test(w))return w.replace(/ت[\u064B-\u0652]*$/,x=>'ت'+(/[\u0650\u064D]/.test(x)?'\u0650':'\u064F'));if(/\u0652[\u0621-\u064A][\u064E-\u0650]$/.test(w))return w.replace(/[\u064B-\u064D]/g,'');w=w.replace(/[\u064B-\u064D]/g,'');
+  function pausal(w){if(/[\u064E-\u0652]ه[\u064F\u0650]$/.test(w))return w;if(/ا[\u064B-\u0652]?ت[\u064B-\u0652]*$/.test(w))return w.replace(/ت[\u064B-\u0652]*$/,x=>'ت'+(/[\u0650\u064D]/.test(x)?'\u0650':'\u064F'));if(/\u0652[\u0621-\u064A][\u064E-\u0650]$/.test(w))return w.replace(/[\u064B-\u064D]/g,'');w=w.replace(/[\u064B-\u064D]/g,'');
     if(w.replace(DIA,'').length<2||!/[\u064E-\u0652]/.test(w))return w;
     const last=w[w.length-1];if(/[\u064E-\u0652]/.test(last))return w;
     if(/[اىويآ]/.test(last))return w;
@@ -605,7 +605,7 @@ const TTS=(()=>{
   /* كلمة تنتهي بساكنين (مثل الشُّغْل، الدَّرْس): القارئ الآلي يُسقط أحدهما عند الوقف، فنُبقي حركة آخرها */
   const CLUSTER=/\u0652[\u0621-\u064A][\u064B-\u0650]*$/;
   const LONGAT=/ا[\u064B-\u0652]?ت[\u064B-\u0652]*$/;
-  function waqf(v){return v.replace(/([ء-يً-ْ]+)([^ء-ي]*)$/,(m,w,tail)=>{if(LONGAT.test(w))return w.replace(/ت[\u064B-\u0652]*$/,x=>'ت'+(/[\u0650\u064D]/.test(x)?'\u0650':'\u064F'))+tail;if(/^(?:[فولبك]?[إأ]|لأ|ولأ)نّ?$/.test(w.replace(/[\u064B-\u0650\u0652]/g,'').replace(/^([فولبك])?ِ?/,'$1'))&&/نَّ$|نّ$/.test(w))return w.replace(/نَّ$|نّ$/,'نَّ')+tail;if(CLUSTER.test(w)&&!/ًا$|اً$/.test(w))return w.replace(/\u064B$/,'\u064E').replace(/\u064C$/,'\u064F').replace(/\u064D$/,'\u0650')+tail;w=w.replace(/ًا$|اً$/,'ا').replace(/[ً-ْ]+$/,m=>m.includes('\u0651')?'\u0651':'');return pausal(w)+tail})}
+  function waqf(v){return v.replace(/([ء-يً-ْ]+)([^ء-ي]*)$/,(m,w,tail)=>{if(/[\u064E-\u0652]ه[\u064F\u0650]$/.test(w))return w+tail;if(LONGAT.test(w))return w.replace(/ت[\u064B-\u0652]*$/,x=>'ت'+(/[\u0650\u064D]/.test(x)?'\u0650':'\u064F'))+tail;if(/^(?:[فولبك]?[إأ]|لأ|ولأ)نّ?$/.test(w.replace(/[\u064B-\u0650\u0652]/g,'').replace(/^([فولبك])?ِ?/,'$1'))&&/نَّ$|نّ$/.test(w))return w.replace(/نَّ$|نّ$/,'نَّ')+tail;if(CLUSTER.test(w)&&!/ًا$|اً$/.test(w))return w.replace(/\u064B$/,'\u064E').replace(/\u064C$/,'\u064F').replace(/\u064D$/,'\u0650')+tail;w=w.replace(/ًا$|اً$/,'ا').replace(/[ً-ْ]+$/,m=>m.includes('\u0651')?'\u0651':'');return pausal(w)+tail})}
   function tvocal(t,cont){const T=window.TASHKEEL||{};
     const P=t.split(/([.،؛:؟!\n]+)/);return P.map((p,j)=>{if(j%2)return p;const k=TNORM(p);if(!k)return p;if(window.__arLog)window.__arLog.add(k);
       const v=T[k];if(!v)return vocal(p,cont&&j===P.length-1);const lead=p.match(/^\s*/)[0],trail=p.match(/\s*$/)[0];return lead+(cont&&j===P.length-1?v:waqf(v))+trail}).join('')}
@@ -1041,7 +1041,7 @@ function openBoard(){
       if(p.b)p.b.forEach(y=>st.push({md:bt(y)}));else st.push({md:bt(p.l[0])},{md:bt(val.replace(/(cos|sin)(\d)/g,'$1 $2')+trg(val.replace(/(cos|sin)(\d)/g,'$1 $2')))});
       st.push({md:'**رابعًا: النتيجة**'},{md:(SYMN[sym]?SYMN[sym]+' ':'')+bt(sym+' = '+ans)+' ✓'});
       if(p.n&&!p.b)st.push({md:'**ملاحظة:** '+p.n});
-      if(p.bl){const k=st.findIndex(y=>/^\*\*ثانيًا:/.test(y.md));st.splice(k+1,st.findIndex(y=>/^\*\*ثالثًا:/.test(y.md))-k-1,{md:p.bl},...(p.bu?[{md:'حيث:'}].concat(p.bu.map(c=>({md:'- '+bt(c)+' '+(c==='θ'?'الزاوية':SYMN[c])}))):[]))}
+      if(p.bl){const k=st.findIndex(y=>/^\*\*ثانيًا:/.test(y.md));st.splice(k+1,st.findIndex(y=>/^\*\*ثالثًا:/.test(y.md))-k-1,...[].concat(p.bl).map(x=>({md:x})),...(p.bu?[{md:'حيث:'}].concat(p.bu.map(c=>({md:'- '+bt(c)+' '+(c==='θ'?'الزاوية':SYMN[c])}))):[]))}
       pack(st).forEach((ch,c)=>out.push({type:'c',title:'تمرين '+AR(j+1)+(c?' (تابع)':''),steps:ch,s4:true}));return}
     out.push({type:'c',title:'تمرين '+AR(j+1),steps:[{md:'**السؤال:** '+p.q},{md:'**المعطيات:** '+p.g.map(g=>'`'+g+'`').join('، ')},{md:'**المطلوب:** '+p.r[0]},{md:'**القانون المستخدم:** `'+p.l[0]+'`'},{md:'**الحل:** `'+val+' = '+ans+'`'},{md:'**النتيجة:** `'+ans+'`'}].concat(p.n?[{md:'**ملاحظة:** '+p.n}]:[])})});
   const sm=(window.SUMM||{})[key(pos.u,pos.l)];
