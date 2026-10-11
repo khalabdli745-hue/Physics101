@@ -1001,7 +1001,7 @@ function openBoard(){
   const S4RX=/^\*\*(أولًا|ثانيًا|ثالثًا|رابعًا):/;
   const isS4=st=>st.some(y=>S4RX.test(y.md||''));
   const pack=st=>{if(!isS4(st)){if(!st.length)return [[]];const U=[];st.forEach(y=>{const sy=/^[-•]\s*`[^`=\s]{1,3}`\s/.test(y.md||'');const hy=(y.md||'').trim()==='حيث:',fg=/^\[\[(fig|img):/.test((y.md||'').trim());if(sy&&U.length&&U[U.length-1].g)U[U.length-1].push(y);else if((hy||fg)&&U.length){U[U.length-1].push(y);if(hy)U[U.length-1].g=true}else{const u=[y];u.g=hy;U.push(u)}});
-    const r=[];U.forEach(u=>{const L=r[r.length-1];if(L&&L.length+u.length<=6)L.push(...u);else r.push(u.slice())});return r}
+    const lim=st.some(y=>(y.md||'').trim()==='حيث:')?8:6;const r=[];U.forEach(u=>{const L=r[r.length-1];if(L&&L.length+u.length<=lim)L.push(...u);else r.push(u.slice())});return r}
     const r=[];st.forEach(y=>{const m=(y.md||'').match(S4RX);if(!r.length||(m&&m[1]!=='أولًا'&&m[1]!=='رابعًا'))r.push([]);r[r.length-1].push(y)});return r};
   const isBul=y=>!!y.md&&/^[-•]/.test(y.md)&&!/^[-•]\s*`[^`=\s]{1,3}`\s/.test(y.md)&&!/^[-•]\s*\*\*/.test(y.md)&&!/^[-•]\s*`[^`]+`[.،]?$/.test(y.md);
   const slides=[];const heads=[];
@@ -1025,15 +1025,15 @@ function openBoard(){
     const e4=s.ex.st.some(y=>S4RX.test(y));s.ex.st.forEach(y=>st.push({md:e4?y:'- '+y}));if(!e4)st.push({md:'**الإجابة:** '+s.ex.a});
     pack(st).forEach((ch,j)=>out.push({type:'c',title:'مثال محلول'+(j?' (تابع)':''),steps:ch,s4:e4}))}
   /* التمارين */
-  const P4=new Set(['1-7']);
+  const P4={has:k=>/^1-/.test(k)};
   const TRV={'cos0':1,'cos60':0.5,'cos90':0,'cos180':-1,'cos30':0.87,'cos45':0.71,'sin0':0,'sin30':0.5,'sin90':1};
   const trg=v=>{let c=false;const r=v.replace(/(cos|sin)\s*(\d+)\s*°/g,(m,f,d)=>{const k=f+d;if(k in TRV){c=true;return TRV[k]<0?'('+fmt(TRV[k])+')':fmt(TRV[k])}return m});return c?' = '+r.split('=').slice(1).join('=').trim():''};
-  const SYMM=new Set(['a','h','g','v','t']);
-  const SYMN={f:'قوة الاحتكاك',F:'القوة',x:'الإزاحة','θ':'الزاوية',m:'الكتلة',a:'التسارع',W:'الشغل',g:'تسارع الجاذبية',h:'الارتفاع',v:'السرعة',t:'الزمن'};
+  const SYMM=new Set(['a','h','g','t','d','Δx','μ','μk','μs','h₁','h₂']);
+  const SYMN={Vf:'السرعة النهائية',Vi:'السرعة الابتدائية','v̄':'السرعة المتوسطة','x₁':'الإزاحة الأولى','F₁':'القوة الأولى','h₁':'الارتفاع الأول','h₂':'الارتفاع الثاني',KE:'الطاقة الحركية',PE:'طاقة الوضع',ME:'الطاقة الميكانيكية',fk:'قوة الاحتكاك الحركي','μk':'معامل الاحتكاك الحركي','μs':'معامل الاحتكاك السكوني','μ':'معامل الاحتكاك',N:'القوة العمودية',Fs:'قوة الاحتكاك السكوني','F₂':'القوة الثانية','ΣF':'محصلة القوى','x₂':'الإزاحة الثانية',d:'مقدار الإزاحة','Δx':'الإزاحة',f:'قوة الاحتكاك',F:'القوة',x:'الإزاحة','θ':'الزاوية',m:'الكتلة',a:'التسارع',W:'الشغل',g:'تسارع الجاذبية',h:'الارتفاع',v:'السرعة المتوسطة',t:'الزمن'};Object.assign(SYMN,({'1-3':{W:'الوزن'},'1-5':{W:'الوزن'},'1-6':{W:'الوزن'},'1-8':{v:'السرعة'},'1-9':{v:'السرعة'},'1-10':{v:'السرعة'},'1-11':{v:'السرعة'}})[K2]||{});
   ((window.PROBS||{})[K2]||[]).forEach((p,j)=>{const val=p.s.replace(/\[([^\]]+)\]/g,(m,v)=>fmt(parseNum(v))),ans=fmt(p.a[0])+(p.a[1]?' '+p.a[1]:'');
-    if(P4.has(K2)){const sym=String(p.l[0]).split('=')[0].trim(),bt=v=>'`'+v+'`';
+    if(P4.has(K2)){const sym=p.rs||String(p.l[0]).split('=')[0].trim(),bt=v=>'`'+v+'`';
       const giv=p.g.map(g=>{const n=SYMN[g.split('=')[0].trim()];return {md:'- '+(n?n+(SYMM.has(g.split('=')[0].trim())?' مقداره ':' مقدارها '):'')+bt(g)}});
-      const used=[...new Set((String(p.l[0]).match(/[A-Za-zθ]/g)||[]).filter(c=>SYMN[c]))];
+      const used=[...new Set((String(p.l[0]).match(/h₁|h₂|KE|PE|ME|Vf|Vi|x₁|x₂|F₁|F₂|ΣF|Fs|fk|μk|μs|μ|Δx|v̄|[A-Za-zθ]/g)||[]).filter(c=>SYMN[c]))];
       const st=[{md:'**السؤال:** '+p.q},{md:'**أولًا: المعطيات والمطلوب**'},{md:'**المعطيات:**'},...giv,{md:'**المطلوب:**'},{md:'- '+p.r[0]},
         {md:'**ثانيًا: القانون**'},{md:bt(p.l[0])}];
       if(used.length){st.push({md:'حيث:'});used.forEach(c=>st.push({md:'- '+bt(c)+' '+SYMN[c]}))}
@@ -1135,7 +1135,15 @@ function openBoard(){
     if(sl.s4&&x.md){const m4=x.md.match(/^\*\*((?:أولًا|ثانيًا|ثالثًا|رابعًا):[^*]+)\*\*\s*(.*)$/);
       if(m4)return (/^أولًا/.test(m4[1])?'لنحل '+(/^تمرين/.test(sl.title)?'هذا التمرين':'هذا المثال')+' خطوة بخطوة، والحل في أربع خطوات: المعطيات والمطلوب، ثم القانون، ثم التعويض، ثم النتيجة. ':'')+m4[1]+'.'+(m4[2]?' '+m4[2]:'');
       const m5=x.md.match(/^\*\*(المعطيات|المطلوب):?\*\*:?\s*(.*)$/);if(m5)return m5[1]+': '+m5[2];
-      if(/^`[^`]+`[.،]?$/.test(x.md)){const pv=(sl.steps[step-2]||{}).md||'';return (/\d/.test(x.md)?'نعوّض: ':/^\*\*ثانيًا:/.test(pv)?'':'القانون: ')+x.md}
+      if(/^`[^`]+`[.،]?$/.test(x.md)){const pv=(sl.steps[step-2]||{}).md||'',nz=y=>y.replace(/[`.،\s]/g,'');
+        let ph='',seen=[],laws=new Set();
+        scan:for(let c=cur,s=step-2;c>=0;c--){const q=out[c];if(!q||!q.s4)break;if(c<cur)s=q.steps.length-1;
+          for(;s>=0;s--){const m=q.steps[s].md||'',h=m.match(S4RX);
+            if(h){if(!ph)ph=h[1];if(h[1]==='ثانيًا'){seen.forEach(y=>laws.add(y));break scan}if(h[1]==='أولًا')break scan;seen=[];continue}
+            if(/^`[^`]+`[.،]?$/.test(m))seen.push(nz(m))}}
+        if(ph==='ثانيًا')return (/^\*\*ثانيًا:/.test(pv)?'':'القانون: ')+x.md;
+        if(ph==='ثالثًا')return (laws.has(nz(x.md))||!/\d/.test(x.md)?'القانون: ':'نعوّض: ')+x.md;
+        return (/\d/.test(x.md)?'نعوّض: ':/^\*\*ثانيًا:/.test(pv)?'':'القانون: ')+x.md}
       return teach(x.md,-1,0)}
     let t=teach(x.md,isB(x)?idx:(/^\[\[(fig|img):/.test(x.md)?cur+step:-1),isB(x)?nb:0);
     if(step===sl.steps.length&&sl.title!=='ملخص الدرس'&&sl.steps.length>1&&cur%3===0)t=t.replace(/[\s✓.،]*$/,'')+'. '+pick(['هل الفكرة واضحة لك؟ ممتاز، لنكمل.','لاحظ كيف ترتبط الفكرة بما سبق.','جميل، احفظ هذه الفكرة جيدًا.'],cur);
@@ -1651,7 +1659,7 @@ else{
   setTimeout(voiceTest,600);
 }
 /* الرموز السفلية: Vi ← V<sub>i</sub> */
-(()=>{const RX=/([A-Za-zΔμ]+)_([A-Za-z0-9]+)|(?<![A-Za-z])(V|F|KE|PE|μ)([ifsk])(?![a-z0-9])|(μ)/g,NS='http://www.w3.org/2000/svg',SKIP=/^(SCRIPT|STYLE|TEXTAREA|INPUT|SUB|tspan|OPTION|TITLE)$/;
+(()=>{const RX=/([A-Za-zΔμ]+)_([A-Za-z0-9]+)|(?<![A-Za-z])(V|F|f|KE|PE|μ)([ifsk])(?![a-z0-9])|(μ)/g,NS='http://www.w3.org/2000/svg',SKIP=/^(SCRIPT|STYLE|TEXTAREA|INPUT|SUB|tspan|OPTION|TITLE)$/;
 function fix(root){if(!root||root.nodeType!==1&&root.nodeType!==9)return;const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT),L=[];let n;
   while(n=w.nextNode()){RX.lastIndex=0;if(RX.test(n.nodeValue)&&n.parentNode&&!SKIP.test(n.parentNode.nodeName)&&!(n.parentNode.closest&&n.parentNode.closest('[contenteditable],sub,.mu')))L.push(n)}
   for(const t of L){const svg=t.parentNode.namespaceURI===NS,f=document.createDocumentFragment(),s=t.nodeValue;let i=0,m;RX.lastIndex=0;
