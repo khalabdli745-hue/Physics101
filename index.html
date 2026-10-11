@@ -605,7 +605,7 @@ const TTS=(()=>{
   /* كلمة تنتهي بساكنين (مثل الشُّغْل، الدَّرْس): القارئ الآلي يُسقط أحدهما عند الوقف، فنُبقي حركة آخرها */
   const CLUSTER=/\u0652[\u0621-\u064A][\u064B-\u0650]*$/;
   const LONGAT=/ا[\u064B-\u0652]?ت[\u064B-\u0652]*$/;
-  function waqf(v){return v.replace(/([ء-يً-ْ]+)([^ء-ي]*)$/,(m,w,tail)=>{if(LONGAT.test(w))return w.replace(/ت[\u064B-\u0652]*$/,x=>'ت'+(/[\u0650\u064D]/.test(x)?'\u0650':'\u064F'))+tail;if(CLUSTER.test(w)&&!/ًا$|اً$/.test(w))return w.replace(/\u064B$/,'\u064E').replace(/\u064C$/,'\u064F').replace(/\u064D$/,'\u0650')+tail;w=w.replace(/ًا$|اً$/,'ا').replace(/[ً-ْ]+$/,m=>m.includes('\u0651')?'\u0651':'');return pausal(w)+tail})}
+  function waqf(v){return v.replace(/([ء-يً-ْ]+)([^ء-ي]*)$/,(m,w,tail)=>{if(LONGAT.test(w))return w.replace(/ت[\u064B-\u0652]*$/,x=>'ت'+(/[\u0650\u064D]/.test(x)?'\u0650':'\u064F'))+tail;if(/^(?:[فولبك]?[إأ]|لأ|ولأ)نّ?$/.test(w.replace(/[\u064B-\u0650\u0652]/g,'').replace(/^([فولبك])?ِ?/,'$1'))&&/نَّ$|نّ$/.test(w))return w.replace(/نَّ$|نّ$/,'نَّ')+tail;if(CLUSTER.test(w)&&!/ًا$|اً$/.test(w))return w.replace(/\u064B$/,'\u064E').replace(/\u064C$/,'\u064F').replace(/\u064D$/,'\u0650')+tail;w=w.replace(/ًا$|اً$/,'ا').replace(/[ً-ْ]+$/,m=>m.includes('\u0651')?'\u0651':'');return pausal(w)+tail})}
   function tvocal(t,cont){const T=window.TASHKEEL||{};
     const P=t.split(/([.،؛:؟!\n]+)/);return P.map((p,j)=>{if(j%2)return p;const k=TNORM(p);if(!k)return p;if(window.__arLog)window.__arLog.add(k);
       const v=T[k];if(!v)return vocal(p,cont&&j===P.length-1);const lead=p.match(/^\s*/)[0],trail=p.match(/\s*$/)[0];return lead+(cont&&j===P.length-1?v:waqf(v))+trail}).join('')}
