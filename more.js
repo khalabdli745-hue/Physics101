@@ -185,6 +185,45 @@ F.u1WorkSign=svg('0 0 380 235',
     T(x0,212,r,C)+T(x0,229,ar,`class="lb xs" text-anchor="middle" style="fill:${col}"`)+
     (i<2?`<line x1="${x0+62}" y1="15" x2="${x0+62}" y2="230" stroke="var(--line)" stroke-dasharray="3 4"/>`:'')}).join(''),
   'الشغل W = F·x·cosθ: موجب إذا ساعدت القوة الحركة، صفر إذا تعامدت معها، سالب إذا عاكستها');
+/* تعريف الشغل: قوة تحرك جسمًا مسافة على خط عملها */
+F.u1WorkLine=svg('0 0 380 210',
+  `<line x1="15" y1="140" x2="365" y2="140" stroke="var(--ink)" stroke-width="2"/>`+
+  `<line x1="20" y1="120" x2="360" y2="120" stroke="var(--accent)" stroke-width="1.4" stroke-dasharray="6 5" opacity=".7"/>`+
+  T(190,46,'خط عمل القوة','class="lb xs" text-anchor="middle" style="fill:var(--accent)"')+`<line x1="190" y1="52" x2="190" y2="114" stroke="var(--accent)" stroke-width="1" stroke-dasharray="2 3" opacity=".7"/>`+
+  `<rect x="40" y="100" width="40" height="40" rx="4" fill="none" stroke="var(--muted)" stroke-width="2" stroke-dasharray="4 3"/>`+T(60,92,'قبل',CX)+
+  `<rect x="250" y="100" width="40" height="40" rx="4" fill="var(--soft)" stroke="var(--ink)" stroke-width="2"/>`+T(270,92,'بعد',CX)+
+  L(290,120,345,120,'var(--accent)','ba',3)+T(318,110,'F',C)+
+  L(60,165,270,165,'var(--muted)','bm',2)+`<line x1="60" y1="158" x2="60" y2="172" stroke="var(--muted)" stroke-width="2"/>`+T(165,185,'المسافة x',CX)+
+  T(190,205,'W = F·x',C),
+  'الشغل: ما تبذله قوة على جسم لتحركه مسافة على نفس خط عمل القوة');
+/* القوة في اتجاه المسافة */
+F.u1WorkAlong=svg('0 0 380 200',
+  `<line x1="40" y1="120" x2="340" y2="120" stroke="var(--ink)" stroke-width="2"/>`+
+  `<rect x="90" y="75" width="50" height="45" rx="4" fill="var(--soft)" stroke="var(--ink)" stroke-width="2"/>`+
+  L(140,97,230,97,'var(--accent)','ba',3.5)+T(185,86,'F',C)+
+  L(90,148,290,148,'var(--muted)','bm',2)+T(190,168,'الإزاحة x',CX)+
+  T(190,194,'W = F·x',C),
+  'إذا كانت القوة في اتجاه المسافة: W = F·x');
+/* القوة تميل بزاوية على خط عمل المسافة */
+F.u1WorkTilt=svg('0 0 380 210',
+  `<line x1="40" y1="130" x2="340" y2="130" stroke="var(--ink)" stroke-width="2"/>`+
+  `<rect x="70" y="85" width="50" height="45" rx="4" fill="var(--soft)" stroke="var(--ink)" stroke-width="2"/>`+
+  L(120,107,240,37,'var(--accent)','ba',3.5)+T(190,52,'F',C)+
+  L(120,107,240,107,'var(--fig2)','bb',2.5,'6 4')+`<line x1="240" y1="107" x2="240" y2="40" stroke="var(--muted)" stroke-dasharray="3 3"/>`+
+  `<path d="M160,107 A40,40 0 0,0 154,86" fill="none" stroke="var(--ink)" stroke-width="1.5"/>`+T(170,98,'θ','class="lb sm" text-anchor="middle"')+
+  T(195,123,'F·cos θ','class="lb xs" text-anchor="middle" style="fill:var(--fig2)"')+
+  L(80,158,280,158,'var(--muted)','bm',2)+T(180,178,'الإزاحة x',CX)+
+  T(190,204,'W = F·x·cos θ',C),
+  'إذا كانت القوة تميل بزاوية θ على خط عمل المسافة: المركبة F·cos θ وحدها تبذل الشغل');
+/* تعريف الجول */
+F.u1Joule=svg('0 0 380 190',
+  `<line x1="40" y1="110" x2="340" y2="110" stroke="var(--ink)" stroke-width="2"/>`+
+  `<rect x="70" y="70" width="40" height="40" rx="4" fill="none" stroke="var(--muted)" stroke-width="2" stroke-dasharray="4 3"/>`+
+  `<rect x="230" y="70" width="40" height="40" rx="4" fill="var(--soft)" stroke="var(--ink)" stroke-width="2"/>`+
+  L(270,90,325,90,'var(--accent)','ba',3)+T(298,78,'F = 1 N',C)+
+  L(90,135,250,135,'var(--muted)','bm',2)+`<line x1="90" y1="128" x2="90" y2="142" stroke="var(--muted)" stroke-width="2"/>`+T(170,155,'x = 1 m',C)+
+  T(190,182,'W = 1 N × 1 m = 1 J',C),
+  'الجول: شغل قوة مقدارها 1 نيوتن تزيح جسمًا مسافة 1 متر في اتجاهها');
 /* تعريف الشغل: قوة في اتجاه الحركة وقوة مائلة */
 F.u1WorkDef=svg('0 0 380 250',
   T(285,24,'القوة في اتجاه الحركة','class="lb sm" text-anchor="middle" style="fill:var(--accent)"')+
@@ -1466,3 +1505,6 @@ for(const k in D){const[u,l]=k.split('-').map(Number);const x=D[k];if(!S[u]||!S[
 (function(){const E=window.EXTRA||{},M=window.FIGMAP=window.FIGMAP||{},a=E['1-3'],b=E['1-4'];
   if(a&&b&&b.ap&&a.ap&&a.ap.indexOf(b.ap)<0)a.ap=a.ap+'\n'+b.ap;
   if(b&&b.fig&&(window.FIGS||{})[b.fig]){M['1-3']=M['1-3']||[];if(a.fig!==b.fig&&M['1-3'].indexOf(b.fig)<0)M['1-3'].push(b.fig)}})();
+
+/* الشغل: حذف شرائح «رسم توضيحي» المكررة بعد إضافة الرسوم في التعريف والحالات */
+(function(){const E=window.EXTRA||{},M=window.FIGMAP||{};if(E['1-7'])delete E['1-7'].fig;M['1-7']=[];})();
