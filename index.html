@@ -705,7 +705,7 @@ const TTS=(()=>{
   }
   const NUMW=['صِفْر','وَاحِد','اثْنَان','ثَلَاثَة','أَرْبَعَة','خَمْسَة','سِتَّة','سَبْعَة','ثَمَانِيَة','تِسْعَة','عَشَرَة'];
   /* «مثال ٣» تُقرأ «مثال ثلاثة» لا «ثلاث» */
-  const numNoun=x=>x.replace(/((?:مِ?|م)[\u064B-\u0652]*ث[\u064B-\u0652]*ا[\u064B-\u0652]*ل|ت[\u064B-\u0652]*م[\u064B-\u0652]*ر[\u064B-\u0652]*ي[\u064B-\u0652]*ن|س[\u064B-\u0652]*ؤ[\u064B-\u0652]*ا[\u064B-\u0652]*ل|د[\u064B-\u0652]*ر[\u064B-\u0652]*س)[\u064B-\u0652]*(\s+)([0-9٠-٩]{1,2})(?![0-9٠-٩]|[.,٫][0-9٠-٩])/g,(m,w,sp,d)=>{const n=+String(d).replace(/[٠-٩]/g,c=>'٠١٢٣٤٥٦٧٨٩'.indexOf(c));return n<=10?w+sp+NUMW[n]:m});
+  const numNoun=x=>x.replace(/((?:مِ?|م)[\u064B-\u0652]*ث[\u064B-\u0652]*ا[\u064B-\u0652]*ل|ت[\u064B-\u0652]*م[\u064B-\u0652]*ر[\u064B-\u0652]*ي[\u064B-\u0652]*ن|س[\u064B-\u0652]*ؤ[\u064B-\u0652]*ا[\u064B-\u0652]*ل|د[\u064B-\u0652]*ر[\u064B-\u0652]*س)[\u064B-\u0652]*(\s+)([0-9٠-٩]{1,2})(?![0-9٠-٩]|[.,٫][0-9٠-٩])/g,(m,w,sp,d)=>{const n=+String(d).replace(/[٠-٩]/g,c=>'٠١٢٣٤٥٦٧٨٩'.indexOf(c));return n<=10?w+'\u0652'+sp+NUMW[n]:m});
   function arPart(t,cont){t=t.replace(/[←⇐]/g,'، إذن ').replace(/[→⇒]/g,' إلى ').replace(/[()«»]/g,' ').replace(/\s·\s|^\s*·|·\s*$/g,'، ').replace(/\s[—–]\s/g,'، ');t=arFix(numNoun(tvocal(t,cont)),cont);return t.replace(/\s+([،.:؟])/g,'$1').replace(/\s+/g,' ')}
   const AR_CH=/[؀-ۿ]/;
   /* النقطة الوسطى «·» بين مسافتين خارج القوانين فاصل بين عبارات، تُقرأ وقفة لا «ضرب» */
@@ -1522,8 +1522,8 @@ function renderQuiz(v){
     const opts=d.querySelector('.opts');
     const order=q.o.length===2?[0,1]:shuffle(q.o.map((_,n)=>n));
     const btns={};
-    const ORDN=['الأول','الثاني','الثالث','الرابع'];
-    d.querySelector('.qn').appendChild(TTS.controls(()=>'السؤال '+(qi+1)+'. '+q.q+'\n'+order.map((oi,n)=>'الخيار '+ORDN[n]+': '+q.o[oi]+'.').join('\n'),{compact:true,label:'🔊',aria:'استمع للسؤال'}));
+    const QORD=['الأول','الثاني','الثالث','الرابع','الخامس','السادس','السابع','الثامن','التاسع','العاشر','الحادي عشر','الثاني عشر','الثالث عشر','الرابع عشر','الخامس عشر'];const ORDN=['الأول','الثاني','الثالث','الرابع'];
+    d.querySelector('.qn').appendChild(TTS.controls(()=>'السؤال '+(QORD[qi]||String(qi+1))+'. '+q.q+'\n'+order.map((oi,n)=>'الخيار '+ORDN[n]+': '+q.o[oi]+'.').join('\n'),{compact:true,label:'🔊',aria:'استمع للسؤال'}));
     order.forEach(oi=>{const b=document.createElement('button');b.innerHTML=inl(q.o[oi]);btns[oi]=b;
       b.onclick=()=>{if(d.dataset.done)return;d.dataset.done=1;answered++;chosen[qi]=oi;const ok=oi===q.a;if(ok)right++;
         b.classList.add(ok?'right':'wrong');if(!ok)btns[q.a].classList.add('right');
