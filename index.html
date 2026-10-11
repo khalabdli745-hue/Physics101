@@ -620,7 +620,11 @@ const TTS=(()=>{
       if(PREP.has(pv)||isPrefixed(bare))W[j]=w+'ِ'}
     return W.join('')}
   function parens(t){let prev;do{prev=t;t=t.replace(/\(([^()]*)\)/g,(m,inner)=>/[+×÷*\/·]|\s[−-]\s/.test(inner)?' قوس، '+inner+' ، إغلاق القوس، ':' '+inner+' ')}while(t!==prev);return t}
+  /* دروس تُقرأ أرقامها وقوانينها بالعربية كاملة (بلا تبديل للإنجليزية) */
+  const AR_ONLY=new Set([]);
+  function arOnly(){try{return AR_ONLY.has(pos.u+'-'+pos.l)}catch(e){return false}}
   function spoken(t){
+    t=String(t).replace(/`?J\s*=\s*N·m`?/g,'، والجول يساوي نيوتن ضرب متر');
     t=markN(sepDot(t)).replace(/Ｎ/g,' نيوتن ').replace(/(\d\s*)Pa\b/g,'$1 باسكال ').replace(/\bPa\b/g,' باسكال ');
     t=t.replace(/^#+\s*/gm,'').replace(/\*\*/g,'').replace(/`/g,'').replace(/^[-•]\s*/gm,'').replace(/[✓✗⚠️]/g,'').replace(/[✦⚗🔊■]/g,'');
     t=t.replace(/([^.:؟!،\n])[ \t]*\n+/g,'$1.\n');
@@ -697,7 +701,10 @@ const TTS=(()=>{
     t=t.replace(/[|[\]{}"'`«»]/g,' ').replace(/\s+([,.:])/g,'$1').replace(/,(\s*,)+/g,',').replace(/\s+/g,' ');
     return t.trim().replace(/^[,.\s]+|[,\s]+$/g,'');
   }
-  function arPart(t,cont){t=t.replace(/[←⇐]/g,'، إذن ').replace(/[→⇒]/g,' إلى ').replace(/[()«»]/g,' ').replace(/\s·\s|^\s*·|·\s*$/g,'، ').replace(/\s[—–]\s/g,'، ');t=arFix(tvocal(t,cont),cont);return t.replace(/\s+([،.:؟])/g,'$1').replace(/\s+/g,' ')}
+  const NUMW=['صِفْر','وَاحِد','اثْنَان','ثَلَاثَة','أَرْبَعَة','خَمْسَة','سِتَّة','سَبْعَة','ثَمَانِيَة','تِسْعَة','عَشَرَة'];
+  /* «مثال ٣» تُقرأ «مثال ثلاثة» لا «ثلاث» */
+  const numNoun=x=>x.replace(/((?:مِ?|م)[\u064B-\u0652]*ث[\u064B-\u0652]*ا[\u064B-\u0652]*ل|ت[\u064B-\u0652]*م[\u064B-\u0652]*ر[\u064B-\u0652]*ي[\u064B-\u0652]*ن|س[\u064B-\u0652]*ؤ[\u064B-\u0652]*ا[\u064B-\u0652]*ل|د[\u064B-\u0652]*ر[\u064B-\u0652]*س)[\u064B-\u0652]*(\s+)([0-9٠-٩]{1,2})(?![0-9٠-٩]|[.,٫][0-9٠-٩])/g,(m,w,sp,d)=>{const n=+String(d).replace(/[٠-٩]/g,c=>'٠١٢٣٤٥٦٧٨٩'.indexOf(c));return n<=10?w+sp+NUMW[n]:m});
+  function arPart(t,cont){t=t.replace(/[←⇐]/g,'، إذن ').replace(/[→⇒]/g,' إلى ').replace(/[()«»]/g,' ').replace(/\s·\s|^\s*·|·\s*$/g,'، ').replace(/\s[—–]\s/g,'، ');t=arFix(numNoun(tvocal(t,cont)),cont);return t.replace(/\s+([،.:؟])/g,'$1').replace(/\s+/g,' ')}
   const AR_CH=/[؀-ۿ]/;
   /* النقطة الوسطى «·» بين مسافتين خارج القوانين فاصل بين عبارات، تُقرأ وقفة لا «ضرب» */
   const sepDot=t=>t.split(/(`[^`]*`)/).map((p,j)=>j%2?p:p.replace(/\s+·\s+/g,'، ')).join('');
@@ -739,7 +746,7 @@ const TTS=(()=>{
     document.body.appendChild(d);setTimeout(()=>d.remove(),4500)}
   const SILENT='data:audio/mpeg;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjYwLjE2LjEwMAAAAAAAAAAAAAAA//OEwAAAAAAAAAAAAEluZm8AAAAPAAAACQAABCAARUVFRUVFRUVFRUVdXV1dXV1dXV1dXXR0dHR0dHR0dHR0i4uLi4uLi4uLi4uioqKioqKioqKiorq6urq6urq6urq60dHR0dHR0dHR0dHo6Ojo6Ojo6Ojo6P//////////////AAAAAExhdmM2MC4zMQAAAAAAAAAAAAAAACQD8AAAAAAAAAQgDeb0IwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//NExAAAAANIAAAAAExBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMu//NExFMAAANIAAAAADEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMu//NExKYAAANIAAAAADEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMu//NExKwAAANIAAAAADEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMu//NExKwAAANIAAAAADEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMu//NExKwAAANIAAAAADEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMu//NExKwAAANIAAAAADEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//NExKwAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//NExKwAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV';
   function chunksAz(text){
-    const items=[];for(const sg of segments(text)){if(sg.l==='en')items.push(sg);else split(sg.t).forEach(t=>items.push({l:'ar',t}))}
+    const items=[];if(arOnly())split(spoken(text)).forEach(t=>items.push({l:'ar',t}));else for(const sg of segments(text)){if(sg.l==='en')items.push(sg);else split(sg.t).forEach(t=>items.push({l:'ar',t}))}
     const out=[];let cur=[],n=0;
     for(const it of items){if(cur.length&&(n+it.t.length>900||cur.length>=30)){out.push(cur);cur=[];n=0}cur.push(it);n+=it.t.length}
     if(cur.length)out.push(cur);
@@ -776,7 +783,7 @@ const TTS=(()=>{
     if(en&&ev){u.voice=ev;u.lang=ev.lang;u.pitch=1}else{u.lang=voice?voice.lang:'ar-SA';if(voice)u.voice=voice;u.pitch=pitch}
     u.rate=rate;u.onend=()=>{if(playing)next()};u.onerror=()=>{if(playing)next()};speechSynthesis.speak(u)}
   function build(text){
-    if(!enVoices.length)return split(spoken(text)).map(t=>({l:'ar',t}));
+    if(!enVoices.length||arOnly())return split(spoken(text)).map(t=>({l:'ar',t}));
     const out=[];for(const s of segments(text)){
       if(s.l==='en'){out.push({l:'en',t:s.t});continue}
       const parts=split(s.t);const L=out[out.length-1];
@@ -1017,10 +1024,11 @@ function openBoard(){
   const P4=new Set(['1-7']);
   const TRV={'cos0':1,'cos60':0.5,'cos90':0,'cos180':-1,'cos30':0.87,'cos45':0.71,'sin0':0,'sin30':0.5,'sin90':1};
   const trg=v=>{let c=false;const r=v.replace(/(cos|sin)\s*(\d+)\s*°/g,(m,f,d)=>{const k=f+d;if(k in TRV){c=true;return TRV[k]<0?'('+fmt(TRV[k])+')':fmt(TRV[k])}return m});return c?' = '+r.split('=').slice(1).join('=').trim():''};
+  const SYMM=new Set(['a','h','g','v','t']);
   const SYMN={f:'قوة الاحتكاك',F:'القوة',x:'الإزاحة','θ':'الزاوية',m:'الكتلة',a:'التسارع',W:'الشغل',g:'تسارع الجاذبية',h:'الارتفاع',v:'السرعة',t:'الزمن'};
   ((window.PROBS||{})[K2]||[]).forEach((p,j)=>{const val=p.s.replace(/\[([^\]]+)\]/g,(m,v)=>fmt(parseNum(v))),ans=fmt(p.a[0])+(p.a[1]?' '+p.a[1]:'');
     if(P4.has(K2)){const sym=String(p.l[0]).split('=')[0].trim(),bt=v=>'`'+v+'`';
-      const giv=p.g.map((g,k)=>{const n=SYMN[g.split('=')[0].trim()];return (k?'و':'')+(n?n+' ':'')+bt(g)}).join('، ');
+      const giv=p.g.map((g,k)=>{const n=SYMN[g.split('=')[0].trim()];return (k?'و':'')+(n?n+(SYMM.has(g.split('=')[0].trim())?' مقداره ':' مقدارها '):'')+bt(g)}).join('، ');
       const used=[...new Set((String(p.l[0]).match(/[A-Za-zθ]/g)||[]).filter(c=>SYMN[c]))];
       const st=[{md:'**السؤال:** '+p.q},{md:'**أولًا: المعطيات والمطلوب**'},{md:'**المعطيات:** '+giv+'.'},{md:'**المطلوب:** '+p.r[0]+'.'},
         {md:'**ثانيًا: القانون**'},{md:bt(p.l[0])}];
