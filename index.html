@@ -669,7 +669,7 @@ const TTS=(()=>{
     ['µF','microfarads'],['μF','microfarads'],['µC','microcoulombs'],['μC','microcoulombs'],['µm','micrometers'],['μm','micrometers'],['µA','microamperes'],['nC','nanocoulombs'],['nF','nanofarads'],['pF','picofarads'],['nm','nanometers'],['mA','milliamperes'],['mV','millivolts'],['kV','kilovolts'],['MΩ','megaohms'],['kΩ','kilo ohms'],
     ['mJ','millijoules'],['kJ','kilojoules'],['MJ','megajoules'],['kW','kilowatts'],['MW','megawatts'],['kg','kilograms'],['km','kilometers'],['cm','centimeters'],['mm','millimeters'],['mg','milligrams'],['ms','milliseconds'],['Hz','hertz'],['cal','calories'],['mol','moles'],['cd','candela'],['Ω','ohms'],['min','minutes']];
   const EN_ONE={m:'meters',s:'seconds',h:'hours',g:'grams',N:'newtons',J:'joules',W:'watts',V:'volts',A:'amperes',C:'coulombs',F:'farads',K:'kelvin',L:'liters'};
-  const EN_LET={a:'ay',b:'bee',c:'see',d:'dee',e:'ee',f:'F',g:'gee',h:'aitch',i:'eye',j:'jay',k:'kay',l:'el',m:'em',n:'N',o:'oh',p:'pee',q:'cue',r:'ar',s:'S',t:'tee',u:'you',v:'vee',w:'double you',x:'ex',y:'why',z:'zee'};
+  const EN_LET={a:'ay',b:'bee',c:'see',d:'dee',e:'E',f:'F',g:'gee',h:'aitch',i:'eye',j:'jay',k:'kay',l:'el',m:'em',n:'N',o:'oh',p:'pee',q:'cue',r:'ar',s:'S',t:'tee',u:'you',v:'vee',w:'double you',x:'ex',y:'why',z:'zee'};
   const EN_SUP={'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9'};
   const EN_SUB={'₀':' naught','₁':' one','₂':' two','₃':' three','ₓ':' x','ᵧ':' y'};
   const EN_WORD={KE:'kinetic energy',PE:'potential energy',ME:'mechanical energy',SI:'S I',DC:'D C',AC:'A C',LED:'L E D',GPS:'G P S',PhET:'fet',cos:'cosine',sin:'sine',tan:'tangent',max:'maximum',min:'minimum',total:'total',known:'known'};
@@ -686,7 +686,7 @@ const TTS=(()=>{
     t=t.replace(/(?<![·\d]\s?)\bA\s?·\s?B\b(?!\s?·)/g,'A'+ph('dot')+'⁠B').replace(/\|([^|]+)\|/g,(m,x)=>ph('magnitude of')+'⁠'+x+' ');
     t=t.replace(/\bmgh\b/g,ph('em gee aitch')).replace(/\bGg\b/g,ph('gigagrams')).replace(/_(ice|melted|melt|rest|total|known)\b/g,(m,w)=>ph(w)).replace(/_Fe\b/g,ph('iron'));
     {const ps=t.split(/\s·\s/);if(ps.length>1){let o=ps[0];for(let i=1;i<ps.length;i++)o+=(/=/.test(ps[i-1])&&/=/.test(ps[i])?' ; ':'·')+ps[i];t=o}}
-    t=t.replace(/\(max\)/g,ph(' maximum')).replace(/μ([sk]?)\s?N\b/g,(m,y)=>ph('mew'+(y?(y=='k'?' kinetic':' static'):'')+' N')).replace(/μmg\b/g,ph('mew em gee')).replace(/(?<![\d.]\s?)\bmg\b/g,ph('em gee')).replace(/μ([sk])(?![a-z])/g,(m,y)=>'μ'+ph(y=='k'?'kinetic':'static')).replace(/\b([VF]|KE|PE)([fisk])\b/g,(m,x,y)=>(x=='V'?'v':x)+ph({f:'final',i:'initial',s:'static',k:'kinetic'}[y])).replace(/v_f/g,'v'+ph('final')).replace(/v_i/g,'v'+ph('initial')).replace(/v_d/g,'v'+ph('drift')).replace(/v̄/g,'v'+ph('average')).replace(/T_f/g,'T'+ph('final')).replace(/T_i/g,'T'+ph('initial')).replace(/_total/g,ph('total')).replace(/_known/g,ph('known')).replace(/_x/g,' x').replace(/_y/g,' y').replace(/_/g,' ');
+    t=t.replace(/\(max\)/g,ph(' maximum')).replace(/μ([sk]?)\s?N\b/g,(m,y)=>ph('mew'+(y?(y=='k'?' kinetic':' static'):'')+' N')).replace(/μmg\b/g,ph('mew em gee')).replace(/(?<![\d.]\s?)\bmg\b/g,ph('em gee')).replace(/μ([sk])(?![a-z])/g,(m,y)=>'μ'+ph(y=='k'?'kinetic':'static')).replace(/\b([VFT]|KE|PE|ME)([fisk])\b/g,(m,x,y)=>(x=='V'?'v':x)+ph({f:'final',i:'initial',s:'static',k:'kinetic'}[y])).replace(/v_f/g,'v'+ph('final')).replace(/v_i/g,'v'+ph('initial')).replace(/v_d/g,'v'+ph('drift')).replace(/v̄/g,'v'+ph('average')).replace(/T_f/g,'T'+ph('final')).replace(/T_i/g,'T'+ph('initial')).replace(/_total/g,ph('total')).replace(/_known/g,ph('known')).replace(/_x/g,' x').replace(/_y/g,' y').replace(/_/g,' ');
     t=t.replace(/î/g,' i'+ph('hat')).replace(/ĵ/g,' j'+ph('hat')).replace(/k̂/g,' k'+ph('hat'));
     t=t.replace(/10([⁻]?[⁰¹²³⁴⁵⁶⁷⁸⁹]+)/g,(m,e)=>ph('ten to the power of '+(e[0]==='⁻'?'minus ':'')+e.replace('⁻','').split('').map(c=>EN_SUP[c]).join('')));
     t=t.replace(/(\d)e([-+]?\d+)/g,(m,d,e)=>d+ph('times ten to the power of '+(e[0]==='-'?'minus '+e.slice(1):e.replace('+',''))));
@@ -868,13 +868,13 @@ function loadUnit(ui){
 
 
 
-/* اختبار نطق نيوتن بكسر التاء: افتح الرابط مع #voicetest */
+/* اختبار نطق حرف E (دلتا إي): افتح الرابط مع #voicetest */
 function voiceTest(){if(!/voicetest/i.test(location.hash+location.search)||document.getElementById('vtCard'))return;
-  const V=[['١','نْيُوتِن'],['٢','نيوتِن'],['٣','نِّيوتِن'],['٤','نيوتين'],['٥','نْيُوتِين'],['٦','نِيُوتِنِ'],['٧','نيوتِنِ']];
+  const V=[['١','إِي'],['٢','إِيْ'],['٣','إي'],['٤','إِ'],['٥','إِيْه'],['٦','اِي'],['٧','إيّ']];
   const c=document.createElement('div');c.id='vtCard';c.className='card';c.style.cssText='position:fixed;top:10px;left:10px;right:10px;z-index:2000;border:3px solid #0B7A70;max-height:80vh;overflow:auto;box-shadow:0 10px 30px rgba(0,0,0,.35)';
-  c.innerHTML='<button type="button" onclick="this.parentNode.remove()" style="float:left;font-size:20px;background:none;border:0;cursor:pointer">✕</button><h2>🔊 اختبار نطق «النيوتِن» بكسر التاء</h2><p>كل زر يقرأ بصوت حامد: «كمية متجهة بوحدة النيوتن. وقانون نيوتن الثاني». أخبرني برقم الزر الذي يقرأها بكسر التاء كاملة.</p>';
+  c.innerHTML='<button type="button" onclick="this.parentNode.remove()" style="float:left;font-size:20px;background:none;border:0;cursor:pointer">✕</button><h2>🔊 اختبار نطق «دلتا إي»</h2><p>كل زر يقرأ بصوت حامد: «دلتا إي يساوي صفر». أخبرني برقم الزر الذي ينطق «إي» صحيحة.</p>';
   const w=document.createElement('div');w.style.cssText='display:flex;flex-wrap:wrap;gap:8px;margin:10px 0';
-  V.forEach(([n,t])=>{const b=document.createElement('button');b.className='btn';b.textContent=n;b.onclick=()=>{TTS.setOV('ar-SA-HamedNeural');const bare=t.replace(/^نّ/,'ن');TTS.playRaw([{l:'ar',t:'كَمِّيَّة مُتَّجِهَة بِوَحْدَةِ ال'+t+'. وقانون '+bare+' الثّانِي.'}],b)};w.appendChild(b)});
+  V.forEach(([n,t])=>{const b=document.createElement('button');b.className='btn';b.textContent=n;b.onclick=()=>{TTS.setOV('ar-SA-HamedNeural');TTS.playRaw([{l:'ar',t:'دِلْتا '+t+' يُساوِي صِفْر.'}],b)};w.appendChild(b)});
   c.appendChild(w);document.body.appendChild(c)}
 addEventListener('hashchange',voiceTest);
 function render(){
@@ -1043,7 +1043,7 @@ function openBoard(){
   const TRV={'cos0':1,'cos60':0.5,'cos90':0,'cos180':-1,'cos30':0.87,'cos45':0.71,'sin0':0,'sin30':0.5,'sin90':1};
   const trg=v=>{let c=false;const r=v.replace(/(cos|sin)\s*(\d+)\s*°/g,(m,f,d)=>{const k=f+d;if(k in TRV){c=true;return TRV[k]<0?'('+fmt(TRV[k])+')':fmt(TRV[k])}return m});return c?' = '+r.split('=').slice(1).join('=').trim():''};
   const SYMM=new Set(['a','h','g','t','d','Δx','μ','μk','μs','h₁','h₂']);
-  const SYMN={KEf:'الطاقة الحركية النهائية',KEi:'الطاقة الحركية الابتدائية',Vf:'السرعة النهائية',Vi:'السرعة الابتدائية','v̄':'السرعة المتوسطة','x₁':'الإزاحة الأولى','F₁':'القوة الأولى','h₁':'الارتفاع الأول','h₂':'الارتفاع الثاني',KE:'الطاقة الحركية',PE:'طاقة الوضع',ME:'الطاقة الميكانيكية',fk:'قوة الاحتكاك الحركي','μk':'معامل الاحتكاك الحركي','μs':'معامل الاحتكاك السكوني','μ':'معامل الاحتكاك',N:'القوة العمودية',Fs:'قوة الاحتكاك السكوني','F₂':'القوة الثانية','ΣF':'محصلة القوى','x₂':'الإزاحة الثانية',d:'مقدار الإزاحة','Δx':'الإزاحة',f:'قوة الاحتكاك',F:'القوة',x:'الإزاحة','θ':'الزاوية',m:'الكتلة',a:'التسارع',W:'الشغل',g:'تسارع الجاذبية',h:'الارتفاع',v:'السرعة المتوسطة',t:'الزمن'};Object.assign(SYMN,({'1-3':{W:'الوزن'},'1-5':{W:'الوزن'},'1-6':{W:'الوزن'},'1-8':{v:'السرعة'},'1-9':{v:'السرعة'},'1-10':{v:'السرعة'},'1-11':{v:'السرعة'}})[K2]||{});
+  const SYMN={KEf:'الطاقة الحركية النهائية',KEi:'الطاقة الحركية الابتدائية',PEf:'طاقة الوضع النهائية',PEi:'طاقة الوضع الابتدائية',MEf:'الطاقة الميكانيكية النهائية',MEi:'الطاقة الميكانيكية الابتدائية',Vf:'السرعة النهائية',Vi:'السرعة الابتدائية','v̄':'السرعة المتوسطة','x₁':'الإزاحة الأولى','F₁':'القوة الأولى','h₁':'الارتفاع الأول','h₂':'الارتفاع الثاني',KE:'الطاقة الحركية',PE:'طاقة الوضع',ME:'الطاقة الميكانيكية',fk:'قوة الاحتكاك الحركي','μk':'معامل الاحتكاك الحركي','μs':'معامل الاحتكاك السكوني','μ':'معامل الاحتكاك',N:'القوة العمودية',Fs:'قوة الاحتكاك السكوني','F₂':'القوة الثانية','ΣF':'محصلة القوى','x₂':'الإزاحة الثانية',d:'مقدار الإزاحة','Δx':'الإزاحة',f:'قوة الاحتكاك',F:'القوة',x:'الإزاحة','θ':'الزاوية',m:'الكتلة',a:'التسارع',W:'الشغل',g:'تسارع الجاذبية',h:'الارتفاع',v:'السرعة المتوسطة',t:'الزمن'};Object.assign(SYMN,({'1-3':{W:'الوزن'},'1-5':{W:'الوزن'},'1-6':{W:'الوزن'},'1-8':{v:'السرعة'},'1-9':{v:'السرعة'},'1-10':{v:'السرعة'},'1-11':{v:'السرعة'}})[K2]||{});
   ((window.PROBS||{})[K2]||[]).filter(p=>!dupQ(p.q)).forEach((p,j)=>{const val=p.s.replace(/\[([^\]]+)\]/g,(m,v)=>fmt(parseNum(v))),ans=fmt(p.a[0])+(p.a[1]?' '+p.a[1]:'');
     if(P4.has(K2)){const sym=p.rs||String(p.l[0]).split('=')[0].trim(),bt=v=>'`'+v+'`';
       const giv=p.g.map(g=>{const n=SYMN[g.split('=')[0].trim()];return {md:'- '+(n?n+(SYMM.has(g.split('=')[0].trim())?' مقداره ':' مقدارها '):'')+bt(g)}});
@@ -1716,7 +1716,7 @@ else{
   setTimeout(voiceTest,600);
 }
 /* الرموز السفلية: Vi ← V<sub>i</sub> */
-(()=>{const RX=/([A-Za-zΔμ]+)_([A-Za-z0-9]+)|(?<![A-Za-z])(V|F|f|KE|PE|μ)([ifsk])(?![a-z0-9])|(μ)/g,NS='http://www.w3.org/2000/svg',SKIP=/^(SCRIPT|STYLE|TEXTAREA|INPUT|SUB|tspan|OPTION|TITLE)$/;
+(()=>{const RX=/([A-Za-zΔμ]+)_([A-Za-z0-9]+)|(?<![A-Za-z])(V|F|f|T|KE|PE|ME|μ)([ifsk])(?![a-z0-9])|(μ)/g,NS='http://www.w3.org/2000/svg',SKIP=/^(SCRIPT|STYLE|TEXTAREA|INPUT|SUB|tspan|OPTION|TITLE)$/;
 function fix(root){if(!root||root.nodeType!==1&&root.nodeType!==9)return;const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT),L=[];let n;
   while(n=w.nextNode()){RX.lastIndex=0;if(RX.test(n.nodeValue)&&n.parentNode&&!SKIP.test(n.parentNode.nodeName)&&!(n.parentNode.closest&&n.parentNode.closest('[contenteditable],sub,.mu')))L.push(n)}
   for(const t of L){const svg=t.parentNode.namespaceURI===NS,f=document.createDocumentFragment(),s=t.nodeValue;let i=0,m;RX.lastIndex=0;
