@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>فيزياء ١٠١ — منصة الشرح التفاعلي</title>
-<meta name="description" content="منصة مجانية لشرح حقيبة الفيزياء العامة ١٠١: صفحات الحقيبة، ملخصات، أمثلة محلولة، اختبارات، شرح صوتي بالعربية وتجارب تفاعلية">
+<meta name="description" content="منصة مجانية لشرح حقيبة الفيزياء العامة ١٠١: صفحات الحقيبة التدريبية، ملخصات، أمثلة محلولة، اختبارات، شرح صوتي بالعربية وتجارب تفاعلية">
 <meta name="theme-color" content="#0369A1">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-180.png">
@@ -452,7 +452,7 @@ sub.ss{font-size:.6em;line-height:0;vertical-align:-.25em}
       <div class="hrow"><h1 id="lessonTitle"></h1><button class="doneBtn" id="doneBtn" aria-pressed="false">أنهيت الدرس</button></div>
       <div class="tabs" role="tablist" id="tabs">
         <button role="tab" data-t="sum">الدرس</button>
-        <button role="tab" data-t="page">صفحات الحقيبة</button>
+        <button role="tab" data-t="page">صفحات الحقيبة التدريبية</button>
         <button role="tab" data-t="ex">أمثلة وتمارين تفاعلية</button>
         <button role="tab" data-t="quiz">اختبر نفسك</button>
         <button role="tab" data-t="lab">تجارب وتطبيقات</button>
@@ -631,7 +631,7 @@ const TTS=(()=>{
   /* دروس تُقرأ أرقامها وقوانينها بالعربية كاملة (بلا تبديل للإنجليزية) */
   const AR_ONLY=new Set([]);
   function arOnly(){try{return AR_ONLY.has(pos.u+'-'+pos.l)}catch(e){return false}}
-  function spoken(t){t=String(t).replace(/\s*·?\s*\(صفحة [0-9٠-٩]+\)/g,'');
+  function spoken(t){t=String(t).replace(/\s*·?\s*\(صفحة [0-9٠-٩]+\)/g,'');t=t.replace(/\[\[fig:[^\]]*\]\]/g,' ').replace(/\[\[img:[^|\]]*\|[^|\]]*\|([^\]]*)\]\]/g,'$1. ').replace(/https?:\/\/\S+/g,' ');t=t.replace(/\s*\\?`[A-Za-zµ]{1,3} → [A-Za-zµ]{1,3}\\?`/g,'');
     t=String(t).replace(/`?J\s*=\s*N·m`?/g,'، والجول يساوي نيوتن ضرب متر');
     t=markN(sepDot(t)).replace(/Ｎ/g,' نيوتن ').replace(/(\d\s*)Pa\b/g,'$1 باسكال ').replace(/\bPa\b/g,' باسكال ');
     t=t.replace(/^#+\s*/gm,'').replace(/\*\*/g,'').replace(/`/g,'').replace(/^[-•]\s*/gm,'').replace(/[✓✗⚠️]/g,'').replace(/[✦⚗🔊■]/g,'');
@@ -679,6 +679,7 @@ const TTS=(()=>{
     if(/^\s*`?N`?\s*$/.test(t))t=t.replace('N','Ｎ');return t}
   function spokenEn(t){
     const P=[];const ph=w=>{P.push(w);return ' \u0001'+(P.length-1)+'\u0002 '};
+    t=t.replace(/\b([A-Za-z])\((km\/h|m\/s|cm|mm|km|kg|min|°C|°F|m|g|h|s|K|J|N)\)/g,(m,x,u)=>x+ph(' in '+{'km/h':'kilometers per hour','m/s':'meters per second','cm':'centimeters','mm':'millimeters','km':'kilometers','m':'meters','kg':'kilograms','g':'grams','h':'hours','min':'minutes','s':'seconds','°C':'degrees Celsius','°F':'degrees Fahrenheit','K':'kelvin','J':'joules','N':'newtons'}[u]+' ')).replace(/ₙ/g,' n').replace(/_eq\b/g,()=>ph(' equivalent'));
     t=t.replace(/^\s*J\s*=\s*N\s*[·.]\s*m\s*$/,()=>ph('joule equals newton meter'));
     t=t.replace(/Ｎ/g,()=>ph('newton')).replace(/(\d\s*)Pa\b/g,(m,d)=>d+ph('pascals')).replace(/\bPa\b/g,()=>ph('pascal'));
     t=t.replace(/\(\s*$/,'').replace(/^\s*\)/,'');
@@ -720,7 +721,7 @@ const TTS=(()=>{
   /* ميو وحدها (خارج القانون) تُقرأ بالعربي؛ وداخل القانون تبقى بالإنجليزي */
   const MUAR={'':' مِيُو ','k':' مِيُو كيه ','s':' مِيُو إس '};
   const soloMu=t=>t.replace(/`\s*[μµ]([sk]?)\s*`/g,(m,y)=>MUAR[y]).replace(/(^|[\s\u0600-\u06FF(«])[μµ]([sk]?)(?=[\s\u0600-\u06FF)»،.:]|$)/g,(m,a,y)=>a+MUAR[y]);
-  function segments(raw){raw=String(raw).replace(/\s*·?\s*\(صفحة [0-9٠-٩]+\)/g,'');
+  function segments(raw){raw=String(raw).replace(/\s*·?\s*\(صفحة [0-9٠-٩]+\)/g,'');raw=raw.replace(/\[\[fig:[^\]]*\]\]/g,' ').replace(/\[\[img:[^|\]]*\|[^|\]]*\|([^\]]*)\]\]/g,'$1. ').replace(/https?:\/\/\S+/g,' ');raw=raw.replace(/\s*\\?`[A-Za-zµ]{1,3} → [A-Za-zµ]{1,3}\\?`/g,'');
     let t=markN(sepDot(soloMu(raw))).replace(/^#+\s*/gm,'').replace(/\*\*/g,'').replace(/`/g,'').replace(/^[-•]\s*/gm,'').replace(/[✓✗⚠️]/g,'').replace(/[✦⚗🔊■]/g,'');
     t=t.replace(/([^.:؟!،\n])[ \t]*\n+/g,'$1.\n').replace(/\n+/g,' ');
     /* نقسم النص إلى كلمات عربية وما بينها */
@@ -900,7 +901,7 @@ function card(title,sub){const c=document.createElement('div');c.className='card
 function wrap(v){v.innerHTML='';const i=document.createElement('div');i.className='inner';v.appendChild(i);return i}
 const GT=t=>t==='refs';
 /* ---------- استبانة رضا المتدرب ---------- */
-const SURVEY=[['الدروس والشرح',['محتوى الدروس واضح ومنظم','الشرح على السبورة مع المدرب الذكي ساعدني على الفهم','الصوت ونطق المصطلحات واضح','صفحات الحقيبة في المنصة مفيدة']],
+const SURVEY=[['الدروس والشرح',['محتوى الدروس واضح ومنظم','الشرح على السبورة مع المدرب الذكي ساعدني على الفهم','الصوت ونطق المصطلحات واضح','صفحات الحقيبة التدريبية في المنصة مفيدة']],
  ['الأمثلة والتمارين',['الأمثلة المحلولة واضحة ومفيدة','خطوات الحل (المعطيات ← المطلوب ← القانون ← النتيجة) ساعدتني على حل المسائل','الآلة الحاسبة العلمية سهلة الاستخدام','التمارين التفاعلية مناسبة لمستواي']],
  ['الاختبارات',['أسئلة الاختبارات مرتبطة بمحتوى الدروس','مستوى صعوبة الاختبارات مناسب','التصحيح الفوري وشرح الإجابة مفيد']],
  ['المنصة بشكل عام',['المنصة سهلة الاستخدام على الجوال','المنصة ساعدتني على فهم مقرر الفيزياء','أنصح زملائي باستخدام المنصة']]];
@@ -985,7 +986,7 @@ function renderRate(v){
 function nextLessonBtn(i){
   const r=document.createElement('div');r.className='btnrow';
   const nx=nextLesson();
-  if(pos.t==='sum'){const b=document.createElement('button');b.className='btn';b.textContent='اقرأ صفحات الحقيبة';b.onclick=()=>setTab('page');r.appendChild(b)}
+  if(pos.t==='sum'){const b=document.createElement('button');b.className='btn';b.textContent='اقرأ صفحات الحقيبة التدريبية';b.onclick=()=>setTab('page');r.appendChild(b)}
   if(nx){const b=document.createElement('button');b.className='btn ghost';b.textContent='الدرس التالي: '+UNITS[nx[0]].l[nx[1]].t;b.onclick=()=>go(nx[0],nx[1],0,pos.t);r.appendChild(b)}
   i.appendChild(r);
 }
@@ -1044,7 +1045,7 @@ function openBoard(){
   const trg=v=>{let c=false;const r=v.replace(/(cos|sin)\s*(\d+)\s*°/g,(m,f,d)=>{const k=f+d;if(k in TRV){c=true;return TRV[k]<0?'('+fmt(TRV[k])+')':fmt(TRV[k])}return m});return c?' = '+r.split('=').slice(1).join('=').trim():''};
   const SYMM=new Set(['a','h','g','t','d','Δx','μ','μk','μs','h₁','h₂']);
   const SYMN={KEf:'الطاقة الحركية النهائية',KEi:'الطاقة الحركية الابتدائية',PEf:'طاقة الوضع النهائية',PEi:'طاقة الوضع الابتدائية',MEf:'الطاقة الميكانيكية النهائية',MEi:'الطاقة الميكانيكية الابتدائية',Vf:'السرعة النهائية',Vi:'السرعة الابتدائية','v̄':'السرعة المتوسطة','x₁':'الإزاحة الأولى','F₁':'القوة الأولى','h₁':'الارتفاع الأول','h₂':'الارتفاع الثاني',KE:'الطاقة الحركية',PE:'طاقة الوضع',ME:'الطاقة الميكانيكية',fk:'قوة الاحتكاك الحركي','μk':'معامل الاحتكاك الحركي','μs':'معامل الاحتكاك السكوني','μ':'معامل الاحتكاك',N:'القوة العمودية',Fs:'قوة الاحتكاك السكوني','F₂':'القوة الثانية','ΣF':'محصلة القوى','x₂':'الإزاحة الثانية',d:'مقدار الإزاحة','Δx':'الإزاحة',f:'قوة الاحتكاك',F:'القوة',x:'الإزاحة','θ':'الزاوية',m:'الكتلة',a:'التسارع',W:'الشغل',g:'تسارع الجاذبية',h:'الارتفاع',v:'السرعة المتوسطة',t:'الزمن'};Object.assign(SYMN,({'1-3':{W:'الوزن'},'1-5':{W:'الوزن'},'1-6':{W:'الوزن'},'1-8':{v:'السرعة'},'1-9':{v:'السرعة'},'1-10':{v:'السرعة'},'1-11':{v:'السرعة'}})[K2]||{});
-  ((window.PROBS||{})[K2]||[]).filter(p=>!dupQ(p.q)).forEach((p,j)=>{const val=p.s.replace(/\[([^\]]+)\]/g,(m,v)=>fmt(parseNum(v))),ans=fmt(p.a[0])+(p.a[1]?' '+p.a[1]:'');
+  ((window.PROBS||{})[K2]||[]).filter(p=>!p.kind&&!dupQ(p.q)).forEach((p,j)=>{const val=p.s.replace(/\[([^\]]+)\]/g,(m,v)=>fmt(parseNum(v))),ans=fmt(p.a[0])+(p.a[1]?' '+p.a[1]:'');
     if(P4.has(K2)){const sym=p.rs||String(p.l[0]).split('=')[0].trim(),bt=v=>'`'+v+'`';
       const giv=p.g.map(g=>{const n=SYMN[g.split('=')[0].trim()];return {md:'- '+(n?n+(SYMM.has(g.split('=')[0].trim())?' مقداره ':' مقدارها '):'')+bt(g)}});
       const used=[...new Set((String(p.laws?p.laws.join(' '):p.l[0]).match(/h₁|h₂|KEf|KEi|KE|PE|ME|Vf|Vi|x₁|x₂|F₁|F₂|ΣF|Fs|fk|μk|μs|μ|Δx|v̄|[A-Za-zθ]/g)||[]).filter(c=>SYMN[c]))];
@@ -1056,7 +1057,7 @@ function openBoard(){
       if(p.n&&!p.b)st.push({md:'**ملاحظة:** '+p.n});
       if(p.bl){const k=st.findIndex(y=>/^\*\*ثانيًا:/.test(y.md));st.splice(k+1,st.findIndex(y=>/^\*\*ثالثًا:/.test(y.md))-k-1,...[].concat(p.bl).map(x=>({md:x})))}
       pack(st).forEach((ch,c)=>out.push({type:'c',title:'تمرين '+AR(j+1)+(p.src?' · '+p.src:'')+(c?' (تابع)':''),steps:ch,s4:true}));return}
-    out.push({type:'c',title:'تمرين '+AR(j+1)+(p.src?' · '+p.src:''),steps:[{md:'**السؤال:** '+p.q},{md:'**المعطيات:** '+p.g.map(g=>'`'+g+'`').join('، ')},{md:'**المطلوب:** '+p.r[0]},{md:'**القانون المستخدم:** '+(p.laws||[p.l[0]]).map(x=>'`'+x+'`').join(' و ')},...(p.b?[{md:'**الحل:**'}].concat(p.b.map((y,i)=>({md:'`'+y+(i===p.b.length-1?' = '+ans:'')+'`'}))):[{md:'**الحل:** `'+val+' = '+ans+'`'}]),{md:'**النتيجة:** `'+(p.rs?p.rs+' = ':'')+ans+'`'}].concat(p.n?[{md:'**ملاحظة:** '+p.n}]:[])})});
+    out.push({type:'c',title:'تمرين '+AR(j+1)+(p.src?' · '+p.src:''),steps:[{md:'**السؤال:** '+p.q},{md:'**المعطيات:** '+p.g.map(g=>'`'+g+'`').join('، ')},{md:'**المطلوب:** '+p.r[0]},{md:'**القانون المستخدم:** '+(p.laws||[p.l[0]]).map(x=>'`'+x+'`').join(' و ')},...(lawHaith(p.l[0])?[{md:lawHaith(p.l[0])}]:[]),...(p.b?[{md:'**الحل:**'}].concat(p.b.map((y,i)=>({md:'`'+y+(i===p.b.length-1?' = '+ans:'')+'`'}))):[{md:'**الحل:** `'+val+' = '+ans+'`'}]),{md:'**النتيجة:** `'+(p.rs?p.rs+' = ':'')+ans+'`'}].concat(p.n?[{md:'**ملاحظة:** '+p.n}]:[])})});
   const sm=(window.SUMM||{})[key(pos.u,pos.l)];
   if(sm)out.push({type:'c',title:'ملخص الدرس',steps:sm.split('\n').filter(x=>x.trim()).map(x=>({md:x.trim()}))});
   out.push({type:'e'});
@@ -1139,6 +1140,7 @@ function openBoard(){
       if(sl.title==='مثال محلول')return sl.s4?'والآن مثال محلول.':'لنحل معًا هذا المثال خطوة بخطوة.';
       if(/^رسم توضيحي/.test(sl.title))return '';
       if(/^مثال/.test(sl.title))return pick(['لنأخذ مثالًا يوضح الفكرة. ','والآن مثال: ','حتى تتضح الصورة، تأمل معي هذا المثال. '],cur)+sl.title.replace(/^مثال\s*[\d٠-٩]*\s*:?\s*/,'')+'.';
+      if(/^أمثلة الحقيبة التدريبية/.test(sl.title))return 'والآن لننتقل إلى حل أمثلة الحقيبة التدريبية.';
       return pick(['ننتقل الآن إلى: ','والآن دعنا نتعرف على: ','الفكرة التالية هي: ','حسنًا، لنتحدث عن: '],cur)+sl.title+'.'}
     const x=sl.steps[step-1];
     if(x.html)return x.say||'';
@@ -1232,7 +1234,7 @@ function renderSum(v){
 function renderPage(v){
   const i=wrap(v),l=lesson(),p=l.p[pos.p];
   const sh=document.createElement('div');sh.className='sheet';i.appendChild(sh);
-  if(PAGES[p]){const im=new Image();im.src=PAGES[p];im.alt=`صفحة ${p} من الحقيبة`;sh.appendChild(im)}
+  if(PAGES[p]){const im=new Image();im.src=PAGES[p];im.alt=`صفحة ${p} من الحقيبة التدريبية`;sh.appendChild(im)}
   else{sh.innerHTML='<div class="pageLoad">جارٍ تحميل صفحات الوحدة…</div>';
     const want=p;loadUnit(pos.u).then(()=>{if(pos.t==='page'&&lesson().p[pos.p]===want)render()}).catch(()=>{sh.innerHTML='<div class="pageLoad">تعذّر تحميل الصفحة. تحقق من الاتصال ثم أعد فتح التبويب.</div>'})}
   $('pageNo').textContent=`صفحة ${AR(pos.p+1)} من ${AR(l.p.length)} · ص${AR(p)}`;
@@ -1381,7 +1383,43 @@ function makeCalc(onUse){
   show();ind();return {btn,panel:P,close:()=>{toggle(false);btn.hidden=true}}}
 
 /* ---------- المسألة التفاعلية ---------- */
+/* شرح رموز قوانين التحويل بالعربي، مثل m(g): الكتلة بالجرام */
+const HQ={m:'الكتلة',L:'الطول',v:'السرعة',t:'الزمن',S:'المساحة',x:'المسافة'};
+const HU={'g':'بالجرام','kg':'بالكيلوجرام','cm':'بالسنتيمتر','mm':'بالمليمتر','m':'بالمتر','km':'بالكيلومتر','h':'بالساعة','s':'بالثانية','min':'بالدقيقة','m/s':'بوحدة متر لكل ثانية','km/h':'بوحدة كيلومتر لكل ساعة','m²':'بالمتر المربع','km²':'بالكيلومتر المربع','cm²':'بالسنتيمتر المربع'};
+function lawHaith(law){const it=[];const seen=new Set();String(law).replace(/\b([A-Za-z])\(([^)]+)\)/g,(m,q,u)=>{if(HQ[q]&&HU[u]&&!seen.has(m)){if(!seen.has(q)){seen.add(q);it.push('`'+q+'` '+HQ[q])}seen.add(m);it.push('`'+m+'` '+HQ[q]+' '+HU[u])}return m});return it.length?'**حيث:** '+it.join('، '):''}
+function unitCard(p,title,onFinish){
+  const c=document.createElement('div');c.className='card prob';
+  c.innerHTML=`<h2>${title}</h2>`;
+  c.appendChild(TTS.controls(()=>p.q));
+  c.insertAdjacentHTML('beforeend',`<p class="pq">${inl(p.q)}</p>`);
+  let first=0,total=0;const steps=[];
+  const mkStep=(n,label)=>{const s=document.createElement('div');s.className='pstep';s.innerHTML=`<div class="phead"><span class="pnum">${AR(n)}</span><b>${label}</b><span class="pstat"></span></div><div class="pbody"></div><div class="pfb" aria-live="polite"></div>`;s.hidden=true;c.appendChild(s);steps.push(s);return s};
+  const fb=(s,msg,cls)=>{const f=s.querySelector('.pfb');f.className='pfb '+(cls||'');f.innerHTML=msg};
+  const mc=(s,label,opts,next)=>{const bd=s.querySelector('.pbody');bd.insertAdjacentHTML('beforeend','<p class="psub">'+inl(label)+'</p>');const w=document.createElement('div');w.className='opts';let tr=0,lk=0;total++;
+    const items=shuffle(opts.map((t,i)=>({t,ok:i===0})));
+    items.forEach(it=>{const b=document.createElement('button');b.innerHTML=inl(it.t);it.el=b;
+      b.onclick=()=>{if(lk)return;
+        if(it.ok){lk=1;b.classList.add('right');items.forEach(x=>x.el.disabled=true);if(!tr)first++;else s.dataset.miss=1;fb(s,'صحيح.','good');next();return}
+        tr++;b.classList.add('wrong');b.disabled=true;
+        if(tr>=2){lk=1;s.dataset.miss=1;items.forEach(x=>{x.el.disabled=true;if(x.ok)x.el.classList.add('right')});fb(s,'الإجابة الصحيحة مظللة بالأخضر.','bad');next();return}
+        fb(s,'ليست هذه. حاول مرة أخرى.','bad')};w.appendChild(b)});bd.appendChild(w)};
+  const close=s=>{const ok=!s.dataset.miss;s.classList.add(ok?'ok':'shown');s.querySelector('.pstat').textContent=ok?'✓':'تم التصحيح'};
+  const go=i=>{const s=steps[i];if(!s)return;s.hidden=false;s.scrollIntoView({block:'nearest',behavior:'smooth'})};
+  /* ١: الرموز ووحدة الطرف الأيسر */
+  const s1=mkStep(1,'أولًا: الرموز ووحداتها');
+  s1.querySelector('.pbody').insertAdjacentHTML('beforeend','<p class="psub"><b>القانون:</b></p><div class="eqblock">'+esc(p.law)+'</div><p class="psub"><b>حيث:</b></p><ul>'+p.sy.map(x=>'<li>'+inl(x)+'</li>').join('')+'</ul>');
+  const s2=mkStep(2,'ثانيًا: الطرف الأيسر'),s3=mkStep(3,'ثالثًا: الطرف الأيمن'),s4=mkStep(4,'رابعًا: المقارنة والنتيجة');
+  const finish=()=>{close(s4);
+    const sol=document.createElement('div');sol.className='ans';
+    sol.innerHTML='الحل:<p><b>الطرف الأيسر:</b> '+inl('`'+p.L.o[0]+'`')+'</p><p><b>الطرف الأيمن:</b> '+inl('`'+p.R[p.R.length-1].o[0]+'`')+'</p><p>'+inl(p.C[0])+'</p><p><b>'+esc(p.ok?'القانون صحيح ✓':'القانون خاطئ ✗')+'</b></p>'+(p.n?'<p class="nt">'+inl(p.n)+'</p>':'');
+    c.appendChild(sol);c.classList.add('finished');
+    const sc=Math.round(first/total*5);onFinish&&onFinish(sc,{q:p.q.slice(0,100),answer:'',correct:sc===5,expected:p.ok?'صحيح':'خاطئ'})};
+  mc(s2,'**'+p.L.q+'**',p.L.o,()=>{close(s2);go(2);let gi=0;const nx=()=>{if(gi>=p.R.length){close(s3);go(3);mc(s4,'**قارن وحدتي الطرفين**',p.C,()=>mc(s4,'**إذن القانون:**',p.ok?['القانون صحيح ✓','القانون خاطئ ✗']:['القانون خاطئ ✗','القانون صحيح ✓'],finish));return}const g=p.R[gi++];mc(s3,'**'+g.q+'**',g.o,nx)};nx()});
+  const b1=document.createElement('button');b1.className='btn';b1.textContent='التالي';b1.onclick=()=>{b1.hidden=true;s1.classList.add('ok');s1.querySelector('.pstat').textContent='✓';go(1)};
+  s1.querySelector('.pbody').appendChild(b1);
+  s1.hidden=false;return c}
 function problemCard(p,title,onFinish){
+  if(p.kind==='units')return unitCard(p,title,onFinish);
   const c=document.createElement('div');c.className='card prob';
   c.innerHTML=`<h2>${title}</h2>`;
   c.appendChild(TTS.controls(()=>p.q));
@@ -1426,7 +1464,7 @@ function problemCard(p,title,onFinish){
         tr++;b.classList.add('wrong');b.disabled=true;
         if(tr>=2){lk=1;items.forEach(x=>{x.el.disabled=true;if(x.ok)x.el.classList.add('right')});done(s1,false,true);fb(s1,'الإجابة الصحيحة مظللة بالأخضر.','bad');reveal(1);return}
         fb(s1,'ليست هذه. حاول مرة أخرى.','bad')};w.appendChild(b)});bd.appendChild(w)};
-  mcStep(2,'ثانيًا: القانون — اختر القانون الصحيح',p.l,'صحيح، هذا هو القانون المناسب.',()=>reveal(2));
+  mcStep(2,'ثانيًا: القانون — اختر القانون الصحيح',p.l,'صحيح، هذا هو القانون المناسب.',()=>{const h=lawHaith(p.l[0]);if(h)steps[1].querySelector('.pbody').insertAdjacentHTML('beforeend','<p class="psub">'+inl(h)+'</p>');reveal(2)});
   /* ثالثًا: التعويض */
   {const fillS=String(p.s).replace(/\[([^\]]+)\]/g,(m,x)=>fmt(parseNum(x))).replace(/\s+/g,' ').trim();
    const ok=p.b&&p.b[1]?p.b[1]:fillS;const nums=ok.match(/\d+(\.\d+)?/g)||[];const ds=[];
@@ -1514,7 +1552,7 @@ function renderEx(v){
     const prog=document.createElement('div');prog.className='score';head.appendChild(prog);i.appendChild(head);
     let fin=0,pts=0;const max=probs.length*5;
     const upd=()=>{prog.textContent=fin?`أنجزت ${AR(fin)} من ${AR(probs.length)} — الخطوات الصحيحة من أول محاولة: ${AR(pts)} من ${AR(max)}`:''};
-    probs.forEach((p,n)=>i.appendChild(problemCard(p,(n===0?'مثال تفاعلي':'تمرين حسابي '+AR(n))+(p.src?' · '+p.src:''),(sc,det)=>{fin++;pts+=sc;upd();SYNC.result('prob',k+'.'+n,lesson().t,sc,5,det);if(fin===probs.length){const b=best['p'+k];if(b==null||pts>b){best['p'+k]=pts;store.set('p101-best',best)}rslot.appendChild(rateLink())}})));
+    probs.forEach((p,n)=>i.appendChild(problemCard(p,(n===0?'مثال تفاعلي':(p.kind?'تمرين ':'تمرين حسابي ')+AR(n))+(p.src?' · '+p.src:''),(sc,det)=>{fin++;pts+=sc;upd();SYNC.result('prob',k+'.'+n,lesson().t,sc,5,det);if(fin===probs.length){const b=best['p'+k];if(b==null||pts>b){best['p'+k]=pts;store.set('p101-best',best)}rslot.appendChild(rateLink())}})));
     const rslot=document.createElement('div');i.appendChild(rslot);
     /* «مثال محلول للمراجعة» حُذف من هذا التبويب لأنه معروض على السبورة */
   }else if(th){i.appendChild(theoryCard(th,s&&s.ex))}
@@ -1621,7 +1659,7 @@ function renderLab(v){
   else c.insertAdjacentHTML('beforeend','<p class="empty">لا توجد تجربة تفاعلية مخصصة لهذا الدرس. جرّب تجارب الدروس الأخرى في الوحدة.</p>');
   i.appendChild(c);
   if(x.ap){const a=card('تطبيقات من الحياة');a.appendChild(TTS.controls(()=>'تطبيقات من الحياة.\n'+x.ap,{compact:true,label:'🔊 استمع للتطبيقات'}));const b=document.createElement('div');b.className='md';b.innerHTML=md(x.ap);a.appendChild(b);i.appendChild(a)}
-  const r=card('مراجع للاستزادة','من قائمة مراجع الحقيبة، المناسبة لهذه الوحدة:');
+  const r=card('مراجع للاستزادة','من قائمة مراجع الحقيبة التدريبية، المناسبة لهذه الوحدة:');
   const ul=document.createElement('ul');ul.className='refs';
   (window.REFS||[]).filter(f=>f.u.includes(pos.u)).forEach(f=>{const li=document.createElement('li');li.innerHTML=`<b></b><br><small></small>`;li.querySelector('b').textContent=f.t;li.querySelector('small').textContent=f.a;ul.appendChild(li)});
   r.appendChild(ul);i.appendChild(r);
