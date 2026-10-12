@@ -393,6 +393,7 @@ details.card summary{cursor:pointer}
 .artIcons span:nth-child(2){transform:translateY(-6px) rotate(-4deg)}.artIcons span:nth-child(3){transform:rotate(5deg)}
 .artText small{display:block;opacity:.9;font-size:13px}.artText b{font-size:18px;line-height:1.5}
 .hIcon{font-size:18px;line-height:1}
+.sbDur{display:inline-block;margin:0 10px;padding:6px 12px;border-radius:999px;background:#fff;border:1.5px solid var(--accent,#1d4ed8);color:var(--accent,#1d4ed8);font-weight:700;font-size:15px;white-space:nowrap}
 @media (max-width:520px){.artBanner{flex-direction:column;align-items:flex-start}.artIcons span{width:48px;height:48px;font-size:27px}.artText b{font-size:16.5px}}
 .claudeBtn{display:flex;align-items:center;gap:12px;margin-top:12px;padding:12px 14px;border-radius:12px;text-decoration:none;color:var(--ink);background:linear-gradient(120deg,#F5E9DF,#FBF6F1);border:1px solid #E8C9B0}
 .claudeBtn .cIco{width:38px;height:38px;border-radius:10px;background:#D97757;color:#fff;display:grid;place-items:center;font-size:20px;flex:none}
@@ -993,7 +994,7 @@ function nextLessonBtn(i){
 function nextLesson(){let u=pos.u,l=pos.l;do{if(l<UNITS[u].l.length-1)l++;else if(u<UNITS.length-1){u++;l=0}else return null}while(HID(u,l));return[u,l]}
 /* ---------- شرح الدرس: سبورة ذكية يشرح عليها المدرب الذكي خطوة بخطوة ---------- */
 const BOARD_PUBLIC=true;
-function openBoard(){
+function openBoard(dry){dry=dry===true;
   const s=study(),l=lesson();if(!s||!l)return;
   const K='p101-board-'+key(pos.u,pos.l);
   /* الأقسام */
@@ -1072,7 +1073,7 @@ function openBoard(){
     </div>
   </div>`;
   {const cs=getComputedStyle($('app'));['--accent','--accent-ink'].forEach(v=>{const x=cs.getPropertyValue(v);if(x)B.style.setProperty(v,x.trim())})}
-  document.body.appendChild(B);document.body.classList.add('boardOpen');
+  if(!dry){document.body.appendChild(B);document.body.classList.add('boardOpen')}
   const slideEl=B.querySelector('.bSlide'),pg=B.querySelector('.bPage'),ct=B.querySelector('.bContent');
   const nSteps=sl=>sl.type==='c'?sl.steps.length:sl.type==='q'?1:0;
   /* عرض الشريحة */
@@ -1163,6 +1164,11 @@ function openBoard(){
     let t=teach(x.md,isB(x)?idx:(/^\[\[(fig|img):/.test(x.md)?cur+step:-1),isB(x)?nb:0);
     if(step===sl.steps.length&&sl.title!=='ملخص الدرس'&&sl.steps.length>1&&cur%3===0)t=t.replace(/[\s✓.،]*$/,'')+'. '+pick(['هل الفكرة واضحة لك؟ ممتاز، لنكمل.','لاحظ كيف ترتبط الفكرة بما سبق.','جميل، احفظ هذه الفكرة جيدًا.'],cur);
     return t};
+  /* نص الشرح كاملًا بترتيب التشغيل التلقائي (لحساب مدة الدرس) */
+  if(dry){const L=[];for(let c=0;c<out.length;c++){const sl=out[c];
+      if(sl.type==='c'){if(sl.title)L.push(narrAt(c,0));for(let st=1;st<=sl.steps.length;st++)L.push(narrAt(c,st))}
+      else{L.push(narrAt(c,0));if(sl.type==='e')break}}
+    return L.map(plain).filter(Boolean)}
   async function run(){const id=++runId;
     while(auto&&id===runId){const sl=out[cur];
       if(sl.type==='c'&&step===0&&sl.title){await say(narr(),id);if(id!==runId)return}
@@ -1197,6 +1203,22 @@ function openBoard(){
   B.querySelector('.bX').onclick=close;
   render();startAuto();
 }
+/* مدة شرح الدرس على السبورة: تقدير أولي من النص، ثم مدة دقيقة يحسبها الخادم من ملفات الصوت المحفوظة */
+const DUR=(()=>{const SK='p101-dur';let map=store.get(SK,{}),loaded=null;const asked={};
+  const fp=t=>{let h=5381;for(let i=0;i<t.length;i++)h=((h<<5)+h+t.charCodeAt(i))|0;return (h>>>0).toString(36)+'_'+t.length};
+  const voice=()=>{try{return localStorage.getItem('p101-bvo')==='z'?'ar-SA-ZariyahNeural':'ar-SA-HamedNeural'}catch(e){return 'ar-SA-HamedNeural'}};
+  const tok=()=>(typeof AUTH!=='undefined'&&AUTH&&AUTH.token)||'';
+  function load(){if(loaded)return loaded;loaded=(API?SYNC.post({a:'durget'}).then(r=>{if(r&&r.ok&&r.d){map=r.d;store.set(SK,map)}return map}):Promise.resolve(map)).catch(()=>map);return loaded}
+  function info(k){let sc=[];try{sc=openBoard(true)||[]}catch(e){}const v=voice(),f=fp(v+'|'+sc.join('\n')),e=map[k+'|'+v];
+    const r=(TTS.getRate&&TTS.getRate())||0.95,sp=0.95/r,exact=!!(e&&e.fp===f);
+    const sec=exact?e.sec*sp+e.says*0.6+e.chunks*0.1:sc.join('').length*0.075*sp+sc.length*0.6;
+    return {k,v,f,sc,exact,min:Math.max(1,Math.round(sec/60))}}
+  function compute(i){if(!API||!tok()||asked[i.k+i.f])return Promise.resolve(null);asked[i.k+i.f]=1;
+    const ch=[];i.sc.forEach(t=>{try{TTS.chunksAz(t).forEach(c=>ch.push(c))}catch(e){}});
+    return SYNC.post({a:'durcalc',token:tok(),key:i.k,voice:i.v,rate:-5,fp:i.f,says:i.sc.length,chunks:ch}).then(r=>{if(r&&r.ok&&r.e){map[i.k+'|'+i.v]=r.e;store.set(SK,map);return r.e}return null}).catch(()=>null)}
+  function badge(el,k){const show=i=>{el.textContent='⏱ '+(i.exact?'':'≈ ')+AR(i.min)+' '+(i.min>=3&&i.min<=10?'دقائق':'دقيقة');el.title=i.exact?'مدة الشرح بصوت المدرب':'مدة تقديرية'};
+    const i=info(k);show(i);load().then(()=>{const j=info(k);show(j);if(!j.exact)compute(j).then(e=>{if(e)show(info(k))})})}
+  return {badge,info,load}})();
 function renderSum(v){
   const i=wrap(v),s=study(),x=extra();
   if(!s){i.innerHTML='<p class="empty">لا يوجد ملخص لهذا الدرس.</p>';return}
@@ -1205,7 +1227,7 @@ function renderSum(v){
   if(BOARD_PUBLIC||(typeof AUTH!=='undefined'&&AUTH&&AUTH.demo)||!API){if(!document.getElementById('sbFont')){const lk=document.createElement('link');lk.id='sbFont';lk.rel='stylesheet';lk.href='https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&display=swap';document.head.appendChild(lk)}
     const bc=document.createElement('div');bc.className='boardCard';
     bc.innerHTML='<div class="sbFrame"><div class="sbTop"><span class="sbCam" aria-hidden="true"></span></div><div class="sbSurface"><h2 class="sbH">شرح الدرس</h2><p class="sbP">على السبورة <span class="sbNo">مع <b>المدرب الذكي</b></span></p><div class="sbRow"><span class="sbAv" aria-hidden="true">👨‍🏫</span></div></div><div class="sbTray" aria-hidden="true"><i style="--m:#1f2937"></i><i style="--m:#1d4ed8"></i><i style="--m:#dc2626"></i><i style="--m:#15803d"></i><b></b></div></div>';
-    const ob=document.createElement('button');ob.className='btn';ob.textContent='▶️ ابدأ الشرح';ob.onclick=openBoard;bc.querySelector('.sbRow').prepend(ob);i.appendChild(bc)}
+    const ob=document.createElement('button');ob.className='btn';ob.textContent='▶️ ابدأ الشرح';ob.onclick=()=>openBoard();bc.querySelector('.sbRow').prepend(ob);const du=document.createElement('span');du.className='sbDur';bc.querySelector('.sbRow').insertBefore(du,ob.nextSibling);DUR.badge(du,key(pos.u,pos.l));i.appendChild(bc)}
   const full=()=>{const l=lesson();let txt='درس '+l.t+'.\n'+s.s.replace(/^\[\[(fig|img):[^\n]*\]\]$/gm,'')+(x.ap?'\nتطبيقات من الحياة.\n'+x.ap:'');
     if(s.ex)txt+='\nمثال محلول.\n'+s.ex.q+'\nالحل.\n'+s.ex.st.join('\n')+'\nالإجابة: '+s.ex.a;return txt};
   const top=document.createElement('div');top.className='listenAll';top.appendChild(TTS.controls(full,{label:'🎧 استمع للدرس كاملًا',aria:'استمع للدرس كاملًا'}));i.appendChild(top);
