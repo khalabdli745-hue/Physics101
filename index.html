@@ -632,7 +632,9 @@ const TTS=(()=>{
     if(/[اىويآ]/.test(last))return w;
     return w+'\u0652'}
   /* السكون للوقف فقط (قبل علامة ترقيم أو في آخر الجملة)، وفي وسط الجملة تُترك الحركة الأخيرة ليضبطها القارئ إعرابيًا */
-  function vocal(t,cont){return t.replace(/[\u0621-\u064A\u064B-\u0652]+/g,(w,o,str)=>{const v=vocWord(w);const nx=str.slice(o+w.length,o+w.length+3);return (cont?/^\s*[،؛؟.:!\n]/.test(nx):/^\s*(?:[،؛؟.:!\n]|$)/.test(nx))?pausal(v):v.replace(/[\u064B-\u064D]/g,'')})}
+  /* كلمة مضبوطة بالحركات أصلًا (مثل إجابات المدرب الذكي): نحافظ على ضبطها كما هو */
+  const FULLV=w=>{const L=w.replace(DIA,'').length,H=(w.match(DIA)||[]).length;return L>1&&H>=Math.ceil(L*0.5)};
+  function vocal(t,cont){return t.replace(/[\u0621-\u064A\u064B-\u0652]+/g,(w,o,str)=>{const full=FULLV(w);const v=full?w:vocWord(w);if(full){const nx0=str.slice(o+w.length,o+w.length+3);return (cont?/^\s*[،؛؟.:!\n]/.test(nx0):/^\s*(?:[،؛؟.:!\n]|$)/.test(nx0))?pausal(w):w}const nx=str.slice(o+w.length,o+w.length+3);return (cont?/^\s*[،؛؟.:!\n]/.test(nx):/^\s*(?:[،؛؟.:!\n]|$)/.test(nx))?pausal(v):v.replace(/[\u064B-\u064D]/g,'')})}
   /* التاء المربوطة في آخر الكلمة تُقرأ هاء، ونيوتن بتشكيل كامل */
 
   /* التشكيل الكامل (tashkeel.js): كل جملة/عبارة مشكّلة تشكيلًا تامًا بالإعراب؛ وما لم يوجد يُشكَّل بالقاموس */
