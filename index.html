@@ -1270,7 +1270,7 @@ const DUR=(()=>{const SK='p101-dur';let map=store.get(SK,{}),loaded=null;const a
   function compute(i){if(!API||!tok()||asked[i.k+i.f])return Promise.resolve(null);asked[i.k+i.f]=1;
     const ch=[];i.sc.forEach(t=>{try{TTS.chunksAz(t).forEach(c=>ch.push(c))}catch(e){}});
     return SYNC.post({a:'durcalc',token:tok(),key:i.k,voice:i.v,rate:-5,fp:i.f,says:i.sc.length,chunks:ch}).then(r=>{if(r&&r.ok&&r.e){map[i.k+'|'+i.v]=r.e;store.set(SK,map);return r.e}return null}).catch(()=>null)}
-  function badge(el,k){const show=i=>{el.textContent='⏱ '+(i.exact?'':'≈ ')+AR(i.min)+' '+(i.min>=3&&i.min<=10?'دقائق':'دقيقة');el.title=i.exact?'مدة الشرح بصوت المدرب':'مدة تقديرية'};
+  function badge(el,k){const show=i=>{el.textContent='⏱ '+AR(i.min)+' '+(i.min>=3&&i.min<=10?'دقائق':'دقيقة');el.title='مدة شرح الدرس'};
     const i=info(k);show(i);load().then(()=>{const j=info(k);show(j);if(!j.exact)compute(j).then(e=>{if(e)show(info(k))})})}
   return {badge,info,load}})();
 function renderSum(v){
