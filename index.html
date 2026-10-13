@@ -300,6 +300,20 @@ li.sym{margin-inline-start:1.6em;font-size:.92em;list-style:none}.md ul li.sym::
 .board .bContent svg{max-width:100%;height:auto}
 
 .board .bSlide{border:10px solid #3b4250;border-radius:12px;background:#fdfdfb;background-image:linear-gradient(#eef1f5 1px,transparent 1px),linear-gradient(90deg,#eef1f5 1px,transparent 1px);background-size:30px 30px}
+.board .bAskBtn{align-self:center;flex:none;border:0;border-radius:14px;background:#f2b84b;color:#3a2a00;font:800 13px/1.25 system-ui,sans-serif;padding:8px 10px;box-shadow:0 3px 8px rgba(0,0,0,.3);cursor:pointer}
+.board .bAskP{max-width:1000px;width:100%;margin:8px auto 0;background:#fff;border-radius:14px;padding:8px 10px;display:flex;flex-direction:column;gap:6px;max-height:46vh;min-height:0}
+.board .bAskP[hidden]{display:none}
+.board.asking .bSlide{flex:1 1 30%}
+.board .bAskH{display:flex;align-items:center;justify-content:space-between;gap:8px}.board .bAskH b{color:var(--accent);font-size:15px}
+.board .bAskX{border:0;border-radius:10px;background:var(--accent);color:var(--accent-ink,#fff);font:700 13px system-ui,sans-serif;padding:7px 12px;cursor:pointer}
+.board .bAskChips{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}.board .bAskChips button{flex:none;border:1px solid #dde2ea;background:#f7f8fa;border-radius:20px;padding:5px 11px;font:600 13px system-ui,sans-serif;color:#1f2937;cursor:pointer}
+.board .bAskLog{overflow:auto;display:flex;flex-direction:column;gap:6px;min-height:0;flex:1}
+.board .bAskM{border-radius:12px;padding:7px 10px;font-size:15px;line-height:1.7;color:#1f2937;max-width:92%}
+.board .bAskM.me{align-self:flex-start;background:#eef2f6}.board .bAskM.bot{align-self:flex-end;background:#fff7e6;border:1px solid #f2d79b}.board .bAskM.err{background:#fbe9eb;color:#b42330}
+.board .bAskM .md p{margin:.2em 0}.board .bAskM .md h3{font-size:1em;margin:.3em 0}
+.board .bAskF{display:flex;gap:6px;align-items:flex-end}.board .bAskF textarea{flex:1;resize:none;border:1px solid #dde2ea;border-radius:10px;padding:8px;font:16px system-ui,sans-serif;min-height:40px;max-height:90px;color:#1f2937;background:#fff}
+.board .bAskF button{height:40px;border-radius:10px;border:1px solid #dde2ea;background:#f7f8fa;font:700 14px system-ui,sans-serif;padding:0 12px;cursor:pointer;color:#1f2937}
+.board .bAskF .bSend{background:var(--accent);color:var(--accent-ink,#fff);border-color:transparent}.board .bAskF .bMic.on{background:#b42330;color:#fff;animation:bTalk .8s infinite}
 .board .bTeach{display:flex;align-items:flex-end;gap:10px;max-width:1000px;width:100%;margin:10px auto 0}
 .board .bAv{font-size:42px;line-height:1;filter:drop-shadow(0 3px 4px rgba(0,0,0,.4));transition:transform .3s}
 .board.talking .bAv{animation:bTalk .8s ease-in-out infinite}
@@ -1072,7 +1086,7 @@ function openBoard(dry){dry=dry===true;
   let cur=0,step=0,VO='h';try{VO=localStorage.getItem('p101-bvo')==='z'?'z':'h'}catch(e){}
   const B=document.createElement('div');B.className='board';B.setAttribute('role','dialog');B.setAttribute('aria-label','شرح الدرس');
   B.innerHTML=`<div class="bTop"><b>📝 شرح الدرس: ${esc(l.t)}</b><span class="bNum"></span><button type="button" class="bX" aria-label="إغلاق">✕</button></div>
-  <div class="bStage"><div class="bSlide"><div class="bPage"><div class="bContent"></div></div></div><div class="bProg"><i></i></div><div class="bTeach"><span class="bAv" aria-hidden="true">👨‍🏫</span><div class="bSay" aria-live="polite"><b>المدرب الذكي</b><span></span></div></div></div>
+  <div class="bStage"><div class="bSlide"><div class="bPage"><div class="bContent"></div></div></div><div class="bProg"><i></i></div><div class="bTeach"><span class="bAv" aria-hidden="true">👨‍🏫</span><div class="bSay" aria-live="polite"><b>المدرب الذكي</b><span></span></div><button type="button" class="bAskBtn" hidden>✋ اسأل<br>المدرب</button></div><div class="bAskP" hidden><div class="bAskH"><b>✋ اسأل المدرب الذكي</b><button type="button" class="bAskX">أكمل الشرح ▶</button></div><div class="bAskChips"></div><div class="bAskLog"></div><form class="bAskF"><button type="button" class="bMic" title="تحدث بسؤالك" aria-label="تحدث بسؤالك">🎤</button><textarea rows="1" placeholder="اكتب سؤالك أو اضغط 🎤 وتكلم" aria-label="سؤالك للمدرب"></textarea><button type="submit" class="bSend">إرسال</button></form></div></div>
   <div class="bBar">
     <div class="bRow">
       <button type="button" class="bVo" title="تغيير صوت المدرب"></button><button type="button" class="bSp" title="سرعة صوت المدرب" aria-label="سرعة صوت المدرب"></button><button type="button" class="bAuto bMain">⏸ إيقاف</button><button type="button" class="bFull" title="ملء الشاشة" aria-label="ملء الشاشة">⛶</button>
@@ -1207,6 +1221,37 @@ function openBoard(dry){dry=dry===true;
   document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement&&B.classList.contains('full')&&B.isConnected){B.classList.remove('full');fullBtn.textContent='⛶'}});
   const close=()=>{auto=false;runId++;TTS.stop();TTS.setOV(null);try{if(document.fullscreenElement)document.exitFullscreen()}catch(e){}B.remove();document.body.classList.remove('boardOpen');document.removeEventListener('keydown',kd)};
   const kd=e=>{if(e.key==='Escape')close();else if(e.key==='ArrowLeft'||e.key===' ')next();else if(e.key==='ArrowRight')prev()};document.addEventListener('keydown',kd);
+  /* المدرب الذكي التفاعلي: يسأل المتدرب أثناء الشرح (كتابة أو صوت)، فيجيب المدرب على السبورة وبالصوت، ثم يكمل الشرح */
+  {const atok=(typeof AUTH!=='undefined'&&AUTH&&AUTH.token)||TAUTH;const aBtn=B.querySelector('.bAskBtn'),aP=B.querySelector('.bAskP'),aLog=aP.querySelector('.bAskLog'),aF=aP.querySelector('.bAskF'),aTa=aF.querySelector('textarea'),aSend=aF.querySelector('.bSend'),aMic=aF.querySelector('.bMic');
+   if(API&&atok){aBtn.hidden=false;
+    const hist=[];let was=false,busy=false;
+    const sayA=async t=>{const id=++runId;B.classList.add('talking');try{if(TTS.has()){const d=document.createElement('button');TTS.play(t,d);await wait(400);while(id===runId&&TTS.busy())await wait(120)}}catch(e){}B.classList.remove('talking')};
+    const openA=()=>{was=auto;stopAuto();aP.hidden=false;B.classList.add('asking');aBtn.hidden=true};
+    const closeA=()=>{runId++;TTS.stop();B.classList.remove('talking','asking');aP.hidden=true;aBtn.hidden=false;if(was)startAuto()};
+    aBtn.onclick=openA;aP.querySelector('.bAskX').onclick=closeA;
+    const ERRS={ai_off:'لم يُفعَّل المدرب الذكي بعد، ويفعّله المدرب من لوحة المدرب.',limit:'وصلت إلى الحد المسموح (١٥ سؤالًا كل ٦ ساعات). حاول لاحقًا.',ai_busy:'المدرب الذكي مشغول الآن لكثرة الأسئلة. حاول بعد دقيقة.',ai_key:'مفتاح الذكاء الاصطناعي غير صالح. أبلغ المدرب.',auth:'سجّل الدخول من جديد.'};
+    const bub=(cls,html)=>{const d=document.createElement('div');d.className='bAskM '+cls;d.innerHTML=html;aLog.appendChild(d);d.scrollIntoView({block:'nearest',behavior:'smooth'});return d};
+    const slideNow=()=>{const sl=out[cur];return ((sl&&sl.title)||'')+' — '+(ct.innerText||'').replace(/\s+/g,' ').slice(0,500)};
+    async function ask(q){q=(q||'').trim();if(!q||busy)return;busy=true;aSend.disabled=true;aTa.value='';
+      bub('me',esc(q));const w=bub('bot wait','<span class="dots">المدرب يفكّر</span>');
+      const ctx=('الدرس: '+l.t+'\n'+s.s).slice(0,3800);
+      try{const r=await SYNC.post({a:'ask',token:atok,q,lessonKey:key(pos.u,pos.l),lessonTitle:l.t,context:ctx,history:hist.slice(-6),mode:'board',slide:slideNow()});
+        w.remove();
+        if(r.ok){hist.push({role:'user',content:q},{role:'assistant',content:r.answer});const shown=r.answer.replace(/[\u064B-\u0652\u0670]/g,'');bub('bot','<div class="md">'+md(shown)+'</div>');cap.innerHTML=inl(shown.replace(/[#*]/g,'').split('\n').filter(Boolean)[0]||'');busy=false;aSend.disabled=false;await sayA(r.answer);return}
+        bub('err',esc(ERRS[r.error]||'تعذّر الحصول على إجابة الآن. حاول مرة أخرى.'))}
+      catch(e){w.remove();bub('err','تعذّر الاتصال. تحقق من الإنترنت.')}
+      busy=false;aSend.disabled=false}
+    ['لم أفهم، اشرح بأسلوب أبسط','أعطني مثالًا آخر','لماذا يحدث هذا؟','كيف أطبّق هذا القانون؟'].forEach(q=>{const c=document.createElement('button');c.type='button';c.textContent=q;c.onclick=()=>ask(q);aP.querySelector('.bAskChips').appendChild(c)});
+    aF.onsubmit=e=>{e.preventDefault();ask(aTa.value)};
+    const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+    if(!SR)aMic.hidden=true;else{let rec=null;
+      aMic.onclick=()=>{if(rec){try{rec.stop()}catch(e){}return}
+        try{rec=new SR();rec.lang='ar-SA';rec.interimResults=true;rec.continuous=false;const base=aTa.value?aTa.value+' ':'';
+          rec.onresult=e=>{let t='';for(let i=0;i<e.results.length;i++)t+=e.results[i][0].transcript;aTa.value=base+t};
+          rec.onend=()=>{rec=null;aMic.classList.remove('on');if(aTa.value.trim())ask(aTa.value)};
+          rec.onerror=()=>{rec=null;aMic.classList.remove('on')};
+          runId++;TTS.stop();rec.start();aMic.classList.add('on')}catch(e){rec=null;aMic.classList.remove('on')}}}
+   }}
   B.querySelector('.bX').onclick=close;
   render();startAuto();
 }
