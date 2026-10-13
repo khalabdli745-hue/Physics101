@@ -586,7 +586,7 @@ const TTS=(()=>{
   /* سرعة القراءة في p101-rate؛ نقل تقييمات النجوم المحفوظة خطأً بالمفتاح نفسه إلى p101-stars */
   {let r0=store.get('p101-rate',0.95);if(r0&&typeof r0==='object'){store.set('p101-stars',Object.assign(store.get('p101-stars',{}),r0));r0=0.95;store.set('p101-rate',r0)}rate=typeof r0==='number'&&r0>=0.5&&r0<=2?r0:0.95}
   /* الصوت الطبيعي من الخادم (Microsoft Azure) */
-  const AZV=[['ar-SA-HamedNeural','رجل','حامد'],['ar-SA-ZariyahNeural','امرأة','زارية'],['ar-AE-HamdanNeural','رجل','حمدان'],['ar-AE-FatimaNeural','امرأة','فاطمة'],['en-US-AndrewMultilingualNeural','رجل','أندرو (متصل)'],['en-US-AvaMultilingualNeural','امرأة','آفا (متصلة)'],['en-US-BrianMultilingualNeural','رجل','براين (متصل)'],['en-US-EmmaMultilingualNeural','امرأة','إيما (متصلة)']];
+  const AZV=[['ar-SA-HamedNeural','رجل','حامد'],['ar-SA-ZariyahNeural','امرأة','زارية']];
   const tok=()=>(AUTH&&AUTH.token)||TAUTH||'';
   let SRV=!!(API&&tok()&&store.get('p101-srvtts',false)),az=null,OV=null;
   const valOf=o=>o.az?'az|'+o.az:o.v.name+'|'+o.p;
@@ -598,7 +598,7 @@ const TTS=(()=>{
     if(voices.length){const base=voices[0];
       if(!opts.some(o=>o.g==='رجل'))opts.push({v:base,p:0.85,g:'رجل',label:'رجل — صوت أعمق'});
       if(!opts.some(o=>o.g==='امرأة'))opts.push({v:base,p:1.22,g:'امرأة',label:'امرأة — صوت أنعم'});}
-    if(SRV)opts=AZV.map(([n,g,l])=>({az:n,g,label:l+' ⭐ صوت طبيعي'})).concat(opts);
+    if(SRV)opts=AZV.map(([n,g,l])=>({az:n,g,label:l+' ⭐ صوت طبيعي'}));
     const want=store.get('p101-voice','');const o=opts.find(o=>valOf(o)===want)||opts[0];
     az=o&&o.az||null;if(o&&!o.az){voice=o.v;pitch=o.p}else{voice=voices[0]||null;pitch=o&&o.az&&/Zariyah|Fatima/.test(o.az)?1.2:1}}
   let enVoices=[];

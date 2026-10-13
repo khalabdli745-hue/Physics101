@@ -166,7 +166,7 @@ async function api(o){const r=await fetch(API,{method:'POST',body:JSON.stringify
 const xd=d=>{if(!d)return '';const x=new Date(d),z=n=>String(n).padStart(2,'0');return `${x.getFullYear()}-${z(x.getMonth()+1)}-${z(x.getDate())} ${z(x.getHours())}:${z(x.getMinutes())}`};
 const fmtTime=s=>{s=+s||0;const h=Math.floor(s/3600),m=Math.round(s%3600/60);return h?`${h} س ${m} د`:`${m} د`};
 const fmtDate=d=>{if(!d)return '—';const x=new Date(d);return x.toLocaleDateString('ar-SA-u-ca-gregory',{day:'numeric',month:'short'})+' '+x.toLocaleTimeString('ar-SA',{hour:'2-digit',minute:'2-digit'})};
-const pctCls=v=>v==null?'n':v>=80?'g':v>=50?'m':'b';
+const pctCls=v=>v==null?'n':v>=80?'g':v>=60?'m':'b';
 const pct=v=>`<span class="pct ${pctCls(v)}">${v==null?'—':AR(Math.round(v))+'٪'}</span>`;
 const avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null;
 function probByLesson(prob){const g={};Object.entries(prob||{}).forEach(([k,v])=>{const l=k.split('.')[0];(g[l]=g[l]||[]).push(+v)});const o={};Object.entries(g).forEach(([l,a])=>o[l]=avg(a));return o}
@@ -290,7 +290,7 @@ async function drawStats(){
   const totDone=st.reduce((a,s)=>a+s.doneN,0),compl=st.length?Math.round(totDone/(st.length*TOTAL)*100):0;
   const tt=st.reduce((a,s)=>a+s.totalSec,0),avgT=st.length?tt/st.length:0;
   /* توزيع الدرجات */
-  const bins=[['ممتاز ٨٥–١٠٠',85,101,'g'],['جيد جدًا ٧٥–٨٤',75,85,'g'],['جيد ٦٥–٧٤',65,75,'m'],['مقبول ٥٠–٦٤',50,65,'m'],['ضعيف أقل من ٥٠',0,50,'b']];
+  const bins=[['ممتاز مرتفع (A+) ٩٥–١٠٠',95,101,'g'],['ممتاز (A) ٩٠–أقل من ٩٥',90,95,'g'],['جيد جدًا مرتفع (B+) ٨٥–أقل من ٩٠',85,90,'g'],['جيد جدًا (B) ٨٠–أقل من ٨٥',80,85,'g'],['جيد مرتفع (C+) ٧٥–أقل من ٨٠',75,80,'m'],['جيد (C) ٧٠–أقل من ٧٥',70,75,'m'],['مقبول مرتفع (D+) ٦٥–أقل من ٧٠',65,70,'m'],['مقبول (D) ٦٠–أقل من ٦٥',60,65,'m'],['غير مجتاز (F) أقل من ٦٠',0,60,'b']];
   const binN=bins.map(b=>ov.filter(v=>v>=b[1]&&v<b[2]).length),maxB=Math.max(1,...binN);
   const bar=(lab,val,max,cls,txt)=>`<div class="bar"><span class="lab" title="${esc(lab)}">${esc(lab)}</span><span class="trk"><span class="fil ${cls||''}" style="width:${max?Math.max(1,val/max*100):0}%;display:block"></span></span><span class="val">${txt!=null?txt:val}</span></div>`;
   /* النشاط اليومي */
@@ -308,7 +308,7 @@ async function drawStats(){
   const secRows=DATA.sections.map(s=>{const x=DATA.students.filter(y=>y.sectionId===s.id&&y.id!=='DEMO');return{n:s.name,c:x.length,a:avg(x.map(y=>y.overall).filter(v=>v!=null)),t:x.reduce((q,y)=>q+y.totalSec,0)/(x.length||1)}}).filter(s=>s.c);
   /* متابعة */
   const risk=st.map(s=>{const why=[];if(!s.loginCount)why.push('لم يدخل المنصة أبدًا');else if(!s.lastSeen||now-new Date(s.lastSeen)>wk)why.push('لم يدخل منذ أكثر من أسبوع');
-    if(s.overall!=null&&s.overall<50)why.push('المعدل '+AR(Math.round(s.overall))+'٪');if(s.loginCount&&!s.attempts)why.push('دخل ولم يحل أي اختبار');return{s,why}}).filter(x=>x.why.length);
+    if(s.overall!=null&&s.overall<60)why.push('غير مجتاز — المعدل '+AR(Math.round(s.overall))+'٪');if(s.loginCount&&!s.attempts)why.push('دخل ولم يحل أي اختبار');return{s,why}}).filter(x=>x.why.length);
   const opts=`<option value="all">كل الشعب</option>`+DATA.sections.map(s=>`<option value="${esc(s.id)}" ${sec===s.id?'selected':''}>${esc(s.name)}</option>`).join('');
   m.innerHTML=`<div class="row" style="margin-bottom:12px"><select id="ssf">${opts}</select><button class="btn ghost sm" id="sref">↻ إعادة الحساب</button><button class="btn sm" id="sexp">⬇ تصدير الإحصائيات Excel</button></div>
   <div class="stats"><div class="stat"><small>المتدربون</small><b>${AR(st.length)}</b></div><div class="stat"><small>نشطون آخر ٧ أيام</small><b>${AR(active7)}</b></div><div class="stat"><small>لم يدخلوا أبدًا</small><b>${AR(never.length)}</b></div>
@@ -396,7 +396,7 @@ async function drawAI(){
    ${tOld?'<p class="msg bad">هذه الميزة تحتاج تحديث كود الخادم (code.gs) في Google Apps Script ونشر إصدار جديد.</p>':`<p class="sub">الحالة: ${tOn?'<b style="color:var(--good)">✓ مفعّل</b> · المنطقة '+esc(ti.region)+' · المستخدم هذا الشهر: '+AR((ti.used||0).toLocaleString('en'))+' حرف من '+AR((ti.cap||0).toLocaleString('en')):'<b style="color:var(--bad)">غير مفعّل</b>'} · أصوات Microsoft الطبيعية (حامد، زارية، حمدان، فاطمة) بالخطة المجانية F0 (٥٠٠ ألف حرف شهريًا). يُحفظ صوت كل مقطع في Google Drive فلا يُستهلك مرة أخرى.</p>`}
    <ol class="sub" style="padding-inline-start:1.2em"><li>من بوابة Azure افتح خدمة الصوت ← <b>Keys and endpoint</b>.</li><li>انسخ <b>KEY 1</b> والصقه هنا، وتأكد من المنطقة (Location/Region).</li><li>اضغط «حفظ وتفعيل» ثم «تجربة الصوت».</li></ol>
    <div class="row"><input type="password" id="ttk" placeholder="KEY 1" style="flex:1;min-width:180px;direction:ltr" autocomplete="off"><input type="text" id="ttr" value="${esc(ti.region||'uaenorth')}" style="width:120px;direction:ltr" aria-label="المنطقة"><button class="btn" id="ttsv">حفظ وتفعيل</button></div>
-   <div class="row" style="margin-top:8px">${tOn?'<select id="ttvo"><option value="ar-SA-HamedNeural">👨 حامد</option><option value="ar-SA-ZariyahNeural">👩 زارية</option><option value="ar-AE-HamdanNeural">👨 حمدان</option><option value="ar-AE-FatimaNeural">👩 فاطمة</option></select><button class="btn ghost" id="ttst">▶ تجربة الصوت</button><button class="btn danger" id="ttoff">إيقاف</button>':''}</div><p class="msg" id="ttm"></p></div>
+   <div class="row" style="margin-top:8px">${tOn?'<select id="ttvo"><option value="ar-SA-HamedNeural">👨 حامد</option><option value="ar-SA-ZariyahNeural">👩 زارية</option></select><button class="btn ghost" id="ttst">▶ تجربة الصوت</button><button class="btn danger" id="ttoff">إيقاف</button>':''}</div><p class="msg" id="ttm"></p></div>
   <div class="card"><h2>تفعيل المدرب الذكي والمساعد الذكي (مجاني)</h2>
    <p class="sub">الحالة: ${r.gem?'<b style="color:var(--good)">✓ Gemini مفعّل</b>':'<b style="color:var(--bad)">Gemini غير مفعّل</b>'} · الاحتياطي Groq: ${r.groq||(r.ai&&!r.gem)?'<b style="color:var(--good)">✓ مفعّل</b>':'غير مفعّل'}<br>المحرك الأساسي <b>Google Gemini</b> المجاني (قوي في العربية الفصحى والفيزياء)، وإذا انشغل ينتقل تلقائيًا إلى Groq. الحد: ١٥ سؤالًا لكل متدرب كل ٦ ساعات.</p>
    <ol class="sub" style="padding-inline-start:1.2em"><li>افتح <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> وسجّل دخولك بحساب Google.</li><li>اضغط <b>Create API key</b>، ثم انسخ المفتاح (يبدأ بـ <span dir="ltr">AIza</span>).</li><li>الصقه هنا واضغط «حفظ وتفعيل».</li><li>اختياري للاحتياط: مفتاح Groq من <a href="https://console.groq.com/keys" target="_blank" rel="noopener">console.groq.com/keys</a> (يبدأ بـ <span dir="ltr">gsk_</span>) بنفس الطريقة.</li></ol>
@@ -427,7 +427,7 @@ function ring(v,size){const r=size/2-9,c=2*Math.PI*r,o=v==null?c:c*(1-Math.max(0
   return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" role="img" aria-label="${v==null?'لا توجد بيانات':Math.round(v)+'٪'}"><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="var(--soft)" stroke-width="12"/><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="var(--accent)" stroke-width="12" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${o}" transform="rotate(-90 ${size/2} ${size/2})"/><text x="50%" y="52%" text-anchor="middle" dominant-baseline="middle" font-size="${size/4.6}" font-weight="700" fill="var(--ink)" style="font-family:inherit">${v==null?'—':AR(Math.round(v))+'٪'}</text></svg>`}
 const kpi=(ic,lab,val,sub)=>`<div class="rp-kpi"><span class="ic" aria-hidden="true">${ic}</span><div><small>${lab}</small><b>${val}</b>${sub?`<em>${sub}</em>`:''}</div></div>`;
 const step=(lab,n,tot,o)=>`<div class="rp-step"><span>${lab}</span><span class="trk"><span class="fil" style="width:${tot?Math.max(n?2:0,n/tot*100):0}%;display:block;--o:${o||1}"></span></span><span class="v">${AR(n)} <small style="color:var(--muted);font-weight:400">${tot?'('+AR(Math.round(n/tot*100))+'٪)':''}</small></span></div>`;
-const band=v=>v==null?'لم يُختبر':v>=80?'متقن':v>=50?'مقبول':'ضعيف';
+const band=v=>v==null?'لم يُختبر':v>=95?'ممتاز مرتفع (A+)':v>=90?'ممتاز (A)':v>=85?'جيد جدًا مرتفع (B+)':v>=80?'جيد جدًا (B)':v>=75?'جيد مرتفع (C+)':v>=70?'جيد (C)':v>=65?'مقبول مرتفع (D+)':v>=60?'مقبول (D)':'غير مجتاز (F)';
 async function drawReports(){
   const m=$('#main');const sec=secFilter;
   if(!STATS||statsSec!==sec){m.innerHTML='<p class="empty"><span class="spin"></span> جارٍ إعداد التقرير…</p>';
@@ -453,7 +453,7 @@ async function drawReports(){
       return {...l,q:avg(q),p:avg(p),v:avg(both),nq:q.length,done:st.filter(s=>s.done.includes(l.k)).length}});
     const tried=per.filter(x=>x.v!=null),hard=tried.slice().sort((a,b)=>a.v-b.v).slice(0,3),easy=tried.slice().sort((a,b)=>b.v-a.v).slice(0,3);
     const top=st.filter(s=>s.overall!=null).sort((a,b)=>b.overall-a.overall).slice(0,5);
-    const weak=st.filter(s=>!s.loginCount||(s.overall!=null&&s.overall<50));
+    const weak=st.filter(s=>!s.loginCount||(s.overall!=null&&s.overall<60));
     const units=UNITS.map((u,ui)=>{const ks=per.filter(x=>x.u===ui);return{t:u.t,ui,v:avg(ks.map(x=>x.v).filter(v=>v!=null)),d:Math.round(ks.reduce((a,x)=>a+x.done,0)/(n*ks.length)*100)}});
     const ins=[];
     if(n-logged)ins.push(`${AR(n-logged)} متدربًا لم يدخلوا المنصة بعد (${AR(Math.round((n-logged)/n*100))}٪).`);
@@ -468,7 +468,7 @@ async function drawReports(){
     <div class="card"><h2>الأداء حسب الوحدة</h2><div class="rp-funnel">${units.map(u=>`<div class="rp-step" title="إنجاز ${u.d}٪"><span>الوحدة ${ORD[u.ui]}</span><span class="trk"><span class="fil" style="width:${u.v==null?0:Math.max(2,u.v)}%;display:block"></span></span><span class="v">${u.v==null?'—':AR(Math.round(u.v))+'٪'}</span></div>`).join('')}</div><p class="sub" style="margin-top:8px">متوسط أفضل درجة في اختبارات وتمارين كل وحدة.</p></div></div>
     <div class="card"><h2>خريطة الدروس</h2><p class="sub">كل مربع درس: متوسط الشعبة فيه (الاختبارات والتمارين) وعدد من حلّه. اضغط أي درس لفتح تقريره المفصّل.</p>
       ${UNITS.map((u,ui)=>`<h3 style="font-size:14px;margin:12px 0 6px;color:var(--muted)">الوحدة ${ORD[ui]}: ${esc(u.t)}</h3><div class="rp-map">${per.filter(x=>x.u===ui).map(x=>`<button class="rp-tile ${pctCls(x.v)}" data-k="${x.k}" title="${esc(x.t)} — ${x.v==null?'لم يُحل بعد':Math.round(x.v)+'٪'}"><span>${esc(x.t)}</span><span><b>${x.v==null?'—':AR(Math.round(x.v))+'٪'}</b> <small>${AR(x.nq)} حلّ</small></span></button>`).join('')}</div>`).join('')}
-      <div class="rp-legend"><span><i style="background:color-mix(in srgb,var(--good) 30%,var(--panel))"></i>متقن ٨٠٪ فأكثر</span><span><i style="background:color-mix(in srgb,var(--mid) 30%,var(--panel))"></i>مقبول ٥٠–٧٩٪</span><span><i style="background:color-mix(in srgb,var(--bad) 28%,var(--panel))"></i>ضعيف أقل من ٥٠٪</span><span><i style="background:var(--panel)"></i>لم يُحل بعد</span></div></div>
+      <div class="rp-legend"><span><i style="background:color-mix(in srgb,var(--good) 30%,var(--panel))"></i>جيد جدًا فأعلى ٨٠٪ فأكثر</span><span><i style="background:color-mix(in srgb,var(--mid) 30%,var(--panel))"></i>مقبول وجيد ٦٠–٧٩٪</span><span><i style="background:color-mix(in srgb,var(--bad) 28%,var(--panel))"></i>غير مجتاز أقل من ٦٠٪</span><span><i style="background:var(--panel)"></i>لم يُحل بعد</span></div></div>
     <div class="grid2"><div class="card"><h2>🏆 الأعلى أداءً</h2>${top.length?top.map((s,i)=>`<div class="qrow" data-id="${esc(s.id)}" style="cursor:pointer">${['🥇','🥈','🥉','④','⑤'][i]} <b>${esc(s.name)}</b> ${pct(s.overall)} <small>· ${AR(s.doneN)} درسًا</small></div>`).join(''):'<p class="empty">لا توجد درجات بعد.</p>'}</div>
     <div class="card"><h2>⚠️ يحتاجون متابعة (${AR(weak.length)})</h2>${weak.length?`<div style="max-height:260px;overflow:auto">${weak.map(s=>`<div class="qrow" data-id="${esc(s.id)}" style="cursor:pointer"><b>${esc(s.name)}</b> ${s.loginCount?pct(s.overall):'<span class="tag warn">لم يدخل</span>'}</div>`).join('')}</div>`:'<p class="empty">لا يوجد. ممتاز!</p>'}</div></div>`;
     xls=[['ملخص الشعبة',[['المؤشر','القيمة'],['الشعبة',secLabel],['عدد المتدربين',n],['دخلوا المنصة',logged],['نشطون آخر 7 أيام',act],['متوسط المعدل %',avgOv==null?'':Math.round(avgOv)],['إنجاز الدروس %',compl],['الوقت الكلي (دقيقة)',Math.round(tt/60)]],[28,20]],
@@ -479,26 +479,26 @@ async function drawReports(){
     const k=RPL,ui=+k.split('-')[0],L=STATS.lessons[k]||{};
     const rows=st.map(s=>({s,q:s.quiz[k]!=null?+s.quiz[k]:null,p:s.probL[k]!=null?s.probL[k]:null,d:s.done.includes(k)}));
     const qs=rows.filter(r=>r.q!=null),ps=rows.filter(r=>r.p!=null),dn=rows.filter(r=>r.d).length;
-    const pass=qs.filter(r=>r.q>=50).length,mast=qs.filter(r=>r.q>=80).length,qa=avg(qs.map(r=>r.q)),pa=avg(ps.map(r=>r.p));
-    const bins=[['٨٠–١٠٠٪ متقن',80,101],['٦٥–٧٩٪',65,80],['٥٠–٦٤٪',50,65],['أقل من ٥٠٪',0,50]],bn=bins.map(b=>qs.filter(r=>r.q>=b[1]&&r.q<b[2]).length),bm=Math.max(1,...bn);
+    const pass=qs.filter(r=>r.q>=60).length,mast=qs.filter(r=>r.q>=90).length,qa=avg(qs.map(r=>r.q)),pa=avg(ps.map(r=>r.p));
+    const bins=[['ممتاز ٩٠–١٠٠٪',90,101],['جيد جدًا ٨٠–٨٩٪',80,90],['جيد ٧٠–٧٩٪',70,80],['مقبول ٦٠–٦٩٪',60,70],['غير مجتاز أقل من ٦٠٪',0,60]],bn=bins.map(b=>qs.filter(r=>r.q>=b[1]&&r.q<b[2]).length),bm=Math.max(1,...bn);
     const qq=(STATS.questions||[]).filter(x=>x.lessonKey===k).sort((a,b)=>a.pct-b.pct);
     const first=L.quizFirst,best=L.quizBest,gain=first!=null&&best!=null?best-first:null;
     const ins=[];
     if(!qs.length&&!ps.length)ins.push('لم يحل أي متدرب اختبار هذا الدرس أو تمارينه بعد.');
-    else{ins.push(`${AR(qs.length)} من ${AR(n)} حلّوا اختبار الدرس، ونجح ${AR(pass)} منهم (٥٠٪ فأكثر).`);
+    else{ins.push(`${AR(qs.length)} من ${AR(n)} حلّوا اختبار الدرس، واجتازه ${AR(pass)} منهم (٦٠٪ فأكثر).`);
       if(gain!=null&&gain>0)ins.push(`تحسّن متوسط الاختبار من ${AR(first)}٪ في أول محاولة إلى ${AR(best)}٪ بعد إعادة المحاولة (+${AR(Math.round(gain))}).`);
       if(qq[0]&&qq[0].pct<60)ins.push(`أصعب سؤال: «${esc(qq[0].q.slice(0,90))}» — أجاب عنه صحيحًا ${AR(qq[0].pct)}٪ فقط.`);
       const no=n-qs.length;if(no)ins.push(`${AR(no)} متدربًا لم يحلّوا الاختبار بعد.`)}
     html=`<div class="rp-hero"><small>تقرير درس — ${esc(secLabel)} · الوحدة ${ORD[ui]}</small><h2>${esc(LT[k])}</h2><div class="meta">${AR(n)} متدربًا · ${today}</div></div>
-    <div class="rp-kpis">${kpi('📘','أنهوا الدرس',AR(dn)+' من '+AR(n),AR(Math.round(dn/n*100))+'٪')}${kpi('📝','حلّوا الاختبار',AR(qs.length),AR(Math.round(qs.length/n*100))+'٪ من الشعبة')}${kpi('🎯','متوسط الاختبار',qa==null?'—':AR(Math.round(qa))+'٪',qa==null?'':band(qa))}${kpi('🧮','متوسط التمارين',pa==null?'—':AR(Math.round(pa))+'٪',AR(ps.length)+' متدربًا')}${kpi('✅','نسبة النجاح',qs.length?AR(Math.round(pass/qs.length*100))+'٪':'—','٥٠٪ فأكثر')}${kpi('🔁','المحاولات',AR((L.quizAttempts||0)+(L.probAttempts||0)))}</div>
+    <div class="rp-kpis">${kpi('📘','أنهوا الدرس',AR(dn)+' من '+AR(n),AR(Math.round(dn/n*100))+'٪')}${kpi('📝','حلّوا الاختبار',AR(qs.length),AR(Math.round(qs.length/n*100))+'٪ من الشعبة')}${kpi('🎯','متوسط الاختبار',qa==null?'—':AR(Math.round(qa))+'٪',qa==null?'':band(qa))}${kpi('🧮','متوسط التمارين',pa==null?'—':AR(Math.round(pa))+'٪',AR(ps.length)+' متدربًا')}${kpi('✅','نسبة الاجتياز',qs.length?AR(Math.round(pass/qs.length*100))+'٪':'—','٥٠٪ فأكثر')}${kpi('🔁','المحاولات',AR((L.quizAttempts||0)+(L.probAttempts||0)))}</div>
     ${ins.length?`<div class="rp-note"><b>💡 أبرز الملاحظات</b><ul style="margin:6px 0 0;padding-inline-start:1.2em">${ins.map(x=>`<li>${x}</li>`).join('')}</ul></div>`:''}
-    <div class="grid2"><div class="card"><h2>مسار المتدربين في الدرس</h2><div class="rp-funnel">${step('في الشعبة',n,n)}${step('دخلوا المنصة',logged,n,.9)}${step('أنهوا الدرس',dn,n,.8)}${step('حلّوا الاختبار',qs.length,n,.7)}${step('نجحوا (٥٠٪+)',pass,n,.6)}${step('أتقنوا (٨٠٪+)',mast,n,.5)}</div></div>
-    <div class="card"><h2>توزيع درجات الاختبار</h2>${qs.length?`<div class="bars">${bins.map((b,i)=>`<div class="bar"><span class="lab">${b[0]}</span><span class="trk"><span class="fil ${['g','g','m','b'][i]}" style="width:${bn[i]/bm*100}%;display:block"></span></span><span class="val">${AR(bn[i])}</span></div>`).join('')}</div><p class="sub" style="margin-top:8px">حسب أفضل محاولة لكل متدرب.</p>`:'<p class="empty">لا توجد درجات بعد.</p>'}</div></div>
+    <div class="grid2"><div class="card"><h2>مسار المتدربين في الدرس</h2><div class="rp-funnel">${step('في الشعبة',n,n)}${step('دخلوا المنصة',logged,n,.9)}${step('أنهوا الدرس',dn,n,.8)}${step('حلّوا الاختبار',qs.length,n,.7)}${step('اجتازوا (٦٠٪+)',pass,n,.6)}${step('ممتاز (٩٠٪+)',mast,n,.5)}</div></div>
+    <div class="card"><h2>توزيع درجات الاختبار</h2>${qs.length?`<div class="bars">${bins.map((b,i)=>`<div class="bar"><span class="lab">${b[0]}</span><span class="trk"><span class="fil ${['g','g','m','m','b'][i]}" style="width:${bn[i]/bm*100}%;display:block"></span></span><span class="val">${AR(bn[i])}</span></div>`).join('')}</div><p class="sub" style="margin-top:8px">حسب أفضل محاولة لكل متدرب.</p>`:'<p class="empty">لا توجد درجات بعد.</p>'}</div></div>
     <div class="grid2"><div class="card"><h2>أثر إعادة المحاولة</h2>${first!=null?`<div class="rp-cmp" role="img" aria-label="أول محاولة ${first}٪ وأفضل محاولة ${best}٪"><div class="f" style="height:${first}%"><span>${AR(first)}٪</span></div><div style="height:${best}%"><span>${AR(best)}٪</span></div></div><div class="rp-cmpx"><span>أول محاولة</span><span>أفضل محاولة</span></div>${gain!=null?`<p class="sub" style="margin-top:8px">التحسن: <b>${gain>=0?'+':''}${AR(Math.round(gain))}</b> نقطة.</p>`:''}`:'<p class="empty">لا توجد محاولات بعد.</p>'}</div>
     <div class="card"><h2>الأسئلة الأكثر خطأ</h2>${qq.length?qq.slice(0,6).map(x=>`<div class="rp-q"><b>${esc(x.q)}</b><div class="trk"><div class="fil" style="width:${x.pct}%;background:var(--${pctCls(x.pct)==='g'?'good':pctCls(x.pct)==='m'?'mid':'bad'})"></div></div><small style="color:var(--muted)">${AR(x.pct)}٪ أجابوا صحيحًا (${AR(x.correct)} من ${AR(x.total)})${x.commonWrong?` · أكثر خطأ: «${esc(x.commonWrong)}»`:''}</small></div>`).join(''):'<p class="empty">لا توجد إجابات بعد.</p>'}</div></div>
     <div class="card"><h2>نتائج المتدربين في الدرس</h2><div class="tableWrap" style="max-height:480px;overflow:auto"><table><thead><tr><th>الاسم</th><th>الاختبار</th><th>التمارين</th><th>أنهى الدرس</th><th>المستوى</th></tr></thead><tbody>
-    ${rows.slice().sort((a,b)=>(b.q??-1)-(a.q??-1)||a.s.name.localeCompare(b.s.name,'ar')).map(r=>`<tr data-id="${esc(r.s.id)}"><td>${esc(r.s.name)}</td><td>${pct(r.q)}</td><td>${pct(r.p)}</td><td>${r.d?'✓':'—'}</td><td><span class="tag ${r.q!=null&&r.q<50?'warn':''}">${band(r.q)}</span></td></tr>`).join('')}</tbody></table></div></div>`;
-    xls=[['تقرير الدرس',[['المؤشر','القيمة'],['الدرس',LT[k]],['الشعبة',secLabel],['عدد المتدربين',n],['أنهوا الدرس',dn],['حلّوا الاختبار',qs.length],['متوسط الاختبار %',qa==null?'':Math.round(qa)],['متوسط التمارين %',pa==null?'':Math.round(pa)],['نجحوا',pass],['أتقنوا',mast],['أول محاولة %',first??''],['أفضل محاولة %',best??'']],[26,34]],
+    ${rows.slice().sort((a,b)=>(b.q??-1)-(a.q??-1)||a.s.name.localeCompare(b.s.name,'ar')).map(r=>`<tr data-id="${esc(r.s.id)}"><td>${esc(r.s.name)}</td><td>${pct(r.q)}</td><td>${pct(r.p)}</td><td>${r.d?'✓':'—'}</td><td><span class="tag ${r.q!=null&&r.q<60?'warn':''}">${band(r.q)}</span></td></tr>`).join('')}</tbody></table></div></div>`;
+    xls=[['تقرير الدرس',[['المؤشر','القيمة'],['الدرس',LT[k]],['الشعبة',secLabel],['عدد المتدربين',n],['أنهوا الدرس',dn],['حلّوا الاختبار',qs.length],['متوسط الاختبار %',qa==null?'':Math.round(qa)],['متوسط التمارين %',pa==null?'':Math.round(pa)],['اجتازوا (60%+)',pass],['ممتاز (90%+)',mast],['أول محاولة %',first??''],['أفضل محاولة %',best??'']],[26,34]],
       ['المتدربون',[['الرقم','الاسم','الاختبار %','التمارين %','أنهى الدرس','المستوى'],...rows.map(r=>[r.s.id,r.s.name,r.q==null?'':Math.round(r.q),r.p==null?'':Math.round(r.p),r.d?'نعم':'لا',band(r.q)])],[14,30,12,12,12,12]],
       ['الأسئلة',[['السؤال','صحيحة','المجموع','النسبة %','أكثر إجابة خاطئة'],...qq.map(x=>[x.q,x.correct,x.total,x.pct,x.commonWrong])],[60,8,8,8,30]]];
   }
@@ -528,7 +528,7 @@ async function drawTrainer(m,ctl,st,sec,secLabel,today,n,logged){
   const covered=new Set(log.map(x=>x.lessonKey)),hrs=log.reduce((a,x)=>a+x.hours,0),cov=Math.round(covered.size/TOTAL*100);
   const T=TLOG.totals||{};
   const ov=st.map(s=>s.overall).filter(v=>v!=null),avgOv=avg(ov),compl=n?Math.round(st.reduce((a,s)=>a+s.doneN,0)/(n*TOTAL)*100):0;
-  const qAll=st.flatMap(s=>Object.values(s.quiz||{}).map(Number)),passR=qAll.length?Math.round(qAll.filter(v=>v>=50).length/qAll.length*100):null;
+  const qAll=st.flatMap(s=>Object.values(s.quiz||{}).map(Number)),passR=qAll.length?Math.round(qAll.filter(v=>v>=60).length/qAll.length*100):null;
   const unitCov=UNITS.map((u,ui)=>{const ks=u.l.map((_,li)=>ui+'-'+li).filter((_,li)=>!u.l[li].hide);return{ui,c:ks.filter(k=>covered.has(k)).length,t:ks.length}});
   const dToday=new Date(),iso=`${dToday.getFullYear()}-${String(dToday.getMonth()+1).padStart(2,'0')}-${String(dToday.getDate()).padStart(2,'0')}`;
   const lessonOpts=UNITS.map((u,ui)=>`<optgroup label="الوحدة ${ORD[ui]}">${u.l.map((l,li)=>l.hide?'':`<option value="${ui}-${li}">${esc(l.t)}${covered.has(ui+'-'+li)?' ✓':''}</option>`).join('')}</optgroup>`).join('');
