@@ -287,11 +287,20 @@ F.u2FreeFall=svg('0 0 380 230',
   L(80,205,80,40,'var(--muted)','bm',2)+T(66,125,'h',C),
   'أثناء السقوط تقل طاقة الوضع وتزداد الطاقة الحركية، ومجموعهما ثابت');
 /* أشكال الطاقة */
-F.u2EnergyForms=svg('0 0 380 170',
-  [['ميكانيكية','var(--accent)'],['كهربائية','var(--fig2)'],['حرارية','var(--warnc)'],['كيميائية','var(--good)'],['نووية','var(--bad)'],['شمسية','var(--accent)']].map(([n,c],i)=>{const x=310-(i%3)*120,y=20+Math.floor(i/3)*70;
-   return `<rect x="${x-50}" y="${y}" width="100" height="50" rx="10" fill="var(--soft)" stroke="${c}" stroke-width="2.5"/>`+T(x,y+31,n,`class="lb sm" text-anchor="middle" style="fill:${c}"`)}).join('')+
-  T(190,162,'وحدة قياس الطاقة: الجول J',CX),
-  'للطاقة أشكال كثيرة، ووحدة قياسها جميعًا الجول');
+F.u2EnergyForms=svg('0 0 380 290',
+  `<rect x="120" y="8" width="140" height="36" rx="10" fill="var(--accent)"/>`+T(190,31,'أنواع الطاقة','class="lb" text-anchor="middle" style="fill:#fff"')+
+  `<path d="M190,44 V58 M158,58 H285 M285,58 V70 M158,58 V237 M158,85 H145 M158,123 H145 M158,161 H145 M158,199 H145 M158,237 H145" fill="none" stroke="var(--muted)" stroke-width="1.8"/>`+
+  /* 1 الميكانيكية وفرعاها */
+  `<rect x="215" y="66" width="140" height="48" rx="9" fill="var(--soft)" stroke="var(--accent)" stroke-width="2.5"/>`+T(285,86,'الطاقة الميكانيكية','class="lb sm" text-anchor="middle" style="fill:var(--accent)"')+T(285,106,'ME',CX)+
+  `<path d="M285,110 V126 M240,126 H330 M240,126 V140 M330,126 V140" fill="none" stroke="var(--accent)" stroke-width="1.8"/>`+
+  `<rect x="290" y="140" width="80" height="52" rx="8" fill="var(--soft)" stroke="var(--fig2)" stroke-width="2"/>`+T(330,162,'الكامنة (الوضع)','class="lb sm" text-anchor="middle" style="fill:var(--fig2);font-size:10.5px"')+T(330,182,'PE',CX)+
+  `<rect x="200" y="140" width="80" height="52" rx="8" fill="var(--soft)" stroke="var(--fig2)" stroke-width="2"/>`+T(240,162,'الحركية','class="lb sm" text-anchor="middle" style="fill:var(--fig2)"')+T(240,182,'K·E',CX)+
+  T(285,210,'ME = KE + PE','class="lb sm" text-anchor="middle" style="fill:var(--accent)"')+
+  /* 2-6 */
+  [['الكهربائية','var(--fig2)'],['الحرارية','var(--warnc)'],['الكيميائية','var(--good)'],['النووية','var(--bad)'],['الشمسية','var(--accent)']].map(([n,c],i)=>{const y=70+i*38;
+   return `<rect x="25" y="${y}" width="120" height="30" rx="8" fill="var(--soft)" stroke="${c}" stroke-width="2.2"/>`+T(85,y+20,n,`class="lb sm" text-anchor="middle" style="fill:${c}"`)}).join('')+
+  T(190,268,'وحدة قياس الطاقة: الجول J',CX),
+  'تنقسم الطاقة إلى ستة أنواع، والطاقة الميكانيكية نوعان: الكامنة (الوضع) والحركية');
 /* الطاقة الحركية */
 F.u2KE=svg('0 0 380 160',
   `<line x1="30" y1="120" x2="350" y2="120" stroke="var(--ink)" stroke-width="2"/>`+
