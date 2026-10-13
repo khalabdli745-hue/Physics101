@@ -566,14 +566,14 @@ function cellHTML(c){c=divs(c);if(/\(صفحة [0-9]+\)/.test(c))return c.split(/
 function photoFail(im){const f=im.closest('figure'),k=im.dataset.fb;if(f)f.outerHTML=(k&&(window.FIGS||{})[k])||''}
 function md(src){
   const out=[];let list=null;
-  const flush=()=>{if(list){out.push(`<${list.t}>${list.i.map(x=>'<li'+(/^\s*`[^`=\s]{1,3}`\s/.test(x)?' class="sym"':'')+'>'+inl(x)+'</li>').join('')}</${list.t}>`);list=null}};
+  const flush=()=>{if(list){out.push(`<${list.t}${list.s>1?' start="'+list.s+'"':''}>${list.i.map(x=>'<li'+(/^\s*`[^`=\s]{1,3}`\s/.test(x)?' class="sym"':'')+'>'+inl(x)+'</li>').join('')}</${list.t}>`);list=null}};
   for(const raw of src.split('\n')){const l=raw.trim();let m;
     if(!l){flush();continue}
     if(m=l.match(/^\[\[img:([^|\]]+)\|(\w*)\|([^\]]*)\]\]$/)){flush();const src=m[1].startsWith('@')?((window.PHOTOS||{})[m[1].slice(1)]||''):m[1];out.push(`<figure class="fig photo"><img src="${esc(src)}" alt="${esc(m[3])}" loading="lazy" referrerpolicy="no-referrer" data-fb="${m[2]}" onerror="photoFail(this)"><figcaption>${esc(m[3])}</figcaption></figure>`);continue}
     if(m=l.match(/^\[\[fig:(\w+)\]\]$/)){flush();out.push((window.FIGS||{})[m[1]]||'');continue}
     if(m=l.match(/^#{1,4}\s+(.*)/)){flush();out.push('<h3><span>'+cellHTML(m[1])+'</span></h3>');continue}
     if(m=l.match(/^[-*•]\s+(.*)/)){if(!list||list.t!=='ul'){flush();list={t:'ul',i:[]}}list.i.push(m[1]);continue}
-    if(m=l.match(/^\d+[.)]\s+(.*)/)){if(!list||list.t!=='ol'){flush();list={t:'ol',i:[]}}list.i.push(m[1]);continue}
+    if(m=l.match(/^(\d+)[.)]\s+(.*)/)){if(!list||list.t!=='ol'){flush();list={t:'ol',i:[],s:+m[1]}}list.i.push(m[2]);continue}
     if(m=l.match(/^`([^`]+)`(.*)$/)){flush();out.push('<div class="eqblock'+(/\u00a0/.test(m[1])?' one':'')+'">'+kfr(esc(divEq(m[1])))+'</div>'+(m[2].trim()?'<p>'+inl(m[2].trim())+'</p>':''));continue}
     flush();out.push('<p>'+inl(l)+'</p>');}
   flush();return out.join('');
@@ -1234,30 +1234,23 @@ function openBoard(dry){dry=dry===true;
     const hist=[];let was=false,busy=false;
     const sayA=async t=>{const id=++runId;B.classList.add('talking');try{if(TTS.has()){const d=document.createElement('button');TTS.play(t,d);await wait(400);while(id===runId&&TTS.busy())await wait(120)}}catch(e){}B.classList.remove('talking')};
     const openA=()=>{was=auto;stopAuto();aP.hidden=false;B.classList.add('asking');aBtn.hidden=true};
-    const closeA=()=>{runId++;TTS.stop();B.classList.remove('talking','asking');aP.hidden=true;aBtn.hidden=false;if(was)startAuto()};
+    const closeA=()=>{if(aMic._abort)aMic._abort();busy=false;aSend.disabled=false;runId++;TTS.stop();B.classList.remove('talking','asking');aP.hidden=true;aBtn.hidden=false;if(was)startAuto()};
     aBtn.onclick=openA;aP.querySelector('.bAskX').onclick=closeA;
-    const ERRS={ai_off:'لم يُفعَّل المدرب الذكي بعد، ويفعّله المدرب من لوحة المدرب.',limit:'وصلت إلى الحد المسموح (١٥ سؤالًا كل ٦ ساعات). حاول لاحقًا.',ai_busy:'المدرب الذكي مشغول الآن لكثرة الأسئلة. حاول بعد دقيقة.',ai_key:'مفتاح الذكاء الاصطناعي غير صالح. أبلغ المدرب.',auth:'سجّل الدخول من جديد.'};
+    const ERRS={timeout:'تأخر الرد. حاول مرة أخرى أو اضغط «أكمل الشرح».',ai_off:'لم يُفعَّل المدرب الذكي بعد، ويفعّله المدرب من لوحة المدرب.',limit:'وصلت إلى الحد المسموح (١٥ سؤالًا كل ٦ ساعات). حاول لاحقًا.',ai_busy:'المدرب الذكي مشغول الآن لكثرة الأسئلة. حاول بعد دقيقة.',ai_key:'مفتاح الذكاء الاصطناعي غير صالح. أبلغ المدرب.',auth:'سجّل الدخول من جديد.'};
     const bub=(cls,html)=>{const d=document.createElement('div');d.className='bAskM '+cls;d.innerHTML=html;aLog.appendChild(d);d.scrollIntoView({block:'nearest',behavior:'smooth'});return d};
     const slideNow=()=>{const sl=out[cur];return ((sl&&sl.title)||'')+' — '+(ct.innerText||'').replace(/\s+/g,' ').slice(0,500)};
     async function ask(q){q=(q||'').trim();if(!q||busy)return;busy=true;aSend.disabled=true;aTa.value='';
       bub('me',esc(q));const w=bub('bot wait','<span class="dots">المدرب يفكّر</span>');
       const ctx=('الدرس: '+l.t+'\n'+s.s).slice(0,3800);
-      try{const r=await SYNC.post({a:'ask',token:atok,q,lessonKey:key(pos.u,pos.l),lessonTitle:l.t,context:ctx,history:hist.slice(-6),mode:'board',slide:slideNow()});
+      try{const r=await Promise.race([SYNC.post({a:'ask',token:atok,q,lessonKey:key(pos.u,pos.l),lessonTitle:l.t,context:ctx,history:hist.slice(-6),mode:'board',slide:slideNow()}),new Promise(r=>setTimeout(()=>r({ok:false,error:'timeout'}),30000))]);if(aP.hidden){w.remove();busy=false;aSend.disabled=false;return}
         w.remove();
         if(r.ok){hist.push({role:'user',content:q},{role:'assistant',content:r.answer});const shown=r.answer.replace(/[\u064B-\u0652\u0670]/g,'');bub('bot','<div class="md">'+md(shown)+'</div>');cap.innerHTML=inl(shown.replace(/[#*]/g,'').split('\n').filter(Boolean)[0]||'');busy=false;aSend.disabled=false;await sayA(r.answer);return}
         bub('err',esc(ERRS[r.error]||'تعذّر الحصول على إجابة الآن. حاول مرة أخرى.'))}
       catch(e){w.remove();bub('err','تعذّر الاتصال. تحقق من الإنترنت.')}
       busy=false;aSend.disabled=false}
-    ['لم أفهم، اشرح بأسلوب أبسط','أعطني مثالًا آخر','لماذا يحدث هذا؟','كيف أطبّق هذا القانون؟'].forEach(q=>{const c=document.createElement('button');c.type='button';c.textContent=q;c.onclick=()=>ask(q);aP.querySelector('.bAskChips').appendChild(c)});
-    aF.onsubmit=e=>{e.preventDefault();ask(aTa.value)};
-    const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-    if(!SR)aMic.hidden=true;else{let rec=null;
-      aMic.onclick=()=>{if(rec){try{rec.stop()}catch(e){}return}
-        try{rec=new SR();rec.lang='ar-SA';rec.interimResults=true;rec.continuous=false;const base=aTa.value?aTa.value+' ':'';
-          rec.onresult=e=>{let t='';for(let i=0;i<e.results.length;i++)t+=e.results[i][0].transcript;aTa.value=base+t};
-          rec.onend=()=>{rec=null;aMic.classList.remove('on');if(aTa.value.trim())ask(aTa.value)};
-          rec.onerror=()=>{rec=null;aMic.classList.remove('on')};
-          runId++;TTS.stop();rec.start();aMic.classList.add('on')}catch(e){rec=null;aMic.classList.remove('on')}}}
+    ['لم أفهم، اشرح بأسلوب أبسط','أعطني مثالًا آخر','لماذا يحدث هذا؟','كيف أطبّق هذا القانون؟'].forEach(q=>{const c=document.createElement('button');c.type='button';c.textContent=q;c.onclick=()=>{if(aMic._abort)aMic._abort();ask(q)};aP.querySelector('.bAskChips').appendChild(c)});
+    aF.onsubmit=e=>{e.preventDefault();if(aMic._abort)aMic._abort();ask(aTa.value)};
+    AIMIC(aMic,aTa,q=>ask(q));
    }}
   B.querySelector('.bX').onclick=close;
   render();startAuto();
@@ -1678,11 +1671,11 @@ function aiCard(){
     log.appendChild(d);return d};
   hist.forEach(m=>bubble(m.role,m.content));
   let busy=false;
-  const ERRS={ai_off:'لم يفعّل المدرب المساعد الذكي بعد.',limit:'وصلت إلى الحد المسموح (١٥ سؤالًا كل ٦ ساعات). حاول لاحقًا.',ai_busy:'المساعد مشغول الآن لكثرة الأسئلة. حاول بعد دقيقة.',ai_key:'مفتاح المساعد غير صالح. أبلغ المدرب.',auth:'انتهت الجلسة، سجّل الدخول من جديد.'};
+  const ERRS={timeout:'تأخر الرد. حاول مرة أخرى.',ai_off:'لم يفعّل المدرب المساعد الذكي بعد.',limit:'وصلت إلى الحد المسموح (١٥ سؤالًا كل ٦ ساعات). حاول لاحقًا.',ai_busy:'المساعد مشغول الآن لكثرة الأسئلة. حاول بعد دقيقة.',ai_key:'مفتاح المساعد غير صالح. أبلغ المدرب.',auth:'انتهت الجلسة، سجّل الدخول من جديد.'};
   async function send(q,ex){q=(q||'').trim();if(!q||busy)return;busy=true;sb.disabled=true;ta.value='';ex=ex||{};
     bubble('user',ex.show||q);const w=document.createElement('div');w.className='aiMsg bot wait';w.innerHTML='<span class="dots">يفكّر</span>';log.appendChild(w);w.scrollIntoView({block:'nearest',behavior:'smooth'});
     const ctx=('الدرس: '+l.t+'\n'+(s?s.s:'')+(s&&s.ex?'\nمثال: '+s.ex.q+'\n'+s.ex.st.join('\n'):'')).slice(0,3800);
-    try{const r=await SYNC.post(Object.assign({a:'ask',token:tok,q,lessonKey:k,lessonTitle:l.t,context:ctx,history:hist.slice(-6),mode:'assist'},ex.req||{}));
+    try{const r=await Promise.race([SYNC.post(Object.assign({a:'ask',token:tok,q,lessonKey:k,lessonTitle:l.t,context:ctx,history:hist.slice(-6),mode:'assist'},ex.req||{})),new Promise(r=>setTimeout(()=>r({ok:false,error:'timeout'}),30000))]);
       w.remove();
       if(r.ok){hist.push({role:'user',content:q},{role:'assistant',content:r.answer});const d=bubble('assistant',r.answer);d.scrollIntoView({block:'nearest',behavior:'smooth'});try{AIVO();TTS.stop();const pb=d.querySelector('button');TTS.play(r.answer,pb||document.createElement('button'))}catch(e){}}
       else{const e=document.createElement('div');e.className='aiMsg err';e.innerHTML=esc(ERRS[r.error]||'تعذّر الحصول على إجابة الآن. حاول مرة أخرى.')+(r.error==='ai_off'?` <a href="${$('aiLink').href}" target="_blank" rel="noopener">استخدم مساعد Claude</a>`:'');log.appendChild(e)}}
@@ -1696,13 +1689,22 @@ function aiCard(){
 /* أدوات المساعد التفاعلي: عرض بلا حركات، صوت المدرب المختار، والسؤال بالصوت */
 const AIPLAIN=t=>String(t).replace(/[ً-ْٰ]/g,'');
 const AIVO=()=>{let v='h';try{v=localStorage.getItem('p101-bvo')||'h'}catch(e){}TTS.setOV(v==='z'?'ar-SA-ZariyahNeural':'ar-SA-HamedNeural')};
-function AIMIC(btn,ta,done){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){btn.hidden=true;return}let rec=null;
-  btn.onclick=()=>{if(rec){try{rec.stop()}catch(e){}return}
-    try{rec=new SR();rec.lang='ar-SA';rec.interimResults=true;rec.continuous=false;const base=ta.value?ta.value+' ':'';
-      rec.onresult=e=>{let t='';for(let i=0;i<e.results.length;i++)t+=e.results[i][0].transcript;ta.value=base+t};
-      rec.onend=()=>{rec=null;btn.classList.remove('on');if(ta.value.trim())done(ta.value)};
-      rec.onerror=()=>{rec=null;btn.classList.remove('on')};
-      TTS.stop();rec.start();btn.classList.add('on')}catch(e){rec=null;btn.classList.remove('on')}}}
+function AIMIC(btn,ta,done){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){btn.hidden=true;return}
+  let rec=null,tSil=0,tCap=0,base='',got='',sent=false;const ico=btn.textContent;
+  const clear=()=>{clearTimeout(tSil);clearTimeout(tCap)};
+  const reset=()=>{clear();rec=null;btn.classList.remove('on');btn.textContent=ico};
+  const finish=()=>{if(!rec)return;const r=rec;clear();try{r.stop()}catch(e){}setTimeout(()=>{if(rec===r){try{r.abort()}catch(e){}reset();fire()}},1200)};
+  const fire=()=>{if(sent)return;sent=true;const q=ta.value.trim();if(q&&got)done(q)};
+  btn._abort=()=>{if(!rec)return;const r=rec;sent=true;reset();try{r.abort()}catch(e){}};
+  btn.onclick=()=>{if(rec){finish();return}
+    try{rec=new SR();rec.lang='ar-SA';rec.interimResults=true;rec.continuous=true;base=ta.value?ta.value+' ':'';got='';sent=false;
+      const me=rec;
+      rec.onresult=e=>{if(rec!==me)return;let t='';for(let i=0;i<e.results.length;i++)t+=e.results[i][0].transcript;got=t;ta.value=base+t;clearTimeout(tSil);tSil=setTimeout(finish,1600)};
+      rec.onend=()=>{if(rec!==me)return;reset();fire()};
+      rec.onerror=()=>{if(rec!==me)return;reset()};
+      TTS.stop();rec.start();btn.classList.add('on');btn.textContent='⏹';
+      tSil=setTimeout(()=>{if(!got&&rec===me){try{me.abort()}catch(e){}reset()}},7000);
+      tCap=setTimeout(finish,20000)}catch(e){reset()}}}
 /* زر المساعد العائم في كل التبويبات */
 const AIFAB=(()=>{let fab=null,sheet=null,card=null,ck='';
   function ensure(){if(fab)return;fab=document.createElement('button');fab.type='button';fab.className='aiFab';fab.innerHTML='✦ <span>المساعد الذكي</span>';fab.onclick=()=>open();
@@ -1710,7 +1712,7 @@ const AIFAB=(()=>{let fab=null,sheet=null,card=null,ck='';
     sheet.querySelector('.aiSheetX').onclick=close;sheet.addEventListener('click',e=>{if(e.target===sheet)close()});document.body.append(fab,sheet)}
   function show(){ensure();const tk=(typeof AUTH!=='undefined'&&AUTH&&AUTH.token)||TAUTH;fab.hidden=!(API&&tk&&typeof pos!=='undefined'&&pos&&lesson());try{const cs=getComputedStyle($('app').querySelector('[data-unit]')||$('app'));['--accent','--accent-ink','--accent-soft','--bg','--card','--ink','--muted','--line','--soft'].forEach(v=>{const x=cs.getPropertyValue(v);if(x){fab.style.setProperty(v,x.trim());sheet.style.setProperty(v,x.trim())}})}catch(e){}}
   function open(){ensure();const k=key(pos.u,pos.l);if(!card||ck!==k){card=aiCard();ck=k;const b=sheet.querySelector('.aiSheetBody');b.innerHTML='';b.appendChild(card)}sheet.hidden=false;document.body.classList.add('aiOpen');return card}
-  function close(){if(sheet){sheet.hidden=true;TTS.stop()}document.body.classList.remove('aiOpen')}
+  function close(){if(sheet){sheet.hidden=true;TTS.stop();sheet.querySelectorAll('.aiMic').forEach(b=>b._abort&&b._abort())}document.body.classList.remove('aiOpen')}
   function hint(p,stepLabel){const c=open();if(c&&c.send)c.send('أعطني تلميحًا يساعدني في حل هذا التمرين دون أن تحله لي',{show:'💡 ساعدني في هذا التمرين'+(stepLabel?' (خطوة: '+stepLabel+')':''),req:{mode:'hint',problem:p.q,step:stepLabel||''}})}
   return{show,open,close,hint}})();
 setInterval(()=>{try{AIFAB.show()}catch(e){}},1500);
