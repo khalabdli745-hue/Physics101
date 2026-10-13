@@ -393,6 +393,8 @@ details.card summary{cursor:pointer}
 .artIcons span:nth-child(2){transform:translateY(-6px) rotate(-4deg)}.artIcons span:nth-child(3){transform:rotate(5deg)}
 .artText small{display:block;opacity:.9;font-size:13px}.artText b{font-size:18px;line-height:1.5}
 .hIcon{font-size:18px;line-height:1}
+.kfr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.15;margin:0 .12em;font-size:.92em}.kfr>span{padding:0 .2em;text-align:center}.kfr>span:first-child{border-bottom:1.6px solid currentColor}
+
 .sbDur{display:inline-block;margin:0 10px;padding:6px 12px;border-radius:999px;background:#fff;border:1.5px solid var(--accent,#1d4ed8);color:var(--accent,#1d4ed8);font-weight:700;font-size:15px;white-space:nowrap}
 @media (max-width:520px){.artBanner{flex-direction:column;align-items:flex-start}.artIcons span{width:48px;height:48px;font-size:27px}.artText b{font-size:16.5px}}
 .claudeBtn{display:flex;align-items:center;gap:12px;margin-top:12px;padding:12px 14px;border-radius:12px;text-decoration:none;color:var(--ink);background:linear-gradient(120deg,#F5E9DF,#FBF6F1);border:1px solid #E8C9B0}
@@ -533,9 +535,13 @@ const divEq=t=>String(t).replace(/÷/g,'/');const divs=divEq;
 (()=>{const fix=root=>{const tw=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let n;while(n=tw.nextNode()){if(n.nodeValue.indexOf('÷')>=0){const e=n.parentElement;if(e&&!e.closest('.calc,.calcbtn,script,style,textarea,input'))n.nodeValue=n.nodeValue.replace(/÷/g,'/')}}};
   const start=()=>{fix(document.body);new MutationObserver(ms=>{ms.forEach(m=>{if(m.type==='characterData'){if(m.target.nodeValue&&m.target.nodeValue.indexOf('÷')>=0)fix(m.target.parentElement||document.body)}else m.addedNodes.forEach(x=>{if(x.nodeType===3){if(x.nodeValue.indexOf('÷')>=0&&x.parentElement)fix(x.parentElement)}else if(x.nodeType===1)fix(x)})})}).observe(document.body,{childList:true,subtree:true,characterData:true})};
   if(document.body)start();else document.addEventListener('DOMContentLoaded',start)})();
-function inl(s){return divs(s).split(/(`[^`]+`)/).map(seg=>seg.startsWith('`')&&seg.endsWith('`')&&seg.length>1?'<span class="eq">'+esc(seg.slice(1,-1))+'</span>':esc(seg).replace(NU,m=>/[A-Za-zµΩ°×]/.test(m)?'<span class="nu">'+m+'</span>':m)).join('').replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>')}
+/* كسر رأسي لقوانين مثل K·E = mv²/2 كما في الحقيبة التدريبية */
+function kfr(h){if(h.indexOf('/2')<0)return h;const parts=[];let d=0,cur='';for(let i=0;i<h.length;i++){const ch=h[i];if(ch==='(')d++;else if(ch===')')d--;
+  if(d===0){const m=h.slice(i).match(/^ (=|\+|−) /);if(m){parts.push(cur,m[0]);cur='';i+=m[0].length-1;continue}}cur+=ch}parts.push(cur);
+  return parts.map((p,i)=>{if(i%2)return p;const m=p.match(/^(.+?)\/2((?:\s*[A-Za-z]{1,2})?)$/);if(m&&m[1].indexOf('/')<0&&!/[\[\]]/.test(m[1]))return '<span class="kfr"><span>'+m[1]+'</span><span>2</span></span>'+m[2];return p}).join('')}
+function inl(s){return divs(s).split(/(`[^`]+`)/).map(seg=>seg.startsWith('`')&&seg.endsWith('`')&&seg.length>1?'<span class="eq">'+kfr(esc(seg.slice(1,-1)))+'</span>':esc(seg).replace(NU,m=>/[A-Za-zµΩ°×]/.test(m)?'<span class="nu">'+m+'</span>':m)).join('').replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>')}
 function cellHTML(c){c=divs(c);if(/\(صفحة [0-9]+\)/.test(c))return c.split(/(\(صفحة [0-9]+\))/).map((x,i)=>i%2?'<bdi dir="rtl" class="pg">'+esc(x)+'</bdi>':(x?cellHTML(x):'')).join('');if(/`/.test(c))return inl(c);
-  return c.split(/([A-Za-z0-9\u2080-\u2089\u00B2\u00B3\u207B\u00B9\u2070-\u2079ΔρεθμΩπ°%îĵ][A-Za-z0-9\u2080-\u2089\u00B2\u00B3\u207B\u00B9\u2070-\u2079ΔρεθμΩπ°%îĵ\u0302 =+\/()·×÷.,−\-]*[A-Za-z0-9\u2080-\u2089\u00B2\u00B3\u00B9\u2070-\u2079ΩΔ°%)îĵ\u0302])/).map((x,i)=>i%2?`<bdi class="eqn">${esc(x)}</bdi>`:inl(x)).join('')}
+  return c.split(/([A-Za-z0-9\u2080-\u2089\u00B2\u00B3\u207B\u00B9\u2070-\u2079ΔρεθμΩπ°%îĵ][A-Za-z0-9\u2080-\u2089\u00B2\u00B3\u207B\u00B9\u2070-\u2079ΔρεθμΩπ°%îĵ\u0302 =+\/()·×÷.,−\-]*[A-Za-z0-9\u2080-\u2089\u00B2\u00B3\u00B9\u2070-\u2079ΩΔ°%)îĵ\u0302])/).map((x,i)=>i%2?`<bdi class="eqn">${kfr(esc(x))}</bdi>`:inl(x)).join('')}
 function photoFail(im){const f=im.closest('figure'),k=im.dataset.fb;if(f)f.outerHTML=(k&&(window.FIGS||{})[k])||''}
 function md(src){
   const out=[];let list=null;
@@ -547,7 +553,7 @@ function md(src){
     if(m=l.match(/^#{1,4}\s+(.*)/)){flush();out.push('<h3><span>'+cellHTML(m[1])+'</span></h3>');continue}
     if(m=l.match(/^[-*•]\s+(.*)/)){if(!list||list.t!=='ul'){flush();list={t:'ul',i:[]}}list.i.push(m[1]);continue}
     if(m=l.match(/^\d+[.)]\s+(.*)/)){if(!list||list.t!=='ol'){flush();list={t:'ol',i:[]}}list.i.push(m[1]);continue}
-    if(m=l.match(/^`([^`]+)`(.*)$/)){flush();out.push('<div class="eqblock'+(/\u00a0/.test(m[1])?' one':'')+'">'+esc(divEq(m[1]))+'</div>'+(m[2].trim()?'<p>'+inl(m[2].trim())+'</p>':''));continue}
+    if(m=l.match(/^`([^`]+)`(.*)$/)){flush();out.push('<div class="eqblock'+(/\u00a0/.test(m[1])?' one':'')+'">'+kfr(esc(divEq(m[1])))+'</div>'+(m[2].trim()?'<p>'+inl(m[2].trim())+'</p>':''));continue}
     flush();out.push('<p>'+inl(l)+'</p>');}
   flush();return out.join('');
 }
@@ -632,7 +638,7 @@ const TTS=(()=>{
   /* دروس تُقرأ أرقامها وقوانينها بالعربية كاملة (بلا تبديل للإنجليزية) */
   const AR_ONLY=new Set([]);
   function arOnly(){try{return AR_ONLY.has(pos.u+'-'+pos.l)}catch(e){return false}}
-  function spoken(t){t=String(t).replace(/\s*·?\s*\(صفحة [0-9٠-٩]+\)/g,'');t=t.replace(/\b([A-Za-z])\((km\/h|m\/s|km²|m²|cm|mm|km|kg|min|m|g|h|s)\)/g,(m,x,u)=>x+' '+{'km/h':'بالكيلومتر لكل ساعة','m/s':'بالمتر لكل ثانية','cm':'بالسنتيمتر','mm':'بالمليمتر','km':'بالكيلومتر','m':'بالمتر','kg':'بالكيلوجرام','g':'بالجرام','h':'بالساعة','min':'بالدقيقة','s':'بالثانية','m²':'بالمتر المربع','km²':'بالكيلومتر المربع'}[u]+' ');t=t.replace(/\[\[fig:[^\]]*\]\]/g,' ').replace(/\[\[img:[^|\]]*\|[^|\]]*\|([^\]]*)\]\]/g,'$1. ').replace(/https?:\/\/\S+/g,' ');t=t.replace(/\s*\\?`[A-Za-zµ]{1,3} → [A-Za-zµ]{1,3}\\?`/g,'');
+  function spoken(t){t=String(t).replace(/K·E/g,'KE').replace(/\s*·?\s*\(صفحة [0-9٠-٩]+\)/g,'');t=t.replace(/\b([A-Za-z])\((km\/h|m\/s|km²|m²|cm|mm|km|kg|min|m|g|h|s)\)/g,(m,x,u)=>x+' '+{'km/h':'بالكيلومتر لكل ساعة','m/s':'بالمتر لكل ثانية','cm':'بالسنتيمتر','mm':'بالمليمتر','km':'بالكيلومتر','m':'بالمتر','kg':'بالكيلوجرام','g':'بالجرام','h':'بالساعة','min':'بالدقيقة','s':'بالثانية','m²':'بالمتر المربع','km²':'بالكيلومتر المربع'}[u]+' ');t=t.replace(/\[\[fig:[^\]]*\]\]/g,' ').replace(/\[\[img:[^|\]]*\|[^|\]]*\|([^\]]*)\]\]/g,'$1. ').replace(/https?:\/\/\S+/g,' ');t=t.replace(/\s*\\?`[A-Za-zµ]{1,3} → [A-Za-zµ]{1,3}\\?`/g,'');
     t=String(t).replace(/`?J\s*=\s*N·m`?/g,'، والجول يساوي نيوتن ضرب متر');
     t=markN(sepDot(t)).replace(/Ｎ/g,' نيوتن ').replace(/(\d\s*)Pa\b/g,'$1 باسكال ').replace(/\bPa\b/g,' باسكال ');
     t=t.replace(/^#+\s*/gm,'').replace(/\*\*/g,'').replace(/`/g,'').replace(/^[-•]\s*/gm,'').replace(/[✓✗⚠️]/g,'').replace(/[✦⚗🔊■]/g,'');
@@ -680,6 +686,7 @@ const TTS=(()=>{
     if(/^\s*`?N`?\s*$/.test(t))t=t.replace('N','Ｎ');return t}
   function spokenEn(t){
     const P=[];const ph=w=>{P.push(w);return ' \u0001'+(P.length-1)+'\u0002 '};
+    t=String(t).replace(/K·E/g,'KE');
     t=t.replace(/\b([A-Za-z])\((km\/h|m\/s|cm|mm|km|kg|min|°C|°F|m|g|h|s|K|J|N)\)/g,(m,x,u)=>x+ph(' in '+{'km/h':'kilometers per hour','m/s':'meters per second','cm':'centimeters','mm':'millimeters','km':'kilometers','m':'meters','kg':'kilograms','g':'grams','h':'hours','min':'minutes','s':'seconds','°C':'degrees Celsius','°F':'degrees Fahrenheit','K':'kelvin','J':'joules','N':'newtons'}[u]+' ')).replace(/ₙ/g,' n').replace(/_eq\b/g,()=>ph(' equivalent'));
     t=t.replace(/^\s*J\s*=\s*N\s*[·.]\s*m\s*$/,()=>ph('joule equals newton meter'));
     t=t.replace(/Ｎ/g,()=>ph('newton')).replace(/(\d\s*)Pa\b/g,(m,d)=>d+ph('pascals')).replace(/\bPa\b/g,()=>ph('pascal'));
@@ -1419,7 +1426,7 @@ function unitCard(p,title,onFinish){
   const fb=(s,msg,cls)=>{const f=s.querySelector('.pfb');f.className='pfb '+(cls||'');f.innerHTML=msg};
   const mc=(s,label,opts,next)=>{const bd=s.querySelector('.pbody');bd.insertAdjacentHTML('beforeend','<p class="psub">'+inl(label)+'</p>');const w=document.createElement('div');w.className='opts';let tr=0,lk=0;total++;
     const items=shuffle(opts.map((t,i)=>({t,ok:i===0})));
-    items.forEach(it=>{const b=document.createElement('button');b.innerHTML=inl(it.t);it.el=b;
+    items.forEach(it=>{const b=document.createElement('button');b.innerHTML=/[ء-ي`]/.test(it.t)?inl(it.t):'<span class="eq">'+kfr(esc(divs(it.t)))+'</span>';it.el=b;
       b.onclick=()=>{if(lk)return;
         if(it.ok){lk=1;b.classList.add('right');items.forEach(x=>x.el.disabled=true);if(!tr)first++;else s.dataset.miss=1;fb(s,'صحيح.','good');next();return}
         tr++;b.classList.add('wrong');b.disabled=true;
@@ -1429,7 +1436,7 @@ function unitCard(p,title,onFinish){
   const go=i=>{const s=steps[i];if(!s)return;s.hidden=false;s.scrollIntoView({block:'nearest',behavior:'smooth'})};
   /* ١: الرموز ووحدة الطرف الأيسر */
   const s1=mkStep(1,'أولًا: الرموز ووحداتها');
-  s1.querySelector('.pbody').insertAdjacentHTML('beforeend','<p class="psub"><b>القانون:</b></p><div class="eqblock">'+esc(p.law)+'</div><p class="psub"><b>حيث:</b></p><ul>'+p.sy.map(x=>'<li>'+inl(x)+'</li>').join('')+'</ul>');
+  s1.querySelector('.pbody').insertAdjacentHTML('beforeend','<p class="psub"><b>القانون:</b></p><div class="eqblock">'+kfr(esc(p.law))+'</div><p class="psub"><b>حيث:</b></p><ul>'+p.sy.map(x=>'<li>'+inl(x)+'</li>').join('')+'</ul>');
   const s2=mkStep(2,'ثانيًا: الطرف الأيسر'),s3=mkStep(3,'ثالثًا: الطرف الأيمن'),s4=mkStep(4,'رابعًا: المقارنة والنتيجة');
   const finish=()=>{close(s4);
     const sol=document.createElement('div');sol.className='ans';
@@ -1469,7 +1476,7 @@ function problemCard(p,title,onFinish){
   const mcStep=(n,label,opts,okMsg,next)=>{
     const s=mkStep(n,label);const w=document.createElement('div');w.className='opts';let tr=0;
     const items=shuffle(opts.map((t,i)=>({t,ok:i===0})));
-    items.forEach(it=>{const b=document.createElement('button');b.innerHTML=inl(it.t);it.el=b;
+    items.forEach(it=>{const b=document.createElement('button');b.innerHTML=/[ء-ي`]/.test(it.t)?inl(it.t):'<span class="eq">'+kfr(esc(divs(it.t)))+'</span>';it.el=b;
       b.onclick=()=>{if(s.dataset.lock)return;
         if(it.ok){s.dataset.lock=1;b.classList.add('right');items.forEach(x=>x.el.disabled=true);done(s,tr===0);fb(s,okMsg,'good');next();return}
         tr++;b.classList.add('wrong');b.disabled=true;
@@ -1480,7 +1487,7 @@ function problemCard(p,title,onFinish){
   /* المطلوب داخل الخطوة الأولى */
   const showReq=()=>{if(s1.dataset.req)return;s1.dataset.req=1;const bd=s1.querySelector('.pbody');bd.insertAdjacentHTML('beforeend','<p class="psub"><b>المطلوب:</b> ما الكمية المطلوب حسابها؟</p>');
     const w=document.createElement('div');w.className='opts';let tr=0,lk=0;const items=shuffle(p.r.map((t,i)=>({t,ok:i===0})));
-    items.forEach(it=>{const b=document.createElement('button');b.innerHTML=inl(it.t);it.el=b;
+    items.forEach(it=>{const b=document.createElement('button');b.innerHTML=/[ء-ي`]/.test(it.t)?inl(it.t):'<span class="eq">'+kfr(esc(divs(it.t)))+'</span>';it.el=b;
       b.onclick=()=>{if(lk)return;
         if(it.ok){lk=1;b.classList.add('right');items.forEach(x=>x.el.disabled=true);done(s1,c1ok&&tr===0,!(c1ok&&tr===0));fb(s1,'صحيح.','good');reveal(1);return}
         tr++;b.classList.add('wrong');b.disabled=true;
@@ -1509,7 +1516,7 @@ function problemCard(p,title,onFinish){
    const s3=mkStep(3,'ثالثًا: التعويض');const bd3=s3.querySelector('.pbody');let f3=true;
    const mcIn=(label,opts,okMsg,next)=>{bd3.insertAdjacentHTML('beforeend','<p class="psub">'+label+'</p>');const w=document.createElement('div');w.className='opts';let tr=0,lk=0;
      const items=shuffle(opts.map((t,i)=>({t,ok:i===0})));
-     items.forEach(it=>{const b=document.createElement('button');b.innerHTML=inl(it.t);it.el=b;
+     items.forEach(it=>{const b=document.createElement('button');b.innerHTML=/[ء-ي`]/.test(it.t)?inl(it.t):'<span class="eq">'+kfr(esc(divs(it.t)))+'</span>';it.el=b;
        b.onclick=()=>{if(lk)return;
          if(it.ok){lk=1;b.classList.add('right');items.forEach(x=>x.el.disabled=true);if(tr)f3=false;fb(s3,okMsg,'good');next();return}
          tr++;b.classList.add('wrong');b.disabled=true;
@@ -1535,7 +1542,7 @@ function problemCard(p,title,onFinish){
   let t5=0;
   const fin=ansRow.querySelector('.final'),bF=ansRow.querySelector('button.btn');
   const finish=(ok)=>{fin.disabled=true;bF.hidden=true;CAL.close();s4.classList.add(ok?'ok':'shown');s4.querySelector('.pstat').textContent=ok?'✓':'تم التصحيح';
-    const sol=document.createElement('div');sol.className='ans';sol.innerHTML='الحل:'+(p.b?p.b.map((y,i)=>'<div class="eqblock">'+esc(divs(y+(i===p.b.length-1?' = '+fmt(p.a[0])+(p.a[1]?' '+p.a[1]:''):'')))+'</div>').join(''):'<div class="eqblock">'+esc(divs(p.s.replace(/\[([^\]]+)\]/g,(m,x)=>fmt(parseNum(x)))))+' = '+esc(fmt(p.a[0]))+(p.a[1]?' '+esc(p.a[1]):'')+'</div>')+(p.n?'<br><span class="nt">'+inl(p.n)+'</span>':'');
+    const sol=document.createElement('div');sol.className='ans';sol.innerHTML='الحل:'+(p.b?p.b.map((y,i)=>'<div class="eqblock">'+kfr(esc(divs(y+(i===p.b.length-1?' = '+fmt(p.a[0])+(p.a[1]?' '+p.a[1]:''):''))))+'</div>').join(''):'<div class="eqblock">'+kfr(esc(divs(p.s.replace(/\[([^\]]+)\]/g,(m,x)=>fmt(parseNum(x))))))+' = '+esc(fmt(p.a[0]))+(p.a[1]?' '+esc(p.a[1]):'')+'</div>')+(p.n?'<br><span class="nt">'+inl(p.n)+'</span>':'');
     c.appendChild(sol);sol.appendChild(TTS.controls(()=>'الحل. '+(p.b?p.b.join('\n'):p.s.replace(/\[([^\]]+)\]/g,(m,x)=>fmt(parseNum(x))))+' = '+fmt(p.a[0])+' '+p.a[1]+(p.n?'. '+p.n:''),{compact:true,label:'🔊 استمع للحل'}));c.classList.add('finished');onFinish&&onFinish(Math.min(firstTry,5),{q:p.q.slice(0,100),answer:fin.value,correct:ok,expected:p.a[0]})};
   bF.onclick=()=>{const v=parseNum(fin.value);
     if(near(v,p.a[0],0.02)){if(t5===0)firstTry+=2;fb(s4,'إجابة صحيحة! أحسنت.','good');finish(true);return}
