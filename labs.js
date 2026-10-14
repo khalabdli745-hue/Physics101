@@ -46,6 +46,25 @@ const CSS=`
 .lab .fb2.ok{background:#DCFCE7;color:#14532D}.lab .fb2.no{background:#FEE2E2;color:#7F1D1D}
 .lab .ctl .stage{margin:6px 0 8px}
 .lab .intro{border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin-bottom:12px}.lab .intro h3{margin:0 0 6px;font-size:15px;color:var(--accent)}.lab .intro .tool p{margin:0 0 6px;font-size:14px;line-height:1.7}.lab .law .sym{padding:6px 0;border-bottom:1px dashed var(--line);font-size:14px}.lab .law .sym b{color:var(--muted)}.lab .law .sym ul{margin:4px 0 0;padding-inline-start:18px;line-height:1.8}.lab .law .sym li span{font-weight:800}.lab .labKind{display:block;font-size:14px;font-weight:700;color:var(--muted);margin-bottom:4px}.lab .labName{display:block;margin:0;font-size:18px;font-weight:800;line-height:1.6}.lab .intro h3,.lab .secH,.lab .res h3{font-size:20px!important;font-weight:800}.lab .ctl:not(.res) h3{font-size:17px!important}.lab .slh{margin:-2px 0 8px;font-size:13px;line-height:1.6;color:var(--muted);background:var(--accent-soft,#EEF5FF);border-radius:8px;padding:6px 10px}.lab .secH{margin:22px 0 8px;font-size:17px;color:var(--accent)}.lab .startBand{margin:0 0 14px;padding:18px 14px;border-radius:14px;background:var(--lo);color:#fff;font-size:22px;font-weight:800;text-align:center;line-height:1.5;box-shadow:0 4px 14px rgba(247,147,30,.35)}.lab .tw{overflow-x:auto}.lab table.rt{width:100%;border-collapse:collapse;font-size:13px}.lab table.rt th,.lab table.rt td{border:1px solid var(--line);padding:7px 6px;text-align:center}.lab table.rt th{background:var(--accent-soft,#E6F0FF);color:var(--ink)}.lab table.rt td{font-variant-numeric:tabular-nums}.lab table.rt td:nth-child(3){white-space:nowrap}.lab .rn{margin:8px 0 0;font-size:14px;line-height:1.7;color:var(--muted)}.lab .intro ol.gl{margin:0;padding-inline-start:22px;font-size:14px;line-height:1.8}.lab .intro ol.gl li::marker{color:var(--accent);font-weight:800}.lab .intro ol.steps{margin:0 0 14px;padding-inline-start:22px;font-size:14px;line-height:1.75}.lab .intro ol.steps li::marker{color:#2563EB;font-weight:800}.lab .intro .stage{background:var(--panel)}
+
+/* ألوان ومربعات */
+.lab .intro,.lab .ctl{border-inline-start:4px solid var(--accent)!important;background:linear-gradient(90deg,transparent,rgba(56,189,248,.04))}
+.lab .ctl.res{border-inline-start-color:#16A34A!important}
+.lab .intro h3,.lab .ctl h3{display:inline-block;padding:4px 12px;border-radius:10px;background:var(--accent-soft,#E6F0FF)}
+.lab .secH{display:block!important;padding:8px 14px;border-radius:12px;background:var(--accent-soft,#E6F0FF);border-inline-start:5px solid var(--accent)}
+.lab .labName{padding:10px 14px;border-radius:12px;background:rgba(247,147,30,.12);border:1px solid rgba(247,147,30,.45)}
+.lab ol.gl{list-style:none;padding:0!important;counter-reset:g;display:grid;gap:8px}
+.lab ol.gl li{counter-increment:g;position:relative;padding:8px 12px;padding-inline-start:42px;border-radius:10px;background:var(--accent-soft,#EEF5FF);border:1px solid var(--line)}
+.lab ol.gl li::before{content:counter(g);position:absolute;inset-inline-start:10px;top:9px;width:22px;height:22px;border-radius:50%;background:var(--accent);color:#fff;font-weight:800;font-size:13px;display:grid;place-items:center}
+.lab .intro .tool p{padding:10px 12px;border-radius:10px;background:rgba(247,147,30,.10);border:1px solid rgba(247,147,30,.35)}
+.lab .law{border:2px solid var(--lo);background:rgba(247,147,30,.08)}
+.lab .law .ln:first-child span{font-size:21px;padding:6px 14px;border-radius:10px;background:var(--panel);border:1px solid var(--lo);color:var(--lo)}
+.lab .law .sym ul{list-style:none;padding:0!important;display:grid;gap:6px}
+.lab .law .sym li{display:block;line-height:1.9;padding:6px 10px;border-radius:8px;background:var(--panel);border:1px solid var(--line)}
+.lab .law .sym li .chip{display:inline-block;margin-inline-end:8px;min-width:28px;text-align:center;padding:1px 6px;border-radius:6px;background:var(--lo);color:#fff;font-weight:800}
+.lab .slh{border:1px dashed var(--accent)}
+.lab .rn{padding:10px 12px;border-radius:10px;background:rgba(22,163,74,.10);border:1px solid rgba(22,163,74,.45);color:var(--ink)!important}
+.lab table.rt th{background:var(--accent)!important;color:#fff!important}
 `;
 function css(){if(document.getElementById('labCss'))return;const s=document.createElement('style');s.id='labCss';s.textContent=CSS;document.head.appendChild(s)}
 const E=t=>'\u2066'+t+'\u2069';
@@ -129,10 +148,10 @@ function measureLab(box){
   <h3 class="secH">5. القانون المستخدم والحسابات</h3>
   <div class="ctl"><h3>5.1 القانون المستخدم</h3>
     <div class="law" id="vol"><div class="ln"><b>القانون</b><span>V = π D² L / 4</span></div><div class="sym"><b>حيث:</b><ul>
-      <li><span dir="ltr">V</span> حجم الأسطوانة، ووحدته <span dir="ltr">m³</span></li>
-      <li><span dir="ltr">π</span> النسبة التقريبية، وقيمتها <span dir="ltr">3.14</span>، وليس لها وحدة</li>
-      <li><span dir="ltr">D</span> قطر الأسطوانة، ويقاس بأداة الميكرومتر، ووحدته <span dir="ltr">m</span></li>
-      <li><span dir="ltr">L</span> طول الأسطوانة، ويقاس بأداة القدمة ذات الورنية، ووحدته <span dir="ltr">m</span></li></ul></div></div>
+      <li><span class="chip" dir="ltr">V</span> حجم الأسطوانة، ووحدته <span dir="ltr">m³</span></li>
+      <li><span class="chip" dir="ltr">π</span> النسبة التقريبية، وقيمتها <span dir="ltr">3.14</span>، وليس لها وحدة</li>
+      <li><span class="chip" dir="ltr">D</span> قطر الأسطوانة، ويقاس بأداة الميكرومتر، ووحدته <span dir="ltr">m</span></li>
+      <li><span class="chip" dir="ltr">L</span> طول الأسطوانة، ويقاس بأداة القدمة ذات الورنية، ووحدته <span dir="ltr">m</span></li></ul></div></div>
   </div>
   <div class="ctl"><h3>5.2 الحسابات</h3>
     <div class="law"><div class="ln"><b>التعويض</b><span id="vS">أكمل القياسين 4.1 و 4.2</span></div></div>

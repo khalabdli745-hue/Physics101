@@ -458,6 +458,18 @@ h3 .eqn{direction:ltr;unicode-bidi:isolate;white-space:nowrap}
 span.mu{font-size:1.25em;line-height:0}
 h3 .secListen{margin-inline-start:auto;flex:none}h3 .secListen button{padding:3px 10px;font-size:14px;min-height:0}
 sub.ss{font-size:.6em;line-height:0;vertical-align:-.25em}
+
+/* ألوان ومربعات المحتوى (2026-10-14) */
+#view .md h3{font-size:17px;padding:8px 12px;border-radius:10px}
+#view .md .eqblock{border:2px solid #F7931E;border-inline-start-width:5px;background:rgba(247,147,30,.10);color:var(--ink);font-size:1.35em;font-weight:700;border-radius:12px;padding:10px 14px}
+#view .md li > .eq{background:rgba(247,147,30,.14);border:1px solid rgba(247,147,30,.55)}
+#view .md li.sym{list-style:none;margin:6px 0;margin-inline-start:.4em;padding:6px 10px;border-radius:10px;background:var(--panel);border:1px solid var(--line);font-size:.95em}
+#view .md li.sym::marker{content:''}#view .md li.sym::before{display:none!important}#view .md ul:has(> li.sym){padding-inline-start:0}
+#view .md li.sym > .eq:first-child{background:#F7931E;color:#fff;border:0;font-weight:700;min-width:26px;text-align:center;margin-inline-end:6px}
+#view .md ul:not(:has(li.sym)) > li{margin:6px 0}
+#view .summCard{border-inline-start:5px solid #16A34A}
+#view .summCard .md li::before{inset-inline-start:10px!important;top:1em!important}#view .summCard .md li{padding:6px 10px;padding-inline-start:28px;position:relative;border-radius:10px;background:rgba(22,163,74,.08);border:1px solid rgba(22,163,74,.30);list-style:none;margin:6px 0}
+#view .card > h2{display:inline-block;padding:4px 12px;border-radius:10px;background:var(--accent-soft)}
 </style>
 </head>
 <body>
