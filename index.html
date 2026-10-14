@@ -408,6 +408,9 @@ details.card summary{cursor:pointer}
 .artText small{display:block;opacity:.9;font-size:13px}.artText b{font-size:18px;line-height:1.5}
 .hIcon{font-size:18px;line-height:1}
 .aiFab{position:fixed;left:14px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:900;border:0;border-radius:999px;background:var(--accent);color:var(--accent-ink,#fff);font:800 15px system-ui,sans-serif;padding:12px 16px;box-shadow:0 6px 18px rgba(0,0,0,.3);cursor:pointer}
+body:has(#pager:not([hidden])) .aiFab{bottom:calc(84px + env(safe-area-inset-bottom))}
+.aiFab{transition:opacity .2s,transform .2s}body.fabHide .aiFab{opacity:0;transform:translateY(24px);pointer-events:none}
+.view::after{content:'';display:block;height:84px}
 .aiFab[hidden],body.boardOpen .aiFab,body.aiOpen .aiFab{display:none}
 .aiSheet{position:fixed;inset:0;z-index:950;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center}.aiSheet[hidden]{display:none}
 .aiSheetIn{position:relative;width:100%;max-width:760px;max-height:88vh;overflow:auto;background:transparent;border-radius:18px 18px 0 0;padding:0 0 env(safe-area-inset-bottom)}
@@ -731,6 +734,7 @@ const TTS=(()=>{
     t=t.replace(/[()]/g,' ');
     t=t.replace(/⁻¹/g,ph('to the minus one')).replace(/²/g,ph('squared')).replace(/³/g,ph('cubed')).replace(/½/g,ph('one half'));
     t=t.replace(/[₀₁₂₃ₓᵧ]/g,c=>ph(EN_SUB[c].trim()));
+    t=t.replace(/([A-Za-z])_([A-Za-z0-9]+)/g,'$1 $2');
     const OPS=[[/√/g,'square root of'],[/≈/g,'approximately equals'],[/≠/g,'does not equal'],[/=/g,'equals'],[/[×·*]/g,'times'],[/÷/g,'divided by'],[/\//g,'over'],[/\+/g,'plus'],[/(^|\s)[−-](?=\d)/g,' minus'],[/[−-]/g,'minus'],[/[←⇐→⇒]/g,', so,'],[/∝/g,'is proportional to'],[/%/g,'percent'],[/°/g,'degrees'],[/</g,'less than'],[/>/g,'greater than'],
       [/θ/g,'theta'],[/Δ/g,'delta'],[/[μµ]/g,'mew'],[/ρ/g,'rho'],[/α/g,'alpha'],[/β/g,'beta'],[/σ/g,'sigma'],[/ε/g,'epsilon'],[/π/g,'pi'],[/Σ/g,'sum of'],[/τ/g,'tau'],[/λ/g,'lambda'],[/ω/g,'omega'],[/Ω/g,'ohms']];
     for(const[re,w]of OPS)t=t.replace(re,()=>ph(w));
@@ -1764,13 +1768,14 @@ function renderQuiz(v){
 }
 function renderLab(v){
   const i=wrap(v),x=extra();
+  const hasLab=window.renderLabCard?renderLabCard(i,pos.u,pos.l):false;
   const c=card('تجارب تفاعلية بالعربية','محاكاة مجانية من مشروع PhET بجامعة كولورادو، تعمل في المتصفح على الجوال والآيباد والكمبيوتر.');
   if(x.sim&&x.sim.length){const g=document.createElement('div');g.className='sims';
     x.sim.forEach(s=>{const a=document.createElement('a');a.className='sim';a.href=s.u;a.target='_blank';a.rel='noopener';
       a.innerHTML=`<span class="ic">⚗</span><span><b></b><small>افتح التجربة في نافذة جديدة</small></span>`;a.querySelector('b').textContent=s.t;g.appendChild(a)});
     c.appendChild(g)}
-  else c.insertAdjacentHTML('beforeend','<p class="empty">لا توجد تجربة تفاعلية مخصصة لهذا الدرس. جرّب تجارب الدروس الأخرى في الوحدة.</p>');
-  i.appendChild(c);
+  else if(!hasLab)c.insertAdjacentHTML('beforeend','<p class="empty">لا توجد تجربة تفاعلية مخصصة لهذا الدرس. جرّب تجارب الدروس الأخرى في الوحدة.</p>');
+  if(!hasLab||(x.sim&&x.sim.length))i.appendChild(c);
   if(x.ap){const a=card('تطبيقات من الحياة');a.appendChild(TTS.controls(()=>'تطبيقات من الحياة.\n'+x.ap,{compact:true,label:'🔊 استمع للتطبيقات'}));const b=document.createElement('div');b.className='md';b.innerHTML=md(x.ap);a.appendChild(b);i.appendChild(a)}
   const r=card('مراجع للاستزادة','من قائمة مراجع الحقيبة التدريبية، المناسبة لهذه الوحدة:');
   const ul=document.createElement('ul');ul.className='refs';
@@ -1898,5 +1903,9 @@ fix(document.body);qfit();new MutationObserver(ms=>{for(const m of ms)for(const 
   addEventListener('appinstalled',()=>bar.hidden=true);
 })();
 </script>
+<script>/* زر المساعد الذكي: يختفي أثناء النزول ويظهر عند الصعود أو التوقف */
+(()=>{let last=0,t=0;const on=e=>{const el=e.target&&e.target.scrollTop!==undefined&&e.target!==document?e.target:document.scrollingElement;const y=el?el.scrollTop:0;
+if(y>last+4)document.body.classList.add('fabHide');else if(y<last-4)document.body.classList.remove('fabHide');last=y;clearTimeout(t);t=setTimeout(()=>document.body.classList.remove('fabHide'),700)};
+document.addEventListener('scroll',on,{capture:true,passive:true})})();</script>
 </body>
 </html>
