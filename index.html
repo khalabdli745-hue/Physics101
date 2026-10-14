@@ -537,7 +537,7 @@ const AUTH=(()=>{try{return JSON.parse(localStorage.getItem('p101-auth')||'null'
 const API=(window.P101_API||'').trim();
 /* نطق إجابات الذكاء الاصطناعي: نحذف تشكيل النموذج قبل القراءة ونترك القاموس المراجع ومحرك الصوت يضبطان النطق (التشكيل يبقى ظاهرًا كما هو) */
 const AISTRIP=t=>String(t).split(/(`[^`]*`)/).map((p,j)=>j%2?p:p.replace(/[\u064B-\u0652\u0670]/g,'')).join('');
-const AISEGS=sp=>{let n=0;return String(sp||'').split(/(?<=[.؟!،])\s+/).map(t=>t.trim()).filter(t=>t&&(n+=t.length)<=1900).map(t=>({l:'ar',t}))};
+const AISEGS=sp=>{let n=0;const out=[];String(sp||'').split(/(`[^`]*`)/).forEach((p,j)=>{if(j%2){try{TTS.segments(p).forEach(x=>{if(x.l==='en'&&x.t.trim())out.push({l:'en',t:x.t.trim()})})}catch(e){}}else p.split(/(?<=[.؟!،])\s+/).map(t=>t.trim()).filter(Boolean).forEach(t=>out.push({l:'ar',t}))});const ch=[];let cur=[];for(const x of out){if(cur.length&&(n+x.t.length>800||cur.length>=30)){ch.push(cur);cur=[];n=0}cur.push(x);n+=x.t.length}if(cur.length)ch.push(cur);return ch};
 const AISPK=t=>{let m='strip';try{m=localStorage.getItem('p101-aisp')||'strip'}catch(e){}return m==='model'?String(t):AISTRIP(t)};
 const TAUTH=(()=>{try{return JSON.parse(localStorage.getItem('p101-tauth')||'null')}catch(e){return null}})();
 const PERSONAL=['p101-done','p101-best','p101-pos','p101-queue'];
@@ -810,7 +810,7 @@ const TTS=(()=>{
   async function playAz(text,b,raw){const g=GEN;
     if(!AUD){AUD=new Audio();AUD.preload='auto'}
     AUD.src=SILENT;try{const p=AUD.play();if(p&&p.catch)p.catch(()=>{})}catch(e){}
-    const chunks=raw?[raw]:chunksAz(text);if(!chunks.length)return stop();
+    const chunks=raw?(Array.isArray(raw[0])?raw:[raw]):chunksAz(text);if(!chunks.length)return stop();
     let i=0;
     try{const AV=OV||az;let pr=getAz(chunks[0],AV);
       for(i=0;i<chunks.length;i++){
@@ -841,7 +841,7 @@ const TTS=(()=>{
   function play(text,b,raw){const useAz=(SRV||OV)&&(OV||az)&&tok()&&API;if(!ok&&!useAz)return;const same=btn===b;stop();if(same)return;
     btn=b;btnHTML=b.innerHTML;b.classList.add('on');b.innerHTML='■ إيقاف';playing=true;
     if(useAz)return playAz(text,b,raw);
-    queue=raw?raw.map(x=>({l:x.l,t:x.t})):build(text);next()}
+    queue=raw?(Array.isArray(raw[0])?raw.flat():raw).map(x=>({l:x.l,t:x.t})):build(text);next()}
   function voiceSelect(){
     const s=document.createElement('select');s.className='voiceSel';s.setAttribute('aria-label','اختر الصوت');
     const fill=()=>{s.innerHTML='';opts.forEach(op=>{const o=document.createElement('option');o.value=valOf(op);
