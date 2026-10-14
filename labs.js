@@ -45,7 +45,7 @@ const CSS=`
 .lab .fb2:empty{display:none}
 .lab .fb2.ok{background:#DCFCE7;color:#14532D}.lab .fb2.no{background:#FEE2E2;color:#7F1D1D}
 .lab .ctl .stage{margin:6px 0 8px}
-.lab .intro{border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin-bottom:12px}.lab .intro h3{margin:0 0 6px;font-size:15px;color:var(--accent)}.lab .intro .tool p{margin:0 0 6px;font-size:14px;line-height:1.7}.lab .law .sym{padding:6px 0;border-bottom:1px dashed var(--line);font-size:14px}.lab .law .sym b{color:var(--muted)}.lab .law .sym ul{margin:4px 0 0;padding-inline-start:18px;line-height:1.8}.lab .law .sym li span{font-weight:800}.lab .labKind{display:block;font-size:14px;font-weight:700;color:var(--muted);margin-bottom:4px}.lab .labName{display:block;margin:0;font-size:18px;font-weight:800;line-height:1.6}.lab .intro h3,.lab .secH,.lab .res h3{font-size:20px!important;font-weight:800}.lab .ctl:not(.res) h3{font-size:17px!important}.lab .slh{margin:-2px 0 8px;font-size:13px;line-height:1.6;color:var(--muted);background:var(--accent-soft,#EEF5FF);border-radius:8px;padding:6px 10px}.lab .secH{margin:22px 0 8px;font-size:17px;color:var(--accent)}.lab .startBand{margin:0 0 14px;padding:18px 14px;border-radius:14px;background:var(--lo);color:#fff;font-size:22px;font-weight:800;text-align:center;line-height:1.5;box-shadow:0 4px 14px rgba(247,147,30,.35)}.lab .tw{overflow-x:auto}.lab table.rt{width:100%;border-collapse:collapse;font-size:13px}.lab table.rt th,.lab table.rt td{border:1px solid var(--line);padding:7px 6px;text-align:center}.lab table.rt th{background:var(--accent-soft,#E6F0FF);color:var(--ink)}.lab table.rt td{font-variant-numeric:tabular-nums}.lab table.rt td:nth-child(3){white-space:nowrap}.lab .rn{margin:8px 0 0;font-size:14px;line-height:1.7;color:var(--muted)}.lab .intro ol.gl{margin:0;padding-inline-start:22px;font-size:14px;line-height:1.8}.lab .intro ol.gl li::marker{color:var(--accent);font-weight:800}.lab .intro ol.steps{margin:0 0 14px;padding-inline-start:22px;font-size:14px;line-height:1.75}.lab .intro ol.steps li::marker{color:#2563EB;font-weight:800}.lab .intro .stage{background:var(--panel)}
+.lab .intro{border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin-bottom:12px}.lab .intro h3{margin:0 0 6px;font-size:15px;color:var(--accent)}.lab .intro .tool p{margin:0 0 6px;font-size:14px;line-height:1.7}.lab .law .sym{padding:6px 0;border-bottom:1px dashed var(--line);font-size:14px}.lab .law .sym b{color:var(--muted)}.lab .law .sym ul{margin:4px 0 0;padding-inline-start:18px;line-height:1.8}.lab .law .sym li span{font-weight:800}.lab .labKind{display:block;font-size:14px;font-weight:700;color:var(--muted);margin-bottom:4px}.lab .labName{display:block;margin:0;font-size:18px;font-weight:800;line-height:1.6}.lab .intro h3,.lab .secH,.lab .res h3{font-size:20px!important;font-weight:800}.lab .ctl:not(.res) h3{font-size:17px!important}.lab .slh{margin:-2px 0 8px;font-size:13px;line-height:1.6;color:var(--muted);background:var(--accent-soft,#EEF5FF);border-radius:8px;padding:6px 10px}.lab .secH{margin:22px 0 8px;font-size:17px;color:var(--accent)}.lab .startBand{margin:0 0 14px;padding:18px 14px;border-radius:14px;background:var(--lo);color:#fff;font-size:22px;font-weight:800;text-align:center;line-height:1.5;box-shadow:0 4px 14px rgba(247,147,30,.35)}.lab .tw{overflow-x:auto}.lab table.rt{width:100%;border-collapse:collapse;font-size:13px}.lab table.rt th,.lab table.rt td{border:1px solid var(--line);padding:7px 6px;text-align:center}.lab table.rt th{background:var(--accent-soft,#E6F0FF);color:var(--ink)}.lab table.rt td{font-variant-numeric:tabular-nums}.lab table.rt td:nth-child(3){white-space:nowrap}.lab .rn{white-space:pre-line;margin:8px 0 0;font-size:14px;line-height:1.7;color:var(--muted)}.lab .intro ol.gl{margin:0;padding-inline-start:22px;font-size:14px;line-height:1.8}.lab .intro ol.gl li::marker{color:var(--accent);font-weight:800}.lab .intro ol.steps{margin:0 0 14px;padding-inline-start:22px;font-size:14px;line-height:1.75}.lab .intro ol.steps li::marker{color:#2563EB;font-weight:800}.lab .intro .stage{background:var(--panel)}
 
 /* ألوان ومربعات */
 .lab .intro,.lab .ctl{border-inline-start:4px solid var(--accent)!important;background:linear-gradient(90deg,transparent,rgba(56,189,248,.04))}
@@ -65,6 +65,10 @@ const CSS=`
 .lab .slh{border:1px dashed var(--accent)}
 .lab .rn{padding:10px 12px;border-radius:10px;background:rgba(22,163,74,.10);border:1px solid rgba(22,163,74,.45);color:var(--ink)!important}
 .lab table.rt th{background:var(--accent)!important;color:#fff!important}
+/* قوانين التحويل والحاسبة */
+.lab .labCalc{margin-top:12px}.lab .labCalc .calcbtn{width:100%;justify-content:center}
+.lab .law .cv li{text-align:center}
+.lab .law .cv .fx{display:inline-block;font-family:"Cambria Math","STIX Two Math","Times New Roman",serif;font-size:19px;font-weight:700;color:var(--ink)}
 `;
 function css(){if(document.getElementById('labCss'))return;const s=document.createElement('style');s.id='labCss';s.textContent=CSS;document.head.appendChild(s)}
 const E=t=>'\u2066'+t+'\u2069';
@@ -114,6 +118,12 @@ function toolsIntro(){
     <div class="tool"><div class="stage">${mic}</div><p><b>أداة الميكرومتر:</b> تقيس الأقطار والسماكات الصغيرة بدقة <span dir="ltr">0.01 mm</span>.</p>
     </div></div>`}
 /* ===== الوحدة الأولى — الكميات الفيزيائية وأنظمة القياس: معمل القياس (أداة القدمة ذات الورنية وأداة الميكرومتر) ===== */
+
+function convBox(rows){return `<div class="sym cv"><b>قوانين التحويل:</b><ul>`+rows.map(r=>`<li><span class="fx" dir="ltr">${r}</span></li>`).join('')+`</ul></div>`}
+function calcInit(root){const h=root.querySelector('.labCalc');if(!h||typeof makeCalc!=='function')return;let tgt=null;
+ root.addEventListener('focusin',e=>{if(e.target.matches('.ans input'))tgt=e.target});
+ const C=makeCalc(v=>{let t=tgt;if(!t||!h.parentElement.contains(t))t=[...h.parentElement.querySelectorAll('.ans input')].find(i=>!i.value)||h.parentElement.querySelector('.ans input');if(!t)return;t.value=v;t.focus()});
+ const u=C.panel.querySelector('.cuse');if(u)u.textContent='✓ ضع النتيجة في خانة الحساب';h.appendChild(C.btn);h.appendChild(C.panel)}
 function measureLab(box){
   box.innerHTML=`
   <div class="intro"><small class="labKind">🧪 تجربة عملية تفاعلية</small><h3>1. اسم التجربة</h3><p class="labName">القياس بأداة القدمة ذات الورنية وأداة الميكرومتر</p></div>
@@ -145,17 +155,19 @@ function measureLab(box){
     <div class="ans"><label>قراءتك للقطر D</label><input id="mIn" inputmode="decimal" dir="ltr" placeholder="mm"><button type="button" class="go" id="mCk">تحقق</button><button type="button" class="rs" id="mHn">تلميح</button></div><div class="fb2" id="mFb"></div>
   </div>
 
-  <h3 class="secH">5. القانون المستخدم والحسابات</h3>
-  <div class="ctl"><h3>5.1 القانون المستخدم</h3>
+  <h3 class="secH">5. القوانين المستخدمة والحسابات</h3>
+  <div class="ctl"><h3>5.1 القوانين المستخدمة</h3>
     <div class="law" id="vol"><div class="ln"><b>القانون</b><span>V = π D² L / 4</span></div><div class="sym"><b>حيث:</b><ul>
       <li><span class="chip" dir="ltr">V</span> حجم الأسطوانة، ووحدته <span dir="ltr">m³</span></li>
       <li><span class="chip" dir="ltr">π</span> النسبة التقريبية، وقيمتها <span dir="ltr">3.14</span>، وليس لها وحدة</li>
       <li><span class="chip" dir="ltr">D</span> قطر الأسطوانة، ويقاس بأداة الميكرومتر، ووحدته <span dir="ltr">m</span></li>
-      <li><span class="chip" dir="ltr">L</span> طول الأسطوانة، ويقاس بأداة القدمة ذات الورنية، ووحدته <span dir="ltr">m</span></li></ul></div></div>
+      <li><span class="chip" dir="ltr">L</span> طول الأسطوانة، ويقاس بأداة القدمة ذات الورنية، ووحدته <span dir="ltr">m</span></li></ul></div>
+      ${convBox(['L(cm) = L(mm) / 10','L(m) = L(mm) / 1000','V(cm³) = V(mm³) / 1000','V(m³) = V(cm³) / 1000000'])}</div>
   </div>
   <div class="ctl"><h3>5.2 الحسابات</h3>
     <div class="law"><div class="ln"><b>التعويض</b><span id="vS">أكمل القياسين 4.1 و 4.2</span></div></div>
     <div class="ans"><label>احسب الحجم V بوحدة cm³</label><input id="cIn" inputmode="decimal" dir="ltr" placeholder="cm³"><button type="button" class="go" id="cCk">تحقق</button></div><div class="fb2" id="cFb"></div>
+    <div class="labCalc"></div>
   </div>
   <div class="ctl res"><h3>6. نتائج التجربة</h3>
     <div class="tw"><table class="rt"><thead><tr><th>الكمية</th><th>الأداة</th><th>القراءة</th><th>بوحدة SI</th></tr></thead>
@@ -230,10 +242,133 @@ function measureLab(box){
   $('cCk').onclick=()=>{if(!(okL&&okD))return fb('cFb',false,'أكمل قياس الطول والقطر أولا.');const v=num($('cIn').value),V=Math.PI*D*D*L/4/1000;if(isNaN(v))return fb('cFb',false,'اكتب الحجم بوحدة cm³.');
     if(Math.abs(v-V)/V<0.02){okV=true;results();}if(Math.abs(v-V)/V<0.02)fb('cFb',true,'✓ إجابة صحيحة:\n'+E(`V = ${V.toFixed(2)} cm³ = ${sci(V*1e-6)} m³`)+'\nلأن '+E('1 cm³ = 10⁻⁶ m³')+'.');else fb('cFb',false,'✗ راجع التحويل: حوّل D وL إلى cm أولا (1 cm = 10 mm)، ثم عوّض في V = π D² L / 4.')};
   $('nw').onclick=newObj;
-  newObj();
+  calcInit(box);newObj();
 }
 
-window.LABS={'0-1':{t:'القياس بأداة القدمة ذات الورنية وأداة الميكرومتر',run:measureLab}};
+/* ===== الوحدة الأولى — التحويل بين الوحدات: سرعة عربة على مسار (أداة الشريط المتري وأداة ساعة الإيقاف) ===== */
+function speedTools(){
+  const lbl=(x,y,tx,ty,t,anc)=>`<line x1="${x}" y1="${y}" x2="${tx}" y2="${ty}" stroke="var(--muted)" stroke-width="1"/><circle cx="${x}" cy="${y}" r="2.4" fill="var(--muted)"/><text x="${tx}" y="${ty+(ty<y?-4:13)}" font-size="13" font-weight="700" text-anchor="${anc||'middle'}" fill="var(--ink)">${t}</text>`;
+  let tk='';for(let c=0;c<=24;c++){const x=118+c*10.5;tk+=`<line x1="${x}" y1="104" x2="${x}" y2="${c%5===0?118:111}" stroke="#1F2937" stroke-width="${c%5===0?1.3:.8}"/>`;if(c%5===0&&c>0)tk+=`<text x="${x}" y="130" font-size="12" font-weight="800" text-anchor="middle" fill="#1F2937">${c}</text>`}
+  const tape=`<svg viewBox="16 0 372 230" aria-label="أداة الشريط المتري">
+    <rect x="118" y="102" width="256" height="30" fill="#FDE68A" stroke="#A16207"/>${tk}
+    <path d="M374,96 H384 V140 H374 Z" fill="#F7931E" stroke="#9A3412"/><rect x="128" y="140" width="44" height="24" rx="6" fill="#F7931E"/><text x="150" y="157" font-size="15" font-weight="800" text-anchor="middle" fill="#fff">cm</text>
+    <rect x="34" y="70" width="88" height="96" rx="22" fill="#F7931E" stroke="#9A3412"/><circle cx="78" cy="118" r="22" fill="#FB923C" stroke="#9A3412"/><circle cx="78" cy="118" r="7" fill="#9A3412"/>
+    <rect x="62" y="60" width="32" height="12" rx="4" fill="#334155"/>
+    ${lbl(78,150,62,206,'العلبة')}${lbl(240,117,250,190,'الشريط المدرج')}${lbl(379,118,384,190,'الخطاف','end')}${lbl(78,62,92,22,'زر التثبيت')}${lbl(200,106,250,40,'التدريج بالسنتيمتر')}
+  </svg>`;
+  let dk='';for(let i=0;i<30;i++){const a=i/30*2*Math.PI-Math.PI/2,five=i%5===0,one=true,r1=five?50:56,x1=200+r1*Math.cos(a),y1=122+r1*Math.sin(a),x2=200+63*Math.cos(a),y2=122+63*Math.sin(a);dk+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#1F2937" stroke-width="${five?1.6:one?1:.5}"/>`;if(five){dk+=`<text x="${200+40*Math.cos(a)}" y="${122+40*Math.sin(a)+5}" font-size="13" font-weight="800" text-anchor="middle" fill="#1F2937">${i}</text>`}}
+  const sw=`<svg viewBox="16 0 372 230" aria-label="أداة ساعة الإيقاف">
+    <rect x="190" y="30" width="20" height="16" rx="3" fill="#F7931E" stroke="#9A3412"/><rect x="186" y="44" width="28" height="8" rx="3" fill="#64748B"/>
+    <rect x="258" y="56" width="14" height="22" rx="3" transform="rotate(40 265 67)" fill="#334155"/>
+    <circle cx="200" cy="122" r="76" fill="#64748B" stroke="#334155" stroke-width="2"/><circle cx="200" cy="122" r="66" fill="#F8FAFC" stroke="#94A3B8"/>${dk}
+    <line x1="200" y1="122" x2="${200+55*Math.cos(7/30*2*Math.PI-Math.PI/2)}" y2="${122+55*Math.sin(7/30*2*Math.PI-Math.PI/2)}" stroke="#F7931E" stroke-width="3" stroke-linecap="round"/><circle cx="200" cy="122" r="5" fill="#F7931E"/><rect x="187" y="129" width="26" height="18" rx="5" fill="#F7931E"/><text x="200" y="143" font-size="13" font-weight="800" text-anchor="middle" fill="#fff">s</text>
+    ${lbl(200,34,120,18,'زر التشغيل والإيقاف')}${lbl(268,64,330,40,'زر التصفير')}${lbl(150,160,110,206,'القرص المدرج بالثانية')}${lbl(222,112,320,150,'العقرب','start')}${lbl(270,150,330,206,'الإطار')}
+  </svg>`;
+  return `<div class="intro"><h3>3. الأدوات المستخدمة</h3>
+    <div class="tool"><div class="stage">${tape}</div><p><b>أداة الشريط المتري:</b> تقيس المسافات والأطوال الكبيرة بالسنتيمتر بدقة <span dir="ltr">0.1 cm</span>.</p></div>
+    <div class="tool"><div class="stage">${sw}</div><p><b>أداة ساعة الإيقاف:</b> تقيس الزمن بالثانية بدقة <span dir="ltr">1 s</span>، ودورة العقرب الكاملة <span dir="ltr">30 s</span>.</p></div></div>`}
+function speedLab2(box){
+  box.innerHTML=`
+  <div class="intro"><small class="labKind">🧪 تجربة عملية تفاعلية</small><h3>1. اسم التجربة</h3><p class="labName">قياس سرعة جسم متحرك والتحويل بين وحداتها</p></div>
+  <div class="tags"><span class="tag">المسافة d: <i>أداة الشريط المتري</i> · cm</span><span class="tag">الزمن t: <i>أداة ساعة الإيقاف</i> · s</span><span class="tag dv">السرعة v: <i>كمية مشتقة</i> · cm/s ← m/s ← km/h</span></div>
+  <div class="intro goals"><h3>2. أهداف التجربة</h3><ol class="gl">
+    <li>التعرف على أجزاء أداة الشريط المتري وأداة ساعة الإيقاف.</li>
+    <li>قراءة المسافة بأداة الشريط المتري بدقة <span dir="ltr">0.1 cm</span>.</li>
+    <li>قراءة الزمن بأداة ساعة الإيقاف بدقة <span dir="ltr">1 s</span>.</li>
+    <li>حساب السرعة بوحدة <span dir="ltr">cm/s</span> من القياسين.</li>
+    <li>تحويل السرعة إلى <span dir="ltr">m/s</span> ثم إلى <span dir="ltr">km/h</span> باستخدام معاملات التحويل.</li></ol></div>
+  ${speedTools()}
+  <h3 class="secH">4. تنفيذ التجربة</h3>
+  <div class="startBand">▶️ لنبدأ التجربة</div>
+  <div class="btns" style="margin-bottom:12px"><button type="button" class="rs" id="nw">🔄 مسار جديد</button></div>
+  <div class="ctl"><h3>4.1 قياس المسافة d بأداة الشريط المتري</h3>
+    <div class="stage"><svg id="tTop" viewBox="0 0 400 120"></svg><svg id="tZm" viewBox="0 0 400 120"></svg><div class="hud"><span id="tSt"></span></div></div>
+    <div class="row"><label for="tR">سحب الشريط</label><output id="tO"></output><input id="tR" type="range" min="0" max="200" step="0.1" value="0"></div>
+    <p class="slh">👆 اسحب المؤشر البرتقالي لسحب الشريط حتى يصل الخطاف إلى خط النهاية.</p>
+    <div class="ans"><label>قراءتك للمسافة d</label><input id="tIn" inputmode="decimal" dir="ltr" placeholder="cm"><button type="button" class="go" id="tCk">تحقق</button><button type="button" class="rs" id="tHn">تلميح</button></div><div class="fb2" id="tFb"></div>
+  </div>
+  <div class="ctl"><h3>4.2 قياس الزمن t بأداة ساعة الإيقاف</h3>
+    <div class="stage"><svg id="sTop" viewBox="0 0 400 90"></svg><svg id="sW" viewBox="0 0 400 262"></svg><div class="hud"><span id="sSt"></span></div></div>
+    <div class="row"><label for="sR">حركة العربة</label><output id="sO"></output><input id="sR" type="range" min="0" max="30" step="0.1" value="0"></div>
+    <p class="slh">👆 اسحب المؤشر البرتقالي لتحريك العربة من خط البداية حتى خط النهاية، وتتوقف ساعة الإيقاف عند وصولها.</p>
+    <div class="ans"><label>قراءتك للزمن t</label><input id="sIn" inputmode="decimal" dir="ltr" placeholder="s"><button type="button" class="go" id="sCk">تحقق</button><button type="button" class="rs" id="sHn">تلميح</button></div><div class="fb2" id="sFb"></div>
+  </div>
+  <h3 class="secH">5. القوانين المستخدمة والحسابات</h3>
+  <div class="ctl"><h3>5.1 القوانين المستخدمة</h3>
+    <div class="law"><div class="ln"><b>القانون</b><span>v = d / t</span></div><div class="sym"><b>حيث:</b><ul>
+      <li><span class="chip" dir="ltr">v</span> سرعة العربة، ووحدتها <span dir="ltr">m/s</span></li>
+      <li><span class="chip" dir="ltr">d</span> المسافة، وتقاس بأداة الشريط المتري، ووحدتها <span dir="ltr">m</span></li>
+      <li><span class="chip" dir="ltr">t</span> الزمن، ويقاس بأداة ساعة الإيقاف، ووحدته <span dir="ltr">s</span></li></ul></div>
+      ${convBox(['d(m) = d(cm) / 100','d(km) = d(m) / 1000','v(m/s) = v(cm/s) / 100','v(km/h) = v(m/s) × 3.6'])}</div>
+  </div>
+  <div class="ctl"><h3>5.2 الحسابات</h3>
+    <div class="law"><div class="ln"><b>التعويض</b><span id="vS">أكمل القياسين 4.1 و 4.2</span></div></div>
+    <div class="ans"><label>1. احسب السرعة v بوحدة cm/s</label><input id="c1" inputmode="decimal" dir="ltr" placeholder="cm/s"><button type="button" class="go" id="c1k">تحقق</button></div><div class="fb2" id="c1f"></div>
+    <div class="ans"><label>2. حوّل السرعة إلى m/s</label><input id="c2" inputmode="decimal" dir="ltr" placeholder="m/s"><button type="button" class="go" id="c2k">تحقق</button></div><div class="fb2" id="c2f"></div>
+    <div class="ans"><label>3. حوّل السرعة إلى km/h</label><input id="c3" inputmode="decimal" dir="ltr" placeholder="km/h"><button type="button" class="go" id="c3k">تحقق</button></div><div class="fb2" id="c3f"></div>
+    <div class="labCalc"></div>
+  </div>
+  <div class="ctl res"><h3>6. نتائج التجربة</h3>
+    <div class="tw"><table class="rt"><thead><tr><th>الكمية</th><th>الأداة</th><th>القراءة</th><th>بوحدة SI</th></tr></thead>
+    <tbody><tr><td>المسافة d</td><td>أداة الشريط المتري</td><td id="r1a">—</td><td id="r1b">—</td></tr>
+    <tr><td>الزمن t</td><td>أداة ساعة الإيقاف</td><td id="r2a">—</td><td id="r2b">—</td></tr>
+    <tr><td>السرعة v</td><td>بالحساب: <span dir="ltr">v = d / t</span></td><td id="r3a">—</td><td id="r3b">—</td></tr>
+    <tr><td>السرعة v</td><td>بالتحويل</td><td id="r4a">—</td><td>—</td></tr></tbody></table></div>
+    <p class="rn" id="rNote">تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.</p></div>`;
+  const $=id=>box.querySelector('#'+id);
+  let d,T,okD,okT,ok1,ok2,ok3,tHint,sHint;
+  const r1=x=>Math.round(x*10)/10;
+  const num=v=>parseFloat(String(v).replace(/[٠-٩]/g,c=>'٠١٢٣٤٥٦٧٨٩'.indexOf(c)).replace('٫','.').replace(',','.'));
+  const fb=(id,ok,msg)=>{$(id).textContent=msg;$(id).className='fb2 '+(ok?'ok':'no')};
+  const X0=40,PX=1.6;
+  function track(svg,cartX,extra){return `<rect x="0" y="${svg==='s'?62:78}" width="400" height="10" fill="#94A3B8"/>
+    <line x1="${X0}" y1="${svg==='s'?18:30}" x2="${X0}" y2="${svg==='s'?72:88}" stroke="#16A34A" stroke-width="3"/><text x="${X0}" y="${svg==='s'?14:26}" font-size="10" font-weight="700" text-anchor="middle" fill="#16A34A">البداية</text>
+    <line x1="${X0+d*PX}" y1="${svg==='s'?18:30}" x2="${X0+d*PX}" y2="${svg==='s'?72:88}" stroke="#DC2626" stroke-width="3"/><text x="${X0+d*PX}" y="${svg==='s'?14:26}" font-size="10" font-weight="700" text-anchor="middle" fill="#DC2626">النهاية</text>${extra||''}`}
+  function newObj(){d=r1(40+Math.random()*140);T=Math.round(5+Math.random()*23);okD=okT=ok1=ok2=ok3=false;tHint=sHint=false;
+    $('tR').value=0;$('sR').value=0;['tIn','sIn','c1','c2','c3'].forEach(k=>$(k).value='');['tFb','sFb','c1f','c2f','c3f'].forEach(k=>{$(k).textContent='';$(k).className='fb2'});tDraw();sDraw();sub();results()}
+  function tVal(){let e=r1(+$('tR').value);if(e>d){e=d;$('tR').value=e}return e}
+  function tDraw(){const e=tVal(),touch=Math.abs(e-d)<1e-6;$('tO').textContent=e.toFixed(1)+' cm';
+    $('tSt').textContent=touch?'✓ الخطاف عند خط النهاية، اقرأ المسافة من التدريج':'اسحب الشريط حتى يصل الخطاف إلى خط النهاية';
+    const xe=X0+e*PX;
+    $('tTop').innerHTML=track('t',0,`<rect x="${X0}" y="60" width="${e*PX}" height="12" fill="#FDE68A" stroke="#A16207" stroke-width=".6"/><rect x="${X0-34}" y="46" width="34" height="34" rx="9" fill="#F7931E" stroke="#9A3412"/><circle cx="${X0-17}" cy="63" r="9" fill="#FB923C" stroke="#9A3412"/><rect x="${xe-2}" y="56" width="5" height="20" fill="#F7931E" stroke="#9A3412"/>`);
+    const k=26,s0=Math.floor(e)-6,XX=c=>20+(c-s0)*k;let g='<rect x="0" y="20" width="400" height="56" fill="#FDE68A"/>';
+    for(let m=s0*10;m<=(s0+15)*10;m++){const c=m/10,x=XX(c);if(x<0||x>400)continue;const big=m%10===0,mid=m%5===0;const hl=tHint&&touch&&m===Math.round(d*10);g+=`<line x1="${x}" y1="20" x2="${x}" y2="${20+(big?22:mid?15:9)}" stroke="${hl?'#DC2626':'#1F2937'}" stroke-width="${hl?2.4:big?1.4:.8}"/>`;if(big&&c>=0)g+=`<text x="${x}" y="58" font-size="13" font-weight="700" text-anchor="middle" fill="#1F2937">${c}</text>`}
+    g+=`<line x1="${XX(e)}" y1="10" x2="${XX(e)}" y2="86" stroke="#F7931E" stroke-width="3"/><text x="${XX(e)}" y="100" font-size="10" text-anchor="middle" fill="var(--ink)">حافة الخطاف</text><rect x="352" y="92" width="44" height="24" rx="6" fill="#F7931E"/><text x="374" y="109" font-size="15" font-weight="800" text-anchor="middle" fill="#fff">cm</text><text x="6" y="110" font-size="12" font-weight="700" text-anchor="start" fill="var(--muted)">تكبير التدريج</text>`;
+    $('tZm').innerHTML=g}
+  function sVal(){let t=+$('sR').value;if(t>T){t=T;$('sR').value=t}return t}
+  function sDraw(){const t=sVal(),done=Math.abs(t-T)<1e-6;$('sO').textContent=done?'وصلت العربة':'';
+    $('sSt').textContent=done?'✓ وصلت العربة إلى خط النهاية وتوقفت ساعة الإيقاف، اقرأ الزمن':'حرّك العربة حتى تصل إلى خط النهاية';
+    const cx=X0+d*PX*t/T;
+    $('sTop').innerHTML=track('s',0,`<g transform="translate(${cx},0)"><rect x="-34" y="34" width="34" height="20" rx="4" fill="#3B82F6" stroke="#1E3A8A"/><circle cx="-26" cy="58" r="5" fill="#111827"/><circle cx="-8" cy="58" r="5" fill="#111827"/></g>`);
+    const C=130,R=118;let g=`<circle cx="200" cy="${C}" r="${R+8}" fill="#64748B" stroke="#334155" stroke-width="2"/><circle cx="200" cy="${C}" r="${R}" fill="#F8FAFC" stroke="#94A3B8"/><rect x="188" y="0" width="24" height="8" rx="3" fill="#F7931E"/>`;
+    for(let i=0;i<30;i++){const a=i/30*2*Math.PI-Math.PI/2,five=i%5===0,one=true,r1=five?R-22:R-13;const hl=sHint&&done&&i===Math.round(T)%30;g+=`<line x1="${200+r1*Math.cos(a)}" y1="${C+r1*Math.sin(a)}" x2="${200+(R-1)*Math.cos(a)}" y2="${C+(R-1)*Math.sin(a)}" stroke="${hl?'#DC2626':'#1F2937'}" stroke-width="${hl?2.6:five?2.2:one?1.5:1}"/>`;if(five)g+=`<text x="${200+(R-38)*Math.cos(a)}" y="${C+(R-38)*Math.sin(a)+6}" font-size="17" font-weight="800" text-anchor="middle" fill="#1F2937">${i}</text>`}
+    const a=t/30*2*Math.PI-Math.PI/2;g+=`<line x1="200" y1="${C}" x2="${200+(R-6)*Math.cos(a)}" y2="${C+(R-6)*Math.sin(a)}" stroke="#F7931E" stroke-width="3.5" stroke-linecap="round"/><circle cx="200" cy="${C}" r="7" fill="#F7931E"/><rect x="185" y="${C+22}" width="30" height="20" rx="5" fill="#F7931E"/><text x="200" y="${C+37}" font-size="14" font-weight="800" text-anchor="middle" fill="#fff">s</text>`;
+    $('sW').innerHTML=g}
+  const vc=()=>d/T,vm=()=>d/T/100,vk=()=>d/T/100*3.6;
+  function sub(){$('vS').textContent=okD&&okT?E(`v = d / t = ${d.toFixed(1)} cm / ${T} s`):'أكمل القياسين 4.1 و 4.2'}
+  function results(){
+    $('r1a').textContent=okD?E(d.toFixed(1)+' cm'):'—';$('r1b').textContent=okD?E((d/100).toFixed(3)+' m'):'—';
+    $('r2a').textContent=okT?E(T+' s'):'—';$('r2b').textContent=okT?E(T+' s'):'—';
+    $('r3a').textContent=ok1?E(vc().toFixed(1)+' cm/s'):'—';$('r3b').textContent=ok2?E(vm().toFixed(3)+' m/s'):'—';
+    $('r4a').textContent=ok3?E(vk().toFixed(2)+' km/h'):'—';
+    $('rNote').textContent=ok1&&ok2&&ok3?'الاستنتاج: تحويل الوحدات يغير العدد ولا يغير الكمية، فالسرعة نفسها تساوي:\n'+E(vc().toFixed(1)+' cm/s = '+vm().toFixed(3)+' m/s = '+vk().toFixed(2)+' km/h'):'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
+  $('tR').oninput=tDraw;$('sR').oninput=sDraw;
+  $('tHn').onclick=()=>{tHint=true;tDraw();fb('tFb',true,'تلميح: الأرقام الكبيرة بالسنتيمتر، وبين كل رقمين 10 أقسام صغيرة كل قسم '+E('0.1 cm')+'. اقرأ آخر رقم قبل حافة الخطاف، ثم عُدّ الأقسام الصغيرة حتى الخط الأحمر.')};
+  $('sHn').onclick=()=>{sHint=true;sDraw();fb('sFb',true,'تلميح: الأرقام على القرص بالثانية وبين كل رقمين '+E('5 s')+'، وكل قسم صغير '+E('1 s')+'. اقرأ آخر رقم مر به العقرب، ثم عُدّ الأقسام حتى العقرب (ظهر باللون الأحمر).')};
+  $('tCk').onclick=()=>{if(Math.abs(tVal()-d)>1e-6)return fb('tFb',false,'اسحب الشريط حتى يصل الخطاف إلى خط النهاية أولا.');const v=num($('tIn').value);if(isNaN(v))return fb('tFb',false,'اكتب قراءتك بالسنتيمتر.');
+    if(Math.abs(v-d)<0.05){okD=true;fb('tFb',true,'✓ قراءة صحيحة:\n'+E(`d = ${d.toFixed(1)} cm = ${(d/100).toFixed(3)} m`))}else fb('tFb',false,'✗ القراءة غير صحيحة، أعد القراءة أو استخدم التلميح.');sub();results()};
+  $('sCk').onclick=()=>{if(Math.abs(sVal()-T)>1e-6)return fb('sFb',false,'حرّك العربة حتى تصل إلى خط النهاية أولا.');const v=num($('sIn').value);if(isNaN(v))return fb('sFb',false,'اكتب قراءتك بالثانية.');
+    if(Math.abs(v-T)<0.05){okT=true;fb('sFb',true,'✓ قراءة صحيحة:\n'+E(`t = ${T} s`))}else fb('sFb',false,'✗ القراءة غير صحيحة، أعد القراءة أو استخدم التلميح.');sub();results()};
+  const chk=(inp,f,val,unit,okMsg,badMsg,set)=>{if(!(okD&&okT))return fb(f,false,'أكمل القياسين 4.1 و 4.2 أولا.');const v=num($(inp).value);if(isNaN(v))return fb(f,false,'اكتب الناتج بوحدة '+unit+'.');
+    if(Math.abs(v-val)/val<0.02){set();fb(f,true,okMsg)}else fb(f,false,badMsg);results()};
+  $('c1k').onclick=()=>chk('c1','c1f',vc(),'cm/s','✓ إجابة صحيحة:\n'+E(`v = ${d.toFixed(1)} / ${T} = ${vc().toFixed(1)} cm/s`),'✗ اقسم المسافة بالسنتيمتر على الزمن بالثانية.',()=>ok1=true);
+  $('c2k').onclick=()=>chk('c2','c2f',vm(),'m/s','✓ إجابة صحيحة:\n'+E(`${vc().toFixed(1)} cm/s / 100 = ${vm().toFixed(3)} m/s`),'✗ لأن '+E('1 m = 100 cm')+'، اقسم السرعة بوحدة cm/s على 100.',()=>ok2=true);
+  $('c3k').onclick=()=>chk('c3','c3f',vk(),'km/h','✓ إجابة صحيحة:\n'+E(`${vm().toFixed(3)} m/s × 3.6 = ${vk().toFixed(2)} km/h`),'✗ اضرب السرعة بوحدة m/s في 3600 ثم اقسم على 1000، أي اضربها في 3.6.',()=>ok3=true);
+  $('nw').onclick=newObj;
+  calcInit(box);newObj();
+}
+
+window.LABS={'0-1':{t:'القياس بأداة القدمة ذات الورنية وأداة الميكرومتر',run:measureLab},'0-2':{t:'قياس سرعة جسم متحرك والتحويل بين وحداتها',run:speedLab2}};
 window.renderLabCard=function(host,u,l){const L=window.LABS[u+'-'+l];if(!L)return false;css();
   const c=document.createElement('div');c.className='card lab';c.innerHTML='<h2></h2><div class="labBody"></div>';c.querySelector('h2').remove();
   host.appendChild(c);L.run(c.querySelector('.labBody'));return true};

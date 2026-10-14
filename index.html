@@ -230,6 +230,7 @@ table.lt tbody tr:nth-child(even) td{background:var(--accent-soft)}
 .calc .ck:active{transform:translateY(1px);box-shadow:none}
 .calc .cuse{margin-top:10px;width:100%;font-size:16px}
 .calc .cuse:disabled{opacity:.45}
+.qcard .qcalc{margin-top:10px}
 .boardCard{margin:0 0 16px}
 .boardCard .sbFrame{background:linear-gradient(180deg,#d9dee5,#aeb6c2);border-radius:14px;padding:8px 10px 0;box-shadow:0 8px 20px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.7)}
 .boardCard .sbTop{display:flex;justify-content:center;height:10px;align-items:center}
@@ -1775,6 +1776,8 @@ function renderQuiz(v){
           rb.hidden=false;i.insertBefore(rateLink(),r);
         }};
       opts.appendChild(b)});
+    {const nd=q.o.filter(o=>/\d/.test(o)).length;if(nd>=3&&(/\d/.test(q.q)||/احسب|مقدار|كم /.test(q.q))&&typeof makeCalc==='function'){
+      const C=makeCalc(()=>{});const u=C.panel.querySelector('.cuse');if(u)u.remove();const w=document.createElement('div');w.className='qcalc';w.append(C.btn,C.panel);d.insertBefore(w,d.querySelector('.why'))}}
     i.appendChild(d);
   });
   i.appendChild(sc);
