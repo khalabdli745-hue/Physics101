@@ -73,6 +73,13 @@ const CSS=`
 .lab .labCalc{margin-top:12px}.lab .labCalc .calcbtn{width:100%;justify-content:center}
 .lab .law .cv li{text-align:center}
 .lab .law .cv .fx{display:inline-block;font-family:"Cambria Math","STIX Two Math","Times New Roman",serif;font-size:19px;font-weight:700;color:var(--ink)}
+/* مراجع التجربة */
+.lab .lrefs .rlead{margin:0 0 8px;font-size:13.5px;line-height:1.7;color:var(--muted)}
+.lab .lrefs ol.rl{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.lab .lrefs ol.rl li{padding:8px 10px;border-radius:10px;background:var(--panel);border:1px solid var(--line)}
+.lab .lrefs .en{display:block;direction:ltr;text-align:left;font-family:Georgia,"Times New Roman",serif;font-size:13px;line-height:1.6;color:var(--ink)}
+.lab .lrefs .ar{display:block;margin-top:6px;font-size:13px;font-weight:700;color:var(--accent);line-height:1.7}
+.lab .lrefs .en a{color:var(--accent);word-break:break-all;text-decoration:none}
 `;
 function css(){if(document.getElementById('labCss'))return;const s=document.createElement('style');s.id='labCss';s.textContent=CSS;document.head.appendChild(s)}
 const E=t=>'\u2066'+t+'\u2069';
@@ -1014,8 +1021,23 @@ function dotLab(box){
   $('nw').onclick=newObj;
   calcInit(box);newObj();
 }
+/* مراجع التجارب (نفس مراجع التقرير) */
+const LREF=[
+ ['North Carolina State University. (n.d.). <i>Measurement: Lab 1, Physics Mechanics Laboratory Manual</i>. Advanced Instructional Systems (WebAssign).','https://www.webassign.net/question_assets/ncsucalcphysmechl3/lab_1/manual.html'],
+ ['Palestine Technical University – Kadoorie. (2022). <i>Physics Lab 1 (105) Manual: Experiment 1 – Measurements and Uncertainties; Experiment 2 – Vectors</i>. Tulkarm, Palestine.','https://lms.ptuk.edu.ps/pluginfile.php/511897/mod_resource/content/3/physlab1-105-Manual%202022-khaled.pdf'],
+ ["The Physics Classroom. (n.d.). <i>Speedometer Cubed Lab: Teacher's Guide</i>. Glenview, IL.",'https://www.physicsclassroom.com/lab/1dkin/K2tg.pdf'],
+ ['University of Mississippi, Department of Physics and Astronomy. (n.d.). <i>Vectors: PHYS 221 Laboratory Manual</i>. Oxford, MS.','https://www.phy.olemiss.edu/lab/LabPDFs/221/LabManual/4_Vectors_221/TAP_Vectors_221.pdf'],
+ ['Universidad de Sevilla, Departamento de Física Aplicada I. (n.d.). <i>Física I – Hoja de laboratorio S1: Vectores (Producto escalar)</i>. Sevilla, España.','https://departamento.us.es/dfisap1/F1/labo/S1/hoja-labS1F1.pdf']];
+const LREFK={'0-1':[[0,'قياس طول أسطوانة وقطرها بأداة القدمة ذات الورنية، ثم حساب حجمها.'],[1,'القياس بأداة القدمة ذات الورنية وأداة الميكرومتر، ثم حساب الحجم.']],
+ '0-2':[[2,'قياس المسافة بالمسطرة المترية والزمن بساعة الإيقاف، ثم حساب السرعة <span dir="ltr">v = d / t</span>.']],
+ '0-4':[[1,'إيجاد محصلة القوى على جهاز طاولة القوى ومقارنتها بقوة الاتزان.'],[3,'إيجاد المحصلة بالمركبات، وقوة الاتزان على جهاز طاولة القوى.']],
+ '0-5':[[3,'تحليل القوة إلى مركبتين <span dir="ltr">Fx = F cos θ</span> و <span dir="ltr">Fy = F sin θ</span> على جهاز طاولة القوى.']],
+ '0-6':[[4,'قياس مركبات متجهين والزاوية بينهما، ثم حساب الضرب القياسي بالطريقتين والمقارنة بينهما.']]};
+function refBox(k){const ix=LREFK[k];if(!ix)return '';
+  return `<div class="intro lrefs"><h3>7. مراجع التجربة</h3><p class="rlead">بنيت هذه التجربة على تجارب منشورة في أدلة معامل الفيزياء بجامعات ومصادر تعليمية موثوقة، مع تكييفها لمحتوى الحقيبة التدريبية.</p><ol class="rl">${ix.map(([i,c],n)=>`<li><span class="en">[${n+1}] ${LREF[i][0]} <a href="${LREF[i][1]}" target="_blank" rel="noopener">${LREF[i][1]}</a></span><span class="ar">يطابق في هذه التجربة: ${c}</span></li>`).join('')}</ol></div>`}
+
 window.LABS={'0-1':{t:'القياس بأداة القدمة ذات الورنية وأداة الميكرومتر',run:measureLab},'0-2':{t:'قياس سرعة جسم متحرك والتحويل بين وحداتها',run:speedLab2},'0-4':{t:'إيجاد محصلة متجهين باستخدام طاولة القوى',run:forceLab},'0-5':{t:'تحليل قوة إلى مركبتين باستخدام طاولة القوى',run:vecLab},'0-6':{t:'الضرب القياسي لمتجهين بمتجهات الوحدة على لوحة الإحداثيات',run:dotLab}};
 /* workLab محفوظة لدرس الشغل لاحقا */
 window.renderLabCard=function(host,u,l){const L=window.LABS[u+'-'+l];if(!L)return false;css();
-  (Array.isArray(L)?L:[L]).forEach(x=>{const c=document.createElement('div');c.className='card lab';c.innerHTML='<div class="labBody"></div>';host.appendChild(c);x.run(c.querySelector('.labBody'))});return true};
+  (Array.isArray(L)?L:[L]).forEach(x=>{const c=document.createElement('div');c.className='card lab';c.innerHTML='<div class="labBody"></div>';host.appendChild(c);x.run(c.querySelector('.labBody'));c.querySelector('.labBody').insertAdjacentHTML('beforeend',refBox(u+'-'+l))});return true};
 })();
