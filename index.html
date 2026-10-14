@@ -409,7 +409,7 @@ details.card summary{cursor:pointer}
 .hIcon{font-size:18px;line-height:1}
 .aiFab{position:fixed;left:14px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:900;border:0;border-radius:999px;background:var(--accent);color:var(--accent-ink,#fff);font:800 15px system-ui,sans-serif;padding:12px 16px;box-shadow:0 6px 18px rgba(0,0,0,.3);cursor:pointer}
 body:has(#pager:not([hidden])) .aiFab{bottom:calc(84px + env(safe-area-inset-bottom))}
-.aiFab{transition:opacity .2s,transform .2s}body.fabHide .aiFab{opacity:0;transform:translateY(24px);pointer-events:none}
+.aiFab{transition:opacity .2s,transform .2s}.aiCmp{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:6px;padding-top:6px;border-top:1px dashed var(--line)}.aiCmp small{flex-basis:100%;color:var(--muted)}body.fabHide .aiFab{opacity:0;transform:translateY(24px);pointer-events:none}
 .view::after{content:'';display:block;height:84px}
 .aiFab[hidden],body.boardOpen .aiFab,body.aiOpen .aiFab{display:none}
 .aiSheet{position:fixed;inset:0;z-index:950;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center}.aiSheet[hidden]{display:none}
@@ -535,6 +535,9 @@ const ORD=['الأولى','الثانية','الثالثة','الرابعة','ا
 const $=id=>document.getElementById(id);
 const AUTH=(()=>{try{return JSON.parse(localStorage.getItem('p101-auth')||'null')}catch(e){return null}})();
 const API=(window.P101_API||'').trim();
+/* نطق إجابات الذكاء الاصطناعي: نحذف تشكيل النموذج قبل القراءة ونترك القاموس المراجع ومحرك الصوت يضبطان النطق (التشكيل يبقى ظاهرًا كما هو) */
+const AISTRIP=t=>String(t).split(/(`[^`]*`)/).map((p,j)=>j%2?p:p.replace(/[\u064B-\u0652\u0670]/g,'')).join('');
+const AISPK=t=>{let m='strip';try{m=localStorage.getItem('p101-aisp')||'strip'}catch(e){}return m==='model'?String(t):AISTRIP(t)};
 const TAUTH=(()=>{try{return JSON.parse(localStorage.getItem('p101-tauth')||'null')}catch(e){return null}})();
 const PERSONAL=['p101-done','p101-best','p101-pos','p101-queue'];
 const sk=k=>AUTH&&API&&PERSONAL.includes(k)?k+'-'+AUTH.id:k;
@@ -1250,7 +1253,7 @@ function openBoard(dry){dry=dry===true;
       const ctx=('الدرس: '+l.t+'\n'+s.s).slice(0,3800);
       try{const r=await Promise.race([SYNC.post({a:'ask',token:atok,q,lessonKey:key(pos.u,pos.l),lessonTitle:l.t,context:ctx,history:hist.slice(-6),mode:'board',slide:slideNow()}),new Promise(r=>setTimeout(()=>r({ok:false,error:'timeout'}),90000))]);if(aP.hidden){w.remove();busy=false;aSend.disabled=false;return}
         w.remove();
-        if(r.ok){hist.push({role:'user',content:q},{role:'assistant',content:r.answer});const shown=r.answer.replace(/[\u064B-\u0652\u0670]/g,'');bub('bot','<div class="md">'+md(shown)+'</div>');cap.innerHTML=inl(shown.replace(/[#*]/g,'').split('\n').filter(Boolean)[0]||'');busy=false;aSend.disabled=false;await sayA(r.answer);return}
+        if(r.ok){hist.push({role:'user',content:q},{role:'assistant',content:r.answer});const shown=r.answer.replace(/[\u064B-\u0652\u0670]/g,'');bub('bot','<div class="md">'+md(shown)+'</div>');cap.innerHTML=inl(shown.replace(/[#*]/g,'').split('\n').filter(Boolean)[0]||'');busy=false;aSend.disabled=false;await sayA(AISPK(r.answer));return}
         bub('err',esc(ERRS[r.error]||'تعذّر الحصول على إجابة الآن. حاول مرة أخرى.')+(r.detail?'<br><small dir="ltr" style="opacity:.7;font-size:11px">'+esc(String(r.detail).slice(0,300))+'</small>':''))}
       catch(e){w.remove();bub('err','تعذّر الاتصال. تحقق من الإنترنت.')}
       busy=false;aSend.disabled=false}
@@ -1673,7 +1676,7 @@ function aiCard(){
   const ta=form.querySelector('textarea'),sb=form.querySelector('button[type=submit]');
   AIMIC(form.querySelector('.aiMic'),ta,q=>send(q));
   const bubble=(role,text)=>{const d=document.createElement('div');d.className='aiMsg '+(role==='user'?'me':'bot');
-    if(role==='user')d.textContent=text;else{d.innerHTML='<div class="md">'+md(AIPLAIN(text))+'</div>';d.appendChild(TTS.controls(()=>{AIVO();return text},{compact:true,label:'🔊 استمع'}))}
+    if(role==='user')d.textContent=text;else{d.innerHTML='<div class="md">'+md(AIPLAIN(text))+'</div>';d.appendChild(TTS.controls(()=>{AIVO();return AISPK(text)},{compact:true,label:'🔊 استمع'}));if(typeof TAUTH!=='undefined'&&TAUTH&&!(typeof AUTH!=='undefined'&&AUTH&&AUTH.token)){const cmp=document.createElement('div');cmp.className='aiCmp';cmp.innerHTML='<small>مقارنة النطق (للمدرب فقط):</small>';cmp.appendChild(TTS.controls(()=>{AIVO();return AISTRIP(text)},{compact:true,label:'🔊 الطريقة الجديدة'}));cmp.appendChild(TTS.controls(()=>{AIVO();return String(text)},{compact:true,label:'🔊 الطريقة السابقة'}));d.appendChild(cmp)}}
     log.appendChild(d);return d};
   hist.forEach(m=>bubble(m.role,m.content));
   let busy=false;
@@ -1683,7 +1686,7 @@ function aiCard(){
     const ctx=('الدرس: '+l.t+'\n'+(s?s.s:'')+(s&&s.ex?'\nمثال: '+s.ex.q+'\n'+s.ex.st.join('\n'):'')).slice(0,3800);
     try{const r=await Promise.race([SYNC.post(Object.assign({a:'ask',token:tok,q,lessonKey:k,lessonTitle:l.t,context:ctx,history:hist.slice(-6),mode:'assist'},ex.req||{})),new Promise(r=>setTimeout(()=>r({ok:false,error:'timeout'}),90000))]);
       w.remove();
-      if(r.ok){hist.push({role:'user',content:q},{role:'assistant',content:r.answer});const d=bubble('assistant',r.answer);d.scrollIntoView({block:'nearest',behavior:'smooth'});try{AIVO();TTS.stop();const pb=d.querySelector('button');TTS.play(r.answer,pb||document.createElement('button'))}catch(e){}}
+      if(r.ok){hist.push({role:'user',content:q},{role:'assistant',content:r.answer});const d=bubble('assistant',r.answer);d.scrollIntoView({block:'nearest',behavior:'smooth'});try{AIVO();TTS.stop();const pb=d.querySelector('button');TTS.play(AISPK(r.answer),pb||document.createElement('button'))}catch(e){}}
       else{const e=document.createElement('div');e.className='aiMsg err';e.innerHTML=esc(ERRS[r.error]||'تعذّر الحصول على إجابة الآن. حاول مرة أخرى.')+(r.detail?'<br><small dir="ltr" style="opacity:.7;font-size:11px">'+esc(String(r.detail).slice(0,300))+'</small>':'')+(r.error==='ai_off'?` <a href="${$('aiLink').href}" target="_blank" rel="noopener">استخدم مساعد Claude</a>`:'');
         if(/timeout|ai_busy|ai_error/.test(r.error)){const rb=document.createElement('button');rb.type='button';rb.className='btn ghost';rb.style.cssText='display:block;margin-top:8px';rb.textContent='🔄 أعد المحاولة';rb.onclick=()=>{e.remove();const um=log.querySelectorAll('.aiMsg.me');if(um.length)um[um.length-1].remove();send(q,ex)};e.appendChild(rb)}
         log.appendChild(e)}}
