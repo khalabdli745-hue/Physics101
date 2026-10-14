@@ -537,6 +537,7 @@ const AUTH=(()=>{try{return JSON.parse(localStorage.getItem('p101-auth')||'null'
 const API=(window.P101_API||'').trim();
 /* نطق إجابات الذكاء الاصطناعي: نحذف تشكيل النموذج قبل القراءة ونترك القاموس المراجع ومحرك الصوت يضبطان النطق (التشكيل يبقى ظاهرًا كما هو) */
 const AISTRIP=t=>String(t).split(/(`[^`]*`)/).map((p,j)=>j%2?p:p.replace(/[\u064B-\u0652\u0670]/g,'')).join('');
+const AISEGS=sp=>{let n=0;return String(sp||'').split(/(?<=[.؟!،])\s+/).map(t=>t.trim()).filter(t=>t&&(n+=t.length)<=1900).map(t=>({l:'ar',t}))};
 const AISPK=t=>{let m='strip';try{m=localStorage.getItem('p101-aisp')||'strip'}catch(e){}return m==='model'?String(t):AISTRIP(t)};
 const TAUTH=(()=>{try{return JSON.parse(localStorage.getItem('p101-tauth')||'null')}catch(e){return null}})();
 const PERSONAL=['p101-done','p101-best','p101-pos','p101-queue'];
@@ -1241,7 +1242,7 @@ function openBoard(dry){dry=dry===true;
   {const atok=(typeof AUTH!=='undefined'&&AUTH&&AUTH.token)||TAUTH;const aBtn=B.querySelector('.bAskBtn'),aP=B.querySelector('.bAskP'),aLog=aP.querySelector('.bAskLog'),aF=aP.querySelector('.bAskF'),aTa=aF.querySelector('textarea'),aSend=aF.querySelector('.bSend'),aMic=aF.querySelector('.bMic');
    if(API&&atok){aBtn.hidden=false;
     const hist=[];let was=false,busy=false;
-    const sayA=async t=>{const id=++runId;B.classList.add('talking');try{if(TTS.has()){const d=document.createElement('button');TTS.play(t,d);await wait(400);while(id===runId&&TTS.busy())await wait(120)}}catch(e){}B.classList.remove('talking')};
+    const sayA=async(t,sp)=>{const id=++runId;B.classList.add('talking');try{if(TTS.has()){const d=document.createElement('button');if(sp)TTS.playRaw(AISEGS(sp),d);else TTS.play(t,d);await wait(400);while(id===runId&&TTS.busy())await wait(120)}}catch(e){}B.classList.remove('talking')};
     const openA=()=>{was=auto;stopAuto();aP.hidden=false;B.classList.add('asking');aBtn.hidden=true};
     const closeA=()=>{if(aMic._abort)aMic._abort();busy=false;aSend.disabled=false;runId++;TTS.stop();B.classList.remove('talking','asking');aP.hidden=true;aBtn.hidden=false;if(was)startAuto()};
     aBtn.onclick=openA;aP.querySelector('.bAskX').onclick=closeA;
@@ -1253,7 +1254,7 @@ function openBoard(dry){dry=dry===true;
       const ctx=('الدرس: '+l.t+'\n'+s.s).slice(0,3800);
       try{const r=await Promise.race([SYNC.post({a:'ask',token:atok,q,lessonKey:key(pos.u,pos.l),lessonTitle:l.t,context:ctx,history:hist.slice(-6),mode:'board',slide:slideNow()}),new Promise(r=>setTimeout(()=>r({ok:false,error:'timeout'}),90000))]);if(aP.hidden){w.remove();busy=false;aSend.disabled=false;return}
         w.remove();
-        if(r.ok){hist.push({role:'user',content:q},{role:'assistant',content:r.answer});const shown=r.answer.replace(/[\u064B-\u0652\u0670]/g,'');bub('bot','<div class="md">'+md(shown)+'</div>');cap.innerHTML=inl(shown.replace(/[#*]/g,'').split('\n').filter(Boolean)[0]||'');busy=false;aSend.disabled=false;await sayA(AISPK(r.answer));return}
+        if(r.ok){hist.push({role:'user',content:q},{role:'assistant',content:r.answer});const shown=r.answer.replace(/[\u064B-\u0652\u0670]/g,'');bub('bot','<div class="md">'+md(shown)+'</div>');cap.innerHTML=inl(shown.replace(/[#*]/g,'').split('\n').filter(Boolean)[0]||'');busy=false;aSend.disabled=false;await sayA(AISPK(r.answer),r.speech);return}
         bub('err',esc(ERRS[r.error]||'تعذّر الحصول على إجابة الآن. حاول مرة أخرى.')+(r.detail?'<br><small dir="ltr" style="opacity:.7;font-size:11px">'+esc(String(r.detail).slice(0,300))+'</small>':''))}
       catch(e){w.remove();bub('err','تعذّر الاتصال. تحقق من الإنترنت.')}
       busy=false;aSend.disabled=false}
@@ -1675,8 +1676,8 @@ function aiCard(){
   form.innerHTML='<button type="button" class="btn ghost aiMic" title="تحدث بسؤالك" aria-label="تحدث بسؤالك">🎤</button><textarea rows="2" placeholder="اكتب سؤالك أو اضغط 🎤 وتكلم…" aria-label="سؤالك للمساعد"></textarea><button class="btn" type="submit">إرسال</button>';
   const ta=form.querySelector('textarea'),sb=form.querySelector('button[type=submit]');
   AIMIC(form.querySelector('.aiMic'),ta,q=>send(q));
-  const bubble=(role,text)=>{const d=document.createElement('div');d.className='aiMsg '+(role==='user'?'me':'bot');
-    if(role==='user')d.textContent=text;else{d.innerHTML='<div class="md">'+md(AIPLAIN(text))+'</div>';d.appendChild(TTS.controls(()=>{AIVO();return AISPK(text)},{compact:true,label:'🔊 استمع'}));if(typeof TAUTH!=='undefined'&&TAUTH&&!(typeof AUTH!=='undefined'&&AUTH&&AUTH.token)){const cmp=document.createElement('div');cmp.className='aiCmp';cmp.innerHTML='<small>مقارنة النطق (للمدرب فقط):</small>';cmp.appendChild(TTS.controls(()=>{AIVO();return AISTRIP(text)},{compact:true,label:'🔊 الطريقة الجديدة'}));cmp.appendChild(TTS.controls(()=>{AIVO();return String(text)},{compact:true,label:'🔊 الطريقة السابقة'}));d.appendChild(cmp)}}
+  const bubble=(role,text,speech)=>{const d=document.createElement('div');d.className='aiMsg '+(role==='user'?'me':'bot');
+    if(role==='user')d.textContent=text;else{d.innerHTML='<div class="md">'+md(AIPLAIN(text))+'</div>';{const lb=document.createElement('div');lb.className='speak compact';const b0=document.createElement('button');b0.innerHTML='🔊 استمع';b0.onclick=()=>{AIVO();if(speech)TTS.playRaw(AISEGS(speech),b0);else TTS.play(AISPK(text),b0)};lb.appendChild(b0);d.appendChild(lb)}if(typeof TAUTH!=='undefined'&&TAUTH&&!(typeof AUTH!=='undefined'&&AUTH&&AUTH.token)){const cmp=document.createElement('div');cmp.className='aiCmp';cmp.innerHTML='<small>مقارنة النطق (للمدرب فقط):</small>';{const b1=document.createElement('button');b1.className='btn ghost';b1.innerHTML='🔊 الطريقة الجديدة';b1.onclick=()=>{AIVO();if(speech)TTS.playRaw(AISEGS(speech),b1);else TTS.play(AISTRIP(text),b1)};cmp.appendChild(b1)}cmp.appendChild(TTS.controls(()=>{AIVO();return String(text)},{compact:true,label:'🔊 الطريقة السابقة'}));d.appendChild(cmp)}}
     log.appendChild(d);return d};
   hist.forEach(m=>bubble(m.role,m.content));
   let busy=false;
@@ -1686,7 +1687,7 @@ function aiCard(){
     const ctx=('الدرس: '+l.t+'\n'+(s?s.s:'')+(s&&s.ex?'\nمثال: '+s.ex.q+'\n'+s.ex.st.join('\n'):'')).slice(0,3800);
     try{const r=await Promise.race([SYNC.post(Object.assign({a:'ask',token:tok,q,lessonKey:k,lessonTitle:l.t,context:ctx,history:hist.slice(-6),mode:'assist'},ex.req||{})),new Promise(r=>setTimeout(()=>r({ok:false,error:'timeout'}),90000))]);
       w.remove();
-      if(r.ok){hist.push({role:'user',content:q},{role:'assistant',content:r.answer});const d=bubble('assistant',r.answer);d.scrollIntoView({block:'nearest',behavior:'smooth'});try{AIVO();TTS.stop();const pb=d.querySelector('button');TTS.play(AISPK(r.answer),pb||document.createElement('button'))}catch(e){}}
+      if(r.ok){hist.push({role:'user',content:q},{role:'assistant',content:r.answer});const d=bubble('assistant',r.answer,r.speech);d.scrollIntoView({block:'nearest',behavior:'smooth'});try{AIVO();TTS.stop();const pb=d.querySelector('button')||document.createElement('button');if(r.speech)TTS.playRaw(AISEGS(r.speech),pb);else TTS.play(AISPK(r.answer),pb)}catch(e){}}
       else{const e=document.createElement('div');e.className='aiMsg err';e.innerHTML=esc(ERRS[r.error]||'تعذّر الحصول على إجابة الآن. حاول مرة أخرى.')+(r.detail?'<br><small dir="ltr" style="opacity:.7;font-size:11px">'+esc(String(r.detail).slice(0,300))+'</small>':'')+(r.error==='ai_off'?` <a href="${$('aiLink').href}" target="_blank" rel="noopener">استخدم مساعد Claude</a>`:'');
         if(/timeout|ai_busy|ai_error/.test(r.error)){const rb=document.createElement('button');rb.type='button';rb.className='btn ghost';rb.style.cssText='display:block;margin-top:8px';rb.textContent='🔄 أعد المحاولة';rb.onclick=()=>{e.remove();const um=log.querySelectorAll('.aiMsg.me');if(um.length)um[um.length-1].remove();send(q,ex)};e.appendChild(rb)}
         log.appendChild(e)}}
