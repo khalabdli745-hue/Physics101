@@ -68,6 +68,7 @@ const CSS=`
 .lab .vcap{text-align:center;font-size:13px;font-weight:700;color:var(--muted);margin:2px 0 10px}.ftl .ln.lw{flex-direction:column;align-items:stretch;gap:4px}
 .lab .ftl .ln.lw span{display:block;text-align:center!important;font-size:16px!important;padding:6px 8px;border-radius:10px;background:var(--panel);border:1px solid var(--lo);color:var(--lo);font-family:"Cambria Math","STIX Two Math","Times New Roman",serif;overflow-x:auto}
 .lab .hsel{margin:0 0 8px}
+.lab .ftl .ln.lw b{white-space:normal;line-height:1.6}
 /* قوانين التحويل والحاسبة */
 .lab .labCalc{margin-top:12px}.lab .labCalc .calcbtn{width:100%;justify-content:center}
 .lab .law .cv li{text-align:center}
@@ -701,8 +702,319 @@ function vecLab(box){
   calcInit(box);newObj();
 }
 
-window.LABS={'0-1':{t:'القياس بأداة القدمة ذات الورنية وأداة الميكرومتر',run:measureLab},'0-2':{t:'قياس سرعة جسم متحرك والتحويل بين وحداتها',run:speedLab2},'0-4':{t:'إيجاد محصلة متجهين باستخدام طاولة القوى',run:forceLab},'0-5':{t:'تحليل قوة إلى مركبتين باستخدام طاولة القوى',run:vecLab}};
+function wkScale(rd,big){/* أداة الميزان الزنبركي أفقيا: الخطاف عند x=0، الحلقة في النهاية. rd القراءة بالنيوتن */
+  const L=150,y=0,h=big?26:22,x0=14,xe=x0+L,u=(L-24)/10,ip=xe-12-rd*u;
+  let t='';for(let i=0;i<=100;i++){const x=xe-12-i*u/10,bg=i%10===0,md=i%5===0;t+=`<line x1="${x}" y1="${y-h/2+2}" x2="${x}" y2="${y-h/2+2+(bg?8:md?6:3.5)}" stroke="#1F2937" stroke-width="${bg?1.1:.5}"/>`;if(bg&&big)t+=`<text x="${x}" y="${y+h/2-3}" font-size="7.5" font-weight="700" text-anchor="middle" fill="#1F2937">${i/10}</text>`}
+  let sp='';for(let i=0;i<9;i++){const a=ip+4+i*((xe-14-ip-4)/9);sp+=`<path d="M${a} ${y-4} l3 8" stroke="#64748B" stroke-width="1.2" fill="none"/>`}
+  return `<line x1="0" y1="${y}" x2="${ip}" y2="${y}" stroke="#334155" stroke-width="2"/><path d="M0 ${y} q-6 0 -6 6 q0 6 6 6" fill="none" stroke="#334155" stroke-width="2.4"/>
+  <rect x="${x0}" y="${y-h/2}" width="${L}" height="${h}" rx="${h/2}" fill="#E0F2FE" stroke="#0369A1" stroke-width="2"/>${t}${sp}
+  <rect x="${ip-2.5}" y="${y-h/2-3}" width="5" height="${h+6}" rx="2" fill="#F7931E" stroke="#9A3412"/>
+  <circle cx="${xe+12}" cy="${y}" r="9" fill="none" stroke="#334155" stroke-width="3"/>`}
+function wkProt(cx,cy,R,th,mag,hl){/* أداة المنقلة */
+  let g=`<path d="M${cx-R} ${cy} A${R} ${R} 0 0 1 ${cx+R} ${cy} Z" fill="rgba(254,243,199,.85)" stroke="#B45309" stroke-width="1.6"/>`;
+  for(let a=0;a<=180;a++){const r1=R,r2=R-(a%10===0?11:a%5===0?7:4),c=Math.cos(a*Math.PI/180),s=Math.sin(a*Math.PI/180);g+=`<line x1="${cx+r1*c}" y1="${cy-r1*s}" x2="${cx+r2*c}" y2="${cy-r2*s}" stroke="#78350F" stroke-width="${a%10===0?1:.5}"/>`;
+    if(a%30===0)g+=`<text x="${cx+(R-20)*c}" y="${cy-(R-20)*s+3}" font-size="8" font-weight="700" text-anchor="middle" fill="#78350F">${a}</text>`}
+  g+=`<circle cx="${cx}" cy="${cy}" r="2.6" fill="#B45309"/>`;
+  if(mag!=null){const c=Math.cos(mag*Math.PI/180),s=Math.sin(mag*Math.PI/180);g+=`<circle cx="${cx+(R-5)*c}" cy="${cy-(R-5)*s}" r="10" fill="rgba(247,147,30,.18)" stroke="#F7931E" stroke-width="2.6"/>`}
+  return g}
+function wkTape(x0,y,len,k,big){/* أداة الشريط المتري: العلبة عند x0 والشريط إلى اليمين بطول len سم، k بكسل لكل سم */
+  let t=`<rect x="${x0}" y="${y-7}" width="${len*k}" height="14" fill="#FDE047" stroke="#A16207" stroke-width="1"/>`;
+  for(let c=0;c<=len;c++){const x=x0+c*k,bg=c%10===0,md=c%5===0;if(k*1>=3||md)t+=`<line x1="${x}" y1="${y-7}" x2="${x}" y2="${y-7+(bg?9:md?6:3)}" stroke="#422006" stroke-width="${bg?1.1:.5}"/>`;if(bg&&c>0&&(big||c%20===0))t+=`<text x="${x}" y="${y+5.5}" font-size="7" font-weight="800" text-anchor="middle" fill="#422006">${c}</text>`}
+  t+=`<rect x="${x0+len*k-1}" y="${y-9}" width="4" height="18" fill="#64748B"/>`;
+  return `<rect x="${x0-34}" y="${y-22}" width="38" height="36" rx="8" fill="#F7931E" stroke="#9A3412" stroke-width="1.6"/><circle cx="${x0-15}" cy="${y-4}" r="9" fill="#FB923C" stroke="#9A3412"/>`+t}
+function wkTools(){
+  const lbl=(x,y,tx,ty,t,anc)=>`<line x1="${x}" y1="${y}" x2="${tx}" y2="${ty}" stroke="var(--muted)" stroke-width="1"/><circle cx="${x}" cy="${y}" r="2.4" fill="var(--muted)"/><text x="${tx}" y="${ty+(ty<y?-4:13)}" font-size="13" font-weight="700" text-anchor="${anc||'middle'}" fill="var(--ink)">${t}</text>`;
+  const sc=`<svg viewBox="0 0 400 165" aria-label="أداة الميزان الزنبركي"><g transform="translate(40 78) scale(1.75)">${wkScale(3.4,1)}</g>${lbl(30,88,40,135,'الخطاف')}${lbl(140,64,110,20,'الأنبوب المدرج')}${lbl(183,72,230,20,'المؤشر')}${lbl(250,78,300,135,'النابض')}${lbl(366,70,370,20,'الحلقة','end')}</svg>`;
+  const pr=`<svg viewBox="0 0 400 215" aria-label="أداة المنقلة">${wkProt(200,160,140)}<line x1="40" y1="160" x2="360" y2="160" stroke="#B45309" stroke-width="2"/>${lbl(200,160,200,192,'مركز المنقلة')}${lbl(300,62,370,20,'التدريج بالدرجات','end')}${lbl(80,160,40,192,'خط القاعدة','start')}</svg>`;
+  const tp=`<svg viewBox="0 0 400 130" aria-label="أداة الشريط المتري"><g transform="translate(0 0)">${wkTape(70,70,56,5,1)}</g>${lbl(52,52,40,20,'العلبة','start')}${lbl(200,66,200,20,'الشريط المدرج بالسنتيمتر')}${lbl(352,62,372,108,'الطرف المعدني','end')}</svg>`;
+  return `<div class="intro"><h3>3. الأدوات والأجهزة المستخدمة</h3>
+    <div class="tool"><div class="stage">${sc}</div><p><b>أداة الميزان الزنبركي:</b> تقيس قوة السحب بالنيوتن من استطالة النابض، وتدريجها من <span dir="ltr">0</span> إلى <span dir="ltr">10 N</span> بدقة <span dir="ltr">0.1 N</span>.</p></div>
+    <div class="tool"><div class="stage">${pr}</div><p><b>أداة المنقلة:</b> تقيس الزاوية بين خيط السحب واتجاه الحركة بدقة <span dir="ltr">1°</span>، ويوضع مركزها عند نقطة ربط الخيط.</p></div>
+    <div class="tool"><div class="stage">${tp}</div><p><b>أداة الشريط المتري:</b> تقيس إزاحة الصندوق بالسنتيمتر بدقة <span dir="ltr">1 cm</span>.</p></div></div>`}
+function workLab(box){
+  box.innerHTML=`
+  <div class="intro"><small class="labKind">🧪 تجربة عملية تفاعلية</small><h3>1. اسم التجربة</h3><p class="labName">حساب الشغل بالضرب القياسي لمتجهي القوة والإزاحة</p></div>
+  <div class="tags"><span class="tag">القوة F: <i>أداة الميزان الزنبركي</i> · N</span><span class="tag">الزاوية θ: <i>أداة المنقلة</i> · °</span><span class="tag">الإزاحة x: <i>أداة الشريط المتري</i> · cm</span><span class="tag dv">الشغل W: <i>ضرب قياسي</i> · J</span></div>
+  <div class="intro goals"><h3>2. أهداف التجربة</h3><ol class="gl">
+    <li>التعرف على أجزاء أداة الميزان الزنبركي وأداة المنقلة وأداة الشريط المتري.</li>
+    <li>قياس قوة السحب بأداة الميزان الزنبركي.</li>
+    <li>قياس الزاوية بين القوة والإزاحة بأداة المنقلة بدقة <span dir="ltr">1°</span>.</li>
+    <li>قياس إزاحة الصندوق بأداة الشريط المتري.</li>
+    <li>حساب الشغل بالضرب القياسي لمتجهي القوة والإزاحة <span dir="ltr">W = F x cos θ</span>.</li></ol></div>
+  ${wkTools()}
+  <h3 class="secH">4. تنفيذ التجربة</h3>
+  <div class="startBand">▶️ لنبدأ التجربة</div>
+  <div class="btns" style="margin-bottom:12px"><button type="button" class="rs" id="nw">🔄 سحب جديد</button></div>
+  <div class="ctl"><h3>4.1 قياس قوة السحب F بأداة الميزان الزنبركي</h3>
+    <div class="stage"><svg id="fS" viewBox="0 -30 400 240"></svg><svg id="fZ" viewBox="0 0 400 120"></svg><div class="hud"><span id="fSt"></span></div></div>
+    <div class="row"><label for="fR">سحب الميزان الزنبركي</label><output id="fO"></output><input id="fR" type="range" min="0" max="100" step="1" value="0"></div>
+    <p class="slh">👆 اسحب المؤشر البرتقالي لشد الميزان الزنبركي بقوة ثابتة حتى يتحرك الصندوق على السطح الأملس، ثم اقرأ الميزان.</p>
+    <div class="ans"><label>قراءتك لقوة السحب F</label><input id="fIn" inputmode="decimal" dir="ltr" placeholder="N"><button type="button" class="go" id="fCk">تحقق</button><button type="button" class="rs" id="fHn">تلميح</button></div><div class="fb2" id="fFb"></div>
+  </div>
+  <div class="ctl"><h3>4.2 قياس الزاوية θ بأداة المنقلة</h3>
+    <div class="stage"><svg id="aS" viewBox="0 -30 400 240"></svg><svg id="aZ" viewBox="0 0 400 120"></svg><div class="hud"><span id="aSt"></span></div></div>
+    <div class="row"><label for="aR">عدسة التكبير على تدريج المنقلة</label><output id="aO"></output><input id="aR" type="range" min="0" max="90" step="1" value="0"></div>
+    <p class="slh">👆 اسحب المؤشر البرتقالي لتحريك عدسة التكبير على تدريج المنقلة حتى تتوقف عند خيط السحب.</p>
+    <div class="ans"><label>قراءتك للزاوية θ</label><input id="tIn" inputmode="decimal" dir="ltr" placeholder="°"><button type="button" class="go" id="tCk">تحقق</button><button type="button" class="rs" id="tHn">تلميح</button></div><div class="fb2" id="tFb"></div>
+  </div>
+  <div class="ctl"><h3>4.3 قياس الإزاحة x بأداة الشريط المتري</h3>
+    <div class="stage"><svg id="dS" viewBox="0 30 400 200"></svg><svg id="dZ" viewBox="0 0 400 120"></svg><div class="hud"><span id="dSt"></span></div></div>
+    <div class="row"><label for="dR">مد الشريط المتري</label><output id="dO"></output><input id="dR" type="range" min="0" max="160" step="1" value="0"></div>
+    <p class="slh">👆 اسحب المؤشر البرتقالي لمد الشريط من خط البداية حتى يلامس مؤخرة الصندوق.</p>
+    <div class="ans"><label>قراءتك للإزاحة x</label><input id="dIn" inputmode="decimal" dir="ltr" placeholder="cm"><button type="button" class="go" id="dCk">تحقق</button><button type="button" class="rs" id="dHn">تلميح</button></div><div class="fb2" id="dFb"></div>
+  </div>
+  <h3 class="secH">5. القوانين المستخدمة والحسابات</h3>
+  <div class="ctl"><h3>5.1 القوانين المستخدمة</h3>
+    <div class="law ftl"><div class="ln lw"><b>الشغل بالضرب القياسي</b><span>W = F⃗ · x⃗ = F x cos θ</span></div>
+            <div class="sym"><b>حيث:</b><ul>
+      <li><span class="chip" dir="ltr">W</span> الشغل المبذول، ووحدته الجول <span dir="ltr">J</span></li>
+      <li><span class="chip" dir="ltr">F</span> قوة السحب، وتقاس بأداة الميزان الزنبركي، ووحدتها <span dir="ltr">N</span></li>
+      <li><span class="chip" dir="ltr">x</span> الإزاحة، وتقاس بأداة الشريط المتري، ووحدتها <span dir="ltr">m</span></li>
+      <li><span class="chip" dir="ltr">θ</span> الزاوية بين القوة والإزاحة، وتقاس بأداة المنقلة، ووحدتها الدرجة <span dir="ltr">°</span></li></ul></div>
+      ${convBox(['x(m) = x(cm) / 100'])}</div>
+  </div>
+  <div class="ctl"><h3>5.2 الحسابات</h3>
+    <div class="law ftl"><div class="ln lw"><b>التعويض</b><span id="vS" style="white-space:pre-line;line-height:2;text-align:left!important">أكمل القياسات 4.1 و 4.2 و 4.3</span></div></div>
+    <div class="ans"><label>احسب الشغل بالضرب القياسي بوحدة J</label><input id="c1" inputmode="decimal" dir="ltr" placeholder="J"><button type="button" class="go" id="c1k">تحقق</button></div><div class="fb2" id="c1f"></div>
+    <div class="labCalc"></div>
+  </div>
+  <div class="ctl res"><h3>6. نتائج التجربة</h3>
+    <div class="tw"><table class="rt"><thead><tr><th>الكمية</th><th>الأداة</th><th>القراءة</th><th>بوحدة SI</th></tr></thead>
+    <tbody><tr><td>القوة F</td><td>أداة الميزان الزنبركي</td><td id="r1a">—</td><td id="r1b">—</td></tr>
+    <tr><td>الزاوية θ</td><td>أداة المنقلة</td><td id="r2a">—</td><td>—</td></tr>
+    <tr><td>الإزاحة x</td><td>أداة الشريط المتري</td><td id="r3a">—</td><td id="r3b">—</td></tr>
+    <tr><td>الشغل بالضرب القياسي</td><td>بالحساب:<br><span dir="ltr" style="white-space:nowrap;font-size:12px">F x cos θ</span></td><td id="r6a">—</td><td>—</td></tr></tbody></table></div>
+    <div class="stage" id="rStage" hidden><svg id="rS" viewBox="0 0 400 295"></svg></div>
+    <p class="rn" id="rNote">تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.</p>
+    <div class="stage" id="fbd" hidden style="margin-top:10px"><svg id="fbS" viewBox="0 -10 400 330"></svg><div class="vcap">القوى المؤثرة على الصندوق</div></div>
+    <div class="tw" id="kT" hidden style="margin-top:10px"><table class="rt"><thead><tr><th>الكمية</th><th>نوعها</th></tr></thead><tbody><tr><td>القوة <span dir="ltr">F⃗</span></td><td>متجهة (مقدار واتجاه)</td></tr><tr><td>الإزاحة <span dir="ltr">x⃗</span></td><td>متجهة (مقدار واتجاه)</td></tr><tr><td>الشغل <span dir="ltr">W = F⃗ · x⃗</span></td><td>قياسية (مقدار فقط)</td></tr></tbody></table></div></div>`;
+  const $=id=>box.querySelector('#'+id),D2R=Math.PI/180;
+  const num=v=>parseFloat(String(v).replace(/[٠-٩]/g,c=>'٠١٢٣٤٥٦٧٨٩'.indexOf(c)).replace('٫','.').replace(',','.'));
+  const fb=(id,ok,msg)=>{$(id).textContent=msg;$(id).className='fb2 '+(ok?'ok':'no')};
+  const fx=(x,n)=>String(+x.toFixed(n));
+  let F,th,d,ok={},hF=false,hT=false,hD=false;
+  const FX=()=>F*Math.cos(th*D2R),FY=()=>F*Math.sin(th*D2R),DM=()=>d/100,W=()=>F*DM()*Math.cos(th*D2R);
+  function newObj(){F=(20+Math.floor(Math.random()*61))/10;th=15+Math.floor(Math.random()*46);d=50+Math.floor(Math.random()*101);ok={};hF=hT=hD=false;
+    ['fR','aR','dR'].forEach(k=>$(k).value=0);['fIn','tIn','dIn','c1'].forEach(k=>$(k).value='');['fFb','tFb','dFb','c1f'].forEach(k=>{$(k).textContent='';$(k).className='fb2'});
+    fDraw();aDraw();dDraw();sub();results()}
+  /* المشهد: طاولة وعربة وخيط بزاوية θ */
+  const TY=170;
+  function cart(x){return `<rect x="${x}" y="${TY-40}" width="60" height="40" rx="2" fill="url(#wkC)" stroke="#78350F" stroke-width="1.6"/><path d="M${x} ${TY-27} H${x+60} M${x} ${TY-13} H${x+60}" stroke="#92400E" stroke-width="1"/><path d="M${x+3} ${TY-3} L${x+57} ${TY-37} M${x+3} ${TY-37} L${x+57} ${TY-3}" stroke="#92400E" stroke-width="2.2" opacity=".55"/><rect x="${x}" y="${TY-40}" width="60" height="40" rx="2" fill="none" stroke="#78350F" stroke-width="2.4"/><circle cx="${x+60}" cy="${TY-21}" r="2.8" fill="#1F2937"/>`}
+  const defs=`<defs><linearGradient id="wkC" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FCD9A0"/><stop offset=".55" stop-color="#E0A458"/><stop offset="1" stop-color="#B7792E"/></linearGradient></defs>`;
+  const table=`<rect x="0" y="${TY}" width="400" height="10" fill="#A16207"/><rect x="0" y="${TY+10}" width="400" height="40" fill="#E8D5A3"/><text x="392" y="${TY+30}" font-size="12" font-weight="800" fill="#78350F" text-anchor="end">سطح أملس (نهمل الاحتكاك)</text>`;
+  function scene(cx,rd,ext,prot,mag){const hx=cx+60,hy=TY-21,c=Math.cos(th*D2R),sn=Math.sin(th*D2R);
+    const L=Math.min(200,112/sn,(306-hx)/c),sl=Math.max(10,L-104-ext),gp=sl+ext+91,Hx=hx+(gp+12)*c,Hy=hy-(gp+12)*sn;
+    /* المتدرب: يقف خلف الطاولة ويسحب الميزان */
+    const Sx=Hx+40,Sy=Hy-4,hip=Sy+64,K='#F1C7A0',KS='#B7855A',SH='#0E7C3A',SL='#16A34A';
+    const A=[Sx-4,Sy+8],Ex=(A[0]+Hx)/2+4,Ey=(A[1]+Hy)/2+12;
+    let man=`<g stroke-linecap="round" stroke-linejoin="round">
+      <path d="M${Sx+6} ${hip} L${Sx-6} ${hip+60}" stroke="#1E3A8A" stroke-width="13"/><path d="M${Sx+20} ${hip} L${Sx+30} ${hip+60}" stroke="#1E40AF" stroke-width="13"/>
+      <ellipse cx="${Sx-12}" cy="${hip+64}" rx="11" ry="5" fill="#111827"/><ellipse cx="${Sx+28}" cy="${hip+64}" rx="11" ry="5" fill="#111827"/>
+      <path d="M${Sx-10} ${Sy+2} Q${Sx+10} ${Sy-8} ${Sx+30} ${Sy+4} L${Sx+30} ${hip+2} Q${Sx+12} ${hip+8} ${Sx-4} ${hip+2} Z" fill="${SL}" stroke="${SH}" stroke-width="1.6"/>
+      <path d="M${Sx-4} ${hip-4} L${Sx+30} ${hip-4}" stroke="#1F2937" stroke-width="4"/>
+      <path d="M${Sx+2} ${Sy-2} L${Sx+10} ${Sy+10} L${Sx+18} ${Sy-2}" fill="none" stroke="${SH}" stroke-width="2"/>
+      <path d="M${Sx+26} ${Sy+8} Q${Sx+34} ${Sy+30} ${Sx+28} ${Sy+48}" fill="none" stroke="${SH}" stroke-width="9"/><circle cx="${Sx+28}" cy="${Sy+52}" r="5" fill="${K}" stroke="${KS}"/>
+      <rect x="${Sx+5}" y="${Sy-12}" width="11" height="12" fill="${K}"/>
+      <ellipse cx="${Sx+10}" cy="${Sy-30}" rx="14" ry="16" fill="${K}" stroke="${KS}" stroke-width="1.4"/>
+      <ellipse cx="${Sx+20}" cy="${Sy-29}" rx="3" ry="5" fill="${K}" stroke="${KS}" stroke-width="1.2"/>
+      <path d="M${Sx-4} ${Sy-32} Q${Sx-4} ${Sy-50} ${Sx+12} ${Sy-48} Q${Sx+27} ${Sy-46} ${Sx+24} ${Sy-28} Q${Sx+20} ${Sy-40} ${Sx+10} ${Sy-40} Q${Sx} ${Sy-40} ${Sx-4} ${Sy-32} Z" fill="#1F2937"/>
+      <path d="M${Sx-1} ${Sy-35} l5 -1" stroke="#1F2937" stroke-width="1.6"/><circle cx="${Sx+1.5}" cy="${Sy-31}" r="1.7" fill="#1F2937"/>
+      <path d="M${Sx-4} ${Sy-29} l-3 5 l4 1" fill="none" stroke="${KS}" stroke-width="1.3"/><path d="M${Sx-2} ${Sy-19} q3 2 6 0" fill="none" stroke="#9A3412" stroke-width="1.4"/>
+      <path d="M${A[0]} ${A[1]} L${Ex} ${Ey}" stroke="${SL}" stroke-width="12"/><path d="M${(A[0]+Ex*2)/3} ${(A[1]+Ey*2)/3} L${Ex} ${Ey} L${Hx} ${Hy}" fill="none" stroke="${K}" stroke-width="7.5"/><path d="M${A[0]} ${A[1]} L${(A[0]+Ex*2)/3} ${(A[1]+Ey*2)/3}" stroke="${SH}" stroke-width="1" />
+      </g><text x="${Sx-8}" y="${Sy-44}" font-size="12.5" font-weight="800" fill="#9A3412" text-anchor="end">المتدرب يسحب</text>`;
+    /* اليد تقبض على حلقة الميزان */
+    const hand=`<g transform="translate(${gp} 0) scale(.62)" stroke-linejoin="round"><path d="M4 -9 Q16 -11 22 -6 L22 6 Q16 11 4 9 Z" fill="${K}" stroke="${KS}" stroke-width="1.3"/>
+      ${[-8,-3.2,1.6,6.4].map(y=>`<rect x="-6" y="${y-1.8}" width="13" height="5.6" rx="2.8" fill="${K}" stroke="${KS}" stroke-width="1.1"/>`).join('')}
+      <path d="M14 -9 Q6 -15 -2 -11 Q-5 -9 -2 -7 Q4 -9 10 -6" fill="${K}" stroke="${KS}" stroke-width="1.2"/><path d="M-1 -10 l2 1" stroke="#E7B48E" stroke-width="1.6"/></g>`;
+    let g=defs+man+table+`<line x1="40" y1="${TY-48}" x2="40" y2="${TY}" stroke="#DC2626" stroke-width="2" stroke-dasharray="4 3"/><text x="40" y="${TY-52}" font-size="11" font-weight="700" text-anchor="middle" fill="#DC2626">خط البداية</text>`+cart(cx);
+    if(prot)g+=wkProt(hx,hy,62,th,mag)+`<line x1="${hx}" y1="${hy}" x2="${hx+70}" y2="${hy}" stroke="#B45309" stroke-width="1" stroke-dasharray="3 3"/>`+cart(cx);
+    g+=`<g transform="translate(${hx} ${hy}) rotate(${-th})"><line x1="0" y1="0" x2="${sl+ext}" y2="0" stroke="#DC2626" stroke-width="2"/><g transform="translate(${sl+ext} 0) scale(.5)">${wkScale(rd,0)}</g>${hand}</g>`;
+    return g}
+  function zoom(id,a,val,step,k,lab,hl,fmt){let g='<rect x="0" y="20" width="400" height="56" fill="#F8FAFC" stroke="#94A3B8"/>';
+    const XX=v=>200+(v-a)/step*k;for(let i=-Math.ceil(200/k)-1;i<=Math.ceil(200/k)+1;i++){const v=Math.round((a/step+i))*step,x=XX(v),n=Math.round(v/step);if(v<-1e-9)continue;const big=n%10===0,mid=n%5===0,isH=hl&&Math.abs(v-val)<step/2;
+      g+=`<line x1="${x}" y1="20" x2="${x}" y2="${20+(big?24:mid?16:9)}" stroke="${isH?'#DC2626':'#1F2937'}" stroke-width="${isH?2.6:big?1.5:.9}"/>`;if(mid)g+=`<text x="${x}" y="62" font-size="13" font-weight="700" text-anchor="middle" fill="#1F2937">${fmt(v)}</text>`}
+    const xs=XX(val);if(xs>0&&xs<400)g+=`<line x1="${xs}" y1="0" x2="${xs}" y2="18" stroke="#DC2626" stroke-width="4"/><path d="M${xs-6} 12 L${xs+6} 12 L${xs} 20 Z" fill="#DC2626"/>`;
+    g+=`<text x="6" y="110" font-size="12" font-weight="700" fill="var(--muted)">تكبير التدريج</text><rect x="346" y="92" width="50" height="24" rx="6" fill="#F7931E"/><text x="371" y="110" font-size="15" font-weight="800" text-anchor="middle" fill="#fff">${lab}</text>`;
+    $(id).innerHTML=g}
+  function fDraw(){const p=+$('fR').value,on=p>=100,rd=Math.round(F*Math.min(p,100)/10)/10;$('fO').textContent=on?'يتحرك':'';
+    $('fSt').textContent=on?'✓ الصندوق يتحرك بقوة سحب ثابتة، اقرأ الميزان':'اشدد الميزان حتى يتحرك الصندوق';
+    $('fS').innerHTML=scene(on?70:40,rd,rd*3,false);
+    zoom('fZ',rd,on&&hF?F:rd,0.1,26,'N',hF&&on,v=>fx(v,1))}
+  function aVal(){let a=+$('aR').value;if(a>th){a=th;$('aR').value=a}return a}
+  function aDraw(){const a=aVal(),touch=a===th;$('aO').textContent=a+'°';$('aSt').textContent=touch?'✓ العدسة على خيط السحب، اقرأ الزاوية من التدريج':'حرّك العدسة حتى تتوقف عند الخيط';
+    $('aS').innerHTML=scene(95,F,F*3,true,a);zoom('aZ',a,th,1,26,'°',hT&&touch,v=>String(v))}
+  function dVal(){let v=+$('dR').value;if(v>d){v=d;$('dR').value=v}return v}
+  function dDraw(){const v=dVal(),touch=v===d,k=1.6;$('dO').textContent=v+' cm';$('dSt').textContent=touch?'✓ الشريط يلامس مؤخرة الصندوق، اقرأ الإزاحة':'مد الشريط حتى يلامس مؤخرة الصندوق';
+    const cx=40+d*k;let g=defs+table+`<line x1="40" y1="${TY-60}" x2="40" y2="${TY}" stroke="#DC2626" stroke-width="2" stroke-dasharray="4 3"/><text x="40" y="${TY-64}" font-size="11" font-weight="700" text-anchor="middle" fill="#DC2626">خط البداية</text>`;
+    g+=`<rect x="40" y="${TY-40}" width="60" height="40" rx="2" fill="none" stroke="#94A3B8" stroke-dasharray="4 3"/>`+cart(cx)+`<line x1="${cx+60}" y1="${TY-21}" x2="${Math.min(cx+100,398)}" y2="${TY-21-40*Math.tan(th*D2R)}" stroke="#DC2626" stroke-width="2"/>`;
+    g+=`<path d="M70 ${TY-50} L${cx+20} ${TY-50}" stroke="#16A34A" stroke-width="2.4"/><path d="M${cx+20} ${TY-50} l-8 -5 l0 10 Z" fill="#16A34A"/><text x="${(70+cx+20)/2}" y="${TY-56}" font-size="12" font-weight="800" text-anchor="middle" fill="#16A34A">x⃗</text>`;
+    g+=`<line x1="${cx}" y1="${TY-40}" x2="${cx}" y2="${TY+28}" stroke="#1E3A8A" stroke-width="1.4" stroke-dasharray="4 3"/><g transform="translate(0 ${TY+20})">${wkTape(40,0,v,k,0)}</g>`;$('dS').innerHTML=g;
+    zoom('dZ',v,d,1,26,'cm',hD&&touch,c=>String(c))}
+  function sub(){$('vS').textContent=ok.f&&ok.t&&ok.d?[`x = ${d} / 100 = ${DM()} m`,`W = ${F} × ${DM()} × cos ${th}°`].map(E).join('\n'):'أكمل القياسات 4.1 و 4.2 و 4.3'}
+  function rDraw(){const st=$('rStage');if(!ok.c1){st.hidden=true;return}st.hidden=false;
+    const ox=50,oy=200,LF=200,Ld=300,fxp=LF*Math.cos(th*D2R),fyp=LF*Math.sin(th*D2R);
+    const arr=(x1,y1,x2,y2,c,lab,lx,ly,w,da)=>{const a=Math.atan2(y2-y1,x2-x1),h=13;return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${c}" stroke-width="${w||4}" ${da?'stroke-dasharray="7 5"':''}/><path d="M${x2} ${y2} L${x2-h*Math.cos(a-.4)} ${y2-h*Math.sin(a-.4)} L${x2-h*Math.cos(a+.4)} ${y2-h*Math.sin(a+.4)} Z" fill="${c}"/><text x="${x2+lx}" y="${y2+ly}" font-size="16" font-weight="800" fill="${c}" text-anchor="middle">${lab}</text>`};
+    let g=`<line x1="20" y1="${oy}" x2="395" y2="${oy}" stroke="var(--muted)" stroke-width="1.2"/><line x1="${ox}" y1="15" x2="${ox}" y2="245" stroke="var(--muted)" stroke-width="1.2"/><text x="${ox+8}" y="22" font-size="13" font-weight="700" fill="var(--muted)">y</text>`;
+    g+=`<line x1="${ox+fxp}" y1="${oy}" x2="${ox+fxp}" y2="${oy-fyp}" stroke="#94A3B8" stroke-dasharray="6 5" stroke-width="1.6"/>`;
+    const R=45;g+=`<path d="M${ox+R} ${oy} A${R} ${R} 0 0 0 ${ox+R*Math.cos(th*D2R)} ${oy-R*Math.sin(th*D2R)}" fill="none" stroke="#DC2626" stroke-width="2.5"/><text x="${ox+(R+14)*Math.cos(th*D2R/2)}" y="${oy-(R+14)*Math.sin(th*D2R/2)+5}" font-size="14" font-weight="800" fill="#DC2626" text-anchor="middle">θ</text>`;
+    g+=arr(ox,oy+22,ox+Ld,oy+22,'#16A34A','x⃗',10,5,4)+arr(ox,oy,ox+fxp,oy,'#F7931E','F cos θ',0,-8,3,1)+arr(ox,oy,ox,oy-fyp,'#7C3AED','F sin θ',-4,-8,3,1)+arr(ox,oy,ox+fxp,oy-fyp,'#DC2626','F⃗',10,-6)+`<circle cx="${ox}" cy="${oy}" r="5" fill="var(--ink)"/>`;
+    g+=`<rect x="200" y="236" width="190" height="30" rx="8" fill="#F7931E"/><text x="295" y="256" font-size="14" font-weight="800" text-anchor="middle" fill="#fff" direction="ltr">W = ${fx(W(),3)} J</text>`;
+    g+=`<text x="390" y="286" font-size="12.5" font-weight="700" fill="var(--muted)" direction="rtl" text-anchor="start">المركبة ⁦F sin θ⁩ عمودية على الإزاحة ⁦x⁩ فلا تبذل شغلا</text>`;
+    $('rS').innerHTML=g}
+  function fbDraw(){const cx=170,cy=160,c=Math.cos(th*D2R),sn=Math.sin(th*D2R),L=130;
+    const ar=(x1,y1,x2,y2,col,lab,lx,ly,da)=>{const a=Math.atan2(y2-y1,x2-x1),h=12;return `<line x1="${x1}" y1="${y1}" x2="${x2-8*Math.cos(a)}" y2="${y2-8*Math.sin(a)}" stroke="${col}" stroke-width="3.5" ${da?'stroke-dasharray="7 5"':''}/><path d="M${x2} ${y2} L${x2-h*Math.cos(a-.4)} ${y2-h*Math.sin(a-.4)} L${x2-h*Math.cos(a+.4)} ${y2-h*Math.sin(a+.4)} Z" fill="${col}"/><text x="${x2+lx}" y="${y2+ly}" font-size="15" font-weight="800" fill="${col}" text-anchor="middle" direction="ltr">${lab}</text>`};
+    let g=`<defs><linearGradient id="wkC2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FCD9A0"/><stop offset=".55" stop-color="#E0A458"/><stop offset="1" stop-color="#B7792E"/></linearGradient></defs><rect x="20" y="${cy+30}" width="360" height="10" fill="#A16207"/>
+      <rect x="${cx-40}" y="${cy-30}" width="80" height="60" rx="3" fill="url(#wkC2)" stroke="#78350F" stroke-width="2.4"/><circle cx="${cx}" cy="${cy}" r="4" fill="#1F2937"/>`;
+    g+=ar(cx,cy,cx+L*c,cy-L*sn,'#DC2626','F',10,-6)+ar(cx,cy,cx+L*c,cy,'#F7931E','F cos θ',0,26,1)+`<line x1="${cx+L*c}" y1="${cy}" x2="${cx+L*c}" y2="${cy-L*sn}" stroke="#94A3B8" stroke-dasharray="5 4"/>`;
+    const W0=140,FS=L*sn,NN=W0-FS;g+=ar(cx,cy,cx,cy-NN,'#16A34A','',0,0)+ar(cx,cy-NN,cx,cy-W0,'#7C3AED','',0,0,1)+`<text x="${cx-12}" y="${cy-NN/2+5}" font-size="14" font-weight="800" fill="#16A34A" text-anchor="end">N قوة رد الفعل</text><text x="${cx-12}" y="${cy-NN-FS/2+5}" font-size="14" font-weight="800" fill="#7C3AED" text-anchor="end" direction="ltr">F sin θ</text><text x="${cx}" y="${cy-W0-12}" font-size="14" font-weight="800" fill="#7C3AED" text-anchor="middle" direction="ltr">F sin θ + N</text>`+ar(cx+8,cy,cx+8,cy+W0,'#1F2937','',0,0)+`<text x="${cx+20}" y="${cy+W0-4}" font-size="14" font-weight="800" fill="#1F2937">Fg قوة الجذب</text>`;
+    $('fbS').innerHTML=g}
+  function results(){
+    $('r1a').textContent=ok.f?E(F.toFixed(1)+' N'):'—';$('r1b').textContent=ok.f?E(F.toFixed(1)+' N'):'—';
+    $('r2a').textContent=ok.t?E(th+'°'):'—';$('r3a').textContent=ok.d?E(d+' cm'):'—';$('r3b').textContent=ok.d?E(DM()+' m'):'—';
+    $('r6a').textContent=ok.c1?E(fx(W(),3)+' J'):'—';
+    rDraw();$('kT').hidden=!ok.c1;$('fbd').hidden=!ok.c1;if(ok.c1)fbDraw();
+    $('rNote').textContent=ok.c1?'الاستنتاج: الشغل يساوي حاصل الضرب القياسي لمتجهي القوة والإزاحة:\n'+E(`W = F⃗ · x⃗ = F x cos θ = ${fx(W(),3)} J`)+'\n\nتوضيح:\n1. ناتج الضرب القياسي لمتجهين كمية قياسية، لذلك الشغل '+E('W')+' له مقدار ووحدة '+E('J')+' فقط، وليس له اتجاه.\n2. السطح أملس فنهمل قوة الاحتكاك، والشغل المحسوب هو شغل قوة السحب '+E('F')+'.\n3. المركبة '+E('F\u00a0cos\u00a0θ')+' في اتجاه الإزاحة، فهي التي تبذل الشغل.\n4. المركبة '+E('F\u00a0sin\u00a0θ')+' عمودية على الإزاحة، فلا تبذل شغلا.\n5. حسب قانون نيوتن الأول، الصندوق لا يتحرك رأسيا، فمجموع المركبة '+E('F\u00a0sin\u00a0θ')+' وقوة رد الفعل '+E('N')+' يساوي قوة الجذب '+E('Fg')+' ويعاكسها، فيلغيانها:\n'+E('F sin θ + N = Fg')+'\n6. حسب قانون نيوتن الثالث، يؤثر الصندوق على السطح بقوة الفعل إلى الأسفل، فيؤثر السطح على الصندوق بقوة رد الفعل '+E('N')+' إلى الأعلى، مساوية لها في المقدار ومعاكسة في الاتجاه:\n'+E('F sin θ + N = Fg'):'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
+  $('fR').oninput=fDraw;$('aR').oninput=aDraw;$('dR').oninput=dDraw;
+  $('fCk').onclick=()=>{if(+$('fR').value<100)return fb('fFb',false,'اشدد الميزان حتى يتحرك الصندوق أولا.');const v=num($('fIn').value);if(isNaN(v))return fb('fFb',false,'اكتب قراءة الميزان بالنيوتن.');
+    if(Math.abs(v-F)<0.05){ok.f=true;fb('fFb',true,'✓ قراءة صحيحة:\n'+E(`F = ${F.toFixed(1)} N`))}else fb('fFb',false,'✗ القراءة غير صحيحة، أعد القراءة أو استخدم التلميح.');sub();results()};
+  $('fHn').onclick=()=>{hF=true;fDraw();fb('fFb',true,'تلميح: الأرقام على التدريج كل '+E('0.5 N')+'، وكل قسم صغير '+E('0.1 N')+'. اقرأ آخر رقم قبل المؤشر، ثم عُدّ الأقسام حتى الخط الأحمر.')};
+  $('tCk').onclick=()=>{if(aVal()!==th)return fb('tFb',false,'حرّك عدسة التكبير حتى تتوقف عند الخيط أولا.');const v=num($('tIn').value);if(isNaN(v))return fb('tFb',false,'اكتب الزاوية بالدرجات.');
+    if(Math.abs(v-th)<0.5){ok.t=true;fb('tFb',true,'✓ قراءة صحيحة:\n'+E(`θ = ${th}°`))}else fb('tFb',false,'✗ القراءة غير صحيحة، أعد القراءة أو استخدم التلميح.');sub();results()};
+  $('tHn').onclick=()=>{hT=true;aDraw();fb('tFb',true,'تلميح: الأرقام على التدريج كل '+E('5°')+'، وكل قسم صغير '+E('1°')+'. اقرأ آخر رقم قبل الخيط، ثم عُدّ الأقسام حتى الخط الأحمر.')};
+  $('dCk').onclick=()=>{if(dVal()!==d)return fb('dFb',false,'مد الشريط حتى يلامس مؤخرة الصندوق أولا.');const v=num($('dIn').value);if(isNaN(v))return fb('dFb',false,'اكتب الإزاحة بالسنتيمتر.');
+    if(Math.abs(v-d)<0.5){ok.d=true;fb('dFb',true,'✓ قراءة صحيحة:\n'+E(`x = ${d} cm = ${DM()} m`))}else fb('dFb',false,'✗ القراءة غير صحيحة، أعد القراءة أو استخدم التلميح.');sub();results()};
+  $('dHn').onclick=()=>{hD=true;dDraw();fb('dFb',true,'تلميح: الأرقام على التدريج كل '+E('5 cm')+'، وكل قسم صغير '+E('1 cm')+'. اقرأ آخر رقم قبل طرف الشريط، ثم عُدّ الأقسام حتى الخط الأحمر.')};
+  const chk=(i,val,okMsg,bad)=>{const f='c'+i+'f';if(!(ok.f&&ok.t&&ok.d))return fb(f,false,'أكمل القياسات 4.1 و 4.2 و 4.3 أولا.');const v=num($('c'+i).value);if(isNaN(v))return fb(f,false,'اكتب الناتج بوحدة J.');
+    if(Math.abs(v-val)/val<=0.02){ok['c'+i]=true;fb(f,true,okMsg)}else fb(f,false,bad);results()};
+  $('c1k').onclick=()=>chk(1,W(),'✓ إجابة صحيحة:\n'+E(`W = ${fx(W(),3)} J`),'✗ حوّل الإزاحة إلى المتر أولا، ثم اضرب F × x × cos θ، وانتبه أن الآلة الحاسبة على وضع الدرجات D.');
+  $('nw').onclick=newObj;
+  calcInit(box);newObj();
+}
+function dpBoard(o){/* لوحة الإحداثيات: o={A:[x,y],B:[x,y],pA,pB,prot:{a0,th,mag},arc,unit} */
+  const X=v=>40+v*40,Y=v=>360-v*40,V='⃗';
+  let g=`<rect x="20" y="20" width="370" height="360" rx="10" fill="#FFFBEB" stroke="#B45309" stroke-width="2"/>`;
+  for(let i=0;i<=8;i++){g+=`<line x1="${X(i)}" y1="${Y(0)}" x2="${X(i)}" y2="${Y(8)}" stroke="#CBD5E1" stroke-width="1"/><line x1="${X(0)}" y1="${Y(i)}" x2="${X(8)}" y2="${Y(i)}" stroke="#CBD5E1" stroke-width="1"/>`;
+    if(i>0)g+=`<text x="${X(i)}" y="${Y(0)+15}" font-size="11" font-weight="700" text-anchor="middle" fill="#475569">${i}</text><text x="${X(0)-8}" y="${Y(i)+4}" font-size="11" font-weight="700" text-anchor="end" fill="#475569">${i}</text>`}
+  g+=`<line x1="${X(0)}" y1="${Y(0)}" x2="${X(8.4)}" y2="${Y(0)}" stroke="#1F2937" stroke-width="2"/><line x1="${X(0)}" y1="${Y(0)}" x2="${X(0)}" y2="${Y(8.4)}" stroke="#1F2937" stroke-width="2"/><text x="${X(8.4)}" y="${Y(0)-6}" font-size="13" font-weight="800" fill="#1F2937">x</text><text x="${X(0)+6}" y="${Y(8.4)+4}" font-size="13" font-weight="800" fill="#1F2937">y</text>`;
+  const ar=(x1,y1,x2,y2,c,w)=>{const a=Math.atan2(y2-y1,x2-x1),h=12;return `<line x1="${x1}" y1="${y1}" x2="${x2-h*.6*Math.cos(a)}" y2="${y2-h*.6*Math.sin(a)}" stroke="${c}" stroke-width="${w}"/><path d="M${x2} ${y2} L${x2-h*Math.cos(a-.4)} ${y2-h*Math.sin(a-.4)} L${x2-h*Math.cos(a+.4)} ${y2-h*Math.sin(a+.4)} Z" fill="${c}"/>`};
+  if(o.unit)g+=ar(X(0),Y(0),X(1),Y(0),'#7C3AED',4)+ar(X(0),Y(0),X(0),Y(1),'#7C3AED',4)+`<text x="${X(.5)}" y="${Y(0)+30}" font-size="14" font-weight="800" fill="#7C3AED" text-anchor="middle">i</text><text x="${X(0)-24}" y="${Y(.5)+5}" font-size="14" font-weight="800" fill="#7C3AED" text-anchor="middle">j</text>`;
+  const proj=(P,p,c)=>{if(!p)return '';const x=X(P[0]),y=Y(P[1]);return `<line x1="${x}" y1="${y}" x2="${x}" y2="${y+(Y(0)-y)*p}" stroke="${c}" stroke-width="2" stroke-dasharray="6 4"/><line x1="${x}" y1="${y}" x2="${x-(x-X(0))*p}" y2="${y}" stroke="${c}" stroke-width="2" stroke-dasharray="6 4"/>`+(p>=1?`<circle cx="${x}" cy="${Y(0)}" r="5" fill="${c}"/><circle cx="${X(0)}" cy="${y}" r="5" fill="${c}"/>`:'')};
+  g+=proj(o.A,o.pA,'#DC2626')+proj(o.B,o.pB,'#2563EB');
+  if(o.prot){const R=110,cx=X(0),cy=Y(0);g+=`<defs><clipPath id="dpClip"><rect x="20" y="20" width="370" height="360" rx="10"/></clipPath></defs><g clip-path="url(#dpClip)"><g transform="rotate(${-o.prot.a0} ${cx} ${cy})">${wkProt(cx,cy,R,0,o.prot.mag)}</g></g>`}
+  if(o.arc){const r=55,a1=o.arc[0]*Math.PI/180,a2=o.arc[1]*Math.PI/180,m=(a1+a2)/2;g+=`<path d="M${X(0)+r*Math.cos(a1)} ${Y(0)-r*Math.sin(a1)} A${r} ${r} 0 0 0 ${X(0)+r*Math.cos(a2)} ${Y(0)-r*Math.sin(a2)}" fill="none" stroke="#F7931E" stroke-width="3"/><text x="${X(0)+(r+14)*Math.cos(m)}" y="${Y(0)-(r+14)*Math.sin(m)+5}" font-size="15" font-weight="800" fill="#F7931E" text-anchor="middle">θ</text>`}
+  const vec=(P,c,lab)=>{const x=X(P[0]),y=Y(P[1]);return ar(X(0),Y(0),x,y,c,4)+`<circle cx="${x}" cy="${y}" r="4" fill="#1F2937"/><text x="${x+10}" y="${y-8}" font-size="17" font-weight="800" fill="${c}">${lab}${V}</text>`};
+  g+=vec(o.A,'#DC2626','A')+vec(o.B,'#2563EB','B')+`<circle cx="${X(0)}" cy="${Y(0)}" r="5" fill="#1F2937"/>`;
+  return g}
+function dpTools(){
+  const lbl=(x,y,tx,ty,t,anc)=>`<line x1="${x}" y1="${y}" x2="${tx}" y2="${ty}" stroke="var(--muted)" stroke-width="1"/><circle cx="${x}" cy="${y}" r="2.4" fill="var(--muted)"/><text x="${tx}" y="${ty+(ty<y?-4:13)}" font-size="13" font-weight="700" text-anchor="${anc||'middle'}" fill="var(--ink)">${t}</text>`;
+  const bd=`<svg viewBox="0 -30 410 462" aria-label="أداة لوحة الإحداثيات">${dpBoard({A:[6,2],B:[3,5],unit:1})}${lbl(40,360,20,402,'نقطة الأصل','start')}${lbl(62,360,150,402,'متجها الوحدة')}${lbl(220,300,320,402,'خيط المتجه')}${lbl(300,100,392,-14,'المربع = 1 cm','end')}</svg>`;
+  const pr=`<svg viewBox="0 0 400 215" aria-label="أداة المنقلة">${wkProt(200,160,140)}<line x1="40" y1="160" x2="360" y2="160" stroke="#B45309" stroke-width="2"/>${lbl(200,160,200,192,'مركز المنقلة')}${lbl(300,62,370,20,'التدريج بالدرجات','end')}${lbl(80,160,40,192,'خط القاعدة','start')}</svg>`;
+  return `<div class="intro"><h3>3. الأدوات والأجهزة المستخدمة</h3>
+    <div class="tool"><div class="stage">${bd}</div><p><b>أداة لوحة الإحداثيات:</b> لوحة مربعات كل مربع منها <span dir="ltr">1 cm</span>، يُشد عليها خيطان من نقطة الأصل يمثلان المتجهين، ومتجها الوحدة <span dir="ltr">i</span> و <span dir="ltr">j</span> طول كل منهما مربع واحد.</p></div>
+    <div class="tool"><div class="stage">${pr}</div><p><b>أداة المنقلة:</b> تقيس الزاوية بين المتجهين بدقة <span dir="ltr">1°</span>، ويوضع مركزها عند نقطة الأصل.</p></div></div>`}
+function dotLab(box){
+  const V='⃗';
+  box.innerHTML=`
+  <div class="intro"><small class="labKind">🧪 تجربة عملية تفاعلية</small><h3>1. اسم التجربة</h3><p class="labName">الضرب القياسي لمتجهين بمتجهات الوحدة على لوحة الإحداثيات</p></div>
+  <div class="tags"><span class="tag">المركبات: <i>أداة لوحة الإحداثيات</i> · cm</span><span class="tag">الزاوية θ: <i>أداة المنقلة</i> · °</span><span class="tag dv">الضرب القياسي: <i>كمية قياسية</i> · cm²</span></div>
+  <div class="intro goals"><h3>2. أهداف التجربة</h3><ol class="gl">
+    <li>قراءة مركبتي كل متجه من أداة لوحة الإحداثيات، وكتابته بمتجهات الوحدة.</li>
+    <li>قياس الزاوية بين المتجهين بأداة المنقلة.</li>
+    <li>حساب الضرب القياسي لمتجهين ممثلين بالإحداثيات الديكارتية وبالإحداثيات القطبية، والمقارنة بين النتيجتين.</li></ol></div>
+  ${dpTools()}
+  <h3 class="secH">4. تنفيذ التجربة</h3>
+  <div class="startBand">▶️ لنبدأ التجربة</div>
+  <div class="btns" style="margin-bottom:12px"><button type="button" class="rs" id="nw">🔄 متجهان جديدان</button></div>
+  <div class="ctl"><h3>4.1 قراءة مركبتي المتجه A${V}</h3>
+    <div class="stage"><svg id="s1" viewBox="0 10 410 390"></svg></div>
+    <div class="row"><label for="p1">إسقاط المتجه على المحورين</label><output id="o1"></output><input id="p1" type="range" min="0" max="100" step="1" value="0"></div>
+    <p class="slh">👆 اسحب المؤشر البرتقالي لإسقاط رأس المتجه على المحورين، ثم عُدّ المربعات.</p>
+    <div class="ans"><label>قراءتك لمركبتي A${V} بوحدة cm</label><input id="ax" inputmode="decimal" dir="ltr" placeholder="Ax"><input id="ay" inputmode="decimal" dir="ltr" placeholder="Ay"><button type="button" class="go" id="aCk">تحقق</button></div><div class="fb2" id="aFb"></div>
+  </div>
+  <div class="ctl"><h3>4.2 قراءة مركبتي المتجه B${V}</h3>
+    <div class="stage"><svg id="s2" viewBox="0 10 410 390"></svg></div>
+    <div class="row"><label for="p2">إسقاط المتجه على المحورين</label><output id="o2"></output><input id="p2" type="range" min="0" max="100" step="1" value="0"></div>
+    <p class="slh">👆 اسحب المؤشر البرتقالي لإسقاط رأس المتجه على المحورين، ثم عُدّ المربعات.</p>
+    <div class="ans"><label>قراءتك لمركبتي B${V} بوحدة cm</label><input id="bx" inputmode="decimal" dir="ltr" placeholder="Bx"><input id="by" inputmode="decimal" dir="ltr" placeholder="By"><button type="button" class="go" id="bCk">تحقق</button></div><div class="fb2" id="bFb"></div>
+  </div>
+  <div class="ctl"><h3>4.3 قياس الزاوية θ بين المتجهين بأداة المنقلة</h3>
+    <div class="stage"><svg id="s3" viewBox="0 10 410 390"></svg><svg id="z3" viewBox="0 0 400 120"></svg><div class="hud"><span id="st3"></span></div></div>
+    <div class="row"><label for="p3">عدسة التكبير على تدريج المنقلة</label><output id="o3"></output><input id="p3" type="range" min="0" max="90" step="1" value="0"></div>
+    <p class="slh">👆 صفر المنقلة على المتجه A${V}. اسحب المؤشر البرتقالي لتحريك العدسة حتى تتوقف عند المتجه B${V}.</p>
+    <div class="ans"><label>قراءتك للزاوية θ</label><input id="tIn" inputmode="decimal" dir="ltr" placeholder="°"><button type="button" class="go" id="tCk">تحقق</button><button type="button" class="rs" id="tHn">تلميح</button></div><div class="fb2" id="tFb"></div>
+  </div>
+  <h3 class="secH">5. القوانين المستخدمة والحسابات</h3>
+  <div class="ctl"><h3>5.1 القوانين المستخدمة</h3>
+    <div class="law ftl"><div class="ln lw"><b>المتجهان بمتجهات الوحدة</b><span>A${V} = Ax i + Ay j ,  B${V} = Bx i + By j</span></div>
+      <div class="ln lw"><b>الضرب القياسي لمتجهين ممثلين بالإحداثيات الديكارتية</b><span>A${V} · B${V} = Ax Bx + Ay By</span></div>
+      <div class="ln lw"><b>الضرب القياسي لمتجهين ممثلين بالإحداثيات القطبية</b><span>A${V} · B${V} = A B cos θ</span></div>
+      <div class="ln lw"><b>مقدار المتجه</b><span>A = √(Ax² + Ay²)</span></div>
+      <div class="sym"><b>حيث:</b><ul>
+      <li><span class="chip" dir="ltr">Ax , Ay</span> مركبتا المتجه <span dir="ltr">A${V}</span>، وتقرآن من أداة لوحة الإحداثيات، ووحدتهما <span dir="ltr">cm</span></li>
+      <li><span class="chip" dir="ltr">Bx , By</span> مركبتا المتجه <span dir="ltr">B${V}</span>، ووحدتهما <span dir="ltr">cm</span></li>
+      <li><span class="chip" dir="ltr">i , j</span> متجها الوحدة على المحورين، مقدار كل منهما 1 وليس لهما وحدة</li>
+      <li><span class="chip" dir="ltr">A , B</span> مقدارا المتجهين، ووحدتهما <span dir="ltr">cm</span></li>
+      <li><span class="chip" dir="ltr">θ</span> الزاوية بين المتجهين، وتقاس بأداة المنقلة، ووحدتها الدرجة <span dir="ltr">°</span></li></ul></div></div>
+  </div>
+  <div class="ctl"><h3>5.2 الحسابات</h3>
+    <div class="law ftl"><div class="ln lw"><b>1. الضرب القياسي لمتجهين ممثلين بالإحداثيات الديكارتية</b><span id="vS1" style="white-space:pre-line;line-height:2;text-align:left!important">أكمل القياسات 4.1 و 4.2</span></div></div>
+    <div class="ans"><label>احسب الضرب القياسي لمتجهين ممثلين بالإحداثيات الديكارتية بوحدة cm²</label><input id="c1" inputmode="decimal" dir="ltr" placeholder="cm²"><button type="button" class="go" id="c1k">تحقق</button></div><div class="fb2" id="c1f"></div>
+    <div class="law ftl" style="margin-top:16px"><div class="ln lw"><b>2. الضرب القياسي لمتجهين ممثلين بالإحداثيات القطبية</b><span id="vS2" style="white-space:pre-line;line-height:2;text-align:left!important">أكمل القياسات 4.1 و 4.2 و 4.3</span></div></div>
+    <div class="ans"><label>احسب الضرب القياسي لمتجهين ممثلين بالإحداثيات القطبية بوحدة cm²</label><input id="c2" inputmode="decimal" dir="ltr" placeholder="cm²"><button type="button" class="go" id="c2k">تحقق</button></div><div class="fb2" id="c2f"></div>
+    <div class="labCalc"></div>
+  </div>
+  <div class="ctl res"><h3>6. نتائج التجربة</h3>
+    <div class="tw"><table class="rt"><thead><tr><th>الكمية</th><th>الأداة</th><th>القراءة</th></tr></thead>
+    <tbody><tr><td>المتجه A${V}</td><td>أداة لوحة الإحداثيات</td><td id="r1">—</td></tr>
+    <tr><td>المتجه B${V}</td><td>أداة لوحة الإحداثيات</td><td id="r2">—</td></tr>
+    <tr><td>الزاوية θ</td><td>أداة المنقلة</td><td id="r3">—</td></tr>
+    <tr><td>الضرب القياسي لمتجهين ممثلين بالإحداثيات الديكارتية</td><td>بالحساب:<br><span dir="ltr" style="white-space:nowrap;font-size:12px">Ax Bx + Ay By</span></td><td id="r4">—</td></tr>
+    <tr><td>الضرب القياسي لمتجهين ممثلين بالإحداثيات القطبية</td><td>بالحساب:<br><span dir="ltr" style="white-space:nowrap;font-size:12px">A B cos θ</span></td><td id="r5">—</td></tr></tbody></table></div>
+    <div class="stage" id="rStage" hidden><svg id="rS" viewBox="0 10 410 390"></svg></div>
+    <p class="rn" id="rNote">تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.</p></div>`;
+  const $=id=>box.querySelector('#'+id),D2R=Math.PI/180;
+  const num=v=>parseFloat(String(v).replace(/[٠-٩]/g,c=>'٠١٢٣٤٥٦٧٨٩'.indexOf(c)).replace('٫','.').replace(',','.'));
+  const fb=(id,ok,msg)=>{$(id).textContent=msg;$(id).className='fb2 '+(ok?'ok':'no')};
+  const fx=(x,n)=>String(+x.toFixed(n));
+  let A,B,aA,aB,th,ok={},hT=false;
+  const MA=()=>Math.hypot(A[0],A[1]),MB=()=>Math.hypot(B[0],B[1]),DC=()=>A[0]*B[0]+A[1]*B[1],DT=()=>MA()*MB()*Math.cos(th*D2R);
+  function newObj(){do{A=[3+Math.floor(Math.random()*6),1+Math.floor(Math.random()*4)];B=[1+Math.floor(Math.random()*4),3+Math.floor(Math.random()*6)];
+      aA=Math.atan2(A[1],A[0])/D2R;aB=Math.atan2(B[1],B[0])/D2R;th=Math.round(aB-aA)}while(th<20||th>85);
+    ok={};hT=false;['p1','p2','p3'].forEach(k=>$(k).value=0);['ax','ay','bx','by','tIn','c1','c2'].forEach(k=>$(k).value='');['aFb','bFb','tFb','c1f','c2f'].forEach(k=>{$(k).textContent='';$(k).className='fb2'});
+    d1();d2();d3();sub();results()}
+  function d1(){const p=+$('p1').value/100;$('o1').textContent=p>=1?'تم':'';$('s1').innerHTML=dpBoard({A,B,pA:p,unit:1})}
+  function d2(){const p=+$('p2').value/100;$('o2').textContent=p>=1?'تم':'';$('s2').innerHTML=dpBoard({A,B,pB:p,unit:1})}
+  function tVal(){let a=+$('p3').value;if(a>th){a=th;$('p3').value=a}return a}
+  function d3(){const a=tVal(),touch=a===th;$('o3').textContent=a+'°';$('st3').textContent=touch?'✓ العدسة على المتجه الأزرق، اقرأ الزاوية':'حرّك العدسة حتى تتوقف عند المتجه الأزرق';
+    $('s3').innerHTML=dpBoard({A,B,prot:{a0:aA,mag:a}});
+    const k=26,XX=d=>200+(d-a)*k;let g='<rect x="0" y="20" width="400" height="56" fill="#F8FAFC" stroke="#94A3B8"/>';
+    for(let d=a-8;d<=a+8;d++){if(d<0)continue;const x=XX(d),big=d%10===0,mid=d%5===0,isH=hT&&touch&&d===th;g+=`<line x1="${x}" y1="20" x2="${x}" y2="${20+(big?24:mid?16:9)}" stroke="${isH?'#DC2626':'#1F2937'}" stroke-width="${isH?2.6:big?1.5:.9}"/>`;if(mid)g+=`<text x="${x}" y="62" font-size="13" font-weight="700" text-anchor="middle" fill="#1F2937">${d}</text>`}
+    const xs=XX(th);if(xs>0&&xs<400)g+=`<line x1="${xs}" y1="0" x2="${xs}" y2="18" stroke="#2563EB" stroke-width="4"/><path d="M${xs-6} 12 L${xs+6} 12 L${xs} 20 Z" fill="#2563EB"/>`;
+    g+=`<text x="6" y="110" font-size="12" font-weight="700" fill="var(--muted)">تكبير التدريج</text><rect x="352" y="92" width="44" height="24" rx="6" fill="#F7931E"/><text x="374" y="110" font-size="16" font-weight="800" text-anchor="middle" fill="#fff">°</text>`;
+    $('z3').innerHTML=g}
+  function sub(){$('vS1').textContent=ok.a&&ok.b?[`A${V} = ${A[0]} i + ${A[1]} j`,`B${V} = ${B[0]} i + ${B[1]} j`,`A${V} · B${V} = Ax Bx + Ay By`,`A${V} · B${V} = (${A[0]})(${B[0]}) + (${A[1]})(${B[1]})`].map(E).join('\n'):'أكمل القياسات 4.1 و 4.2';
+    $('vS2').textContent=ok.a&&ok.b&&ok.t?[`A = √(${A[0]}² + ${A[1]}²) = ${fx(MA(),2)} cm`,`B = √(${B[0]}² + ${B[1]}²) = ${fx(MB(),2)} cm`,`A${V} · B${V} = A B cos θ`,`A${V} · B${V} = ${fx(MA(),2)} × ${fx(MB(),2)} × cos ${th}°`].map(E).join('\n'):'أكمل القياسات 4.1 و 4.2 و 4.3'}
+  function results(){
+    $('r1').textContent=ok.a?E(`${A[0]} i + ${A[1]} j  cm`):'—';$('r2').textContent=ok.b?E(`${B[0]} i + ${B[1]} j  cm`):'—';$('r3').textContent=ok.t?E(th+'°'):'—';
+    $('r4').textContent=ok.c1?E(DC()+' cm²'):'—';$('r5').textContent=ok.c2?E(fx(DT(),1)+' cm²'):'—';
+    const done=ok.c1&&ok.c2;$('rStage').hidden=!done;if(done)$('rS').innerHTML=dpBoard({A,B,unit:1,arc:[aA,aB]});
+    $('rNote').textContent=done?'الاستنتاج: الطريقتان تعطيان نفس الناتج تقريبا:\nبالإحداثيات الديكارتية: '+E(`A${V} · B${V} = ${DC()} cm²`)+'\nبالإحداثيات القطبية: '+E(`A${V} · B${V} = ${fx(DT(),1)} cm²`)+'\n\nتوضيح:\n1. ناتج الضرب القياسي لمتجهين كمية قياسية (عدد ووحدة فقط، وليس له اتجاه).\n2. في الإحداثيات الديكارتية نضرب المركبتين السينيتين معا، والمركبتين الصاديتين معا، ثم نجمع.':'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
+  $('p1').oninput=d1;$('p2').oninput=d2;$('p3').oninput=d3;
+  const rd=(P,ix,iy,f,pid,nm)=>{if(+$(pid).value<100)return fb(f,false,'اسحب المؤشر حتى يكتمل الإسقاط أولا.');const x=num($(ix).value),y=num($(iy).value);if(isNaN(x)||isNaN(y))return fb(f,false,'اكتب المركبتين بالسنتيمتر.');
+    if(x===P[0]&&y===P[1]){fb(f,true,'✓ قراءة صحيحة:\n'+E(`${nm}${V} = ${P[0]} i + ${P[1]} j`));return true}fb(f,false,'✗ عُدّ المربعات من نقطة الأصل حتى النقطة الملونة على كل محور.');return false};
+  $('aCk').onclick=()=>{if(rd(A,'ax','ay','aFb','p1','A'))ok.a=true;sub();results()};
+  $('bCk').onclick=()=>{if(rd(B,'bx','by','bFb','p2','B'))ok.b=true;sub();results()};
+  $('tCk').onclick=()=>{if(tVal()!==th)return fb('tFb',false,'حرّك العدسة حتى تتوقف عند المتجه الأزرق أولا.');const v=num($('tIn').value);if(isNaN(v))return fb('tFb',false,'اكتب الزاوية بالدرجات.');
+    if(Math.abs(v-th)<0.5){ok.t=true;fb('tFb',true,'✓ قراءة صحيحة:\n'+E(`θ = ${th}°`))}else fb('tFb',false,'✗ القراءة غير صحيحة، أعد القراءة أو استخدم التلميح.');sub();results()};
+  $('tHn').onclick=()=>{hT=true;d3();fb('tFb',true,'تلميح: الأرقام على التدريج كل '+E('5°')+'، وكل قسم صغير '+E('1°')+'. اقرأ آخر رقم قبل السهم الأزرق، ثم عُدّ الأقسام حتى الخط الأحمر.')};
+  const chk=(i,val,okMsg,bad)=>{const f='c'+i+'f';if(!(ok.a&&ok.b&&(i===1||ok.t)))return fb(f,false,i===1?'أكمل القياسين 4.1 و 4.2 أولا.':'أكمل القياسات 4.1 و 4.2 و 4.3 أولا.');const v=num($('c'+i).value);if(isNaN(v))return fb(f,false,'اكتب الناتج بوحدة cm².');
+    if(Math.abs(v-val)/val<=0.02){ok['c'+i]=true;fb(f,true,okMsg)}else fb(f,false,bad);results()};
+  $('c1k').onclick=()=>chk(1,DC(),'✓ إجابة صحيحة:\n'+E(`A${V} · B${V} = ${A[0]*B[0]} + ${A[1]*B[1]} = ${DC()} cm²`),'✗ اضرب Ax في Bx، ثم Ay في By، واجمع الناتجين.');
+  $('c2k').onclick=()=>chk(2,DT(),'✓ إجابة صحيحة:\n'+E(`A${V} · B${V} = ${fx(DT(),1)} cm²`),'✗ اضرب المقدارين A و B في cos θ، وانتبه أن الآلة الحاسبة على وضع الدرجات D.');
+  $('nw').onclick=newObj;
+  calcInit(box);newObj();
+}
+window.LABS={'0-1':{t:'القياس بأداة القدمة ذات الورنية وأداة الميكرومتر',run:measureLab},'0-2':{t:'قياس سرعة جسم متحرك والتحويل بين وحداتها',run:speedLab2},'0-4':{t:'إيجاد محصلة متجهين باستخدام طاولة القوى',run:forceLab},'0-5':{t:'تحليل قوة إلى مركبتين باستخدام طاولة القوى',run:vecLab},'0-6':[{t:'حساب الشغل بالضرب القياسي لمتجهي القوة والإزاحة',run:workLab},{t:'الضرب القياسي لمتجهين بمتجهات الوحدة على لوحة الإحداثيات',run:dotLab}]};
 window.renderLabCard=function(host,u,l){const L=window.LABS[u+'-'+l];if(!L)return false;css();
-  const c=document.createElement('div');c.className='card lab';c.innerHTML='<h2></h2><div class="labBody"></div>';c.querySelector('h2').remove();
-  host.appendChild(c);L.run(c.querySelector('.labBody'));return true};
+  (Array.isArray(L)?L:[L]).forEach(x=>{const c=document.createElement('div');c.className='card lab';c.innerHTML='<div class="labBody"></div>';host.appendChild(c);x.run(c.querySelector('.labBody'))});return true};
 })();
