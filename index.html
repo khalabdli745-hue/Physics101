@@ -409,7 +409,7 @@ details.card summary{cursor:pointer}
 .hIcon{font-size:18px;line-height:1}
 .aiFab{position:fixed;left:14px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:900;border:0;border-radius:999px;background:var(--accent);color:var(--accent-ink,#fff);font:800 15px system-ui,sans-serif;padding:12px 16px;box-shadow:0 6px 18px rgba(0,0,0,.3);cursor:pointer}
 body:has(#pager:not([hidden])) .aiFab{bottom:calc(84px + env(safe-area-inset-bottom))}
-.aiFab{transition:opacity .2s,transform .2s}.aiCmp{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:6px;padding-top:6px;border-top:1px dashed var(--line)}.aiCmp small{flex-basis:100%;color:var(--muted)}body.fabHide .aiFab{opacity:0;transform:translateY(24px);pointer-events:none}
+.aiFab{transition:opacity .2s,transform .2s}body.fabHide .aiFab{opacity:0;transform:translateY(24px);pointer-events:none}
 .view::after{content:'';display:block;height:84px}
 .aiFab[hidden],body.boardOpen .aiFab,body.aiOpen .aiFab{display:none}
 .aiSheet{position:fixed;inset:0;z-index:950;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center}.aiSheet[hidden]{display:none}
@@ -706,7 +706,7 @@ const TTS=(()=>{
     ['µF','microfarads'],['μF','microfarads'],['µC','microcoulombs'],['μC','microcoulombs'],['µm','micrometers'],['μm','micrometers'],['µA','microamperes'],['nC','nanocoulombs'],['nF','nanofarads'],['pF','picofarads'],['nm','nanometers'],['mA','milliamperes'],['mV','millivolts'],['kV','kilovolts'],['MΩ','megaohms'],['kΩ','kilo ohms'],
     ['mJ','millijoules'],['kJ','kilojoules'],['MJ','megajoules'],['kW','kilowatts'],['MW','megawatts'],['kg','kilograms'],['km','kilometers'],['cm','centimeters'],['mm','millimeters'],['mg','milligrams'],['ms','milliseconds'],['Hz','hertz'],['cal','calories'],['mol','moles'],['cd','candela'],['Ω','ohms'],['min','minutes']];
   const EN_ONE={m:'meters',s:'seconds',h:'hours',g:'grams',N:'newtons',J:'joules',W:'watts',V:'volts',A:'amperes',C:'coulombs',F:'farads',K:'kelvin',L:'liters'};
-  const EN_LET={a:'ay',b:'bee',c:'see',d:'dee',e:'E',f:'F',g:'gee',h:'aitch',i:'eye',j:'jay',k:'kay',l:'el',m:'em',n:'N',o:'oh',p:'pee',q:'cue',r:'ar',s:'S',t:'tee',u:'you',v:'vee',w:'double you',x:'ex',y:'why',z:'zee'};
+  const EN_LET={a:'A',b:'B',c:'C',d:'D',e:'E',f:'F',g:'G',h:'H',i:'I',j:'J',k:'K',l:'L',m:'M',n:'N',o:'O',p:'P',q:'Q',r:'R',s:'S',t:'T',u:'U',v:'V',w:'W',x:'X',y:'Y',z:'Z'};
   const EN_SUP={'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9'};
   const EN_SUB={'₀':' naught','₁':' one','₂':' two','₃':' three','ₓ':' x','ᵧ':' y'};
   const EN_WORD={KE:'kinetic energy',PE:'potential energy',ME:'mechanical energy',SI:'S I',DC:'D C',AC:'A C',LED:'L E D',GPS:'G P S',PhET:'fet',cos:'cosine',sin:'sine',tan:'tangent',max:'maximum',min:'minimum',total:'total',known:'known'};
@@ -1677,7 +1677,7 @@ function aiCard(){
   const ta=form.querySelector('textarea'),sb=form.querySelector('button[type=submit]');
   AIMIC(form.querySelector('.aiMic'),ta,q=>send(q));
   const bubble=(role,text,speech)=>{const d=document.createElement('div');d.className='aiMsg '+(role==='user'?'me':'bot');
-    if(role==='user')d.textContent=text;else{d.innerHTML='<div class="md">'+md(AIPLAIN(text))+'</div>';{const lb=document.createElement('div');lb.className='speak compact';const b0=document.createElement('button');b0.innerHTML='🔊 استمع';b0.onclick=()=>{AIVO();if(speech)TTS.playRaw(AISEGS(speech),b0);else TTS.play(AISPK(text),b0)};lb.appendChild(b0);d.appendChild(lb)}if(typeof TAUTH!=='undefined'&&TAUTH&&!(typeof AUTH!=='undefined'&&AUTH&&AUTH.token)){const cmp=document.createElement('div');cmp.className='aiCmp';cmp.innerHTML='<small>مقارنة النطق (للمدرب فقط):</small>';{const b1=document.createElement('button');b1.className='btn ghost';b1.innerHTML='🔊 الطريقة الجديدة';b1.onclick=()=>{AIVO();if(speech)TTS.playRaw(AISEGS(speech),b1);else TTS.play(AISTRIP(text),b1)};cmp.appendChild(b1)}cmp.appendChild(TTS.controls(()=>{AIVO();return String(text)},{compact:true,label:'🔊 الطريقة السابقة'}));d.appendChild(cmp)}}
+    if(role==='user')d.textContent=text;else{d.innerHTML='<div class="md">'+md(AIPLAIN(text))+'</div>';{const lb=document.createElement('div');lb.className='speak compact';const b0=document.createElement('button');b0.innerHTML='🔊 استمع';b0.onclick=()=>{AIVO();if(speech)TTS.playRaw(AISEGS(speech),b0);else TTS.play(AISPK(text),b0)};lb.appendChild(b0);d.appendChild(lb)}}
     log.appendChild(d);return d};
   hist.forEach(m=>bubble(m.role,m.content));
   let busy=false;
