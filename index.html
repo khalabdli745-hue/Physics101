@@ -482,7 +482,7 @@ sub.ss{font-size:.6em;line-height:0;vertical-align:-.25em}
         <button role="tab" data-t="page">صفحات الحقيبة التدريبية</button>
         <button role="tab" data-t="ex">أمثلة وتمارين تفاعلية</button>
         <button role="tab" data-t="quiz">اختبر نفسك</button>
-        <button role="tab" data-t="lab">تجارب وتطبيقات</button>
+        <button role="tab" data-t="lab">تجارب عملية تفاعلية</button>
         <button role="tab" data-t="rate">⭐ قيّم الدرس</button>
         <button role="tab" data-t="survey">📝 استبانة الرضا</button>
       </div>
@@ -1781,7 +1781,7 @@ function renderLab(v){
     c.appendChild(g)}
   else if(!hasLab)c.insertAdjacentHTML('beforeend','<p class="empty">لا توجد تجربة تفاعلية مخصصة لهذا الدرس. جرّب تجارب الدروس الأخرى في الوحدة.</p>');
   if(!hasLab||(x.sim&&x.sim.length))i.appendChild(c);
-  if(x.ap){const a=card('تطبيقات من الحياة');a.appendChild(TTS.controls(()=>'تطبيقات من الحياة.\n'+x.ap,{compact:true,label:'🔊 استمع للتطبيقات'}));const b=document.createElement('div');b.className='md';b.innerHTML=md(x.ap);a.appendChild(b);i.appendChild(a)}
+  /* تطبيقات من الحياة: تبقى في تبويب الدرس فقط، ولا تظهر في تبويب التجارب العملية */
   const r=card('مراجع للاستزادة','من قائمة مراجع الحقيبة التدريبية، المناسبة لهذه الوحدة:');
   const ul=document.createElement('ul');ul.className='refs';
   (window.REFS||[]).filter(f=>f.u.includes(pos.u)).forEach(f=>{const li=document.createElement('li');li.innerHTML=`<b></b><br><small></small>`;li.querySelector('b').textContent=f.t;li.querySelector('small').textContent=f.a;ul.appendChild(li)});
