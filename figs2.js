@@ -117,4 +117,45 @@ F.circuit=svg('0 0 380 230',
 const SET={'0-0':'siUnits','0-1':'siUnits','0-2':'prefix','0-3':'prefix','0-8':'prefix','1-0':'motionTypes','1-2':'vtGraph','1-4':'newton3','1-11':'vtGraph','2-0':'molecules','2-1':'molecules','2-3':'heatCurve','2-4':'heatCurve','2-5':'mixing','2-7':'mixing','3-0':'atom','3-1':'rubbing','3-9':'field','4-0':'circuit','4-1':'wire','4-2':'wire','4-3':'wire','4-4':'acdc','4-6':'wireR','4-7':'circuit'};
 const E=window.EXTRA=window.EXTRA||{};
 Object.entries(SET).forEach(([k,f])=>{E[k]=E[k]||{};E[k].fig=f});
+
+/* الضرب القياسي بالإحداثيات القطبية: المتجهان A و B والزاوية بينهما فقط */
+{const ox=60,oy=210,P=(r,a)=>[ox+r*Math.cos(a*Math.PI/180),oy-r*Math.sin(a*Math.PI/180)];
+ const a1=20,a2=65,[ax,ay]=P(185,a2),[bx,by]=P(230,a1),r=70,[x1,y1]=P(r,a1),[x2,y2]=P(r,a2),[tx,ty]=P(r+20,(a1+a2)/2);
+ F.dotPolar=svg('0 0 380 235',
+  L(ox,oy,365,oy,'var(--muted)','bm',1.6)+L(ox,oy,ox,15,'var(--muted)','bm',1.6)+`<text x="368" y="${oy+5}" class="lb sm">x</text><text x="${ox}" y="11" class="lb sm" text-anchor="middle">y</text>`
+  +`<path d="M${x1} ${y1} A${r} ${r} 0 0 0 ${x2} ${y2}" fill="none" stroke="var(--warnc)" stroke-width="3"/>`
+  +L(ox,oy,bx,by,'var(--fig2)','bb',3.5)+L(ox,oy,ax,ay,'var(--accent)','ba',3.5)
+  +`<text x="${ax+8}" y="${ay}" class="lb ac">A</text><text x="${bx+6}" y="${by+4}" class="lb" style="fill:var(--fig2)">B</text><text x="${tx}" y="${ty+6}" class="lb wr" text-anchor="middle">θ</text>`
+  +`<circle cx="${ox}" cy="${oy}" r="4" fill="var(--ink)"/>`,
+  'المتجهان A و B والزاوية θ بينهما')}
+/* الضرب القياسي بالإحداثيات الديكارتية: المتجهان ومركباتهما ومتجها الوحدة */
+{const ox=50,oy=225,k=42,X=v=>ox+v*k,Y=v=>oy-v*k;let g='';
+ for(let i=0;i<=7;i++)g+=`<line x1="${X(i)}" y1="${Y(0)}" x2="${X(i)}" y2="${Y(5)}" stroke="var(--line)" stroke-width="1"/>`;
+ for(let i=0;i<=5;i++)g+=`<line x1="${X(0)}" y1="${Y(i)}" x2="${X(7)}" y2="${Y(i)}" stroke="var(--line)" stroke-width="1"/>`;
+ for(let i=1;i<=6;i++)g+=`<text x="${X(i)}" y="${Y(0)+16}" class="lb xs" text-anchor="middle">${i}</text>`;
+ for(let i=1;i<=4;i++)g+=`<text x="${X(0)-8}" y="${Y(i)+4}" class="lb xs" text-anchor="end">${i}</text>`;
+ g+=L(X(0),Y(0),X(7.3),Y(0),'var(--muted)','bm',1.6)+L(X(0),Y(0),X(0),Y(5.2),'var(--muted)','bm',1.6)+`<text x="${X(7.3)+4}" y="${Y(0)+5}" class="lb sm">x</text><text x="${X(0)}" y="${Y(5.2)-6}" class="lb sm" text-anchor="middle">y</text>`;
+ const A=[5,2],B=[2,4];
+ g+=L(X(A[0]),Y(A[1]),X(A[0]),Y(0),'var(--accent)','',1.6,'5 4')+L(X(A[0]),Y(A[1]),X(0),Y(A[1]),'var(--accent)','',1.6,'5 4');
+ g+=L(X(B[0]),Y(B[1]),X(B[0]),Y(0),'var(--fig2)','',1.6,'5 4')+L(X(B[0]),Y(B[1]),X(0),Y(B[1]),'var(--fig2)','',1.6,'5 4');
+ g+=L(X(0),Y(0),X(A[0]),Y(A[1]),'var(--accent)','ba',3.5)+L(X(0),Y(0),X(B[0]),Y(B[1]),'var(--fig2)','bb',3.5);
+ g+=L(X(0),Y(0),X(1),Y(0),'var(--warnc)','bw',2.6)+L(X(0),Y(0),X(0),Y(1),'var(--warnc)','bw',2.6);
+ g+=`<text x="${X(.5)}" y="${Y(0)+32}" class="lb sm wr" text-anchor="middle">î</text><text x="${X(0)-22}" y="${Y(.5)+5}" class="lb sm wr" text-anchor="middle">ĵ</text>`;
+ g+=`<text x="${X(A[0])+8}" y="${Y(A[1])-6}" class="lb ac">A = 5î + 2ĵ</text><text x="${X(B[0])+8}" y="${Y(B[1])-6}" class="lb" style="fill:var(--fig2)">B = 2î + 4ĵ</text>`;
+ g+=`<text x="${X(A[0])}" y="${Y(0)+32}" class="lb xs ac" text-anchor="middle">Ax = 5</text><text x="${X(B[0])}" y="${Y(0)+32}" class="lb xs" style="fill:var(--fig2)" text-anchor="middle">Bx = 2</text>`;
+ g+=`<text x="${X(0)-26}" y="${Y(A[1])+4}" class="lb xs ac" text-anchor="end">Ay = 2</text><text x="${X(0)-26}" y="${Y(B[1])+4}" class="lb xs" style="fill:var(--fig2)" text-anchor="end">By = 4</text>`;
+ g+=`<circle cx="${X(0)}" cy="${Y(0)}" r="4" fill="var(--ink)"/>`;
+ F.dotCart=svg('-40 0 420 275',g,'A·B = AxBx + AyBy = (5)(2) + (2)(4) = 18')}
+
+/* الضرب الاتجاهي: A×B عمودي على مستوى المتجهين (من الحقيبة) */
+{const ox=150,oy=185;
+ F.crossPlane=svg('0 0 380 295',
+  `<path d="M40 225 L120 120 L350 150 L270 260 Z" fill="var(--soft)" stroke="var(--muted)" stroke-width="1.5"/>`
+  +L(ox,oy,ox,282,'var(--muted)','bm',2,'6 5')+`<text x="${ox+10}" y="276" class="lb sm" style="fill:var(--muted)">B×A</text>`
+  +`<path d="M${ox+40} ${oy-5} A40 40 0 0 1 ${ox+38} ${oy+14}" fill="none" stroke="var(--warnc)" stroke-width="2.5"/><text x="${ox+50}" y="${oy+8}" class="lb sm wr">θ</text>`
+  +L(ox,oy,ox+130,oy-22,'var(--fig2)','bb',3.5)+L(ox,oy,ox+120,oy+40,'var(--accent)','ba',3.5)
+  +L(ox,oy,ox,25,'var(--warnc)','bw',3.5)
+  +`<text x="${ox+136}" y="${oy-26}" class="lb" style="fill:var(--fig2)">B</text><text x="${ox+126}" y="${oy+52}" class="lb ac">A</text><text x="${ox+12}" y="36" class="lb wr">A×B</text>`
+  +`<circle cx="${ox}" cy="${oy}" r="4" fill="var(--ink)"/>`,
+  'A×B عمودي على مستوى المتجهين A و B')}
 })();

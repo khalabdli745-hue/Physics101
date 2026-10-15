@@ -453,7 +453,11 @@ body:has(#pager:not([hidden])) .aiFab{bottom:calc(84px + env(safe-area-inset-bot
   .pager{padding-bottom:calc(10px + env(safe-area-inset-bottom,0px))}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
-.eqblock.one{white-space:nowrap;overflow-x:auto;scrollbar-width:none;padding-inline:8px}
+.eqblock.one{white-space:nowrap;overflow-x:auto;scrollbar-width:none;padding-inline:6px}
+.sq{white-space:nowrap;display:inline-flex;align-items:flex-start}.sqs{padding-inline-end:0}.sqr{border-top:1.6px solid currentColor;padding:1px 3px 0 2px;margin-top:.12em;line-height:1.15}
+.bp{font-weight:900;font-size:1.25em;line-height:1;vertical-align:-0.08em}
+li.eqln{white-space:nowrap;overflow:hidden}li.eqln .eq{white-space:nowrap!important}
+.board .eqblock.one,.board li.eqln{white-space:normal;overflow:visible}.board li.eqln .eq{white-space:normal!important;max-width:100%}
 h3 .eqn{direction:ltr;unicode-bidi:isolate;white-space:nowrap}
 .fig.photo img{display:block;width:100%;max-width:440px;margin:0 auto;border-radius:12px;border:1px solid var(--line);background:var(--soft)}
 span.mu{font-size:1.25em;line-height:0}
@@ -581,13 +585,21 @@ const divEq=t=>String(t).replace(/÷/g,'/');const divs=divEq;
 function kfr(h){if(h.indexOf('/2')<0)return h;const parts=[];let d=0,cur='';for(let i=0;i<h.length;i++){const ch=h[i];if(ch==='(')d++;else if(ch===')')d--;
   if(d===0){const m=h.slice(i).match(/^ (=|\+|−) /);if(m){parts.push(cur,m[0]);cur='';i+=m[0].length-1;continue}}cur+=ch}parts.push(cur);
   return parts.map((p,i)=>{if(i%2)return p;const m=p.match(/^(.+?)\/2((?:\s*[A-Za-z]{1,2})?)$/);if(m&&m[1].indexOf('/')<0&&!/[\[\]]/.test(m[1]))return '<span class="kfr"><span>'+m[1]+'</span><span>2</span></span>'+m[2];return p}).join('')}
-function inl(s){return divs(s).split(/(`[^`]+`)/).map(seg=>seg.startsWith('`')&&seg.endsWith('`')&&seg.length>1?'<span class="eq">'+kfr(esc(seg.slice(1,-1)))+'</span>':esc(seg).replace(NU,m=>/[A-Za-zµΩ°×]/.test(m)?'<span class="nu">'+m+'</span>':m)).join('').replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>')}
+/* درس 0-6: علامة الجذر طويلة تمتد فوق ما تحتها */
+function rad(h){try{if(key(pos.u,pos.l)!=='0-6')return h}catch(e){return h}
+  let o='',i=0;while(i<h.length){const c=h[i];if(c!=='√'){o+=c;i++;continue}i++;let inner='';
+    if(h[i]==='('){let d=0,j=i;for(;j<h.length;j++){if(h[j]==='(')d++;else if(h[j]===')'){d--;if(!d)break}}inner=h.slice(i+1,j);i=j+1}
+    else{const m=h.slice(i).match(/^[0-9.A-Za-z²³]+/);inner=m?m[0]:'';i+=inner.length}
+    o+='<span class="sq"><span class="sqs">√</span><span class="sqr">'+rad(inner)+'</span></span>'}
+  return o}
+function bp(h){return h.replace(/\[/g,'<b class="bp">(</b>').replace(/\]/g,'<b class="bp">)</b>')}
+function inl(s){return divs(s).split(/(`[^`]+`)/).map(seg=>seg.startsWith('`')&&seg.endsWith('`')&&seg.length>1?'<span class="eq">'+bp(kfr(rad(esc(seg.slice(1,-1)))))+'</span>':esc(seg).replace(NU,m=>/[A-Za-zµΩ°×]/.test(m)?'<span class="nu">'+m+'</span>':m)).join('').replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>')}
 function cellHTML(c){c=divs(c);if(/\(صفحة [0-9]+\)/.test(c))return c.split(/(\(صفحة [0-9]+\))/).map((x,i)=>i%2?'<bdi dir="rtl" class="pg">'+esc(x)+'</bdi>':(x?cellHTML(x):'')).join('');if(/`/.test(c))return inl(c);
-  return c.split(/([A-Za-z0-9\u2080-\u2089\u00B2\u00B3\u207B\u00B9\u2070-\u2079ΔρεθμΩπ°%îĵ][A-Za-z0-9\u2080-\u2089\u00B2\u00B3\u207B\u00B9\u2070-\u2079ΔρεθμΩπ°%îĵ\u0302 =+\/()·×÷.,−\-]*[A-Za-z0-9\u2080-\u2089\u00B2\u00B3\u00B9\u2070-\u2079ΩΔ°%)îĵ\u0302])/).map((x,i)=>i%2?`<bdi class="eqn">${kfr(esc(x))}</bdi>`:inl(x)).join('')}
+  return c.split(/([A-Za-z0-9\u2080-\u2089\u00B2\u00B3\u207B\u00B9\u2070-\u2079ΔρεθμΩπ°%îĵ][A-Za-z0-9\u2080-\u2089\u00B2\u00B3\u207B\u00B9\u2070-\u2079ΔρεθμΩπ°%îĵ\u0302 =+\/()·×÷.,−\-]*[A-Za-z0-9\u2080-\u2089\u00B2\u00B3\u00B9\u2070-\u2079ΩΔ°%)îĵ\u0302])/).map((x,i)=>i%2?`<bdi class="eqn">${kfr(rad(esc(x)))}</bdi>`:inl(x)).join('')}
 function photoFail(im){const f=im.closest('figure'),k=im.dataset.fb;if(f)f.outerHTML=(k&&(window.FIGS||{})[k])||''}
 function md(src){
   const out=[];let list=null;
-  const flush=()=>{if(list){out.push(`<${list.t}${list.s>1?' start="'+list.s+'"':''}>${list.i.map(x=>'<li'+(/^\s*`[^`=\s]{1,3}`\s/.test(x)?' class="sym"':'')+'>'+inl(x)+'</li>').join('')}</${list.t}>`);list=null}};
+  const flush=()=>{if(list){out.push(`<${list.t}${list.s>1?' start="'+list.s+'"':''}>${list.i.map(x=>'<li'+(/^\s*`[^`=\s]{1,3}`\s/.test(x)?' class="sym"':/^`[^`]+`[.،]?$/.test(x.trim())?' class="eqln"':'')+'>'+inl(x)+'</li>').join('')}</${list.t}>`);list=null}};
   for(const raw of src.split('\n')){const l=raw.trim();let m;
     if(!l){flush();continue}
     if(m=l.match(/^\[\[img:([^|\]]+)\|(\w*)\|([^\]]*)\]\]$/)){flush();const src=m[1].startsWith('@')?((window.PHOTOS||{})[m[1].slice(1)]||''):m[1];out.push(`<figure class="fig photo"><img src="${esc(src)}" alt="${esc(m[3])}" loading="lazy" referrerpolicy="no-referrer" data-fb="${m[2]}" onerror="photoFail(this)"><figcaption>${esc(m[3])}</figcaption></figure>`);continue}
@@ -595,7 +607,7 @@ function md(src){
     if(m=l.match(/^#{1,4}\s+(.*)/)){flush();out.push('<h3><span>'+cellHTML(m[1])+'</span></h3>');continue}
     if(m=l.match(/^[-*•]\s+(.*)/)){if(!list||list.t!=='ul'){flush();list={t:'ul',i:[]}}list.i.push(m[1]);continue}
     if(m=l.match(/^(\d+)[.)]\s+(.*)/)){if(!list||list.t!=='ol'){flush();list={t:'ol',i:[],s:+m[1]}}list.i.push(m[2]);continue}
-    if(m=l.match(/^`([^`]+)`(.*)$/)){flush();out.push('<div class="eqblock'+(/\u00a0/.test(m[1])?' one':'')+'">'+kfr(esc(divEq(m[1])))+'</div>'+(m[2].trim()?'<p>'+inl(m[2].trim())+'</p>':''));continue}
+    if(m=l.match(/^`([^`]+)`(.*)$/)){flush();out.push('<div class="eqblock'+(/\u00a0/.test(m[1])?' one':'')+'">'+bp(kfr(rad(esc(divEq(m[1])))))+'</div>'+(m[2].trim()?'<p>'+inl(m[2].trim())+'</p>':''));continue}
     flush();out.push('<p>'+inl(l)+'</p>');}
   flush();return out.join('');
 }
@@ -684,6 +696,8 @@ const TTS=(()=>{
   function arOnly(){try{return AR_ONLY.has(pos.u+'-'+pos.l)}catch(e){return false}}
   function spoken(t){t=String(t).replace(/K·E/g,'KE').replace(/\s*·?\s*\(صفحة [0-9٠-٩]+\)/g,'');t=t.replace(/\b([A-Za-z])\((km\/h|m\/s|km²|m²|cm|mm|km|kg|min|m|g|h|s)\)/g,(m,x,u)=>x+' '+{'km/h':'بالكيلومتر لكل ساعة','m/s':'بالمتر لكل ثانية','cm':'بالسنتيمتر','mm':'بالمليمتر','km':'بالكيلومتر','m':'بالمتر','kg':'بالكيلوجرام','g':'بالجرام','h':'بالساعة','min':'بالدقيقة','s':'بالثانية','m²':'بالمتر المربع','km²':'بالكيلومتر المربع'}[u]+' ');t=t.replace(/\[\[fig:[^\]]*\]\]/g,' ').replace(/\[\[img:[^|\]]*\|[^|\]]*\|([^\]]*)\]\]/g,'$1. ').replace(/https?:\/\/\S+/g,' ');t=t.replace(/\s*\\?`[A-Za-zµ]{1,3} → [A-Za-zµ]{1,3}\\?`/g,'');
     t=String(t).replace(/`?J\s*=\s*N·m`?/g,'، والجول يساوي نيوتن ضرب متر');
+    /* درس الضرب: AxBx تقرأ مركبتين، n̂ تقرأ «إن»، الأقواس المربعة كأقواس عادية، î·î تقرأ «آي ضرب آي»، والسالب قبل متجه */
+    t=t.replace(/(cos|sin|tan)⁻¹\s*/g,' معكوس $1 ').replace(/\|\s*·\s*/g,'| × ').replace(/([AB])([xyz])(?=[AB][xyz])/g,'$1$2 ').replace(/n\u0302/g,'n').replace(/\[/g,'(').replace(/\]/g,')').replace(/\b(cos|sin|tan)(?=\d)/g,'$1 ').replace(/(î|ĵ|k\u0302)\s*·\s*(?=î|ĵ|k\u0302)/g,'$1 دُوتْ ').replace(/(î|ĵ|k\u0302)\s*×\s*(?=î|ĵ|k\u0302)/g,'$1 كْرُوسْ ').replace(/\b([AB])\s*·\s*(?=[AB]\b)/g,'$1 دُوتْ ').replace(/\b([AB])\s*×\s*(?=[AB]\b)/g,'$1 كْرُوسْ ').replace(/(=\s*)[−-]\s*(?=[A-Z])/g,'$1 سالب ');
     t=markN(sepDot(t)).replace(/Ｎ/g,' نيوتن ').replace(/(\d\s*)Pa\b/g,'$1 باسكال ').replace(/\bPa\b/g,' باسكال ');
     t=t.replace(/^#+\s*/gm,'').replace(/\*\*/g,'').replace(/`/g,'').replace(/^[-•]\s*/gm,'').replace(/[✓✗⚠️]/g,'').replace(/[✦⚗🔊■]/g,'');
     t=t.replace(/([^.:؟!،\n])[ \t]*\n+/g,'$1.\n');
@@ -734,6 +748,7 @@ const TTS=(()=>{
     t=t.replace(/\b([A-Za-z])\((km\/h|m\/s|cm|mm|km|kg|min|°C|°F|m|g|h|s|K|J|N)\)/g,(m,x,u)=>x+ph(' in '+{'km/h':'kilometers per hour','m/s':'meters per second','cm':'centimeters','mm':'millimeters','km':'kilometers','m':'meters','kg':'kilograms','g':'grams','h':'hours','min':'minutes','s':'seconds','°C':'degrees Celsius','°F':'degrees Fahrenheit','K':'kelvin','J':'joules','N':'newtons'}[u]+' ')).replace(/ₙ/g,' n').replace(/_eq\b/g,()=>ph(' equivalent'));
     t=t.replace(/^\s*J\s*=\s*N\s*[·.]\s*m\s*$/,()=>ph('joule equals newton meter'));
     t=t.replace(/Ｎ/g,()=>ph('newton')).replace(/(\d\s*)Pa\b/g,(m,d)=>d+ph('pascals')).replace(/\bPa\b/g,()=>ph('pascal'));
+    t=t.replace(/n\u0302/g,'n').replace(/\[/g,'(').replace(/\]/g,')');
     t=t.replace(/\(\s*$/,'').replace(/^\s*\)/,'');
     t=t.replace(/\bv([fi])\b/g,'V$1').replace(/\b(cos|sin|tan)(?=\d|θ)/g,'$1 ').replace(/([AB])([xyz])(?=[AB][xyz])/g,'$1$2 ');
     t=t.replace(/(?<![·\d]\s?)\bA\s?·\s?B\b(?!\s?·)/g,'A'+ph('dot')+'⁠B').replace(/\|([^|]+)\|/g,(m,x)=>ph('magnitude of')+'⁠'+x+' ');
@@ -1068,6 +1083,8 @@ function openBoard(dry){dry=dry===true;
   const slides=[];const heads=[];
   secs.forEach(sec=>{const its=items(sec);let title='';if(its[0]&&its[0][0]==='#'&&!/^#\s/.test(its[0].slice(1,2))){title=its.shift().slice(1)}
     if(title&&!/^مثال/.test(title))heads.push(title);
+    /* درس 0-6: عنوان شريحة المثال = رقم المثال ورقم الصفحة */
+    if(key(pos.u,pos.l)==='0-6'){if(/^أمثلة/.test(title)&&its[0]&&/^#مثال/.test(its[0]))title=its.shift().slice(1);title=title.replace(/^(مثال [0-9٠-٩]+):.*?\((صفحة [0-9٠-٩]+)\)\s*$/,'$1 ($2)')}
     let sub=its.map(x=>x[0]==='#'?{h:x.slice(1)}:{md:x});
     if(isS4(sub)){let hz=false;sub=sub.filter(y=>{const m=(y.md||'').trim();if(m==='حيث:'){hz=true;return false}if(hz&&/^[-•]\s*`[^`]+`\s/.test(m)&&!/=/.test(m.split('`')[1]))return false;hz=false;return true})}
     const s4=isS4(sub);let b0=0;const bn=sub.filter(isBul).length;pack(sub).forEach((ch,j)=>{slides.push({type:'c',title:title+(j?' (تابع)':''),steps:ch,s4,b0,bn});b0+=ch.filter(isBul).length})});
@@ -1110,7 +1127,7 @@ function openBoard(dry){dry=dry===true;
       if(p.n&&!p.b)st.push({md:'**ملاحظة:** '+p.n});
       if(p.bl){const k=st.findIndex(y=>/^\*\*ثانيًا:/.test(y.md));st.splice(k+1,st.findIndex(y=>/^\*\*ثالثًا:/.test(y.md))-k-1,...[].concat(p.bl).map(x=>({md:x})))}
       pack(st).forEach((ch,c)=>out.push({type:'c',title:'تمرين '+AR(j+1)+(p.src?' · '+p.src:'')+(c?' (تابع)':''),steps:ch,s4:true}));return}
-    out.push({type:'c',title:'تمرين '+AR(j+1)+(p.src?' · '+p.src:''),steps:[{md:'**السؤال:** '+p.q},{md:'**المعطيات:** '+p.g.map(g=>'`'+g+'`').join('، ')},{md:'**المطلوب:** '+p.r[0]},{md:'**القانون المستخدم:** '+(p.laws||[p.l[0]]).map(x=>'`'+x+'`').join(' و ')},...(lawHaith(p.l[0])?[{md:lawHaith(p.l[0])}]:[]),...(p.b?[{md:'**الحل:**'}].concat(p.b.map((y,i)=>({md:'`'+y+(i===p.b.length-1?' = '+ans:'')+'`'}))):[{md:'**الحل:** `'+val+' = '+ans+'`'}]),{md:'**النتيجة:** `'+(p.rs?p.rs+' = ':'')+ans+'`'}].concat(p.n?[{md:'**ملاحظة:** '+p.n}]:[])})});
+    out.push({type:'c',title:'تمرين '+AR(j+1)+(K2==='0-6'?((String(p.src||'').match(/صفحة [0-9٠-٩]+/)||[''])[0].replace(/^(.+)$/,' ($1)')):(p.src?' · '+p.src:'')),steps:[{md:'**السؤال:** '+p.q},{md:'**المعطيات:** '+p.g.map(g=>'`'+g+'`').join('، ')},{md:'**المطلوب:** '+p.r[0]},{md:'**القانون المستخدم:** '+(p.laws||[p.l[0]]).map(x=>'`'+x+'`').join(' و ')},...(lawHaith(p.l[0])?[{md:lawHaith(p.l[0])}]:[]),...(p.b?[{md:'**الحل:**'}].concat(p.b.map((y,i)=>({md:'`'+y+(i===p.b.length-1?' = '+ans:'')+'`'}))):[{md:'**الحل:** `'+val+' = '+ans+'`'}]),{md:'**النتيجة:** `'+(p.rs?p.rs+' = ':'')+ans+'`'}].concat(p.n?[{md:'**ملاحظة:** '+p.n}]:[])})});
   const sm=(window.SUMM||{})[key(pos.u,pos.l)];
   if(sm)out.push({type:'c',title:'ملخص الدرس',steps:sm.split('\n').filter(x=>x.trim()).map(x=>({md:x.trim()}))});
   out.push({type:'e'});
@@ -1496,7 +1513,7 @@ function unitCard(p,title,onFinish){
   const fb=(s,msg,cls)=>{const f=s.querySelector('.pfb');f.className='pfb '+(cls||'');f.innerHTML=msg};
   const mc=(s,label,opts,next)=>{const bd=s.querySelector('.pbody');bd.insertAdjacentHTML('beforeend','<p class="psub">'+inl(label)+'</p>');const w=document.createElement('div');w.className='opts';let tr=0,lk=0;total++;
     const items=shuffle(opts.map((t,i)=>({t,ok:i===0})));
-    items.forEach(it=>{const b=document.createElement('button');b.innerHTML=/[ء-ي`]/.test(it.t)?inl(it.t):'<span class="eq">'+kfr(esc(divs(it.t)))+'</span>';it.el=b;
+    items.forEach(it=>{const b=document.createElement('button');b.innerHTML=/[ء-ي`]/.test(it.t)?inl(it.t):'<span class="eq">'+kfr(rad(esc(divs(it.t))))+'</span>';it.el=b;
       b.onclick=()=>{if(lk)return;
         if(it.ok){lk=1;b.classList.add('right');items.forEach(x=>x.el.disabled=true);if(!tr)first++;else s.dataset.miss=1;fb(s,'صحيح.','good');next();return}
         tr++;b.classList.add('wrong');b.disabled=true;
@@ -1506,7 +1523,7 @@ function unitCard(p,title,onFinish){
   const go=i=>{const s=steps[i];if(!s)return;s.hidden=false;s.scrollIntoView({block:'nearest',behavior:'smooth'})};
   /* ١: الرموز ووحدة الطرف الأيسر */
   const s1=mkStep(1,'أولًا: الرموز ووحداتها');
-  s1.querySelector('.pbody').insertAdjacentHTML('beforeend','<p class="psub"><b>القانون:</b></p><div class="eqblock">'+kfr(esc(p.law))+'</div><p class="psub"><b>حيث:</b></p><ul>'+p.sy.map(x=>'<li>'+inl(x)+'</li>').join('')+'</ul>');
+  s1.querySelector('.pbody').insertAdjacentHTML('beforeend','<p class="psub"><b>القانون:</b></p><div class="eqblock">'+kfr(rad(esc(p.law)))+'</div><p class="psub"><b>حيث:</b></p><ul>'+p.sy.map(x=>'<li>'+inl(x)+'</li>').join('')+'</ul>');
   const s2=mkStep(2,'ثانيًا: الطرف الأيسر'),s3=mkStep(3,'ثالثًا: الطرف الأيمن'),s4=mkStep(4,'رابعًا: المقارنة والنتيجة');
   const finish=()=>{close(s4);
     const sol=document.createElement('div');sol.className='ans';
@@ -1546,7 +1563,7 @@ function problemCard(p,title,onFinish){
   const mcStep=(n,label,opts,okMsg,next)=>{
     const s=mkStep(n,label);const w=document.createElement('div');w.className='opts';let tr=0;
     const items=shuffle(opts.map((t,i)=>({t,ok:i===0})));
-    items.forEach(it=>{const b=document.createElement('button');b.innerHTML=/[ء-ي`]/.test(it.t)?inl(it.t):'<span class="eq">'+kfr(esc(divs(it.t)))+'</span>';it.el=b;
+    items.forEach(it=>{const b=document.createElement('button');b.innerHTML=/[ء-ي`]/.test(it.t)?inl(it.t):'<span class="eq">'+kfr(rad(esc(divs(it.t))))+'</span>';it.el=b;
       b.onclick=()=>{if(s.dataset.lock)return;
         if(it.ok){s.dataset.lock=1;b.classList.add('right');items.forEach(x=>x.el.disabled=true);done(s,tr===0);fb(s,okMsg,'good');next();return}
         tr++;b.classList.add('wrong');b.disabled=true;
@@ -1557,7 +1574,7 @@ function problemCard(p,title,onFinish){
   /* المطلوب داخل الخطوة الأولى */
   const showReq=()=>{if(s1.dataset.req)return;s1.dataset.req=1;const bd=s1.querySelector('.pbody');bd.insertAdjacentHTML('beforeend','<p class="psub"><b>المطلوب:</b> ما الكمية المطلوب حسابها؟</p>');
     const w=document.createElement('div');w.className='opts';let tr=0,lk=0;const items=shuffle(p.r.map((t,i)=>({t,ok:i===0})));
-    items.forEach(it=>{const b=document.createElement('button');b.innerHTML=/[ء-ي`]/.test(it.t)?inl(it.t):'<span class="eq">'+kfr(esc(divs(it.t)))+'</span>';it.el=b;
+    items.forEach(it=>{const b=document.createElement('button');b.innerHTML=/[ء-ي`]/.test(it.t)?inl(it.t):'<span class="eq">'+kfr(rad(esc(divs(it.t))))+'</span>';it.el=b;
       b.onclick=()=>{if(lk)return;
         if(it.ok){lk=1;b.classList.add('right');items.forEach(x=>x.el.disabled=true);done(s1,c1ok&&tr===0,!(c1ok&&tr===0));fb(s1,'صحيح.','good');reveal(1);return}
         tr++;b.classList.add('wrong');b.disabled=true;
@@ -1586,7 +1603,7 @@ function problemCard(p,title,onFinish){
    const s3=mkStep(3,'ثالثًا: التعويض');const bd3=s3.querySelector('.pbody');let f3=true;
    const mcIn=(label,opts,okMsg,next)=>{bd3.insertAdjacentHTML('beforeend','<p class="psub">'+label+'</p>');const w=document.createElement('div');w.className='opts';let tr=0,lk=0;
      const items=shuffle(opts.map((t,i)=>({t,ok:i===0})));
-     items.forEach(it=>{const b=document.createElement('button');b.innerHTML=/[ء-ي`]/.test(it.t)?inl(it.t):'<span class="eq">'+kfr(esc(divs(it.t)))+'</span>';it.el=b;
+     items.forEach(it=>{const b=document.createElement('button');b.innerHTML=/[ء-ي`]/.test(it.t)?inl(it.t):'<span class="eq">'+kfr(rad(esc(divs(it.t))))+'</span>';it.el=b;
        b.onclick=()=>{if(lk)return;
          if(it.ok){lk=1;b.classList.add('right');items.forEach(x=>x.el.disabled=true);if(tr)f3=false;fb(s3,okMsg,'good');next();return}
          tr++;b.classList.add('wrong');b.disabled=true;
@@ -1612,7 +1629,7 @@ function problemCard(p,title,onFinish){
   let t5=0;
   const fin=ansRow.querySelector('.final'),bF=ansRow.querySelector('button.btn');
   const finish=(ok)=>{fin.disabled=true;bF.hidden=true;CAL.close();s4.classList.add(ok?'ok':'shown');s4.querySelector('.pstat').textContent=ok?'✓':'تم التصحيح';
-    const sol=document.createElement('div');sol.className='ans';sol.innerHTML='الحل:'+(p.b?p.b.map((y,i)=>'<div class="eqblock">'+kfr(esc(divs(y+(i===p.b.length-1?' = '+fmt(p.a[0])+(p.a[1]?' '+p.a[1]:''):''))))+'</div>').join(''):'<div class="eqblock">'+kfr(esc(divs(p.s.replace(/\[([^\]]+)\]/g,(m,x)=>fmt(parseNum(x))))))+' = '+esc(fmt(p.a[0]))+(p.a[1]?' '+esc(p.a[1]):'')+'</div>')+(p.n?'<br><span class="nt">'+inl(p.n)+'</span>':'');
+    const sol=document.createElement('div');sol.className='ans';sol.innerHTML='الحل:'+(p.b?p.b.map((y,i)=>'<div class="eqblock">'+kfr(rad(esc(divs(y+(i===p.b.length-1?' = '+fmt(p.a[0])+(p.a[1]?' '+p.a[1]:''):'')))))+'</div>').join(''):'<div class="eqblock">'+kfr(rad(esc(divs(p.s.replace(/\[([^\]]+)\]/g,(m,x)=>fmt(parseNum(x)))))))+' = '+esc(fmt(p.a[0]))+(p.a[1]?' '+esc(p.a[1]):'')+'</div>')+(p.n?'<br><span class="nt">'+inl(p.n)+'</span>':'');
     c.appendChild(sol);sol.appendChild(TTS.controls(()=>'الحل. '+(p.b?p.b.join('\n'):p.s.replace(/\[([^\]]+)\]/g,(m,x)=>fmt(parseNum(x))))+' = '+fmt(p.a[0])+' '+p.a[1]+(p.n?'. '+p.n:''),{compact:true,label:'🔊 استمع للحل'}));c.classList.add('finished');onFinish&&onFinish(Math.min(firstTry,5),{q:p.q.slice(0,100),answer:fin.value,correct:ok,expected:p.a[0]})};
   bF.onclick=()=>{const v=parseNum(fin.value);
     if(near(v,p.a[0],0.02)){if(t5===0)firstTry+=2;fb(s4,'إجابة صحيحة! أحسنت.','good');finish(true);return}
@@ -1788,6 +1805,7 @@ function renderQuiz(v){
 }
 function renderLab(v){
   const i=wrap(v),x=extra();
+  {const lt=(lesson()||{}).t||'',nm=/ورقة عمل|مراجعة وتمارين/.test(lt)?'هذا الدرس مخصص للتمارين والمراجعة، ولا توجد فيه تجارب عملية.':/^مقدمة الوحدة/.test(lt)?'هذا الدرس مخصص لمقدمة الوحدة وأهدافها، ولا توجد فيه تجارب عملية.':'';if(nm){const c=card('تجارب عملية تفاعلية');c.insertAdjacentHTML('beforeend','<p class="empty">'+nm+'</p>');i.appendChild(c);return}}
   const hasLab=window.renderLabCard?renderLabCard(i,pos.u,pos.l):false;
   const c=card('تجارب تفاعلية بالعربية','محاكاة مجانية من مشروع PhET بجامعة كولورادو، تعمل في المتصفح على الجوال والآيباد والكمبيوتر.');
   if(x.sim&&x.sim.length){const g=document.createElement('div');g.className='sims';
@@ -1898,7 +1916,11 @@ function fix(root){if(!root||root.nodeType!==1&&root.nodeType!==9)return;const w
   for(const t of L){const svg=t.parentNode.namespaceURI===NS,f=document.createDocumentFragment(),s=t.nodeValue;let i=0,m;RX.lastIndex=0;
     while(m=RX.exec(s)){f.append(s.slice(i,m.index));const base=m[1]||m[3]||m[5];if(base==='μ'){let b;if(svg){b=document.createElementNS(NS,'tspan');b.setAttribute('font-size','125%')}else{b=document.createElement('span');b.className='mu'}b.textContent='μ';f.append(b)}else f.append(base);if(m[5]){i=m.index+1;continue}let e;if(svg){e=document.createElementNS(NS,'tspan');e.setAttribute('baseline-shift','sub');e.setAttribute('font-size','70%')}else{e=document.createElement('sub');e.className='ss'}e.textContent=m[2]||m[4];f.append(e);if(svg){const r=document.createElementNS(NS,'tspan');r.textContent='​';f.append(r)}i=m.index+m[0].length}
     f.append(s.slice(i));t.parentNode.replaceChild(f,t)}}
-const fit=()=>document.querySelectorAll('.eqblock.one').forEach(e=>{if(!e.offsetWidth)return;e.style.fontSize='';let f=parseFloat(getComputedStyle(e).fontSize),k=0;while(e.scrollWidth>e.clientWidth+1&&f>10&&k++<40){f-=0.5;e.style.fontSize=f+'px'}});
+const fit=()=>document.querySelectorAll('.eqblock.one,li.eqln').forEach(e=>{if(!e.offsetWidth)return;e.style.fontSize='';let f=parseFloat(getComputedStyle(e).fontSize),k=0;
+  /* على السبورة: القانون الطويل ينزل لسطرين فقط، وإن زاد يصغر الخط */
+  if(e.closest('.board')){if(!e.dataset.brk){e.dataset.brk=1;const W=document.createTreeWalker(e,NodeFilter.SHOW_TEXT);let n;while(n=W.nextNode())n.nodeValue=n.nodeValue.replace(/[ \u00a0]+/g,'\u00a0').replace(/([+=])\u00a0/g,'$1 ')}
+    const qs=[e,...e.querySelectorAll('.eq')],over=()=>{qs.forEach(x=>x.style.setProperty('white-space','nowrap','important'));const h1=e.offsetHeight;qs.forEach(x=>x.style.removeProperty('white-space'));return e.offsetHeight>h1*2.4||e.scrollWidth>e.clientWidth+1};while(over()&&f>8&&k++<60){f-=0.5;e.style.fontSize=f+'px'}return}
+  while(e.scrollWidth>e.clientWidth+1&&f>8&&k++<60){f-=0.5;e.style.fontSize=f+'px'}});
 let ft=0;const qfit=()=>{cancelAnimationFrame(ft);ft=requestAnimationFrame(fit)};addEventListener('resize',qfit);
 fix(document.body);qfit();new MutationObserver(ms=>{for(const m of ms)for(const a of m.addedNodes)fix(a.nodeType===3?a.parentNode:a);qfit()}).observe(document.body,{childList:true,subtree:true});})();
 </script>

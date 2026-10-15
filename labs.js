@@ -93,7 +93,7 @@ function toolsIntro(){
   const bd=(x,y,n)=>`<circle cx="${x}" cy="${y}" r="11" fill="#2563EB" stroke="#fff" stroke-width="2"/><text x="${x}" y="${y+5}" font-size="13" font-weight="800" text-anchor="middle" fill="#fff">${n}</text>`;
   let tk='';for(let i=0;i<=105;i++){const x=62+i*3;if(x>372)break;tk+=`<line x1="${x}" y1="66" x2="${x}" y2="${i%10===0?78:i%5===0?74:71}" stroke="#1F2937" stroke-width="${i%10===0?1.3:.8}"/>`;if(i%10===0&&i>0)tk+=`<text x="${x}" y="91" font-size="9" text-anchor="middle" fill="#1F2937">${i/10}</text>`}
   let vk='';for(let i=0;i<=10;i++){const x=147+i*6.5;vk+=`<line x1="${x}" y1="96" x2="${x}" y2="${i%5===0?110:105}" stroke="#7C2D12" stroke-width=".9"/>`}
-  const cal=`<svg viewBox="16 0 372 242" aria-label="أداة القدمة ذات الورنية">
+  const cal=`<svg viewBox="16 0 372 242" aria-label="القدمة ذات الورنية">
     <defs><linearGradient id="iCyl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#BFDBFE"/><stop offset=".5" stop-color="#3B82F6"/><stop offset="1" stop-color="#1E3A8A"/></linearGradient></defs>
     <rect x="32" y="64" width="352" height="32" rx="3" fill="#CBD5E1" stroke="#475569"/>${tk}
     <path d="M32,64 V96 H62 V196 L44,172 H32 Z" fill="#F7931E" stroke="#9A3412"/><path d="M36,64 V26 L52,36 V64 Z" fill="#F7931E" stroke="#9A3412"/>
@@ -109,7 +109,7 @@ function toolsIntro(){
   let th='';[[-2,'45'],[-1,''],[0,'0'],[1,''],[2,'5']].forEach(([k,n])=>{const y=104+k*7;th+=`<line x1="284" y1="${y}" x2="${n?296:291}" y2="${y}" stroke="#7C2D12" stroke-width="1"/>`+(n?`<text x="299" y="${y+3.5}" font-size="8" font-weight="700" fill="#7C2D12">${n}</text>`:'')});
   let kn='';for(let i=0;i<9;i++)kn+=`<line x1="${318+i*4}" y1="84" x2="${318+i*4}" y2="124" stroke="#9A3412" stroke-width=".8" opacity=".6"/>`;
   let rk='';for(let i=0;i<6;i++)rk+=`<line x1="${352+i*5}" y1="94" x2="${352+i*5}" y2="114" stroke="#9A3412" stroke-width=".8" opacity=".7"/>`;
-  const mic=`<svg viewBox="16 0 372 242" aria-label="أداة الميكرومتر">
+  const mic=`<svg viewBox="16 0 372 242" aria-label="الميكرومتر">
     <defs><radialGradient id="iCyl2"><stop offset="0" stop-color="#BFDBFE"/><stop offset=".6" stop-color="#3B82F6"/><stop offset="1" stop-color="#1E3A8A"/></radialGradient>
       <linearGradient id="iTh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FDBA74"/><stop offset=".45" stop-color="#F7931E"/><stop offset="1" stop-color="#C2410C"/></linearGradient></defs>
     <path d="M40,74 H58 V160 Q58,178 80,178 H208 Q226,178 226,160 V116 H244 V164 Q244,196 210,196 H80 Q40,196 40,162 Z" fill="#64748B" stroke="#334155"/>
@@ -124,9 +124,9 @@ function toolsIntro(){
     
   </svg>`;
   return `<div class="intro"><h3>3. الأدوات المستخدمة</h3>
-    <div class="tool"><div class="stage">${cal}</div><p><b>أداة القدمة ذات الورنية:</b> تقيس الأطوال والأقطار الخارجية والداخلية والأعماق بدقة <span dir="ltr">0.1 mm</span>.</p>
+    <div class="tool"><div class="stage">${cal}</div><p><b>القدمة ذات الورنية:</b> تقيس الأطوال والأقطار الخارجية والداخلية والأعماق بدقة <span dir="ltr">0.1 mm</span>.</p>
     </div>
-    <div class="tool"><div class="stage">${mic}</div><p><b>أداة الميكرومتر:</b> تقيس الأقطار والسماكات الصغيرة بدقة <span dir="ltr">0.01 mm</span>.</p>
+    <div class="tool"><div class="stage">${mic}</div><p><b>الميكرومتر:</b> تقيس الأقطار والسماكات الصغيرة بدقة <span dir="ltr">0.01 mm</span>.</p>
     </div></div>`}
 /* ===== الوحدة الأولى — الكميات الفيزيائية وأنظمة القياس: معمل القياس (أداة القدمة ذات الورنية وأداة الميكرومتر) ===== */
 
@@ -260,7 +260,7 @@ function measureLab(box){
 function speedTools(){
   const lbl=(x,y,tx,ty,t,anc)=>`<line x1="${x}" y1="${y}" x2="${tx}" y2="${ty}" stroke="var(--muted)" stroke-width="1"/><circle cx="${x}" cy="${y}" r="2.4" fill="var(--muted)"/><text x="${tx}" y="${ty+(ty<y?-4:13)}" font-size="13" font-weight="700" text-anchor="${anc||'middle'}" fill="var(--ink)">${t}</text>`;
   let tk='';for(let c=0;c<=24;c++){const x=118+c*10.5;tk+=`<line x1="${x}" y1="104" x2="${x}" y2="${c%5===0?118:111}" stroke="#1F2937" stroke-width="${c%5===0?1.3:.8}"/>`;if(c%5===0&&c>0)tk+=`<text x="${x}" y="130" font-size="12" font-weight="800" text-anchor="middle" fill="#1F2937">${c}</text>`}
-  const tape=`<svg viewBox="16 0 372 230" aria-label="أداة الشريط المتري">
+  const tape=`<svg viewBox="16 0 372 230" aria-label="الشريط المتري">
     <rect x="118" y="102" width="256" height="30" fill="#FDE68A" stroke="#A16207"/>${tk}
     <path d="M374,96 H384 V140 H374 Z" fill="#F7931E" stroke="#9A3412"/><rect x="128" y="140" width="44" height="24" rx="6" fill="#F7931E"/><text x="150" y="157" font-size="15" font-weight="800" text-anchor="middle" fill="#fff">cm</text>
     <rect x="34" y="70" width="88" height="96" rx="22" fill="#F7931E" stroke="#9A3412"/><circle cx="78" cy="118" r="22" fill="#FB923C" stroke="#9A3412"/><circle cx="78" cy="118" r="7" fill="#9A3412"/>
@@ -268,7 +268,7 @@ function speedTools(){
     ${lbl(78,150,62,206,'العلبة')}${lbl(240,117,250,190,'الشريط المدرج')}${lbl(379,118,384,190,'الخطاف','end')}${lbl(78,62,92,22,'زر التثبيت')}${lbl(200,106,250,40,'التدريج بالسنتيمتر')}
   </svg>`;
   let dk='';for(let i=0;i<30;i++){const a=i/30*2*Math.PI-Math.PI/2,five=i%5===0,one=true,r1=five?50:56,x1=200+r1*Math.cos(a),y1=122+r1*Math.sin(a),x2=200+63*Math.cos(a),y2=122+63*Math.sin(a);dk+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#1F2937" stroke-width="${five?1.6:one?1:.5}"/>`;if(five){dk+=`<text x="${200+40*Math.cos(a)}" y="${122+40*Math.sin(a)+5}" font-size="13" font-weight="800" text-anchor="middle" fill="#1F2937">${i}</text>`}}
-  const sw=`<svg viewBox="16 0 372 230" aria-label="أداة ساعة الإيقاف">
+  const sw=`<svg viewBox="16 0 372 230" aria-label="ساعة الإيقاف">
     <rect x="190" y="30" width="20" height="16" rx="3" fill="#F7931E" stroke="#9A3412"/><rect x="186" y="44" width="28" height="8" rx="3" fill="#64748B"/>
     <rect x="258" y="56" width="14" height="22" rx="3" transform="rotate(40 265 67)" fill="#334155"/>
     <circle cx="200" cy="122" r="76" fill="#64748B" stroke="#334155" stroke-width="2"/><circle cx="200" cy="122" r="66" fill="#F8FAFC" stroke="#94A3B8"/>${dk}
@@ -276,8 +276,8 @@ function speedTools(){
     ${lbl(200,34,120,18,'زر التشغيل والإيقاف')}${lbl(268,64,330,40,'زر التصفير')}${lbl(150,160,110,206,'القرص المدرج بالثانية')}${lbl(222,112,320,150,'العقرب','start')}${lbl(270,150,330,206,'الإطار')}
   </svg>`;
   return `<div class="intro"><h3>3. الأدوات المستخدمة</h3>
-    <div class="tool"><div class="stage">${tape}</div><p><b>أداة الشريط المتري:</b> تقيس المسافات والأطوال الكبيرة بالسنتيمتر بدقة <span dir="ltr">0.1 cm</span>.</p></div>
-    <div class="tool"><div class="stage">${sw}</div><p><b>أداة ساعة الإيقاف:</b> تقيس الزمن بالثانية بدقة <span dir="ltr">1 s</span>، ودورة العقرب الكاملة <span dir="ltr">30 s</span>.</p></div></div>`}
+    <div class="tool"><div class="stage">${tape}</div><p><b>الشريط المتري:</b> تقيس المسافات والأطوال الكبيرة بالسنتيمتر بدقة <span dir="ltr">0.1 cm</span>.</p></div>
+    <div class="tool"><div class="stage">${sw}</div><p><b>ساعة الإيقاف:</b> تقيس الزمن بالثانية بدقة <span dir="ltr">1 s</span>، ودورة العقرب الكاملة <span dir="ltr">30 s</span>.</p></div></div>`}
 function speedLab2(box){
   box.innerHTML=`
   <div class="intro"><small class="labKind">🧪 تجربة عملية تفاعلية</small><h3>1. اسم التجربة</h3><p class="labName">قياس سرعة جسم متحرك والتحويل بين وحداتها</p></div>
@@ -423,13 +423,13 @@ function ft3D(strs){/* منظر ثلاثي الأبعاد لجهاز طاولة 
   return g}
 function ftTools(){
   const lbl=(x,y,tx,ty,t,anc)=>`<line x1="${x}" y1="${y}" x2="${tx}" y2="${ty}" stroke="var(--muted)" stroke-width="1"/><circle cx="${x}" cy="${y}" r="2.4" fill="var(--muted)"/><text x="${tx}" y="${ty+(ty<y?-4:13)}" font-size="13" font-weight="700" text-anchor="${anc||'middle'}" fill="var(--ink)">${t}</text>`;
-  const t3=`<svg viewBox="0 10 460 395" aria-label="جهاز طاولة القوى ثلاثي الأبعاد">${ft3D([{a:30,c:'#2563EB',lab:'m₁'},{a:150,c:'#16A34A',lab:'m₂'},{a:270,c:'#F7931E',lab:'m₃'}])}</svg>`;
-  const tbl=`<svg viewBox="-60 -50 520 510" aria-label="جهاز طاولة القوى">${ftDisk({strings:[{a:30,c:'#2563EB',lab:'m₁'},{a:150,c:'#16A34A',lab:'m₂'},{a:270,c:'#F7931E',lab:'m₃'}]})}
+  const t3=`<svg viewBox="0 10 460 395" aria-label="طاولة القوى ثلاثي الأبعاد">${ft3D([{a:30,c:'#2563EB',lab:'m₁'},{a:150,c:'#16A34A',lab:'m₂'},{a:270,c:'#F7931E',lab:'m₃'}])}</svg>`;
+  const tbl=`<svg viewBox="-60 -50 520 510" aria-label="طاولة القوى">${ftDisk({strings:[{a:30,c:'#2563EB',lab:'m₁'},{a:150,c:'#16A34A',lab:'m₂'},{a:270,c:'#F7931E',lab:'m₃'}]})}
     ${lbl(200,200,90,-26,'المسمار المركزي')}${lbl(211,191,320,-26,'الحلقة')}${lbl(335,122,455,40,'البكرة','end')}${lbl(278,155,455,232,'الخيط','end')}${lbl(70,247,-55,330,'القرص المدرج بالدرجات','start')}${lbl(200,382,330,440,'حامل الكتل')}</svg>`;
-  const bal=`<svg viewBox="20 30 360 215" aria-label="جهاز الميزان الرقمي">${ftBalance(1,'150.0 g',62)}${lbl(205,100,350,70,'حامل الكتل','end')}${lbl(150,145,60,110,'الكفة')}${lbl(170,173,60,222,'الشاشة')}</svg>`;
+  const bal=`<svg viewBox="20 30 360 215" aria-label="الميزان الرقمي">${ftBalance(1,'150.0 g',62)}${lbl(205,100,350,70,'حامل الكتل','end')}${lbl(150,145,60,110,'الكفة')}${lbl(170,173,60,222,'الشاشة')}</svg>`;
   return `<div class="intro"><h3>3. الأدوات والأجهزة المستخدمة</h3>
-    <div class="tool"><div class="stage">${t3}</div><div class="vcap">منظر ثلاثي الأبعاد</div><div class="stage">${tbl}</div><div class="vcap">منظر علوي</div><p><b>جهاز طاولة القوى:</b> قرص أفقي مدرج من <span dir="ltr">0°</span> إلى <span dir="ltr">360°</span> بدقة <span dir="ltr">1°</span>، تُعلق على بكراته كتل بخيوط مربوطة بحلقة حول مسمار مركزي، وتكون القوى متزنة عندما تستقر الحلقة في المركز.</p></div>
-    <div class="tool"><div class="stage">${bal}</div><p><b>جهاز الميزان الرقمي:</b> يقيس كتلة حامل الكتل مع ما عليه بالجرام بدقة <span dir="ltr">0.1 g</span>.</p></div></div>`}
+    <div class="tool"><div class="stage">${t3}</div><div class="vcap">منظر ثلاثي الأبعاد</div><div class="stage">${tbl}</div><div class="vcap">منظر علوي</div><p><b>طاولة القوى:</b> قرص أفقي مدرج من <span dir="ltr">0°</span> إلى <span dir="ltr">360°</span> بدقة <span dir="ltr">1°</span>، تُعلق على بكراته كتل بخيوط مربوطة بحلقة حول مسمار مركزي، وتكون القوى متزنة عندما تستقر الحلقة في المركز.</p></div>
+    <div class="tool"><div class="stage">${bal}</div><p><b>الميزان الرقمي:</b> يقيس كتلة حامل الكتل مع ما عليه بالجرام بدقة <span dir="ltr">0.1 g</span>.</p></div></div>`}
 function forceLab(box){
   box.innerHTML=`
   <div class="intro"><small class="labKind">🧪 تجربة عملية تفاعلية</small><h3>1. اسم التجربة</h3><p class="labName">إيجاد محصلة متجهين باستخدام طاولة القوى</p></div>
@@ -575,13 +575,13 @@ function forceLab(box){
 
 function vrTools(){
   const lbl=(x,y,tx,ty,t,anc)=>`<line x1="${x}" y1="${y}" x2="${tx}" y2="${ty}" stroke="var(--muted)" stroke-width="1"/><circle cx="${x}" cy="${y}" r="2.4" fill="var(--muted)"/><text x="${tx}" y="${ty+(ty<y?-4:13)}" font-size="13" font-weight="700" text-anchor="${anc||'middle'}" fill="var(--ink)">${t}</text>`;
-  const t3=`<svg viewBox="0 10 460 395" aria-label="جهاز طاولة القوى ثلاثي الأبعاد">${ft3D([{a:40,c:'#DC2626',lab:'m'},{a:180,c:'#2563EB',lab:'mₓ'},{a:270,c:'#16A34A',lab:'mᵧ'}])}</svg>`;
-  const tbl=`<svg viewBox="-60 -50 520 510" aria-label="جهاز طاولة القوى">${ftDisk({strings:[{a:40,c:'#DC2626',lab:'m'},{a:180,c:'#2563EB',lab:'mₓ'},{a:270,c:'#16A34A',lab:'mᵧ'}]})}
+  const t3=`<svg viewBox="0 10 460 395" aria-label="طاولة القوى ثلاثي الأبعاد">${ft3D([{a:40,c:'#DC2626',lab:'m'},{a:180,c:'#2563EB',lab:'mₓ'},{a:270,c:'#16A34A',lab:'mᵧ'}])}</svg>`;
+  const tbl=`<svg viewBox="-60 -50 520 510" aria-label="طاولة القوى">${ftDisk({strings:[{a:40,c:'#DC2626',lab:'m'},{a:180,c:'#2563EB',lab:'mₓ'},{a:270,c:'#16A34A',lab:'mᵧ'}]})}
     ${lbl(200,200,90,-26,'المسمار المركزي')}${lbl(211,191,320,-26,'الحلقة')}${lbl(318,101,455,40,'البكرة','end')}${lbl(270,141,455,232,'الخيط','end')}${lbl(70,247,-55,330,'القرص المدرج بالدرجات','start')}${lbl(200,382,330,440,'حامل الكتل')}</svg>`;
-  const bal=`<svg viewBox="20 30 360 215" aria-label="جهاز الميزان الرقمي">${ftBalance(1,'150.0 g',62)}${lbl(205,100,350,70,'حامل الكتل','end')}${lbl(150,145,60,110,'الكفة')}${lbl(170,173,60,222,'الشاشة')}</svg>`;
+  const bal=`<svg viewBox="20 30 360 215" aria-label="الميزان الرقمي">${ftBalance(1,'150.0 g',62)}${lbl(205,100,350,70,'حامل الكتل','end')}${lbl(150,145,60,110,'الكفة')}${lbl(170,173,60,222,'الشاشة')}</svg>`;
   return `<div class="intro"><h3>3. الأدوات والأجهزة المستخدمة</h3>
-    <div class="tool"><div class="stage">${t3}</div><div class="vcap">منظر ثلاثي الأبعاد</div><div class="stage">${tbl}</div><div class="vcap">منظر علوي</div><p><b>جهاز طاولة القوى:</b> قرص أفقي مدرج من <span dir="ltr">0°</span> إلى <span dir="ltr">360°</span> بدقة <span dir="ltr">1°</span>، تعلق على بكراته كتل بخيوط مربوطة بحلقة حول مسمار مركزي، وتكون القوى متزنة عندما تستقر الحلقة في المركز.</p></div>
-    <div class="tool"><div class="stage">${bal}</div><p><b>جهاز الميزان الرقمي:</b> يقيس كتلة حامل الكتل مع ما عليه بالجرام بدقة <span dir="ltr">0.1 g</span>.</p></div></div>`}
+    <div class="tool"><div class="stage">${t3}</div><div class="vcap">منظر ثلاثي الأبعاد</div><div class="stage">${tbl}</div><div class="vcap">منظر علوي</div><p><b>طاولة القوى:</b> قرص أفقي مدرج من <span dir="ltr">0°</span> إلى <span dir="ltr">360°</span> بدقة <span dir="ltr">1°</span>، تعلق على بكراته كتل بخيوط مربوطة بحلقة حول مسمار مركزي، وتكون القوى متزنة عندما تستقر الحلقة في المركز.</p></div>
+    <div class="tool"><div class="stage">${bal}</div><p><b>الميزان الرقمي:</b> يقيس كتلة حامل الكتل مع ما عليه بالجرام بدقة <span dir="ltr">0.1 g</span>.</p></div></div>`}
 function vecLab(box){
   box.innerHTML=`
   <div class="intro"><small class="labKind">🧪 تجربة عملية تفاعلية</small><h3>1. اسم التجربة</h3><p class="labName">تحليل قوة إلى مركبتين باستخدام طاولة القوى</p></div>
@@ -731,13 +731,13 @@ function wkTape(x0,y,len,k,big){/* أداة الشريط المتري: العل�
   return `<rect x="${x0-34}" y="${y-22}" width="38" height="36" rx="8" fill="#F7931E" stroke="#9A3412" stroke-width="1.6"/><circle cx="${x0-15}" cy="${y-4}" r="9" fill="#FB923C" stroke="#9A3412"/>`+t}
 function wkTools(){
   const lbl=(x,y,tx,ty,t,anc)=>`<line x1="${x}" y1="${y}" x2="${tx}" y2="${ty}" stroke="var(--muted)" stroke-width="1"/><circle cx="${x}" cy="${y}" r="2.4" fill="var(--muted)"/><text x="${tx}" y="${ty+(ty<y?-4:13)}" font-size="13" font-weight="700" text-anchor="${anc||'middle'}" fill="var(--ink)">${t}</text>`;
-  const sc=`<svg viewBox="0 0 400 165" aria-label="أداة الميزان الزنبركي"><g transform="translate(40 78) scale(1.75)">${wkScale(3.4,1)}</g>${lbl(30,88,40,135,'الخطاف')}${lbl(140,64,110,20,'الأنبوب المدرج')}${lbl(183,72,230,20,'المؤشر')}${lbl(250,78,300,135,'النابض')}${lbl(366,70,370,20,'الحلقة','end')}</svg>`;
-  const pr=`<svg viewBox="0 0 400 215" aria-label="أداة المنقلة">${wkProt(200,160,140)}<line x1="40" y1="160" x2="360" y2="160" stroke="#B45309" stroke-width="2"/>${lbl(200,160,200,192,'مركز المنقلة')}${lbl(300,62,370,20,'التدريج بالدرجات','end')}${lbl(80,160,40,192,'خط القاعدة','start')}</svg>`;
-  const tp=`<svg viewBox="0 0 400 130" aria-label="أداة الشريط المتري"><g transform="translate(0 0)">${wkTape(70,70,56,5,1)}</g>${lbl(52,52,40,20,'العلبة','start')}${lbl(200,66,200,20,'الشريط المدرج بالسنتيمتر')}${lbl(352,62,372,108,'الطرف المعدني','end')}</svg>`;
+  const sc=`<svg viewBox="0 0 400 165" aria-label="الميزان الزنبركي"><g transform="translate(40 78) scale(1.75)">${wkScale(3.4,1)}</g>${lbl(30,88,40,135,'الخطاف')}${lbl(140,64,110,20,'الأنبوب المدرج')}${lbl(183,72,230,20,'المؤشر')}${lbl(250,78,300,135,'النابض')}${lbl(366,70,370,20,'الحلقة','end')}</svg>`;
+  const pr=`<svg viewBox="0 0 400 215" aria-label="المنقلة">${wkProt(200,160,140)}<line x1="40" y1="160" x2="360" y2="160" stroke="#B45309" stroke-width="2"/>${lbl(200,160,200,192,'مركز المنقلة')}${lbl(300,62,370,20,'التدريج بالدرجات','end')}${lbl(80,160,40,192,'خط القاعدة','start')}</svg>`;
+  const tp=`<svg viewBox="0 0 400 130" aria-label="الشريط المتري"><g transform="translate(0 0)">${wkTape(70,70,56,5,1)}</g>${lbl(52,52,40,20,'العلبة','start')}${lbl(200,66,200,20,'الشريط المدرج بالسنتيمتر')}${lbl(352,62,372,108,'الطرف المعدني','end')}</svg>`;
   return `<div class="intro"><h3>3. الأدوات والأجهزة المستخدمة</h3>
-    <div class="tool"><div class="stage">${sc}</div><p><b>أداة الميزان الزنبركي:</b> تقيس قوة السحب بالنيوتن من استطالة النابض، وتدريجها من <span dir="ltr">0</span> إلى <span dir="ltr">10 N</span> بدقة <span dir="ltr">0.1 N</span>.</p></div>
-    <div class="tool"><div class="stage">${pr}</div><p><b>أداة المنقلة:</b> تقيس الزاوية بين خيط السحب واتجاه الحركة بدقة <span dir="ltr">1°</span>، ويوضع مركزها عند نقطة ربط الخيط.</p></div>
-    <div class="tool"><div class="stage">${tp}</div><p><b>أداة الشريط المتري:</b> تقيس إزاحة الصندوق بالسنتيمتر بدقة <span dir="ltr">1 cm</span>.</p></div></div>`}
+    <div class="tool"><div class="stage">${sc}</div><p><b>الميزان الزنبركي:</b> تقيس قوة السحب بالنيوتن من استطالة النابض، وتدريجها من <span dir="ltr">0</span> إلى <span dir="ltr">10 N</span> بدقة <span dir="ltr">0.1 N</span>.</p></div>
+    <div class="tool"><div class="stage">${pr}</div><p><b>المنقلة:</b> تقيس الزاوية بين خيط السحب واتجاه الحركة بدقة <span dir="ltr">1°</span>، ويوضع مركزها عند نقطة ربط الخيط.</p></div>
+    <div class="tool"><div class="stage">${tp}</div><p><b>الشريط المتري:</b> تقيس إزاحة الصندوق بالسنتيمتر بدقة <span dir="ltr">1 cm</span>.</p></div></div>`}
 function workLab(box){
   box.innerHTML=`
   <div class="intro"><small class="labKind">🧪 تجربة عملية تفاعلية</small><h3>1. اسم التجربة</h3><p class="labName">حساب الشغل بالضرب القياسي لمتجهي القوة والإزاحة</p></div>
@@ -914,11 +914,11 @@ function dpBoard(o){/* لوحة الإحداثيات: o={A:[x,y],B:[x,y],pA,pB,p
   return g}
 function dpTools(){
   const lbl=(x,y,tx,ty,t,anc)=>`<line x1="${x}" y1="${y}" x2="${tx}" y2="${ty}" stroke="var(--muted)" stroke-width="1"/><circle cx="${x}" cy="${y}" r="2.4" fill="var(--muted)"/><text x="${tx}" y="${ty+(ty<y?-4:13)}" font-size="13" font-weight="700" text-anchor="${anc||'middle'}" fill="var(--ink)">${t}</text>`;
-  const bd=`<svg viewBox="0 -30 410 462" aria-label="أداة لوحة الإحداثيات">${dpBoard({A:[6,2],B:[3,5],unit:1})}${lbl(40,360,20,402,'نقطة الأصل','start')}${lbl(62,360,150,402,'متجها الوحدة')}${lbl(220,300,320,402,'خيط المتجه')}${lbl(300,100,392,-14,'المربع = 1 cm','end')}</svg>`;
-  const pr=`<svg viewBox="0 0 400 215" aria-label="أداة المنقلة">${wkProt(200,160,140)}<line x1="40" y1="160" x2="360" y2="160" stroke="#B45309" stroke-width="2"/>${lbl(200,160,200,192,'مركز المنقلة')}${lbl(300,62,370,20,'التدريج بالدرجات','end')}${lbl(80,160,40,192,'خط القاعدة','start')}</svg>`;
+  const bd=`<svg viewBox="0 -30 410 462" aria-label="لوحة الإحداثيات">${dpBoard({A:[6,2],B:[3,5],unit:1})}${lbl(40,360,20,402,'نقطة الأصل','start')}${lbl(62,360,150,402,'متجها الوحدة')}${lbl(220,300,320,402,'خيط المتجه')}${lbl(300,100,392,-14,'المربع = 1 cm','end')}</svg>`;
+  const pr=`<svg viewBox="0 0 400 215" aria-label="المنقلة">${wkProt(200,160,140)}<line x1="40" y1="160" x2="360" y2="160" stroke="#B45309" stroke-width="2"/>${lbl(200,160,200,192,'مركز المنقلة')}${lbl(300,62,370,20,'التدريج بالدرجات','end')}${lbl(80,160,40,192,'خط القاعدة','start')}</svg>`;
   return `<div class="intro"><h3>3. الأدوات والأجهزة المستخدمة</h3>
-    <div class="tool"><div class="stage">${bd}</div><p><b>أداة لوحة الإحداثيات:</b> لوحة مربعات كل مربع منها <span dir="ltr">1 cm</span>، يُشد عليها خيطان من نقطة الأصل يمثلان المتجهين، ومتجها الوحدة <span dir="ltr">i</span> و <span dir="ltr">j</span> طول كل منهما مربع واحد.</p></div>
-    <div class="tool"><div class="stage">${pr}</div><p><b>أداة المنقلة:</b> تقيس الزاوية بين المتجهين بدقة <span dir="ltr">1°</span>، ويوضع مركزها عند نقطة الأصل.</p></div></div>`}
+    <div class="tool"><div class="stage">${bd}</div><p><b>لوحة الإحداثيات:</b> لوحة مربعات كل مربع منها <span dir="ltr">1 cm</span>، يُشد عليها خيطان من نقطة الأصل يمثلان المتجهين، ومتجها الوحدة <span dir="ltr">i</span> و <span dir="ltr">j</span> طول كل منهما مربع واحد.</p></div>
+    <div class="tool"><div class="stage">${pr}</div><p><b>المنقلة:</b> تقيس الزاوية بين المتجهين بدقة <span dir="ltr">1°</span>، ويوضع مركزها عند نقطة الأصل.</p></div></div>`}
 function dotLab(box){
   const V='⃗';
   box.innerHTML=`
@@ -977,7 +977,6 @@ function dotLab(box){
     <tr><td>الزاوية θ</td><td>أداة المنقلة</td><td id="r3">—</td></tr>
     <tr><td>الضرب القياسي لمتجهين ممثلين بالإحداثيات الديكارتية</td><td>بالحساب:<br><span dir="ltr" style="white-space:nowrap;font-size:12px">Ax Bx + Ay By</span></td><td id="r4">—</td></tr>
     <tr><td>الضرب القياسي لمتجهين ممثلين بالإحداثيات القطبية</td><td>بالحساب:<br><span dir="ltr" style="white-space:nowrap;font-size:12px">A B cos θ</span></td><td id="r5">—</td></tr></tbody></table></div>
-    <div class="stage" id="rStage" hidden><svg id="rS" viewBox="0 10 410 390"></svg></div>
     <p class="rn" id="rNote">تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.</p></div>`;
   const $=id=>box.querySelector('#'+id),D2R=Math.PI/180;
   const num=v=>parseFloat(String(v).replace(/[٠-٩]/g,c=>'٠١٢٣٤٥٦٧٨٩'.indexOf(c)).replace('٫','.').replace(',','.'));
@@ -1004,7 +1003,7 @@ function dotLab(box){
   function results(){
     $('r1').textContent=ok.a?E(`${A[0]} i + ${A[1]} j  cm`):'—';$('r2').textContent=ok.b?E(`${B[0]} i + ${B[1]} j  cm`):'—';$('r3').textContent=ok.t?E(th+'°'):'—';
     $('r4').textContent=ok.c1?E(DC()+' cm²'):'—';$('r5').textContent=ok.c2?E(fx(DT(),1)+' cm²'):'—';
-    const done=ok.c1&&ok.c2;$('rStage').hidden=!done;if(done)$('rS').innerHTML=dpBoard({A,B,unit:1,arc:[aA,aB]});
+    const done=ok.c1&&ok.c2;
     $('rNote').textContent=done?'الاستنتاج: الطريقتان تعطيان نفس الناتج تقريبا:\nبالإحداثيات الديكارتية: '+E(`A${V} · B${V} = ${DC()} cm²`)+'\nبالإحداثيات القطبية: '+E(`A${V} · B${V} = ${fx(DT(),1)} cm²`)+'\n\nتوضيح:\n1. ناتج الضرب القياسي لمتجهين كمية قياسية (عدد ووحدة فقط، وليس له اتجاه).\n2. في الإحداثيات الديكارتية نضرب المركبتين السينيتين معا، والمركبتين الصاديتين معا، ثم نجمع.':'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
   $('p1').oninput=d1;$('p2').oninput=d2;$('p3').oninput=d3;
   const rd=(P,ix,iy,f,pid,nm)=>{if(+$(pid).value<100)return fb(f,false,'اسحب المؤشر حتى يكتمل الإسقاط أولا.');const x=num($(ix).value),y=num($(iy).value);if(isNaN(x)||isNaN(y))return fb(f,false,'اكتب المركبتين بالسنتيمتر.');
