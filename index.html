@@ -1506,7 +1506,7 @@ function lawHaith(law){const it=[];const seen=new Set();String(law).replace(/\b(
 function unitCard(p,title,onFinish){
   const c=document.createElement('div');c.className='card prob';
   c.innerHTML=`<h2>${title}</h2>`;
-  c.appendChild(TTS.controls(()=>p.q));{const tk=(typeof AUTH!=='undefined'&&AUTH&&AUTH.token)||TAUTH;if(API&&tk)c.appendChild(hintBtn(c,p))}
+  {const tk=(typeof AUTH!=='undefined'&&AUTH&&AUTH.token)||TAUTH;if(API&&tk)c.appendChild(hintBtn(c,p))}
   c.insertAdjacentHTML('beforeend',`<p class="pq">${inl(p.q)}</p>`);
   let first=0,total=0;const steps=[];
   const mkStep=(n,label)=>{const s=document.createElement('div');s.className='pstep';s.innerHTML=`<div class="phead"><span class="pnum">${AR(n)}</span><b>${label}</b><span class="pstat"></span></div><div class="pbody"></div><div class="pfb" aria-live="polite"></div>`;s.hidden=true;c.appendChild(s);steps.push(s);return s};
@@ -1538,7 +1538,7 @@ function problemCard(p,title,onFinish){
   if(p.kind==='units')return unitCard(p,title,onFinish);
   const c=document.createElement('div');c.className='card prob';
   c.innerHTML=`<h2>${title}</h2>`;
-  c.appendChild(TTS.controls(()=>p.q));{const tk=(typeof AUTH!=='undefined'&&AUTH&&AUTH.token)||TAUTH;if(API&&tk)c.appendChild(hintBtn(c,p))}
+  {const tk=(typeof AUTH!=='undefined'&&AUTH&&AUTH.token)||TAUTH;if(API&&tk)c.appendChild(hintBtn(c,p))}
   c.insertAdjacentHTML('beforeend',`<p class="pq">${String(p.q).split('\n').map(inl).join('<br>')}</p>`);
   let firstTry=0;const steps=[];
   const mkStep=(n,label)=>{const s=document.createElement('div');s.className='pstep';s.innerHTML=`<div class="phead"><span class="pnum">${AR(n)}</span><b>${label}</b><span class="pstat"></span></div><div class="pbody"></div><div class="pfb" aria-live="polite"></div>`;s.hidden=true;c.appendChild(s);steps.push(s);return s};
@@ -1630,7 +1630,7 @@ function problemCard(p,title,onFinish){
   const fin=ansRow.querySelector('.final'),bF=ansRow.querySelector('button.btn');
   const finish=(ok)=>{fin.disabled=true;bF.hidden=true;CAL.close();s4.classList.add(ok?'ok':'shown');s4.querySelector('.pstat').textContent=ok?'✓':'تم التصحيح';
     const sol=document.createElement('div');sol.className='ans';sol.innerHTML='الحل:'+(p.b?p.b.map((y,i)=>'<div class="eqblock">'+kfr(rad(esc(divs(y+(i===p.b.length-1?' = '+fmt(p.a[0])+(p.a[1]?' '+p.a[1]:''):'')))))+'</div>').join(''):'<div class="eqblock">'+kfr(rad(esc(divs(p.s.replace(/\[([^\]]+)\]/g,(m,x)=>fmt(parseNum(x)))))))+' = '+esc(fmt(p.a[0]))+(p.a[1]?' '+esc(p.a[1]):'')+'</div>')+(p.n?'<br><span class="nt">'+inl(p.n)+'</span>':'');
-    c.appendChild(sol);sol.appendChild(TTS.controls(()=>'الحل. '+(p.b?p.b.join('\n'):p.s.replace(/\[([^\]]+)\]/g,(m,x)=>fmt(parseNum(x))))+' = '+fmt(p.a[0])+' '+p.a[1]+(p.n?'. '+p.n:''),{compact:true,label:'🔊 استمع للحل'}));c.classList.add('finished');onFinish&&onFinish(Math.min(firstTry,5),{q:p.q.slice(0,100),answer:fin.value,correct:ok,expected:p.a[0]})};
+    c.appendChild(sol);c.classList.add('finished');onFinish&&onFinish(Math.min(firstTry,5),{q:p.q.slice(0,100),answer:fin.value,correct:ok,expected:p.a[0]})};
   bF.onclick=()=>{const v=parseNum(fin.value);
     if(near(v,p.a[0],0.02)){if(t5===0)firstTry+=2;fb(s4,'إجابة صحيحة! أحسنت.','good');finish(true);return}
     t5++;
@@ -1643,7 +1643,6 @@ function problemCard(p,title,onFinish){
 }
 function theoryCard(t,ex){
   const c=document.createElement('div');c.className='card';c.innerHTML='<h2>مثال نظري</h2>';
-  c.appendChild(TTS.controls(()=>t.q+'\n'+t.o.join('\n')));
   c.insertAdjacentHTML('beforeend',`<p class="pq">${inl(t.q)}</p>`);
   const w=document.createElement('div');w.className='opts';let tr=0;
   const items=shuffle(t.o.map((x,i)=>({x,ok:i===t.a})));
@@ -1653,8 +1652,8 @@ function theoryCard(t,ex){
   items.forEach(it=>{const b=document.createElement('button');b.innerHTML=inl(it.x);it.el=b;
     b.onclick=()=>{if(c.dataset.lock)return;
       if(it.ok||tr>=1){c.dataset.lock=1;items.forEach(y=>{y.el.disabled=true;if(y.ok)y.el.classList.add('right')});if(!it.ok)b.classList.add('wrong');
-        f.className='pfb '+(it.ok?'good':'bad');f.textContent=it.ok?'إجابة صحيحة! وهذا التوضيح:':'الإجابة الصحيحة باللون الأخضر، وهذا التوضيح:';expl.hidden=false;
-        if(ex)expl.prepend(TTS.controls(()=>'التوضيح.\n'+ex.st.join('\n')+'\n'+ex.a,{compact:true,label:'🔊 استمع للتوضيح'}));return}
+        f.className='pfb '+(it.ok?'good':'bad');f.textContent=it.ok?(ex?'إجابة صحيحة! وهذا التوضيح:':'إجابة صحيحة!'):(ex?'الإجابة الصحيحة باللون الأخضر، وهذا التوضيح:':'الإجابة الصحيحة باللون الأخضر.');expl.hidden=false;
+        return}
       tr++;b.classList.add('wrong');b.disabled=true;f.className='pfb bad';f.textContent='ليست هذه. حاول مرة أخرى.'};
     w.appendChild(b)});
   c.append(w,f,expl);return c;
@@ -1662,7 +1661,6 @@ function theoryCard(t,ex){
 function renderEx(v){
   const i=wrap(v),s=study(),k=key(pos.u,pos.l);
   const probs=(window.PROBS||{})[k],th=(window.THEORY||{})[k];
-  i.insertAdjacentHTML('beforeend',TTS_HELP);
   if(probs&&probs.length){
     const head=card('أمثلة وتمارين حسابية تفاعلية','حل كل مسألة بأربع خطوات: المعطيات ← المطلوب ← القانون ← النتيجة بالآلة الحاسبة. يُصحَّح كل جواب فورًا.');
     const prog=document.createElement('div');prog.className='score';head.appendChild(prog);i.appendChild(head);
@@ -1778,7 +1776,7 @@ function renderQuiz(v){
     const order=q.o.length===2?[0,1]:shuffle(q.o.map((_,n)=>n));
     const btns={};
     const QORD=['الأول','الثاني','الثالث','الرابع','الخامس','السادس','السابع','الثامن','التاسع','العاشر','الحادي عشر','الثاني عشر','الثالث عشر','الرابع عشر','الخامس عشر'];const ORDN=['الأول','الثاني','الثالث','الرابع'];
-    d.querySelector('.qn').appendChild(TTS.controls(()=>'السؤال '+(QORD[qi]||String(qi+1))+'. '+q.q+'\n'+order.map((oi,n)=>'الخيار '+ORDN[n]+': '+q.o[oi]+'.').join('\n'),{compact:true,label:'🔊',aria:'استمع للسؤال'}));
+
     order.forEach(oi=>{const b=document.createElement('button');b.innerHTML=inl(q.o[oi]);btns[oi]=b;
       b.onclick=()=>{if(d.dataset.done)return;d.dataset.done=1;answered++;chosen[qi]=oi;const ok=oi===q.a;if(ok)right++;
         b.classList.add(ok?'right':'wrong');if(!ok)btns[q.a].classList.add('right');
@@ -1807,6 +1805,7 @@ function renderLab(v){
   const i=wrap(v),x=extra();
   {const lt=(lesson()||{}).t||'',nm=/ورقة عمل|مراجعة وتمارين/.test(lt)?'هذا الدرس مخصص للتمارين والمراجعة، ولا توجد فيه تجارب عملية.':/^مقدمة الوحدة/.test(lt)?'هذا الدرس مخصص لمقدمة الوحدة وأهدافها، ولا توجد فيه تجارب عملية.':'';if(nm){const c=card('تجارب عملية تفاعلية');c.insertAdjacentHTML('beforeend','<p class="empty">'+nm+'</p>');i.appendChild(c);return}}
   const hasLab=window.renderLabCard?renderLabCard(i,pos.u,pos.l):false;
+  if(hasLab)return; /* الدرس الذي له تجربة معتمدة: تظهر التجربة ومراجعها فقط */
   const c=card('تجارب تفاعلية بالعربية','محاكاة مجانية من مشروع PhET بجامعة كولورادو، تعمل في المتصفح على الجوال والآيباد والكمبيوتر.');
   if(x.sim&&x.sim.length){const g=document.createElement('div');g.className='sims';
     x.sim.forEach(s=>{const a=document.createElement('a');a.className='sim';a.href=s.u;a.target='_blank';a.rel='noopener';
@@ -1912,7 +1911,7 @@ else{
 /* الرموز السفلية: Vi ← V<sub>i</sub> */
 (()=>{const RX=/([A-Za-zΔμ]+)_([A-Za-z0-9]+)|(?<![A-Za-z])(V|F|f|T|KE|PE|ME|μ)([ifsk])(?![a-z0-9])|(μ)/g,NS='http://www.w3.org/2000/svg',SKIP=/^(SCRIPT|STYLE|TEXTAREA|INPUT|SUB|tspan|OPTION|TITLE)$/;
 function fix(root){if(!root||root.nodeType!==1&&root.nodeType!==9)return;const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT),L=[];let n;
-  while(n=w.nextNode()){RX.lastIndex=0;if(RX.test(n.nodeValue)&&n.parentNode&&!SKIP.test(n.parentNode.nodeName)&&!(n.parentNode.closest&&n.parentNode.closest('[contenteditable],sub,.mu')))L.push(n)}
+  while(n=w.nextNode()){RX.lastIndex=0;if(RX.test(n.nodeValue)&&n.parentNode&&!SKIP.test(n.parentNode.nodeName)&&!(n.parentNode.closest&&n.parentNode.closest('[contenteditable],sub,.mu,.lrefs')))L.push(n)}
   for(const t of L){const svg=t.parentNode.namespaceURI===NS,f=document.createDocumentFragment(),s=t.nodeValue;let i=0,m;RX.lastIndex=0;
     while(m=RX.exec(s)){f.append(s.slice(i,m.index));const base=m[1]||m[3]||m[5];if(base==='μ'){let b;if(svg){b=document.createElementNS(NS,'tspan');b.setAttribute('font-size','125%')}else{b=document.createElement('span');b.className='mu'}b.textContent='μ';f.append(b)}else f.append(base);if(m[5]){i=m.index+1;continue}let e;if(svg){e=document.createElementNS(NS,'tspan');e.setAttribute('baseline-shift','sub');e.setAttribute('font-size','70%')}else{e=document.createElement('sub');e.className='ss'}e.textContent=m[2]||m[4];f.append(e);if(svg){const r=document.createElementNS(NS,'tspan');r.textContent='​';f.append(r)}i=m.index+m[0].length}
     f.append(s.slice(i));t.parentNode.replaceChild(f,t)}}
