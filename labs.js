@@ -93,6 +93,85 @@ const f=(n,d=2)=>{const r=Math.round(n*10**d)/10**d;return String(r)};
 function quiz(root,qs){qs.forEach(q=>{const d=document.createElement('div');d.className='q';d.innerHTML='<p></p><div class="op"></div><div class="fb"></div>';d.querySelector('p').textContent=q.q;
   q.o.forEach((o,i)=>{const b=document.createElement('button');b.type='button';b.dir='auto';b.textContent=o;b.onclick=()=>{d.querySelectorAll('.op button').forEach(x=>x.className='');b.className=i===q.a?'ok':'no';d.querySelector('.fb').textContent=(i===q.a?'✓ إجابة صحيحة. ':'✗ حاول مرة أخرى. ')+(i===q.a?q.e:q.h)};d.querySelector('.op').appendChild(b)});root.appendChild(d)})}
 
+/* ===== مناظر ثلاثية الأبعاد للتجارب الأولى ===== */
+function ob3(BASE){const S=(x,d,z)=>[x+d*0.6,BASE-z-d*0.5],P=(x,d,z)=>S(x,d,z).join(',');
+  const poly=(a,f,st)=>`<polygon points="${a.map(p=>P(...p)).join(' ')}" fill="${f}" stroke="${st||'#334155'}" stroke-linejoin="round"/>`;
+  const box=(x0,x1,d0,d1,z0,z1,cf,ct,cs,st)=>poly([[x0,d0,z1],[x1,d0,z1],[x1,d1,z1],[x0,d1,z1]],ct,st)+poly([[x1,d0,z0],[x1,d1,z0],[x1,d1,z1],[x1,d0,z1]],cs,st)+poly([[x0,d0,z0],[x1,d0,z0],[x1,d0,z1],[x0,d0,z1]],cf,st);
+  const lbl=(x,y,tx,ty,t,anc)=>`<line x1="${x}" y1="${y}" x2="${tx}" y2="${ty}" stroke="var(--muted)" stroke-width="1"/><circle cx="${x}" cy="${y}" r="2.4" fill="var(--muted)"/><text x="${tx}" y="${ty+(ty<y?-4:13)}" font-size="13" font-weight="700" text-anchor="${anc||'middle'}" fill="var(--ink)">${t}</text>`;
+  const table=(T)=>box(6,346,0,86,0,T,'#B7834A','#E9C894','#9A6A3A','#7C4A1F');
+  return {S,P,poly,box,lbl,table}}
+function ms3D(){/* القدمة ذات الورنية والميكرومتر على طاولة المعمل مع الأسطوانة */
+  const BASE=210,T=12,{S,poly,box,lbl,table}=ob3(BASE);let g=`<defs><linearGradient id="msCy" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#BFDBFE"/><stop offset=".5" stop-color="#3B82F6"/><stop offset="1" stop-color="#1E3A8A"/></linearGradient><linearGradient id="msCv" x1="0" x2="1"><stop offset="0" stop-color="#BFDBFE"/><stop offset=".5" stop-color="#3B82F6"/><stop offset="1" stop-color="#1E3A8A"/></linearGradient></defs>`;
+  g+=table(T);
+  /* أداة القدمة ذات الورنية قائمة على فكيها فوق الطاولة، ووجهها المدرج نحو الناظر، والأسطوانة بين الفكين */
+  const FD=36,BK=6,ZB0=T+62,ZB1=T+84,J0=26,J1=36,JM0=118,JM1=128,BX0=16,BX1=232;
+  g+=box(BX0,BX1,FD,FD+BK,ZB0,ZB1,'#CBD5E1','#F1F5F9','#94A3B8','#475569');
+  for(let i=0;i<=46;i++){const x=J1+i*4;if(x>BX1-6)break;const big=i%10===0,mid=i%5===0,[a,b]=S(x,FD,ZB0+2),[,b2]=S(x,FD,ZB0+2+(big?9:mid?6:4));g+=`<line x1="${a}" y1="${b}" x2="${a}" y2="${b2}" stroke="#1F2937" stroke-width="${big?1.2:.7}"/>`;if(big){const [q,w]=S(x,FD,ZB0+13);g+=`<text x="${q}" y="${w+4}" font-size="9" font-weight="800" text-anchor="middle" fill="#1F2937">${i/10}</text>`}}
+  {const [q,w]=S(BX1-12,FD,ZB0+13);g+=`<text x="${q}" y="${w+4}" font-size="9" font-weight="800" text-anchor="middle" fill="#475569">cm</text>`}
+  /* الفك الثابت والأسطوانة والفك المتحرك */
+  g+=box(J0,J1,FD,FD+BK,T,ZB0,'#F7931E','#FDBA74','#C2410C','#9A3412');
+  {const r=13,x0=J1,x1=JM0,[a,ya]=S(x0,FD+BK/2,T+r),[b,yb]=S(x1,FD+BK/2,T+r);
+   g+=`<path d="M${a},${ya-r} L${b},${yb-r} L${b},${yb+r} L${a},${ya+r} Z" fill="url(#msCy)" stroke="#1E3A8A"/><ellipse cx="${b}" cy="${yb}" rx="6" ry="${r}" fill="#93C5FD" stroke="#1E3A8A"/>`}
+  g+=box(JM0,JM1,FD,FD+BK,T,ZB0,'#F7931E','#FDBA74','#C2410C','#9A3412');
+  /* الورنية المنزلقة ونافذتها وتدريجها */
+  g+=box(JM0,JM0+50,FD-3,FD+BK,ZB0-8,ZB1+2,'#F7931E','#FDBA74','#C2410C','#9A3412');
+  {const a=S(JM1+2,FD-3,ZB0-6),b=S(JM0+48,FD-3,ZB0+8);g+=`<rect x="${a[0]}" y="${b[1]}" width="${b[0]-a[0]}" height="${a[1]-b[1]}" fill="#FEF3C7" stroke="#7C2D12" stroke-width=".8"/>`;
+   for(let k=0;k<=10;k++){const x=JM1+4+k*3.6,[q,w]=S(x,FD-3,ZB0+8),[,w2]=S(x,FD-3,ZB0+8-(k%5?4:7));g+=`<line x1="${q}" y1="${w}" x2="${q}" y2="${w2}" stroke="#7C2D12" stroke-width=".8"/>`;if(k%5===0){g+=`<text x="${q}" y="${w2+7}" font-size="7" font-weight="800" text-anchor="middle" fill="#7C2D12">${k}</text>`}}}
+  {const [a,b]=S(JM0+26,FD-3,ZB0-12);g+=`<circle cx="${a}" cy="${b}" r="6" fill="#9A3412" stroke="#7C2D12"/>`}
+  g+=box(JM0+34,JM0+42,FD,FD+BK,ZB1+2,ZB1+7,'#1F2937','#475569','#0F172A','#000');
+  /* ساق قياس العمق */
+  g+=box(BX1,BX1+16,FD+2,FD+4,ZB0+9,ZB0+12,'#94A3B8','#E2E8F0','#64748B','#475569');
+  /* أداة الميكرومتر قائمة على حامل */
+  const MX=258,MD=44;g+=box(MX-14,MX+70,MD-10,MD+12,T,T+5,'#334155','#64748B','#1F2937','#0F172A');
+  {const p=(x,z)=>S(x,MD,z).join(',');g+=`<path d="M${p(MX,T+58)} L${p(MX,T+18)} Q${p(MX+30,T+8)} ${p(MX+60,T+18)} L${p(MX+60,T+46)}" fill="none" stroke="#475569" stroke-width="11" stroke-linejoin="round"/>`}
+  g+=box(MX-2,MX+8,MD-3,MD+3,T+53,T+61,'#F7931E','#FDBA74','#C2410C','#9A3412');
+  {const [cx,cb]=S(MX+16,MD,T+44),[,ct]=S(MX+16,MD,T+72),rx=7,ry=3;g+=`<path d="M${cx-rx},${ct} L${cx-rx},${cb} A${rx},${ry} 0 0 0 ${cx+rx},${cb} L${cx+rx},${ct} Z" fill="url(#msCv)" stroke="#1E3A8A"/><ellipse cx="${cx}" cy="${ct}" rx="${rx}" ry="${ry}" fill="#93C5FD" stroke="#1E3A8A"/>`}
+  g+=box(MX+24,MX+60,MD-3,MD+3,T+53,T+61,'#CBD5E1','#F1F5F9','#94A3B8','#64748B')+box(MX+60,MX+92,MD-5,MD+5,T+51,T+63,'#EA580C','#FDBA74','#C2410C','#9A3412')+box(MX+92,MX+104,MD-3,MD+3,T+53,T+61,'#F97316','#FED7AA','#C2410C','#9A3412');
+  for(let i=0;i<6;i++){const [a,b]=S(MX+64+i*5,MD-5,T+51),[,c]=S(MX+64+i*5,MD-5,T+63);g+=`<line x1="${a}" y1="${b}" x2="${a}" y2="${c}" stroke="#7C2D12" stroke-width=".7"/>`}
+  g+=lbl(...S(200,FD,ZB1),180,16,'المسطرة الرئيسية (التدريج الرئيسي)')+lbl(...S(JM0+38,FD-3,ZB0+2),250,BASE-150,'الورنية','start')+lbl(...S(J0+5,FD,T+30),12,BASE-70,'الفك الثابت','start')+lbl(...S(JM0+5,FD,T+20),170,BASE+24,'الفك المتحرك')+lbl(...S(70,FD+3,T+6),8,BASE+24,'الأسطوانة: الطول L','start')+lbl(...S(JM0+26,FD-3,ZB0-12),12,96,'عجلة التحريك','start')+lbl(...S(JM0+38,FD,ZB1+6),12,40,'برغي التثبيت','start')+lbl(...S(MX+16,MD,T+64),396,22,'الأسطوانة: القطر D','end')+lbl(...S(MX+80,MD-5,T+57),390,BASE+24,'أداة الميكرومتر','end');
+  return `<svg viewBox="0 0 400 ${BASE+40}" aria-label="أداة القدمة ذات الورنية وأداة الميكرومتر على طاولة المعمل">${g}</svg>`}
+function sp3D(dd,o){/* مسار العربة على طاولة: الشريط المتري والعربة وساعة الإيقاف؛ dd المسافة بالسنتيمتر */
+  o=o||{};const BASE=150,T=12,K=1.45,X0=48,{S,poly,box,lbl,table}=ob3(BASE);let g=table(T);
+  g+=box(20,346,26,50,T,T+4,'#64748B','#94A3B8','#475569','#334155');
+  const line=(x,c)=>{const a=S(x,26,T+4),b=S(x,50,T+4);return `<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="${c}" stroke-width="3"/>`};
+  g+=line(X0,'#16A34A')+line(X0+dd*K,'#DC2626');
+  {const a=S(X0,26,T),b=S(X0+dd*K,26,T);g+=`<text x="${a[0]}" y="${a[1]+11}" font-size="10" font-weight="800" text-anchor="middle" fill="#16A34A">البداية</text><text x="${b[0]}" y="${b[1]+11}" font-size="10" font-weight="800" text-anchor="middle" fill="#DC2626">النهاية</text>`}
+  /* أداة الشريط المتري: علبة بقرص دائري وزر تثبيت، وشريط مدرج بالسنتيمتر ينتهي بخطاف */
+  const te=o.tape==null?0:o.tape,CX0=X0-40,CX1=X0-6,CD0=58,CD1=76,CZ=T+26;
+  if(te>0){g+=box(X0-6,X0+te*K,62,70,T,T+1.5,'#FDE68A','#FEF3C7','#D97706','#A16207');
+    for(let c=0;c<=te;c+=5){const big=c%10===0,[a,b]=S(X0+c*K,62,T+1.5),[a2,b2]=S(X0+c*K,big?66:64,T+1.5);g+=`<line x1="${a}" y1="${b}" x2="${a2}" y2="${b2}" stroke="#1F2937" stroke-width="${big?1:.6}"/>`;if(c%20===0&&c>0){const [q,w]=S(X0+c*K,68,T+1.5);g+=`<text x="${q}" y="${w+1}" font-size="7" font-weight="800" text-anchor="middle" fill="#1F2937">${c}</text>`}}
+    const hx=X0+te*K;g+=box(hx,hx+3,60,72,T,T+8,'#F7931E','#FDBA74','#C2410C','#9A3412')}
+  g+=box(CX0,CX1,CD0,CD1,T,CZ,'#EA580C','#FB923C','#C2410C','#9A3412');
+  {const [cx,cy]=S((CX0+CX1)/2,CD0,(T+CZ)/2);g+=`<circle cx="${cx}" cy="${cy}" r="9" fill="#FDBA74" stroke="#9A3412" stroke-width="1.4"/><circle cx="${cx}" cy="${cy}" r="3" fill="#9A3412"/>`}
+  g+=box(CX0+12,CX0+22,CD0+4,CD0+12,CZ,CZ+4,'#1F2937','#475569','#0F172A','#000');
+  {const [a,b]=S(X0-6,64,T+3);g+=`<rect x="${a-2}" y="${b-4}" width="5" height="6" fill="#FDE68A" stroke="#A16207" stroke-width=".6"/>`}
+  /* العربة */
+  if(o.cart!=null){const cx=X0+o.cart*K;g+=box(cx-30,cx,28,42,T+8,T+20,'#2563EB','#93C5FD','#1E40AF','#1E3A8A');[[cx-24,28],[cx-6,28]].forEach(([x,d])=>{const [a,b]=S(x,d,T+8);g+=`<circle cx="${a}" cy="${b}" r="4.5" fill="#111827"/>`})}
+  if(o.lab){g+=lbl(...S(X0-23,58,T+13),20,20,'أداة الشريط المتري','start')+(te>0?lbl(...S(X0+te*K+1,66,T+8),300,20,'الخطاف'):'')+lbl(...S(200,26,T+2),200,BASE+24,'مسار الحركة')+lbl(...S(X0,38,T+4),60,BASE+24,'خط البداية')+lbl(...S(X0+dd*K,38,T+4),330,BASE+24,'خط النهاية')+(o.cart!=null?lbl(...S(X0+o.cart*K-15,38,T+20),190,20,'العربة'):'')}
+  return `<svg viewBox="0 0 400 ${BASE+(o.lab?40:12)}" aria-label="مسار العربة والشريط المتري">${g}</svg>`}
+function dp3D(){/* لوحة الإحداثيات على الطاولة مع الخيطين والمنقلة */
+  const BASE=230,T=12,{S,poly,box,lbl,table}=ob3(BASE);let g=table(T);
+  const O=[60,6],U=26,B=(i,j)=>S(O[0]+i*U,O[1]+j*U*0.62,T+3);
+  g+=box(40,300,0,80,T,T+3,'#B45309','#FFFBEB','#92400E','#B45309');
+  for(let i=0;i<=8;i++){const a=B(i,0),b=B(i,4.6);g+=`<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="#E5D3B3" stroke-width=".8"/>`}
+  for(let j=0;j<=4;j++){const a=B(0,j),b=B(9,j);g+=`<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="#E5D3B3" stroke-width=".8"/>`}
+  {const o=B(0,0),x=B(9.3,0),y=B(0,4.8);g+=`<line x1="${o[0]}" y1="${o[1]}" x2="${x[0]}" y2="${x[1]}" stroke="#1F2937" stroke-width="1.6"/><line x1="${o[0]}" y1="${o[1]}" x2="${y[0]}" y2="${y[1]}" stroke="#1F2937" stroke-width="1.6"/><text x="${x[0]+4}" y="${x[1]+4}" font-size="12" font-weight="800" fill="#1F2937">x</text><text x="${y[0]-4}" y="${y[1]-4}" font-size="12" font-weight="800" fill="#1F2937">y</text>`;
+   const a=B(6,1.3),b=B(3,3.2);g+=`<line x1="${o[0]}" y1="${o[1]}" x2="${a[0]}" y2="${a[1]}" stroke="#DC2626" stroke-width="3"/><circle cx="${a[0]}" cy="${a[1]}" r="3.5" fill="#1F2937"/><text x="${a[0]+6}" y="${a[1]}" font-size="14" font-weight="800" fill="#DC2626">A⃗</text><line x1="${o[0]}" y1="${o[1]}" x2="${b[0]}" y2="${b[1]}" stroke="#2563EB" stroke-width="3"/><circle cx="${b[0]}" cy="${b[1]}" r="3.5" fill="#1F2937"/><text x="${b[0]+6}" y="${b[1]}" font-size="14" font-weight="800" fill="#2563EB">B⃗</text><circle cx="${o[0]}" cy="${o[1]}" r="4" fill="#1F2937"/>`}
+  /* المنقلة موضوعة بجانب اللوحة */
+  {const c=S(250,62,T+3);let p=`<path d="M${c[0]-38},${c[1]} A38,22 0 0 1 ${c[0]+38},${c[1]} Z" fill="#FDE68A" fill-opacity=".9" stroke="#B45309" stroke-width="1.4"/>`;for(let k=0;k<=18;k++){const t=Math.PI*k/18,x1=c[0]-38*Math.cos(t),y1=c[1]-22*Math.sin(t),x2=c[0]-33*Math.cos(t),y2=c[1]-19*Math.sin(t);p+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#92400E" stroke-width=".8"/>`}g+=p}
+  g+=lbl(...B(9,4.6),330,20,'لوحة الإحداثيات','end')+lbl(...B(4.5,0.98),150,BASE+24,'خيط المتجه A⃗')+lbl(...B(1.5,1.6),20,40,'خيط المتجه B⃗','start')+lbl(...S(250,62,T+18),330,BASE+24,'المنقلة')+lbl(...B(0,0),30,BASE+24,'نقطة الأصل','start');
+  return `<svg viewBox="0 0 400 ${BASE+40}" aria-label="لوحة الإحداثيات والمنقلة على طاولة المعمل">${g}</svg>`}
+function cv3D(p,o){/* الحمل: كأس زجاجي فوق سخان من جهة واحدة، مع صبغة */
+  o=o||{};const BASE=220,T=12,{S,poly,box,lbl,table}=ob3(BASE);let g=table(T);
+  g+=box(140,262,18,62,T,T+12,'#334155','#64748B','#1F2937','#0F172A');{const [a,b]=S(166,40,T+12);g+=`<ellipse cx="${a}" cy="${b}" rx="18" ry="6" fill="${p>0?'#EF4444':'#94A3B8'}"/>`}
+  const cx=200,cd=40,R=48,Z0=T+12,Z1=Z0+120,[x0,y0]=S(cx,cd,Z0),[,y1]=S(cx,cd,Z1),[,yw]=S(cx,cd,Z1-14);
+  g+=`<path d="M${x0-R},${yw} L${x0-R},${y0} A${R},14 0 0 0 ${x0+R},${y0} L${x0+R},${yw} Z" fill="#BFDBFE" opacity=".85"/><ellipse cx="${x0}" cy="${yw}" rx="${R}" ry="14" fill="#93C5FD" stroke="#1D4ED8" stroke-width=".8"/>`;
+  const L=470,dash=`stroke-dasharray="${L*p} ${L}"`,Lx=x0-26,Rx=x0+26,top=yw+14,bot=y0-10;
+  g+=`<path d="M${Lx},${bot} L${Lx},${top+12} Q${Lx},${top} ${Lx+12},${top} L${Rx-12},${top} Q${Rx},${top} ${Rx},${top+12} L${Rx},${bot-12} Q${Rx},${bot} ${Rx-12},${bot} L${Lx+12},${bot}" fill="none" stroke="#9333EA" stroke-width="5" stroke-linecap="round" ${dash} opacity=".85"/>`;
+  if(p>0.2)g+=`<path d="M${Lx-6},${(top+bot)/2} l6,-10 l6,10" fill="none" stroke="#DC2626" stroke-width="3"/>`;if(p>0.6)g+=`<path d="M${Rx-6},${(top+bot)/2} l6,10 l6,-10" fill="none" stroke="#2563EB" stroke-width="3"/>`;
+  g+=`<path d="M${x0-R},${y1} L${x0-R},${y0} A${R},14 0 0 0 ${x0+R},${y0} L${x0+R},${y1}" fill="none" stroke="#1E3A8A" stroke-width="2"/><ellipse cx="${x0}" cy="${y1}" rx="${R}" ry="14" fill="none" stroke="#1E3A8A" stroke-width="1.6"/>`;
+  if(o.lab)g+=lbl(Lx,(top+bot)/2,40,60,'ماء ساخن يرتفع','start')+lbl(Rx,(top+bot)/2,360,60,'ماء بارد ينزل','end')+lbl(...S(150,18,T+6),110,BASE+24,'مصدر الحرارة')+lbl(x0,top,200,20,'صبغة ملونة')+lbl(x0+R,y0-40,330,BASE+24,'كأس زجاجي فيه ماء','end');
+  return `<svg viewBox="0 0 400 ${BASE+(o.lab?40:12)}" aria-label="تيار الحمل في كأس ماء">${g}</svg>`}
 function toolsIntro(){
   const lbl=(x,y,tx,ty,t,anc)=>`<line x1="${x}" y1="${y}" x2="${tx}" y2="${ty}" stroke="var(--muted)" stroke-width="1"/><circle cx="${x}" cy="${y}" r="2.4" fill="var(--muted)"/><text x="${tx}" y="${ty+(ty<y?-4:13)}" font-size="13" font-weight="700" text-anchor="${anc||'middle'}" fill="var(--ink)">${t}</text>`;
   const bd=(x,y,n)=>`<circle cx="${x}" cy="${y}" r="11" fill="#2563EB" stroke="#fff" stroke-width="2"/><text x="${x}" y="${y+5}" font-size="13" font-weight="800" text-anchor="middle" fill="#fff">${n}</text>`;
@@ -128,7 +207,8 @@ function toolsIntro(){
     ${lbl(250,98,268,48,'التدريج الخطي')}${lbl(316,124,382,196,'الأسطوانة الدوارة','end')}${lbl(370,114,380,160,'مقبض الضبط الدوراني','end')}${lbl(160,188,190,222,'الإطار')}${lbl(202,88,200,28,'مثبت العمود')}
     
   </svg>`;
-  return `<div class="intro"><h3>3. الأدوات المستخدمة</h3>
+  return `<div class="intro"><h3>3. الأدوات والأجهزة المستخدمة</h3>
+    <div class="tool"><div class="stage">${ms3D()}</div><div class="vcap">أداة القدمة ذات الورنية وأداة الميكرومتر والأسطوانة على طاولة المعمل: منظر ثلاثي الأبعاد</div><p><b>ترتيب الأدوات:</b> تقاس الأسطوانة نفسها مرتين: طولها L بأداة القدمة ذات الورنية، وقطرها D بأداة الميكرومتر.</p></div>
     <div class="tool"><div class="stage">${cal}</div><p><b>القدمة ذات الورنية:</b> تقيس الأطوال والأقطار الخارجية والداخلية والأعماق بدقة <span dir="ltr">0.1 mm</span>.</p>
     </div>
     <div class="tool"><div class="stage">${mic}</div><p><b>الميكرومتر:</b> تقيس الأقطار والسماكات الصغيرة بدقة <span dir="ltr">0.01 mm</span>.</p>
@@ -182,9 +262,12 @@ function measureLab(box){
   </div>
 
     <div class="ctl"><h3>5.3 الحسابات</h3>
-    <div class="law"><div class="ln"><b>التعويض</b><span id="vS" style="white-space:pre-line;line-height:2">أكمل القياسين 5.1 و 5.2</span></div></div>
-    <div class="ans"><label>احسب الحجم V بوحدة cm³</label><input id="cIn" inputmode="decimal" dir="ltr" placeholder="cm³"><button type="button" class="go" id="cCk">تحقق</button></div><div class="fb2" id="cFb"></div>
-    <div class="labCalc"></div>
+    <h4 class="sbh">أ) تحويل الطول L من mm إلى cm</h4>
+    ${hxCalcStep('L','L(cm) = L(mm) / 10','احسب الطول L بوحدة cm','cm')}
+    <h4 class="sbh">ب) تحويل القطر D من mm إلى cm</h4>
+    ${hxCalcStep('D','D(cm) = D(mm) / 10','احسب القطر D بوحدة cm','cm')}
+    <h4 class="sbh">ج) حساب حجم الأسطوانة</h4>
+    ${hxCalcStep('V','V = π·D²·L / 4','احسب الحجم V بوحدة cm³','cm³')}
   </div>
   <div class="ctl res"><h3>6. نتائج التجربة</h3>
     <div class="tw"><table class="rt"><thead><tr><th>الكمية</th><th>الأداة</th><th>القراءة</th><th>بوحدة SI</th></tr></thead>
@@ -196,7 +279,7 @@ function measureLab(box){
   const $=id=>box.querySelector('#'+id);
   let L,D,okL=false,okD=false,vHint=false,mHint=false;
   const r1=x=>Math.round(x*10)/10,r2=x=>Math.round(x*100)/100;
-  function newObj(){L=r1(25+Math.random()*60);D=r2(4+Math.random()*16);okL=okD=false;okV=false;vHint=mHint=false;$('vR').value=100;$('mR').value=25;['vIn','mIn','cIn'].forEach(k=>$(k).value='');['vFb','mFb','cFb'].forEach(k=>{$(k).textContent='';$(k).className='fb2'});vDraw();mDraw();vol()}
+  function newObj(){L=r1(25+Math.random()*60);D=r2(4+Math.random()*16);okL=okD=false;okV=false;vHint=mHint=false;$('vR').value=100;$('mR').value=25;okCL=okCD=false;['vIn','mIn','cL','cD','cV'].forEach(k=>$(k).value='');['vFb','mFb','cLf','cDf','cVf'].forEach(k=>{$(k).textContent='';$(k).className='fb2'});vDraw();mDraw();vol()}
   /* --- القدمة --- */
   function vVal(){let o=r1(+$('vR').value);if(o<L){o=L;$('vR').value=o}return o}
   function vDraw(){const o=vVal(),touch=Math.abs(o-L)<1e-6;$('vO').textContent=o.toFixed(1)+' mm';
@@ -236,15 +319,17 @@ function measureLab(box){
     for(let j=Math.floor(t)-7;j<=Math.ceil(t)+7;j++){const y=75-(j-t)*7.5;if(y<20||y>130)continue;const jj=((j%50)+50)%50,b=jj%5===0,hl=mHint&&touch&&Math.abs(j-t)<0.5;g+=`<line x1="${xe}" y1="${y}" x2="${xe+(b?18:11)}" y2="${y}" stroke="${hl?'#DC2626':'#111827'}" stroke-width="${hl?2.4:1}"/>`;if(b)g+=`<text x="${xe+22}" y="${y+4}" font-size="11" font-weight="700" fill="#111827">${jj}</text>`}
     g+=`<text x="6" y="124" font-size="10" text-anchor="start" fill="#334155">التدريج الخطي</text><text x="396" y="147" font-size="10" text-anchor="end" fill="#9A3412">التدريج الدائري</text>`;
     $('mZm').innerHTML=g}
-  let okV=false;
+  let okV=false,okCL=false,okCD=false;
   function results(){const E=x=>'\u2066'+x+'\u2069';
     $('rL1').textContent=okL?E(L.toFixed(1)+' mm'):'—';$('rL2').textContent=okL?E((L/1000).toFixed(4)+' m'):'—';
     $('rD1').textContent=okD?E(D.toFixed(2)+' mm'):'—';$('rD2').textContent=okD?E((D/1000).toFixed(5)+' m'):'—';
     const V=Math.PI*D*D*L/4;$('rV1').textContent=okV?E((V/1000).toFixed(2)+' cm³'):'—';$('rV2').textContent=okV?E(sci(V*1e-9)+' m³'):'—';
     $('rNote').textContent=okL&&okD&&okV?'الاستنتاج: أداة الميكرومتر أدق، فدقتها '+E('0.01 mm')+' مقابل '+E('0.1 mm')+' لأداة القدمة ذات الورنية، لذلك تستخدم لقياس القطر الصغير. والحجم كمية مشتقة تحسب من كميتين أساسيتين مقيستين.':'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
-  function vol(){results();if(!(okL&&okD)){$('vS').textContent='أكمل القياسين 5.1 و 5.2';return}
-    const Lm=L/1000,Dm=D/1000,V=Math.PI*Dm*Dm*Lm/4;
-    $('vS').textContent='V = π D² L / 4\n'+`V = π × (${sci(Dm)} m)² × ${sci(Lm)} m / 4 = ${sci(V)} m³`}
+  const LC=()=>L/10,DC=()=>D/10,VC=()=>Math.PI*DC()*DC()*LC()/4;
+  function vol(){results();
+    $('sbL').textContent=okL?['L(cm) = L(mm) / 10',E(`L = ${L.toFixed(1)} / 10`)].join('\n'):'L(cm) = L(mm) / 10';
+    $('sbD').textContent=okD?['D(cm) = D(mm) / 10',E(`D = ${D.toFixed(2)} / 10`)].join('\n'):'D(cm) = D(mm) / 10';
+    $('sbV').textContent=okCL&&okCD?['V = π·D²·L / 4',E(`V = π × ${(+DC().toFixed(3))}² × ${(+LC().toFixed(2))} / 4`)].join('\n'):'V = π·D²·L / 4'}
   const num=v=>parseFloat(String(v).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace('٫','.').replace(',','.'));
   const fb=(id,ok,msg)=>{$(id).textContent=msg;$(id).className='fb2 '+(ok?'ok':'no')};
   $('vR').oninput=vDraw;$('mR').oninput=mDraw;
@@ -256,8 +341,12 @@ function measureLab(box){
     const mm=Math.floor(L+1e-9),n=Math.round((L-mm)*10);if(Math.abs(v-L)<0.05){okL=true;fb('vFb',true,'✓ قراءة صحيحة:\n'+E(`L = ${mm} mm + ${n} × 0.1 mm = ${L.toFixed(1)} mm = ${(L/1000).toFixed(4)} m`))}else fb('vFb',false,'✗ القراءة غير صحيحة، أعد قراءة التدريجين أو استخدم التلميح.');vol()};
   $('mCk').onclick=()=>{const r=mVal(),v=num($('mIn').value);if(Math.abs(r-D)>1e-6)return fb('mFb',false,'أدر الأسطوانة حتى يلامس العمود السلك أولا.');if(isNaN(v))return fb('mFb',false,'اكتب قراءتك بالملليمتر.');
     const lin=Math.floor(D*2+1e-9)/2,c=Math.round((D-lin)*100);if(Math.abs(v-D)<0.005){okD=true;fb('mFb',true,'✓ قراءة صحيحة:\n'+E(`D = ${lin.toFixed(1)} mm + ${c} × 0.01 mm = ${D.toFixed(2)} mm = ${(D/1000).toFixed(5)} m`))}else fb('mFb',false,'✗ القراءة غير صحيحة، أعد قراءة التدريجين أو استخدم التلميح.');vol()};
-  $('cCk').onclick=()=>{if(!(okL&&okD))return fb('cFb',false,'أكمل قياس الطول والقطر أولا.');const v=num($('cIn').value),V=Math.PI*D*D*L/4/1000;if(isNaN(v))return fb('cFb',false,'اكتب الحجم بوحدة cm³.');
-    if(Math.abs(v-V)/V<0.02){okV=true;results();}if(Math.abs(v-V)/V<0.02)fb('cFb',true,'✓ إجابة صحيحة:\n'+E(`V = ${V.toFixed(2)} cm³ = ${sci(V*1e-6)} m³`)+'\nلأن '+E('1 cm³ = 10⁻⁶ m³')+'.');else fb('cFb',false,'✗ راجع التحويل: اكتب D وL بوحدة cm أولا (1 cm = 10 mm)، ثم ضع القيم في V = π D² L / 4.')};
+  $('cLk').onclick=()=>{if(!okL)return fb('cLf',false,'أكمل قياس الطول بأداة القدمة أولا.');const v=num($('cL').value);if(isNaN(v))return fb('cLf',false,'اكتب الناتج بوحدة cm.');
+    if(Math.abs(v-LC())<0.006){okCL=true;fb('cLf',true,'✓ إجابة صحيحة:\n'+E(`L = ${L.toFixed(1)} / 10 = ${+LC().toFixed(2)} cm`))}else fb('cLf',false,'✗ لأن '+E('1 cm = 10 mm')+'، اقسم الطول بالملليمتر على 10:\n'+E(`L = ${L.toFixed(1)} / 10`));vol()};
+  $('cDk').onclick=()=>{if(!okD)return fb('cDf',false,'أكمل قياس القطر بأداة الميكرومتر أولا.');const v=num($('cD').value);if(isNaN(v))return fb('cDf',false,'اكتب الناتج بوحدة cm.');
+    if(Math.abs(v-DC())<0.0006){okCD=true;fb('cDf',true,'✓ إجابة صحيحة:\n'+E(`D = ${D.toFixed(2)} / 10 = ${+DC().toFixed(3)} cm`))}else fb('cDf',false,'✗ لأن '+E('1 cm = 10 mm')+'، اقسم القطر بالملليمتر على 10:\n'+E(`D = ${D.toFixed(2)} / 10`));vol()};
+  $('cVk').onclick=()=>{if(!(okCL&&okCD))return fb('cVf',false,'أكمل تحويل الطول والقطر إلى cm أولا.');const v=num($('cV').value),V=VC();if(isNaN(v))return fb('cVf',false,'اكتب الحجم بوحدة cm³.');
+    if(Math.abs(v-V)/V<0.02){okV=true;fb('cVf',true,'✓ إجابة صحيحة:\n'+E(`V = ${V.toFixed(2)} cm³ = ${sci(V*1e-6)} m³`)+'\nلأن '+E('1 cm³ = 10⁻⁶ m³')+'.')}else fb('cVf',false,'✗ احسب مربع القطر أولا، ثم اضرب في π وفي الطول، ثم اقسم على 4:\n'+E(`V = π × ${(+DC().toFixed(3))}² × ${(+LC().toFixed(2))} / 4`));vol()};
   $('nw').onclick=newObj;
   calcInit(box);newObj();
 }
@@ -281,7 +370,8 @@ function speedTools(){
     <line x1="200" y1="122" x2="${200+55*Math.cos(7/30*2*Math.PI-Math.PI/2)}" y2="${122+55*Math.sin(7/30*2*Math.PI-Math.PI/2)}" stroke="#F7931E" stroke-width="3" stroke-linecap="round"/><circle cx="200" cy="122" r="5" fill="#F7931E"/><rect x="187" y="129" width="26" height="18" rx="5" fill="#F7931E"/><text x="200" y="143" font-size="13" font-weight="800" text-anchor="middle" fill="#fff">s</text>
     ${lbl(200,34,120,18,'زر التشغيل والإيقاف')}${lbl(268,64,330,40,'زر التصفير')}${lbl(150,160,110,206,'القرص المدرج بالثانية')}${lbl(222,112,320,150,'العقرب','start')}${lbl(270,150,330,206,'الإطار')}
   </svg>`;
-  return `<div class="intro"><h3>3. الأدوات المستخدمة</h3>
+  return `<div class="intro"><h3>3. الأدوات والأجهزة المستخدمة</h3>
+    <div class="tool"><div class="stage">${sp3D(120,{tape:120,cart:14,lab:true})}</div><div class="vcap">مسار العربة وأداة الشريط المتري على طاولة المعمل: منظر ثلاثي الأبعاد</div><p><b>ترتيب الأدوات:</b> مسار مستقيم عليه خط البداية وخط النهاية، والعربة عند خط البداية، وأداة الشريط المتري عند خط البداية لقياس المسافة بين الخطين، وساعة الإيقاف لقياس زمن الحركة.</p></div>
     <div class="tool"><div class="stage">${tape}</div><p><b>الشريط المتري:</b> تقيس المسافات والأطوال الكبيرة بالسنتيمتر بدقة <span dir="ltr">0.1 cm</span>.</p></div>
     <div class="tool"><div class="stage">${sw}</div><p><b>ساعة الإيقاف:</b> تقيس الزمن بالثانية بدقة <span dir="ltr">1 s</span>، ودورة العقرب الكاملة <span dir="ltr">30 s</span>.</p></div></div>`}
 function speedLab2(box){
@@ -307,23 +397,30 @@ function speedLab2(box){
   <div class="startBand">▶️ لنبدأ التجربة</div>
   <div class="btns" style="margin-bottom:12px"><button type="button" class="rs" id="nw">🔄 مسار جديد</button></div>
   <div class="ctl"><h3>5.1 قياس المسافة d بأداة الشريط المتري</h3>
-    <div class="stage"><svg id="tTop" viewBox="0 0 400 120"></svg><svg id="tZm" viewBox="0 0 400 120"></svg><div class="hud"><span id="tSt"></span></div></div>
+    <div class="stage"><div id="tTop"></div><svg id="tZm" viewBox="0 0 400 120"></svg><div class="hud"><span id="tSt"></span></div></div>
     <div class="row"><label for="tR">سحب الشريط</label><output id="tO"></output><input id="tR" type="range" min="0" max="200" step="0.1" value="0"></div>
     <p class="slh">👆 اسحب المؤشر البرتقالي لسحب الشريط حتى يصل الخطاف إلى خط النهاية.</p>
     <div class="ans"><label>قراءتك للمسافة d</label><input id="tIn" inputmode="decimal" dir="ltr" placeholder="cm"><button type="button" class="go" id="tCk">تحقق</button><button type="button" class="rs" id="tHn">تلميح</button></div><div class="fb2" id="tFb"></div>
   </div>
   <div class="ctl"><h3>5.2 قياس الزمن t بأداة ساعة الإيقاف</h3>
-    <div class="stage"><svg id="sTop" viewBox="0 0 400 90"></svg><svg id="sW" viewBox="0 0 400 262"></svg><div class="hud"><span id="sSt"></span></div></div>
+    <div class="stage"><div id="sTop"></div><svg id="sW" viewBox="0 0 400 262"></svg><div class="hud"><span id="sSt"></span></div></div>
     <div class="row"><label for="sR">حركة العربة</label><output id="sO"></output><input id="sR" type="range" min="0" max="30" step="0.1" value="0"></div>
     <p class="slh">👆 اسحب المؤشر البرتقالي لتحريك العربة من خط البداية حتى خط النهاية، وتتوقف ساعة الإيقاف عند وصولها.</p>
     <div class="ans"><label>قراءتك للزمن t</label><input id="sIn" inputmode="decimal" dir="ltr" placeholder="s"><button type="button" class="go" id="sCk">تحقق</button><button type="button" class="rs" id="sHn">تلميح</button></div><div class="fb2" id="sFb"></div>
   </div>
     <div class="ctl"><h3>5.3 الحسابات</h3>
-    <div class="law"><div class="ln"><b>التعويض</b><span id="vS">أكمل القياسين 5.1 و 5.2</span></div></div>
-    <div class="ans"><label>1. احسب السرعة v بوحدة cm/s</label><input id="c1" inputmode="decimal" dir="ltr" placeholder="cm/s"><button type="button" class="go" id="c1k">تحقق</button></div><div class="fb2" id="c1f"></div>
-    <div class="ans"><label>2. اكتب السرعة بوحدة m/s</label><input id="c2" inputmode="decimal" dir="ltr" placeholder="m/s"><button type="button" class="go" id="c2k">تحقق</button></div><div class="fb2" id="c2f"></div>
-    <div class="ans"><label>3. اكتب السرعة بوحدة km/h</label><input id="c3" inputmode="decimal" dir="ltr" placeholder="km/h"><button type="button" class="go" id="c3k">تحقق</button></div><div class="fb2" id="c3f"></div>
-    <div class="labCalc"></div>
+    <h4 class="sbh">أ) حساب السرعة</h4>
+    <div class="cstep"><div class="law ftl"><div class="ln lw"><b>التعويض</b><span id="vS1" style="white-space:pre-line;line-height:2">v = d / t</span></div></div>
+    <p class="slh">🧮 احسب الناتج بنفسك بالآلة الحاسبة، ثم ضع النتيجة في الخانة.</p><div class="labCalc"></div>
+    <div class="ans"><label>احسب السرعة v بوحدة cm/s</label><input id="c1" inputmode="decimal" dir="ltr" placeholder="cm/s"><button type="button" class="go" id="c1k">تحقق</button></div><div class="fb2" id="c1f"></div></div>
+    <h4 class="sbh">ب) تحويل السرعة من cm/s إلى m/s</h4>
+    <div class="cstep"><div class="law ftl"><div class="ln lw"><b>التعويض</b><span id="vS2" style="white-space:pre-line;line-height:2">v(m/s) = v(cm/s) / 100</span></div></div>
+    <p class="slh">🧮 احسب الناتج بنفسك بالآلة الحاسبة، ثم ضع النتيجة في الخانة.</p><div class="labCalc"></div>
+    <div class="ans"><label>احسب السرعة v بوحدة m/s</label><input id="c2" inputmode="decimal" dir="ltr" placeholder="m/s"><button type="button" class="go" id="c2k">تحقق</button></div><div class="fb2" id="c2f"></div></div>
+    <h4 class="sbh">ج) تحويل السرعة من m/s إلى km/h</h4>
+    <div class="cstep"><div class="law ftl"><div class="ln lw"><b>التعويض</b><span id="vS3" style="white-space:pre-line;line-height:2">v(km/h) = v(m/s) × 3.6</span></div></div>
+    <p class="slh">🧮 احسب الناتج بنفسك بالآلة الحاسبة، ثم ضع النتيجة في الخانة.</p><div class="labCalc"></div>
+    <div class="ans"><label>احسب السرعة v بوحدة km/h</label><input id="c3" inputmode="decimal" dir="ltr" placeholder="km/h"><button type="button" class="go" id="c3k">تحقق</button></div><div class="fb2" id="c3f"></div></div>
   </div>
   <div class="ctl res"><h3>6. نتائج التجربة</h3>
     <div class="tw"><table class="rt"><thead><tr><th>الكمية</th><th>الأداة</th><th>القراءة</th><th>بوحدة SI</th></tr></thead>
@@ -347,7 +444,7 @@ function speedLab2(box){
   function tDraw(){const e=tVal(),touch=Math.abs(e-d)<1e-6;$('tO').textContent=e.toFixed(1)+' cm';
     $('tSt').textContent=touch?'✓ الخطاف عند خط النهاية، اقرأ المسافة من التدريج':'اسحب الشريط حتى يصل الخطاف إلى خط النهاية';
     const xe=X0+e*PX;
-    $('tTop').innerHTML=track('t',0,`<rect x="${X0}" y="60" width="${e*PX}" height="12" fill="#FDE68A" stroke="#A16207" stroke-width=".6"/><rect x="${X0-34}" y="46" width="34" height="34" rx="9" fill="#F7931E" stroke="#9A3412"/><circle cx="${X0-17}" cy="63" r="9" fill="#FB923C" stroke="#9A3412"/><rect x="${xe-2}" y="56" width="5" height="20" fill="#F7931E" stroke="#9A3412"/>`);
+    $('tTop').innerHTML=sp3D(d,{tape:e});
     const k=26,s0=Math.floor(e)-6,XX=c=>20+(c-s0)*k;let g='<rect x="0" y="20" width="400" height="56" fill="#FDE68A"/>';
     for(let m=s0*10;m<=(s0+15)*10;m++){const c=m/10,x=XX(c);if(x<0||x>400)continue;const big=m%10===0,mid=m%5===0;const hl=tHint&&touch&&m===Math.round(d*10);g+=`<line x1="${x}" y1="20" x2="${x}" y2="${20+(big?22:mid?15:9)}" stroke="${hl?'#DC2626':'#1F2937'}" stroke-width="${hl?2.4:big?1.4:.8}"/>`;if(big&&c>=0)g+=`<text x="${x}" y="58" font-size="13" font-weight="700" text-anchor="middle" fill="#1F2937">${c}</text>`}
     g+=`<line x1="${XX(e)}" y1="10" x2="${XX(e)}" y2="86" stroke="#F7931E" stroke-width="3"/><text x="${XX(e)}" y="100" font-size="10" text-anchor="middle" fill="var(--ink)">حافة الخطاف</text><rect x="352" y="92" width="44" height="24" rx="6" fill="#F7931E"/><text x="374" y="109" font-size="15" font-weight="800" text-anchor="middle" fill="#fff">cm</text><text x="6" y="110" font-size="12" font-weight="700" text-anchor="start" fill="var(--muted)">تكبير التدريج</text>`;
@@ -356,13 +453,15 @@ function speedLab2(box){
   function sDraw(){const t=sVal(),done=Math.abs(t-T)<1e-6;$('sO').textContent=done?'وصلت العربة':'';
     $('sSt').textContent=done?'✓ وصلت العربة إلى خط النهاية وتوقفت ساعة الإيقاف، اقرأ الزمن':'اسحب العربة حتى تصل إلى خط النهاية';
     const cx=X0+d*PX*t/T;
-    $('sTop').innerHTML=track('s',0,`<g transform="translate(${cx},0)"><rect x="-34" y="34" width="34" height="20" rx="4" fill="#3B82F6" stroke="#1E3A8A"/><circle cx="-26" cy="58" r="5" fill="#111827"/><circle cx="-8" cy="58" r="5" fill="#111827"/></g>`);
+    $('sTop').innerHTML=sp3D(d,{tape:0,cart:d*t/T});
     const C=130,R=118;let g=`<circle cx="200" cy="${C}" r="${R+8}" fill="#64748B" stroke="#334155" stroke-width="2"/><circle cx="200" cy="${C}" r="${R}" fill="#F8FAFC" stroke="#94A3B8"/><rect x="188" y="0" width="24" height="8" rx="3" fill="#F7931E"/>`;
     for(let i=0;i<30;i++){const a=i/30*2*Math.PI-Math.PI/2,five=i%5===0,one=true,r1=five?R-22:R-13;const hl=sHint&&done&&i===Math.round(T)%30;g+=`<line x1="${200+r1*Math.cos(a)}" y1="${C+r1*Math.sin(a)}" x2="${200+(R-1)*Math.cos(a)}" y2="${C+(R-1)*Math.sin(a)}" stroke="${hl?'#DC2626':'#1F2937'}" stroke-width="${hl?2.6:five?2.2:one?1.5:1}"/>`;if(five)g+=`<text x="${200+(R-38)*Math.cos(a)}" y="${C+(R-38)*Math.sin(a)+6}" font-size="17" font-weight="800" text-anchor="middle" fill="#1F2937">${i}</text>`}
     const a=t/30*2*Math.PI-Math.PI/2;g+=`<line x1="200" y1="${C}" x2="${200+(R-6)*Math.cos(a)}" y2="${C+(R-6)*Math.sin(a)}" stroke="#F7931E" stroke-width="3.5" stroke-linecap="round"/><circle cx="200" cy="${C}" r="7" fill="#F7931E"/><rect x="185" y="${C+22}" width="30" height="20" rx="5" fill="#F7931E"/><text x="200" y="${C+37}" font-size="14" font-weight="800" text-anchor="middle" fill="#fff">s</text>`;
     $('sW').innerHTML=g}
   const vc=()=>d/T,vm=()=>d/T/100,vk=()=>d/T/100*3.6;
-  function sub(){$('vS').textContent=okD&&okT?E(`v = d / t = ${d.toFixed(1)} cm / ${T} s`):'أكمل القياسين 5.1 و 5.2'}
+  function sub(){$('vS1').textContent=okD&&okT?['v = d / t',E(`v = ${d.toFixed(1)} / ${T}`)].join('\n'):'v = d / t';
+    $('vS2').textContent=ok1?['v(m/s) = v(cm/s) / 100',E(`v = ${vc().toFixed(1)} / 100`)].join('\n'):'v(m/s) = v(cm/s) / 100';
+    $('vS3').textContent=ok2?['v(km/h) = v(m/s) × 3.6',E(`v = ${vm().toFixed(3)} × 3.6`)].join('\n'):'v(km/h) = v(m/s) × 3.6'}
   function results(){
     $('r1a').textContent=okD?E(d.toFixed(1)+' cm'):'—';$('r1b').textContent=okD?E((d/100).toFixed(3)+' m'):'—';
     $('r2a').textContent=okT?E(T+' s'):'—';$('r2b').textContent=okT?E(T+' s'):'—';
@@ -376,11 +475,11 @@ function speedLab2(box){
     if(Math.abs(v-d)<0.05){okD=true;fb('tFb',true,'✓ قراءة صحيحة:\n'+E(`d = ${d.toFixed(1)} cm = ${(d/100).toFixed(3)} m`))}else fb('tFb',false,'✗ القراءة غير صحيحة، أعد القراءة أو استخدم التلميح.');sub();results()};
   $('sCk').onclick=()=>{if(Math.abs(sVal()-T)>1e-6)return fb('sFb',false,'اسحب العربة حتى تصل إلى خط النهاية أولا.');const v=num($('sIn').value);if(isNaN(v))return fb('sFb',false,'اكتب قراءتك بالثانية.');
     if(Math.abs(v-T)<0.05){okT=true;fb('sFb',true,'✓ قراءة صحيحة:\n'+E(`t = ${T} s`))}else fb('sFb',false,'✗ القراءة غير صحيحة، أعد القراءة أو استخدم التلميح.');sub();results()};
-  const chk=(inp,f,val,unit,okMsg,badMsg,set)=>{if(!(okD&&okT))return fb(f,false,'أكمل القياسين 5.1 و 5.2 أولا.');const v=num($(inp).value);if(isNaN(v))return fb(f,false,'اكتب الناتج بوحدة '+unit+'.');
-    if(Math.abs(v-val)/val<0.02){set();fb(f,true,okMsg)}else fb(f,false,badMsg);results()};
+  const chk=(inp,f,val,unit,okMsg,badMsg,set,need,needMsg)=>{if(!(okD&&okT))return fb(f,false,'أكمل القياسين 5.1 و 5.2 أولا.');if(need&&!need())return fb(f,false,needMsg);const v=num($(inp).value);if(isNaN(v))return fb(f,false,'اكتب الناتج بوحدة '+unit+'.');
+    if(Math.abs(v-val)/val<0.02){set();fb(f,true,okMsg)}else fb(f,false,badMsg);sub();results()};
   $('c1k').onclick=()=>chk('c1','c1f',vc(),'cm/s','✓ إجابة صحيحة:\n'+E(`v = ${d.toFixed(1)} / ${T} = ${vc().toFixed(1)} cm/s`),'✗ اقسم المسافة بالسنتيمتر على الزمن بالثانية.',()=>ok1=true);
-  $('c2k').onclick=()=>chk('c2','c2f',vm(),'m/s','✓ إجابة صحيحة:\n'+E(`${vc().toFixed(1)} cm/s / 100 = ${vm().toFixed(3)} m/s`),'✗ لأن '+E('1 m = 100 cm')+'، اقسم السرعة بوحدة cm/s على 100.',()=>ok2=true);
-  $('c3k').onclick=()=>chk('c3','c3f',vk(),'km/h','✓ إجابة صحيحة:\n'+E(`${vm().toFixed(3)} m/s × 3.6 = ${vk().toFixed(2)} km/h`),'✗ اضرب السرعة بوحدة m/s في 3600 ثم اقسم على 1000، أي اضربها في 3.6.',()=>ok3=true);
+  $('c2k').onclick=()=>chk('c2','c2f',vm(),'m/s','✓ إجابة صحيحة:\n'+E(`${vc().toFixed(1)} cm/s / 100 = ${vm().toFixed(3)} m/s`),'✗ لأن '+E('1 m = 100 cm')+'، اقسم السرعة بوحدة cm/s على 100.',()=>ok2=true,()=>ok1,'احسب السرعة بوحدة cm/s أولا.');
+  $('c3k').onclick=()=>chk('c3','c3f',vk(),'km/h','✓ إجابة صحيحة:\n'+E(`${vm().toFixed(3)} m/s × 3.6 = ${vk().toFixed(2)} km/h`),'✗ اضرب السرعة بوحدة m/s في 3600 ثم اقسم على 1000، أي اضربها في 3.6.',()=>ok3=true,()=>ok2,'احسب السرعة بوحدة m/s أولا.');
   $('nw').onclick=newObj;
   calcInit(box);newObj();
 }
@@ -488,9 +587,15 @@ function forceLab(box){
     <div class="ans"><label>عند استقرار الحلقة في المركز اضغط تحقق</label><button type="button" class="go" id="eCk">تحقق</button><button type="button" class="rs" id="eHn">تلميح</button></div><div class="fb2" id="eFb"></div>
   </div>
     <div class="ctl"><h3>5.4 الحسابات</h3>
-    <div class="law ftl"><div class="ln lw"><b>التعويض</b><span id="vS" style="white-space:pre-line;line-height:2;text-align:left!important">أكمل القياسين 5.1 و 5.2</span></div></div>
-    <div class="ans"><label>احسب مقدار المحصلة R بوحدة N</label><input id="c4" inputmode="decimal" dir="ltr" placeholder="N"><button type="button" class="go" id="c4k">تحقق</button></div><div class="fb2" id="c4f"></div>
-    <div class="labCalc"></div>
+    <p class="slh">ℹ️ <b>المعطيات:</b> تسارع الجاذبية <b dir="ltr">g = 9.8 m/s²</b></p>
+    <h4 class="sbh">أ) حساب القوة F₁</h4>
+    ${hxCalcStep('F1','F₁ = m₁·g','احسب القوة F₁ بوحدة N','N')}
+    <h4 class="sbh">ب) حساب القوة F₂</h4>
+    ${hxCalcStep('F2','F₂ = m₂·g','احسب القوة F₂ بوحدة N','N')}
+    <h4 class="sbh">ج) حساب الزاوية بين القوتين θ</h4>
+    ${hxCalcStep('TH','θ = θ₂ − θ₁','احسب الزاوية θ بالدرجات','°')}
+    <h4 class="sbh">د) حساب مقدار المحصلة R</h4>
+    ${hxCalcStep('4','R = √( F₁² + F₂² + 2·F₁·F₂·cos θ )','احسب مقدار المحصلة R بوحدة N','N')}
   </div>
   <div class="ctl res"><h3>6. نتائج التجربة</h3>
     <div class="tw"><table class="rt"><thead><tr><th>الكمية</th><th>الأداة</th><th>القراءة</th><th>بوحدة SI</th></tr></thead>
@@ -516,7 +621,7 @@ function forceLab(box){
   const adiff=(a,b)=>{let d=Math.abs(a-b)%360;return d>180?360-d:d};
   function newObj(){m1=100+10*Math.floor(Math.random()*21);m2=100+10*Math.floor(Math.random()*21);t1=Math.floor(Math.random()*61);t2=t1+70+Math.floor(Math.random()*71);
     ok={};h1=h2=false;hs=1;zoomOf=1;['bR','a1R','a2R','m3R','t3R'].forEach(k=>$(k).value=0);
-    ['m1In','m2In','t1In','t2In','c4'].forEach(k=>$(k).value='');['m1Fb','m2Fb','t1Fb','t2Fb','eFb','c4f'].forEach(k=>{$(k).textContent='';$(k).className='fb2'});
+    ['m1In','m2In','t1In','t2In','cF1','cF2','cTH','c4'].forEach(k=>$(k).value='');['m1Fb','m2Fb','t1Fb','t2Fb','eFb','cF1f','cF2f','cTHf','c4f'].forEach(k=>{$(k).textContent='';$(k).className='fb2'});
     bDraw();aDraw();eDraw();sub();results()}
   function bDraw(){box.querySelectorAll('.hsel button').forEach(b=>b.className=+b.dataset.h===hs?'go':'rs');
     const p=+$('bR').value,on=p>=100,m=hs===1?m1:m2;$('bO').textContent=on?'على الكفة':'';
@@ -538,7 +643,11 @@ function forceLab(box){
     const n=Math.hypot(nx,ny),s=bal?0:Math.min(30,Math.max(6,n/Math.max(F1(),F2())*40));const rx=n?nx/n*s:0,ry=n?-ny/n*s:0;
     $('eSt').textContent=bal?'✓ استقرت الحلقة في المركز، القوى الثلاث متزنة':'الحلقة منحرفة عن المركز، القوى غير متزنة';
     $('eS').innerHTML=ftDisk({strings:[{a:t1,c:'#2563EB',lab:'m₁'},{a:t2,c:'#16A34A',lab:'m₂'}].concat(m3>0?[{a:t3,c:'#F7931E',lab:'m₃'}]:[]),ring:[rx,ry]});return bal}
-  function sub(){const f1=fx(F1(),3),f2=fx(F2(),3);$('vS').textContent=ok.m1&&ok.m2&&ok.t1&&ok.t2?['R = √( F₁² + F₂² + 2 F₁ F₂ cos θ )',`F₁ = ${m1/1000} × 9.8 = ${f1} N`,`F₂ = ${m2/1000} × 9.8 = ${f2} N`,`θ = ${t2}° − ${t1}° = ${TH()}°`,`R = √( ${f1}² + ${f2}² + 2 × ${f1} × ${f2} × cos ${TH()}° )`].map(E).join('\n'):'أكمل القياسين 5.1 و 5.2'}
+  function sub(){const f1=fx(F1(),3),f2=fx(F2(),3);
+    $('sbF1').textContent=ok.m1?['F₁ = m₁·g',E(`m₁ = ${m1.toFixed(1)} g = ${m1/1000} kg`),E(`F₁ = ${m1/1000} × 9.8`)].join('\n'):'F₁ = m₁·g';
+    $('sbF2').textContent=ok.m2?['F₂ = m₂·g',E(`m₂ = ${m2.toFixed(1)} g = ${m2/1000} kg`),E(`F₂ = ${m2/1000} × 9.8`)].join('\n'):'F₂ = m₂·g';
+    $('sbTH').textContent=ok.t1&&ok.t2?['θ = θ₂ − θ₁',E(`θ = ${t2}° − ${t1}°`)].join('\n'):'θ = θ₂ − θ₁';
+    $('sb4').textContent=ok.cF1&&ok.cF2&&ok.cTH?['R = √( F₁² + F₂² + 2·F₁·F₂·cos θ )',E(`R = √( ${f1}² + ${f2}² + 2 × ${f1} × ${f2} × cos ${TH()}° )`)].join('\n'):'R = √( F₁² + F₂² + 2·F₁·F₂·cos θ )'}
 
   function rDraw(){const st=$('rStage');if(!ok.c4){st.hidden=true;return}st.hidden=false;
     const C=[200,175],P=(r,a)=>[C[0]+r*Math.cos(a*D2R),C[1]-r*Math.sin(a*D2R)],k=135/Math.max(RR(),F1(),F2());
@@ -573,8 +682,11 @@ function forceLab(box){
     fb('eFb',true,'✓ القوى الثلاث متزنة:\n'+E(`m₃ = ${m3} g ,  θ₃ = ${t3}°`));results()};
   $('eHn').onclick=()=>fb('eFb',true,'تلميح: قوة الاتزان تقع في الجهة المقابلة للقوتين تقريبا. ابدأ بزاوية بين '+E(Math.round(TE()-20)%360+'°')+' و '+E(Math.round(TE()+20)%360+'°')+'، ثم زد الكتلة تدريجيا حتى تقترب الحلقة من المركز.');
   const chk=(i,val,unit,tol,okMsg,badMsg)=>{const f='c'+i+'f';if(!(ok.m1&&ok.m2&&ok.t1&&ok.t2))return fb(f,false,'أكمل القياسين 5.1 و 5.2 أولا.');const v=num($('c'+i).value);if(isNaN(v))return fb(f,false,'اكتب الناتج بوحدة '+unit+'.');
-    const good=unit==='°'?adiff(v,val)<=tol:Math.abs(v-val)/Math.abs(val)<=tol;if(good){ok['c'+i]=true;fb(f,true,okMsg)}else fb(f,false,badMsg);results()};
-  $('c4k').onclick=()=>chk(4,RR(),'N',.02,'✓ إجابة صحيحة:\n'+E(`R = ${fx(RR(),2)} N`),'✗ ضع القيم في قانون جيب التمام، وانتبه أن الآلة الحاسبة على وضع الدرجات D.');
+    const good=unit==='°'?adiff(v,val)<=tol:Math.abs(v-val)/Math.abs(val)<=tol;if(good){ok['c'+i]=true;fb(f,true,okMsg)}else fb(f,false,badMsg);sub();results()};
+  $('cF1k').onclick=()=>chk('F1',F1(),'N',.01,'✓ إجابة صحيحة:\n'+E(`F₁ = ${m1/1000} × 9.8 = ${fx(F1(),3)} N`),'✗ اكتب الكتلة بوحدة kg، ثم اضربها في 9.8:\n'+E(`F₁ = ${m1/1000} × 9.8`));
+  $('cF2k').onclick=()=>chk('F2',F2(),'N',.01,'✓ إجابة صحيحة:\n'+E(`F₂ = ${m2/1000} × 9.8 = ${fx(F2(),3)} N`),'✗ اكتب الكتلة بوحدة kg، ثم اضربها في 9.8:\n'+E(`F₂ = ${m2/1000} × 9.8`));
+  $('cTHk').onclick=()=>chk('TH',TH(),'°',.5,'✓ إجابة صحيحة:\n'+E(`θ = ${t2}° − ${t1}° = ${TH()}°`),'✗ اطرح الزاوية الصغرى من الكبرى:\n'+E(`θ = ${t2}° − ${t1}°`));
+  $('c4k').onclick=()=>{if(!(ok.cF1&&ok.cF2&&ok.cTH))return fb('c4f',false,'أكمل حساب F₁ و F₂ و θ أولا.');chk(4,RR(),'N',.02,'✓ إجابة صحيحة:\n'+E(`R = ${fx(RR(),2)} N`),'✗ ضع القيم في قانون جيب التمام، وانتبه أن الآلة الحاسبة على وضع الدرجات D.')};
   $('nw').onclick=newObj;
   calcInit(box);newObj();
 }
@@ -637,10 +749,13 @@ function vecLab(box){
     <div class="ans"><label>عند استقرار الحلقة في المركز اضغط تحقق</label><button type="button" class="go" id="eCk">تحقق</button><button type="button" class="rs" id="eHn">تلميح</button></div><div class="fb2" id="eFb"></div>
   </div>
     <div class="ctl"><h3>5.4 الحسابات</h3>
-    <div class="law ftl"><div class="ln lw"><b>التعويض</b><span id="vS" style="white-space:pre-line;line-height:2;text-align:left!important">أكمل القياسين 5.1 و 5.2</span></div></div>
-    <div class="ans"><label>1. احسب المركبة السينية Fx بوحدة N</label><input id="c1" inputmode="decimal" dir="ltr" placeholder="N"><button type="button" class="go" id="c1k">تحقق</button></div><div class="fb2" id="c1f"></div>
-    <div class="ans"><label>2. احسب المركبة الصادية Fy بوحدة N</label><input id="c2" inputmode="decimal" dir="ltr" placeholder="N"><button type="button" class="go" id="c2k">تحقق</button></div><div class="fb2" id="c2f"></div>
-    <div class="labCalc"></div>
+    <p class="slh">ℹ️ <b>المعطيات:</b> تسارع الجاذبية <b dir="ltr">g = 9.8 m/s²</b></p>
+    <h4 class="sbh">أ) حساب مقدار القوة F</h4>
+    ${hxCalcStep('F','F = m·g','احسب مقدار القوة F بوحدة N','N')}
+    <h4 class="sbh">ب) حساب المركبة السينية Fx</h4>
+    ${hxCalcStep('1','Fx = F·cos θ','احسب المركبة السينية Fx بوحدة N','N')}
+    <h4 class="sbh">ج) حساب المركبة الصادية Fy</h4>
+    ${hxCalcStep('2','Fy = F·sin θ','احسب المركبة الصادية Fy بوحدة N','N')}
   </div>
   <div class="ctl res"><h3>6. نتائج التجربة</h3>
     <div class="tw"><table class="rt"><thead><tr><th>الكمية</th><th>الأداة</th><th>القراءة</th><th>بوحدة SI</th></tr></thead>
@@ -660,7 +775,7 @@ function vecLab(box){
   let m,th,ok={},hT=false;
   const F=()=>m/1000*G,FX=()=>F()*Math.cos(th*D2R),FY=()=>F()*Math.sin(th*D2R),MX=()=>m*Math.cos(th*D2R),MY=()=>m*Math.sin(th*D2R);
   function newObj(){m=200+10*Math.floor(Math.random()*31);th=20+Math.floor(Math.random()*51);ok={};hT=false;
-    ['bR','aR','xR','yR'].forEach(k=>$(k).value=0);['mIn','tIn','c1','c2'].forEach(k=>$(k).value='');['mFb','tFb','eFb','c1f','c2f'].forEach(k=>{$(k).textContent='';$(k).className='fb2'});
+    ['bR','aR','xR','yR'].forEach(k=>$(k).value=0);['mIn','tIn','cF','c1','c2'].forEach(k=>$(k).value='');['mFb','tFb','eFb','cFf','c1f','c2f'].forEach(k=>{$(k).textContent='';$(k).className='fb2'});
     bDraw();aDraw();eDraw();sub();results()}
   function bDraw(){const p=+$('bR').value,on=p>=100;$('bO').textContent=on?'على الكفة':'';$('bSt').textContent=on?'✓ الحامل على الكفة، اقرأ الكتلة من الشاشة':'أنزل الحامل حتى يستقر على الكفة';
     $('bS').innerHTML=ftBalance(1,on?m.toFixed(1)+' g':'0.0 g',-4+p*0.66)}
@@ -679,7 +794,10 @@ function vecLab(box){
     $('eSt').textContent=bal?'✓ استقرت الحلقة في المركز، المركبتان توازنان القوة':'الحلقة منحرفة عن المركز';
     const st=[{a:th,c:'#DC2626',lab:'m'}];if(mx>0)st.push({a:180,c:'#2563EB',lab:'mₓ'});if(my>0)st.push({a:270,c:'#16A34A',lab:'mᵧ'});
     $('eS').innerHTML=ftDisk({strings:st,ring:[n?nx/n*sz:0,n?-ny/n*sz:0]});return bal}
-  function sub(){const f=fx(F(),3);$('vS').textContent=ok.m&&ok.t?['Fx = F cos θ , Fy = F sin θ',`F = ${m/1000} × 9.8 = ${f} N`,`Fx = ${f} × cos ${th}°`,`Fy = ${f} × sin ${th}°`].map(E).join('\n'):'أكمل القياسين 5.1 و 5.2'}
+  function sub(){const f=fx(F(),3);
+    $('sbF').textContent=ok.m?['F = m·g',E(`m = ${m} g = ${m/1000} kg`),E(`F = ${m/1000} × 9.8`)].join('\n'):'F = m·g';
+    $('sb1').textContent=ok.cF&&ok.t?['Fx = F·cos θ',E(`Fx = ${f} × cos ${th}°`)].join('\n'):'Fx = F·cos θ';
+    $('sb2').textContent=ok.cF&&ok.t?['Fy = F·sin θ',E(`Fy = ${f} × sin ${th}°`)].join('\n'):'Fy = F·sin θ'}
   function rDraw(){const st=$('rStage');if(!(ok.c1&&ok.c2)){st.hidden=true;return}st.hidden=false;
     const ox=200,oy=180,K=135/F(),fxp=FX()*K,fyp=FY()*K;
     const arr=(x1,y1,x2,y2,c,lab,lx,ly)=>{const a=Math.atan2(y2-y1,x2-x1),h=13;return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${c}" stroke-width="4"/><path d="M${x2} ${y2} L${x2-h*Math.cos(a-.4)} ${y2-h*Math.sin(a-.4)} L${x2-h*Math.cos(a+.4)} ${y2-h*Math.sin(a+.4)} Z" fill="${c}"/><text x="${x2+lx}" y="${y2+ly}" font-size="16" font-weight="800" fill="${c}" text-anchor="middle">${lab}</text>`};
@@ -708,9 +826,10 @@ function vecLab(box){
   $('eCk').onclick=()=>{if(!eDraw())return fb('eFb',false,'✗ الحلقة لم تستقر في المركز بعد، اضبط الكتلتين.');ok.e={x:+$('xR').value,y:+$('yR').value};fb('eFb',true,'✓ استقرت الحلقة:\n'+E(`mₓ = ${ok.e.x} g ,  mᵧ = ${ok.e.y} g`));results()};
   $('eHn').onclick=()=>fb('eFb',true,'تلميح: كلما زادت زاوية القوة احتاجت الكتلة mᵧ إلى قيمة أكبر والكتلة mₓ إلى قيمة أصغر. اضبط كل كتلة حتى يقترب مركز الحلقة من المسمار.');
   const chk=(i,val,okMsg,bad)=>{const f='c'+i+'f';if(!(ok.m&&ok.t))return fb(f,false,'أكمل القياسين 5.1 و 5.2 أولا.');const v=num($('c'+i).value);if(isNaN(v))return fb(f,false,'اكتب الناتج بوحدة N.');
-    if(Math.abs(v-val)/val<=0.02){ok['c'+i]=true;fb(f,true,okMsg)}else fb(f,false,bad);results()};
-  $('c1k').onclick=()=>chk(1,FX(),'✓ إجابة صحيحة:\n'+E(`Fx = ${fx(FX(),2)} N`),'✗ اضرب مقدار القوة في جيب تمام الزاوية cos θ، وانتبه أن الآلة الحاسبة على وضع الدرجات D.');
-  $('c2k').onclick=()=>chk(2,FY(),'✓ إجابة صحيحة:\n'+E(`Fy = ${fx(FY(),2)} N`),'✗ اضرب مقدار القوة في جيب الزاوية sin θ.');
+    if(Math.abs(v-val)/val<=0.02){ok['c'+i]=true;fb(f,true,okMsg)}else fb(f,false,bad);sub();results()};
+  $('cFk').onclick=()=>chk('F',F(),'✓ إجابة صحيحة:\n'+E(`F = ${m/1000} × 9.8 = ${fx(F(),3)} N`),'✗ اكتب الكتلة بوحدة kg، ثم اضربها في 9.8:\n'+E(`F = ${m/1000} × 9.8`));
+  $('c1k').onclick=()=>ok.cF?chk(1,FX(),'✓ إجابة صحيحة:\n'+E(`Fx = ${fx(FX(),2)} N`),'✗ اضرب مقدار القوة في جيب تمام الزاوية cos θ، وانتبه أن الآلة الحاسبة على وضع الدرجات D.'):fb('c1f',false,'احسب مقدار القوة F أولا.');
+  $('c2k').onclick=()=>ok.cF?chk(2,FY(),'✓ إجابة صحيحة:\n'+E(`Fy = ${fx(FY(),2)} N`),'✗ اضرب مقدار القوة في جيب الزاوية sin θ.'):fb('c2f',false,'احسب مقدار القوة F أولا.');
   $('nw').onclick=newObj;
   calcInit(box);newObj();
 }
@@ -923,6 +1042,7 @@ function dpTools(){
   const bd=`<svg viewBox="0 -30 410 462" aria-label="لوحة الإحداثيات">${dpBoard({A:[6,2],B:[3,5],unit:1})}${lbl(40,360,20,402,'نقطة الأصل','start')}${lbl(62,360,150,402,'متجها الوحدة')}${lbl(220,300,320,402,'خيط المتجه')}${lbl(300,100,392,-14,'المربع = 1 cm','end')}</svg>`;
   const pr=`<svg viewBox="0 0 400 215" aria-label="المنقلة">${wkProt(200,160,140)}<line x1="40" y1="160" x2="360" y2="160" stroke="#B45309" stroke-width="2"/>${lbl(200,160,200,192,'مركز المنقلة')}${lbl(300,62,370,20,'التدريج بالدرجات','end')}${lbl(80,160,40,192,'خط القاعدة','start')}</svg>`;
   return `<div class="intro"><h3>3. الأدوات والأجهزة المستخدمة</h3>
+    <div class="tool"><div class="stage">${dp3D()}</div><div class="vcap">لوحة الإحداثيات والمنقلة على طاولة المعمل: منظر ثلاثي الأبعاد</div></div>
     <div class="tool"><div class="stage">${bd}</div><p><b>لوحة الإحداثيات:</b> لوحة مربعات كل مربع منها <span dir="ltr">1 cm</span>، عليها خيطان مشدودان من نقطة الأصل يمثلان المتجهين، ومتجها الوحدة <span dir="ltr">i</span> و <span dir="ltr">j</span> طول كل منهما مربع واحد.</p></div>
     <div class="tool"><div class="stage">${pr}</div><p><b>المنقلة:</b> تقيس الزاوية بين المتجهين بدقة <span dir="ltr">1°</span>، ويوضع مركزها عند نقطة الأصل.</p></div></div>`}
 function dotLab(box){
@@ -970,11 +1090,14 @@ function dotLab(box){
     <div class="ans"><label>قراءتك للزاوية θ</label><input id="tIn" inputmode="decimal" dir="ltr" placeholder="°"><button type="button" class="go" id="tCk">تحقق</button><button type="button" class="rs" id="tHn">تلميح</button></div><div class="fb2" id="tFb"></div>
   </div>
     <div class="ctl"><h3>5.4 الحسابات</h3>
-    <div class="law ftl"><div class="ln lw"><b>1. الضرب القياسي لمتجهين ممثلين بالإحداثيات الديكارتية</b><span id="vS1" style="white-space:pre-line;line-height:2;text-align:left!important">أكمل القياسات 5.1 و 5.2</span></div></div>
-    <div class="ans"><label>احسب الضرب القياسي لمتجهين ممثلين بالإحداثيات الديكارتية بوحدة cm²</label><input id="c1" inputmode="decimal" dir="ltr" placeholder="cm²"><button type="button" class="go" id="c1k">تحقق</button></div><div class="fb2" id="c1f"></div>
-    <div class="law ftl" style="margin-top:16px"><div class="ln lw"><b>2. الضرب القياسي لمتجهين ممثلين بالإحداثيات القطبية</b><span id="vS2" style="white-space:pre-line;line-height:2;text-align:left!important">أكمل القياسات 5.1 و 5.2 و 5.3</span></div></div>
-    <div class="ans"><label>احسب الضرب القياسي لمتجهين ممثلين بالإحداثيات القطبية بوحدة cm²</label><input id="c2" inputmode="decimal" dir="ltr" placeholder="cm²"><button type="button" class="go" id="c2k">تحقق</button></div><div class="fb2" id="c2f"></div>
-    <div class="labCalc"></div>
+    <h4 class="sbh">أ) الضرب القياسي لمتجهين ممثلين بالإحداثيات الديكارتية</h4>
+    <div class="cstep"><div class="law ftl"><div class="ln lw"><b>التعويض</b><span id="vS1" style="white-space:pre-line;line-height:2">—</span></div></div>
+    <p class="slh">🧮 احسب الناتج بنفسك بالآلة الحاسبة، ثم ضع النتيجة في الخانة.</p><div class="labCalc"></div>
+    <div class="ans"><label>احسب الضرب القياسي بوحدة cm²</label><input id="c1" inputmode="decimal" dir="ltr" placeholder="cm²"><button type="button" class="go" id="c1k">تحقق</button></div><div class="fb2" id="c1f"></div></div>
+    <h4 class="sbh">ب) الضرب القياسي لمتجهين ممثلين بالإحداثيات القطبية</h4>
+    <div class="cstep"><div class="law ftl"><div class="ln lw"><b>التعويض</b><span id="vS2" style="white-space:pre-line;line-height:2">—</span></div></div>
+    <p class="slh">🧮 احسب الناتج بنفسك بالآلة الحاسبة، ثم ضع النتيجة في الخانة.</p><div class="labCalc"></div>
+    <div class="ans"><label>احسب الضرب القياسي بوحدة cm²</label><input id="c2" inputmode="decimal" dir="ltr" placeholder="cm²"><button type="button" class="go" id="c2k">تحقق</button></div><div class="fb2" id="c2f"></div></div>
   </div>
   <div class="ctl res"><h3>6. نتائج التجربة</h3>
     <div class="tw"><table class="rt"><thead><tr><th>الكمية</th><th>الأداة</th><th>القراءة</th></tr></thead>
@@ -1004,8 +1127,9 @@ function dotLab(box){
     const xs=XX(th);if(xs>0&&xs<400)g+=`<line x1="${xs}" y1="0" x2="${xs}" y2="18" stroke="#2563EB" stroke-width="4"/><path d="M${xs-6} 12 L${xs+6} 12 L${xs} 20 Z" fill="#2563EB"/>`;
     g+=`<text x="6" y="110" font-size="12" font-weight="700" fill="var(--muted)">تكبير التدريج</text><rect x="352" y="92" width="44" height="24" rx="6" fill="#F7931E"/><text x="374" y="110" font-size="16" font-weight="800" text-anchor="middle" fill="#fff">°</text>`;
     $('z3').innerHTML=g}
-  function sub(){$('vS1').textContent=ok.a&&ok.b?[`A${V} = ${A[0]} i + ${A[1]} j`,`B${V} = ${B[0]} i + ${B[1]} j`,`A${V} · B${V} = Ax Bx + Ay By`,`A${V} · B${V} = (${A[0]})(${B[0]}) + (${A[1]})(${B[1]})`].map(E).join('\n'):'أكمل القياسات 5.1 و 5.2';
-    $('vS2').textContent=ok.a&&ok.b&&ok.t?[`A = √(${A[0]}² + ${A[1]}²) = ${fx(MA(),2)} cm`,`B = √(${B[0]}² + ${B[1]}²) = ${fx(MB(),2)} cm`,`A${V} · B${V} = A B cos θ`,`A${V} · B${V} = ${fx(MA(),2)} × ${fx(MB(),2)} × cos ${th}°`].map(E).join('\n'):'أكمل القياسات 5.1 و 5.2 و 5.3'}
+  function sub(){const L1=`A${V} · B${V} = Ax·Bx + Ay·By`,L2=`A${V} · B${V} = A·B·cos θ`;
+    $('vS1').textContent=ok.a&&ok.b?[L1,...[`A${V} = ${A[0]} i + ${A[1]} j`,`B${V} = ${B[0]} i + ${B[1]} j`,`A${V} · B${V} = (${A[0]})(${B[0]}) + (${A[1]})(${B[1]})`].map(E)].join('\n'):L1;
+    $('vS2').textContent=ok.a&&ok.b&&ok.t?[L2,...[`A = √(${A[0]}² + ${A[1]}²) = ${fx(MA(),2)} cm`,`B = √(${B[0]}² + ${B[1]}²) = ${fx(MB(),2)} cm`,`A${V} · B${V} = ${fx(MA(),2)} × ${fx(MB(),2)} × cos ${th}°`].map(E)].join('\n'):L2}
   function results(){
     $('r1').textContent=ok.a?E(`${A[0]} i + ${A[1]} j  cm`):'—';$('r2').textContent=ok.b?E(`${B[0]} i + ${B[1]} j  cm`):'—';$('r3').textContent=ok.t?E(th+'°'):'—';
     $('r4').textContent=ok.c1?E(DC()+' cm²'):'—';$('r5').textContent=ok.c2?E(fx(DT(),1)+' cm²'):'—';
@@ -1252,7 +1376,7 @@ function airLab(box){
   function curve(id,kind){const col=['#3B82F6','#F7931E'],T=[TT(1),TT(2)],V=[VF(1),VF(2)],Aa=[AC(1),AC(2)];
     const L=58,R=360,TOP=46,B=222,tm=Math.max(...T)*1.12,ym=(kind==='v'?Math.max(...V):Math.max(...Aa))*1.3,X=x=>L+x/tm*(R-L),Y=y=>B-y/ym*(B-TOP);
     const ts=nice(tm/4),ys=nice(ym/4);
-    let g=`<text x="200" y="15" font-size="14" font-weight="800" text-anchor="middle" fill="var(--ink)">${kind==='v'?'منحنى السرعة مع الزمن (V − t)':'منحنى التسارع مع الزمن (a − t)'}</text>`;
+    let g=`<text x="200" y="15" font-size="14" font-weight="800" text-anchor="middle" fill="var(--ink)">${kind==='v'?'منحنى السرعة مع الزمن':'منحنى التسارع مع الزمن'}</text>`;
     for(let y=ys;y<=ym+1e-9;y+=ys)g+=`<line x1="${L}" y1="${Y(y)}" x2="${R}" y2="${Y(y)}" stroke="var(--line)"/><text x="${L-6}" y="${Y(y)+4}" font-size="11" text-anchor="end" fill="var(--ink)" direction="ltr">${+y.toFixed(3)}</text>`;
     for(let x=ts;x<=tm+1e-9;x+=ts)g+=`<line x1="${X(x)}" y1="${B}" x2="${X(x)}" y2="${B+5}" stroke="var(--ink)"/><text x="${X(x)}" y="${B+18}" font-size="11" text-anchor="middle" fill="var(--ink)" direction="ltr">${+x.toFixed(2)}</text>`;
     g+=`<line x1="${L}" y1="${B}" x2="${R+10}" y2="${B}" stroke="var(--ink)" stroke-width="1.5"/><line x1="${L}" y1="${B}" x2="${L}" y2="${TOP-12}" stroke="var(--ink)" stroke-width="1.5"/><text x="${R+14}" y="${B+4}" font-size="12" font-weight="700" text-anchor="start" fill="var(--ink)" direction="ltr">t</text><text x="${R+14}" y="${B+18}" font-size="11" text-anchor="start" fill="var(--ink)" direction="ltr">(s)</text><text x="${L-5}" y="${TOP-10}" font-size="12" font-weight="700" text-anchor="end" fill="var(--ink)" direction="ltr">${kind==='v'?'V (m/s)':'a (m/s²)'}</text><text x="${L+6}" y="${TOP-10}" font-size="12" font-weight="700" text-anchor="start" fill="var(--muted)">${kind==='v'?'‏سرعة العربة‏':'‏تسارع العربة‏'}</text>`;
@@ -1675,7 +1799,7 @@ function frSpring(F,nm){/* رسم تفصيلي لتوصيل الميزان ال�
   for(let i=0;i<=50;i++){const x=x0+12+i*3;if(x>x1-6)break;g+=`<line x1="${x}" y1="64" x2="${x}" y2="${64+(i%10===0?9:i%5===0?6:3)}" stroke="#1F2937" stroke-width="${i%10===0?1.2:.6}"/>`;if(i%10===0)g+=`<text x="${x}" y="60" font-size="10" font-weight="700" text-anchor="middle" fill="var(--ink)">${i/10}</text>`}
   g+=`<line x1="${x1}" y1="84" x2="${x1+20}" y2="84" stroke="#334155" stroke-width="3"/><circle cx="${x1+30}" cy="84" r="10" fill="none" stroke="#F7931E" stroke-width="4"/>`;
   g+=frHand(x1+34,84,1.2)+`<line x1="${x1+50}" y1="104" x2="${x1+92}" y2="104" stroke="#F7931E" stroke-width="3"/><path d="M${x1+100},104 l-10,-6 v12 Z" fill="#F7931E"/>`;
-  g+=lbl(30,70,8,22,nm,'start')+lbl(96,86,96,150,'الخيط')+lbl(126,80,112,22,'خطاف الميزان','start')+lbl(x0+40,84,x0+30,150,'النابض')+lbl(x0+96,66,248,22,'‏التدريج (N)‏')+lbl(xi,94,xi+30,150,'المؤشر')+lbl(x1+24,92,x1+20,150,'حلقة السحب')+lbl(x1+90,50,420,22,'يد المتدرب','middle')+lbl(x1-20,100,304,22,'جسم الميزان','start');
+  g+=lbl(30,70,8,22,nm,'start')+lbl(96,86,96,150,'الخيط')+lbl(126,80,112,22,'خطاف الميزان','start')+lbl(x0+40,84,x0+30,150,'النابض')+lbl(x0+96,66,248,22,'التدريج بوحدة N')+lbl(xi,94,xi+30,150,'المؤشر')+lbl(x1+24,92,x1+20,150,'حلقة السحب')+lbl(x1+90,50,420,22,'يد المتدرب','middle')+lbl(x1-20,100,304,22,'جسم الميزان','start');
   return `<svg viewBox="0 0 470 168" aria-label="توصيل الميزان النابضي بالصندوق">${g}</svg>`}
 function frLab(box){
   const MU=0.3;
@@ -2302,7 +2426,7 @@ function htScene(o){/* o:{px,tz,R,t,lab,hl,cl,pour} مجس الحرارة: px م
   {const inCup=Math.abs(px-HX)<1||Math.abs(px-CX)<1,[,rim]=S(px,D,T+CH);if(inCup&&ay>rim)g+=`<rect x="${ax-2}" y="${ry}" width="4" height="${Math.max(0,rim+RY-ry)}" fill="url(#htRod)" stroke="#475569" stroke-width=".8"/><rect x="${ax-5}" y="${hy}" width="10" height="${ry-hy}" rx="3" fill="#1F2937" stroke="#0F172A"/>`}
   {const [sx,sy]=S(26,70,T);g+=`<rect x="${sx-4}" y="${sy-44}" width="8" height="6" rx="1.5" fill="#475569"/><circle cx="${sx}" cy="${sy-22}" r="17" fill="#1F2937" stroke="#0F172A"/><circle cx="${sx}" cy="${sy-22}" r="13" fill="#E2E8F0"/><text x="${sx}" y="${sy-18}" font-size="10" font-weight="800" text-anchor="middle" fill="#0F172A" font-family="Consolas,monospace" direction="ltr">${o.t==null?'0':o.t} s</text>`}
   if(o.lab){const h=S(HX-RX,D,T+40),c=S(CX+RX,D,T+40),[,rt]=S(px,D,tz+40);
-    g+=lbl(h[0],h[1],8,24,'‏ماء ساخن (m₁)‏','start')+lbl(c[0]-4,c[1]-30,170,24,'‏ماء بارد (m₂)‏')+lbl(ax+2,rt,396,60,'مجس الحرارة الرقمي','end')+lbl(...S(320,6,T+30),345,BASE+28,'جهاز القراءة')+lbl(...S(26,70,T+30),6,BASE+28,'ساعة الإيقاف','start')+lbl(...S(HX,D,T+20),150,BASE+28,'كوب عازل')}
+    g+=lbl(h[0],h[1],8,24,'ماء ساخن m₁','start')+lbl(c[0]-4,c[1]-30,170,24,'ماء بارد m₂')+lbl(ax+2,rt,396,60,'مجس الحرارة الرقمي','end')+lbl(...S(320,6,T+30),345,BASE+28,'جهاز القراءة')+lbl(...S(26,70,T+30),6,BASE+28,'ساعة الإيقاف','start')+lbl(...S(HX,D,T+20),150,BASE+28,'كوب عازل')}
   return `<svg viewBox="0 0 400 ${BASE+(o.lab?44:12)}" aria-label="مجس حرارة رقمي وكوبان: ماء ساخن وماء بارد">${g}</svg>`}
 function htBal(v,lab,hot){const wc=hot?'#FCA5A5':'#93C5FD',sc=hot?'#B91C1C':'#1D4ED8';
   return `<svg viewBox="0 0 400 170" aria-label="الميزان الرقمي"><rect x="90" y="92" width="220" height="62" rx="10" fill="#334155" stroke="#0F172A" stroke-width="2"/><rect x="110" y="106" width="130" height="34" rx="5" fill="#BBF7D0" stroke="#14532D"/><text x="175" y="130" font-size="20" font-weight="800" text-anchor="middle" fill="#14532D" direction="ltr" font-family="Consolas,monospace">${v}</text><text x="270" y="130" font-size="16" font-weight="800" fill="#fff">g</text><rect x="120" y="80" width="160" height="12" rx="3" fill="#94A3B8" stroke="#475569"/>
@@ -2779,7 +2903,7 @@ function lhLab(box){
     <li>إضافة الجليد إلى الماء الدافئ وقياس درجة الحرارة النهائية <span dir="ltr">Tf</span> بعد انصهاره كاملا.</li>
     <li>حساب الحرارة الكامنة لانصهار الجليد <span dir="ltr">H</span> من القانون <span dir="ltr" style="white-space:nowrap">Q = m·H</span> ومقارنتها بالقيمة المرجعية.</li></ol></div>
   <div class="intro"><h3>3. الأدوات والأجهزة المستخدمة</h3>
-    <div class="tool"><div class="stage">${hxScene({cups:[{x:HX,wc:WW[0],sc:WW[1],lv:0.6},{x:CX,lv:0,ice:6}],probe:{x:HX,tz:HX_IN},R:'45.0',lbls:[[HX-30,40,40,8,24,'ماء دافئ','start'],[CX+30,40,40,200,24,'‏مكعبات جليد (0 °C)‏'],[HX,40,130,396,60,'مجس الحرارة الرقمي','end'],[320,6,30,345,264,'جهاز القراءة'],[HX,40,20,150,264,'كوب عازل']]})}</div><div class="vcap">كوب عازل فيه ماء دافئ ومكعبات جليد عند 0 °C</div>
+    <div class="tool"><div class="stage">${hxScene({cups:[{x:HX,wc:WW[0],sc:WW[1],lv:0.6},{x:CX,lv:0,ice:6}],probe:{x:HX,tz:HX_IN},R:'45.0',lbls:[[HX-30,40,40,8,24,'ماء دافئ','start'],[CX+30,40,40,200,24,'مكعبات جليد عند 0 °C'],[HX,40,130,396,60,'مجس الحرارة الرقمي','end'],[320,6,30,345,264,'جهاز القراءة'],[HX,40,20,150,264,'كوب عازل']]})}</div><div class="vcap">كوب عازل فيه ماء دافئ ومكعبات جليد عند 0 °C</div>
     <p><b>ترتيب الأجهزة:</b> ماء دافئ معلوم الكتلة في كوب عازل، ومكعبات جليد تذوب عند <span dir="ltr">0 °C</span> معلومة الكتلة، ومجس الحرارة متصل بجهاز القراءة.</p></div>
     <div class="tool"><div class="stage">${hxBal('40','mi','ice')}</div><p><b>الميزان الرقمي:</b> يقيس كتلة الماء الدافئ وكتلة الجليد بالجرام بدقة <span dir="ltr">1 g</span>.</p>
     <p><b>مجس الحرارة الرقمي:</b> يعرض درجة حرارة الماء بدقة <span dir="ltr">0.1 °C</span>.</p></div></div>
@@ -2921,7 +3045,7 @@ function trLab(box){
   <div class="intro"><h3>3. الأدوات والأجهزة المستخدمة</h3>
     <div class="tool"><div class="stage">${cdScene(0,[1,1,1],{lab:true})}</div><div class="vcap">جهاز التوصيل الحراري: ثلاثة قضبان فلزية متصلة بكتلة نحاسية فوق مصدر حرارة</div>
     <p><b>جهاز التوصيل الحراري:</b> ثلاثة قضبان متساوية الطول والسمك من النحاس والألومنيوم والحديد، متصلة بكتلة نحاسية فوق مصدر حرارة، وفي طرف كل قضيب كرة صغيرة مثبتة بالشمع.</p></div>
-    <div class="tool"><div class="stage">${cvScene(0.8,{lab:true})}</div><div class="vcap">كأس ماء يسخن من أسفل جانبه الأيسر، مع صبغة ملونة</div>
+    <div class="tool"><div class="stage">${cv3D(0.8,{lab:true})}</div><div class="vcap">كأس ماء يسخن من أسفل جانبه الأيسر، مع صبغة ملونة</div>
     <p><b>كأس الماء والصبغة:</b> تسخين الماء من أسفل جانب واحد مع قطرات صبغة ملونة لرؤية حركة الماء.</p></div>
     <div class="tool"><div class="stage">${lcScene(0,null,{lab:true})}</div><div class="vcap">مكعب ليزلي ومقياس الحرارة بالأشعة تحت الحمراء</div>
     <p><b>مكعب ليزلي <span dir="ltr">(Leslie Cube)</span>:</b> مكعب معدني يملأ بماء ساخن، أحد وجهيه مطلي بالأسود والآخر لامع، فيكونان عند درجة الحرارة نفسها.</p>
@@ -2971,7 +3095,7 @@ function trLab(box){
     $('cSt').textContent=t===0?'ابدأ تشغيل ساعة الإيقاف مع تشغيل مصدر الحرارة':F.includes(t)?'✓ سقطت كرة الآن، اقرأ الزمن من ساعة الإيقاف':`سقط ${n} من 3 كرات`;
     $('cS').innerHTML=cdScene(t,F,{sw:t});$('cZ').innerHTML=hxZoom([[56,288,`t = ${t} s`]],'شاشة ساعة الإيقاف (مكبرة)')}
   function vDraw(){const v=+$('vR').value;$('vRO').textContent=v>=100?'تكون تيار الحمل':'';$('vSt').textContent=v>=100?'✓ الماء الساخن يرتفع، والبارد ينزل ليحل محله: تيار الحمل':v>0?'الصبغة تتحرك مع الماء…':'ابدأ تشغيل مصدر الحرارة';
-    $('vS').innerHTML=cvScene(v/100,{lab:v>=100});if(v>=100&&!ok.v){ok.v=true;results()}}
+    $('vS').innerHTML=cv3D(v/100,{lab:v>=100});if(v>=100&&!ok.v){ok.v=true;results()}}
   function lDraw(){const v=+$('lR').value,R=v===0?BK.toFixed(1):v===100?SH.toFixed(1):null;$('lRO').textContent=v===0?'الوجه الأسود':v===100?'الوجه اللامع':'';
     $('lSt').textContent=v===0?'✓ المقياس موجه إلى الوجه الأسود':v===100?'✓ المقياس موجه إلى الوجه اللامع':'أدر المقياس حتى يواجه الوجه اللامع';
     $('lS').innerHTML=lcScene(v,R);$('lZ').innerHTML=hxZoom([[56,288,`T = ${R||'--.-'} °C`]],'شاشة مقياس الحرارة بالأشعة تحت الحمراء (مكبرة)')}
@@ -3046,8 +3170,8 @@ window.LABS={'0-1':{t:'القياس بأداة القدمة ذات الورني�
 /* إصلاح اتجاه الأقواس: عزل الأقواس ذات المحتوى اللاتيني داخل النص العربي، وضبط نصوص الرسوم العربية التي فيها أقواس */
 const BIDI_AR=/[؀-ۿ]/,BIDI_GRP=/\((?=[^()؀-ۿ⁦⁩]*[A-Za-z0-9])[^()؀-ۿ⁦⁩]*\)/g;
 function bidiNode(n){const p=n.parentNode;if(!p||!BIDI_AR.test(n.data))return;if(p.closest&&p.closest('[dir="ltr"],input,textarea,script,style'))return;
-  let d=n.data.replace(BIDI_GRP,(m,o,s)=>(s[o-1]==='⁦'?m:'⁦'+m+'⁩'));
-  if(p.closest&&p.closest('svg')&&/[()]/.test(d)){if(d[0]!=='‏')d='‏'+d;if(d[d.length-1]!=='‏')d=d+'‏'}
+  let d;if(p.closest&&p.closest('svg')){if(!/[()]/.test(n.data)||n.data[0]==='\u202b')return;d='\u202b'+n.data.replace(/[\u200f\u2066\u2069]/g,'')+'\u202c'}
+  else d=n.data.replace(BIDI_GRP,(m,o,s)=>(s[o-1]==='\u2066'?m:'\u2066'+m+'\u2069'));
   if(d!==n.data)n.data=d}
 function bidiFix(root){const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let n;const a=[];while(n=w.nextNode())a.push(n);a.forEach(bidiNode)}
 function bidiWatch(root){bidiFix(root);if(typeof MutationObserver!=='function')return;new MutationObserver(ms=>{ms.forEach(m=>{if(m.type==='characterData')bidiNode(m.target);else m.addedNodes.forEach(x=>{if(x.nodeType===3)bidiNode(x);else if(x.nodeType===1)bidiFix(x)})})}).observe(root,{subtree:true,childList:true,characterData:true})}
