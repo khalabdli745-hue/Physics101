@@ -136,18 +136,17 @@ function sp3D(dd,o){/* مسار العربة على طاولة: الشريط ا�
   const line=(x,c)=>{const a=S(x,26,T+4),b=S(x,50,T+4);return `<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="${c}" stroke-width="3"/>`};
   g+=line(X0,'#16A34A')+line(X0+dd*K,'#DC2626');
   {const a=S(X0,26,T),b=S(X0+dd*K,26,T);g+=`<text x="${a[0]}" y="${a[1]+11}" font-size="10" font-weight="800" text-anchor="middle" fill="#16A34A">البداية</text><text x="${b[0]}" y="${b[1]+11}" font-size="10" font-weight="800" text-anchor="middle" fill="#DC2626">النهاية</text>`}
-  /* أداة الشريط المتري: علبة بقرص دائري وزر تثبيت، وشريط مدرج بالسنتيمتر ينتهي بخطاف */
-  const te=o.tape==null?0:o.tape,CX0=X0-40,CX1=X0-6,CD0=58,CD1=76,CZ=T+26;
-  if(te>0){g+=box(X0-6,X0+te*K,62,70,T,T+1.5,'#FDE68A','#FEF3C7','#D97706','#A16207');
-    for(let c=0;c<=te;c+=5){const big=c%10===0,[a,b]=S(X0+c*K,62,T+1.5),[a2,b2]=S(X0+c*K,big?66:64,T+1.5);g+=`<line x1="${a}" y1="${b}" x2="${a2}" y2="${b2}" stroke="#1F2937" stroke-width="${big?1:.6}"/>`;if(c%20===0&&c>0){const [q,w]=S(X0+c*K,68,T+1.5);g+=`<text x="${q}" y="${w+1}" font-size="7" font-weight="800" text-anchor="middle" fill="#1F2937">${c}</text>`}}
-    const hx=X0+te*K;g+=box(hx,hx+3,60,72,T,T+8,'#F7931E','#FDBA74','#C2410C','#9A3412')}
-  g+=box(CX0,CX1,CD0,CD1,T,CZ,'#EA580C','#FB923C','#C2410C','#9A3412');
-  {const [cx,cy]=S((CX0+CX1)/2,CD0,(T+CZ)/2);g+=`<circle cx="${cx}" cy="${cy}" r="9" fill="#FDBA74" stroke="#9A3412" stroke-width="1.4"/><circle cx="${cx}" cy="${cy}" r="3" fill="#9A3412"/>`}
-  g+=box(CX0+12,CX0+22,CD0+4,CD0+12,CZ,CZ+4,'#1F2937','#475569','#0F172A','#000');
-  {const [a,b]=S(X0-6,64,T+3);g+=`<rect x="${a-2}" y="${b-4}" width="5" height="6" fill="#FDE68A" stroke="#A16207" stroke-width=".6"/>`}
+  /* أداة الشريط المتري: علبة بقرص دائري وزر تثبيت عند خط البداية، وشريط مدرج بالسنتيمتر ممدود على المسار ينتهي بخطاف */
+  const te=o.tape==null?0:o.tape,CX0=X0-32,CX1=X0-2,CD0=34,CD1=54,ZT0=T+4,CZ=ZT0+24;
+  if(te>0){const TD0=40,TD1=50,ZT=ZT0+0.8;g+=box(X0-2,X0+te*K,TD0,TD1,ZT0,ZT,'#FACC15','#FEF08A','#CA8A04','#A16207');
+    for(let c=0;c<=te;c++){const big=c%10===0,mid=c%5===0;if(!mid&&te>80)continue;const [a,b]=S(X0+c*K,TD0,ZT),[a2,b2]=S(X0+c*K,TD0+(big?6:mid?4:2.5),ZT);g+=`<line x1="${a}" y1="${b}" x2="${a2}" y2="${b2}" stroke="#1F2937" stroke-width="${big?1.1:.6}"/>`;if(big&&c>0){const [q,w]=S(X0+c*K,TD0+8.5,ZT);g+=`<text x="${q}" y="${w+1}" font-size="8.5" font-weight="800" text-anchor="middle" fill="#1F2937">${c}</text>`}}
+    const hx=X0+te*K;g+=box(hx,hx+3,TD0-2,TD1+2,ZT0,ZT0+9,'#F7931E','#FDBA74','#C2410C','#9A3412')}
+  g+=box(CX0,CX1,CD0,CD1,ZT0,CZ,'#EA580C','#FB923C','#C2410C','#9A3412');
+  {const [cx,cy]=S((CX0+CX1)/2,CD0,(ZT0+CZ)/2);g+=`<circle cx="${cx}" cy="${cy}" r="9" fill="#FDBA74" stroke="#9A3412" stroke-width="1.4"/><circle cx="${cx}" cy="${cy}" r="3" fill="#9A3412"/>`}
+  g+=box(CX0+10,CX0+20,CD0+4,CD0+12,CZ,CZ+4,'#1F2937','#475569','#0F172A','#000');
   /* العربة */
-  if(o.cart!=null){const cx=X0+o.cart*K;g+=box(cx-30,cx,28,42,T+8,T+20,'#2563EB','#93C5FD','#1E40AF','#1E3A8A');[[cx-24,28],[cx-6,28]].forEach(([x,d])=>{const [a,b]=S(x,d,T+8);g+=`<circle cx="${a}" cy="${b}" r="4.5" fill="#111827"/>`})}
-  if(o.lab){g+=lbl(...S(X0-23,58,T+13),20,20,'أداة الشريط المتري','start')+(te>0?lbl(...S(X0+te*K+1,66,T+8),300,20,'الخطاف'):'')+lbl(...S(200,26,T+2),200,BASE+24,'مسار الحركة')+lbl(...S(X0,38,T+4),60,BASE+24,'خط البداية')+lbl(...S(X0+dd*K,38,T+4),330,BASE+24,'خط النهاية')+(o.cart!=null?lbl(...S(X0+o.cart*K-15,38,T+20),190,20,'العربة'):'')}
+  if(o.cart!=null){const cx=X0+o.cart*K;g+=box(cx-30,cx,27,38,T+8,T+20,'#2563EB','#93C5FD','#1E40AF','#1E3A8A');[[cx-24,27],[cx-6,27]].forEach(([x,d])=>{const [a,b]=S(x,d,T+8);g+=`<circle cx="${a}" cy="${b}" r="4.5" fill="#111827"/>`})}
+  if(o.lab){g+=lbl(...S(X0-17,34,T+16),20,20,'أداة الشريط المتري','start')+(te>0?lbl(...S(X0+te*K+1,50,T+12),300,20,'الخطاف'):'')+lbl(...S(200,26,T+2),200,BASE+24,'مسار الحركة')+lbl(...S(X0,38,T+4),60,BASE+24,'خط البداية')+lbl(...S(X0+dd*K,38,T+4),330,BASE+24,'خط النهاية')+(o.cart!=null?lbl(...S(X0+o.cart*K-15,38,T+20),190,20,'العربة'):'')}
   return `<svg viewBox="0 0 400 ${BASE+(o.lab?40:12)}" aria-label="مسار العربة والشريط المتري">${g}</svg>`}
 function dp3D(){/* لوحة الإحداثيات على الطاولة مع الخيطين والمنقلة */
   const BASE=230,T=12,{S,poly,box,lbl,table}=ob3(BASE);let g=table(T);
@@ -1422,11 +1421,12 @@ function ffScene(h,s,o){/* منظر ثلاثي الأبعاد: h الارتفا�
   g+=box(180,212,10,32,ZT-12,ZT,'#334155','#64748B','#1F2937')+box(212,222,18,24,ZT-8,ZT-2,'#F7931E','#FDBA74','#C2410C');
   /* وسادة الاستقبال */
   g+=box(172,228,2,38,0,8,'#1F2937','#475569','#0F172A')+poly([[176,6,8],[224,6,8],[224,34,8],[176,34,8]],'#F7931E','#C2410C');
-  /* الشريط المتري الرأسي */
-  {const a=S(240,20,8),b=S(240,20,z0),c=S(250,20,z0),d=S(250,20,8);g+=`<polygon points="${a} ${b} ${c} ${d}" fill="#FEF3C7" stroke="#A16207"/>`;
-   for(let i=0;i<=Math.floor(h*20+1e-9);i++){const zz=z0-i*K/20,[p,q]=S(240,20,zz),big=i%2===0,[p2]=S(big?246:243,20,zz);g+=`<line x1="${p}" y1="${q}" x2="${p2}" y2="${q}" stroke="#1F2937" stroke-width="${big?1.1:.6}"/>`;
-     if(big)g+=`<text x="${p-2}" y="${q+3}" font-size="7.5" font-weight="700" text-anchor="end" fill="#1F2937">${i*5}</text>`}
-   {const [p,q]=S(240,20,z0);g+=`<text x="${p+4}" y="${q-4}" font-size="8" font-weight="800" fill="#A16207">cm</text>`}}
+  /* الشريط المتري الرأسي: الخطاف (الصفر) على سطح وسادة الاستقبال، والعلبة في الأعلى فوق مستوى الإفلات */
+  {const a=S(218,20,8),b=S(218,20,z0+6),c=S(228,20,z0+6),d=S(228,20,8);g+=`<polygon points="${a} ${b} ${c} ${d}" fill="#FACC15" stroke="#A16207"/>`;
+   for(let i=0;i<=Math.floor(h*20+1e-9);i++){const zz=8+i*K/20,[p,q]=S(228,20,zz),big=i%2===0,[p2]=S(big?222:225,20,zz);g+=`<line x1="${p}" y1="${q}" x2="${p2}" y2="${q}" stroke="#1F2937" stroke-width="${big?1.1:.6}"/>`;
+     if(big)g+=`<text x="${p+3}" y="${q+3}" font-size="7.5" font-weight="700" text-anchor="start" fill="#1F2937">${i*5}</text>`}
+   g+=`<rect x="${a[0]-2}" y="${a[1]-2}" width="${d[0]-a[0]+4}" height="4" fill="#F7931E" stroke="#9A3412" stroke-width=".8"/>`}
+  g+=box(214,238,14,28,z0+6,z0+28,'#EA580C','#FB923C','#C2410C','#9A3412');{const [cx,cy]=S(226,14,z0+17);g+=`<circle cx="${cx}" cy="${cy}" r="7" fill="#FDBA74" stroke="#9A3412" stroke-width="1.3"/><circle cx="${cx}" cy="${cy}" r="2.4" fill="#9A3412"/>`}g+=box(221,231,17,24,z0+28,z0+31,'#1F2937','#475569','#0F172A','#000');
   /* مسار السقوط */
   {const a=S(196,20,z0-2),b=S(196,20,10);g+=`<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="#94A3B8" stroke-width="1" stroke-dasharray="3 4"/>`}
   /* الكرة */
@@ -1439,8 +1439,9 @@ function ffScene(h,s,o){/* منظر ثلاثي الأبعاد: h الارتفا�
    g+=`<path d="M${w1[0]},${w1[1]} C${w1[0]+50},${w1[1]-6} ${k1[0]},${k1[1]-40} ${k1[0]},${k1[1]}" fill="none" stroke="#1F2937" stroke-width="2"/><path d="M${w2[0]},${w2[1]} C${w2[0]+8},${w2[1]+10} ${k2[0]-10},${k2[1]+6} ${k2[0]},${k2[1]}" fill="none" stroke="#1F2937" stroke-width="2"/>`}
   /* السهم والارتفاع h */
   {const a=S(160,20,z0),b=S(160,20,8);g+=`<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="#2563EB" stroke-width="1.6"/><path d="M${a[0]-5},${a[1]+8} L${a[0]},${a[1]} L${a[0]+5},${a[1]+8} M${b[0]-5},${b[1]-8} L${b[0]},${b[1]} L${b[0]+5},${b[1]-8}" stroke="#2563EB" stroke-width="1.6" fill="none"/><text x="${a[0]-6}" y="${(a[1]+b[1])/2+5}" font-size="15" font-weight="800" text-anchor="end" fill="#2563EB">h</text>`}
-  if(o.ptr){const [p,q]=S(254,20,z0-o.ptr.p*K);g+=`<path d="M${p+12},${q-6} L${p+2},${q} L${p+12},${q+6} Z" fill="#F7931E"/><line x1="${p+2}" y1="${q}" x2="${p+26}" y2="${q}" stroke="#F7931E" stroke-width="2.5"/>`;if(o.ptr.touch){const [c1,c2]=S(250,20,8);g+=`<circle cx="${c1}" cy="${c2}" r="7" fill="none" stroke="#16A34A" stroke-width="2.5"/>`}}
-  if(o.lab){const B=S(196,20,z0+9-s*K);g+=lbl(...S(70,20,ZT-60),20,ZT-20>0?60:60,'الحامل','start')+lbl(...S(196,21,ZT-6),150,22,'جهاز السقوط الحر')+lbl(B[0]-9,B[1],128,B[1]+34,'الكرة','end')+lbl(...S(200,20,4),110,BASE+24,'وسادة الاستقبال')+lbl(...S(245,20,z0*0.75),292,S(0,0,z0*0.9)[1],'الشريط المتري','start')+lbl(...S(330,24,4),340,BASE+24,'المؤقت الرقمي')}
+  if(o.ptr){const r1=S(204,20,z0),r2=S(218,20,z0);g+=`<line x1="${r1[0]}" y1="${r1[1]}" x2="${r2[0]}" y2="${r2[1]}" stroke="#DC2626" stroke-width="1.6" stroke-dasharray="5 3"/>`}
+  if(o.ptr){const [p,q]=S(236,20,8+o.ptr.p*K);g+=`<path d="M${p+12},${q-6} L${p+2},${q} L${p+12},${q+6} Z" fill="#F7931E"/><line x1="${p+2}" y1="${q}" x2="${p+26}" y2="${q}" stroke="#F7931E" stroke-width="2.5"/>`;if(o.ptr.touch){const [c1,c2]=S(228,20,z0);g+=`<circle cx="${c1}" cy="${c2}" r="7" fill="none" stroke="#16A34A" stroke-width="2.5"/>`}}
+  if(o.lab){const B=S(196,20,z0+9-s*K);g+=lbl(...S(70,20,ZT-60),20,ZT-20>0?60:60,'الحامل','start')+lbl(...S(196,21,ZT-6),150,22,'جهاز السقوط الحر')+lbl(B[0]-9,B[1],128,B[1]+34,'الكرة','end')+lbl(...S(200,20,4),110,BASE+24,'وسادة الاستقبال')+lbl(...S(223,20,z0*0.75),292,S(0,0,z0*0.9)[1],'الشريط المتري','start')+lbl(...S(330,24,4),340,BASE+24,'المؤقت الرقمي')}
   if(o.note)g+=`<text x="12" y="18" font-size="12" font-weight="800" fill="#C2410C">${o.note}</text>`;
   return `<svg viewBox="0 0 400 ${BASE+(o.lab?40:14)}" aria-label="جهاز السقوط الحر">${g}</svg>`}
 function ffTools(){
@@ -1457,7 +1458,7 @@ function ffTools(){
     <div class="tool"><p><b>جهاز السقوط الحر (Free Fall Adapter):</b> ماسك يمسك الكرة الفولاذية، وعند فتحه تسقط الكرة من السكون ويبدأ المؤقت الرقمي العد من <span dir="ltr">ti = 0</span>.</p>
     <p><b>وسادة الاستقبال:</b> تستقبل الكرة عند ارتطامها، فترسل إشارة توقف المؤقت الرقمي عند الزمن النهائي <span dir="ltr">tf</span>.</p>
     <p><b>المؤقت الرقمي:</b> يعرض الزمن الابتدائي والزمن النهائي بدقة <span dir="ltr">0.0001 s</span>.</p>
-    <p><b>الشريط المتري:</b> شريط رأسي صفره عند أسفل الكرة، ويقاس به ارتفاع السقوط <span dir="ltr">h</span> بدقة <span dir="ltr">0.1 cm</span>.</p></div>
+    <p><b>الشريط المتري:</b> شريط رأسي يبدأ صفره من سطح وسادة الاستقبال وعلبته في الأعلى، ويقاس به ارتفاع السقوط <span dir="ltr">h</span> بدقة <span dir="ltr">0.1 cm</span>.</p></div>
     <div class="tool"><p><b>ربط معادلة الحركة بالسقوط الحر:</b> السقوط الحر حركة بتسارع ثابت، فنستخدم نفس المعادلة الثانية بعد تغيير الرموز:</p>${tbl}</div></div>`}
 function ffLab(box){
   const K=n=>'';
@@ -1475,7 +1476,7 @@ function ffLab(box){
     <h4 class="sbh">ج) التحقق بقياس الارتفاع بالشريط المتري</h4>
     <div class="stage"><div id="pS${n}"></div><svg id="pZ${n}" viewBox="0 0 400 110"></svg><div class="hud"><span id="pSt${n}"></span></div></div>
     <div class="row"><label for="pR${n}">مؤشر القياس</label><output id="pO${n}"></output><input id="pR${n}" type="range" min="0" max="160" step="0.1" value="0"></div>
-    <p class="slh">👆 اسحب المؤشر البرتقالي على الشريط المتري من أسفل الكرة حتى يلامس سطح وسادة الاستقبال.</p>
+    <p class="slh">👆 اسحب المؤشر البرتقالي على الشريط المتري من سطح وسادة الاستقبال (صفر الشريط) حتى يصل إلى مستوى الإفلات (أسفل الكرة قبل إفلاتها).</p>
     <div class="ans"><label>قراءتك للارتفاع h</label><input id="hIn${n}" inputmode="decimal" dir="ltr" placeholder="cm"><button type="button" class="go" id="hCk${n}">تحقق</button><button type="button" class="rs" id="hHn${n}">تلميح</button></div><div class="fb2" id="hFb${n}"></div>
   </div>`;
   box.innerHTML=`
@@ -1533,11 +1534,11 @@ function ffLab(box){
   function pVal(n){let p=r1(+$('pR'+n).value);if(p>H[n]){p=H[n];$('pR'+n).value=p}return p}
   const pTouch=n=>Math.abs(pVal(n)-H[n])<1e-6;
   function pDraw(n){const v=H[n],p=pVal(n),touch=pTouch(n),hl=hH[n]&&touch,c0=Math.floor(v)-7,X=c=>(c-c0)*26;
-    $('pO'+n).textContent=p.toFixed(1)+' cm';$('pSt'+n).textContent=touch?'✓ المؤشر عند سطح وسادة الاستقبال، اقرأ الارتفاع من الشريط':'اسحب المؤشر حتى يلامس سطح وسادة الاستقبال';
+    $('pO'+n).textContent=p.toFixed(1)+' cm';$('pSt'+n).textContent=touch?'✓ المؤشر عند مستوى الإفلات، اقرأ الارتفاع من الشريط':'اسحب المؤشر حتى يصل إلى مستوى الإفلات';
     $('pS'+n).innerHTML=ffScene(v/100,v/100,{ptr:{p:p/100,touch}});
     let z=`<rect x="0" y="34" width="400" height="58" fill="#FEF3C7" stroke="#A16207"/>`;
     for(let m=Math.ceil(c0*10);m<=Math.floor((c0+15.4)*10);m++){const x=X(m/10),big=m%10===0,mid=m%5===0,h=hl&&m===Math.round(v*10);z+=`<line x1="${x}" y1="34" x2="${x}" y2="${34+(big?22:mid?15:9)}" stroke="${h?'#2563EB':'#1F2937'}" stroke-width="${h?2.6:big?1.4:.8}"/>`;if(big)z+=`<text x="${x}" y="74" font-size="13" font-weight="700" text-anchor="middle" fill="#1F2937">${m/10}</text>`}
-    const xb=X(v);z+=`<line x1="${xb}" y1="8" x2="${xb}" y2="98" stroke="#C2410C" stroke-width="2.2" stroke-dasharray="6 4"/><text x="${xb-6}" y="20" font-size="12" font-weight="700" text-anchor="end" fill="var(--ink)">سطح وسادة الاستقبال</text>`;
+    const xb=X(v);z+=`<line x1="${xb}" y1="8" x2="${xb}" y2="98" stroke="#C2410C" stroke-width="2.2" stroke-dasharray="6 4"/><text x="${xb-6}" y="20" font-size="12" font-weight="700" text-anchor="end" fill="var(--ink)">مستوى الإفلات</text>`;
     const xp=X(p);z+=`<line x1="${xp}" y1="30" x2="${xp}" y2="96" stroke="#F7931E" stroke-width="3.5"/><path d="M${xp-7},104 L${xp},94 L${xp+7},104 Z" fill="#F7931E"/><rect x="352" y="82" width="44" height="24" rx="6" fill="#F7931E"/><text x="374" y="99" font-size="15" font-weight="800" text-anchor="middle" fill="#fff">cm</text><text x="6" y="106" font-size="12" font-weight="700" fill="var(--muted)">تكبير الشريط المتري</text>`;
     $('pZ'+n).innerHTML=z}
   const subN=n=>[E(`Δt = ${T[n].toFixed(4)} − 0 = ${T[n].toFixed(4)} s`),E(`h = ½ × 9.8 × ${T[n].toFixed(4)}²`)];
@@ -1556,7 +1557,7 @@ function ffLab(box){
     $('ch'+n+'k').onclick=()=>{if(!ok['t'+n])return fb('ch'+n+'f',false,'اقرأ الزمن النهائي أولا.');const v=num($('ch'+n).value);if(isNaN(v))return fb('ch'+n+'f',false,'اكتب الناتج بوحدة m.');
       if(Math.abs(v-HC(n))/HC(n)<0.01){ok['c'+n]=true;fb('ch'+n+'f',true,'✓ إجابة صحيحة:\n'+E(`h = ½ × 9.8 × ${T[n].toFixed(4)}² = ${fx(HC(n),3)} m`))}else fb('ch'+n+'f',false,'✗ احسب مربع الزمن Δt، ثم اضربه في 9.8، ثم اقسم الناتج على 2.');results()};
     $('hHn'+n).onclick=()=>{hH[n]=true;pDraw(n);fb('hFb'+n,true,'تلميح: الأرقام الكبيرة بالسنتيمتر، وبين كل رقمين 10 أقسام صغيرة كل قسم '+E('0.1 cm')+'. اقرأ آخر رقم قبل المؤشر، ثم احسب عدد الأقسام الصغيرة حتى الخط الأزرق.')};
-    $('hCk'+n).onclick=()=>{if(!pTouch(n))return fb('hFb'+n,false,'اسحب المؤشر حتى يلامس سطح وسادة الاستقبال أولا.');const v=num($('hIn'+n).value);if(isNaN(v))return fb('hFb'+n,false,'اكتب قراءتك بالسنتيمتر.');
+    $('hCk'+n).onclick=()=>{if(!pTouch(n))return fb('hFb'+n,false,'اسحب المؤشر حتى يصل إلى مستوى الإفلات أولا.');const v=num($('hIn'+n).value);if(isNaN(v))return fb('hFb'+n,false,'اكتب قراءتك بالسنتيمتر.');
       if(Math.abs(v-H[n])<0.05){ok['m'+n]=true;fb('hFb'+n,true,'✓ قراءة صحيحة:\n'+E(`h = ${H[n].toFixed(1)} cm = ${fx(H[n]/100,3)} m`)+(ok['c'+n]?'\nالارتفاع المحسوب '+E(`h = ${fx(HC(n),3)} m`)+' يساوي المقاس تقريبا.':''))}else fb('hFb'+n,false,'✗ القراءة غير صحيحة، أعد القراءة أو استخدم التلميح.');results()}});
   $('nw').onclick=newObj;
   calcInit(box);newObj();
@@ -1932,7 +1933,8 @@ function wkScene(s,o){/* s إزاحة الصندوق بالبكسل، والشر
   g+=box(8,380,0,70,0,12,'#B7834A','#E9C894','#9A6A3A','#7C4A1F');
   for(let i=0;i<8;i++){const a=S(20+i*44,10,12),b=S(46+i*44,66,12);g+=`<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="#D2A86E" stroke-width="1"/>`}
   /* الشريط المتري على الحافة الأمامية */
-  g+=poly([[XS,1,12],[XS+K*120,1,12],[XS+K*120,8,12],[XS,8,12]],'#FEF3C7','#A16207');
+  g+=poly([[XS,0,12.6],[XS+K*120,0,12.6],[XS+K*120,9,12.6],[XS,9,12.6]],'#FACC15','#A16207');
+  g+=box(XS-28,XS-2,0,16,12,34,'#EA580C','#FB923C','#C2410C','#9A3412');{const [cx,cy]=S(XS-15,0,23);g+=`<circle cx="${cx}" cy="${cy}" r="8" fill="#FDBA74" stroke="#9A3412" stroke-width="1.3"/><circle cx="${cx}" cy="${cy}" r="2.6" fill="#9A3412"/>`}g+=box(XS-20,XS-11,3,10,34,37,'#1F2937','#475569','#0F172A','#000');
   for(let c=0;c<=120;c+=5){const a=S(XS+c*K,1,12),b=S(XS+c*K,c%10?4:7,12);g+=`<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="#1F2937" stroke-width="${c%10?.6:1}"/>`;if(c%20===0){const t=S(XS+c*K,0,12);g+=`<text x="${t[0]}" y="${t[1]+11}" font-size="9" font-weight="700" text-anchor="middle" fill="#1F2937">${c}</text>`}}
   /* الموضع الابتدائي */
   {const a=S(XS,0,12),b=S(XS,60,12);g+=`<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="#2563EB" stroke-width="1.6" stroke-dasharray="4 3"/>`;if(o.xi){const t=S(XS,62,12);g+=`<text x="${t[0]-2}" y="${t[1]-4}" font-size="11" font-weight="800" text-anchor="middle" fill="#2563EB" direction="ltr">xi = 0</text>`}}
