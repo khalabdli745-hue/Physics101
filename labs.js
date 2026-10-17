@@ -131,23 +131,23 @@ function ms3D(){/* القدمة ذات الورنية والميكرومتر ع�
   g+=lbl(...S(200,FD,ZB1),180,16,'المسطرة الرئيسية (التدريج الرئيسي)')+lbl(...S(JM0+38,FD-3,ZB0+2),250,BASE-150,'الورنية','start')+lbl(...S(J0+5,FD,T+30),12,BASE-70,'الفك الثابت','start')+lbl(...S(JM0+5,FD,T+20),170,BASE+24,'الفك المتحرك')+lbl(...S(70,FD+3,T+6),8,BASE+24,'الأسطوانة: الطول L','start')+lbl(...S(JM0+26,FD-3,ZB0-12),12,96,'عجلة التحريك','start')+lbl(...S(JM0+38,FD,ZB1+6),12,40,'برغي التثبيت','start')+lbl(...S(MX+16,MD,T+64),396,22,'الأسطوانة: القطر D','end')+lbl(...S(MX+80,MD-5,T+57),390,BASE+24,'أداة الميكرومتر','end');
   return `<svg viewBox="0 0 400 ${BASE+40}" aria-label="أداة القدمة ذات الورنية وأداة الميكرومتر على طاولة المعمل">${g}</svg>`}
 function sp3D(dd,o){/* مسار العربة على طاولة: الشريط المتري والعربة وساعة الإيقاف؛ dd المسافة بالسنتيمتر */
-  o=o||{};const BASE=150,T=12,K=1.45,X0=48,{S,poly,box,lbl,table}=ob3(BASE);let g=table(T);
+  o=o||{};const BASE=150,T=12,K=1.6,X0=48,{S,poly,box,lbl,table}=ob3(BASE);let g=table(T);
   g+=box(20,346,26,50,T,T+4,'#64748B','#94A3B8','#475569','#334155');
   const line=(x,c)=>{const a=S(x,26,T+4),b=S(x,50,T+4);return `<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="${c}" stroke-width="3"/>`};
   g+=line(X0,'#16A34A')+line(X0+dd*K,'#DC2626');
   {const a=S(X0,26,T),b=S(X0+dd*K,26,T);g+=`<text x="${a[0]}" y="${a[1]+11}" font-size="10" font-weight="800" text-anchor="middle" fill="#16A34A">البداية</text><text x="${b[0]}" y="${b[1]+11}" font-size="10" font-weight="800" text-anchor="middle" fill="#DC2626">النهاية</text>`}
   /* أداة الشريط المتري: علبة بقرص دائري وزر تثبيت عند خط البداية، وشريط مدرج بالسنتيمتر ممدود على المسار ينتهي بخطاف */
   const te=o.tape==null?0:o.tape,CX0=X0-32,CX1=X0-2,CD0=34,CD1=54,ZT0=T+4,CZ=ZT0+24;
-  if(te>0){const TD0=40,TD1=50,ZT=ZT0+0.8;g+=box(X0-2,X0+te*K,TD0,TD1,ZT0,ZT,'#FACC15','#FEF08A','#CA8A04','#A16207');
+  if(!o.noTape){const TD0=40,TD1=50,ZT=ZT0+0.8;g+=box(X0-2,X0+te*K,TD0,TD1,ZT0,ZT,'#FACC15','#FEF08A','#CA8A04','#A16207');
     for(let c=0;c<=te;c++){const big=c%10===0,mid=c%5===0;if(!mid&&te>80)continue;const [a,b]=S(X0+c*K,TD0,ZT),[a2,b2]=S(X0+c*K,TD0+(big?6:mid?4:2.5),ZT);g+=`<line x1="${a}" y1="${b}" x2="${a2}" y2="${b2}" stroke="#1F2937" stroke-width="${big?1.1:.6}"/>`;if(big&&c>0){const [q,w]=S(X0+c*K,TD0+8.5,ZT);g+=`<text x="${q}" y="${w+1}" font-size="8.5" font-weight="800" text-anchor="middle" fill="#1F2937">${c}</text>`}}
     const hx=X0+te*K;g+=box(hx,hx+3,TD0-2,TD1+2,ZT0,ZT0+9,'#F7931E','#FDBA74','#C2410C','#9A3412')}
-  g+=box(CX0,CX1,CD0,CD1,ZT0,CZ,'#EA580C','#FB923C','#C2410C','#9A3412');
+  if(!o.noTape){g+=box(CX0,CX1,CD0,CD1,ZT0,CZ,'#EA580C','#FB923C','#C2410C','#9A3412');
   {const [cx,cy]=S((CX0+CX1)/2,CD0,(ZT0+CZ)/2);g+=`<circle cx="${cx}" cy="${cy}" r="9" fill="#FDBA74" stroke="#9A3412" stroke-width="1.4"/><circle cx="${cx}" cy="${cy}" r="3" fill="#9A3412"/>`}
-  g+=box(CX0+10,CX0+20,CD0+4,CD0+12,CZ,CZ+4,'#1F2937','#475569','#0F172A','#000');
+  g+=box(CX0+10,CX0+20,CD0+4,CD0+12,CZ,CZ+4,'#1F2937','#475569','#0F172A','#000');}
   /* العربة */
   if(o.cart!=null){const cx=X0+o.cart*K;g+=box(cx-30,cx,27,38,T+8,T+20,'#2563EB','#93C5FD','#1E40AF','#1E3A8A');[[cx-24,27],[cx-6,27]].forEach(([x,d])=>{const [a,b]=S(x,d,T+8);g+=`<circle cx="${a}" cy="${b}" r="4.5" fill="#111827"/>`})}
   if(o.lab){g+=lbl(...S(X0-17,34,T+16),20,20,'أداة الشريط المتري','start')+(te>0?lbl(...S(X0+te*K+1,50,T+12),300,20,'الخطاف'):'')+lbl(...S(200,26,T+2),200,BASE+24,'مسار الحركة')+lbl(...S(X0,38,T+4),60,BASE+24,'خط البداية')+lbl(...S(X0+dd*K,38,T+4),330,BASE+24,'خط النهاية')+(o.cart!=null?lbl(...S(X0+o.cart*K-15,38,T+20),190,20,'العربة'):'')}
-  return `<svg viewBox="0 0 400 ${BASE+(o.lab?40:12)}" aria-label="مسار العربة والشريط المتري">${g}</svg>`}
+  return `<svg viewBox="0 ${o.lab?0:46} 400 ${BASE+(o.lab?40:12)-(o.lab?0:46)}" aria-label="مسار العربة والشريط المتري">${g}</svg>`}
 function dp3D(){/* لوحة الإحداثيات على الطاولة مع الخيطين والمنقلة */
   const BASE=230,T=12,{S,poly,box,lbl,table}=ob3(BASE);let g=table(T);
   const O=[60,6],U=26,B=(i,j)=>S(O[0]+i*U,O[1]+j*U*0.62,T+3);
@@ -443,7 +443,7 @@ function speedLab2(box){
   function tDraw(){const e=tVal(),touch=Math.abs(e-d)<1e-6;$('tO').textContent=e.toFixed(1)+' cm';
     $('tSt').textContent=touch?'✓ الخطاف عند خط النهاية، اقرأ المسافة من التدريج':'اسحب الشريط حتى يصل الخطاف إلى خط النهاية';
     const xe=X0+e*PX;
-    $('tTop').innerHTML=sp3D(d,{tape:e});
+    $('tTop').innerHTML=sp3D(d,{tape:e,cart:0});
     const k=26,s0=Math.floor(e)-6,XX=c=>20+(c-s0)*k;let g='<rect x="0" y="20" width="400" height="56" fill="#FDE68A"/>';
     for(let m=s0*10;m<=(s0+15)*10;m++){const c=m/10,x=XX(c);if(x<0||x>400)continue;const big=m%10===0,mid=m%5===0;const hl=tHint&&touch&&m===Math.round(d*10);g+=`<line x1="${x}" y1="20" x2="${x}" y2="${20+(big?22:mid?15:9)}" stroke="${hl?'#DC2626':'#1F2937'}" stroke-width="${hl?2.4:big?1.4:.8}"/>`;if(big&&c>=0)g+=`<text x="${x}" y="58" font-size="13" font-weight="700" text-anchor="middle" fill="#1F2937">${c}</text>`}
     g+=`<line x1="${XX(e)}" y1="10" x2="${XX(e)}" y2="86" stroke="#F7931E" stroke-width="3"/><text x="${XX(e)}" y="100" font-size="10" text-anchor="middle" fill="var(--ink)">حافة الخطاف</text><rect x="352" y="92" width="44" height="24" rx="6" fill="#F7931E"/><text x="374" y="109" font-size="15" font-weight="800" text-anchor="middle" fill="#fff">cm</text><text x="6" y="110" font-size="12" font-weight="700" text-anchor="start" fill="var(--muted)">تكبير التدريج</text>`;
@@ -452,7 +452,7 @@ function speedLab2(box){
   function sDraw(){const t=sVal(),done=Math.abs(t-T)<1e-6;$('sO').textContent=done?'وصلت العربة':'';
     $('sSt').textContent=done?'✓ وصلت العربة إلى خط النهاية وتوقفت ساعة الإيقاف، اقرأ الزمن':'اسحب العربة حتى تصل إلى خط النهاية';
     const cx=X0+d*PX*t/T;
-    $('sTop').innerHTML=sp3D(d,{tape:0,cart:d*t/T});
+    $('sTop').innerHTML=sp3D(d,{tape:d,cart:d*t/T});
     const C=130,R=118;let g=`<circle cx="200" cy="${C}" r="${R+8}" fill="#64748B" stroke="#334155" stroke-width="2"/><circle cx="200" cy="${C}" r="${R}" fill="#F8FAFC" stroke="#94A3B8"/><rect x="188" y="0" width="24" height="8" rx="3" fill="#F7931E"/>`;
     for(let i=0;i<30;i++){const a=i/30*2*Math.PI-Math.PI/2,five=i%5===0,one=true,r1=five?R-22:R-13;const hl=sHint&&done&&i===Math.round(T)%30;g+=`<line x1="${200+r1*Math.cos(a)}" y1="${C+r1*Math.sin(a)}" x2="${200+(R-1)*Math.cos(a)}" y2="${C+(R-1)*Math.sin(a)}" stroke="${hl?'#DC2626':'#1F2937'}" stroke-width="${hl?2.6:five?2.2:one?1.5:1}"/>`;if(five)g+=`<text x="${200+(R-38)*Math.cos(a)}" y="${C+(R-38)*Math.sin(a)+6}" font-size="17" font-weight="800" text-anchor="middle" fill="#1F2937">${i}</text>`}
     const a=t/30*2*Math.PI-Math.PI/2;g+=`<line x1="200" y1="${C}" x2="${200+(R-6)*Math.cos(a)}" y2="${C+(R-6)*Math.sin(a)}" stroke="#F7931E" stroke-width="3.5" stroke-linecap="round"/><circle cx="200" cy="${C}" r="7" fill="#F7931E"/><rect x="185" y="${C+22}" width="30" height="20" rx="5" fill="#F7931E"/><text x="200" y="${C+37}" font-size="14" font-weight="800" text-anchor="middle" fill="#fff">s</text>`;
