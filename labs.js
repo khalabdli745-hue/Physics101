@@ -1300,7 +1300,9 @@ function ffScene(h,s,o){/* منظر ثلاثي الأبعاد: h الارتفا�
   g+=box(172,228,2,38,0,8,'#1F2937','#475569','#0F172A')+poly([[176,6,8],[224,6,8],[224,34,8],[176,34,8]],'#F7931E','#C2410C');
   /* الشريط المتري الرأسي */
   {const a=S(240,20,8),b=S(240,20,z0),c=S(250,20,z0),d=S(250,20,8);g+=`<polygon points="${a} ${b} ${c} ${d}" fill="#FEF3C7" stroke="#A16207"/>`;
-   for(let i=0;i<=Math.floor(h*10);i++){const zz=z0-i*K/10,[p,q]=S(240,20,zz),[p2]=S(i%5===0?247:244,20,zz);g+=`<line x1="${p}" y1="${q}" x2="${p2}" y2="${q}" stroke="#1F2937" stroke-width="${i%5===0?1.1:.6}"/>`}}
+   for(let i=0;i<=Math.floor(h*20+1e-9);i++){const zz=z0-i*K/20,[p,q]=S(240,20,zz),big=i%2===0,[p2]=S(big?246:243,20,zz);g+=`<line x1="${p}" y1="${q}" x2="${p2}" y2="${q}" stroke="#1F2937" stroke-width="${big?1.1:.6}"/>`;
+     if(big)g+=`<text x="${p-2}" y="${q+3}" font-size="7.5" font-weight="700" text-anchor="end" fill="#1F2937">${i*5}</text>`}
+   {const [p,q]=S(240,20,z0);g+=`<text x="${p+4}" y="${q-4}" font-size="8" font-weight="800" fill="#A16207">cm</text>`}}
   /* مسار السقوط */
   {const a=S(196,20,z0-2),b=S(196,20,10);g+=`<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="#94A3B8" stroke-width="1" stroke-dasharray="3 4"/>`}
   /* الكرة */
