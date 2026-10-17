@@ -3619,6 +3619,187 @@ function efLab(box){
   calcInit(box);newObj();qf();
 }
 
+function pdScene(o){/* الرسم المعتمد (b.png) — o:{x (cm من القطب السالب), pd (عمق المجس), v (قراءة الفولتميتر), v0 (جهد المصدر), lab} */
+  o=o||{};const B=330,S=(x,d,z)=>[x+d*0.6,B-z-d*0.5],F=n=>(+n).toFixed(1),P=(...a)=>a.map(p=>F(p[0])+','+F(p[1])).join(' ');
+  const box=(x0,x1,d0,d1,z0,z1,top,front,side,st)=>{st=st||'#334155';return `<polygon points="${P(S(x0,d0,z0),S(x1,d0,z0),S(x1,d0,z1),S(x0,d0,z1))}" fill="${front}" stroke="${st}"/><polygon points="${P(S(x1,d0,z0),S(x1,d1,z0),S(x1,d1,z1),S(x1,d0,z1))}" fill="${side}" stroke="${st}"/><polygon points="${P(S(x0,d0,z1),S(x1,d0,z1),S(x1,d1,z1),S(x0,d1,z1))}" fill="${top}" stroke="${st}"/>`};
+  const line=(a,b,c,w,ex)=>`<line x1="${F(a[0])}" y1="${F(a[1])}" x2="${F(b[0])}" y2="${F(b[1])}" stroke="${c||'#334155'}" stroke-width="${w||1.2}" ${ex||''}/>`;
+  const wire=(pts,c,w)=>`<polyline points="${P(...pts)}" fill="none" stroke="${c}" stroke-width="${w||2.8}" stroke-linejoin="round" stroke-linecap="round"/>`;
+  const curve=(pts,c,w)=>{let d=`M${F(pts[0][0])},${F(pts[0][1])}`;for(let i=1;i<pts.length-1;i+=2)d+=` Q${F(pts[i][0])},${F(pts[i][1])} ${F(pts[i+1][0])},${F(pts[i+1][1])}`;return `<path d="${d}" fill="none" stroke="${c}" stroke-width="${w||2.8}" stroke-linecap="round"/>`};
+  const lbl=(t,x,y,anc,col,sz)=>`<text x="${F(x)}" y="${F(y)}" text-anchor="${anc||'middle'}" font-size="${sz||15}" font-weight="700" fill="${col||'var(--ink)'}" style="paint-order:stroke;stroke:var(--panel);stroke-width:3.5px">${t}</text>`;
+  const dot=(p,c,r)=>`<circle cx="${F(p[0])}" cy="${F(p[1])}" r="${r||3.5}" fill="${c}" stroke="#1F2937" stroke-width="0.8"/>`;
+  const XL=90,XR=290,x=o.x==null?5:o.x,PX=XL+x*20,PD=o.pd==null?55:o.pd;
+  let g=`<defs><marker id="pdAr" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#FDE68A"/></marker></defs>`;
+  /* مصدر الجهد المستمر */
+  const SX0=-150,SX1=-40,SD0=300,SD1=340;g+=box(SX0,SX1,SD0,SD1,0,50,'#CBD5E1','#475569','#334155');
+  const pt=S(-125,SD0,32),pr=S(-65,SD0,32),pdp=S(-118,SD0,14);
+  g+=`<rect x="${F(pdp[0])}" y="${F(pdp[1]-10)}" width="40" height="13" fill="#0F172A"/><text x="${F(pdp[0]+20)}" y="${F(pdp[1]+1)}" font-size="10" font-weight="700" fill="#22C55E" text-anchor="middle" direction="ltr">${o.v0||'10.0'} V</text>`;
+  g+=`<text x="${F(pt[0])}" y="${F(pt[1]-8)}" font-size="12" font-weight="700" text-anchor="middle" fill="#fff">−</text><text x="${F(pr[0])}" y="${F(pr[1]-8)}" font-size="12" font-weight="700" text-anchor="middle" fill="#fff">+</text>`;
+  const eL=S(XL,150,10.5),eR=S(XR,150,10.5);
+  g+=wire([pt,S(-125,SD0,0),S(-125,255,0),S(40,255,0),S(XL,175,10)],'#2563EB')+wire([pr,S(-65,SD0,0),S(-65,275,0),S(XR,275,0),S(XR,175,10)],'#DC2626');
+  /* اللوحة والورقة الموصلة */
+  g+=box(40,340,0,170,0,10,'#E5E7EB','#D6B48A','#C49A6C');
+  g+=`<polygon points="${P(S(55,12,10.2),S(325,12,10.2),S(325,158,10.2),S(55,158,10.2))}" fill="#52525B" stroke="#18181B"/>`;
+  for(let gx=70;gx<320;gx+=20)for(let gd=25;gd<155;gd+=20){const p=S(gx,gd,10.3);g+=`<circle cx="${F(p[0])}" cy="${F(p[1])}" r="0.8" fill="#71717A"/>`}
+  [130,170,210,250].forEach(ex=>{if(Math.abs(ex-PX)>1)g+=line(S(ex,22,10.4),S(ex,148,10.4),'#A1A1AA',0.9,'stroke-dasharray="4 3"')});
+  g+=line(S(PX,22,10.4),S(PX,148,10.4),'#F7931E',1.6,'stroke-dasharray="5 3"');
+  [[XL,'#2563EB'],[XR,'#DC2626']].forEach(([ex,c])=>{g+=`<polygon points="${P(S(ex-4,20,10.5),S(ex+4,20,10.5),S(ex+4,150,10.5),S(ex-4,150,10.5))}" fill="#E5E7EB" stroke="${c}" stroke-width="2.2"/>`});
+  /* المسطرة المليمترية */
+  g+=`<polygon points="${P(S(80,-14,10),S(310,-14,10),S(310,2,10),S(80,2,10))}" fill="#FEF3C7" stroke="#B45309"/><polygon points="${P(S(80,-14,10),S(310,-14,10),S(310,-14,6),S(80,-14,6))}" fill="#FCD34D" stroke="#B45309"/>`;
+  for(let i=0;i<=100;i++){const X=XL+i*2,L=i%10===0?8:i%5===0?5:3;g+=line(S(X,2,10),S(X,2-L,10),'#78350F',i%10?0.6:1);
+    if(i%20===0){const p=S(X,-11,10);g+=`<text x="${F(p[0])}" y="${F(p[1]+3)}" font-size="9" font-weight="700" text-anchor="middle" fill="#78350F">${i/10}</text>`}}
+  g+=wire([S(XL,175,10),S(XL,170,10.5),eL],'#2563EB')+wire([S(XR,175,10),S(XR,170,10.5),eR],'#DC2626')+dot(pt,'#111827',4.5)+dot(pr,'#DC2626',4.5)+dot(eL,'#94A3B8')+dot(eR,'#94A3B8');
+  /* جهاز الفولتميتر الرقمي */
+  const VX=455;g+=box(VX,VX+75,0,42,0,80,'#E2E8F0','#F59E0B','#D97706');
+  const v0=S(VX+8,0,48);g+=`<rect x="${F(v0[0])}" y="${F(v0[1]-23)}" width="59" height="23" fill="#0F172A" rx="2"/><text x="${F(v0[0]+29.5)}" y="${F(v0[1]-6)}" font-size="15" font-weight="700" fill="#22C55E" text-anchor="middle" font-family="monospace" direction="ltr">${o.v||'4.00'} V</text>`;
+  const jc=S(VX+18,0,18),jv=S(VX+57,0,18);
+  g+=`<text x="${F(jc[0])}" y="${F(jc[1]+13)}" font-size="9" font-weight="700" text-anchor="middle" fill="#111827">COM</text><text x="${F(jv[0])}" y="${F(jv[1]+13)}" font-size="9" font-weight="700" text-anchor="middle" fill="#111827">V</text>`;
+  const eLf=S(XL,20,10.5);g+=wire([jc,S(VX+18,0,0),S(VX+18,-34,0),S(60,-34,0),S(60,-34,10),S(60,20,10),eLf],'#2563EB',2.6)+dot(jc,'#111827',4)+dot(eLf,'#94A3B8');
+  /* المجس */
+  const tip=S(PX,PD,10.5),dx=14,dy=-70,Ln=Math.hypot(dx,dy),ux=dx/Ln,uy=dy/Ln,nx=-uy,ny=ux,A=(t,w)=>[tip[0]+ux*t+nx*w,tip[1]+uy*t+ny*w];
+  const seg=(t0,w0,t1,w1,f,st)=>`<polygon points="${P(A(t0,-w0),A(t1,-w1),A(t1,w1),A(t0,w0))}" fill="${f}" stroke="${st||'#1F2937'}" stroke-width="0.8" stroke-linejoin="round"/>`;
+  g+=seg(0,0.5,18,1.6,'#E5E7EB','#475569')+seg(18,2.6,25,5.5,'#F7931E')+seg(25,9.5,29,9.5,'#C2410C')+seg(29,5.5,66,6,'#F7931E');
+  for(let t=34;t<64;t+=6)g+=line(A(t,-5.5),A(t,5.5),'#C2410C',1);
+  g+=seg(66,4.5,77,2.2,'#7C2D12');const top=A(77,0);g+=dot(tip,'#F7931E',2.2);
+  g+=curve([top,[Math.max(300,top[0]+40),214],[330,252],[345,282],[400,292],[482,286],jv],'#DC2626',2.6)+dot(jv,'#DC2626',4);
+  /* المسافة d */
+  {const a=S(XL,26,10.6),b=S(PX,26,10.6);g+=`<line x1="${F(a[0])}" y1="${F(a[1])}" x2="${F(b[0])}" y2="${F(b[1])}" stroke="#FDE68A" stroke-width="1.6" marker-start="url(#pdAr)" marker-end="url(#pdAr)"/><text x="${F((a[0]+b[0])/2)}" y="${F((a[1]+b[1])/2-5)}" font-size="15" font-weight="700" fill="#FDE68A" text-anchor="middle" font-style="italic">d</text>`}
+  let H=305;
+  if(o.lab){let q=S((SX0+SX1)/2,SD1,50);g+=lbl('مصدر جهد مستمر',q[0],q[1]-10);
+    q=S(VX+37,42,80);g+=lbl('جهاز الفولتميتر الرقمي',q[0]+6,q[1]-12);
+    q=S(XL,150,10.5);g+=lbl('القطب السالب (−)',q[0]-12,q[1]-6,'end','#2563EB');
+    q=S(XR,150,10.5);g+=lbl('القطب الموجب (+)',q[0]+50,q[1]-38,'end','#DC2626',14);
+    g+=lbl('المجس',top[0],top[1]-8,'middle','#C2410C');
+    q=S(PX,118,10.4);g+=lbl('خط تساوي جهد',q[0]+6,q[1]+4,'start','#C2410C',12);
+    q=S(80,-14,6);g+=lbl('مسطرة مليمترية',q[0]-24,q[1]-2,'end','#92400E');
+    q=S(40,75,5);g+=lbl('ورقة موصلة',q[0]-10,q[1]+4,'end')+line([q[0]-6,q[1]],S(62,75,10.3),'var(--ink)',1);
+    const steps=['① مصدر الجهد المستمر يعطي 10 V بين القطبين، فينشأ بينهما مجال كهربائي منتظم.','② مسبار COM لجهاز الفولتميتر متصل بالقطب السالب (نقطة الصفر للجهد).','③ يضع المتدرب المجس عند نقطة، ويقرأ بعدها d عن القطب السالب على المسطرة المليمترية.','④ يقرأ الجهد V عند النقطة نفسها، ثم يكرر عند نقطة ثانية (كل قراءة خطوة مستقلة).','⑤ يحسب شدة المجال E = ΔV / d عند كل نقطة، ويتحقق أنها ثابتة.','⑥ يحرك المجس على الخط البرتقالي فتبقى القراءة ثابتة، وهذا خط تساوي جهد.'];
+    const py=390;g+=`<rect x="-180" y="${py}" width="770" height="${30+steps.length*24}" rx="10" fill="#FFF7ED" stroke="#F7931E" stroke-width="1.5"/><text x="575" y="${py+22}" font-size="15" font-weight="800" text-anchor="start" direction="rtl" fill="#C2410C">خطوات التجربة</text>`;
+    steps.forEach((t,i)=>{g+=`<text x="575" y="${py+48+i*24}" font-size="13.5" font-weight="600" text-anchor="start" fill="#0F172A" direction="rtl">${t}</text>`});H=py+30+steps.length*24+10-80}
+  return `<svg viewBox="-190 80 790 ${H}" aria-label="ورقة موصلة عليها قطبان متوازيان موصلان بمصدر جهد مستمر، وجهاز الفولتميتر الرقمي ومجسه على مسافة d من القطب السالب، ومسطرة مليمترية">${g}</svg>`}
+
+function pdLab(box){
+  const DX=[3,7],D0=10;
+  box.innerHTML=`
+  <div class="intro"><small class="labKind">🧪 تجربة عملية تفاعلية</small><h3>1. اسم التجربة</h3><p class="labName">قياس فرق الجهد في مجال كهربائي منتظم</p></div>
+  <div class="tags"><span class="tag">المسافة d: <i>المسطرة المليمترية</i> · cm</span><span class="tag">الجهد V: <i>جهاز الفولتميتر الرقمي</i> · V</span><span class="tag dv">شدة المجال E: <i>محسوبة</i> · N/C</span></div>
+  <div class="intro goals"><h3>2. أهداف التجربة</h3><ol class="gl">
+    <li>التعرف على الورقة الموصلة والقطبين المتوازيين ومصدر الجهد المستمر وجهاز الفولتميتر الرقمي.</li>
+    <li>قياس الجهد عند نقطتين بين القطبين بجهاز الفولتميتر الرقمي، وقياس بعد كل نقطة عن القطب السالب بالمسطرة المليمترية.</li>
+    <li>حساب شدة المجال الكهربائي من العلاقة <span dir="ltr">ΔV = E·d</span>، والتحقق من أنها ثابتة بين القطبين (مجال منتظم).</li>
+    <li>تحديد خط تساوي جهد بتحريك المجس على خط مواز للقطبين.</li></ol></div>
+  <div class="intro"><h3>3. الأدوات والأجهزة المستخدمة</h3>
+    <div class="tool"><div class="stage">${pdScene({lab:true,x:5,pd:55,v:'4.00',v0:'10.0'})}</div><div class="vcap">الورقة الموصلة والقطبان ومصدر الجهد المستمر وجهاز الفولتميتر الرقمي: منظر ثلاثي الأبعاد</div>
+    <p><b>ترتيب الأجهزة:</b> قطبان معدنيان متوازيان على ورقة موصلة، المسافة بينهما <span dir="ltr">10 cm</span>، وموصلان بمصدر جهد مستمر: القطب السالب بالسلك الأزرق والقطب الموجب بالسلك الأحمر. ومسبار <span dir="ltr">COM</span> لجهاز الفولتميتر الرقمي متصل بالقطب السالب، والمجس يحركه المتدرب على الورقة. والمسطرة المليمترية أمام اللوحة وصفرها عند القطب السالب.</p></div>
+    <p><b>الورقة الموصلة:</b> ورقة سوداء مطلية بطبقة كربون موصلة ضعيفة، يمر فيها تيار صغير بين القطبين، فيتوزع الجهد عليها بانتظام.</p>
+    <p><b>القطبان المتوازيان:</b> شريطان معدنيان مرسومان بحبر فضي موصل على الورقة، ويتولد بينهما مجال كهربائي منتظم يتجه من القطب الموجب إلى القطب السالب.</p>
+    <p><b>مصدر الجهد المستمر <span dir="ltr">(DC Power Supply)</span>:</b> يعطي فرق جهد ثابتا بين القطبين، وتظهر قيمته على شاشته بالفولت.</p>
+    <p><b>جهاز الفولتميتر الرقمي <span dir="ltr">(Digital Voltmeter)</span>:</b> يقيس فرق الجهد بين مسبار <span dir="ltr">COM</span> والمجس، ويعرضه بالفولت بدقة <span dir="ltr">0.01 V</span>. ولأن <span dir="ltr">COM</span> متصل بالقطب السالب فإن القراءة هي جهد النقطة التي يلمسها المجس.</p>
+    <p><b>المجس:</b> إبرة معدنية بمقبض عازل، يلمس بها المتدرب النقطة المراد قياس جهدها.</p>
+    <p><b>المسطرة المليمترية:</b> مقسمة كل <span dir="ltr">1 mm</span>، ويقرأ المؤشر البرتقالي عليها بعد طرف المجس <span dir="ltr">d</span> عن القطب السالب بدقة <span dir="ltr">0.1 cm</span>.</p></div>
+  <h3 class="secH">4. القوانين المستخدمة</h3>
+  <div class="ctl">
+    <div class="law ftl"><div class="ln lw"><b>فرق الجهد في المجال المنتظم</b><span>ΔV = E·d</span></div>
+      <div class="ln lw"><b>ومنه شدة المجال المنتظم</b><span>E = ΔV / d</span></div>
+      <div class="ln lw"><b>فرق الجهد بين النقطتين</b><span>ΔV = V₂ − V₁</span></div>
+      <div class="vfig">${(window.FIGS||{}).vUniform||''}</div>
+      <div class="sym"><b>حيث:</b><ul>
+      <li><span class="chip" dir="ltr">ΔV</span> فرق الجهد بين نقطتين، ووحدته <span dir="ltr">V</span></li>
+      <li><span class="chip" dir="ltr">E</span> شدة المجال الكهربائي المنتظم، ووحدتها <span dir="ltr">N/C</span> (وتكافئ <span dir="ltr">V/m</span>)</li>
+      <li><span class="chip" dir="ltr">d</span> المسافة باتجاه خطوط المجال، ووحدتها <span dir="ltr">m</span>، و <span dir="ltr">1 cm = 0.01 m</span></li>
+      <li><span class="chip" dir="ltr">V₁</span> و <span class="chip" dir="ltr">V₂</span> قراءتا الفولتميتر عند النقطتين، ووحدتهما <span dir="ltr">V</span></li>
+      </ul></div>
+      <p class="slh">ℹ️ مسبار <span dir="ltr">COM</span> على القطب السالب، فجهد القطب السالب صفر، وقراءة الفولتميتر عند نقطة هي فرق الجهد بينها وبين القطب السالب.</p></div></div>
+  <h3 class="secH">5. تنفيذ التجربة</h3>
+  <div class="startBand">▶️ لنبدأ التجربة</div>
+  <div class="btns" style="margin-bottom:12px"><button type="button" class="rs" id="nw">🔄 جهد جديد للمصدر</button></div>
+  <div class="ctl"><h3>5.1 القياس</h3>
+    ${DX.map((d,i)=>`<h4 class="sbh">${'أب'[i]}) قراءة الجهد عند المسافة <bdi dir="ltr">d${'₁₂'[i]} = ${d} cm</bdi></h4>
+    <div class="stage"><div id="pS${i}"></div><svg id="pM${i}" viewBox="0 0 400 120"></svg><svg id="pZ${i}" viewBox="0 0 400 112"></svg><div class="hud"><span id="pSt${i}"></span></div></div>
+    <div class="row"><label for="pR${i}">تحريك المجس</label><output id="pO${i}"></output><input id="pR${i}" type="range" min="0" max="100" step="1" value="0"></div>
+    <p class="slh">👆 اسحب المؤشر البرتقالي لتحريك المجس على الورقة حتى يقع مؤشره على التدريج <bdi dir="ltr">${d}.0 cm</bdi> في التكبير، ثم اقرأ المسافة والجهد.</p>
+    <div class="ans"><label>قراءة المسطرة <bdi dir="ltr">d${'₁₂'[i]}</bdi></label><input id="pd${i}" inputmode="decimal" dir="ltr" placeholder="cm"><button type="button" class="go" id="pd${i}Ck">تحقق</button></div><div class="fb2" id="pd${i}Fb"></div>
+    <div class="ans"><label>قراءة الفولتميتر <bdi dir="ltr">V${'₁₂'[i]}</bdi> عند <bdi dir="ltr" style="white-space:nowrap">d = ${d} cm</bdi></label><input id="pv${i}" inputmode="decimal" dir="ltr" placeholder="V"><button type="button" class="go" id="pv${i}Ck">تحقق</button></div><div class="fb2" id="pv${i}Fb"></div>`).join('')}
+    <h4 class="sbh">ج) تحديد خط تساوي الجهد عند <bdi dir="ltr">d₂ = ${DX[1]} cm</bdi></h4>
+    <div class="stage"><div id="pS2"></div><svg id="pZ2" viewBox="0 0 400 112"></svg><div class="hud"><span id="pSt2"></span></div></div>
+    <div class="row"><label for="pR2">تحريك المجس على الخط البرتقالي</label><output id="pO2"></output><input id="pR2" type="range" min="0" max="100" step="1" value="0"></div>
+    <p class="slh">👆 اسحب المؤشر البرتقالي لتحريك المجس على الخط البرتقالي الموازي للقطبين (المسافة ثابتة <bdi dir="ltr">${DX[1]} cm</bdi>) حتى نهايته، ثم اقرأ الفولتميتر.</p>
+    <div class="ans"><label>قراءة الفولتميتر <bdi dir="ltr">V₃</bdi> عند النقطة الجديدة</label><input id="pv2" inputmode="decimal" dir="ltr" placeholder="V"><button type="button" class="go" id="pv2Ck">تحقق</button></div><div class="fb2" id="pv2Fb"></div>
+  </div>
+  <div class="ctl"><h3>5.2 الحسابات</h3>
+    <p class="slh">ℹ️ حول المسافة من <bdi dir="ltr">cm</bdi> إلى <bdi dir="ltr">m</bdi> بالقسمة على 100.</p>
+    <h4 class="sbh">أ) حساب شدة المجال عند النقطة الأولى</h4>
+    ${hxCalcStep('P1','E₁ = V₁ / d₁','احسب E₁ بوحدة N/C','N/C')}
+    <h4 class="sbh">ب) حساب شدة المجال عند النقطة الثانية</h4>
+    ${hxCalcStep('P2','E₂ = V₂ / d₂','احسب E₂ بوحدة N/C','N/C')}
+    <h4 class="sbh">ج) حساب فرق الجهد بين النقطتين</h4>
+    ${hxCalcStep('PV','ΔV = V₂ − V₁','احسب ΔV بوحدة V','V')}
+    <h4 class="sbh">د) حساب شدة المجال من فرق الجهد</h4>
+    ${hxCalcStep('PE','E = ΔV / d','احسب E بوحدة N/C','N/C')}
+  </div>
+  <div class="ctl res"><h3>6. نتائج التجربة</h3>
+    <div class="tw"><table class="rt"><thead><tr><th>الكمية</th><th>القيمة</th></tr></thead>
+    <tbody><tr><td>الجهد <bdi dir="ltr">V₁</bdi> عند <bdi dir="ltr" style="white-space:nowrap">${DX[0]} cm</bdi></td><td id="pt0">—</td></tr>
+    <tr><td>الجهد <bdi dir="ltr">V₂</bdi> عند <bdi dir="ltr" style="white-space:nowrap">${DX[1]} cm</bdi></td><td id="pt1">—</td></tr>
+    <tr><td>الجهد <bdi dir="ltr">V₃</bdi> على خط تساوي الجهد</td><td id="pt2">—</td></tr>
+    <tr><td>شدة المجال <bdi dir="ltr">E₁</bdi> و <bdi dir="ltr">E₂</bdi></td><td id="pt3">—</td></tr>
+    <tr><td>فرق الجهد <bdi dir="ltr">ΔV</bdi> وشدة المجال <bdi dir="ltr">E</bdi></td><td id="pt4">—</td></tr></tbody></table></div>
+    <p class="rn" id="pNote">تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.</p></div>`;
+  const $=id=>box.querySelector('#'+id);
+  const num=labNum;
+  const fb=(id,ok,msg)=>{$(id).textContent=msg;$(id).className='fb2 '+(ok?'ok':'no')};
+  const fb0=id=>{$(id).textContent='';$(id).className='fb2'};
+  const fx=(x,n)=>String(+(+x).toFixed(n));
+  const zoom=(lines,cap)=>`<rect x="20" y="4" width="360" height="86" rx="14" fill="#334155" stroke="#0F172A" stroke-width="2"/>`+lines+`<text x="200" y="106" font-size="12" font-weight="700" text-anchor="middle" fill="var(--muted)">${cap}</text>`;
+  const scr=(x,w,txt)=>`<rect x="${x}" y="16" width="${w}" height="62" rx="8" fill="#0F172A" stroke="#14532D"/><text x="${x+w/2}" y="57" font-size="26" font-weight="800" text-anchor="middle" fill="#22C55E" direction="ltr" font-family="Consolas,monospace">${txt}</text>`;
+  const mmZ=r=>{let s=`<rect x="10" y="4" width="380" height="94" rx="12" fill="#334155" stroke="#0F172A" stroke-width="2"/><rect x="24" y="14" width="352" height="70" rx="4" fill="#FEF3C7"/>`;const X=v=>200+(v-r)*160;
+    for(let n=Math.ceil((r-1.2)*10);n<=Math.floor((r+1.2)*10);n++){const v=n/10,x=X(v);if(x<26||x>374||v<0||v>10)continue;const big=n%10===0,hf=n%5===0;s+=`<line x1="${x}" y1="14" x2="${x}" y2="${14+(big?30:hf?22:14)}" stroke="#78350F" stroke-width="${big?2:1.2}"/>`+(big?`<text x="${x}" y="66" font-size="16" font-weight="800" text-anchor="middle" fill="#78350F" direction="ltr">${Math.round(v)}</text>`:'')}
+    return s+`<line x1="200" y1="10" x2="200" y2="48" stroke="#EA580C" stroke-width="2.5"/><line x1="200" y1="72" x2="200" y2="88" stroke="#EA580C" stroke-width="2.5"/><text x="32" y="80" font-size="12" font-weight="800" text-anchor="start" fill="#78350F" direction="ltr">cm</text><text x="200" y="114" font-size="12" font-weight="700" text-anchor="middle" fill="var(--muted)">‏تدريج المسطرة المليمترية عند مؤشر المجس (مكبر)‏</text>`};
+  let V0=10,NZ=[1,1],ok={};
+  const VA=(d,i)=>Math.round(V0*d/D0*(i==null?1:NZ[i])*100)/100,VV=()=>DX.map((d,i)=>VA(d,i));
+  const E1=()=>VV()[0]/(DX[0]/100),E2=()=>VV()[1]/(DX[1]/100),DV=()=>Math.round((VV()[1]-VV()[0])*100)/100,EE=()=>DV()/((DX[1]-DX[0])/100);
+  const PD0=55,PD1=22;
+  function pDraw(i){const v=+$('pR'+i).value;let x,pd,at=v>=100,vv;
+    if(i<2){const to=DX[i];x=Math.round((0.5+(to-0.5)*v/100)*10)/10;pd=PD0;vv=at?VA(to,i):VA(x)}
+    else{x=DX[1];pd=PD0+(PD1-PD0)*v/100;vv=VA(DX[1],1)}
+    const t=vv.toFixed(2);$('pO'+i).textContent='';
+    $('pS'+i).innerHTML=pdScene({x,pd,v:t,v0:V0.toFixed(1)});
+    if(i<2){$('pM'+i).innerHTML=mmZ(x);$('pSt'+i).textContent=at?'✓ وصل المجس إلى المسافة المطلوبة، اقرأ المسطرة ثم الفولتميتر':'كلما اقترب المجس من القطب الموجب زادت قراءة الجهد'}
+    else $('pSt2').textContent=at?'✓ المجس في نقطة جديدة على الخط نفسه، اقرأ الفولتميتر':'لاحظ قراءة الفولتميتر أثناء تحريك المجس على الخط البرتقالي';
+    $('pZ'+i).innerHTML=zoom(scr(90,220,`${t} V`),'‏شاشة جهاز الفولتميتر الرقمي (مكبرة)‏')}
+  function newObj(){V0=(12+Math.floor(Math.random()*13))/2;NZ=[0.99+Math.random()*0.02,0.99+Math.random()*0.02];ok={};
+    [0,1,2].forEach(i=>{$('pR'+i).value=0;pDraw(i)});['pd0','pd1','pv0','pv1','pv2'].forEach(p=>{$(p).value='';fb0(p+'Fb')});['P1','P2','PV','PE'].forEach(k=>{$('c'+k).value='';fb0('c'+k+'f')});sub();results()}
+  function sub(){const v=VV();
+    $('sbP1').textContent=ok.v0?['E₁ = V₁ / d₁',E(`E₁ = ${v[0].toFixed(2)} / ${fx(DX[0]/100,2)}`)].join('\n'):'E₁ = V₁ / d₁';
+    $('sbP2').textContent=ok.v1?['E₂ = V₂ / d₂',E(`E₂ = ${v[1].toFixed(2)} / ${fx(DX[1]/100,2)}`)].join('\n'):'E₂ = V₂ / d₂';
+    $('sbPV').textContent=ok.v0&&ok.v1?['ΔV = V₂ − V₁',E(`ΔV = ${v[1].toFixed(2)} − ${v[0].toFixed(2)}`)].join('\n'):'ΔV = V₂ − V₁';
+    $('sbPE').textContent=ok.cPV?['E = ΔV / d',E(`E = ${DV().toFixed(2)} / ${fx((DX[1]-DX[0])/100,2)}`)].join('\n'):'E = ΔV / d'}
+  function results(){const v=VV();
+    $('pt0').textContent=ok.v0?E(v[0].toFixed(2)+' V'):'—';$('pt1').textContent=ok.v1?E(v[1].toFixed(2)+' V'):'—';
+    $('pt2').textContent=ok.v2?E(v[1].toFixed(2)+' V = V₂'):'—';
+    $('pt3').textContent=ok.cP1&&ok.cP2?E(`${fx(E1(),0)} N/C ≈ ${fx(E2(),0)} N/C`):'—';
+    $('pt4').textContent=ok.cPV&&ok.cPE?E(`${DV().toFixed(2)} V · ${fx(EE(),0)} N/C`):'—';
+    $('pNote').innerHTML=ok.cP1&&ok.cP2&&ok.cPE&&ok.v2?'الاستنتاج: شدة المجال الكهربائي متساوية تقريبا عند كل النقاط بين القطبين، فالمجال بينهما <b>مجال منتظم</b>، وفرق الجهد بين نقطتين يساوي شدة المجال مضروبة في المسافة بينهما <span dir="ltr" style="white-space:nowrap">ΔV = E·d</span>. والجهد ثابت على الخط الموازي للقطبين، فهو خط تساوي جهد عمودي على خطوط المجال.':'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
+  DX.forEach((d,i)=>{$('pR'+i).oninput=()=>pDraw(i);
+    $('pd'+i+'Ck').onclick=()=>{const f='pd'+i+'Fb';if(+$('pR'+i).value<100)return fb(f,false,`حرك المجس حتى يصل إلى ${d} cm أولا.`);const v=num($('pd'+i).value);if(isNaN(v))return fb(f,false,'اكتب قراءة المسطرة بالسنتيمتر.');
+      if(Math.abs(v-d)<0.05){ok['d'+i]=true;fb(f,true,'✓ قراءة صحيحة:\n'+E(`d${'₁₂'[i]} = ${d.toFixed(1)} cm`))}else fb(f,false,'✗ اقرأ الرقم الكبير قبل الخط البرتقالي، ثم عد أقسام المليمتر الصغيرة حتى الخط.')};
+    $('pv'+i+'Ck').onclick=()=>{const f='pv'+i+'Fb';if(+$('pR'+i).value<100)return fb(f,false,`حرك المجس حتى يصل إلى ${d} cm أولا.`);const v=num($('pv'+i).value);if(isNaN(v))return fb(f,false,'اكتب قراءة الفولتميتر بالفولت.');
+      const val=VV()[i];if(Math.abs(v-val)<0.005){ok['v'+i]=true;fb(f,true,'✓ قراءة صحيحة:\n'+E(`V${'₁₂'[i]} = ${val.toFixed(2)} V`))}else fb(f,false,'✗ اكتب الرقم الظاهر على شاشة الفولتميتر كما هو.');sub();results()}});
+  $('pR2').oninput=()=>pDraw(2);
+  $('pv2Ck').onclick=()=>{const f='pv2Fb';if(!ok.v1)return fb(f,false,'أكمل القراءة (ب) أولا.');if(+$('pR2').value<100)return fb(f,false,'حرك المجس على الخط البرتقالي حتى نهايته أولا.');const v=num($('pv2').value);if(isNaN(v))return fb(f,false,'اكتب قراءة الفولتميتر بالفولت.');
+    const val=VV()[1];if(Math.abs(v-val)<0.005){ok.v2=true;fb(f,true,'✓ قراءة صحيحة:\n'+E(`V₃ = ${val.toFixed(2)} V = V₂`)+'\nالجهد لم يتغير عند تحريك المجس على الخط الموازي للقطبين، فهذا خط تساوي جهد.')}else fb(f,false,'✗ اكتب الرقم الظاهر على شاشة الفولتميتر كما هو.');results()};
+  const chk=(id,need,needMsg,val,tol,okMsg,badMsg)=>{const f='c'+id+'f';if(!need())return fb(f,false,needMsg);const v=num($('c'+id).value);if(isNaN(v))return fb(f,false,'اكتب الناتج بالأرقام.');
+    if(Math.abs(v-val())/Math.abs(val())<=tol){ok['c'+id]=true;fb(f,true,okMsg())}else fb(f,false,badMsg());sub();results()};
+  $('cP1k').onclick=()=>chk('P1',()=>ok.v0&&ok.d0,'أكمل القراءة (أ) أولا.',E1,.02,()=>'✓ إجابة صحيحة:\n'+E(`E₁ = ${VV()[0].toFixed(2)} / ${fx(DX[0]/100,2)} = ${fx(E1(),1)} N/C`),()=>'✗ حول d₁ إلى المتر ثم اقسم عليه قراءة الفولتميتر:\n'+E(`E₁ = ${VV()[0].toFixed(2)} / ${fx(DX[0]/100,2)}`));
+  $('cP2k').onclick=()=>chk('P2',()=>ok.v1&&ok.d1,'أكمل القراءة (ب) أولا.',E2,.02,()=>'✓ إجابة صحيحة:\n'+E(`E₂ = ${VV()[1].toFixed(2)} / ${fx(DX[1]/100,2)} = ${fx(E2(),1)} N/C`)+'\n'+(Math.abs(E1()-E2())/E1()<.03?'شدة المجال عند النقطتين متساوية تقريبا، فالمجال منتظم.':''),()=>'✗ حول d₂ إلى المتر ثم اقسم عليه قراءة الفولتميتر:\n'+E(`E₂ = ${VV()[1].toFixed(2)} / ${fx(DX[1]/100,2)}`));
+  $('cPVk').onclick=()=>chk('PV',()=>ok.v0&&ok.v1,'أكمل القراءتين (أ) و (ب) أولا.',DV,.01,()=>'✓ إجابة صحيحة:\n'+E(`ΔV = ${VV()[1].toFixed(2)} − ${VV()[0].toFixed(2)} = ${DV().toFixed(2)} V`),()=>'✗ اطرح القراءة الأولى من الثانية:\n'+E(`ΔV = ${VV()[1].toFixed(2)} − ${VV()[0].toFixed(2)}`));
+  $('cPEk').onclick=()=>chk('PE',()=>ok.cPV,'احسب فرق الجهد (ج) أولا.',EE,.02,()=>'✓ إجابة صحيحة:\n'+E(`d = ${DX[1]} − ${DX[0]} = ${DX[1]-DX[0]} cm = ${fx((DX[1]-DX[0])/100,2)} m`)+'\n'+E(`E = ${DV().toFixed(2)} / ${fx((DX[1]-DX[0])/100,2)} = ${fx(EE(),1)} N/C`),()=>'✗ المسافة بين النقطتين d = d₂ − d₁ بالمتر، ثم اقسم عليها فرق الجهد:\n'+E(`E = ${DV().toFixed(2)} / ${fx((DX[1]-DX[0])/100,2)}`));
+  $('nw').onclick=newObj;
+  function fitL(){box.querySelectorAll('.law .ln > span, h4.sbh').forEach(e=>{if(!e.offsetWidth)return;e.style.fontSize='';if(e.dataset.pl==null)e.dataset.pl=/pre-line/.test(e.getAttribute('style')||'')?'1':'';const pre=e.dataset.pl==='1';e.style.whiteSpace=pre?'pre':'nowrap';e.style.display='block';e.style.overflow='hidden';
+    let f=parseFloat(getComputedStyle(e).fontSize),k=0;while(e.scrollWidth>e.clientWidth+1&&f>9&&k++<80){f-=0.5;e.style.fontSize=f+'px'}});const hs=[...box.querySelectorAll('h4.sbh')].filter(e=>e.offsetWidth);if(hs.some(e=>e.style.fontSize)){const m=Math.min(...hs.map(e=>parseFloat(getComputedStyle(e).fontSize)));hs.forEach(e=>e.style.fontSize=m+'px')}}
+  const qf=()=>requestAnimationFrame(fitL);addEventListener('resize',qf);new MutationObserver(qf).observe(box,{childList:true,subtree:true,characterData:true});
+  calcInit(box);newObj();qf();
+}
+
 const LREF=[
  ['North Carolina State University. (n.d.). <i>Measurement: Lab 1, Physics Mechanics Laboratory Manual</i>. Advanced Instructional Systems (WebAssign).','https://www.webassign.net/question_assets/ncsucalcphysmechl3/lab_1/manual.html'],
  ['Palestine Technical University – Kadoorie. (2022). <i>Physics Lab 1 (105) Manual: Experiment 1 – Measurements and Uncertainties; Experiment 2 – Vectors</i>. Tulkarm, Palestine.','https://lms.ptuk.edu.ps/pluginfile.php/511897/mod_resource/content/3/physlab1-105-Manual%202022-khaled.pdf'],
@@ -3655,9 +3836,13 @@ const LREF=[
  ['The Ohio State University, Department of Physics. (n.d.). <i>Physics 1201 Laboratory, Experiment 1: Charges and Forces</i>. Columbus, OH.','https://www.asc.ohio-state.edu/physics/svccourses/phys1201/public_html/P1201_Lab_1.pdf'],
  ['PHYWE Systeme GmbH. (n.d.). <i>Coulomb Potential and Coulomb Field of Metal Spheres (P2420505), University Experiments</i>. Göttingen, Germany.','https://www.phywe.com/eksperimenty-i-nabory/universitet_25255'],
  ['PHYWE Systeme GmbH. (n.d.). <i>Laboratory Experiments Physics LEP 4.2.05: Coulomb Potential and Coulomb Field of Metal Spheres</i>. Hosted by Nikhef, Amsterdam.','https://www.nikhef.nl/~h73/kn1c/praktikum/phywe/LEP/Experim/4_2_05.pdf'],
- ['University of Minnesota, School of Physics and Astronomy. (n.d.). <i>Physics 1202 Laboratory IV: Electric Field and Potential</i>. Minneapolis, MN.','https://groups.spa.umn.edu/physed/Research/Lab%20Manuals/1202/lab%204%20Electric%20Fields.pdf']
+ ['University of Minnesota, School of Physics and Astronomy. (n.d.). <i>Physics 1202 Laboratory IV: Electric Field and Potential</i>. Minneapolis, MN.','https://groups.spa.umn.edu/physed/Research/Lab%20Manuals/1202/lab%204%20Electric%20Fields.pdf'],
+ ['University of Mississippi, Department of Physics and Astronomy. (n.d.). <i>Electric Field and Potentials: PHYS 224 Laboratory Manual</i>. Oxford, MS.','https://www.phy.olemiss.edu/lab/LabPDFs/224/LabManual/2_ElectricFieldAndPotentials_224/WS_E&amp;V_224.pdf'],
+ ['Auburn University, Department of Physics. (n.d.). <i>Electric Fields Lab: PHYS 1500 Laboratory</i>. Auburn, AL.','https://php.auburn.edu/academic/cosam/departments/physics/intro-courses/ugrad-lab/physics1500/lab-files/Electric%20Fields%20Lab.pdf'],
+ ['Texas Christian University, Department of Physics and Astronomy. (n.d.). <i>Lab 1: Electric Field Mapping, PHYS 10164</i>. Fort Worth, TX.','https://personal.tcu.edu/dingram/phys10164/lab1.pdf'],
+ ['University of North Carolina at Charlotte. (n.d.). <i>Electric Fields and Potentials: Lab 1, Physics Laboratory Manual</i>. Advanced Instructional Systems (WebAssign).','https://www.webassign.net/question_assets/unccolphyseml1/lab_1/manual.html']
 ];
-const LREFK={'3-3':[[31,'مسار مدرج تتحرك عليه الكرة الثانية لقياس المسافة بين مركزي الكرتين بالمليمتر (فكرة المسار المدرج).'],[33,'قياس شدة المجال الكهربائي حول كرات معدنية مشحونة بمقياس المجال الكهربائي عند مسافات مختلفة، والتحقق من أن المجال يتناسب عكسيا مع مربع المسافة.'],[34,'دليل التجربة: كرة معدنية على ساق عازلة ومقياس المجال الكهربائي ومسطرة مترية، وقياس E مقابل r.'],[35,'رسم خطوط المجال الكهربائي حول شحنة موجبة وشحنة سالبة وشحنتين مختلفتين.']],
+const LREFK={'3-4':[[36,'ورقة موصلة عليها قطبان متصلان بمصدر جهد مستمر، وقياس الجهد عند نقاط مختلفة بالفولتميتر الرقمي، ورسم خطوط تساوي الجهد وخطوط المجال.'],[37,'قياس الجهد بين قطبين متوازيين على ورقة موصلة، وحساب شدة المجال من تغير الجهد مع المسافة.'],[38,'رسم خريطة المجال الكهربائي: تحديد نقاط الجهد المتساوي بمجس الفولتميتر على ورقة موصلة.'],[39,'خطوط تساوي الجهد عمودية على خطوط المجال، وشدة المجال بين لوحين متوازيين E = ΔV / d.'],[35,'قياس فرق الجهد والمجال الكهربائي بين لوحين متوازيين ومقارنتهما.']],'3-3':[[31,'مسار مدرج تتحرك عليه الكرة الثانية لقياس المسافة بين مركزي الكرتين بالمليمتر (فكرة المسار المدرج).'],[33,'قياس شدة المجال الكهربائي حول كرات معدنية مشحونة بمقياس المجال الكهربائي عند مسافات مختلفة، والتحقق من أن المجال يتناسب عكسيا مع مربع المسافة.'],[34,'دليل التجربة: كرة معدنية على ساق عازلة ومقياس المجال الكهربائي ومسطرة مترية، وقياس E مقابل r.'],[35,'رسم خطوط المجال الكهربائي حول شحنة موجبة وشحنة سالبة وشحنتين مختلفتين.']],
  '3-1':[[32,'قياس القوة بين كرتين مشحونتين بميزان رقمي وتحويل قراءته بالجرام إلى قوة بالقانون F = m·g، وقياس المسافة بين مركزي الكرتين بمسطرة.'],[29,'كرة مشحونة على ميزان إلكتروني وكرة مشحونة معلقة فوقها، وقياس القوة عند مسافات مختلفة، ورسم القوة مقابل 1/r² للتحقق من قانون التربيع العكسي وحساب الشحنة.'],[30,'قياس قوة التنافر بين كرتين مشحونتين عند مسافات من 20 cm إلى 5 cm، وتحليل العلاقة بين القوة والمسافة والتحقق من قانون كولوم.'],[31,'جهاز قانون كولوم: كرتان معدنيتان موصلتان، والقوة بينهما تقاس عند مسافات مختلفة لإيجاد قانون التربيع العكسي.']],
  '2-1':[[21,'تسخين كتلة من الماء بمقاومة كهربائية وقياس الطاقة الكهربائية بالجول والطاقة الحرارية بالسعر، وإيجاد عدد الجولات في السعر الواحد.'],[19,'الحرارة طاقة تنتقل بسبب فرق درجة الحرارة، ووحدتاها الجول والسعر <span dir="ltr" style="white-space:nowrap">1 cal = 4.186 J</span>.']],
  '2-2':[[22,'نقطتا انصهار الجليد وغليان الماء في المقاييس الثلاثة، وقوانين التحويل بين السلسيوسي وكلفن والفهرنهايتي.'],[18,'قياس درجة حرارة الماء بالميزان الحراري الرقمي في المعمل.']],
@@ -3680,7 +3865,7 @@ const LREFK={'3-3':[[31,'مسار مدرج تتحرك عليه الكرة الث
 function refBox(k){const ix=LREFK[k];if(!ix)return '';
   return `<div class="intro lrefs"><h3>7. مراجع التجربة</h3><p class="rlead">بنيت هذه التجربة على تجارب منشورة في أدلة معامل الفيزياء بجامعات ومصادر تعليمية موثوقة، مع تكييفها لمحتوى الحقيبة التدريبية.</p><ol class="rl">${ix.map(([i,c],n)=>`<li><span class="en">[${n+1}] ${LREF[i][0]} <a href="${LREF[i][1]}" target="_blank" rel="noopener">${LREF[i][1]}</a></span><span class="ar">يطابق في هذه التجربة: ${c}</span></li>`).join('')}</ol></div>`}
 
-window.LABS={'0-1':{t:'القياس بأداة القدمة ذات الورنية وأداة الميكرومتر',run:measureLab},'0-2':{t:'قياس سرعة جسم متحرك والتحويل بين وحداتها',run:speedLab2},'0-4':{t:'إيجاد محصلة متجهين باستخدام طاولة القوى',run:forceLab},'0-5':{t:'تحليل قوة إلى مركبتين باستخدام طاولة القوى',run:vecLab},'0-6':{t:'الضرب القياسي لمتجهين بمتجهات الوحدة على لوحة الإحداثيات',run:dotLab},'1-1':{t:'إيجاد تسارع عربة على المسار الهوائي المائل وأثر زيادة الميل على السرعة والتسارع',run:airLab},'1-2':{t:'حساب ارتفاع سقوط كرة باستخدام معادلة الحركة الثانية',run:ffLab},'1-3':{t:'التحقق من قانون نيوتن الثاني باستخدام جهاز آتوود',run:awLab},'1-5':{t:'حساب قوة الاحتكاك الحركي والتحقق منها بالميزان النابضي',run:frLab},'1-7':{t:'حساب الشغل المبذول على صندوق خشبي بقوة أفقية',run:wkLab2},'1-8':{t:'إيجاد طاقة الوضع لجسم وعلاقتها بالارتفاع',run:peLab},'1-9':{t:'التحقق من حفظ الطاقة الميكانيكية لجسم ساقط سقوطا حرا',run:ceLab},'2-1':{t:'قياس الطاقة الحرارية الناتجة من سخان كهربائي وتحويلها بين الجول والسعر',run:q1Lab},'2-2':{t:'قياس درجتي انصهار الجليد وغليان الماء والتحويل بين مقاييس درجة الحرارة',run:tsLab},'2-3':{t:'حساب كمية الحرارة اللازمة لتسخين الماء',run:shLab},'2-4':{t:'حساب الحرارة الكامنة لانصهار الجليد',run:lhLab},'2-5':{t:'التحقق من الاتزان الحراري بخلط ماء ساخن وماء بارد',run:eqLab},'2-6':{t:'مقارنة طرق انتقال الحرارة: التوصيل والحمل والإشعاع',run:trLab},'3-1':{t:'التحقق من قانون كولوم',run:clLab},'3-3':{t:'قياس شدة المجال الكهربائي حول شحنة نقطية',run:efLab}};
+window.LABS={'0-1':{t:'القياس بأداة القدمة ذات الورنية وأداة الميكرومتر',run:measureLab},'0-2':{t:'قياس سرعة جسم متحرك والتحويل بين وحداتها',run:speedLab2},'0-4':{t:'إيجاد محصلة متجهين باستخدام طاولة القوى',run:forceLab},'0-5':{t:'تحليل قوة إلى مركبتين باستخدام طاولة القوى',run:vecLab},'0-6':{t:'الضرب القياسي لمتجهين بمتجهات الوحدة على لوحة الإحداثيات',run:dotLab},'1-1':{t:'إيجاد تسارع عربة على المسار الهوائي المائل وأثر زيادة الميل على السرعة والتسارع',run:airLab},'1-2':{t:'حساب ارتفاع سقوط كرة باستخدام معادلة الحركة الثانية',run:ffLab},'1-3':{t:'التحقق من قانون نيوتن الثاني باستخدام جهاز آتوود',run:awLab},'1-5':{t:'حساب قوة الاحتكاك الحركي والتحقق منها بالميزان النابضي',run:frLab},'1-7':{t:'حساب الشغل المبذول على صندوق خشبي بقوة أفقية',run:wkLab2},'1-8':{t:'إيجاد طاقة الوضع لجسم وعلاقتها بالارتفاع',run:peLab},'1-9':{t:'التحقق من حفظ الطاقة الميكانيكية لجسم ساقط سقوطا حرا',run:ceLab},'2-1':{t:'قياس الطاقة الحرارية الناتجة من سخان كهربائي وتحويلها بين الجول والسعر',run:q1Lab},'2-2':{t:'قياس درجتي انصهار الجليد وغليان الماء والتحويل بين مقاييس درجة الحرارة',run:tsLab},'2-3':{t:'حساب كمية الحرارة اللازمة لتسخين الماء',run:shLab},'2-4':{t:'حساب الحرارة الكامنة لانصهار الجليد',run:lhLab},'2-5':{t:'التحقق من الاتزان الحراري بخلط ماء ساخن وماء بارد',run:eqLab},'2-6':{t:'مقارنة طرق انتقال الحرارة: التوصيل والحمل والإشعاع',run:trLab},'3-1':{t:'التحقق من قانون كولوم',run:clLab},'3-3':{t:'قياس شدة المجال الكهربائي حول شحنة نقطية',run:efLab},'3-4':{t:'قياس فرق الجهد في مجال كهربائي منتظم',run:pdLab}};
 
 /* الدروس المدمجة في الوحدة الثالثة: تجربة واحدة لكل درس — الانصهار والغليان، والحرارة الكامنة لانصهار الجليد، والاتزان الحراري بخلط الماء */
 (function(){const L=window.LABS;if(L['2-2'])L['2-1']=Object.assign({k:'2-2'},L['2-2']);if(L['2-4'])L['2-3']=Object.assign({k:'2-4'},L['2-4'])})();

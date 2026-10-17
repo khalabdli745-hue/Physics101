@@ -159,3 +159,60 @@ Object.entries(SET).forEach(([k,f])=>{E[k]=E[k]||{};E[k].fig=f});
   +`<circle cx="${ox}" cy="${oy}" r="4" fill="var(--ink)"/>`,
   'A×B عمودي على مستوى المتجهين A و B')}
 })();
+/* المجال المنتظم وغير المنتظم، والجهد فيهما (درسا 3-3 و 3-4) */
+(function(){
+const A=(id,c)=>`<marker id="${id}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="${c}"/></marker>`;
+const defs=`<defs>${A('uh','var(--ink)')}${A('ua','var(--accent)')}${A('ub','var(--fig2)')}${A('um','var(--muted)')}</defs>`;
+const svg=(vb,body,cap)=>`<figure class="fig"><svg viewBox="${vb}" role="img" aria-label="${cap}">${defs}${body}</svg><figcaption>${cap}</figcaption></figure>`;
+const T=(x,y,s,o='')=>{if(/[؀-ۿ]/.test(s)&&!/text-anchor/.test(o))o+=' text-anchor="end"';return `<text x="${x}" y="${y}" ${o}>${s}</text>`};
+const L=(x1,y1,x2,y2,c='var(--ink)',m='uh',w=2.5,d='')=>`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${c}" stroke-width="${w}" ${m?`marker-end="url(#${m})"`:''} ${d?`stroke-dasharray="${d}"`:''}/>`;
+const D=(x1,y1,x2,y2,c='var(--ink)')=>`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${c}" stroke-width="1.6" marker-start="url(#uh)" marker-end="url(#uh)"/>`;
+const C='class="lb sm" text-anchor="middle"';
+const F=window.FIGS=window.FIGS||{};
+const XL=120,XR=260,Y0=50,Y1=190;
+/* مكثف متوازي اللوحين موصل بمصدر جهد مستمر */
+const cap=(field)=>
+  `<rect x="${XL-8}" y="${Y0}" width="8" height="${Y1-Y0}" fill="#DC2626" rx="2"/><rect x="${XR}" y="${Y0}" width="8" height="${Y1-Y0}" fill="#2563EB" rx="2"/>`
+  +[68,94,146,172].map(y=>`<text x="${XL-20}" y="${y+5}" ${C} style="fill:#DC2626">+</text><text x="${XR+20}" y="${y+5}" ${C} style="fill:#2563EB">−</text>`).join('')
+  +`<path d="M${XL-8},120 L${XL-40},120 L${XL-40},232 L183,232" fill="none" stroke="var(--ink)" stroke-width="1.8"/><path d="M${XR+8},120 L${XR+40},120 L${XR+40},232 L197,232" fill="none" stroke="var(--ink)" stroke-width="1.8"/><circle cx="${XL-8}" cy="120" r="2.5" fill="var(--ink)"/><circle cx="${XR+8}" cy="120" r="2.5" fill="var(--ink)"/>`
+  +`<line x1="185" y1="220" x2="185" y2="244" stroke="var(--ink)" stroke-width="2.5"/><line x1="195" y1="226" x2="195" y2="238" stroke="var(--ink)" stroke-width="5"/>`
+  +`<text x="176" y="226" ${C} style="fill:#DC2626">+</text><text x="205" y="226" ${C} style="fill:#2563EB">−</text>`
+  +T(190,262,'V','class="lb" text-anchor="middle"')+T(300,262,'مصدر جهد مستمر','class="lb xs" text-anchor="middle"')
+  +T(XL-10,40,'اللوح الموجب','class="lb xs" text-anchor="middle" style="fill:#DC2626"')+T(XR+10,40,'اللوح السالب','class="lb xs" text-anchor="middle" style="fill:#2563EB"')
+  +field;
+const lines=(c,m,w)=>[70,100,130,160].map(y=>L(XL+4,y,XR-6,y,c,m,w)).join('');
+F.efUniform=svg('40 20 360 255',
+  cap(lines('var(--accent)','ua',2.5)
+   +`<rect x="176" y="106" width="28" height="18" fill="var(--panel)"/>`+T(190,120,'E','class="lb ac" text-anchor="middle"')
+   +D(XL,205,XR,205)+`<rect x="181" y="196" width="18" height="16" fill="var(--panel)"/>`+T(190,209,'d',C)
+   +T(XR+50,95,'E = V / d','class="lb ac" text-anchor="start"')),
+  'المجال المنتظم بين لوحين متوازيين موصلين بمصدر جهد: خطوط مستقيمة متوازية متساوية التباعد');
+F.vUniform=svg('40 20 360 255',
+  cap(lines('var(--accent)','ua',1.6)
+   +[160,220].map(x=>L(x,58,x,182,'var(--fig2)',null,2,'6 4')).join('')
+   +`<circle cx="160" cy="115" r="5" fill="var(--ink)"/><circle cx="220" cy="115" r="5" fill="var(--ink)"/>`
+   +`<rect x="140" y="80" width="40" height="17" fill="var(--panel)"/><rect x="200" y="80" width="40" height="17" fill="var(--panel)"/>`
+   +T(160,93,'V<tspan dy="4" font-size="10">a</tspan>',C)+T(220,93,'V<tspan dy="4" font-size="10">b</tspan>',C)
+   +D(160,145,220,145)+`<rect x="181" y="135" width="18" height="16" fill="var(--panel)"/>`+T(190,148,'d',C)
+   +T(XR+50,95,'ΔV = E·d','class="lb ac" text-anchor="start"')+`<rect x="176" y="166" width="28" height="18" fill="var(--panel)"/>`+T(190,180,'E','class="lb ac" text-anchor="middle"')
+   +T(362,140,'خطوط تساوي','class="lb xs" text-anchor="middle" style="fill:var(--fig2)"')+T(362,156,'الجهد','class="lb xs" text-anchor="middle" style="fill:var(--fig2)"')+L(342,168,382,168,'var(--fig2)',null,2,'6 4')),
+  'فرق الجهد بين النقطتين a و b في المجال المنتظم يساوي E·d، وخطوط تساوي الجهد عمودية على خطوط المجال');
+/* شحنة نقطية */
+const cx=110,cy=130;
+const rays=(r0,r1,c,m,w)=>Array.from({length:12},(_,i)=>{const a=i*Math.PI/6;return L(cx+r0*Math.cos(a),cy+r0*Math.sin(a),cx+r1*Math.cos(a),cy+r1*Math.sin(a),c,m,w)}).join('');
+const q=`<circle cx="${cx}" cy="${cy}" r="15" fill="#DC2626"/><text x="${cx}" y="${cy+6}" class="lb ch" text-anchor="middle">+</text><text x="${cx-24}" y="${cy-20}" ${C}>q</text>`;
+F.efPoint=svg('0 30 380 210',
+  rays(20,78,'var(--accent)','ua',2)+q
+  +`<circle cx="270" cy="${cy}" r="5" fill="var(--ink)"/>`+L(275,cy,335,cy,'var(--accent)','ua',3.5)
+  +T(305,cy-12,'E','class="lb ac" text-anchor="middle"')+T(270,cy-12,'P',C)
+  +D(cx,cy+40,270,cy+40)+T(190,cy+58,'r',C)+L(270,cy+8,270,cy+46,'var(--muted)',null,1,'3 3')
+  +T(265,62,'E = k·q / r²','class="lb ac" text-anchor="middle"'),
+  'المجال غير المنتظم حول شحنة نقطية: خطوط شعاعية تتباعد ويضعف المجال كلما زادت r');
+F.vPoint=svg('0 30 380 210',
+  rays(20,100,'var(--accent)',null,1)+[40,65,95].map(r=>`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="var(--fig2)" stroke-width="2" stroke-dasharray="6 4"/>`).join('')+q
+  +`<circle cx="${cx+95}" cy="${cy}" r="5" fill="var(--ink)"/>`+T(cx+108,cy-10,'V',C)
+  +D(cx,cy+40,cx+95,cy+40)+`<rect x="${cx+40}" y="${cy+29}" width="16" height="17" fill="var(--panel)"/>`+T(cx+48,cy+43,'r',C)
+  +T(300,80,'V = k·q / r','class="lb ac" text-anchor="middle"')
+  +T(300,112,'خطوط تساوي الجهد','class="lb xs" text-anchor="middle" style="fill:var(--fig2)"')+L(280,124,320,124,'var(--fig2)',null,2,'6 4'),
+  'الجهد حول شحنة نقطية: خطوط تساوي الجهد دوائر حول الشحنة، ويقل الجهد كلما زادت r');
+})();
