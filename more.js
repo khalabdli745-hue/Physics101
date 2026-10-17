@@ -1713,3 +1713,29 @@ const pool=[];for(const k in P)(P[k]||[]).forEach(p=>pool.push([k,p]));
 const find=r=>{const [k,q]=r.split('|');const x=pool.find(([kk,p])=>kk===k&&p.q.startsWith(q));return x&&x[1]};
 SPEC.forEach(S=>{for(const r in S.FIX){const p=find(r);if(p){Object.assign(p,S.FIX[r]);if(S.FIX[r].bl===null){delete p.bl;delete p.bu}}}
  for(const k in S.L){const arr=[];S.L[k].forEach(e=>{let p=e.new?S.I[e.new]:find(e.ref);if(!p){console.warn('missing',k,e);return}arr.push(Object.assign({},p,e.src?{src:e.src}:{}))});P[k]=arr}})})();
+
+/* دمج دروس الوحدة الثالثة: كل درس مخفي يدمج في الدرس الظاهر قبله (الشرح والأسئلة والمسائل والجداول والملخص والتطبيقات والرسوم والتمارين المولدة) */
+(function(){const PAIRS=[[1,2],[3,4],[5,6]],U=2,S=(window.STUDY||[])[U],P=window.PROBS||{},TB=window.TABLES||{},TH=window.THEORY||{},E=window.EXTRA||{},M=window.FIGMAP=window.FIGMAP||{},SM=window.SUMM||{};
+  const ALIAS={};
+  PAIRS.forEach(([a,b])=>{const ka=U+'-'+a,kb=U+'-'+b;ALIAS[ka]=[ka,kb];
+    if(S&&S[a]&&S[b]){const H='### أمثلة الحقيبة التدريبية محلولة',sp=t=>{t=(t||'').trim();const i=t.indexOf(H);return i<0?[t,'']:[t.slice(0,i).trim(),t.slice(i+H.length).trim()]},A=sp(S[a].s),B=sp(S[b].s),ex=[A[1],B[1]].filter(Boolean).join('\n');S[a].s=[A[0],B[0]].filter(Boolean).join('\n')+(ex?'\n'+H+'\n'+ex:'');S[a].qz=(S[a].qz||[]).concat(S[b].qz||[]);}
+    if(P[kb])P[ka]=(P[ka]||[]).concat(P[kb]);
+    if(TB[kb])TB[ka]=(TB[ka]||[]).concat(TB[kb]);
+    if(!TH[ka]&&TH[kb])TH[ka]=TH[kb];
+    if(SM[kb])SM[ka]=(SM[ka]?SM[ka].trim()+'\n':'')+SM[kb].trim();
+    const ea=E[ka]||(E[ka]={}),eb=E[kb]||{};
+    if(eb.ap)ea.ap=ea.ap?(ea.ap.indexOf(eb.ap)<0?ea.ap+'\n'+eb.ap:ea.ap):eb.ap;
+    if(eb.sim){ea.sim=ea.sim||[];eb.sim.forEach(x=>{if(!ea.sim.some(y=>y.u===x.u))ea.sim.push(x)})}
+    const fa=(M[ka]||[]).slice();if(eb.fig&&eb.fig!==ea.fig&&fa.indexOf(eb.fig)<0)fa.push(eb.fig);(M[kb]||[]).forEach(f=>{if(f!==ea.fig&&fa.indexOf(f)<0)fa.push(f)});M[ka]=fa;});
+  const G=window.GENS;if(G){const has=G.has,make=G.make;
+    G.has=k=>ALIAS[k]?ALIAS[k].some(x=>has(x)):has(k);
+    G.make=k=>{if(!ALIAS[k])return make(k);const ks=ALIAS[k].filter(x=>has(x));return ks.length?make(ks[Math.floor(Math.random()*ks.length)]):null};}
+  window.LESSON_MERGE=ALIAS;})();
+
+/* درسا التحويل بين الوحدات وقانون كولوم: المفاهيم أولا ثم «أمثلة الحقيبة التدريبية محلولة» مرة واحدة وتحتها كل الأمثلة بترتيب الصفحات */
+[[0,2],[3,2]].forEach(([U,L])=>{const S=(window.STUDY||[])[U];if(!S||!S[L]||!S[L].s)return;const H='### أمثلة الحقيبة التدريبية محلولة';
+  const parts=S[L].s.split(/^(?=### )/m),ex=[],con=[];let pre='';
+  parts.forEach(t=>{if(!/^### /.test(t)){pre+=t;return}if(t.trim()===H||t.startsWith(H+'\n'))return;(/^### مثال/.test(t)?ex:con).push(t.replace(/\s*$/,'\n'))});
+  const pg=t=>{const m=t.match(/صفحة (\d+)/);return m?+m[1]:999};ex.sort((a,b)=>pg(a)-pg(b));
+  if(ex.length)S[L].s=pre+con.join('')+H+'\n'+ex.join('');});
+
