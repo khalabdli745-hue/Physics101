@@ -2260,10 +2260,14 @@ function ceScene(h,s,o){/* h ارتفاع الإفلات (سم) فوق شعاع 
   g+=`<path d="M${cx},${ct-ry+1} v-8 a5,5 0 1 1 0.1,0" fill="none" stroke="#334155" stroke-width="2.2"/>`;
   /* الجانب الأمامي للبوابة */
   g+=box(MX+24,MX+30,MD-12,MD+14,G-10,G+10,'#475569','#94A3B8','#334155','#1F2937');
-  /* ذراع الحامل وماسك الإفلات */
+  /* ذراع الحامل وآلية الإطلاق */
   g+=box(94,MX+4,55,59,ZA,ZA+5,'#94A3B8','#E2E8F0','#64748B','#475569');
   g+=box(82,98,50,64,ZA-6,ZA+11,'#1F2937','#475569','#0F172A','#0F172A');
-  {const [a,b]=S(MX,MD,ZA),op=rel?7:0;g+=`<path d="M${a-6-op},${b} v14 h4 M${a+6+op},${b} v14 h-4" fill="none" stroke="#F7931E" stroke-width="3"/>`}
+  /* آلية الإطلاق: جسم معدني على طرف الذراع، وفكان برتقاليان يمسكان الجسم، وذراع إطلاق حمراء تضغط لفتح الفكين */
+  {const [a,b]=S(MX,MD,ZA),op=rel?7:0;g+=`<path d="M${a-6-op},${b} v14 h4 M${a+6+op},${b} v14 h-4" fill="none" stroke="#F7931E" stroke-width="3"/>`;
+   g+=box(MX-10,MX+10,MD-6,MD+6,ZA-3,ZA+10,'#334155','#64748B','#1F2937','#0F172A');
+   const p0=S(MX+10,MD,ZA+6),p1=rel?S(MX+26,MD,ZA+1):S(MX+24,MD,ZA+16);
+   g+=`<line x1="${p0[0]}" y1="${p0[1]}" x2="${p1[0]}" y2="${p1[1]}" stroke="#DC2626" stroke-width="3.2" stroke-linecap="round"/><circle cx="${p1[0]}" cy="${p1[1]}" r="4" fill="#EF4444" stroke="#7F1D1D"/><circle cx="${p0[0]}" cy="${p0[1]}" r="2" fill="#0F172A"/>`}
   /* أسفل الجسم حتى المسطرة */
   if(!rel){const b=S(RX+12,48,ZT);g+=`<line x1="${cx-rx}" y1="${cb}" x2="${b[0]}" y2="${b[1]}" stroke="#DC2626" stroke-width="1.6" stroke-dasharray="5 3"/>`}
   if(o.harr&&!rel){const a=S(MX+44,MD,G),b=S(MX+44,MD,ZT);g+=`<line x1="${a[0]}" y1="${a[1]-2}" x2="${b[0]}" y2="${b[1]+2}" stroke="#2563EB" stroke-width="2"/><path d="M${a[0]-5},${a[1]-10} L${a[0]},${a[1]-2} L${a[0]+5},${a[1]-10} M${b[0]-5},${b[1]+10} L${b[0]},${b[1]+2} L${b[0]+5},${b[1]+10}" stroke="#2563EB" stroke-width="2" fill="none"/><text x="${a[0]+8}" y="${(a[1]+b[1])/2+5}" font-size="15" font-weight="800" fill="#2563EB" direction="ltr">h</text>`}
@@ -2273,22 +2277,22 @@ function ceScene(h,s,o){/* h ارتفاع الإفلات (سم) فوق شعاع 
   {g+=box(272,332,2,24,T,T+40,'#334155','#475569','#1F2937','#0F172A');const s1=S(276,2,T+6),s2=S(328,2,T+34);
    g+=`<rect x="${s1[0]}" y="${s2[1]}" width="${s2[0]-s1[0]}" height="${s1[1]-s2[1]}" rx="3" fill="#BBF7D0" stroke="#14532D"/><text x="${(s1[0]+s2[0])/2}" y="${(s1[1]+s2[1])/2+4}" font-size="10" font-weight="800" text-anchor="middle" fill="#14532D" font-family="Consolas,monospace" direction="ltr">${o.v||'-.--'} m/s</text>`;
    const w=S(MX+30,MD,G),k=S(272,14,T+30);g+=`<path d="M${w[0]},${w[1]} C${w[0]+18},${w[1]+10} ${k[0]-10},${k[1]-10} ${k[0]},${k[1]}" fill="none" stroke="#1F2937" stroke-width="2"/>`}
-  if(o.lab){const [bx,by]=S(MX,MD,ZA);g+=lbl(...S(90,57,ZA+24),30,22,'الحامل المعملي','start')+lbl(bx+8,by+6,250,22,'ماسك الإفلات','start')+lbl(cx+rx-4,(ct+cb)/2,300,ZA>200?96:120,'‏الجسم (الثقل)‏','start')+lbl(...S(RX+6,48,G+60*K),6,BASE-150,'المسطرة المترية','start')+lbl(...S(MX-27,MD-12,G),80,BASE+26,'البوابة الضوئية')+lbl(...S(MX+10,MD-12,T+5),200,BASE+26,'وسادة الاستقبال')+lbl(...S(300,2,T+20),340,BASE+26,'عداد البوابة')}
+  if(o.lab){const [bx,by]=S(MX,MD,ZA);g+=lbl(...S(90,57,ZA+24),30,22,'الحامل المعملي','start')+lbl(...S(MX+4,MD-6,ZA+8),250,22,'آلية الإطلاق','start')+lbl(cx+rx-4,(ct+cb)/2,300,ZA>200?96:120,'‏الجسم (الثقل)‏','start')+lbl(...S(RX+6,48,G+60*K),6,BASE-150,'المسطرة المترية','start')+lbl(...S(MX-27,MD-12,G),80,BASE+26,'البوابة الضوئية')+lbl(...S(MX+10,MD-12,T+5),200,BASE+26,'وسادة الاستقبال')+lbl(...S(300,2,T+20),340,BASE+26,'عداد البوابة')}
   return `<svg viewBox="0 0 400 ${BASE+(o.lab?44:14)}" aria-label="إفلات جسم من ارتفاع فوق بوابة ضوئية">${g}</svg>`}
 function ceLab(box){
   box.innerHTML=`
   <div class="intro"><small class="labKind">🧪 تجربة عملية تفاعلية</small><h3>1. اسم التجربة</h3><p class="labName">التحقق من حفظ الطاقة الميكانيكية لجسم ساقط سقوطا حرا</p></div>
   <div class="tags"><span class="tag">الكتلة m: <i>الميزان الرقمي</i> · g</span><span class="tag">الارتفاع h: <i>المسطرة المترية</i> · cm</span><span class="tag">السرعة v: <i>البوابة الضوئية</i> · m/s</span><span class="tag dv">الطاقة PE و KE: <i>كمية مشتقة</i> · J</span></div>
   <div class="intro goals"><h3>2. أهداف التجربة</h3><ol class="gl">
-    <li>التعرف على الحامل المعملي وماسك الإفلات والبوابة الضوئية والمسطرة المترية والميزان الرقمي.</li>
+    <li>التعرف على الحامل المعملي وآلية الإطلاق والبوابة الضوئية والمسطرة المترية والميزان الرقمي.</li>
     <li>قياس كتلة الجسم (الثقل) <span dir="ltr">m</span> وارتفاع إفلاته <span dir="ltr">h</span>.</li>
     <li>قياس سرعة الجسم (الثقل) <span dir="ltr">v</span> عند البوابة الضوئية.</li>
     <li>حساب طاقة الوضع <span dir="ltr" style="white-space:nowrap">PE = m·g·h</span> وطاقة الحركة <span dir="ltr" style="white-space:nowrap">KE = ½·m·v²</span>.</li>
     <li>المقارنة بينهما للتحقق من حفظ الطاقة الميكانيكية.</li></ol></div>
   <div class="intro"><h3>3. الأدوات والأجهزة المستخدمة</h3>
     <div class="tool"><div class="stage">${ceScene(50,0,{lab:true,harr:true})}</div><div class="vcap">إفلات جسم فوق بوابة ضوئية: منظر ثلاثي الأبعاد</div>
-    <p><b>ترتيب الأجهزة:</b> الجسم (الثقل) ممسوك بماسك الإفلات في طرف ذراع الحامل المعملي، وتحته بوابة ضوئية مثبتة على الحامل، ثم وسادة استقبال على الطاولة. صفر المسطرة المترية عند شعاع البوابة الضوئية <span dir="ltr">(hi = 0)</span>.</p></div>
-    <div class="tool"><p><b>ماسك الإفلات:</b> يمسك الجسم (الثقل) ساكنا، وعند فتحه يسقط الجسم من السكون دون دفع <span dir="ltr">(Vi = 0)</span>.</p>
+    <p><b>ترتيب الأجهزة:</b> الجسم (الثقل) ممسوك بآلية الإطلاق في طرف ذراع الحامل المعملي، وتحته بوابة ضوئية مثبتة على الحامل، ثم وسادة استقبال على الطاولة. صفر المسطرة المترية عند شعاع البوابة الضوئية <span dir="ltr">(hi = 0)</span>.</p></div>
+    <div class="tool"><p><b>آلية الإطلاق:</b> تمسك الجسم (الثقل) ساكنا، وعند الضغط على ذراعها الحمراء ينفتح الفكان فيسقط الجسم من السكون دون دفع <span dir="ltr">(Vi = 0)</span>.</p>
     <p><b>البوابة الضوئية (Photogate):</b> مضبوطة على وضع قياس السرعة، فتعرض سرعة الجسم لحظة قطعه لشعاعها مباشرة بوحدة <span dir="ltr">m/s</span>.</p>
     <p><b>المسطرة المترية:</b> يقاس بها ارتفاع أسفل الجسم (الثقل) فوق شعاع البوابة بدقة <span dir="ltr">0.1 cm</span>.</p>
     <p><b>الميزان الرقمي:</b> يقيس كتلة الجسم (الثقل) بالجرام بدقة <span dir="ltr">1 g</span>.</p></div></div>
@@ -2332,8 +2336,8 @@ function ceLab(box){
     <div class="ans"><label>قراءتك لارتفاع أسفل الجسم (الثقل) hf</label><input id="hIn" inputmode="decimal" dir="ltr" placeholder="cm"><button type="button" class="go" id="hCk">تحقق</button><button type="button" class="rs" id="hHn">تلميح</button></div><div class="fb2" id="hFb"></div>
     <h4 class="sbh">ج) إفلات الجسم (الثقل) وقراءة سرعته بالبوابة الضوئية</h4>
     <div class="stage"><div id="gS"></div><svg id="vS" viewBox="0 0 400 112"></svg><div class="hud"><span id="gSt"></span></div></div>
-    <div class="row"><label for="gR">فتح ماسك الإفلات</label><output id="gO"></output><input id="gR" type="range" min="0" max="100" step="1" value="0"></div>
-    <p class="slh">👆 اسحب المؤشر البرتقالي لفتح ماسك الإفلات، فيسقط الجسم (الثقل) من السكون ويعبر شعاع البوابة الضوئية، ثم اقرأ سرعته من الشاشة المكبرة.</p>
+    <div class="row"><label for="gR">فتح آلية الإطلاق</label><output id="gO"></output><input id="gR" type="range" min="0" max="100" step="1" value="0"></div>
+    <p class="slh">👆 اسحب المؤشر البرتقالي لفتح آلية الإطلاق، فيسقط الجسم (الثقل) من السكون ويعبر شعاع البوابة الضوئية، ثم اقرأ سرعته من الشاشة المكبرة.</p>
     <div class="ans"><label>قراءتك لسرعة الجسم (الثقل) v</label><input id="vIn" inputmode="decimal" dir="ltr" placeholder="m/s"><button type="button" class="go" id="vCk">تحقق</button></div><div class="fb2" id="vFb"></div>
     <h4 class="sbh">د) حساب طاقة الوضع عند الإفلات</h4>
     <p class="slh">ℹ️ <b>المعطيات:</b> تسارع الجاذبية <b dir="ltr">g = 9.8 m/s²</b></p>
@@ -2380,7 +2384,7 @@ function ceLab(box){
     $('pZ').innerHTML=z}
   function gDraw(){const v=+$('gR').value,dn=fallen(),sMax=H+(56-5)/1.55,s=v<=0?0:Math.min(sMax,v/60*H+(v>=60?(v-60)/40*(sMax-H):0));
     $('gO').textContent=v>=100?'استقر على الوسادة':dn?'عبر البوابة':v>0?'يسقط…':'';
-    $('gSt').textContent=dn?'✓ عبر الجسم (الثقل) شعاع البوابة الضوئية، اقرأ سرعته v من الشاشة المكبرة':v>0?'الجسم (الثقل) يسقط من السكون…':'الجسم (الثقل) ساكن في ماسك الإفلات (Vi = 0)';
+    $('gSt').textContent=dn?'✓ عبر الجسم (الثقل) شعاع البوابة الضوئية، اقرأ سرعته v من الشاشة المكبرة':v>0?'الجسم (الثقل) يسقط من السكون…':'الجسم (الثقل) ساكن في آلية الإطلاق (Vi = 0)';
     $('gS').innerHTML=ceScene(H,s,{v:dn?V.toFixed(2):null});
     $('vS').innerHTML=`<rect x="40" y="4" width="320" height="86" rx="14" fill="#334155" stroke="#0F172A" stroke-width="2"/><rect x="56" y="16" width="288" height="62" rx="8" fill="#BBF7D0" stroke="#14532D"/><text x="200" y="58" font-size="26" font-weight="800" text-anchor="middle" fill="#14532D" direction="ltr" font-family="Consolas,monospace">v = ${dn?V.toFixed(2):'-.--'} m/s</text><text x="200" y="106" font-size="12" font-weight="700" text-anchor="middle" fill="var(--muted)">‏شاشة عداد البوابة الضوئية (مكبرة)‏</text>`}
   function sub(){
@@ -2399,7 +2403,7 @@ function ceLab(box){
   $('hHn').onclick=()=>{hX=true;pDraw();fb('hFb',true,'تلميح: الأرقام الكبيرة بالسنتيمتر، وبين كل رقمين 10 أقسام صغيرة كل قسم '+E('0.1 cm')+'. اقرأ آخر رقم قبل المؤشر، ثم احسب عدد الأقسام الصغيرة حتى الخط الأزرق.')};
   $('hCk').onclick=()=>{if(!pTouch())return fb('hFb',false,'اسحب المؤشر حتى يلامس أسفل الجسم (الثقل) أولا.');const v=num($('hIn').value);if(isNaN(v))return fb('hFb',false,'اكتب قراءتك بالسنتيمتر.');
     if(Math.abs(v-H)<0.05){ok.h=true;fb('hFb',true,'✓ قراءة صحيحة:\n'+E(`hf = ${H.toFixed(1)} cm`)+'\n'+E(`h = hf − hi = ${H.toFixed(1)} − 0 = ${H.toFixed(1)} cm = ${fx(HM(),3)} m`))}else fb('hFb',false,'✗ القراءة غير صحيحة، أعد القراءة أو استخدم التلميح.');sub();results()};
-  $('vCk').onclick=()=>{if(!fallen())return fb('vFb',false,'افتح ماسك الإفلات حتى يعبر الجسم (الثقل) البوابة الضوئية أولا.');const v=num($('vIn').value);if(isNaN(v))return fb('vFb',false,'اكتب قراءتك بوحدة m/s.');
+  $('vCk').onclick=()=>{if(!fallen())return fb('vFb',false,'افتح آلية الإطلاق حتى يعبر الجسم (الثقل) البوابة الضوئية أولا.');const v=num($('vIn').value);if(isNaN(v))return fb('vFb',false,'اكتب قراءتك بوحدة m/s.');
     if(Math.abs(v-V)<0.005){ok.v=true;fb('vFb',true,'✓ قراءة صحيحة:\n'+E(`v = ${V.toFixed(2)} m/s`))}else fb('vFb',false,'✗ اكتب السرعة كما تظهر على الشاشة المكبرة.');sub();results()};
   const chk=(c,need,needMsg,val,okMsg,bad)=>{if(!need())return fb(c+'f',false,needMsg);const v=num($(c).value);if(isNaN(v))return fb(c+'f',false,'اكتب الناتج بوحدة J.');
     if(Math.abs(v-val)/val<0.01){ok[c]=true;fb(c+'f',true,okMsg())}else fb(c+'f',false,bad);sub();results()};
