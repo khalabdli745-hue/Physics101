@@ -200,7 +200,7 @@ function measureLab(box){
   /* --- القدمة --- */
   function vVal(){let o=r1(+$('vR').value);if(o<L){o=L;$('vR').value=o}return o}
   function vDraw(){const o=vVal(),touch=Math.abs(o-L)<1e-6;$('vO').textContent=o.toFixed(1)+' mm';
-    $('vSt').textContent=touch?'✓ فكا أداة القدمة يلامسان الأسطوانة، اقرأ القياس من التدريجين':'يوجد فراغ بين الفك والأسطوانة، قرّب الفك';
+    $('vSt').textContent=touch?'✓ فكا أداة القدمة يلامسان الأسطوانة، اقرأ القياس من التدريجين':'يوجد فراغ بين الفك والأسطوانة، اسحب الفك نحو الأسطوانة';
     const px=3.4,x0=30,xo=x0+o*px,xl=x0+L*px,h=Math.min(D*3.2,60);
     $('vTop').innerHTML=`<rect x="10" y="14" width="385" height="16" rx="3" fill="#94A3B8"/>${Array.from({length:11},(_,i)=>`<line x1="${x0+i*10*px}" y1="14" x2="${x0+i*10*px}" y2="22" stroke="#1F2937"/>`).join('')}
       <path d="M${x0-14} 14 H${x0} V110 H${x0-6} L${x0-14} 96 Z" fill="#F7931E"/>
@@ -241,7 +241,7 @@ function measureLab(box){
     $('rL1').textContent=okL?E(L.toFixed(1)+' mm'):'—';$('rL2').textContent=okL?E((L/1000).toFixed(4)+' m'):'—';
     $('rD1').textContent=okD?E(D.toFixed(2)+' mm'):'—';$('rD2').textContent=okD?E((D/1000).toFixed(5)+' m'):'—';
     const V=Math.PI*D*D*L/4;$('rV1').textContent=okV?E((V/1000).toFixed(2)+' cm³'):'—';$('rV2').textContent=okV?E(sci(V*1e-9)+' m³'):'—';
-    $('rNote').textContent=okL&&okD&&okV?'الاستنتاج: أداة الميكرومتر أدق، فدقتها '+E('0.01 mm')+' مقابل '+E('0.1 mm')+' لأداة القدمة ذات الورنية، لذلك استُخدمت لقياس القطر الصغير. والحجم كمية مشتقة حُسبت من كميتين أساسيتين مقيستين.':'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
+    $('rNote').textContent=okL&&okD&&okV?'الاستنتاج: أداة الميكرومتر أدق، فدقتها '+E('0.01 mm')+' مقابل '+E('0.1 mm')+' لأداة القدمة ذات الورنية، لذلك تستخدم لقياس القطر الصغير. والحجم كمية مشتقة تحسب من كميتين أساسيتين مقيستين.':'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
   function vol(){results();if(!(okL&&okD)){$('vS').textContent='أكمل القياسين 5.1 و 5.2';return}
     const Lm=L/1000,Dm=D/1000,V=Math.PI*Dm*Dm*Lm/4;
     $('vS').textContent='V = π D² L / 4\n'+`V = π × (${sci(Dm)} m)² × ${sci(Lm)} m / 4 = ${sci(V)} m³`}
@@ -252,12 +252,12 @@ function measureLab(box){
   box.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{$('mR').value=r2(+$('mR').value+ +b.dataset.m);mDraw()});
   $('vHn').onclick=()=>{vHint=true;vDraw();fb('vFb',true,'تلميح: اقرأ أولا آخر ملليمتر في التدريج الرئيسي قبل صفر الورنية، ثم ابحث عن خط الورنية المنطبق تماما على خط من التدريج الرئيسي (ظهر باللون الأحمر)، واضرب رقمه في 0.1 mm.')};
   $('mHn').onclick=()=>{mHint=true;mDraw();fb('mFb',true,'تلميح: اقرأ آخر خط ظاهر في التدريج الخطي (ملليمتر كامل أو نصف ملليمتر)، ثم أضف رقم قسم التدريج الدائري المنطبق على الخط الأفقي (ظهر باللون الأحمر) مضروبا في 0.01 mm.')};
-  $('vCk').onclick=()=>{const o=vVal(),v=num($('vIn').value);if(Math.abs(o-L)>1e-6)return fb('vFb',false,'قرّب الفك حتى يلامس الأسطوانة أولا.');if(isNaN(v))return fb('vFb',false,'اكتب قراءتك بالملليمتر.');
+  $('vCk').onclick=()=>{const o=vVal(),v=num($('vIn').value);if(Math.abs(o-L)>1e-6)return fb('vFb',false,'اسحب الفك حتى يلامس الأسطوانة أولا.');if(isNaN(v))return fb('vFb',false,'اكتب قراءتك بالملليمتر.');
     const mm=Math.floor(L+1e-9),n=Math.round((L-mm)*10);if(Math.abs(v-L)<0.05){okL=true;fb('vFb',true,'✓ قراءة صحيحة:\n'+E(`L = ${mm} mm + ${n} × 0.1 mm = ${L.toFixed(1)} mm = ${(L/1000).toFixed(4)} m`))}else fb('vFb',false,'✗ القراءة غير صحيحة، أعد قراءة التدريجين أو استخدم التلميح.');vol()};
   $('mCk').onclick=()=>{const r=mVal(),v=num($('mIn').value);if(Math.abs(r-D)>1e-6)return fb('mFb',false,'أدر الأسطوانة حتى يلامس العمود السلك أولا.');if(isNaN(v))return fb('mFb',false,'اكتب قراءتك بالملليمتر.');
     const lin=Math.floor(D*2+1e-9)/2,c=Math.round((D-lin)*100);if(Math.abs(v-D)<0.005){okD=true;fb('mFb',true,'✓ قراءة صحيحة:\n'+E(`D = ${lin.toFixed(1)} mm + ${c} × 0.01 mm = ${D.toFixed(2)} mm = ${(D/1000).toFixed(5)} m`))}else fb('mFb',false,'✗ القراءة غير صحيحة، أعد قراءة التدريجين أو استخدم التلميح.');vol()};
   $('cCk').onclick=()=>{if(!(okL&&okD))return fb('cFb',false,'أكمل قياس الطول والقطر أولا.');const v=num($('cIn').value),V=Math.PI*D*D*L/4/1000;if(isNaN(v))return fb('cFb',false,'اكتب الحجم بوحدة cm³.');
-    if(Math.abs(v-V)/V<0.02){okV=true;results();}if(Math.abs(v-V)/V<0.02)fb('cFb',true,'✓ إجابة صحيحة:\n'+E(`V = ${V.toFixed(2)} cm³ = ${sci(V*1e-6)} m³`)+'\nلأن '+E('1 cm³ = 10⁻⁶ m³')+'.');else fb('cFb',false,'✗ راجع التحويل: حوّل D وL إلى cm أولا (1 cm = 10 mm)، ثم عوّض في V = π D² L / 4.')};
+    if(Math.abs(v-V)/V<0.02){okV=true;results();}if(Math.abs(v-V)/V<0.02)fb('cFb',true,'✓ إجابة صحيحة:\n'+E(`V = ${V.toFixed(2)} cm³ = ${sci(V*1e-6)} m³`)+'\nلأن '+E('1 cm³ = 10⁻⁶ m³')+'.');else fb('cFb',false,'✗ راجع التحويل: اكتب D وL بوحدة cm أولا (1 cm = 10 mm)، ثم ضع القيم في V = π D² L / 4.')};
   $('nw').onclick=newObj;
   calcInit(box);newObj();
 }
@@ -321,8 +321,8 @@ function speedLab2(box){
     <div class="ctl"><h3>5.3 الحسابات</h3>
     <div class="law"><div class="ln"><b>التعويض</b><span id="vS">أكمل القياسين 5.1 و 5.2</span></div></div>
     <div class="ans"><label>1. احسب السرعة v بوحدة cm/s</label><input id="c1" inputmode="decimal" dir="ltr" placeholder="cm/s"><button type="button" class="go" id="c1k">تحقق</button></div><div class="fb2" id="c1f"></div>
-    <div class="ans"><label>2. حوّل السرعة إلى m/s</label><input id="c2" inputmode="decimal" dir="ltr" placeholder="m/s"><button type="button" class="go" id="c2k">تحقق</button></div><div class="fb2" id="c2f"></div>
-    <div class="ans"><label>3. حوّل السرعة إلى km/h</label><input id="c3" inputmode="decimal" dir="ltr" placeholder="km/h"><button type="button" class="go" id="c3k">تحقق</button></div><div class="fb2" id="c3f"></div>
+    <div class="ans"><label>2. اكتب السرعة بوحدة m/s</label><input id="c2" inputmode="decimal" dir="ltr" placeholder="m/s"><button type="button" class="go" id="c2k">تحقق</button></div><div class="fb2" id="c2f"></div>
+    <div class="ans"><label>3. اكتب السرعة بوحدة km/h</label><input id="c3" inputmode="decimal" dir="ltr" placeholder="km/h"><button type="button" class="go" id="c3k">تحقق</button></div><div class="fb2" id="c3f"></div>
     <div class="labCalc"></div>
   </div>
   <div class="ctl res"><h3>6. نتائج التجربة</h3>
@@ -354,7 +354,7 @@ function speedLab2(box){
     $('tZm').innerHTML=g}
   function sVal(){let t=+$('sR').value;if(t>T){t=T;$('sR').value=t}return t}
   function sDraw(){const t=sVal(),done=Math.abs(t-T)<1e-6;$('sO').textContent=done?'وصلت العربة':'';
-    $('sSt').textContent=done?'✓ وصلت العربة إلى خط النهاية وتوقفت ساعة الإيقاف، اقرأ الزمن':'حرّك العربة حتى تصل إلى خط النهاية';
+    $('sSt').textContent=done?'✓ وصلت العربة إلى خط النهاية وتوقفت ساعة الإيقاف، اقرأ الزمن':'اسحب العربة حتى تصل إلى خط النهاية';
     const cx=X0+d*PX*t/T;
     $('sTop').innerHTML=track('s',0,`<g transform="translate(${cx},0)"><rect x="-34" y="34" width="34" height="20" rx="4" fill="#3B82F6" stroke="#1E3A8A"/><circle cx="-26" cy="58" r="5" fill="#111827"/><circle cx="-8" cy="58" r="5" fill="#111827"/></g>`);
     const C=130,R=118;let g=`<circle cx="200" cy="${C}" r="${R+8}" fill="#64748B" stroke="#334155" stroke-width="2"/><circle cx="200" cy="${C}" r="${R}" fill="#F8FAFC" stroke="#94A3B8"/><rect x="188" y="0" width="24" height="8" rx="3" fill="#F7931E"/>`;
@@ -370,11 +370,11 @@ function speedLab2(box){
     $('r4a').textContent=ok3?E(vk().toFixed(2)+' km/h'):'—';
     $('rNote').textContent=ok1&&ok2&&ok3?'الاستنتاج: تحويل الوحدات يغير العدد ولا يغير الكمية، فالسرعة نفسها تساوي:\n'+E(vc().toFixed(1)+' cm/s = '+vm().toFixed(3)+' m/s = '+vk().toFixed(2)+' km/h'):'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
   $('tR').oninput=tDraw;$('sR').oninput=sDraw;
-  $('tHn').onclick=()=>{tHint=true;tDraw();fb('tFb',true,'تلميح: الأرقام الكبيرة بالسنتيمتر، وبين كل رقمين 10 أقسام صغيرة كل قسم '+E('0.1 cm')+'. اقرأ آخر رقم قبل حافة الخطاف، ثم عُدّ الأقسام الصغيرة حتى الخط الأحمر.')};
-  $('sHn').onclick=()=>{sHint=true;sDraw();fb('sFb',true,'تلميح: الأرقام على القرص بالثانية وبين كل رقمين '+E('5 s')+'، وكل قسم صغير '+E('1 s')+'. اقرأ آخر رقم مر به العقرب، ثم عُدّ الأقسام حتى العقرب (ظهر باللون الأحمر).')};
+  $('tHn').onclick=()=>{tHint=true;tDraw();fb('tFb',true,'تلميح: الأرقام الكبيرة بالسنتيمتر، وبين كل رقمين 10 أقسام صغيرة كل قسم '+E('0.1 cm')+'. اقرأ آخر رقم قبل حافة الخطاف، ثم احسب عدد الأقسام الصغيرة حتى الخط الأحمر.')};
+  $('sHn').onclick=()=>{sHint=true;sDraw();fb('sFb',true,'تلميح: الأرقام على القرص بالثانية وبين كل رقمين '+E('5 s')+'، وكل قسم صغير '+E('1 s')+'. اقرأ آخر رقم مر به العقرب، ثم احسب عدد الأقسام حتى العقرب (ظهر باللون الأحمر).')};
   $('tCk').onclick=()=>{if(Math.abs(tVal()-d)>1e-6)return fb('tFb',false,'اسحب الشريط حتى يصل الخطاف إلى خط النهاية أولا.');const v=num($('tIn').value);if(isNaN(v))return fb('tFb',false,'اكتب قراءتك بالسنتيمتر.');
     if(Math.abs(v-d)<0.05){okD=true;fb('tFb',true,'✓ قراءة صحيحة:\n'+E(`d = ${d.toFixed(1)} cm = ${(d/100).toFixed(3)} m`))}else fb('tFb',false,'✗ القراءة غير صحيحة، أعد القراءة أو استخدم التلميح.');sub();results()};
-  $('sCk').onclick=()=>{if(Math.abs(sVal()-T)>1e-6)return fb('sFb',false,'حرّك العربة حتى تصل إلى خط النهاية أولا.');const v=num($('sIn').value);if(isNaN(v))return fb('sFb',false,'اكتب قراءتك بالثانية.');
+  $('sCk').onclick=()=>{if(Math.abs(sVal()-T)>1e-6)return fb('sFb',false,'اسحب العربة حتى تصل إلى خط النهاية أولا.');const v=num($('sIn').value);if(isNaN(v))return fb('sFb',false,'اكتب قراءتك بالثانية.');
     if(Math.abs(v-T)<0.05){okT=true;fb('sFb',true,'✓ قراءة صحيحة:\n'+E(`t = ${T} s`))}else fb('sFb',false,'✗ القراءة غير صحيحة، أعد القراءة أو استخدم التلميح.');sub();results()};
   const chk=(inp,f,val,unit,okMsg,badMsg,set)=>{if(!(okD&&okT))return fb(f,false,'أكمل القياسين 5.1 و 5.2 أولا.');const v=num($(inp).value);if(isNaN(v))return fb(f,false,'اكتب الناتج بوحدة '+unit+'.');
     if(Math.abs(v-val)/val<0.02){set();fb(f,true,okMsg)}else fb(f,false,badMsg);results()};
@@ -434,7 +434,7 @@ function ftTools(){
     ${lbl(200,200,90,-26,'المسمار المركزي')}${lbl(211,191,320,-26,'الحلقة')}${lbl(335,122,455,40,'البكرة','end')}${lbl(278,155,455,232,'الخيط','end')}${lbl(70,247,-55,330,'القرص المدرج بالدرجات','start')}${lbl(200,382,330,440,'حامل الكتل')}</svg>`;
   const bal=`<svg viewBox="20 30 360 215" aria-label="الميزان الرقمي">${ftBalance(1,'150.0 g',62)}${lbl(205,100,350,70,'حامل الكتل','end')}${lbl(150,145,60,110,'الكفة')}${lbl(170,173,60,222,'الشاشة')}</svg>`;
   return `<div class="intro"><h3>3. الأدوات والأجهزة المستخدمة</h3>
-    <div class="tool"><div class="stage">${t3}</div><div class="vcap">منظر ثلاثي الأبعاد</div><div class="stage">${tbl}</div><div class="vcap">منظر علوي</div><p><b>طاولة القوى:</b> قرص أفقي مدرج من <span dir="ltr">0°</span> إلى <span dir="ltr">360°</span> بدقة <span dir="ltr">1°</span>، تُعلق على بكراته كتل بخيوط مربوطة بحلقة حول مسمار مركزي، وتكون القوى متزنة عندما تستقر الحلقة في المركز.</p></div>
+    <div class="tool"><div class="stage">${t3}</div><div class="vcap">منظر ثلاثي الأبعاد</div><div class="stage">${tbl}</div><div class="vcap">منظر علوي</div><p><b>طاولة القوى:</b> قرص أفقي مدرج من <span dir="ltr">0°</span> إلى <span dir="ltr">360°</span> بدقة <span dir="ltr">1°</span>، على بكراته كتل معلقة بخيوط مربوطة بحلقة حول مسمار مركزي، وتكون القوى متزنة عندما تستقر الحلقة في المركز.</p></div>
     <div class="tool"><div class="stage">${bal}</div><p><b>الميزان الرقمي:</b> يقيس كتلة حامل الكتل مع ما عليه بالجرام بدقة <span dir="ltr">0.1 g</span>.</p></div></div>`}
 function forceLab(box){
   box.innerHTML=`
@@ -484,7 +484,7 @@ function forceLab(box){
     <div class="stage"><svg id="eS" viewBox="-30 -30 460 460"></svg><div class="hud"><span id="eSt"></span></div></div>
     <div class="row"><label for="m3R">الكتلة الثالثة m₃</label><output id="m3O"></output><input id="m3R" type="range" min="0" max="600" step="5" value="0"></div>
     <div class="row"><label for="t3R">زاوية البكرة الثالثة θ₃</label><output id="t3O"></output><input id="t3R" type="range" min="0" max="359" step="1" value="0"></div>
-    <p class="slh">👆 حرّك المؤشر الأول لزيادة الكتلة m₃.<br>ثم حرّك المؤشر الثاني لتدوير البكرة الثالثة إلى الجهة المقابلة للخيطين حتى تستقر الحلقة في المركز، واضغط «تحقق».</p>
+    <p class="slh">👆 اسحب المؤشر الأول لزيادة الكتلة m₃.<br>ثم اسحب المؤشر الثاني لتدوير البكرة الثالثة إلى الجهة المقابلة للخيطين حتى تستقر الحلقة في المركز، واضغط «تحقق».</p>
     <div class="ans"><label>عند استقرار الحلقة في المركز اضغط تحقق</label><button type="button" class="go" id="eCk">تحقق</button><button type="button" class="rs" id="eHn">تلميح</button></div><div class="fb2" id="eFb"></div>
   </div>
     <div class="ctl"><h3>5.4 الحسابات</h3>
@@ -525,7 +525,7 @@ function forceLab(box){
   function aVal(i){const R=$('a'+i+'R'),T=i===1?t1:t2;let a=+R.value;if(a>T){a=T;R.value=a}return a}
   function aDraw(){const a1=aVal(1),a2=aVal(2),a=zoomOf===1?a1:a2,T=zoomOf===1?t1:t2,touch=a===T,hl=(zoomOf===1?h1:h2)&&touch;
     $('a1O').textContent=a1+'°';$('a2O').textContent=a2+'°';
-    $('aSt').textContent=touch?'✓ العدسة على خيط m'+(zoomOf===1?'₁':'₂')+'، اقرأ الزاوية من التدريج':'حرّك العدسة حتى تتوقف عند الخيط';
+    $('aSt').textContent=touch?'✓ العدسة على خيط m'+(zoomOf===1?'₁':'₂')+'، اقرأ الزاوية من التدريج':'اسحب العدسة حتى تتوقف عند الخيط';
     $('aS').innerHTML=ftDisk({strings:[{a:t1,c:'#2563EB',lab:'m₁'},{a:t2,c:'#16A34A',lab:'m₂'}],mag:a});
     const k=26,XX=d=>200+(d-a)*k;let g='<rect x="0" y="20" width="400" height="56" fill="#F8FAFC" stroke="#94A3B8"/>';
     for(let d=a-8;d<=a+8;d++){const x=XX(d),dd=((d%360)+360)%360,big=dd%10===0,mid=dd%5===0,isH=hl&&dd===T;g+=`<line x1="${x}" y1="20" x2="${x}" y2="${20+(big?24:mid?16:9)}" stroke="${isH?'#DC2626':'#1F2937'}" stroke-width="${isH?2.6:big?1.5:.9}"/>`;if(mid)g+=`<text x="${x}" y="62" font-size="13" font-weight="700" text-anchor="middle" fill="#1F2937">${dd}</text>`}
@@ -564,17 +564,17 @@ function forceLab(box){
   const mChk=(i)=>{const m=i===1?m1:m2,f='m'+i+'Fb';const v=num($('m'+i+'In').value);if(isNaN(v))return fb(f,false,'ضع الحامل على الكفة واكتب قراءة الشاشة بالجرام.');
     if(Math.abs(v-m)<0.05){ok['m'+i]=true;fb(f,true,'✓ قراءة صحيحة:\n'+E(`m${i===1?'₁':'₂'} = ${m.toFixed(1)} g = ${m/1000} kg`))}else fb(f,false,'✗ القراءة غير صحيحة، اختر الحامل الصحيح وأنزله على الكفة ثم اقرأ الشاشة.');sub();results()};
   $('m1Ck').onclick=()=>mChk(1);$('m2Ck').onclick=()=>mChk(2);
-  const tChk=(i)=>{const T=i===1?t1:t2,f='t'+i+'Fb';if(aVal(i)!==T)return fb(f,false,'حرّك عدسة التكبير حتى تتوقف عند خيط m'+(i===1?'₁':'₂')+' أولا.');const v=num($('t'+i+'In').value);if(isNaN(v))return fb(f,false,'اكتب الزاوية بالدرجات.');
+  const tChk=(i)=>{const T=i===1?t1:t2,f='t'+i+'Fb';if(aVal(i)!==T)return fb(f,false,'اسحب عدسة التكبير حتى تتوقف عند خيط m'+(i===1?'₁':'₂')+' أولا.');const v=num($('t'+i+'In').value);if(isNaN(v))return fb(f,false,'اكتب الزاوية بالدرجات.');
     if(Math.abs(v-T)<0.5){ok['t'+i]=true;fb(f,true,'✓ قراءة صحيحة:\n'+E(`θ${i===1?'₁':'₂'} = ${T}°`))}else fb(f,false,'✗ القراءة غير صحيحة، أعد القراءة أو استخدم التلميح.');sub();results()};
   $('t1Ck').onclick=()=>tChk(1);$('t2Ck').onclick=()=>tChk(2);
-  const tHn=i=>{if(i===1)h1=true;else h2=true;zoomOf=i;aDraw();fb('t'+i+'Fb',true,'تلميح: الأرقام على التدريج كل '+E('5°')+'، وكل قسم صغير '+E('1°')+'. اقرأ آخر رقم قبل الخيط، ثم عُدّ الأقسام حتى الخط الأحمر.')};
+  const tHn=i=>{if(i===1)h1=true;else h2=true;zoomOf=i;aDraw();fb('t'+i+'Fb',true,'تلميح: الأرقام على التدريج كل '+E('5°')+'، وكل قسم صغير '+E('1°')+'. اقرأ آخر رقم قبل الخيط، ثم احسب عدد الأقسام حتى الخط الأحمر.')};
   $('t1Hn').onclick=()=>tHn(1);$('t2Hn').onclick=()=>tHn(2);
-  $('eCk').onclick=()=>{if(!eDraw())return fb('eFb',false,'✗ الحلقة لم تستقر في المركز بعد، غيّر الكتلة الثالثة وزاويتها.');const m3=+$('m3R').value,t3=+$('t3R').value;ok.e={m:m3,t:t3};
+  $('eCk').onclick=()=>{if(!eDraw())return fb('eFb',false,'✗ الحلقة لم تستقر في المركز بعد، اضبط الكتلة الثالثة وزاويتها.');const m3=+$('m3R').value,t3=+$('t3R').value;ok.e={m:m3,t:t3};
     fb('eFb',true,'✓ القوى الثلاث متزنة:\n'+E(`m₃ = ${m3} g ,  θ₃ = ${t3}°`));results()};
   $('eHn').onclick=()=>fb('eFb',true,'تلميح: قوة الاتزان تقع في الجهة المقابلة للقوتين تقريبا. ابدأ بزاوية بين '+E(Math.round(TE()-20)%360+'°')+' و '+E(Math.round(TE()+20)%360+'°')+'، ثم زد الكتلة تدريجيا حتى تقترب الحلقة من المركز.');
   const chk=(i,val,unit,tol,okMsg,badMsg)=>{const f='c'+i+'f';if(!(ok.m1&&ok.m2&&ok.t1&&ok.t2))return fb(f,false,'أكمل القياسين 5.1 و 5.2 أولا.');const v=num($('c'+i).value);if(isNaN(v))return fb(f,false,'اكتب الناتج بوحدة '+unit+'.');
     const good=unit==='°'?adiff(v,val)<=tol:Math.abs(v-val)/Math.abs(val)<=tol;if(good){ok['c'+i]=true;fb(f,true,okMsg)}else fb(f,false,badMsg);results()};
-  $('c4k').onclick=()=>chk(4,RR(),'N',.02,'✓ إجابة صحيحة:\n'+E(`R = ${fx(RR(),2)} N`),'✗ عوّض في قانون جيب التمام، وانتبه أن الآلة الحاسبة على وضع الدرجات D.');
+  $('c4k').onclick=()=>chk(4,RR(),'N',.02,'✓ إجابة صحيحة:\n'+E(`R = ${fx(RR(),2)} N`),'✗ ضع القيم في قانون جيب التمام، وانتبه أن الآلة الحاسبة على وضع الدرجات D.');
   $('nw').onclick=newObj;
   calcInit(box);newObj();
 }
@@ -586,7 +586,7 @@ function vrTools(){
     ${lbl(200,200,90,-26,'المسمار المركزي')}${lbl(211,191,320,-26,'الحلقة')}${lbl(318,101,455,40,'البكرة','end')}${lbl(270,141,455,232,'الخيط','end')}${lbl(70,247,-55,330,'القرص المدرج بالدرجات','start')}${lbl(200,382,330,440,'حامل الكتل')}</svg>`;
   const bal=`<svg viewBox="20 30 360 215" aria-label="الميزان الرقمي">${ftBalance(1,'150.0 g',62)}${lbl(205,100,350,70,'حامل الكتل','end')}${lbl(150,145,60,110,'الكفة')}${lbl(170,173,60,222,'الشاشة')}</svg>`;
   return `<div class="intro"><h3>3. الأدوات والأجهزة المستخدمة</h3>
-    <div class="tool"><div class="stage">${t3}</div><div class="vcap">منظر ثلاثي الأبعاد</div><div class="stage">${tbl}</div><div class="vcap">منظر علوي</div><p><b>طاولة القوى:</b> قرص أفقي مدرج من <span dir="ltr">0°</span> إلى <span dir="ltr">360°</span> بدقة <span dir="ltr">1°</span>، تعلق على بكراته كتل بخيوط مربوطة بحلقة حول مسمار مركزي، وتكون القوى متزنة عندما تستقر الحلقة في المركز.</p></div>
+    <div class="tool"><div class="stage">${t3}</div><div class="vcap">منظر ثلاثي الأبعاد</div><div class="stage">${tbl}</div><div class="vcap">منظر علوي</div><p><b>طاولة القوى:</b> قرص أفقي مدرج من <span dir="ltr">0°</span> إلى <span dir="ltr">360°</span> بدقة <span dir="ltr">1°</span>، على بكراته كتل معلقة بخيوط مربوطة بحلقة حول مسمار مركزي، وتكون القوى متزنة عندما تستقر الحلقة في المركز.</p></div>
     <div class="tool"><div class="stage">${bal}</div><p><b>الميزان الرقمي:</b> يقيس كتلة حامل الكتل مع ما عليه بالجرام بدقة <span dir="ltr">0.1 g</span>.</p></div></div>`}
 function vecLab(box){
   box.innerHTML=`
@@ -632,7 +632,7 @@ function vecLab(box){
     <div class="stage"><svg id="eS" viewBox="-30 -30 460 460"></svg><div class="hud"><span id="eSt"></span></div></div>
     <div class="row"><label for="xR">الكتلة mₓ على البكرة 180°</label><output id="xO"></output><input id="xR" type="range" min="0" max="500" step="5" value="0"></div>
     <div class="row"><label for="yR">الكتلة mᵧ على البكرة 270°</label><output id="yO"></output><input id="yR" type="range" min="0" max="500" step="5" value="0"></div>
-    <p class="slh">👆 حرّك المؤشر الأول لزيادة الكتلة mₓ على المحور السيني.<br>ثم حرّك المؤشر الثاني لزيادة الكتلة mᵧ على المحور الصادي حتى تستقر الحلقة في المركز، واضغط «تحقق».</p>
+    <p class="slh">👆 اسحب المؤشر الأول لزيادة الكتلة mₓ على المحور السيني.<br>ثم اسحب المؤشر الثاني لزيادة الكتلة mᵧ على المحور الصادي حتى تستقر الحلقة في المركز، واضغط «تحقق».</p>
     <p class="slh" style="border-style:solid;background:rgba(247,147,30,.10)"><b>ملاحظة:</b> الكتلتان mₓ و mᵧ تشدان الحلقة <b>عكس</b> مركبتي القوة حتى تتزن، فتكون قوتهما مساوية للمركبتين في المقدار ومعاكسة لهما في الاتجاه.</p>
     <div class="ans"><label>عند استقرار الحلقة في المركز اضغط تحقق</label><button type="button" class="go" id="eCk">تحقق</button><button type="button" class="rs" id="eHn">تلميح</button></div><div class="fb2" id="eFb"></div>
   </div>
@@ -666,7 +666,7 @@ function vecLab(box){
     $('bS').innerHTML=ftBalance(1,on?m.toFixed(1)+' g':'0.0 g',-4+p*0.66)}
   function aVal(){let a=+$('aR').value;if(a>th){a=th;$('aR').value=a}return a}
   function aDraw(){const a=aVal(),touch=a===th,hl=hT&&touch;$('aO').textContent=a+'°';
-    $('aSt').textContent=touch?'✓ العدسة على خيط القوة، اقرأ الزاوية من التدريج':'حرّك العدسة حتى تتوقف عند الخيط';
+    $('aSt').textContent=touch?'✓ العدسة على خيط القوة، اقرأ الزاوية من التدريج':'اسحب العدسة حتى تتوقف عند الخيط';
     $('aS').innerHTML=ftDisk({strings:[{a:th,c:'#DC2626',lab:'m'}],mag:a});
     const k=26,XX=d=>200+(d-a)*k;let g='<rect x="0" y="20" width="400" height="56" fill="#F8FAFC" stroke="#94A3B8"/>';
     for(let d=a-8;d<=a+8;d++){const x=XX(d),dd=((d%360)+360)%360,big=dd%10===0,mid=dd%5===0,isH=hl&&dd===th;g+=`<line x1="${x}" y1="20" x2="${x}" y2="${20+(big?24:mid?16:9)}" stroke="${isH?'#DC2626':'#1F2937'}" stroke-width="${isH?2.6:big?1.5:.9}"/>`;if(mid)g+=`<text x="${x}" y="62" font-size="13" font-weight="700" text-anchor="middle" fill="#1F2937">${dd}</text>`}
@@ -702,11 +702,11 @@ function vecLab(box){
   $('bR').oninput=bDraw;$('aR').oninput=aDraw;$('xR').oninput=eDraw;$('yR').oninput=eDraw;
   $('mCk').onclick=()=>{if(+$('bR').value<100)return fb('mFb',false,'أنزل الحامل على الكفة أولا.');const v=num($('mIn').value);if(isNaN(v))return fb('mFb',false,'اكتب قراءة الشاشة بالجرام.');
     if(Math.abs(v-m)<0.05){ok.m=true;fb('mFb',true,'✓ قراءة صحيحة:\n'+E(`m = ${m.toFixed(1)} g = ${m/1000} kg`))}else fb('mFb',false,'✗ القراءة غير صحيحة، اقرأ الرقم الظاهر على الشاشة.');sub();results()};
-  $('tCk').onclick=()=>{if(aVal()!==th)return fb('tFb',false,'حرّك عدسة التكبير حتى تتوقف عند الخيط أولا.');const v=num($('tIn').value);if(isNaN(v))return fb('tFb',false,'اكتب الزاوية بالدرجات.');
+  $('tCk').onclick=()=>{if(aVal()!==th)return fb('tFb',false,'اسحب عدسة التكبير حتى تتوقف عند الخيط أولا.');const v=num($('tIn').value);if(isNaN(v))return fb('tFb',false,'اكتب الزاوية بالدرجات.');
     if(Math.abs(v-th)<0.5){ok.t=true;fb('tFb',true,'✓ قراءة صحيحة:\n'+E(`θ = ${th}°`))}else fb('tFb',false,'✗ القراءة غير صحيحة، أعد القراءة أو استخدم التلميح.');sub();results()};
-  $('tHn').onclick=()=>{hT=true;aDraw();fb('tFb',true,'تلميح: الأرقام على التدريج كل '+E('5°')+'، وكل قسم صغير '+E('1°')+'. اقرأ آخر رقم قبل الخيط، ثم عُدّ الأقسام حتى الخط الأحمر.')};
-  $('eCk').onclick=()=>{if(!eDraw())return fb('eFb',false,'✗ الحلقة لم تستقر في المركز بعد، غيّر الكتلتين.');ok.e={x:+$('xR').value,y:+$('yR').value};fb('eFb',true,'✓ استقرت الحلقة:\n'+E(`mₓ = ${ok.e.x} g ,  mᵧ = ${ok.e.y} g`));results()};
-  $('eHn').onclick=()=>fb('eFb',true,'تلميح: كلما زادت زاوية القوة احتاجت الكتلة mᵧ إلى قيمة أكبر والكتلة mₓ إلى قيمة أصغر. غيّر كل كتلة حتى يقترب مركز الحلقة من المسمار.');
+  $('tHn').onclick=()=>{hT=true;aDraw();fb('tFb',true,'تلميح: الأرقام على التدريج كل '+E('5°')+'، وكل قسم صغير '+E('1°')+'. اقرأ آخر رقم قبل الخيط، ثم احسب عدد الأقسام حتى الخط الأحمر.')};
+  $('eCk').onclick=()=>{if(!eDraw())return fb('eFb',false,'✗ الحلقة لم تستقر في المركز بعد، اضبط الكتلتين.');ok.e={x:+$('xR').value,y:+$('yR').value};fb('eFb',true,'✓ استقرت الحلقة:\n'+E(`mₓ = ${ok.e.x} g ,  mᵧ = ${ok.e.y} g`));results()};
+  $('eHn').onclick=()=>fb('eFb',true,'تلميح: كلما زادت زاوية القوة احتاجت الكتلة mᵧ إلى قيمة أكبر والكتلة mₓ إلى قيمة أصغر. اضبط كل كتلة حتى يقترب مركز الحلقة من المسمار.');
   const chk=(i,val,okMsg,bad)=>{const f='c'+i+'f';if(!(ok.m&&ok.t))return fb(f,false,'أكمل القياسين 5.1 و 5.2 أولا.');const v=num($('c'+i).value);if(isNaN(v))return fb(f,false,'اكتب الناتج بوحدة N.');
     if(Math.abs(v-val)/val<=0.02){ok['c'+i]=true;fb(f,true,okMsg)}else fb(f,false,bad);results()};
   $('c1k').onclick=()=>chk(1,FX(),'✓ إجابة صحيحة:\n'+E(`Fx = ${fx(FX(),2)} N`),'✗ اضرب مقدار القوة في جيب تمام الزاوية cos θ، وانتبه أن الآلة الحاسبة على وضع الدرجات D.');
@@ -854,7 +854,7 @@ function workLab(box){
     $('fS').innerHTML=scene(on?70:40,rd,rd*3,false);
     zoom('fZ',rd,on&&hF?F:rd,0.1,26,'N',hF&&on,v=>fx(v,1))}
   function aVal(){let a=+$('aR').value;if(a>th){a=th;$('aR').value=a}return a}
-  function aDraw(){const a=aVal(),touch=a===th;$('aO').textContent=a+'°';$('aSt').textContent=touch?'✓ العدسة على خيط السحب، اقرأ الزاوية من التدريج':'حرّك العدسة حتى تتوقف عند الخيط';
+  function aDraw(){const a=aVal(),touch=a===th;$('aO').textContent=a+'°';$('aSt').textContent=touch?'✓ العدسة على خيط السحب، اقرأ الزاوية من التدريج':'اسحب العدسة حتى تتوقف عند الخيط';
     $('aS').innerHTML=scene(95,F,F*3,true,a);zoom('aZ',a,th,1,26,'°',hT&&touch,v=>String(v))}
   function dVal(){let v=+$('dR').value;if(v>d){v=d;$('dR').value=v}return v}
   function dDraw(){const v=dVal(),touch=v===d,k=1.6;$('dO').textContent=v+' cm';$('dSt').textContent=touch?'✓ الشريط يلامس مؤخرة الصندوق، اقرأ الإزاحة':'مد الشريط حتى يلامس مؤخرة الصندوق';
@@ -890,16 +890,16 @@ function workLab(box){
   $('fR').oninput=fDraw;$('aR').oninput=aDraw;$('dR').oninput=dDraw;
   $('fCk').onclick=()=>{if(+$('fR').value<100)return fb('fFb',false,'اشدد الميزان حتى يتحرك الصندوق أولا.');const v=num($('fIn').value);if(isNaN(v))return fb('fFb',false,'اكتب قراءة الميزان بالنيوتن.');
     if(Math.abs(v-F)<0.05){ok.f=true;fb('fFb',true,'✓ قراءة صحيحة:\n'+E(`F = ${F.toFixed(1)} N`))}else fb('fFb',false,'✗ القراءة غير صحيحة، أعد القراءة أو استخدم التلميح.');sub();results()};
-  $('fHn').onclick=()=>{hF=true;fDraw();fb('fFb',true,'تلميح: الأرقام على التدريج كل '+E('0.5 N')+'، وكل قسم صغير '+E('0.1 N')+'. اقرأ آخر رقم قبل المؤشر، ثم عُدّ الأقسام حتى الخط الأحمر.')};
-  $('tCk').onclick=()=>{if(aVal()!==th)return fb('tFb',false,'حرّك عدسة التكبير حتى تتوقف عند الخيط أولا.');const v=num($('tIn').value);if(isNaN(v))return fb('tFb',false,'اكتب الزاوية بالدرجات.');
+  $('fHn').onclick=()=>{hF=true;fDraw();fb('fFb',true,'تلميح: الأرقام على التدريج كل '+E('0.5 N')+'، وكل قسم صغير '+E('0.1 N')+'. اقرأ آخر رقم قبل المؤشر، ثم احسب عدد الأقسام حتى الخط الأحمر.')};
+  $('tCk').onclick=()=>{if(aVal()!==th)return fb('tFb',false,'اسحب عدسة التكبير حتى تتوقف عند الخيط أولا.');const v=num($('tIn').value);if(isNaN(v))return fb('tFb',false,'اكتب الزاوية بالدرجات.');
     if(Math.abs(v-th)<0.5){ok.t=true;fb('tFb',true,'✓ قراءة صحيحة:\n'+E(`θ = ${th}°`))}else fb('tFb',false,'✗ القراءة غير صحيحة، أعد القراءة أو استخدم التلميح.');sub();results()};
-  $('tHn').onclick=()=>{hT=true;aDraw();fb('tFb',true,'تلميح: الأرقام على التدريج كل '+E('5°')+'، وكل قسم صغير '+E('1°')+'. اقرأ آخر رقم قبل الخيط، ثم عُدّ الأقسام حتى الخط الأحمر.')};
+  $('tHn').onclick=()=>{hT=true;aDraw();fb('tFb',true,'تلميح: الأرقام على التدريج كل '+E('5°')+'، وكل قسم صغير '+E('1°')+'. اقرأ آخر رقم قبل الخيط، ثم احسب عدد الأقسام حتى الخط الأحمر.')};
   $('dCk').onclick=()=>{if(dVal()!==d)return fb('dFb',false,'مد الشريط حتى يلامس مؤخرة الصندوق أولا.');const v=num($('dIn').value);if(isNaN(v))return fb('dFb',false,'اكتب الإزاحة بالسنتيمتر.');
     if(Math.abs(v-d)<0.5){ok.d=true;fb('dFb',true,'✓ قراءة صحيحة:\n'+E(`x = ${d} cm = ${DM()} m`))}else fb('dFb',false,'✗ القراءة غير صحيحة، أعد القراءة أو استخدم التلميح.');sub();results()};
-  $('dHn').onclick=()=>{hD=true;dDraw();fb('dFb',true,'تلميح: الأرقام على التدريج كل '+E('5 cm')+'، وكل قسم صغير '+E('1 cm')+'. اقرأ آخر رقم قبل طرف الشريط، ثم عُدّ الأقسام حتى الخط الأحمر.')};
+  $('dHn').onclick=()=>{hD=true;dDraw();fb('dFb',true,'تلميح: الأرقام على التدريج كل '+E('5 cm')+'، وكل قسم صغير '+E('1 cm')+'. اقرأ آخر رقم قبل طرف الشريط، ثم احسب عدد الأقسام حتى الخط الأحمر.')};
   const chk=(i,val,okMsg,bad)=>{const f='c'+i+'f';if(!(ok.f&&ok.t&&ok.d))return fb(f,false,'أكمل القياسات 5.1 و 5.2 و 5.3 أولا.');const v=num($('c'+i).value);if(isNaN(v))return fb(f,false,'اكتب الناتج بوحدة J.');
     if(Math.abs(v-val)/val<=0.02){ok['c'+i]=true;fb(f,true,okMsg)}else fb(f,false,bad);results()};
-  $('c1k').onclick=()=>chk(1,W(),'✓ إجابة صحيحة:\n'+E(`W = ${fx(W(),3)} J`),'✗ حوّل الإزاحة إلى المتر أولا، ثم اضرب F × x × cos θ، وانتبه أن الآلة الحاسبة على وضع الدرجات D.');
+  $('c1k').onclick=()=>chk(1,W(),'✓ إجابة صحيحة:\n'+E(`W = ${fx(W(),3)} J`),'✗ اكتب الإزاحة بوحدة المتر أولا، ثم اضرب F × x × cos θ، وانتبه أن الآلة الحاسبة على وضع الدرجات D.');
   $('nw').onclick=newObj;
   calcInit(box);newObj();
 }
@@ -923,7 +923,7 @@ function dpTools(){
   const bd=`<svg viewBox="0 -30 410 462" aria-label="لوحة الإحداثيات">${dpBoard({A:[6,2],B:[3,5],unit:1})}${lbl(40,360,20,402,'نقطة الأصل','start')}${lbl(62,360,150,402,'متجها الوحدة')}${lbl(220,300,320,402,'خيط المتجه')}${lbl(300,100,392,-14,'المربع = 1 cm','end')}</svg>`;
   const pr=`<svg viewBox="0 0 400 215" aria-label="المنقلة">${wkProt(200,160,140)}<line x1="40" y1="160" x2="360" y2="160" stroke="#B45309" stroke-width="2"/>${lbl(200,160,200,192,'مركز المنقلة')}${lbl(300,62,370,20,'التدريج بالدرجات','end')}${lbl(80,160,40,192,'خط القاعدة','start')}</svg>`;
   return `<div class="intro"><h3>3. الأدوات والأجهزة المستخدمة</h3>
-    <div class="tool"><div class="stage">${bd}</div><p><b>لوحة الإحداثيات:</b> لوحة مربعات كل مربع منها <span dir="ltr">1 cm</span>، يُشد عليها خيطان من نقطة الأصل يمثلان المتجهين، ومتجها الوحدة <span dir="ltr">i</span> و <span dir="ltr">j</span> طول كل منهما مربع واحد.</p></div>
+    <div class="tool"><div class="stage">${bd}</div><p><b>لوحة الإحداثيات:</b> لوحة مربعات كل مربع منها <span dir="ltr">1 cm</span>، عليها خيطان مشدودان من نقطة الأصل يمثلان المتجهين، ومتجها الوحدة <span dir="ltr">i</span> و <span dir="ltr">j</span> طول كل منهما مربع واحد.</p></div>
     <div class="tool"><div class="stage">${pr}</div><p><b>المنقلة:</b> تقيس الزاوية بين المتجهين بدقة <span dir="ltr">1°</span>، ويوضع مركزها عند نقطة الأصل.</p></div></div>`}
 function dotLab(box){
   const V='⃗';
@@ -954,13 +954,13 @@ function dotLab(box){
   <div class="ctl"><h3>5.1 قراءة مركبتي المتجه A${V}</h3>
     <div class="stage"><svg id="s1" viewBox="0 10 410 390"></svg></div>
     <div class="row"><label for="p1">إسقاط المتجه على المحورين</label><output id="o1"></output><input id="p1" type="range" min="0" max="100" step="1" value="0"></div>
-    <p class="slh">👆 اسحب المؤشر البرتقالي لإسقاط رأس المتجه على المحورين، ثم عُدّ المربعات.</p>
+    <p class="slh">👆 اسحب المؤشر البرتقالي لإسقاط رأس المتجه على المحورين، ثم احسب عدد المربعات.</p>
     <div class="ans"><label>قراءتك لمركبتي A${V} بوحدة cm</label><input id="ax" inputmode="decimal" dir="ltr" placeholder="Ax"><input id="ay" inputmode="decimal" dir="ltr" placeholder="Ay"><button type="button" class="go" id="aCk">تحقق</button></div><div class="fb2" id="aFb"></div>
   </div>
   <div class="ctl"><h3>5.2 قراءة مركبتي المتجه B${V}</h3>
     <div class="stage"><svg id="s2" viewBox="0 10 410 390"></svg></div>
     <div class="row"><label for="p2">إسقاط المتجه على المحورين</label><output id="o2"></output><input id="p2" type="range" min="0" max="100" step="1" value="0"></div>
-    <p class="slh">👆 اسحب المؤشر البرتقالي لإسقاط رأس المتجه على المحورين، ثم عُدّ المربعات.</p>
+    <p class="slh">👆 اسحب المؤشر البرتقالي لإسقاط رأس المتجه على المحورين، ثم احسب عدد المربعات.</p>
     <div class="ans"><label>قراءتك لمركبتي B${V} بوحدة cm</label><input id="bx" inputmode="decimal" dir="ltr" placeholder="Bx"><input id="by" inputmode="decimal" dir="ltr" placeholder="By"><button type="button" class="go" id="bCk">تحقق</button></div><div class="fb2" id="bFb"></div>
   </div>
   <div class="ctl"><h3>5.3 قياس الزاوية θ بين المتجهين بأداة المنقلة</h3>
@@ -997,7 +997,7 @@ function dotLab(box){
   function d1(){const p=+$('p1').value/100;$('o1').textContent=p>=1?'تم':'';$('s1').innerHTML=dpBoard({A,B,pA:p,unit:1})}
   function d2(){const p=+$('p2').value/100;$('o2').textContent=p>=1?'تم':'';$('s2').innerHTML=dpBoard({A,B,pB:p,unit:1})}
   function tVal(){let a=+$('p3').value;if(a>th){a=th;$('p3').value=a}return a}
-  function d3(){const a=tVal(),touch=a===th;$('o3').textContent=a+'°';$('st3').textContent=touch?'✓ العدسة على المتجه الأزرق، اقرأ الزاوية':'حرّك العدسة حتى تتوقف عند المتجه الأزرق';
+  function d3(){const a=tVal(),touch=a===th;$('o3').textContent=a+'°';$('st3').textContent=touch?'✓ العدسة على المتجه الأزرق، اقرأ الزاوية':'اسحب العدسة حتى تتوقف عند المتجه الأزرق';
     $('s3').innerHTML=dpBoard({A,B,prot:{a0:aA,mag:a}});
     const k=26,XX=d=>200+(d-a)*k;let g='<rect x="0" y="20" width="400" height="56" fill="#F8FAFC" stroke="#94A3B8"/>';
     for(let d=a-8;d<=a+8;d++){if(d<0)continue;const x=XX(d),big=d%10===0,mid=d%5===0,isH=hT&&touch&&d===th;g+=`<line x1="${x}" y1="20" x2="${x}" y2="${20+(big?24:mid?16:9)}" stroke="${isH?'#DC2626':'#1F2937'}" stroke-width="${isH?2.6:big?1.5:.9}"/>`;if(mid)g+=`<text x="${x}" y="62" font-size="13" font-weight="700" text-anchor="middle" fill="#1F2937">${d}</text>`}
@@ -1013,12 +1013,12 @@ function dotLab(box){
     $('rNote').textContent=done?'الاستنتاج: الطريقتان تعطيان نفس الناتج تقريبا:\nبالإحداثيات الديكارتية: '+E(`A${V} · B${V} = ${DC()} cm²`)+'\nبالإحداثيات القطبية: '+E(`A${V} · B${V} = ${fx(DT(),1)} cm²`)+'\n\nتوضيح:\n1. ناتج الضرب القياسي لمتجهين كمية قياسية (عدد ووحدة فقط، وليس له اتجاه).\n2. في الإحداثيات الديكارتية نضرب المركبتين السينيتين معا، والمركبتين الصاديتين معا، ثم نجمع.':'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
   $('p1').oninput=d1;$('p2').oninput=d2;$('p3').oninput=d3;
   const rd=(P,ix,iy,f,pid,nm)=>{if(+$(pid).value<100)return fb(f,false,'اسحب المؤشر حتى يكتمل الإسقاط أولا.');const x=num($(ix).value),y=num($(iy).value);if(isNaN(x)||isNaN(y))return fb(f,false,'اكتب المركبتين بالسنتيمتر.');
-    if(x===P[0]&&y===P[1]){fb(f,true,'✓ قراءة صحيحة:\n'+E(`${nm}${V} = ${P[0]} i + ${P[1]} j`));return true}fb(f,false,'✗ عُدّ المربعات من نقطة الأصل حتى النقطة الملونة على كل محور.');return false};
+    if(x===P[0]&&y===P[1]){fb(f,true,'✓ قراءة صحيحة:\n'+E(`${nm}${V} = ${P[0]} i + ${P[1]} j`));return true}fb(f,false,'✗ احسب عدد المربعات من نقطة الأصل حتى النقطة الملونة على كل محور.');return false};
   $('aCk').onclick=()=>{if(rd(A,'ax','ay','aFb','p1','A'))ok.a=true;sub();results()};
   $('bCk').onclick=()=>{if(rd(B,'bx','by','bFb','p2','B'))ok.b=true;sub();results()};
-  $('tCk').onclick=()=>{if(tVal()!==th)return fb('tFb',false,'حرّك العدسة حتى تتوقف عند المتجه الأزرق أولا.');const v=num($('tIn').value);if(isNaN(v))return fb('tFb',false,'اكتب الزاوية بالدرجات.');
+  $('tCk').onclick=()=>{if(tVal()!==th)return fb('tFb',false,'اسحب العدسة حتى تتوقف عند المتجه الأزرق أولا.');const v=num($('tIn').value);if(isNaN(v))return fb('tFb',false,'اكتب الزاوية بالدرجات.');
     if(Math.abs(v-th)<0.5){ok.t=true;fb('tFb',true,'✓ قراءة صحيحة:\n'+E(`θ = ${th}°`))}else fb('tFb',false,'✗ القراءة غير صحيحة، أعد القراءة أو استخدم التلميح.');sub();results()};
-  $('tHn').onclick=()=>{hT=true;d3();fb('tFb',true,'تلميح: الأرقام على التدريج كل '+E('5°')+'، وكل قسم صغير '+E('1°')+'. اقرأ آخر رقم قبل السهم الأزرق، ثم عُدّ الأقسام حتى الخط الأحمر.')};
+  $('tHn').onclick=()=>{hT=true;d3();fb('tFb',true,'تلميح: الأرقام على التدريج كل '+E('5°')+'، وكل قسم صغير '+E('1°')+'. اقرأ آخر رقم قبل السهم الأزرق، ثم احسب عدد الأقسام حتى الخط الأحمر.')};
   const chk=(i,val,okMsg,bad)=>{const f='c'+i+'f';if(!(ok.a&&ok.b&&(i===1||ok.t)))return fb(f,false,i===1?'أكمل القياسين 5.1 و 5.2 أولا.':'أكمل القياسات 5.1 و 5.2 و 5.3 أولا.');const v=num($('c'+i).value);if(isNaN(v))return fb(f,false,'اكتب الناتج بوحدة cm².');
     if(Math.abs(v-val)/val<=0.02){ok['c'+i]=true;fb(f,true,okMsg)}else fb(f,false,bad);results()};
   $('c1k').onclick=()=>chk(1,DC(),'✓ إجابة صحيحة:\n'+E(`A${V} · B${V} = ${A[0]*B[0]} + ${A[1]*B[1]} = ${DC()} cm²`),'✗ اضرب Ax في Bx، ثم Ay في By، واجمع الناتجين.');
@@ -1274,9 +1274,9 @@ function airLab(box){
   [1,2].forEach(n=>{
     $('gR'+n).oninput=()=>gDraw(n);
     $('gHn'+n).onclick=()=>{hG[n]=true;gDraw(n);fb('tFb'+n,true,'تلميح: يبدأ العد عندما تنطلق العربة من البوابة الأولى، ويتوقف عندما تصل إلى البوابة الثانية. الزمن الابتدائي '+E('ti = 0')+'، فاكتب الزمن النهائي '+E('tf')+' والسرعة النهائية '+E('Vf')+' كما يظهران على الشاشة (باللون الأحمر).')};
-    $('tCk'+n).onclick=()=>{if(!done(n))return fb('tFb'+n,false,'حرّك العربة حتى تصل إلى البوابة الثانية ويتوقف المؤقت الرقمي أولا.');const v=num($('tIn'+n).value);if(isNaN(v))return fb('tFb'+n,false,'اكتب قراءتك بالثانية.');
+    $('tCk'+n).onclick=()=>{if(!done(n))return fb('tFb'+n,false,'اسحب العربة حتى تصل إلى البوابة الثانية ويتوقف المؤقت الرقمي أولا.');const v=num($('tIn'+n).value);if(isNaN(v))return fb('tFb'+n,false,'اكتب قراءتك بالثانية.');
       if(Math.abs(v-TT(n))<0.00005){ok['t'+n]=true;fb('tFb'+n,true,'✓ قراءة صحيحة:\n'+E(`tf = ${TT(n).toFixed(4)} s`)+'\n'+E(`Δt = tf − ti = ${TT(n).toFixed(4)} − 0 = ${TT(n).toFixed(4)} s`))}else fb('tFb'+n,false,'✗ القراءة غير صحيحة، اكتب الزمن كما يظهر على الشاشة بأربعة أرقام عشرية.');sub();results()};
-    $('vCk'+n).onclick=()=>{if(!done(n))return fb('vFb'+n,false,'حرّك العربة حتى تصل إلى البوابة الثانية أولا.');const v=num($('vIn'+n).value);if(isNaN(v))return fb('vFb'+n,false,'اكتب قراءتك بوحدة m/s.');
+    $('vCk'+n).onclick=()=>{if(!done(n))return fb('vFb'+n,false,'اسحب العربة حتى تصل إلى البوابة الثانية أولا.');const v=num($('vIn'+n).value);if(isNaN(v))return fb('vFb'+n,false,'اكتب قراءتك بوحدة m/s.');
       if(Math.abs(v-VF(n))<0.0005){ok['v'+n]=true;fb('vFb'+n,true,'✓ قراءة صحيحة:\n'+E(`Vf = ${VF(n).toFixed(3)} m/s`))}else fb('vFb'+n,false,'✗ اكتب السرعة النهائية كما تظهر على الشاشة بثلاثة أرقام عشرية.');sub();results()};
     $('ca'+n+'k').onclick=()=>{if(!trOK(n))return fb('ca'+n+'f',false,'أكمل قراءة الزمن النهائي والسرعة النهائية في هذه المحاولة أولا.');const v=num($('ca'+n).value);if(isNaN(v))return fb('ca'+n+'f',false,'اكتب الناتج بوحدة m/s².');
       if(Math.abs(v-AC(n))/AC(n)<0.03){ok['ca'+n]=true;fb('ca'+n+'f',true,'✓ إجابة صحيحة:\n'+E(`a = (Vf − Vi) / Δt = (${fx(VF(n),3)} − 0) / ${TT(n).toFixed(4)} = ${fx(AC(n),2)} m/s²`))}else fb('ca'+n+'f',false,'✗ اطرح السرعة الابتدائية من السرعة النهائية، ثم اقسم الناتج على الزمن Δt.');sub();results()}});
@@ -1409,7 +1409,7 @@ function ffLab(box){
   function pVal(n){let p=r1(+$('pR'+n).value);if(p>H[n]){p=H[n];$('pR'+n).value=p}return p}
   const pTouch=n=>Math.abs(pVal(n)-H[n])<1e-6;
   function pDraw(n){const v=H[n],p=pVal(n),touch=pTouch(n),hl=hH[n]&&touch,c0=Math.floor(v)-7,X=c=>(c-c0)*26;
-    $('pO'+n).textContent=p.toFixed(1)+' cm';$('pSt'+n).textContent=touch?'✓ المؤشر عند سطح وسادة الاستقبال، اقرأ الارتفاع من الشريط':'حرّك المؤشر حتى يلامس سطح وسادة الاستقبال';
+    $('pO'+n).textContent=p.toFixed(1)+' cm';$('pSt'+n).textContent=touch?'✓ المؤشر عند سطح وسادة الاستقبال، اقرأ الارتفاع من الشريط':'اسحب المؤشر حتى يلامس سطح وسادة الاستقبال';
     $('pS'+n).innerHTML=ffScene(v/100,v/100,{ptr:{p:p/100,touch}});
     let z=`<rect x="0" y="34" width="400" height="58" fill="#FEF3C7" stroke="#A16207"/>`;
     for(let m=Math.ceil(c0*10);m<=Math.floor((c0+15.4)*10);m++){const x=X(m/10),big=m%10===0,mid=m%5===0,h=hl&&m===Math.round(v*10);z+=`<line x1="${x}" y1="34" x2="${x}" y2="${34+(big?22:mid?15:9)}" stroke="${h?'#2563EB':'#1F2937'}" stroke-width="${h?2.6:big?1.4:.8}"/>`;if(big)z+=`<text x="${x}" y="74" font-size="13" font-weight="700" text-anchor="middle" fill="#1F2937">${m/10}</text>`}
@@ -1430,9 +1430,9 @@ function ffLab(box){
     $('tCk'+n).onclick=()=>{if(!landed(n))return fb('tFb'+n,false,'اسحب المؤشر حتى ترتطم الكرة بوسادة الاستقبال أولا.');const v=num($('tIn'+n).value);if(isNaN(v))return fb('tFb'+n,false,'اكتب قراءتك بالثانية.');
       if(Math.abs(v-T[n])<0.00005){ok['t'+n]=true;fb('tFb'+n,true,'✓ قراءة صحيحة:\n'+E(`tf = ${T[n].toFixed(4)} s`)+'\n'+E(`Δt = tf − ti = ${T[n].toFixed(4)} − 0 = ${T[n].toFixed(4)} s`))}else fb('tFb'+n,false,'✗ القراءة غير صحيحة، اكتب الزمن كما يظهر على الشاشة بأربعة أرقام عشرية.');sub();results()};
     $('ch'+n+'k').onclick=()=>{if(!ok['t'+n])return fb('ch'+n+'f',false,'اقرأ الزمن النهائي أولا.');const v=num($('ch'+n).value);if(isNaN(v))return fb('ch'+n+'f',false,'اكتب الناتج بوحدة m.');
-      if(Math.abs(v-HC(n))/HC(n)<0.01){ok['c'+n]=true;fb('ch'+n+'f',true,'✓ إجابة صحيحة:\n'+E(`h = ½ × 9.8 × ${T[n].toFixed(4)}² = ${fx(HC(n),3)} m`))}else fb('ch'+n+'f',false,'✗ ربّع الزمن Δt، ثم اضربه في 9.8، ثم اقسم الناتج على 2.');results()};
-    $('hHn'+n).onclick=()=>{hH[n]=true;pDraw(n);fb('hFb'+n,true,'تلميح: الأرقام الكبيرة بالسنتيمتر، وبين كل رقمين 10 أقسام صغيرة كل قسم '+E('0.1 cm')+'. اقرأ آخر رقم قبل المؤشر، ثم عُدّ الأقسام الصغيرة حتى الخط الأزرق.')};
-    $('hCk'+n).onclick=()=>{if(!pTouch(n))return fb('hFb'+n,false,'حرّك المؤشر حتى يلامس سطح وسادة الاستقبال أولا.');const v=num($('hIn'+n).value);if(isNaN(v))return fb('hFb'+n,false,'اكتب قراءتك بالسنتيمتر.');
+      if(Math.abs(v-HC(n))/HC(n)<0.01){ok['c'+n]=true;fb('ch'+n+'f',true,'✓ إجابة صحيحة:\n'+E(`h = ½ × 9.8 × ${T[n].toFixed(4)}² = ${fx(HC(n),3)} m`))}else fb('ch'+n+'f',false,'✗ احسب مربع الزمن Δt، ثم اضربه في 9.8، ثم اقسم الناتج على 2.');results()};
+    $('hHn'+n).onclick=()=>{hH[n]=true;pDraw(n);fb('hFb'+n,true,'تلميح: الأرقام الكبيرة بالسنتيمتر، وبين كل رقمين 10 أقسام صغيرة كل قسم '+E('0.1 cm')+'. اقرأ آخر رقم قبل المؤشر، ثم احسب عدد الأقسام الصغيرة حتى الخط الأزرق.')};
+    $('hCk'+n).onclick=()=>{if(!pTouch(n))return fb('hFb'+n,false,'اسحب المؤشر حتى يلامس سطح وسادة الاستقبال أولا.');const v=num($('hIn'+n).value);if(isNaN(v))return fb('hFb'+n,false,'اكتب قراءتك بالسنتيمتر.');
       if(Math.abs(v-H[n])<0.05){ok['m'+n]=true;fb('hFb'+n,true,'✓ قراءة صحيحة:\n'+E(`h = ${H[n].toFixed(1)} cm = ${fx(H[n]/100,3)} m`)+(ok['c'+n]?'\nالارتفاع المحسوب '+E(`h = ${fx(HC(n),3)} m`)+' يساوي المقاس تقريبا.':''))}else fb('hFb'+n,false,'✗ القراءة غير صحيحة، أعد القراءة أو استخدم التلميح.');results()}});
   $('nw').onclick=newObj;
   calcInit(box);newObj();
@@ -1788,7 +1788,7 @@ function frLab(box){
     if(Math.abs(v-M)<0.5){ok.m=true;fb('mFb',true,'✓ قراءة صحيحة:\n'+E(`m = ${M} g = ${fx(KG(),3)} kg`))}else fb('mFb',false,'✗ اقرأ الرقم الظاهر على شاشة الميزان.');sub();results()};
   const chk=(c,need,needMsg,val,unit,tol,okMsg,bad)=>{if(!need())return fb(c+'f',false,needMsg);const v=num($(c).value);if(isNaN(v))return fb(c+'f',false,'اكتب الناتج بوحدة '+unit+'.');
     if(Math.abs(v-val)/Math.abs(val)<tol){ok[c]=true;fb(c+'f',true,okMsg())}else fb(c+'f',false,bad);sub();results()};
-  $('cNk').onclick=()=>chk('cN',()=>ok.m,'قس كتلة الصندوق أولا.',NN(),'N',0.01,()=>'✓ إجابة صحيحة:\n'+E(`N = ${fx(KG(),3)} × 9.8 = ${fx(NN(),3)} N`),'✗ حوّل الكتلة إلى kg، ثم اضربها في 9.8.');
+  $('cNk').onclick=()=>chk('cN',()=>ok.m,'قس كتلة الصندوق أولا.',NN(),'N',0.01,()=>'✓ إجابة صحيحة:\n'+E(`N = ${fx(KG(),3)} × 9.8 = ${fx(NN(),3)} N`),'✗ اكتب الكتلة بوحدة kg، ثم اضربها في 9.8.');
   $('cFk').onclick=()=>chk('cF',()=>ok.cN,'احسب القوة العمودية N أولا.',FK(),'N',0.01,()=>'✓ إجابة صحيحة:\n'+E(`fk = ${MU} × ${fx(NN(),3)} = ${FK().toFixed(2)} N`),'✗ اضرب معامل الاحتكاك الحركي '+MU+' في القوة العمودية N.');
   $('gR').oninput=gDraw;
   $('fHn').onclick=()=>{hF=true;gDraw();fb('fFb',true,'تلميح: الأرقام على التدريج بالنيوتن، وبين كل رقمين 5 أقسام صغيرة كل قسم '+E('0.1 N')+'. اسحب الصندوق حتى يتحرك بسرعة ثابتة، ثم اقرأ الخط الأحمر تحت المؤشر.')};
@@ -1916,7 +1916,7 @@ function wkLab2(box){
   function pVal(){let p=r1(+$('pR').value);if(p>X){p=X;$('pR').value=p}return p}
   const pTouch=()=>done()&&Math.abs(pVal()-X)<1e-6;
   function pDraw(){const dn=done(),p=pVal(),touch=pTouch(),hl=hX&&touch,c0=Math.max(0,Math.floor(X)-7),XX=c=>(c-c0)*26;
-    $('pO').textContent=p.toFixed(1)+' cm';$('pSt').textContent=!dn?'اسحب الصندوق حتى نهاية السحب في الخطوة أ أولا':touch?'✓ المؤشر عند الحافة الخلفية للصندوق، اقرأ الموضع النهائي من الشريط':'حرّك المؤشر حتى يلامس الحافة الخلفية للصندوق';
+    $('pO').textContent=p.toFixed(1)+' cm';$('pSt').textContent=!dn?'اسحب الصندوق حتى نهاية السحب في الخطوة أ أولا':touch?'✓ المؤشر عند الحافة الخلفية للصندوق، اقرأ الموضع النهائي من الشريط':'اسحب المؤشر حتى يلامس الحافة الخلفية للصندوق';
     $('pS').innerHTML=wkScene(dn?X*K:0,{ptr:{p,touch},xi:true});
     let z=`<rect x="0" y="34" width="400" height="58" fill="#FEF3C7" stroke="#A16207"/>`;
     for(let m=Math.ceil(c0*10);m<=Math.floor((c0+15.4)*10);m++){const x=XX(m/10),big=m%10===0,mid=m%5===0,h=hl&&m===Math.round(X*10);z+=`<line x1="${x}" y1="34" x2="${x}" y2="${34+(big?22:mid?15:9)}" stroke="${h?'#2563EB':'#1F2937'}" stroke-width="${h?2.6:big?1.4:.8}"/>`;if(big)z+=`<text x="${x}" y="74" font-size="13" font-weight="700" text-anchor="middle" fill="#1F2937">${m/10}</text>`}
@@ -1932,11 +1932,11 @@ function wkLab2(box){
   $('fHn').onclick=()=>{hF=true;gDraw();fb('fFb',true,'تلميح: الأرقام على التدريج بالنيوتن، وبين كل رقمين 5 أقسام صغيرة كل قسم '+E('0.1 N')+'. اسحب الصندوق حتى يتحرك بسرعة ثابتة، ثم اقرأ الخط الأحمر تحت المؤشر.')};
   $('fCk').onclick=()=>{if(!moving())return fb('fFb',false,'اسحب المؤشر حتى يتحرك الصندوق بسرعة ثابتة أولا.');const v=num($('fIn').value);if(isNaN(v))return fb('fFb',false,'اكتب قراءتك بالنيوتن.');
     if(Math.abs(v-F)<0.01){ok.f=true;fb('fFb',true,'✓ قراءة صحيحة:\n'+E(`F = ${F.toFixed(1)} N`))}else fb('fFb',false,'✗ القراءة غير صحيحة، أعد القراءة أو استخدم التلميح.');sub();results()};
-  $('xHn').onclick=()=>{hX=true;pDraw();fb('xFb',true,'تلميح: الأرقام الكبيرة بالسنتيمتر، وبين كل رقمين 10 أقسام صغيرة كل قسم '+E('0.1 cm')+'. اقرأ آخر رقم قبل المؤشر، ثم عُدّ الأقسام الصغيرة حتى الخط الأزرق.')};
-  $('xCk').onclick=()=>{if(!done())return fb('xFb',false,'اسحب الصندوق حتى نهاية السحب في الخطوة أ أولا.');if(!pTouch())return fb('xFb',false,'حرّك المؤشر حتى يلامس الحافة الخلفية للصندوق أولا.');const v=num($('xIn').value);if(isNaN(v))return fb('xFb',false,'اكتب قراءتك بالسنتيمتر.');
+  $('xHn').onclick=()=>{hX=true;pDraw();fb('xFb',true,'تلميح: الأرقام الكبيرة بالسنتيمتر، وبين كل رقمين 10 أقسام صغيرة كل قسم '+E('0.1 cm')+'. اقرأ آخر رقم قبل المؤشر، ثم احسب عدد الأقسام الصغيرة حتى الخط الأزرق.')};
+  $('xCk').onclick=()=>{if(!done())return fb('xFb',false,'اسحب الصندوق حتى نهاية السحب في الخطوة أ أولا.');if(!pTouch())return fb('xFb',false,'اسحب المؤشر حتى يلامس الحافة الخلفية للصندوق أولا.');const v=num($('xIn').value);if(isNaN(v))return fb('xFb',false,'اكتب قراءتك بالسنتيمتر.');
     if(Math.abs(v-X)<0.05){ok.x=true;fb('xFb',true,'✓ قراءة صحيحة:\n'+E(`xf = ${X.toFixed(1)} cm`)+'\n'+E(`x = xf − xi = ${X.toFixed(1)} − 0 = ${X.toFixed(1)} cm = ${fx(XM(),3)} m`))}else fb('xFb',false,'✗ القراءة غير صحيحة، أعد القراءة أو استخدم التلميح.');sub();results()};
   $('cWk').onclick=()=>{if(!(ok.f&&ok.x))return fb('cWf',false,'أكمل قياس القوة والإزاحة أولا.');const v=num($('cW').value);if(isNaN(v))return fb('cWf',false,'اكتب الناتج بوحدة J.');
-    if(Math.abs(v-WW())/WW()<0.01){ok.cW=true;fb('cWf',true,'✓ إجابة صحيحة:\n'+E(`W = ${F.toFixed(1)} × ${fx(XM(),3)} = ${fx(WW(),3)} J`))}else fb('cWf',false,'✗ حوّل الإزاحة إلى المتر، ثم اضربها في قوة السحب F.');results()};
+    if(Math.abs(v-WW())/WW()<0.01){ok.cW=true;fb('cWf',true,'✓ إجابة صحيحة:\n'+E(`W = ${F.toFixed(1)} × ${fx(XM(),3)} = ${fx(WW(),3)} J`))}else fb('cWf',false,'✗ اكتب الإزاحة بوحدة المتر، ثم اضربها في قوة السحب F.');results()};
   $('nw').onclick=newObj;
   calcInit(box);newObj();
 }
@@ -2061,8 +2061,8 @@ function peLab(box){
   function pVal(k){let p=r1(+$('pR'+k).value);if(p>H[k]){p=H[k];$('pR'+k).value=p}return p}
   const pTouch=k=>done(k)&&Math.abs(pVal(k)-H[k])<1e-6;
   function draw(k){const v=+$('gR'+k).value,dn=done(k),p=pVal(k),touch=pTouch(k),hl=hX[k]&&touch,h=v/100*H[k],HH=H[k];
-    $('gO'+k).textContent=dn?'ثبت الجسم (الثقل)':v>0?'يرتفع…':'';$('pO'+k).textContent=p.toFixed(1)+' cm';
-    $('gSt'+k).textContent=!dn?(v>0?'ذراع الحامل يرتفع بالجسم (الثقل)…':'الجسم (الثقل) على سطح الطاولة، ارفع ذراع الحامل بمؤشر «رفع ذراع الحامل»'):touch?'✓ المؤشر عند أسفل الجسم (الثقل)، اقرأ الارتفاع من المسطرة':'حرّك «مؤشر القياس» حتى يلامس أسفل الجسم (الثقل)';
+    $('gO'+k).textContent=dn?'استقر الجسم (الثقل)':v>0?'يرتفع…':'';$('pO'+k).textContent=p.toFixed(1)+' cm';
+    $('gSt'+k).textContent=!dn?(v>0?'ذراع الحامل يرتفع بالجسم (الثقل)…':'الجسم (الثقل) على سطح الطاولة، ارفع ذراع الحامل بمؤشر «رفع ذراع الحامل»'):touch?'✓ المؤشر عند أسفل الجسم (الثقل)، اقرأ الارتفاع من المسطرة':'اسحب «مؤشر القياس» حتى يلامس أسفل الجسم (الثقل)';
     $('gS'+k).innerHTML=peScene(h,{ptr:{p,touch},arr:!dn});
     const c0=Math.max(0,Math.floor(HH)-7),XX=c=>(c-c0)*26;
     let z=`<rect x="0" y="34" width="400" height="58" fill="#FEF3C7" stroke="#A16207"/>`;
@@ -2094,11 +2094,11 @@ function peLab(box){
     if(Math.abs(v-M)<0.5){ok.m=true;fb('mFb',true,'✓ قراءة صحيحة:\n'+E(`m = ${M} g = ${fx(KG(),3)} kg`))}else fb('mFb',false,'✗ اقرأ الرقم الظاهر على شاشة الميزان.');sub();results()};
   [1,2].forEach(k=>{
     $('gR'+k).oninput=()=>draw(k);$('pR'+k).oninput=()=>draw(k);
-    $('hHn'+k).onclick=()=>{hX[k]=true;draw(k);fb('hFb'+k,true,'تلميح: الأرقام الكبيرة بالسنتيمتر، وبين كل رقمين 10 أقسام صغيرة كل قسم '+E('0.1 cm')+'. اقرأ آخر رقم قبل المؤشر، ثم عُدّ الأقسام الصغيرة حتى الخط الأزرق.')};
-    $('hCk'+k).onclick=()=>{if(!done(k))return fb('hFb'+k,false,'ارفع ذراع الحامل بمؤشر «رفع ذراع الحامل» حتى نهايته أولا.');if(!pTouch(k))return fb('hFb'+k,false,'حرّك «مؤشر القياس» حتى يلامس أسفل الجسم (الثقل) أولا.');const v=num($('hIn'+k).value);if(isNaN(v))return fb('hFb'+k,false,'اكتب قراءتك بالسنتيمتر.');
+    $('hHn'+k).onclick=()=>{hX[k]=true;draw(k);fb('hFb'+k,true,'تلميح: الأرقام الكبيرة بالسنتيمتر، وبين كل رقمين 10 أقسام صغيرة كل قسم '+E('0.1 cm')+'. اقرأ آخر رقم قبل المؤشر، ثم احسب عدد الأقسام الصغيرة حتى الخط الأزرق.')};
+    $('hCk'+k).onclick=()=>{if(!done(k))return fb('hFb'+k,false,'ارفع ذراع الحامل بمؤشر «رفع ذراع الحامل» حتى نهايته أولا.');if(!pTouch(k))return fb('hFb'+k,false,'اسحب «مؤشر القياس» حتى يلامس أسفل الجسم (الثقل) أولا.');const v=num($('hIn'+k).value);if(isNaN(v))return fb('hFb'+k,false,'اكتب قراءتك بالسنتيمتر.');
       if(Math.abs(v-H[k])<0.05){ok['h'+k]=true;fb('hFb'+k,true,'✓ قراءة صحيحة:\n'+E(`hf = ${H[k].toFixed(1)} cm`)+'\n'+E(`h = hf − hi = ${H[k].toFixed(1)} − 0 = ${H[k].toFixed(1)} cm = ${fx(HM(k),3)} m`))}else fb('hFb'+k,false,'✗ القراءة غير صحيحة، أعد القراءة أو استخدم التلميح.');sub();results()};
     $('cPk'+k).onclick=()=>{if(!(ok.m&&ok['h'+k]))return fb('cPf'+k,false,'أكمل قياس الكتلة والارتفاع أولا.');const v=num($('cP'+k).value);if(isNaN(v))return fb('cPf'+k,false,'اكتب الناتج بوحدة J.');
-      if(Math.abs(v-PE(k))/PE(k)<0.01){ok['cP'+k]=true;fb('cPf'+k,true,'✓ إجابة صحيحة:\n'+E(`PE = ${fx(KG(),3)} × 9.8 × ${fx(HM(k),3)} = ${fx(PE(k),3)} J`))}else fb('cPf'+k,false,'✗ حوّل الكتلة إلى kg والارتفاع إلى m، ثم اضرب الكتلة في 9.8 في الارتفاع.');results()}});
+      if(Math.abs(v-PE(k))/PE(k)<0.01){ok['cP'+k]=true;fb('cPf'+k,true,'✓ إجابة صحيحة:\n'+E(`PE = ${fx(KG(),3)} × 9.8 × ${fx(HM(k),3)} = ${fx(PE(k),3)} J`))}else fb('cPf'+k,false,'✗ اكتب الكتلة بوحدة kg والارتفاع بوحدة m، ثم اضرب الكتلة في 9.8 في الارتفاع.');results()}});
   $('nw').onclick=newObj;
   calcInit(box);newObj();
 }
@@ -2241,7 +2241,7 @@ function ceLab(box){
   function pVal(){let p=r1(+$('pR').value);if(p>H){p=H;$('pR').value=p}return p}
   const pTouch=()=>Math.abs(pVal()-H)<1e-6;
   function pDraw(){const p=pVal(),touch=pTouch(),hl=hX&&touch,c0=Math.max(0,Math.floor(H)-7),XX=c=>(c-c0)*26;
-    $('pO').textContent=p.toFixed(1)+' cm';$('pSt').textContent=touch?'✓ المؤشر عند أسفل الجسم (الثقل)، اقرأ الارتفاع من المسطرة':'حرّك المؤشر حتى يلامس أسفل الجسم (الثقل)';
+    $('pO').textContent=p.toFixed(1)+' cm';$('pSt').textContent=touch?'✓ المؤشر عند أسفل الجسم (الثقل)، اقرأ الارتفاع من المسطرة':'اسحب المؤشر حتى يلامس أسفل الجسم (الثقل)';
     $('pS').innerHTML=ceScene(H,0,{ptr:{p,touch}});
     let z=`<rect x="0" y="34" width="400" height="58" fill="#FEF3C7" stroke="#A16207"/>`;
     for(let m=Math.ceil(c0*10);m<=Math.floor((c0+15.4)*10);m++){const x=XX(m/10),big=m%10===0,mid=m%5===0,hh=hl&&m===Math.round(H*10);z+=`<line x1="${x}" y1="34" x2="${x}" y2="${34+(big?22:mid?15:9)}" stroke="${hh?'#2563EB':'#1F2937'}" stroke-width="${hh?2.6:big?1.4:.8}"/>`;if(big)z+=`<text x="${x}" y="74" font-size="13" font-weight="700" text-anchor="middle" fill="#1F2937">${m/10}</text>`}
@@ -2267,15 +2267,15 @@ function ceLab(box){
   $('pR').oninput=pDraw;$('gR').oninput=gDraw;
   $('mCk').onclick=()=>{const v=num($('mIn').value);if(isNaN(v))return fb('mFb',false,'اكتب قراءتك بالجرام.');
     if(Math.abs(v-M)<0.5){ok.m=true;fb('mFb',true,'✓ قراءة صحيحة:\n'+E(`m = ${M} g = ${fx(KG(),3)} kg`))}else fb('mFb',false,'✗ اقرأ الرقم الظاهر على شاشة الميزان.');sub();results()};
-  $('hHn').onclick=()=>{hX=true;pDraw();fb('hFb',true,'تلميح: الأرقام الكبيرة بالسنتيمتر، وبين كل رقمين 10 أقسام صغيرة كل قسم '+E('0.1 cm')+'. اقرأ آخر رقم قبل المؤشر، ثم عُدّ الأقسام الصغيرة حتى الخط الأزرق.')};
-  $('hCk').onclick=()=>{if(!pTouch())return fb('hFb',false,'حرّك المؤشر حتى يلامس أسفل الجسم (الثقل) أولا.');const v=num($('hIn').value);if(isNaN(v))return fb('hFb',false,'اكتب قراءتك بالسنتيمتر.');
+  $('hHn').onclick=()=>{hX=true;pDraw();fb('hFb',true,'تلميح: الأرقام الكبيرة بالسنتيمتر، وبين كل رقمين 10 أقسام صغيرة كل قسم '+E('0.1 cm')+'. اقرأ آخر رقم قبل المؤشر، ثم احسب عدد الأقسام الصغيرة حتى الخط الأزرق.')};
+  $('hCk').onclick=()=>{if(!pTouch())return fb('hFb',false,'اسحب المؤشر حتى يلامس أسفل الجسم (الثقل) أولا.');const v=num($('hIn').value);if(isNaN(v))return fb('hFb',false,'اكتب قراءتك بالسنتيمتر.');
     if(Math.abs(v-H)<0.05){ok.h=true;fb('hFb',true,'✓ قراءة صحيحة:\n'+E(`hf = ${H.toFixed(1)} cm`)+'\n'+E(`h = hf − hi = ${H.toFixed(1)} − 0 = ${H.toFixed(1)} cm = ${fx(HM(),3)} m`))}else fb('hFb',false,'✗ القراءة غير صحيحة، أعد القراءة أو استخدم التلميح.');sub();results()};
   $('vCk').onclick=()=>{if(!fallen())return fb('vFb',false,'افتح ماسك الإفلات حتى يعبر الجسم (الثقل) البوابة الضوئية أولا.');const v=num($('vIn').value);if(isNaN(v))return fb('vFb',false,'اكتب قراءتك بوحدة m/s.');
     if(Math.abs(v-V)<0.005){ok.v=true;fb('vFb',true,'✓ قراءة صحيحة:\n'+E(`v = ${V.toFixed(2)} m/s`))}else fb('vFb',false,'✗ اكتب السرعة كما تظهر على الشاشة المكبرة.');sub();results()};
   const chk=(c,need,needMsg,val,okMsg,bad)=>{if(!need())return fb(c+'f',false,needMsg);const v=num($(c).value);if(isNaN(v))return fb(c+'f',false,'اكتب الناتج بوحدة J.');
     if(Math.abs(v-val)/val<0.01){ok[c]=true;fb(c+'f',true,okMsg())}else fb(c+'f',false,bad);sub();results()};
-  $('cPk').onclick=()=>chk('cP',()=>ok.m&&ok.h,'أكمل قياس الكتلة والارتفاع أولا.',PE(),()=>'✓ إجابة صحيحة:\n'+E(`PE = ${fx(KG(),3)} × 9.8 × ${fx(HM(),3)} = ${fx(PE(),3)} J`),'✗ حوّل الكتلة إلى kg والارتفاع إلى m، ثم اضرب الكتلة في 9.8 في الارتفاع.');
-  $('cKk').onclick=()=>chk('cK',()=>ok.m&&ok.v,'أكمل قياس الكتلة والسرعة أولا.',KE(),()=>'✓ إجابة صحيحة:\n'+E(`KE = 0.5 × ${fx(KG(),3)} × ${V.toFixed(2)}² = ${fx(KE(),3)} J`),'✗ ربّع السرعة، ثم اضربها في الكتلة بالكيلوجرام وفي 0.5.');
+  $('cPk').onclick=()=>chk('cP',()=>ok.m&&ok.h,'أكمل قياس الكتلة والارتفاع أولا.',PE(),()=>'✓ إجابة صحيحة:\n'+E(`PE = ${fx(KG(),3)} × 9.8 × ${fx(HM(),3)} = ${fx(PE(),3)} J`),'✗ اكتب الكتلة بوحدة kg والارتفاع بوحدة m، ثم اضرب الكتلة في 9.8 في الارتفاع.');
+  $('cKk').onclick=()=>chk('cK',()=>ok.m&&ok.v,'أكمل قياس الكتلة والسرعة أولا.',KE(),()=>'✓ إجابة صحيحة:\n'+E(`KE = 0.5 × ${fx(KG(),3)} × ${V.toFixed(2)}² = ${fx(KE(),3)} J`),'✗ احسب مربع السرعة، ثم اضربها في الكتلة بالكيلوجرام وفي 0.5.');
   $('nw').onclick=newObj;
   calcInit(box);newObj();
 }
@@ -2421,7 +2421,7 @@ function eqLab(box){
   function cDraw(){const v=+$('cR').value,in2=v>=100;if(!in2)$('pR').value=0;const pr=+$('pR').value,mixed=pr>=100;if(!mixed)$('tR').value=0;const t=+$('tR').value;
     const q=path(100-v,CX,HX),hl=1-pr/100,cl=CL()+(1-CL())*pr/100,R=!in2?'--.-':mixed?Tt(t).toFixed(1):T2.toFixed(1);
     $('cO').textContent=in2?'في الماء البارد':'';$('pO').textContent=mixed?'تم السكب':pr>0?'يسكب…':'';$('tO').textContent=t+' s';
-    $('cSt').textContent=!in2?'انقل المجس من الماء الساخن إلى الكوب الثاني (ماء بارد)':!mixed?'اسكب الماء الساخن كاملا في الكوب الثاني':t===0?'✓ تم الخلط، شغل ساعة الإيقاف':t>=60?'✓ ثبتت القراءة: الاتزان الحراري':'درجة حرارة الخليط ترتفع…';
+    $('cSt').textContent=!in2?'انقل المجس من الماء الساخن إلى الكوب الثاني (ماء بارد)':!mixed?'اسكب الماء الساخن كاملا في الكوب الثاني':t===0?'✓ تم الخلط، ابدأ تشغيل ساعة الإيقاف':t>=60?'✓ ثبتت القراءة: الاتزان الحراري':'درجة حرارة الخليط ترتفع…';
     $('cS').innerHTML=htScene({px:q.px,tz:q.tz,R:in2?R:null,t,hl,cl,pour:pr>0&&pr<100});
     $('cZ').innerHTML=zoom(scr(36,210,`T = ${R} °C`)+scr(256,108,`${t} s`),'‏شاشة جهاز القراءة وساعة الإيقاف (مكبرتان)‏')}
   function sub(){$('sbT').textContent=ok.m1&&ok.m2&&ok.a&&ok.b?['Tf = (m₁·T₁ + m₂·T₂) / (m₁ + m₂)',E(`Tf = (${M1} × ${T1.toFixed(1)} + ${M2} × ${T2.toFixed(1)}) / (${M1} + ${M2})`)].join('\n'):'Tf = (m₁·T₁ + m₂·T₂) / (m₁ + m₂)'}
@@ -2585,7 +2585,7 @@ function q1Lab(box){
     $('cmpN').textContent=all?'الكمية نفسها من الطاقة الحرارية، لكن عددها بالجول أكبر لأن الجول وحدة أصغر من السعر، وعددها بالكيلو سعر أصغر لأنه وحدة أكبر.':'';
     $('rNote').innerHTML=all?`الاستنتاج: تحولت الطاقة الكهربائية في السخان إلى طاقة حرارية انتقلت إلى الماء فارتفعت درجة حرارته من <span dir="ltr">${T0.toFixed(1)} °C</span> إلى <span dir="ltr">${r1(T0+DT).toFixed(1)} °C</span>، والحرارة طاقة تقاس بالجول ويمكن تحويلها إلى السعر <span dir="ltr" style="white-space:nowrap">1 cal = 4.186 J</span>.`:'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
   $('sR').oninput=sDraw;
-  $('qInCk').onclick=()=>{if(+$('sR').value<100)return fb('qInFb',false,'شغل السخان حتى يتوقف تلقائيا أولا.');const v=num($('qIn').value);if(isNaN(v))return fb('qInFb',false,'اكتب قراءتك بالجول.');
+  $('qInCk').onclick=()=>{if(+$('sR').value<100)return fb('qInFb',false,'ابدأ تشغيل السخان حتى يتوقف تلقائيا أولا.');const v=num($('qIn').value);if(isNaN(v))return fb('qInFb',false,'اكتب قراءتك بالجول.');
     if(Math.abs(v-Q)<0.5){ok.q=true;fb('qInFb',true,'✓ قراءة صحيحة:\n'+E(`Q = ${Q} J`))}else fb('qInFb',false,'✗ اكتب الرقم الظاهر على شاشة عداد الطاقة.');sub();results()};
   $('cCk').onclick=()=>{if(!ok.q)return fb('cCf',false,'اقرأ الطاقة من عداد الطاقة أولا.');const v=num($('cC').value);if(isNaN(v))return fb('cCf',false,'اكتب الناتج بوحدة cal.');
     if(Math.abs(v-QC())/QC()<0.005){ok.cC=true;fb('cCf',true,'✓ إجابة صحيحة:\n'+E(`Q = ${Q} / 4.186 = ${fx(QC(),1)} cal`))}else fb('cCf',false,'✗ اقسم الطاقة بالجول على 4.186:\n'+E(`Q = ${Q} / 4.186`));sub();results()};
@@ -2759,10 +2759,10 @@ function shLab(box){
   const rd=(id,need,msg,val,key,lab,u,tol)=>{if(!need())return fb(id+'Fb',false,msg);const v=num($(id).value);if(isNaN(v))return fb(id+'Fb',false,`اكتب قراءتك بوحدة ${u}.`);
     if(Math.abs(v-val)<tol){ok[key]=true;fb(id+'Fb',true,'✓ قراءة صحيحة:\n'+E(`${lab} = ${u==='J'?val:val.toFixed(1)} ${u}`))}else fb(id+'Fb',false,'✗ اكتب القراءة كما تظهر على الشاشة المكبرة.');sub();results()};
   $('aInCk').onclick=()=>rd('aIn',()=>+$('aR').value>=100,'أنزل المجس في الماء أولا.',T1,'a','T₁','°C',0.05);
-  $('tInCk').onclick=()=>rd('tIn',()=>+$('sR').value>=100,'شغل السخان حتى يتوقف تلقائيا أولا.',T2,'t','T₂','°C',0.05);
-  $('eInCk').onclick=()=>rd('eIn',()=>+$('sR').value>=100,'شغل السخان حتى يتوقف تلقائيا أولا.',EN,'e','E','J',0.5);
+  $('tInCk').onclick=()=>rd('tIn',()=>+$('sR').value>=100,'ابدأ تشغيل السخان حتى يتوقف تلقائيا أولا.',T2,'t','T₂','°C',0.05);
+  $('eInCk').onclick=()=>rd('eIn',()=>+$('sR').value>=100,'ابدأ تشغيل السخان حتى يتوقف تلقائيا أولا.',EN,'e','E','J',0.5);
   $('cCk').onclick=()=>{if(!ok.m)return fb('cCf',false,'أكمل قياس الكتلة أولا.');const v=num($('cC').value);if(isNaN(v))return fb('cCf',false,'اكتب الناتج بوحدة J/°C.');
-    if(Math.abs(v-CC())/CC()<0.005){ok.cC=true;fb('cCf',true,'✓ إجابة صحيحة:\n'+E(`C = ${fx(KG(),3)} × 4180 = ${fx(CC(),1)} J/°C`))}else fb('cCf',false,'✗ حول الكتلة إلى kg ثم اضربها في 4180:\n'+E(`C = ${fx(KG(),3)} × 4180`));sub();results()};
+    if(Math.abs(v-CC())/CC()<0.005){ok.cC=true;fb('cCf',true,'✓ إجابة صحيحة:\n'+E(`C = ${fx(KG(),3)} × 4180 = ${fx(CC(),1)} J/°C`))}else fb('cCf',false,'✗ اكتب الكتلة بوحدة kg ثم اضربها في 4180:\n'+E(`C = ${fx(KG(),3)} × 4180`));sub();results()};
   $('cQk').onclick=()=>{if(!(ok.m&&ok.a&&ok.t))return fb('cQf',false,'أكمل قياس الكتلة ودرجتي الحرارة أولا.');const v=num($('cQ').value);if(isNaN(v))return fb('cQf',false,'اكتب الناتج بوحدة J.');
     if(Math.abs(v-QQ())/QQ()<0.005){ok.cQ=true;fb('cQf',true,'✓ إجابة صحيحة:\n'+E(`Q = ${fx(KG(),3)} × 4180 × ${DT().toFixed(1)} = ${fx(QQ(),1)} J`))}else fb('cQf',false,'✗ اطرح أولا ثم اضرب:\n'+E(`ΔT = ${T2.toFixed(1)} − ${T1.toFixed(1)} = ${DT().toFixed(1)} °C`)+'\n'+E(`Q = ${fx(KG(),3)} × 4180 × ${DT().toFixed(1)}`));sub();results()};
   $('nw').onclick=newObj;calcInit(box);newObj()}
@@ -2862,7 +2862,7 @@ function lhLab(box){
     if(Math.abs(v-val())/Math.abs(val())<0.005){ok['c'+id]=true;fb('c'+id+'f',true,'✓ إجابة صحيحة:\n'+E(okTxt()))}else fb('c'+id+'f',false,bad());sub();results()}};
   const all4=()=>ok.w&&ok.i&&ok.a&&ok.f;
   ck('1',all4,Q1,()=>`Q₁ = ${fx(KW(),3)} × 4180 × ${fx(T1-TF,1)} = ${fx(Q1(),1)} J`,()=>'✗ اطرح أولا ثم اضرب:\n'+E(`T₁ − Tf = ${T1.toFixed(1)} − ${TF.toFixed(1)} = ${fx(T1-TF,1)} °C`)+'\n'+E(`Q₁ = ${fx(KW(),3)} × 4180 × ${fx(T1-TF,1)}`));
-  ck('2',all4,Q2,()=>`Q₂ = ${fx(KI(),3)} × 4180 × ${TF.toFixed(1)} = ${fx(Q2(),1)} J`,()=>'✗ حول كتلة الجليد إلى kg ثم اضرب:\n'+E(`Q₂ = ${fx(KI(),3)} × 4180 × ${TF.toFixed(1)}`));
+  ck('2',all4,Q2,()=>`Q₂ = ${fx(KI(),3)} × 4180 × ${TF.toFixed(1)} = ${fx(Q2(),1)} J`,()=>'✗ اكتب كتلة الجليد بوحدة kg ثم اضرب:\n'+E(`Q₂ = ${fx(KI(),3)} × 4180 × ${TF.toFixed(1)}`));
   ck('H',()=>ok.c1&&ok.c2,HH,()=>`H = ${fx(Q1()-Q2(),1)} / ${fx(KI(),3)} = ${fx(HH(),0)} J/kg`,()=>'✗ اطرح أولا ثم اقسم على كتلة الجليد بالكيلوجرام:\n'+E(`Q₁ − Q₂ = ${fx(Q1(),1)} − ${fx(Q2(),1)} = ${fx(Q1()-Q2(),1)} J`)+'\n'+E(`H = ${fx(Q1()-Q2(),1)} / ${fx(KI(),3)}`));
   $('nw').onclick=newObj;calcInit(box);newObj()}
 
@@ -2968,12 +2968,12 @@ function trLab(box){
   function newObj(){F=[18+Math.floor(Math.random()*8),32+Math.floor(Math.random()*10),70+Math.floor(Math.random()*25)];BK=r1(76+Math.random()*6);SH=r1(30+Math.random()*6);ok={};
     ['tR','vR','lR'].forEach(k=>$(k).value=0);['t1','t2','t3','b1','b2'].forEach(k=>$(k).value='');['t1Fb','t2Fb','t3Fb','b1Fb','b2Fb'].forEach(fb0);cDraw();vDraw();lDraw();results()}
   function cDraw(){const t=+$('tR').value,n=F.filter(x=>t>=x).length;$('tO').textContent=t+' s';
-    $('cSt').textContent=t===0?'شغل ساعة الإيقاف مع تشغيل مصدر الحرارة':F.includes(t)?'✓ سقطت كرة الآن، اقرأ الزمن من ساعة الإيقاف':`سقط ${n} من 3 كرات`;
+    $('cSt').textContent=t===0?'ابدأ تشغيل ساعة الإيقاف مع تشغيل مصدر الحرارة':F.includes(t)?'✓ سقطت كرة الآن، اقرأ الزمن من ساعة الإيقاف':`سقط ${n} من 3 كرات`;
     $('cS').innerHTML=cdScene(t,F,{sw:t});$('cZ').innerHTML=hxZoom([[56,288,`t = ${t} s`]],'شاشة ساعة الإيقاف (مكبرة)')}
-  function vDraw(){const v=+$('vR').value;$('vRO').textContent=v>=100?'تكون تيار الحمل':'';$('vSt').textContent=v>=100?'✓ الماء الساخن يرتفع، والبارد ينزل ليحل محله: تيار الحمل':v>0?'الصبغة تتحرك مع الماء…':'شغل مصدر الحرارة';
+  function vDraw(){const v=+$('vR').value;$('vRO').textContent=v>=100?'تكون تيار الحمل':'';$('vSt').textContent=v>=100?'✓ الماء الساخن يرتفع، والبارد ينزل ليحل محله: تيار الحمل':v>0?'الصبغة تتحرك مع الماء…':'ابدأ تشغيل مصدر الحرارة';
     $('vS').innerHTML=cvScene(v/100,{lab:v>=100});if(v>=100&&!ok.v){ok.v=true;results()}}
   function lDraw(){const v=+$('lR').value,R=v===0?BK.toFixed(1):v===100?SH.toFixed(1):null;$('lRO').textContent=v===0?'الوجه الأسود':v===100?'الوجه اللامع':'';
-    $('lSt').textContent=v===0?'✓ المقياس موجه إلى الوجه الأسود':v===100?'✓ المقياس موجه إلى الوجه اللامع':'حرك المقياس حتى يواجه الوجه اللامع';
+    $('lSt').textContent=v===0?'✓ المقياس موجه إلى الوجه الأسود':v===100?'✓ المقياس موجه إلى الوجه اللامع':'أدر المقياس حتى يواجه الوجه اللامع';
     $('lS').innerHTML=lcScene(v,R);$('lZ').innerHTML=hxZoom([[56,288,`T = ${R||'--.-'} °C`]],'شاشة مقياس الحرارة بالأشعة تحت الحمراء (مكبرة)')}
   function results(){['r1','r2','r3'].forEach((r,i)=>$(r).textContent=ok['t'+(i+1)]?E(F[i]+' s'):'—');$('r4').textContent=ok.v?'الماء الساخن يرتفع والبارد ينزل':'—';$('r5').textContent=ok.b1?E(BK.toFixed(1)+' °C'):'—';$('r6').textContent=ok.b2?E(SH.toFixed(1)+' °C'):'—';
     const all=ok.t1&&ok.t2&&ok.t3&&ok.v&&ok.b1&&ok.b2;
@@ -2982,9 +2982,9 @@ function trLab(box){
     $('rNote').innerHTML=all?'الاستنتاج: تنتقل الحرارة بالتوصيل في المواد الصلبة، والنحاس أجود الفلزات الثلاثة توصيلا للحرارة ثم الألومنيوم ثم الحديد، وتنتقل بالحمل في السوائل بحركة المائع الساخن إلى أعلى، وتنتقل بالإشعاع على شكل موجات كهرومغناطيسية، والسطح الأسود يشع أكثر من السطح اللامع.':'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
   $('tR').oninput=cDraw;$('vR').oninput=vDraw;$('lR').oninput=lDraw;
   const nm=['النحاس','الألومنيوم','الحديد'];
-  [0,1,2].forEach(i=>{$('t'+(i+1)+'Ck').onclick=()=>{const id='t'+(i+1);if(+$('tR').value<F[i])return fb(id+'Fb',false,'حرك ساعة الإيقاف حتى تسقط الكرة عن قضيب '+nm[i]+' أولا.');const v=num($(id).value);if(isNaN(v))return fb(id+'Fb',false,'اكتب الزمن بالثانية.');
+  [0,1,2].forEach(i=>{$('t'+(i+1)+'Ck').onclick=()=>{const id='t'+(i+1);if(+$('tR').value<F[i])return fb(id+'Fb',false,'اسحب مؤشر ساعة الإيقاف حتى تسقط الكرة عن قضيب '+nm[i]+' أولا.');const v=num($(id).value);if(isNaN(v))return fb(id+'Fb',false,'اكتب الزمن بالثانية.');
     if(Math.abs(v-F[i])<=1){ok[id]=true;fb(id+'Fb',true,'✓ قراءة صحيحة:\n'+E(`t = ${F[i]} s`))}else fb(id+'Fb',false,'✗ ارجع بساعة الإيقاف إلى أول لحظة سقطت فيها الكرة، واقرأ الزمن.');results()}});
-  const rb=(id,pos,val,lab)=>{$(id+'Ck').onclick=()=>{if(+$('lR').value!==pos)return fb(id+'Fb',false,`وجه المقياس إلى ${lab} أولا.`);const v=num($(id).value);if(isNaN(v))return fb(id+'Fb',false,'اكتب القراءة بوحدة °C.');
+  const rb=(id,pos,val,lab)=>{$(id+'Ck').onclick=()=>{if(+$('lR').value!==pos)return fb(id+'Fb',false,`أدر المقياس نحو ${lab} أولا.`);const v=num($(id).value);if(isNaN(v))return fb(id+'Fb',false,'اكتب القراءة بوحدة °C.');
     if(Math.abs(v-val())<0.05){ok[id]=true;fb(id+'Fb',true,'✓ قراءة صحيحة:\n'+E(`T = ${val().toFixed(1)} °C`))}else fb(id+'Fb',false,'✗ اكتب القراءة كما تظهر على الشاشة المكبرة.');results()}};
   rb('b1',0,()=>BK,'الوجه الأسود');rb('b2',100,()=>SH,'الوجه اللامع');
   $('nw').onclick=newObj;newObj()}
@@ -3043,6 +3043,14 @@ function refBox(k){const ix=LREFK[k];if(!ix)return '';
 
 window.LABS={'0-1':{t:'القياس بأداة القدمة ذات الورنية وأداة الميكرومتر',run:measureLab},'0-2':{t:'قياس سرعة جسم متحرك والتحويل بين وحداتها',run:speedLab2},'0-4':{t:'إيجاد محصلة متجهين باستخدام طاولة القوى',run:forceLab},'0-5':{t:'تحليل قوة إلى مركبتين باستخدام طاولة القوى',run:vecLab},'0-6':{t:'الضرب القياسي لمتجهين بمتجهات الوحدة على لوحة الإحداثيات',run:dotLab},'1-1':{t:'إيجاد تسارع عربة على المسار الهوائي المائل وأثر زيادة الميل على السرعة والتسارع',run:airLab},'1-2':{t:'حساب ارتفاع سقوط كرة باستخدام معادلة الحركة الثانية',run:ffLab},'1-3':{t:'التحقق من قانون نيوتن الثاني باستخدام جهاز آتوود',run:awLab},'1-5':{t:'حساب قوة الاحتكاك الحركي والتحقق منها بالميزان النابضي',run:frLab},'1-7':{t:'حساب الشغل المبذول على صندوق خشبي بقوة أفقية',run:wkLab2},'1-8':{t:'إيجاد طاقة الوضع لجسم وعلاقتها بالارتفاع',run:peLab},'1-9':{t:'التحقق من حفظ الطاقة الميكانيكية لجسم ساقط سقوطا حرا',run:ceLab},'2-1':{t:'قياس الطاقة الحرارية الناتجة من سخان كهربائي وتحويلها بين الجول والسعر',run:q1Lab},'2-2':{t:'قياس درجتي انصهار الجليد وغليان الماء والتحويل بين مقاييس درجة الحرارة',run:tsLab},'2-3':{t:'حساب كمية الحرارة اللازمة لتسخين الماء',run:shLab},'2-4':{t:'حساب الحرارة الكامنة لانصهار الجليد',run:lhLab},'2-5':{t:'التحقق من الاتزان الحراري بخلط ماء ساخن وماء بارد',run:eqLab},'2-6':{t:'مقارنة طرق انتقال الحرارة: التوصيل والحمل والإشعاع',run:trLab}};
 /* workLab محفوظة لدرس الشغل لاحقا */
+/* إصلاح اتجاه الأقواس: عزل الأقواس ذات المحتوى اللاتيني داخل النص العربي، وضبط نصوص الرسوم العربية التي فيها أقواس */
+const BIDI_AR=/[؀-ۿ]/,BIDI_GRP=/\((?=[^()؀-ۿ⁦⁩]*[A-Za-z0-9])[^()؀-ۿ⁦⁩]*\)/g;
+function bidiNode(n){const p=n.parentNode;if(!p||!BIDI_AR.test(n.data))return;if(p.closest&&p.closest('[dir="ltr"],input,textarea,script,style'))return;
+  let d=n.data.replace(BIDI_GRP,(m,o,s)=>(s[o-1]==='⁦'?m:'⁦'+m+'⁩'));
+  if(p.closest&&p.closest('svg')&&/[()]/.test(d)){if(d[0]!=='‏')d='‏'+d;if(d[d.length-1]!=='‏')d=d+'‏'}
+  if(d!==n.data)n.data=d}
+function bidiFix(root){const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let n;const a=[];while(n=w.nextNode())a.push(n);a.forEach(bidiNode)}
+function bidiWatch(root){bidiFix(root);if(typeof MutationObserver!=='function')return;new MutationObserver(ms=>{ms.forEach(m=>{if(m.type==='characterData')bidiNode(m.target);else m.addedNodes.forEach(x=>{if(x.nodeType===3)bidiNode(x);else if(x.nodeType===1)bidiFix(x)})})}).observe(root,{subtree:true,childList:true,characterData:true})}
 window.renderLabCard=function(host,u,l){const L=window.LABS[u+'-'+l];if(!L)return false;css();
-  (Array.isArray(L)?L:[L]).forEach(x=>{const c=document.createElement('div');c.className='card lab';c.innerHTML='<div class="labBody"></div>';host.appendChild(c);x.run(c.querySelector('.labBody'));c.querySelector('.labBody').insertAdjacentHTML('beforeend',refBox(u+'-'+l))});return true};
+  (Array.isArray(L)?L:[L]).forEach(x=>{const c=document.createElement('div');c.className='card lab';c.innerHTML='<div class="labBody"></div>';host.appendChild(c);x.run(c.querySelector('.labBody'));c.querySelector('.labBody').insertAdjacentHTML('beforeend',refBox(u+'-'+l));bidiWatch(c)});return true};
 })();
