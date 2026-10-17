@@ -1438,31 +1438,37 @@ function ffLab(box){
 
 /* ===== الوحدة الثانية — القوة وقوانين نيوتن للحركة: التحقق من قانون نيوتن الثاني باستخدام جهاز آتوود ===== */
 function awScene(h,s,o){/* h ارتفاع m₁ عن الوسادة بالمتر، s ما نزلته m₁ */
-  o=o||{};const K=150,ZP=34,Z1=ZP+h*K,TOP=Z1+90,BASE=TOP+40,S=(x,d,z)=>[x+d*0.6,BASE-z-d*0.5],P=(x,d,z)=>S(x,d,z).join(',');
+  o=o||{};const K=150,ZP=7,Z1=ZP+h*K,TOP=Z1+142,BASE=TOP+40,S=(x,d,z)=>[x+d*0.6,BASE-z-d*0.5],P=(x,d,z)=>S(x,d,z).join(',');
   const poly=(a,f,st)=>`<polygon points="${a.map(p=>P(...p)).join(' ')}" fill="${f}" stroke="${st||'#334155'}" stroke-linejoin="round"/>`;
   const box=(x0,x1,d0,d1,z0,z1,cf,ct,cs,st)=>poly([[x0,d0,z1],[x1,d0,z1],[x1,d1,z1],[x0,d1,z1]],ct,st)+poly([[x1,d0,z0],[x1,d1,z0],[x1,d1,z1],[x1,d0,z1]],cs,st)+poly([[x0,d0,z0],[x1,d0,z0],[x1,d0,z1],[x0,d0,z1]],cf,st);
   const lbl=(x,y,tx,ty,t,anc)=>`<line x1="${x}" y1="${y}" x2="${tx}" y2="${ty}" stroke="var(--muted)" stroke-width="1"/><circle cx="${x}" cy="${y}" r="2.4" fill="var(--muted)"/><text x="${tx}" y="${ty+(ty<y?-4:13)}" font-size="13" font-weight="700" text-anchor="${anc||'middle'}" fill="var(--ink)">${t}</text>`;
-  const XL=135,XR=205,PZ=TOP-20;/* موضعا الخيطين ومركز البكرة */
+  const XL=117,XR=205,PZ=TOP-50;/* موضعا الخيطين ومركز البكرة */
   let g=poly([[10,-40,0],[330,-40,0],[330,70,0],[10,70,0]],'#FEF9EF','#E7D7B9');
   g+=box(30,110,0,40,0,8,'#475569','#94A3B8','#334155')+box(64,74,16,26,8,TOP+14,'#64748B','#CBD5E1','#475569')+box(64,182,16,26,TOP+6,TOP+14,'#64748B','#CBD5E1','#475569');
   /* وسادة الاستقبال تحت m₁ */
-  g+=box(XR-17,XR+17,6,34,0,ZP-6,'#94A3B8','#CBD5E1','#64748B','#475569')+box(XR-17,XR+17,6,34,ZP-6,ZP,'#1F2937','#475569','#0F172A')+poly([[XR-14,9,ZP],[XR+14,9,ZP],[XR+14,31,ZP],[XR-14,31,ZP]],'#F7931E','#C2410C');
+  g+=box(XR-17,XR+17,6,34,0,ZP,'#1F2937','#475569','#0F172A')+poly([[XR-14,9,ZP],[XR+14,9,ZP],[XR+14,31,ZP],[XR-14,31,ZP]],'#F7931E','#C2410C');
   /* البوابة الضوئية فوق وسادة الاستقبال */
-  {const Zg=ZP+36;g+=box(XR-31,XR-26,15,25,0,Zg+8,'#475569','#94A3B8','#334155','#1F2937')+box(XR+26,XR+31,15,25,0,Zg+8,'#475569','#94A3B8','#334155','#1F2937');
-   for(let z=Zg;z>=ZP+3;z-=6){const a=S(XR-26,20,z),b=S(XR+26,20,z);g+=`<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="#EF4444" stroke-width="1.5" stroke-dasharray="4 3"/><circle cx="${a[0]}" cy="${a[1]}" r="2" fill="#EF4444" stroke="#7F1D1D" stroke-width=".6"/>`}}
+  const Zg=ZP+12,GW=36,GX=XR+9;/* البوابة الضوئية: رأس على شكل U (مصدر ضوء وكاشف في طرفي الذراعين) مثبت بماسك على قضيب حامل */
+  g+=box(GX-12,GX+14,50,62,0,4,'#334155','#64748B','#1F2937','#0F172A')+box(GX-2,GX+3,54,58,4,Zg+26,'#94A3B8','#E2E8F0','#64748B','#475569');
+  g+=box(GX-6,GX+7,50,60,Zg-6,Zg+6,'#1F2937','#475569','#0F172A','#000');
+  g+=box(GX-GW-8,GX+GW+8,40,50,Zg-12,Zg+12,'#1F2937','#475569','#111827','#000')+box(GX-GW-8,GX-GW,-6,50,Zg-12,Zg+12,'#1F2937','#475569','#111827','#000');
+  {const a=S(GX-GW,20,Zg),b=S(GX+GW,20,Zg),l=S(GX,45,Zg+12);g+=`<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="#EF4444" stroke-width="2" stroke-dasharray="4 3"/><circle cx="${a[0]}" cy="${a[1]}" r="3.2" fill="#EF4444" stroke="#7F1D1D"/><ellipse cx="${l[0]}" cy="${l[1]}" rx="4" ry="2" fill="${o.blk?'#EF4444':'#22C55E'}" stroke="#14532D"/>`}
   /* الكتلتان والخيط */
   const z1=Z1-s*K,z2=8+s*K,hb=26;
-  {const [px,py]=S(170,20,PZ);const [l1]=S(XL,20,0),[r1]=S(XR,20,0);const yl=S(XL,20,z2+hb)[1],yr=S(XR,20,z1+hb)[1];
+  {const [px,py]=S((XL+XR)/2,20,PZ);const [l1]=S(XL,20,0),[r1]=S(XR,20,0);const yl=S(XL,20,z2+hb)[1],yr=S(XR,20,z1+hb)[1];
    g+=`<line x1="${l1}" y1="${py}" x2="${l1}" y2="${yl}" stroke="#7C2D12" stroke-width="2.4"/><line x1="${r1}" y1="${py}" x2="${r1}" y2="${yr}" stroke="#7C2D12" stroke-width="2.4"/>`;
    g+=box(XL-12,XL+12,8,32,z2,z2+hb,'#60A5FA','#BFDBFE','#3B82F6','#1E3A8A')+box(XR-14,XR+14,6,34,z1,z1+hb+6,'#2563EB','#93C5FD','#1E3A8A','#1E3A8A');
    const [ax,ay]=S(XL,20,z2+hb/2),[bx,by]=S(XR,20,z1+hb/2+3);g+=`<text x="${ax+6}" y="${ay+5}" font-size="12" font-weight="800" text-anchor="middle" fill="#1E3A8A" direction="ltr">m₂</text><text x="${bx+6}" y="${by+5}" font-size="12" font-weight="800" text-anchor="middle" fill="#fff" direction="ltr">m₁</text>`;
-   g+=`<circle cx="${px}" cy="${py}" r="${(r1-l1)/2}" fill="#CBD5E1" stroke="#334155" stroke-width="2"/><path d="M${l1},${py} A${(r1-l1)/2},${(r1-l1)/2} 0 0 1 ${r1},${py}" fill="none" stroke="#7C2D12" stroke-width="2.4"/><circle cx="${px}" cy="${py}" r="4" fill="#334155"/>`}
+   g+=`<circle cx="${px}" cy="${py}" r="${(r1-l1)/2}" fill="#CBD5E1" stroke="#334155" stroke-width="2"/><path d="M${l1},${py} A${(r1-l1)/2},${(r1-l1)/2} 0 0 1 ${r1},${py}" fill="none" stroke="#7C2D12" stroke-width="2.4"/><circle cx="${px}" cy="${py}" r="4" fill="#334155"/>`;{const [,ay]=S((XL+XR)/2,20,TOP+6);g+=`<path d="M${px-5},${ay} L${px-3},${py} M${px+5},${ay} L${px+3},${py}" stroke="#475569" stroke-width="3"/>`}}
+  /* الجانب الأمامي للبوابة الضوئية (أمام الكتلة m₁) */
+  g+=box(GX+GW,GX+GW+8,-6,50,Zg-12,Zg+12,'#1F2937','#475569','#111827','#000');
+  {const d=S(GX+GW,20,Zg);g+=`<rect x="${d[0]-3}" y="${d[1]-3}" width="6" height="6" rx="1" fill="#38BDF8" stroke="#0C4A6E"/>`}
   /* المؤقت الرقمي */
-  {g+=box(262,358,24,52,0,52,'#334155','#475569','#1F2937','#0F172A');const s1=S(267,24,8),s2=S(353,24,46);
+  {g+=box(276,364,24,52,0,52,'#334155','#475569','#1F2937','#0F172A');const s1=S(280,24,8),s2=S(360,24,46);
    g+=`<rect x="${s1[0]}" y="${s2[1]}" width="${s2[0]-s1[0]}" height="${s1[1]-s2[1]}" rx="3" fill="#BBF7D0" stroke="#14532D"/>`;
-   if(o.tm){const cx=(s1[0]+s2[0])/2,row=(l,v,y,h,u)=>`<text x="${cx}" y="${s2[1]+y}" font-size="9.5" font-weight="800" text-anchor="middle" fill="${h?'#DC2626':'#14532D'}" direction="ltr" font-family="Consolas,monospace">${l} = ${v} ${u||'s'}</text>`;g+=row('ti',o.tm.ti,11)+row('tf',o.tm.tf,23,o.tm.hl)+row('Vf',o.tm.vf||'-.---',35,o.tm.hl,'m/s')};
-   const w=S(XR+31,20,ZP+30),k=S(262,38,6);g+=`<path d="M${w[0]},${w[1]} C${w[0]+10},${w[1]+10} ${k[0]-10},${k[1]+6} ${k[0]},${k[1]}" fill="none" stroke="#1F2937" stroke-width="2"/>`}
-  if(o.lab){g+=lbl(...S(182,20,PZ+12),250,18,'البكرة','start')+lbl(...S(XL,20,(z2+hb+PZ)/2),90,BASE-200,'الخيط','start')+lbl(...S(70,20,TOP-60),20,70,'الحامل','start')+lbl(...S(XL-12,20,z2+12),40,BASE-120,'الكتلة الأخف m₂','start')+lbl(...S(XR+14,20,z1+30),262,48,'الكتلة الأثقل m₁','start')+lbl(...S(XR+8,20,ZP),300,BASE-150,'وسادة الاستقبال','start')+lbl(...S(XR-10,6,12),108,BASE+24,'قاعدة الوسادة')+lbl(...S(XR+28,15,ZP+40),230,BASE+24,'البوابة الضوئية')+lbl(...S(332,24,4),350,BASE+24,'المؤقت الرقمي')}
+   if(o.tm){const cx=(s1[0]+s2[0])/2,row=(l,v,y,h,u)=>`<text x="${cx}" y="${s2[1]+y}" font-size="8.6" font-weight="800" text-anchor="middle" fill="${h?'#DC2626':'#14532D'}" direction="ltr" font-family="Consolas,monospace">${l} = ${v} ${u||'s'}</text>`;g+=row('ti',o.tm.ti,11)+row('tf',o.tm.tf,23,o.tm.hl)+row('Vf',o.tm.vf||'-.---',35,o.tm.hl,'m/s')};
+   const w=S(GX+GW+8,40,Zg),k=S(276,38,6);g+=`<path d="M${w[0]},${w[1]} C${w[0]+10},${w[1]+10} ${k[0]-10},${k[1]+6} ${k[0]},${k[1]}" fill="none" stroke="#1F2937" stroke-width="2"/>`}
+  if(o.lab){g+=lbl(...S(175,20,PZ+20),250,18,'البكرة','start')+lbl(...S(XL,20,(z2+hb+PZ)/2),90,BASE-200,'الخيط','start')+lbl(...S(70,20,TOP-60),20,70,'الحامل','start')+lbl(...S(XL-12,20,z2+12),40,BASE-120,'الكتلة الأخف m₂','start')+lbl(...S(XR+14,20,z1+30),262,48,'الكتلة الأثقل m₁','start')+lbl(...S(XR+8,20,ZP),300,BASE-150,'وسادة الاستقبال','start')+lbl(...S(GX+GW+4,-6,Zg-8),230,BASE+24,'البوابة الضوئية')+lbl(...S(GX-GW+12,20,Zg),70,BASE+24,'الشعاع الضوئي')+lbl(...S(GX+5,56,Zg+22),396,BASE-112,'قضيب وماسك البوابة','end')+lbl(...S(340,24,4),352,BASE+24,'المؤقت الرقمي')}
   if(o.note)g+=`<text x="12" y="18" font-size="12" font-weight="800" fill="#C2410C">${o.note}</text>`;
   return `<svg viewBox="0 0 400 ${BASE+(o.lab?40:14)}" aria-label="جهاز آتوود">${g}</svg>`}
 function awBal(v,lab){return `<svg viewBox="0 0 400 150" aria-label="الميزان الرقمي"><rect x="90" y="70" width="220" height="62" rx="10" fill="#334155" stroke="#0F172A" stroke-width="2"/><rect x="110" y="84" width="130" height="34" rx="5" fill="#BBF7D0" stroke="#14532D"/><text x="175" y="108" font-size="20" font-weight="800" text-anchor="middle" fill="#14532D" direction="ltr" font-family="Consolas,monospace">${v}</text><text x="270" y="108" font-size="16" font-weight="800" fill="#fff">g</text><rect x="120" y="58" width="160" height="12" rx="3" fill="#94A3B8" stroke="#475569"/><rect x="170" y="22" width="60" height="36" rx="4" fill="${lab==='m₁'?'#2563EB':'#60A5FA'}" stroke="#1E3A8A"/><text x="200" y="45" font-size="15" font-weight="800" text-anchor="middle" fill="#fff" direction="ltr">${lab}</text><text x="12" y="146" font-size="12" font-weight="700" fill="var(--muted)">الميزان الرقمي</text></svg>`}
@@ -2107,7 +2113,7 @@ function ceScene(h,s,o){/* h ارتفاع الإفلات (سم) فوق شعاع 
   g+=box(56,156,42,80,T,T+6,'#334155','#64748B','#1F2937','#0F172A');
   g+=box(86,94,54,60,T+6,ZA+30,'#94A3B8','#E2E8F0','#64748B','#475569');
   /* وسادة الاستقبال */
-  g+=box(MX-26,MX+26,MD-12,MD+12,T,T+5,'#1F2937','#F7931E','#C2410C','#9A3412');
+  g+=box(MX-26,MX+26,MD-20,MD+6,T,T+5,'#1F2937','#F7931E','#C2410C','#9A3412');
   /* المسطرة المترية: صفرها عند شعاع البوابة */
   g+=box(94,RX,51,55,G+40*K,G+40*K+6,'#334155','#64748B','#1F2937','#0F172A');
   g+=box(RX,RX+12,48,52,G-4,G+102*K,'#FCD34D','#FEF3C7','#D97706','#A16207');
@@ -2272,6 +2278,715 @@ function ceLab(box){
   calcInit(box);newObj();
 }
 
+function htScene(o){/* o:{px,tz,R,t,lab,hl,cl,pour} مجس الحرارة: px موضع محوره، tz ارتفاع طرفه، R قراءة الشاشة، t زمن ساعة الإيقاف، hl مستوى الماء الساخن 0..1، cl مستوى ماء الكوب الثاني 0..1، pour سكب */
+  o=o||{};const BASE=250,T=14,D=40,CH=78,HX=110,CX=228,RX=30,RY=10,S=(x,d,z)=>[x+d*0.6,BASE-z-d*0.5],P=(x,d,z)=>S(x,d,z).join(',');
+  const poly=(a,f,st)=>`<polygon points="${a.map(p=>P(...p)).join(' ')}" fill="${f}" stroke="${st||'#334155'}" stroke-linejoin="round"/>`;
+  const box=(x0,x1,d0,d1,z0,z1,cf,ct,cs,st)=>poly([[x0,d0,z1],[x1,d0,z1],[x1,d1,z1],[x0,d1,z1]],ct,st)+poly([[x1,d0,z0],[x1,d1,z0],[x1,d1,z1],[x1,d0,z1]],cs,st)+poly([[x0,d0,z0],[x1,d0,z0],[x1,d0,z1],[x0,d0,z1]],cf,st);
+  const lbl=(x,y,tx,ty,t,anc)=>`<line x1="${x}" y1="${y}" x2="${tx}" y2="${ty}" stroke="var(--muted)" stroke-width="1"/><circle cx="${x}" cy="${y}" r="2.4" fill="var(--muted)"/><text x="${tx}" y="${ty+(ty<y?-4:13)}" font-size="13" font-weight="700" text-anchor="${anc||'middle'}" fill="var(--ink)">${t}</text>`;
+  const hl=o.hl==null?1:o.hl,cl=o.cl==null?0.5:o.cl,mix=cl>0.55;
+  let g=`<defs><linearGradient id="htCup" x1="0" x2="1"><stop offset="0" stop-color="#E2E8F0"/><stop offset=".45" stop-color="#FFFFFF"/><stop offset="1" stop-color="#CBD5E1"/></linearGradient><linearGradient id="htRod" x1="0" x2="1"><stop offset="0" stop-color="#94A3B8"/><stop offset=".5" stop-color="#F1F5F9"/><stop offset="1" stop-color="#64748B"/></linearGradient></defs>`;
+  g+=box(6,346,0,86,0,T,'#B7834A','#E9C894','#9A6A3A','#7C4A1F');
+  const back=(x,lv,wc,sc)=>{const [cx,yt]=S(x,D,T+CH);let s=`<ellipse cx="${cx}" cy="${yt}" rx="${RX}" ry="${RY}" fill="#94A3B8" stroke="#475569" stroke-width="1.4"/>`;if(lv>0.03){const [,yw]=S(x,D,T+6+lv*(CH-18));s+=`<ellipse cx="${cx}" cy="${yw}" rx="${RX-3}" ry="${RY-1}" fill="${wc}" stroke="${sc}" stroke-width="1"/>`}return s};
+  const front=x=>{const [cx,yt]=S(x,D,T+CH),[,yb]=S(x,D,T);return `<path d="M${cx-RX},${yt} L${cx-RX},${yb} A${RX},${RY} 0 0 0 ${cx+RX},${yb} L${cx+RX},${yt} A${RX},${RY} 0 0 1 ${cx-RX},${yt} Z" fill="url(#htCup)" stroke="#475569" stroke-width="1.4"/>`};
+  g+=back(HX,hl,'#FCA5A5','#B91C1C')+back(CX,cl,mix?'#D8B4FE':'#93C5FD',mix?'#7E22CE':'#1D4ED8');
+  if(hl>0.05){const [cx,yt]=S(HX,D,T+CH);for(let i=-1;i<=1;i++)g+=`<path d="M${cx+i*12},${yt-6} c-6,-8 6,-14 0,-22 c-6,-8 6,-14 0,-20" fill="none" stroke="#94A3B8" stroke-width="2" opacity=".55"/>`}
+  if(o.pour){const a=S(HX+RX-4,D,T+CH),b=S(CX-6,D,T+CH-8);g+=`<path d="M${a[0]},${a[1]} Q${(a[0]+b[0])/2},${a[1]-40} ${b[0]},${b[1]}" fill="none" stroke="#F87171" stroke-width="5" stroke-linecap="round" opacity=".85"/>`}
+  g+=box(282,340,6,30,T,T+50,'#334155','#475569','#1F2937','#0F172A');
+  {const a=S(286,6,T+40),b=S(336,6,T+14);g+=`<rect x="${a[0]}" y="${a[1]}" width="${b[0]-a[0]}" height="${b[1]-a[1]}" rx="3" fill="#BBF7D0" stroke="#14532D"/><text x="${(a[0]+b[0])/2}" y="${(a[1]+b[1])/2+4}" font-size="11" font-weight="800" text-anchor="middle" fill="#14532D" font-family="Consolas,monospace" direction="ltr">${o.R||'--.-'} °C</text>`}
+  const px=o.px==null?CX:o.px,tz=o.tz==null?T+CH+26:o.tz,[ax,ay]=S(px,D,tz),[,ry]=S(px,D,tz+72),[,hy]=S(px,D,tz+96);
+  {const k=S(300,18,T+50);g+=`<path d="M${ax},${hy} C${ax+30},${hy-36} ${k[0]+10},${k[1]-90} ${k[0]},${k[1]}" fill="none" stroke="#1F2937" stroke-width="2.2"/>`}
+  g+=`<rect x="${ax-2}" y="${ry}" width="4" height="${ay-ry}" fill="url(#htRod)" stroke="#475569" stroke-width=".8"/><circle cx="${ax}" cy="${ay}" r="2.6" fill="#F7931E"/><rect x="${ax-5}" y="${hy}" width="10" height="${ry-hy}" rx="3" fill="#1F2937" stroke="#0F172A"/>`;
+  g+=front(HX)+front(CX);
+  {const inCup=Math.abs(px-HX)<1||Math.abs(px-CX)<1,[,rim]=S(px,D,T+CH);if(inCup&&ay>rim)g+=`<rect x="${ax-2}" y="${ry}" width="4" height="${Math.max(0,rim+RY-ry)}" fill="url(#htRod)" stroke="#475569" stroke-width=".8"/><rect x="${ax-5}" y="${hy}" width="10" height="${ry-hy}" rx="3" fill="#1F2937" stroke="#0F172A"/>`}
+  {const [sx,sy]=S(26,70,T);g+=`<rect x="${sx-4}" y="${sy-44}" width="8" height="6" rx="1.5" fill="#475569"/><circle cx="${sx}" cy="${sy-22}" r="17" fill="#1F2937" stroke="#0F172A"/><circle cx="${sx}" cy="${sy-22}" r="13" fill="#E2E8F0"/><text x="${sx}" y="${sy-18}" font-size="10" font-weight="800" text-anchor="middle" fill="#0F172A" font-family="Consolas,monospace" direction="ltr">${o.t==null?'0':o.t} s</text>`}
+  if(o.lab){const h=S(HX-RX,D,T+40),c=S(CX+RX,D,T+40),[,rt]=S(px,D,tz+40);
+    g+=lbl(h[0],h[1],8,24,'‏ماء ساخن (m₁)‏','start')+lbl(c[0]-4,c[1]-30,170,24,'‏ماء بارد (m₂)‏')+lbl(ax+2,rt,396,60,'مجس الحرارة الرقمي','end')+lbl(...S(320,6,T+30),345,BASE+28,'جهاز القراءة')+lbl(...S(26,70,T+30),6,BASE+28,'ساعة الإيقاف','start')+lbl(...S(HX,D,T+20),150,BASE+28,'كوب عازل')}
+  return `<svg viewBox="0 0 400 ${BASE+(o.lab?44:12)}" aria-label="مجس حرارة رقمي وكوبان: ماء ساخن وماء بارد">${g}</svg>`}
+function htBal(v,lab,hot){const wc=hot?'#FCA5A5':'#93C5FD',sc=hot?'#B91C1C':'#1D4ED8';
+  return `<svg viewBox="0 0 400 170" aria-label="الميزان الرقمي"><rect x="90" y="92" width="220" height="62" rx="10" fill="#334155" stroke="#0F172A" stroke-width="2"/><rect x="110" y="106" width="130" height="34" rx="5" fill="#BBF7D0" stroke="#14532D"/><text x="175" y="130" font-size="20" font-weight="800" text-anchor="middle" fill="#14532D" direction="ltr" font-family="Consolas,monospace">${v}</text><text x="270" y="130" font-size="16" font-weight="800" fill="#fff">g</text><rect x="120" y="80" width="160" height="12" rx="3" fill="#94A3B8" stroke="#475569"/>
+  <path d="M170,24 L172,80 L228,80 L230,24 Z" fill="#F8FAFC" stroke="#475569" stroke-width="1.4"/><path d="M171,40 L172,79 L228,79 L229,40 Z" fill="${wc}" stroke="${sc}"/><ellipse cx="200" cy="24" rx="30" ry="5" fill="#E2E8F0" stroke="#475569"/><text x="200" y="66" font-size="14" font-weight="800" text-anchor="middle" fill="${sc}" direction="ltr">${lab}</text>${hot?'<path d="M188,18 c-5,-6 5,-10 0,-16 M200,18 c-5,-6 5,-10 0,-16 M212,18 c-5,-6 5,-10 0,-16" fill="none" stroke="#94A3B8" stroke-width="1.8" opacity=".6"/>':''}
+  <text x="12" y="166" font-size="12" font-weight="700" fill="var(--muted)">‏الميزان الرقمي (مصفر لكتلة الكوب)‏</text></svg>`}
+function eqLab(box){
+  box.innerHTML=`
+  <div class="intro"><small class="labKind">🧪 تجربة عملية تفاعلية</small><h3>1. اسم التجربة</h3><p class="labName">التحقق من الاتزان الحراري بخلط ماء ساخن وماء بارد</p></div>
+  <div class="tags"><span class="tag">الكتلة m: <i>الميزان الرقمي</i> · g</span><span class="tag">درجة الحرارة T: <i>مجس الحرارة الرقمي</i> · °C</span><span class="tag">الزمن t: <i>ساعة الإيقاف</i> · s</span><span class="tag dv">درجة حرارة الاتزان Tf: <i>مقاسة ومحسوبة</i> · °C</span></div>
+  <div class="intro goals"><h3>2. أهداف التجربة</h3><ol class="gl">
+    <li>التعرف على الميزان الرقمي ومجس الحرارة الرقمي وساعة الإيقاف.</li>
+    <li>قياس كتلتي الماء الساخن <span dir="ltr">m₁</span> والماء البارد <span dir="ltr">m₂</span> بالميزان الرقمي.</li>
+    <li>قياس درجتي حرارة الماء البارد <span dir="ltr">T₂</span> والماء الساخن <span dir="ltr">T₁</span> بمجس الحرارة الرقمي.</li>
+    <li>خلط الماءين وقراءة درجة حرارة الخليط مع الزمن حتى الاتزان الحراري <span dir="ltr">Tf</span>.</li>
+    <li>حساب <span dir="ltr">Tf</span> من قانون الاتزان الحراري ومقارنتها بالقيمة المقاسة.</li></ol></div>
+  <div class="intro"><h3>3. الأدوات والأجهزة المستخدمة</h3>
+    <div class="tool"><div class="stage">${htScene({lab:true,px:228,tz:14+78+26})}</div><div class="vcap">مجس حرارة رقمي وكوبان عازلان: منظر ثلاثي الأبعاد</div>
+    <p><b>ترتيب الأجهزة:</b> كوبان عازلان على الطاولة: الأول فيه ماء ساخن، والثاني فيه ماء بارد. ومجس الحرارة متصل بسلك بجهاز القراءة الرقمي، وساعة الإيقاف لقياس الزمن.</p></div>
+    <div class="tool"><div class="stage">${htBal('150','m₁',true)}</div><p><b>الميزان الرقمي:</b> يصفر بالكوب الفارغ، ثم يقيس كتلة الماء وحده بالجرام بدقة <span dir="ltr">1 g</span>.</p>
+    <p><b>مجس الحرارة الرقمي <span dir="ltr">(Temperature Probe)</span>:</b> طرفه المعدني يوضع في الماء، فتظهر درجة حرارته على شاشة جهاز القراءة بوحدة <span dir="ltr">°C</span> بدقة <span dir="ltr">0.1 °C</span>.</p>
+    <p><b>الكوب العازل:</b> كوب من الفلين يقلل تبادل الحرارة بين الماء والهواء المحيط.</p>
+    <p><b>ساعة الإيقاف:</b> تقيس الزمن <span dir="ltr">t</span> بالثانية من لحظة سكب الماء الساخن.</p></div></div>
+  <h3 class="secH">4. القوانين المستخدمة</h3>
+  <div class="ctl">
+    <div class="law ftl"><div class="ln lw"><b>اتجاه انتقال الحرارة: تنتقل تلقائيا من الجسم الأعلى حرارة إلى الأقل حرارة حتى تتساوى درجتا الحرارة</b><span>T₁ > Tf > T₂</span></div>
+      <div class="ln lw"><b>الاتزان الحراري: مجموع كميات الحرارة المتبادلة صفر</b><span>Q₁ + Q₂ = 0</span></div>
+      <div class="ln lw"><b>الحرارة التي يفقدها الماء الساخن = الحرارة التي يكتسبها الماء البارد</b><span>m₁·c₁·(T₁ − Tf) = m₂·c₂·(Tf − T₂)</span></div>
+      <div class="ln lw"><b>وبما أن المادتين ماء <span dir="ltr">(c₁ = c₂)</span> تختصر الحرارة النوعية، ونحل المعادلة لإيجاد <span dir="ltr">Tf</span></b><span>Tf = (m₁·T₁ + m₂·T₂) / (m₁ + m₂)</span></div>
+      <div class="vfig"><svg viewBox="0 0 340 170" style="width:100%;max-width:420px;display:block;margin:6px auto" role="img" aria-label="انتقال الحرارة من الماء الساخن إلى الماء البارد">
+      <rect x="30" y="50" width="90" height="70" rx="10" fill="#FCA5A5" stroke="#B91C1C"/><text x="75" y="80" text-anchor="middle" font-size="14" font-weight="800" fill="#7F1D1D">ماء ساخن</text><text x="75" y="104" text-anchor="middle" font-size="13" font-weight="800" fill="#7F1D1D" dir="ltr">m₁ , T₁</text>
+      <rect x="220" y="50" width="90" height="70" rx="10" fill="#93C5FD" stroke="#1D4ED8"/><text x="265" y="80" text-anchor="middle" font-size="14" font-weight="800" fill="#1E3A8A">ماء بارد</text><text x="265" y="104" text-anchor="middle" font-size="13" font-weight="800" fill="#1E3A8A" dir="ltr">m₂ , T₂</text>
+      <path d="M128,85 H210 m-10,-8 l10,8 l-10,8" stroke="#F7931E" stroke-width="4" fill="none"/><text x="170" y="74" text-anchor="middle" font-size="15" font-weight="800" fill="#C2410C" dir="ltr">Q</text>
+      <text x="170" y="150" text-anchor="middle" font-size="13" font-weight="700" fill="var(--ink)">‏حتى تتساوى درجتا الحرارة عند Tf (الاتزان الحراري)‏</text>
+      </svg><div class="vcap">يفقد الماء الساخن حرارة ويكتسبها الماء البارد حتى يصل الخليط إلى درجة حرارة واحدة</div></div>
+      <div class="sym"><b>حيث:</b><ul>
+      <li><span class="chip" dir="ltr">m₁</span> كتلة الماء الساخن، و <span class="chip" dir="ltr">m₂</span> كتلة الماء البارد، وتقاسان بالميزان الرقمي بوحدة <span dir="ltr">g</span></li>
+      <li><span class="chip" dir="ltr">c₁ = c₂</span> الحرارة النوعية للماء، وقيمتها <span dir="ltr">4186 J/kg·°C</span>، وتختصر من الطرفين</li>
+      <li><span class="chip" dir="ltr">T₁</span> درجة حرارة الماء الساخن، و <span class="chip" dir="ltr">T₂</span> درجة حرارة الماء البارد، ووحدتهما <span dir="ltr">°C</span></li>
+      <li><span class="chip" dir="ltr">Tf</span> درجة الحرارة النهائية للخليط عند الاتزان الحراري، ووحدتها <span dir="ltr">°C</span></li>
+      <li><span class="chip" dir="ltr">Q₁ , Q₂</span> كمية الحرارة التي يفقدها الماء الساخن ويكتسبها الماء البارد، ووحدتها <span dir="ltr">J</span></li>
+      <li><span class="chip" dir="ltr">t</span> الزمن من لحظة سكب الماء الساخن، ووحدته <span dir="ltr">s</span></li>
+      </ul></div>
+      <p class="slh">ℹ️ لا نحتاج تحويل الكتلة إلى <span dir="ltr">kg</span>، لأن الكتلتين في البسط والمقام بنفس الوحدة.</p></div></div>
+  <h3 class="secH">5. تنفيذ التجربة</h3>
+  <div class="startBand">▶️ لنبدأ التجربة</div>
+  <div class="btns" style="margin-bottom:12px"><button type="button" class="rs" id="nw">🔄 قراءات جديدة</button></div>
+  <div class="ctl"><h3>5.1 القياس والحساب</h3>
+    <h4 class="sbh">أ) قياس كتلة الماء الساخن m₁ بالميزان الرقمي</h4>
+    <div class="stage"><div id="b1"></div></div>
+    <div class="ans"><label>قراءتك لكتلة الماء الساخن m₁</label><input id="m1In" inputmode="decimal" dir="ltr" placeholder="g"><button type="button" class="go" id="m1Ck">تحقق</button></div><div class="fb2" id="m1Fb"></div>
+    <h4 class="sbh">ب) قياس كتلة الماء البارد m₂ بالميزان الرقمي</h4>
+    <div class="stage"><div id="b2"></div></div>
+    <div class="ans"><label>قراءتك لكتلة الماء البارد m₂</label><input id="m2In" inputmode="decimal" dir="ltr" placeholder="g"><button type="button" class="go" id="m2Ck">تحقق</button></div><div class="fb2" id="m2Fb"></div>
+    <h4 class="sbh">ج) قياس درجة حرارة الماء البارد T₂</h4>
+    <div class="stage"><div id="aS"></div><svg id="aZ" viewBox="0 0 400 112"></svg><div class="hud"><span id="aSt"></span></div></div>
+    <div class="row"><label for="aR">إنزال المجس</label><output id="aO"></output><input id="aR" type="range" min="0" max="100" step="1" value="0"></div>
+    <p class="slh">👆 اسحب المؤشر البرتقالي لإنزال مجس الحرارة في الكوب الثاني (ماء بارد)، ثم اقرأ درجة الحرارة من الشاشة المكبرة.</p>
+    <div class="ans"><label>قراءتك لدرجة حرارة الماء البارد T₂</label><input id="aIn" inputmode="decimal" dir="ltr" placeholder="°C"><button type="button" class="go" id="aCk">تحقق</button></div><div class="fb2" id="aFb"></div>
+    <h4 class="sbh">د) قياس درجة حرارة الماء الساخن T₁</h4>
+    <div class="stage"><div id="bS"></div><svg id="bZ" viewBox="0 0 400 112"></svg><div class="hud"><span id="bSt"></span></div></div>
+    <div class="row"><label for="bR">نقل المجس</label><output id="bO"></output><input id="bR" type="range" min="0" max="100" step="1" value="0"></div>
+    <p class="slh">👆 اسحب المؤشر البرتقالي لنقل مجس الحرارة إلى الكوب الأول (ماء ساخن) حتى تثبت القراءة، ثم اقرأ درجة الحرارة.</p>
+    <div class="ans"><label>قراءتك لدرجة حرارة الماء الساخن T₁</label><input id="bIn" inputmode="decimal" dir="ltr" placeholder="°C"><button type="button" class="go" id="bCk">تحقق</button></div><div class="fb2" id="bFb"></div>
+    <h4 class="sbh">هـ) خلط الماءين وقراءة درجة حرارة الخليط مع الزمن</h4>
+    <div class="stage"><div id="cS"></div><svg id="cZ" viewBox="0 0 400 112"></svg><div class="hud"><span id="cSt"></span></div></div>
+    <div class="row"><label for="cR">نقل المجس</label><output id="cO"></output><input id="cR" type="range" min="0" max="100" step="1" value="0"></div>
+    <div class="row"><label for="pR">سكب الماء الساخن</label><output id="pO"></output><input id="pR" type="range" min="0" max="100" step="1" value="0"></div>
+    <div class="row"><label for="tR">ساعة الإيقاف</label><output id="tO"></output><input id="tR" type="range" min="0" max="60" step="5" value="0"></div>
+    <p class="slh">👆 انقل المجس إلى الكوب الثاني (ماء بارد)، ثم اسكب الماء الساخن فيه، ثم اسحب مؤشر ساعة الإيقاف إلى كل زمن واقرأ درجة حرارة الخليط.</p>
+    <div class="ans"><label>درجة حرارة الخليط عند <bdi dir="ltr">t = 10 s</bdi></label><input id="k1" inputmode="decimal" dir="ltr" placeholder="°C"><button type="button" class="go" id="k1Ck">تحقق</button></div><div class="fb2" id="k1Fb"></div>
+    <div class="ans"><label>درجة حرارة الخليط عند <bdi dir="ltr">t = 30 s</bdi></label><input id="k2" inputmode="decimal" dir="ltr" placeholder="°C"><button type="button" class="go" id="k2Ck">تحقق</button></div><div class="fb2" id="k2Fb"></div>
+    <div class="ans"><label>درجة الحرارة عند الاتزان <bdi dir="ltr">Tf</bdi> عند <bdi dir="ltr">t = 60 s</bdi></label><input id="k3" inputmode="decimal" dir="ltr" placeholder="°C"><button type="button" class="go" id="k3Ck">تحقق</button></div><div class="fb2" id="k3Fb"></div>
+    <h4 class="sbh">و) حساب درجة حرارة الاتزان Tf من القانون</h4>
+    <div class="cstep"><div class="law ftl"><div class="ln lw"><b>التعويض</b><span id="sbT" style="white-space:pre-line;line-height:2">Tf = (m₁·T₁ + m₂·T₂) / (m₁ + m₂)</span></div></div>
+    <p class="slh">🧮 احسب الناتج بنفسك بالآلة الحاسبة، ثم ضع النتيجة في الخانة.</p><div class="labCalc"></div>
+    <div class="ans"><label>احسب Tf من القانون بوحدة °C</label><input id="cT" inputmode="decimal" dir="ltr" placeholder="°C"><button type="button" class="go" id="cTk">تحقق</button></div><div class="fb2" id="cTf"></div></div>
+  </div>
+  <div class="ctl"><h3>5.2 المقارنة بين درجة حرارة الاتزان المقاسة والمحسوبة</h3>
+    <div class="law ftl"><div class="ln lw"><b>المقارنة</b><span id="cmpS" style="white-space:pre-line;line-height:2">أكمل الخطوات في 5.1</span></div></div>
+    <p class="rn" id="cmpN"></p></div>
+  <div class="ctl res"><h3>6. نتائج التجربة</h3>
+    <div class="tw"><table class="rt"><thead><tr><th>الكمية</th><th>القيمة</th></tr></thead>
+    <tbody><tr><td>كتلة الماء الساخن m₁</td><td id="r1">—</td></tr>
+    <tr><td>كتلة الماء البارد m₂</td><td id="r2">—</td></tr>
+    <tr><td>درجة حرارة الماء البارد T₂</td><td id="r3">—</td></tr>
+    <tr><td>درجة حرارة الماء الساخن T₁</td><td id="r4">—</td></tr>
+    <tr><td>الخليط عند <bdi dir="ltr" style="white-space:nowrap">t = 10 s</bdi></td><td id="r5">—</td></tr>
+    <tr><td>الخليط عند <bdi dir="ltr" style="white-space:nowrap">t = 30 s</bdi></td><td id="r6">—</td></tr>
+    <tr><td>Tf المقاسة بالمجس</td><td id="r7">—</td></tr>
+    <tr><td>Tf المحسوبة من القانون</td><td id="r8">—</td></tr></tbody></table></div>
+    <div id="htC"></div>
+    <p class="rn" id="rNote">تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.</p></div>`;
+  const $=id=>box.querySelector('#'+id);
+  const num=v=>parseFloat(String(v).replace(/[٠-٩]/g,c=>'٠١٢٣٤٥٦٧٨٩'.indexOf(c)).replace('٫','.').replace(',','.'));
+  const fb=(id,ok,msg)=>{$(id).textContent=msg;$(id).className='fb2 '+(ok?'ok':'no')};
+  const fb0=id=>{$(id).textContent='';$(id).className='fb2'};
+  const r1=x=>Math.round(x*10)/10,fx=(x,n)=>String(+x.toFixed(n));
+  const TT=14,CH=78,HX=110,CX=228,ZIN=TT+20,ZUP=TT+CH+26,TAU=8,TS=[10,30,60];
+  let M1,M2,T1,T2,TFM,ok={};
+  const TFC=()=>(M1*T1+M2*T2)/(M1+M2),Tt=t=>r1(TFM+(T2-TFM)*Math.exp(-t/TAU));
+  const path=(v,x0,x1)=>v<=30?{px:x0,tz:ZIN+v/30*(ZUP-ZIN)}:v<=70?{px:x0+(x1-x0)*(v-30)/40,tz:ZUP}:{px:x1,tz:ZUP-(v-70)/30*(ZUP-ZIN)};
+  const zoom=(lines,cap)=>`<rect x="20" y="4" width="360" height="86" rx="14" fill="#334155" stroke="#0F172A" stroke-width="2"/>`+lines+`<text x="200" y="106" font-size="12" font-weight="700" text-anchor="middle" fill="var(--muted)">${cap}</text>`;
+  const scr=(x,w,txt)=>`<rect x="${x}" y="16" width="${w}" height="62" rx="8" fill="#BBF7D0" stroke="#14532D"/><text x="${x+w/2}" y="57" font-size="24" font-weight="800" text-anchor="middle" fill="#14532D" direction="ltr" font-family="Consolas,monospace">${txt}</text>`;
+  const CL=()=>M2/(M1+M2);
+  function newObj(){M1=100+10*Math.floor(Math.random()*11);M2=100+10*Math.floor(Math.random()*11);T1=r1(60+Math.random()*20);T2=r1(20+Math.random()*6);TFM=r1(TFC()-(0.3+Math.random()*0.5));ok={};
+    ['aR','bR','cR','pR','tR'].forEach(k=>$(k).value=0);['m1In','m2In','aIn','bIn','k1','k2','k3','cT'].forEach(k=>$(k).value='');['m1Fb','m2Fb','aFb','bFb','k1Fb','k2Fb','k3Fb','cTf'].forEach(fb0);
+    $('b1').innerHTML=htBal(M1,'m₁',true);$('b2').innerHTML=htBal(M2,'m₂',false);aDraw();bDraw();cDraw();sub();results()}
+  function aDraw(){const v=+$('aR').value,on=v>=100,p=on?ZIN:ZUP-v/100*(ZUP-ZIN);
+    $('aO').textContent=on?'في الماء':'';$('aSt').textContent=on?'✓ المجس في الماء البارد، اقرأ درجة الحرارة T₂':'أنزل المجس حتى يستقر في الماء';
+    $('aS').innerHTML=htScene({px:CX,tz:p,R:on?T2.toFixed(1):null,cl:CL()});
+    $('aZ').innerHTML=zoom(scr(56,288,`T = ${on?T2.toFixed(1):'--.-'} °C`),'‏شاشة جهاز القراءة (مكبرة)‏')}
+  function bDraw(){const v=+$('bR').value,on=v>=100,q=path(100-v,HX,CX);
+    $('bO').textContent=on?'في الماء الساخن':'';$('bSt').textContent=on?'✓ ثبتت القراءة، اقرأ درجة حرارة الماء الساخن T₁':v>30&&v<70?'المجس في الهواء…':'انقل المجس إلى الكوب الأول (ماء ساخن)';
+    $('bS').innerHTML=htScene({px:q.px,tz:q.tz,R:on?T1.toFixed(1):null,cl:CL()});
+    $('bZ').innerHTML=zoom(scr(56,288,`T = ${on?T1.toFixed(1):'--.-'} °C`),'‏شاشة جهاز القراءة (مكبرة)‏')}
+  function cDraw(){const v=+$('cR').value,in2=v>=100;if(!in2)$('pR').value=0;const pr=+$('pR').value,mixed=pr>=100;if(!mixed)$('tR').value=0;const t=+$('tR').value;
+    const q=path(100-v,CX,HX),hl=1-pr/100,cl=CL()+(1-CL())*pr/100,R=!in2?'--.-':mixed?Tt(t).toFixed(1):T2.toFixed(1);
+    $('cO').textContent=in2?'في الماء البارد':'';$('pO').textContent=mixed?'تم السكب':pr>0?'يسكب…':'';$('tO').textContent=t+' s';
+    $('cSt').textContent=!in2?'انقل المجس من الماء الساخن إلى الكوب الثاني (ماء بارد)':!mixed?'اسكب الماء الساخن كاملا في الكوب الثاني':t===0?'✓ تم الخلط، شغل ساعة الإيقاف':t>=60?'✓ ثبتت القراءة: الاتزان الحراري':'درجة حرارة الخليط ترتفع…';
+    $('cS').innerHTML=htScene({px:q.px,tz:q.tz,R:in2?R:null,t,hl,cl,pour:pr>0&&pr<100});
+    $('cZ').innerHTML=zoom(scr(36,210,`T = ${R} °C`)+scr(256,108,`${t} s`),'‏شاشة جهاز القراءة وساعة الإيقاف (مكبرتان)‏')}
+  function sub(){$('sbT').textContent=ok.m1&&ok.m2&&ok.a&&ok.b?['Tf = (m₁·T₁ + m₂·T₂) / (m₁ + m₂)',E(`Tf = (${M1} × ${T1.toFixed(1)} + ${M2} × ${T2.toFixed(1)}) / (${M1} + ${M2})`)].join('\n'):'Tf = (m₁·T₁ + m₂·T₂) / (m₁ + m₂)'}
+  function chart(){if(!ok.k3){$('htC').innerHTML='';return}
+    const y0=Math.floor(T2/10)*10,y1=Math.ceil((TFC()+2)/10)*10,X0=48,Yb=232,W=300,H=200,X=t=>X0+t/60*W,Y=v=>Yb-(v-y0)/(y1-y0)*H;let s='';
+    for(let t=0;t<=60;t+=10)s+=`<line x1="${X(t)}" y1="${Yb}" x2="${X(t)}" y2="${Yb-H}" stroke="var(--line)"/><text x="${X(t)}" y="${Yb+16}" font-size="11" text-anchor="middle" fill="var(--ink)">${t}</text>`;
+    for(let v=y0;v<=y1;v+=5)s+=`<line x1="${X0}" y1="${Y(v)}" x2="${X0+W}" y2="${Y(v)}" stroke="var(--line)"/><text x="${X0-6}" y="${Y(v)+4}" font-size="11" text-anchor="end" fill="var(--ink)">${v}</text>`;
+    s+=`<line x1="${X0}" y1="${Yb}" x2="${X0+W+8}" y2="${Yb}" stroke="var(--ink)" stroke-width="1.6"/><line x1="${X0}" y1="${Yb}" x2="${X0}" y2="${Yb-H-8}" stroke="var(--ink)" stroke-width="1.6"/>`;
+    s+=`<text x="${X0+W}" y="${Yb+34}" font-size="13" font-weight="700" text-anchor="end" fill="var(--ink)">t (s)</text><text x="${X0+4}" y="${Yb-H-12}" font-size="13" font-weight="700" fill="var(--ink)">T (°C)</text>`;
+    if(ok.cT)s+=`<line x1="${X0}" y1="${Y(TFC())}" x2="${X0+W}" y2="${Y(TFC())}" stroke="#2563EB" stroke-width="1.6" stroke-dasharray="6 4"/><text x="${X(26)}" y="${Y(TFC())-8}" font-size="12" font-weight="800" text-anchor="end" fill="#2563EB">المحسوبة</text><text x="${X(28)}" y="${Y(TFC())-8}" font-size="12" font-weight="800" text-anchor="start" fill="#2563EB">Tf = ${fx(TFC(),1)} °C</text>`;
+    let d='';for(let t=0;t<=60;t+=1)d+=(t?'L':'M')+X(t).toFixed(1)+','+Y(TFM+(T2-TFM)*Math.exp(-t/TAU)).toFixed(1);s+=`<path d="${d}" fill="none" stroke="#F7931E" stroke-width="3"/>`;
+    [[0,T2],[10,Tt(10)],[30,Tt(30)],[60,Tt(60)]].forEach(([t,v])=>{s+=`<circle cx="${X(t)}" cy="${Y(v)}" r="5.5" fill="#7E22CE" stroke="#fff" stroke-width="2"/><text x="${X(t)+6}" y="${Y(v)+18}" font-size="11" font-weight="700" fill="#6B21A8">${v.toFixed(1)}</text>`});
+    $('htC').innerHTML=`<div class="stage"><svg viewBox="0 0 380 280" style="direction:ltr;display:block;width:100%;height:auto" aria-label="منحنى درجة حرارة الخليط مع الزمن">${s}</svg></div><div class="vcap">ترتفع درجة حرارة الخليط ثم تثبت عند درجة حرارة الاتزان Tf</div>`}
+  function results(){
+    $('r1').textContent=ok.m1?E(M1+' g'):'—';$('r2').textContent=ok.m2?E(M2+' g'):'—';$('r3').textContent=ok.a?E(T2.toFixed(1)+' °C'):'—';$('r4').textContent=ok.b?E(T1.toFixed(1)+' °C'):'—';
+    $('r5').textContent=ok.k1?E(Tt(10).toFixed(1)+' °C'):'—';$('r6').textContent=ok.k2?E(Tt(30).toFixed(1)+' °C'):'—';$('r7').textContent=ok.k3?E(TFM.toFixed(1)+' °C'):'—';$('r8').textContent=ok.cT?E(fx(TFC(),1)+' °C'):'—';
+    const all=ok.k3&&ok.cT;
+    $('cmpS').textContent=all?['درجة حرارة الاتزان المقاسة بالمجس:',E(`Tf = ${TFM.toFixed(1)} °C`),'درجة حرارة الاتزان المحسوبة من القانون:',E(`Tf = ${fx(TFC(),1)} °C`),'الفرق:',E(`${fx(TFC(),1)} − ${TFM.toFixed(1)} = ${fx(r1(TFC())-TFM,1)} °C`)].join('\n'):'أكمل الخطوات في 5.1';
+    $('cmpN').textContent=all?'درجة حرارة الاتزان المقاسة قريبة من المحسوبة، وأقل منها قليلا لأن جزءا صغيرا من الحرارة انتقل إلى الكوب والهواء المحيط.':'';
+    chart();
+    $('rNote').innerHTML=all?'الاستنتاج: فقد الماء الساخن حرارة واكتسبها الماء البارد حتى وصل الخليط إلى درجة حرارة واحدة <span dir="ltr">Tf</span> بين <span dir="ltr">T₂</span> و <span dir="ltr">T₁</span>، وهذا هو الاتزان الحراري، والحرارة المفقودة تساوي الحرارة المكتسبة <span dir="ltr" style="white-space:nowrap">Q₁ + Q₂ = 0</span>.':'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
+  $('aR').oninput=aDraw;$('bR').oninput=bDraw;['cR','pR','tR'].forEach(k=>$(k).oninput=cDraw);
+  const mk=(inp,f,val,key,lab)=>{const v=num($(inp).value);if(isNaN(v))return fb(f,false,'اكتب قراءتك بالجرام.');
+    if(Math.abs(v-val)<0.5){ok[key]=true;fb(f,true,'✓ قراءة صحيحة:\n'+E(`${lab} = ${val} g`))}else fb(f,false,'✗ اقرأ الرقم الظاهر على شاشة الميزان.');sub();results()};
+  $('m1Ck').onclick=()=>mk('m1In','m1Fb',M1,'m1','m₁');$('m2Ck').onclick=()=>mk('m2In','m2Fb',M2,'m2','m₂');
+  const rd=(inp,f,need,needMsg,val,key,lab)=>{if(!need())return fb(f,false,needMsg);const v=num($(inp).value);if(isNaN(v))return fb(f,false,'اكتب قراءتك بوحدة °C.');
+    if(Math.abs(v-val)<0.05){ok[key]=true;fb(f,true,'✓ قراءة صحيحة:\n'+E(`${lab} = ${val.toFixed(1)} °C`))}else fb(f,false,'✗ اكتب درجة الحرارة كما تظهر على الشاشة المكبرة، برقم عشري واحد.');sub();results()};
+  $('aCk').onclick=()=>rd('aIn','aFb',()=>+$('aR').value>=100,'أنزل المجس حتى يستقر في الماء أولا.',T2,'a','T₂');
+  $('bCk').onclick=()=>rd('bIn','bFb',()=>+$('bR').value>=100,'انقل المجس إلى الماء الساخن حتى تثبت القراءة أولا.',T1,'b','T₁');
+  [['k1',0],['k2',1],['k3',2]].forEach(([k,i])=>{$(k+'Ck').onclick=()=>{const t=TS[i];
+    rd(k,k+'Fb',()=>+$('pR').value>=100&&+$('tR').value===t,+$('cR').value<100?'انقل المجس إلى الماء البارد أولا.':+$('pR').value<100?'اسكب الماء الساخن كاملا أولا.':`اسحب ساعة الإيقاف إلى t = ${t} s أولا.`,Tt(t),k,i===2?'Tf':`T (${t} s)`)}});
+  $('cTk').onclick=()=>{if(!(ok.m1&&ok.m2&&ok.a&&ok.b))return fb('cTf',false,'أكمل قياس الكتلتين ودرجتي الحرارة أولا.');const v=num($('cT').value);if(isNaN(v))return fb('cTf',false,'اكتب الناتج بوحدة °C.');
+    const x=TFC();if(Math.abs(v-x)<=0.1){ok.cT=true;fb('cTf',true,'✓ إجابة صحيحة:\n'+E(`Tf = (${M1} × ${T1.toFixed(1)} + ${M2} × ${T2.toFixed(1)}) / ${M1+M2}`)+'\n'+E(`Tf = ${fx(M1*T1+M2*T2,1)} / ${M1+M2} = ${fx(x,1)} °C`))}
+    else fb('cTf',false,'✗ اضرب كل كتلة في درجة حرارتها واجمع الناتجين:\n'+E(`${M1} × ${T1.toFixed(1)} + ${M2} × ${T2.toFixed(1)} = ${fx(M1*T1+M2*T2,1)}`)+'\nثم اقسم على مجموع الكتلتين '+E(`${M1} + ${M2} = ${M1+M2}`));sub();results()};
+  $('nw').onclick=newObj;
+  calcInit(box);newObj();
+}
+
+/* ===== أدوات مشتركة لتجارب الوحدة الثالثة (الفيزياء الحرارية) ===== */
+function hxScene(o){/* o:{cups:[{x,wc,sc,lv,ice,boil,steam}],probe:{x,tz},R,heater:{x,on},jm,sw,pour:[x0,x1],lbls:[[x,d,z,tx,ty,t,anc]]} */
+  o=o||{};const BASE=250,T=14,D=40,CH=78,RX=30,RY=10,S=(x,d,z)=>[x+d*0.6,BASE-z-d*0.5],P=(x,d,z)=>S(x,d,z).join(',');
+  const poly=(a,f,st)=>`<polygon points="${a.map(p=>P(...p)).join(' ')}" fill="${f}" stroke="${st||'#334155'}" stroke-linejoin="round"/>`;
+  const box=(x0,x1,d0,d1,z0,z1,cf,ct,cs,st)=>poly([[x0,d0,z1],[x1,d0,z1],[x1,d1,z1],[x0,d1,z1]],ct,st)+poly([[x1,d0,z0],[x1,d1,z0],[x1,d1,z1],[x1,d0,z1]],cs,st)+poly([[x0,d0,z0],[x1,d0,z0],[x1,d0,z1],[x0,d0,z1]],cf,st);
+  const lbl=(x,y,tx,ty,t,anc)=>`<line x1="${x}" y1="${y}" x2="${tx}" y2="${ty}" stroke="var(--muted)" stroke-width="1"/><circle cx="${x}" cy="${y}" r="2.4" fill="var(--muted)"/><text x="${tx}" y="${ty+(ty<y?-4:13)}" font-size="13" font-weight="700" text-anchor="${anc||'middle'}" fill="var(--ink)">${t}</text>`;
+  const cups=o.cups||[];
+  let g=`<defs><linearGradient id="hxCup" x1="0" x2="1"><stop offset="0" stop-color="#E2E8F0"/><stop offset=".45" stop-color="#FFFFFF"/><stop offset="1" stop-color="#CBD5E1"/></linearGradient><linearGradient id="hxRod" x1="0" x2="1"><stop offset="0" stop-color="#94A3B8"/><stop offset=".5" stop-color="#F1F5F9"/><stop offset="1" stop-color="#64748B"/></linearGradient></defs>`;
+  g+=box(6,346,0,86,0,T,'#B7834A','#E9C894','#9A6A3A','#7C4A1F');
+  /* عداد الطاقة (الجول ميتر) خلف الكوب */
+  if(o.jm!=null){g+=box(36,112,52,72,T,T+44,'#1E3A8A','#3B82F6','#1E40AF','#172554');const a=S(40,52,T+36),b=S(108,52,T+14);
+    g+=`<rect x="${a[0]}" y="${a[1]}" width="${b[0]-a[0]}" height="${b[1]-a[1]}" rx="3" fill="#BBF7D0" stroke="#14532D"/><text x="${(a[0]+b[0])/2}" y="${(a[1]+b[1])/2+4}" font-size="10.5" font-weight="800" text-anchor="middle" fill="#14532D" font-family="Consolas,monospace" direction="ltr">${o.jm} J</text>`;
+    const p=S(36,62,T+30);g+=`<path d="M${p[0]},${p[1]} c-14,4 -20,20 -24,34" fill="none" stroke="#1F2937" stroke-width="2"/><rect x="${p[0]-30}" y="${p[1]+32}" width="12" height="8" rx="2" fill="#334155"/>`}
+  cups.forEach(c=>{const [cx,yt]=S(c.x,D,T+CH);g+=`<ellipse cx="${cx}" cy="${yt}" rx="${RX}" ry="${RY}" fill="#94A3B8" stroke="#475569" stroke-width="1.4"/>`;
+    if(c.lv>0.03){const [,yw]=S(c.x,D,T+CH-5-(1-Math.min(1,c.lv))*6);g+=`<ellipse cx="${cx}" cy="${yw}" rx="${RX-3}" ry="${RY-1}" fill="${c.wc}" stroke="${c.sc}" stroke-width="1"/>`;
+      if(c.boil)for(let i=0;i<7;i++)g+=`<circle cx="${cx-18+i*6}" cy="${yw-3+(i%3)*3}" r="${1.6+(i%2)}" fill="#fff" stroke="${c.sc}" stroke-width=".6"/>`;
+      if(c.ice){const k=c.isz==null?1:c.isz;for(let i=0;i<c.ice;i++){const w=10*k,x=cx-20+i*13,y=yw-5+(i%2)*4;if(w>1.5)g+=`<rect x="${x}" y="${y-w/2}" width="${w}" height="${w}" rx="2" fill="#F0F9FF" stroke="#7DD3FC" stroke-width="1.2" transform="rotate(${i*17-10} ${x+w/2} ${y})"/>`}}}
+    else if(c.ice){const [,yb]=S(c.x,D,T+CH-4);for(let i=0;i<c.ice;i++){const x=cx-20+(i%3)*13,y=yb-4-Math.floor(i/3)*10;g+=`<rect x="${x}" y="${y-5}" width="10" height="10" rx="2" fill="#F0F9FF" stroke="#7DD3FC" stroke-width="1.2" transform="rotate(${i*17-10} ${x+5} ${y})"/>`}}
+    if(c.steam){for(let i=-1;i<=1;i++)g+=`<path d="M${cx+i*12},${yt-6} c-6,-8 6,-14 0,-22 c-6,-8 6,-14 0,-20" fill="none" stroke="#94A3B8" stroke-width="2" opacity=".55"/>`}});
+  if(o.pour){const a=S(o.pour[0]+RX-4,D,T+CH),b=S(o.pour[1]-6,D,T+CH-8);g+=`<path d="M${a[0]},${a[1]} Q${(a[0]+b[0])/2},${a[1]-40} ${b[0]},${b[1]}" fill="none" stroke="${o.pourC||'#F87171'}" stroke-width="5" stroke-linecap="round" opacity=".85"/>`}
+  if(o.flyIce){const [x,y]=S(o.flyIce[0],D,o.flyIce[1]);for(let i=0;i<3;i++)g+=`<rect x="${x-16+i*12}" y="${y-5}" width="10" height="10" rx="2" fill="#F0F9FF" stroke="#7DD3FC" stroke-width="1.2"/>`}
+  /* جهاز القراءة الرقمي */
+  if(o.probe){g+=box(282,340,6,30,T,T+50,'#334155','#475569','#1F2937','#0F172A');const a=S(286,6,T+40),b=S(336,6,T+14);
+    g+=`<rect x="${a[0]}" y="${a[1]}" width="${b[0]-a[0]}" height="${b[1]-a[1]}" rx="3" fill="#BBF7D0" stroke="#14532D"/><text x="${(a[0]+b[0])/2}" y="${(a[1]+b[1])/2+4}" font-size="11" font-weight="800" text-anchor="middle" fill="#14532D" font-family="Consolas,monospace" direction="ltr">${o.R||'--.-'} °C</text>`}
+  const rimFix=[];
+  /* السخان الكهربائي (سخان غمر) */
+  if(o.heater){const hx=o.heater.x,on=o.heater.on,[a,yb]=S(hx-8,D,T+10),[b]=S(hx+8,D,T+10),[,yh]=S(hx,D,T+CH+34),[,yh2]=S(hx,D,T+CH+50);
+    let z=`M${a},${yh} V${yb-8}`;for(let i=0;i<5;i++)z+=` q${8},${6} 16,0 q${-8},${-6} -16,0`;z+=` M${b},${yb-8} V${yh}`;
+    const hs=`<path d="${z}" fill="none" stroke="${on?'#EF4444':'#64748B'}" stroke-width="3"/><rect x="${a-4}" y="${yh2}" width="${b-a+8}" height="${yh-yh2}" rx="3" fill="#1F2937"/>`;
+    g+=hs;rimFix.push(`<path d="M${a},${yh} V${S(hx,D,T+CH)[1]+RY} M${b},${yh} V${S(hx,D,T+CH)[1]+RY}" fill="none" stroke="${on?'#EF4444':'#64748B'}" stroke-width="3"/><rect x="${a-4}" y="${yh2}" width="${b-a+8}" height="${yh-yh2}" rx="3" fill="#1F2937"/>`);
+    if(o.jm!=null){const k=S(112,62,T+40);g+=`<path d="M${(a+b)/2},${yh2} C${(a+b)/2-10},${yh2-30} ${k[0]+20},${k[1]-30} ${k[0]},${k[1]}" fill="none" stroke="#1F2937" stroke-width="2.2"/>`}}
+  if(o.probe){const px=o.probe.x,tz=o.probe.tz,[ax,ay]=S(px,D,tz),[,ry]=S(px,D,tz+72),[,hy]=S(px,D,tz+96);
+    {const k=S(300,18,T+50);g+=`<path d="M${ax},${hy} C${ax+30},${hy-36} ${k[0]+10},${k[1]-90} ${k[0]},${k[1]}" fill="none" stroke="#1F2937" stroke-width="2.2"/>`}
+    g+=`<rect x="${ax-2}" y="${ry}" width="4" height="${ay-ry}" fill="url(#hxRod)" stroke="#475569" stroke-width=".8"/><circle cx="${ax}" cy="${ay}" r="2.6" fill="#F7931E"/><rect x="${ax-5}" y="${hy}" width="10" height="${ry-hy}" rx="3" fill="#1F2937" stroke="#0F172A"/>`;
+    const [,rim]=S(px,D,T+CH);if(cups.some(c=>Math.abs(c.x-px)<1)&&ay>rim)rimFix.push(`<rect x="${ax-2}" y="${ry}" width="4" height="${Math.max(0,rim+RY-ry)}" fill="url(#hxRod)" stroke="#475569" stroke-width=".8"/><rect x="${ax-5}" y="${hy}" width="10" height="${ry-hy}" rx="3" fill="#1F2937" stroke="#0F172A"/>`)}
+  cups.forEach(c=>{const [cx,yt]=S(c.x,D,T+CH),[,yb]=S(c.x,D,T);g+=`<path d="M${cx-RX},${yt} L${cx-RX},${yb} A${RX},${RY} 0 0 0 ${cx+RX},${yb} L${cx+RX},${yt} A${RX},${RY} 0 0 1 ${cx-RX},${yt} Z" fill="url(#hxCup)" stroke="#475569" stroke-width="1.4"/>`});
+  g+=rimFix.join('');
+  if(o.sw!=null){const [sx,sy]=S(26,70,T);g+=`<rect x="${sx-4}" y="${sy-44}" width="8" height="6" rx="1.5" fill="#475569"/><circle cx="${sx}" cy="${sy-22}" r="17" fill="#1F2937" stroke="#0F172A"/><circle cx="${sx}" cy="${sy-22}" r="13" fill="#E2E8F0"/><text x="${sx}" y="${sy-18}" font-size="10" font-weight="800" text-anchor="middle" fill="#0F172A" font-family="Consolas,monospace" direction="ltr">${o.sw} s</text>`}
+  (o.lbls||[]).forEach(([x,d,z,tx,ty,t,anc])=>{g+=lbl(...S(x,d,z),tx,ty,t,anc)});
+  return `<svg viewBox="0 0 400 ${BASE+((o.lbls||[]).length?44:12)}" aria-label="${o.aria||'أدوات تجربة حرارية'}">${g}</svg>`}
+function hxBal(v,lab,kind){/* kind: hot|cold|ice */const wc=kind==='hot'?'#FCA5A5':kind==='warm'?'#FECACA':'#93C5FD',sc=kind==='hot'||kind==='warm'?'#B91C1C':'#1D4ED8';
+  let cup=`<path d="M170,24 L172,80 L228,80 L230,24 Z" fill="#F8FAFC" stroke="#475569" stroke-width="1.4"/>`;
+  if(kind==='ice')for(let i=0;i<6;i++){const x=176+(i%3)*16,y=60-Math.floor(i/3)*16;cup+=`<rect x="${x}" y="${y}" width="13" height="13" rx="2" fill="#F0F9FF" stroke="#0EA5E9" stroke-width="1.2" transform="rotate(${i*13-8} ${x+6} ${y+6})"/>`}
+  else cup+=`<path d="M171,40 L172,79 L228,79 L229,40 Z" fill="${wc}" stroke="${sc}"/>`;
+  return `<svg viewBox="0 0 400 170" aria-label="الميزان الرقمي"><rect x="90" y="92" width="220" height="62" rx="10" fill="#334155" stroke="#0F172A" stroke-width="2"/><rect x="110" y="106" width="130" height="34" rx="5" fill="#BBF7D0" stroke="#14532D"/><text x="175" y="130" font-size="20" font-weight="800" text-anchor="middle" fill="#14532D" direction="ltr" font-family="Consolas,monospace">${v}</text><text x="270" y="130" font-size="16" font-weight="800" fill="#fff">g</text><rect x="120" y="80" width="160" height="12" rx="3" fill="#94A3B8" stroke="#475569"/>${cup}<ellipse cx="200" cy="24" rx="30" ry="5" fill="#E2E8F0" stroke="#475569"/>${kind!=='ice'?`<text x="200" y="66" font-size="14" font-weight="800" text-anchor="middle" fill="${sc}" direction="ltr">${lab}</text>`:''}
+  <text x="12" y="166" font-size="12" font-weight="700" fill="var(--muted)">‏الميزان الرقمي (مصفر لكتلة الكوب)‏</text></svg>`}
+const hxZoom=(scrs,cap)=>`<rect x="20" y="4" width="360" height="86" rx="14" fill="#334155" stroke="#0F172A" stroke-width="2"/>`+scrs.map(([x,w,txt])=>`<rect x="${x}" y="16" width="${w}" height="62" rx="8" fill="#BBF7D0" stroke="#14532D"/><text x="${x+w/2}" y="57" font-size="${w<150?20:24}" font-weight="800" text-anchor="middle" fill="#14532D" direction="ltr" font-family="Consolas,monospace">${txt}</text>`).join('')+`<text x="200" y="106" font-size="12" font-weight="700" text-anchor="middle" fill="var(--muted)">‏${cap}‏</text>`;
+function hxKit(box){/* أدوات مشتركة داخل كل تجربة */
+  const $=id=>box.querySelector('#'+id);
+  const num=v=>parseFloat(String(v).replace(/[٠-٩]/g,c=>'٠١٢٣٤٥٦٧٨٩'.indexOf(c)).replace('٫','.').replace(',','.'));
+  const fb=(id,ok,msg)=>{$(id).textContent=msg;$(id).className='fb2 '+(ok?'ok':'no')};
+  const fb0=id=>{$(id).textContent='';$(id).className='fb2'};
+  return {$,num,fb,fb0,r1:x=>Math.round(x*10)/10,fx:(x,n)=>String(+(+x).toFixed(n))}}
+const hxCalcStep=(id,lawTxt,label,unit)=>`<div class="cstep"><div class="law ftl"><div class="ln lw"><b>التعويض</b><span id="sb${id}" style="white-space:pre-line;line-height:2">${lawTxt}</span></div></div>
+    <p class="slh">🧮 احسب الناتج بنفسك بالآلة الحاسبة، ثم ضع النتيجة في الخانة.</p><div class="labCalc"></div>
+    <div class="ans"><label>${label}</label><input id="c${id}" inputmode="decimal" dir="ltr" placeholder="${unit}"><button type="button" class="go" id="c${id}k">تحقق</button></div><div class="fb2" id="c${id}f"></div></div>`;
+const hxRow=(id,lab)=>`<div class="row"><label for="${id}">${lab}</label><output id="${id}O"></output><input id="${id}" type="range" min="0" max="100" step="1" value="0"></div>`;
+const hxAns=(id,lab,unit)=>`<div class="ans"><label>${lab}</label><input id="${id}" inputmode="decimal" dir="ltr" placeholder="${unit}"><button type="button" class="go" id="${id}Ck">تحقق</button></div><div class="fb2" id="${id}Fb"></div>`;
+const HX_T=14,HX_CH=78,HX_IN=34,HX_UP=14+78+26;
+const hxPath=(v,x0,x1)=>v<=30?{x:x0,tz:HX_IN+v/30*(HX_UP-HX_IN)}:v<=70?{x:x0+(x1-x0)*(v-30)/40,tz:HX_UP}:{x:x1,tz:HX_UP-(v-70)/30*(HX_UP-HX_IN)};
+
+/* ===== 2-1 الحرارة: الطاقة الحرارية من سخان كهربائي والتحويل بين الجول والسعر ===== */
+function q1Lab(box){
+  const CX=228,W=['#93C5FD','#1D4ED8'];
+  box.innerHTML=`
+  <div class="intro"><small class="labKind">🧪 تجربة عملية تفاعلية</small><h3>1. اسم التجربة</h3><p class="labName">قياس الطاقة الحرارية الناتجة من سخان كهربائي وتحويلها بين الجول والسعر</p></div>
+  <div class="tags"><span class="tag">الطاقة الحرارية Q: <i>عداد الطاقة (Joulemeter)</i> · J</span><span class="tag">درجة الحرارة T: <i>مجس الحرارة الرقمي</i> · °C</span><span class="tag dv">Q بالسعر والكيلو سعر: <i>كمية محولة</i> · cal و kcal</span></div>
+  <div class="intro goals"><h3>2. أهداف التجربة</h3><ol class="gl">
+    <li>التعرف على سخان الغمر الكهربائي وعداد الطاقة ومجس الحرارة الرقمي.</li>
+    <li>ملاحظة تحول الطاقة الكهربائية إلى طاقة حرارية تنتقل إلى الماء فترتفع درجة حرارته.</li>
+    <li>قراءة الطاقة الحرارية <span dir="ltr">Q</span> بالجول من عداد الطاقة.</li>
+    <li>تحويل الطاقة الحرارية من الجول إلى السعر، ثم إلى الكيلو سعر.</li></ol></div>
+  <div class="intro"><h3>3. الأدوات والأجهزة المستخدمة</h3>
+    <div class="tool"><div class="stage">${hxScene({cups:[{x:CX,wc:W[0],sc:W[1],lv:0.75}],heater:{x:CX-8,on:false},jm:'0',probe:{x:CX+14,tz:HX_IN},R:'22.0',lbls:[[CX-30,40,40,200,264,'كوب عازل فيه ماء'],[CX-16,40,110,170,24,'سخان الغمر الكهربائي'],[60,52,30,46,264,'عداد الطاقة'],[CX+16,40,130,396,60,'مجس الحرارة الرقمي','end'],[320,6,30,345,264,'جهاز القراءة']]})}</div><div class="vcap">سخان غمر كهربائي في كوب ماء، متصل بعداد طاقة: منظر ثلاثي الأبعاد</div>
+    <p><b>ترتيب الأجهزة:</b> سخان الغمر الكهربائي مغمور في ماء داخل كوب عازل، وهو موصل بالكهرباء عبر عداد الطاقة الذي يقيس الطاقة المستهلكة بالجول، ومجس الحرارة في الماء متصل بجهاز القراءة.</p></div>
+    <div class="tool"><p><b>سخان الغمر الكهربائي <span dir="ltr">(Immersion Heater)</span>:</b> ملف معدني يسخن عند مرور التيار الكهربائي، فيحول الطاقة الكهربائية إلى طاقة حرارية تنتقل إلى الماء.</p>
+    <p><b>عداد الطاقة <span dir="ltr">(Joulemeter)</span>:</b> يعرض الطاقة التي يحولها السخان بوحدة الجول <span dir="ltr">J</span> مباشرة.</p>
+    <p><b>مجس الحرارة الرقمي:</b> يعرض درجة حرارة الماء بوحدة <span dir="ltr">°C</span> بدقة <span dir="ltr">0.1 °C</span>.</p></div></div>
+  <h3 class="secH">4. القوانين المستخدمة</h3>
+  <div class="ctl">
+    <div class="law ftl"><div class="ln lw"><b>الحرارة شكل من أشكال الطاقة، ومن مصادرها الكهرباء، ووحدتها في النظام الدولي الجول</b><span>Q (J)</span></div>
+      <div class="ln lw"><b>العلاقة بين السعر والجول</b><span>1 cal = 4.186 J</span></div>
+      <div class="ln lw"><b>العلاقة بين الكيلو سعر والسعر</b><span>1 kcal = 1000 cal</span></div>
+      <div class="sym"><b>حيث:</b><ul>
+      <li><span class="chip" dir="ltr">Q</span> كمية الحرارة (الطاقة الحرارية)، ووحدتها في النظام الدولي الجول <span dir="ltr">J</span></li>
+      <li><span class="chip" dir="ltr">cal</span> السعر الحراري: كمية الحرارة اللازمة لرفع درجة حرارة <span dir="ltr">1 g</span> من الماء درجة سلسيوس واحدة</li>
+      <li><span class="chip" dir="ltr">kcal</span> الكيلو سعر، ويساوي <span dir="ltr">1000 cal</span></li>
+      <li><span class="chip" dir="ltr">T</span> درجة حرارة الماء، ووحدتها <span dir="ltr">°C</span></li></ul></div>
+      ${convBox(['Q(cal) = Q(J) / 4.186','Q(kcal) = Q(cal) / 1000'])}</div></div>
+  <h3 class="secH">5. تنفيذ التجربة</h3>
+  <div class="startBand">▶️ لنبدأ التجربة</div>
+  <div class="btns" style="margin-bottom:12px"><button type="button" class="rs" id="nw">🔄 قراءات جديدة</button></div>
+  <div class="ctl"><h3>5.1 القياس والحساب</h3>
+    <h4 class="sbh">أ) تشغيل السخان وقراءة الطاقة الحرارية من عداد الطاقة</h4>
+    <div class="stage"><div id="sS"></div><svg id="sZ" viewBox="0 0 400 112"></svg><div class="hud"><span id="sSt"></span></div></div>
+    ${hxRow('sR','تشغيل السخان')}
+    <p class="slh">👆 اسحب المؤشر البرتقالي لتشغيل السخان حتى يتوقف تلقائيا، ولاحظ ارتفاع درجة حرارة الماء، ثم اقرأ الطاقة من شاشة عداد الطاقة.</p>
+    ${hxAns('qIn','قراءتك للطاقة الحرارية Q','J')}
+    <h4 class="sbh">ب) تحويل الطاقة الحرارية من الجول إلى السعر</h4>
+    ${hxCalcStep('C','Q(cal) = Q(J) / 4.186','احسب Q بوحدة cal','cal')}
+    <h4 class="sbh">ج) تحويل الطاقة الحرارية من السعر إلى الكيلو سعر</h4>
+    ${hxCalcStep('K','Q(kcal) = Q(cal) / 1000','احسب Q بوحدة kcal','kcal')}
+  </div>
+  <div class="ctl"><h3>5.2 المقارنة بين قيم الطاقة الحرارية بالوحدات الثلاث</h3>
+    <div class="law ftl"><div class="ln lw"><b>المقارنة</b><span id="cmpS" style="white-space:pre-line;line-height:2">أكمل الخطوات في 5.1</span></div></div>
+    <p class="rn" id="cmpN"></p></div>
+  <div class="ctl res"><h3>6. نتائج التجربة</h3>
+    <div class="tw"><table class="rt"><thead><tr><th>الكمية</th><th>القيمة</th></tr></thead>
+    <tbody><tr><td>درجة حرارة الماء قبل التسخين</td><td id="r1">—</td></tr><tr><td>درجة حرارة الماء بعد التسخين</td><td id="r2">—</td></tr>
+    <tr><td>الطاقة الحرارية Q بالجول</td><td id="r3">—</td></tr><tr><td>الطاقة الحرارية Q بالسعر</td><td id="r4">—</td></tr><tr><td>الطاقة الحرارية Q بالكيلو سعر</td><td id="r5">—</td></tr></tbody></table></div>
+    <p class="rn" id="rNote">تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.</p></div>`;
+  const {$,num,fb,fb0,r1,fx}=hxKit(box);let Q,T0,DT,ok={};
+  const QC=()=>Q/4.186,QK=()=>QC()/1000;
+  function newObj(){Q=10*Math.floor(300+Math.random()*600);T0=r1(20+Math.random()*5);DT=r1(Q/(0.2*4186));ok={};$('sR').value=0;['qIn','cC','cK'].forEach(k=>$(k).value='');['qInFb','cCf','cKf'].forEach(fb0);sDraw();sub();results()}
+  function sDraw(){const v=+$('sR').value,done=v>=100,E=Math.round(Q*v/100),T=r1(T0+DT*v/100);
+    $('sRO').textContent=done?'توقف السخان':v>0?'يعمل…':'';$('sSt').textContent=done?'✓ توقف السخان، اقرأ الطاقة الحرارية من عداد الطاقة':v>0?'السخان يحول الطاقة الكهربائية إلى حرارة، ودرجة حرارة الماء ترتفع…':'السخان متوقف';
+    $('sS').innerHTML=hxScene({cups:[{x:CX,wc:W[0],sc:W[1],lv:0.75,steam:v>60}],heater:{x:CX-8,on:v>0&&!done},jm:String(E),probe:{x:CX+14,tz:HX_IN},R:T.toFixed(1)});
+    $('sZ').innerHTML=hxZoom([[36,210,`Q = ${E} J`],[256,108,`${T.toFixed(1)}°C`]],'شاشتا عداد الطاقة وجهاز قراءة الحرارة (مكبرتان)')}
+  function sub(){$('sbC').textContent=ok.q?['Q(cal) = Q(J) / 4.186',E(`Q = ${Q} / 4.186`)].join('\n'):'Q(cal) = Q(J) / 4.186';
+    $('sbK').textContent=ok.cC?['Q(kcal) = Q(cal) / 1000',E(`Q = ${fx(QC(),1)} / 1000`)].join('\n'):'Q(kcal) = Q(cal) / 1000'}
+  function results(){$('r1').textContent=ok.q?E(T0.toFixed(1)+' °C'):'—';$('r2').textContent=ok.q?E(r1(T0+DT).toFixed(1)+' °C'):'—';$('r3').textContent=ok.q?E(Q+' J'):'—';$('r4').textContent=ok.cC?E(fx(QC(),1)+' cal'):'—';$('r5').textContent=ok.cK?E(fx(QK(),3)+' kcal'):'—';
+    const all=ok.cK;$('cmpS').textContent=all?[E(`Q = ${Q} J`),E(`Q = ${fx(QC(),1)} cal`),E(`Q = ${fx(QK(),3)} kcal`)].join('\n'):'أكمل الخطوات في 5.1';
+    $('cmpN').textContent=all?'الكمية نفسها من الطاقة الحرارية، لكن عددها بالجول أكبر لأن الجول وحدة أصغر من السعر، وعددها بالكيلو سعر أصغر لأنه وحدة أكبر.':'';
+    $('rNote').innerHTML=all?`الاستنتاج: تحولت الطاقة الكهربائية في السخان إلى طاقة حرارية انتقلت إلى الماء فارتفعت درجة حرارته من <span dir="ltr">${T0.toFixed(1)} °C</span> إلى <span dir="ltr">${r1(T0+DT).toFixed(1)} °C</span>، والحرارة طاقة تقاس بالجول ويمكن تحويلها إلى السعر <span dir="ltr" style="white-space:nowrap">1 cal = 4.186 J</span>.`:'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
+  $('sR').oninput=sDraw;
+  $('qInCk').onclick=()=>{if(+$('sR').value<100)return fb('qInFb',false,'شغل السخان حتى يتوقف تلقائيا أولا.');const v=num($('qIn').value);if(isNaN(v))return fb('qInFb',false,'اكتب قراءتك بالجول.');
+    if(Math.abs(v-Q)<0.5){ok.q=true;fb('qInFb',true,'✓ قراءة صحيحة:\n'+E(`Q = ${Q} J`))}else fb('qInFb',false,'✗ اكتب الرقم الظاهر على شاشة عداد الطاقة.');sub();results()};
+  $('cCk').onclick=()=>{if(!ok.q)return fb('cCf',false,'اقرأ الطاقة من عداد الطاقة أولا.');const v=num($('cC').value);if(isNaN(v))return fb('cCf',false,'اكتب الناتج بوحدة cal.');
+    if(Math.abs(v-QC())/QC()<0.005){ok.cC=true;fb('cCf',true,'✓ إجابة صحيحة:\n'+E(`Q = ${Q} / 4.186 = ${fx(QC(),1)} cal`))}else fb('cCf',false,'✗ اقسم الطاقة بالجول على 4.186:\n'+E(`Q = ${Q} / 4.186`));sub();results()};
+  $('cKk').onclick=()=>{if(!ok.cC)return fb('cKf',false,'أكمل التحويل إلى السعر أولا.');const v=num($('cK').value);if(isNaN(v))return fb('cKf',false,'اكتب الناتج بوحدة kcal.');
+    if(Math.abs(v-QK())/QK()<0.005){ok.cK=true;fb('cKf',true,'✓ إجابة صحيحة:\n'+E(`Q = ${fx(QC(),1)} / 1000 = ${fx(QK(),3)} kcal`))}else fb('cKf',false,'✗ اقسم الطاقة بالسعر على 1000:\n'+E(`Q = ${fx(QC(),1)} / 1000`));sub();results()};
+  $('nw').onclick=newObj;calcInit(box);newObj()}
+
+/* ===== 2-2 درجة الحرارة ومقاييسها ===== */
+function tsLab(box){
+  const HX=110,CX=228,BW=['#FCA5A5','#B91C1C'],IW=['#BAE6FD','#0369A1'];
+  box.innerHTML=`
+  <div class="intro"><small class="labKind">🧪 تجربة عملية تفاعلية</small><h3>1. اسم التجربة</h3><p class="labName">قياس درجتي انصهار الجليد وغليان الماء والتحويل بين مقاييس درجة الحرارة</p></div>
+  <div class="tags"><span class="tag">درجة الحرارة C: <i>مجس الحرارة الرقمي</i> · °C</span><span class="tag dv">K و F: <i>كميات محولة</i> · K و °F</span></div>
+  <div class="intro goals"><h3>2. أهداف التجربة</h3><ol class="gl">
+    <li>التعرف على مجس الحرارة الرقمي وجهاز القراءة.</li>
+    <li>قياس درجة حرارة خليط الماء والجليد (نقطة انصهار الجليد) بالمقياس السلسيوسي.</li>
+    <li>قياس درجة حرارة الماء المغلي (نقطة غليان الماء) بالمقياس السلسيوسي.</li>
+    <li>تحويل القراءتين إلى مقياس كلفن والمقياس الفهرنهايتي ومقارنتها بالقيم المعيارية.</li></ol></div>
+  <div class="intro"><h3>3. الأدوات والأجهزة المستخدمة</h3>
+    <div class="tool"><div class="stage">${hxScene({cups:[{x:HX,wc:BW[0],sc:BW[1],lv:1,boil:true,steam:true},{x:CX,wc:IW[0],sc:IW[1],lv:0.85,ice:4}],probe:{x:CX,tz:HX_UP},lbls:[[HX-30,40,40,8,24,'ماء يغلي','start'],[CX-30,40,40,150,24,'ماء وجليد'],[CX,40,HX_UP+40,396,60,'مجس الحرارة الرقمي','end'],[320,6,30,345,264,'جهاز القراءة'],[HX,40,20,150,264,'كوب عازل']]})}</div><div class="vcap">مجس حرارة رقمي وكوبان: ماء يغلي وماء وجليد</div>
+    <p><b>ترتيب الأجهزة:</b> كوب فيه خليط من الماء والجليد، وكوب فيه ماء يغلي، ومجس الحرارة متصل بسلك بجهاز القراءة الرقمي.</p></div>
+    <div class="tool"><p><b>مجس الحرارة الرقمي <span dir="ltr">(Temperature Probe)</span>:</b> يقيس درجة الحرارة بالمقياس السلسيوسي <span dir="ltr">°C</span> بدقة <span dir="ltr">0.1 °C</span>.</p>
+    <p><b>خليط الماء والجليد:</b> درجة حرارته ثابتة عند نقطة انصهار الجليد ما دام فيه جليد.</p>
+    <p><b>الماء المغلي:</b> درجة حرارته ثابتة عند نقطة الغليان ما دام يغلي، وهي <span dir="ltr">100 °C</span> عند الضغط الجوي المعياري، وأقل قليلا في المرتفعات.</p></div></div>
+  <h3 class="secH">4. القوانين المستخدمة</h3>
+  <div class="ctl">
+    <div class="law ftl"><div class="ln lw"><b>التحويل من المقياس السلسيوسي إلى مقياس كلفن</b><span>K = C + 273</span></div>
+      <div class="ln lw"><b>التحويل من المقياس السلسيوسي إلى المقياس الفهرنهايتي</b><span>F = 1.8·C + 32</span></div>
+      <div class="sym"><b>حيث:</b><ul>
+      <li><span class="chip" dir="ltr">C</span> درجة الحرارة بالمقياس السلسيوسي، ووحدتها <span dir="ltr">°C</span></li>
+      <li><span class="chip" dir="ltr">K</span> درجة الحرارة بمقياس كلفن (المقياس المطلق)، ووحدتها <span dir="ltr">K</span></li>
+      <li><span class="chip" dir="ltr">F</span> درجة الحرارة بالمقياس الفهرنهايتي، ووحدتها <span dir="ltr">°F</span></li>
+      <li><span class="chip" dir="ltr">273</span> و <span class="chip" dir="ltr">32</span> و <span class="chip" dir="ltr">1.8</span> ثوابت التحويل، وليس لها وحدة</li></ul></div>
+      <div class="tw"><table class="rt"><thead><tr><th>النقطة</th><th>°C</th><th>K</th><th>°F</th></tr></thead><tbody><tr><td>انصهار الجليد</td><td>0</td><td>273</td><td>32</td></tr><tr><td>غليان الماء</td><td>100</td><td>373</td><td>212</td></tr></tbody></table></div></div></div>
+  <h3 class="secH">5. تنفيذ التجربة</h3>
+  <div class="startBand">▶️ لنبدأ التجربة</div>
+  <div class="btns" style="margin-bottom:12px"><button type="button" class="rs" id="nw">🔄 قراءات جديدة</button></div>
+  <div class="ctl"><h3>5.1 القياس والحساب</h3>
+    <h4 class="sbh">أ) قياس درجة حرارة خليط الماء والجليد C₁</h4>
+    <div class="stage"><div id="aS"></div><svg id="aZ" viewBox="0 0 400 112"></svg><div class="hud"><span id="aSt"></span></div></div>
+    ${hxRow('aR','إنزال المجس')}
+    <p class="slh">👆 اسحب المؤشر البرتقالي لإنزال مجس الحرارة في خليط الماء والجليد، ثم اقرأ درجة الحرارة من الشاشة المكبرة.</p>
+    ${hxAns('aIn','قراءتك لدرجة حرارة خليط الماء والجليد C₁','°C')}
+    <h4 class="sbh">ب) قياس درجة حرارة الماء المغلي C₂</h4>
+    <div class="stage"><div id="bS"></div><svg id="bZ" viewBox="0 0 400 112"></svg><div class="hud"><span id="bSt"></span></div></div>
+    ${hxRow('bR','نقل المجس')}
+    <p class="slh">👆 اسحب المؤشر البرتقالي لنقل مجس الحرارة إلى الماء المغلي حتى تثبت القراءة، ثم اقرأ درجة الحرارة.</p>
+    ${hxAns('bIn','قراءتك لدرجة حرارة الماء المغلي C₂','°C')}
+    <h4 class="sbh">ج) التحويل إلى مقياس كلفن</h4>
+    ${hxCalcStep('K1','K = C + 273','احسب K₁ لخليط الماء والجليد','K')}
+    ${hxCalcStep('K2','K = C + 273','احسب K₂ للماء المغلي','K')}
+    <h4 class="sbh">د) التحويل إلى المقياس الفهرنهايتي</h4>
+    ${hxCalcStep('F1','F = 1.8·C + 32','احسب F₁ لخليط الماء والجليد','°F')}
+    ${hxCalcStep('F2','F = 1.8·C + 32','احسب F₂ للماء المغلي','°F')}
+  </div>
+  <div class="ctl"><h3>5.2 المقارنة بالقيم المعيارية</h3>
+    <div class="law ftl"><div class="ln lw"><b>المقارنة</b><span id="cmpS" style="white-space:pre-line;line-height:2">أكمل الخطوات في 5.1</span></div></div>
+    <p class="rn" id="cmpN"></p></div>
+  <div class="ctl res"><h3>6. نتائج التجربة</h3>
+    <div class="tw"><table class="rt"><thead><tr><th>القياس</th><th>°C</th><th>K</th><th>°F</th></tr></thead>
+    <tbody><tr><td>خليط الماء والجليد</td><td id="r1">—</td><td id="r2">—</td><td id="r3">—</td></tr><tr><td>الماء المغلي</td><td id="r4">—</td><td id="r5">—</td><td id="r6">—</td></tr></tbody></table></div>
+    <p class="rn" id="rNote">تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.</p></div>`;
+  const {$,num,fb,fb0,r1,fx}=hxKit(box);let C1,C2,ok={};
+  const KK=c=>c+273,FF=c=>1.8*c+32;
+  function newObj(){C1=r1(Math.random()*0.4);C2=r1(98.5+Math.random()*1.3);ok={};['aR','bR'].forEach(k=>$(k).value=0);['aIn','bIn','cK1','cK2','cF1','cF2'].forEach(k=>$(k).value='');['aInFb','bInFb','cK1f','cK2f','cF1f','cF2f'].forEach(fb0);aDraw();bDraw();sub();results()}
+  const cups=()=>[{x:HX,wc:BW[0],sc:BW[1],lv:1,boil:true,steam:true},{x:CX,wc:IW[0],sc:IW[1],lv:0.85,ice:4}];
+  function aDraw(){const v=+$('aR').value,on=v>=100;$('aRO').textContent=on?'في الخليط':'';$('aSt').textContent=on?'✓ المجس في خليط الماء والجليد، اقرأ درجة الحرارة':'أنزل المجس حتى يستقر في الخليط';
+    $('aS').innerHTML=hxScene({cups:cups(),probe:{x:CX,tz:HX_UP-v/100*(HX_UP-HX_IN)},R:on?C1.toFixed(1):null});$('aZ').innerHTML=hxZoom([[56,288,`T = ${on?C1.toFixed(1):'--.-'} °C`]],'شاشة جهاز القراءة (مكبرة)')}
+  function bDraw(){const v=+$('bR').value,on=v>=100,q=hxPath(100-v,HX,CX);$('bRO').textContent=on?'في الماء المغلي':'';$('bSt').textContent=on?'✓ ثبتت القراءة، اقرأ درجة حرارة الماء المغلي':'انقل المجس إلى الماء المغلي';
+    $('bS').innerHTML=hxScene({cups:cups(),probe:{x:q.x,tz:q.tz},R:on?C2.toFixed(1):null});$('bZ').innerHTML=hxZoom([[56,288,`T = ${on?C2.toFixed(1):'--.-'} °C`]],'شاشة جهاز القراءة (مكبرة)')}
+  function sub(){$('sbK1').textContent=ok.a?['K = C + 273',E(`K₁ = ${C1.toFixed(1)} + 273`)].join('\n'):'K = C + 273';$('sbK2').textContent=ok.b?['K = C + 273',E(`K₂ = ${C2.toFixed(1)} + 273`)].join('\n'):'K = C + 273';
+    $('sbF1').textContent=ok.a?['F = 1.8·C + 32',E(`F₁ = 1.8 × ${C1.toFixed(1)} + 32`)].join('\n'):'F = 1.8·C + 32';$('sbF2').textContent=ok.b?['F = 1.8·C + 32',E(`F₂ = 1.8 × ${C2.toFixed(1)} + 32`)].join('\n'):'F = 1.8·C + 32'}
+  function results(){$('r1').textContent=ok.a?E(C1.toFixed(1)):'—';$('r4').textContent=ok.b?E(C2.toFixed(1)):'—';$('r2').textContent=ok.K1?E(fx(KK(C1),1)):'—';$('r5').textContent=ok.K2?E(fx(KK(C2),1)):'—';$('r3').textContent=ok.F1?E(fx(FF(C1),2)):'—';$('r6').textContent=ok.F2?E(fx(FF(C2),2)):'—';
+    const all=ok.K1&&ok.K2&&ok.F1&&ok.F2;
+    $('cmpS').textContent=all?['خليط الماء والجليد:',E(`${C1.toFixed(1)} °C = ${fx(KK(C1),1)} K = ${fx(FF(C1),2)} °F`),'(القيمة المعيارية: 0 °C = 273 K = 32 °F)','الماء المغلي:',E(`${C2.toFixed(1)} °C = ${fx(KK(C2),1)} K = ${fx(FF(C2),2)} °F`),'(القيمة المعيارية: 100 °C = 373 K = 212 °F)'].join('\n'):'أكمل الخطوات في 5.1';
+    $('cmpN').textContent=all?'القراءتان قريبتان من القيم المعيارية، ودرجة غليان الماء أقل قليلا من 100 °C لأن الضغط الجوي في المعمل أقل من الضغط المعياري.':'';
+    $('rNote').innerHTML=all?'الاستنتاج: درجة الحرارة الواحدة يعبر عنها بأرقام مختلفة في المقاييس الثلاثة، ويحول بينها بالقانونين <span dir="ltr" style="white-space:nowrap">K = C + 273</span> و <span dir="ltr" style="white-space:nowrap">F = 1.8·C + 32</span>، ومقياس كلفن لا يحتوي على قيم سالبة.':'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
+  $('aR').oninput=aDraw;$('bR').oninput=bDraw;
+  const rd=(id,need,msg,val,key,lab)=>{if(!need())return fb(id+'Fb',false,msg);const v=num($(id).value);if(isNaN(v))return fb(id+'Fb',false,'اكتب قراءتك بوحدة °C.');
+    if(Math.abs(v-val)<0.05){ok[key]=true;fb(id+'Fb',true,'✓ قراءة صحيحة:\n'+E(`${lab} = ${val.toFixed(1)} °C`))}else fb(id+'Fb',false,'✗ اكتب درجة الحرارة كما تظهر على الشاشة المكبرة، برقم عشري واحد.');sub();results()};
+  $('aInCk').onclick=()=>rd('aIn',()=>+$('aR').value>=100,'أنزل المجس في الخليط أولا.',C1,'a','C₁');
+  $('bInCk').onclick=()=>rd('bIn',()=>+$('bR').value>=100,'انقل المجس إلى الماء المغلي أولا.',C2,'b','C₂');
+  const ck=(id,need,val,unit,okTxt,bad)=>{$('c'+id+'k').onclick=()=>{if(!ok[need])return fb('c'+id+'f',false,'أكمل القراءة أولا.');const v=num($('c'+id).value);if(isNaN(v))return fb('c'+id+'f',false,`اكتب الناتج بوحدة ${unit}.`);
+    if(Math.abs(v-val())<=0.051){ok[id]=true;fb('c'+id+'f',true,'✓ إجابة صحيحة:\n'+E(okTxt()))}else fb('c'+id+'f',false,bad());sub();results()}};
+  ck('K1','a',()=>KK(C1),'K',()=>`K₁ = ${C1.toFixed(1)} + 273 = ${fx(KK(C1),1)} K`,()=>'✗ أضف 273 إلى درجة الحرارة السلسيوسية:\n'+E(`K₁ = ${C1.toFixed(1)} + 273`));
+  ck('K2','b',()=>KK(C2),'K',()=>`K₂ = ${C2.toFixed(1)} + 273 = ${fx(KK(C2),1)} K`,()=>'✗ أضف 273 إلى درجة الحرارة السلسيوسية:\n'+E(`K₂ = ${C2.toFixed(1)} + 273`));
+  ck('F1','a',()=>FF(C1),'°F',()=>`F₁ = 1.8 × ${C1.toFixed(1)} + 32 = ${fx(FF(C1),2)} °F`,()=>'✗ اضرب أولا ثم أضف 32:\n'+E(`1.8 × ${C1.toFixed(1)} = ${fx(1.8*C1,2)}`)+'\n'+E(`F₁ = ${fx(1.8*C1,2)} + 32`));
+  ck('F2','b',()=>FF(C2),'°F',()=>`F₂ = 1.8 × ${C2.toFixed(1)} + 32 = ${fx(FF(C2),2)} °F`,()=>'✗ اضرب أولا ثم أضف 32:\n'+E(`1.8 × ${C2.toFixed(1)} = ${fx(1.8*C2,2)}`)+'\n'+E(`F₂ = ${fx(1.8*C2,2)} + 32`));
+  $('nw').onclick=newObj;calcInit(box);newObj()}
+
+/* ===== 2-3 الحرارة النوعية: Q = m·c·ΔT ===== */
+function shLab(box){
+  const CX=228,W=['#93C5FD','#1D4ED8'],c=4180;
+  box.innerHTML=`
+  <div class="intro"><small class="labKind">🧪 تجربة عملية تفاعلية</small><h3>1. اسم التجربة</h3><p class="labName">حساب كمية الحرارة اللازمة لتسخين الماء باستخدام القانون Q = m·c·ΔT</p></div>
+  <div class="tags"><span class="tag">الكتلة m: <i>الميزان الرقمي</i> · g</span><span class="tag">درجة الحرارة T: <i>مجس الحرارة الرقمي</i> · °C</span><span class="tag">الطاقة E: <i>عداد الطاقة</i> · J</span><span class="tag dv">C و Q: <i>كميات مشتقة</i> · J/°C و J</span></div>
+  <div class="intro goals"><h3>2. أهداف التجربة</h3><ol class="gl">
+    <li>التعرف على الميزان الرقمي وسخان الغمر الكهربائي وعداد الطاقة ومجس الحرارة الرقمي.</li>
+    <li>قياس كتلة الماء <span dir="ltr">m</span> ودرجتي حرارته قبل التسخين <span dir="ltr">T₁</span> وبعده <span dir="ltr">T₂</span>.</li>
+    <li>حساب السعة الحرارية للماء <span dir="ltr" style="white-space:nowrap">C = m·c</span>.</li>
+    <li>حساب كمية الحرارة التي اكتسبها الماء <span dir="ltr" style="white-space:nowrap">Q = m·c·ΔT</span>، ومقارنتها بالطاقة التي قاسها عداد الطاقة.</li></ol></div>
+  <div class="intro"><h3>3. الأدوات والأجهزة المستخدمة</h3>
+    <div class="tool"><div class="stage">${hxScene({cups:[{x:CX,wc:W[0],sc:W[1],lv:0.75}],heater:{x:CX-8,on:false},jm:'0',probe:{x:CX+14,tz:HX_IN},R:'22.0',lbls:[[CX-30,40,40,200,264,'كوب عازل فيه ماء'],[CX-16,40,110,170,24,'سخان الغمر الكهربائي'],[60,52,30,46,264,'عداد الطاقة'],[CX+16,40,130,396,60,'مجس الحرارة الرقمي','end'],[320,6,30,345,264,'جهاز القراءة']]})}</div><div class="vcap">تسخين كتلة من الماء بسخان غمر كهربائي: منظر ثلاثي الأبعاد</div>
+    <p><b>ترتيب الأجهزة:</b> ماء معلوم الكتلة في كوب عازل، وفيه سخان الغمر الكهربائي الموصل بعداد الطاقة، ومجس الحرارة المتصل بجهاز القراءة.</p></div>
+    <div class="tool"><div class="stage">${hxBal('200','m',false)}</div><p><b>الميزان الرقمي:</b> يصفر بالكوب الفارغ، ثم يقيس كتلة الماء وحده بالجرام بدقة <span dir="ltr">1 g</span>.</p>
+    <p><b>سخان الغمر الكهربائي وعداد الطاقة:</b> السخان يحول الطاقة الكهربائية إلى حرارة، والعداد يعرض الطاقة المستهلكة <span dir="ltr">E</span> بالجول.</p>
+    <p><b>مجس الحرارة الرقمي:</b> يعرض درجة حرارة الماء بدقة <span dir="ltr">0.1 °C</span>.</p></div></div>
+  <h3 class="secH">4. القوانين المستخدمة</h3>
+  <div class="ctl">
+    <div class="law ftl"><div class="ln lw"><b>التغير في درجة الحرارة</b><span>ΔT = T₂ − T₁</span></div>
+      <div class="ln lw"><b>السعة الحرارية</b><span>C = m·c</span></div>
+      <div class="ln lw"><b>كمية الحرارة اللازمة لتغيير درجة حرارة جسم</b><span>Q = m·c·ΔT</span></div>
+      <div class="sym"><b>حيث:</b><ul>
+      <li><span class="chip" dir="ltr">m</span> كتلة الماء، وتقاس بالميزان الرقمي، ووحدتها <span dir="ltr">kg</span></li>
+      <li><span class="chip" dir="ltr">c</span> الحرارة النوعية للماء، وقيمتها <span dir="ltr">4180 J/kg·°C</span>: كمية الحرارة اللازمة لرفع درجة حرارة <span dir="ltr">1 kg</span> من الماء درجة سلسيوس واحدة</li>
+      <li><span class="chip" dir="ltr">C</span> السعة الحرارية: كمية الحرارة اللازمة لرفع درجة حرارة الجسم كله درجة واحدة، ووحدتها <span dir="ltr">J/°C</span></li>
+      <li><span class="chip" dir="ltr">T₁, T₂</span> درجتا حرارة الماء قبل التسخين وبعده، و <span class="chip" dir="ltr">ΔT</span> التغير بينهما، ووحدتها <span dir="ltr">°C</span></li>
+      <li><span class="chip" dir="ltr">Q</span> كمية الحرارة التي اكتسبها الماء، و <span class="chip" dir="ltr">E</span> الطاقة التي قاسها عداد الطاقة، ووحدتهما <span dir="ltr">J</span></li></ul></div>
+      ${convBox(['m(kg) = m(g) / 1000'])}</div></div>
+  <h3 class="secH">5. تنفيذ التجربة</h3>
+  <div class="startBand">▶️ لنبدأ التجربة</div>
+  <div class="btns" style="margin-bottom:12px"><button type="button" class="rs" id="nw">🔄 قراءات جديدة</button></div>
+  <div class="ctl"><h3>5.1 القياس والحساب</h3>
+    <h4 class="sbh">أ) قياس كتلة الماء m بالميزان الرقمي</h4>
+    <div class="stage"><div id="bl"></div></div>
+    ${hxAns('mIn','قراءتك لكتلة الماء m','g')}
+    <h4 class="sbh">ب) قياس درجة حرارة الماء قبل التسخين T₁</h4>
+    <div class="stage"><div id="aS"></div><svg id="aZ" viewBox="0 0 400 112"></svg><div class="hud"><span id="aSt"></span></div></div>
+    ${hxRow('aR','إنزال المجس')}
+    <p class="slh">👆 اسحب المؤشر البرتقالي لإنزال مجس الحرارة في الماء، ثم اقرأ درجة الحرارة من الشاشة المكبرة.</p>
+    ${hxAns('aIn','قراءتك لدرجة الحرارة قبل التسخين T₁','°C')}
+    <h4 class="sbh">ج) تسخين الماء وقراءة درجة حرارته بعد التسخين T₂ والطاقة E</h4>
+    <div class="stage"><div id="sS"></div><svg id="sZ" viewBox="0 0 400 112"></svg><div class="hud"><span id="sSt"></span></div></div>
+    ${hxRow('sR','تشغيل السخان')}
+    <p class="slh">👆 اسحب المؤشر البرتقالي لتشغيل السخان حتى يتوقف تلقائيا، ثم اقرأ درجة حرارة الماء وقراءة عداد الطاقة.</p>
+    ${hxAns('tIn','قراءتك لدرجة الحرارة بعد التسخين T₂','°C')}
+    ${hxAns('eIn','قراءتك لعداد الطاقة E','J')}
+    <h4 class="sbh">د) حساب السعة الحرارية للماء</h4>
+    <p class="slh">ℹ️ <b>المعطيات:</b> الحرارة النوعية للماء <b dir="ltr">c = 4180 J/kg·°C</b></p>
+    ${hxCalcStep('C','C = m·c','احسب السعة الحرارية C بوحدة J/°C','J/°C')}
+    <h4 class="sbh">هـ) حساب كمية الحرارة التي اكتسبها الماء</h4>
+    ${hxCalcStep('Q','Q = m·c·ΔT','احسب كمية الحرارة Q بوحدة J','J')}
+  </div>
+  <div class="ctl"><h3>5.2 المقارنة بين كمية الحرارة المحسوبة والطاقة المقاسة</h3>
+    <div class="law ftl"><div class="ln lw"><b>المقارنة</b><span id="cmpS" style="white-space:pre-line;line-height:2">أكمل الخطوات في 5.1</span></div></div>
+    <p class="rn" id="cmpN"></p></div>
+  <div class="ctl res"><h3>6. نتائج التجربة</h3>
+    <div class="tw"><table class="rt"><thead><tr><th>الكمية</th><th>القيمة</th></tr></thead>
+    <tbody><tr><td>كتلة الماء m</td><td id="r1">—</td></tr><tr><td>T₁ قبل التسخين</td><td id="r2">—</td></tr><tr><td>T₂ بعد التسخين</td><td id="r3">—</td></tr><tr><td>التغير ΔT</td><td id="r4">—</td></tr>
+    <tr><td>السعة الحرارية C</td><td id="r5">—</td></tr><tr><td>كمية الحرارة Q</td><td id="r6">—</td></tr><tr><td>طاقة العداد E</td><td id="r7">—</td></tr></tbody></table></div>
+    <p class="rn" id="rNote">تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.</p></div>`;
+  const {$,num,fb,fb0,r1,fx}=hxKit(box);let M,T1,T2,EN,ok={};
+  const KG=()=>M/1000,DT=()=>r1(T2-T1),CC=()=>KG()*c,QQ=()=>KG()*c*DT();
+  function newObj(){M=150+10*Math.floor(Math.random()*11);T1=r1(20+Math.random()*5);EN=10*Math.floor(500+Math.random()*500);T2=r1(T1+EN*(0.9+Math.random()*0.05)/(M/1000*c));ok={};
+    ['aR','sR'].forEach(k=>$(k).value=0);['mIn','aIn','tIn','eIn','cC','cQ'].forEach(k=>$(k).value='');['mInFb','aInFb','tInFb','eInFb','cCf','cQf'].forEach(fb0);$('bl').innerHTML=hxBal(M,'m',false);aDraw();sDraw();sub();results()}
+  function aDraw(){const v=+$('aR').value,on=v>=100;$('aRO').textContent=on?'في الماء':'';$('aSt').textContent=on?'✓ المجس في الماء، اقرأ T₁':'أنزل المجس حتى يستقر في الماء';
+    $('aS').innerHTML=hxScene({cups:[{x:CX,wc:W[0],sc:W[1],lv:0.75}],heater:{x:CX-8,on:false},jm:'0',probe:{x:CX+14,tz:HX_UP-v/100*(HX_UP-HX_IN)},R:on?T1.toFixed(1):null});$('aZ').innerHTML=hxZoom([[56,288,`T = ${on?T1.toFixed(1):'--.-'} °C`]],'شاشة جهاز القراءة (مكبرة)')}
+  function sDraw(){const v=+$('sR').value,done=v>=100,T=r1(T1+(T2-T1)*v/100),e=Math.round(EN*v/100);$('sRO').textContent=done?'توقف السخان':v>0?'يعمل…':'';
+    $('sSt').textContent=done?'✓ توقف السخان، اقرأ T₂ وقراءة عداد الطاقة E':v>0?'درجة حرارة الماء ترتفع…':'السخان متوقف';
+    $('sS').innerHTML=hxScene({cups:[{x:CX,wc:W[0],sc:W[1],lv:0.75}],heater:{x:CX-8,on:v>0&&!done},jm:String(e),probe:{x:CX+14,tz:HX_IN},R:T.toFixed(1)});
+    $('sZ').innerHTML=hxZoom([[36,210,`T = ${T.toFixed(1)} °C`],[256,108,`${e} J`]],'شاشتا جهاز قراءة الحرارة وعداد الطاقة (مكبرتان)')}
+  function sub(){$('sbC').textContent=ok.m?['C = m·c',E(`m = ${M} g = ${fx(KG(),3)} kg`),E(`C = ${fx(KG(),3)} × 4180`)].join('\n'):'C = m·c';
+    $('sbQ').textContent=ok.m&&ok.a&&ok.t?['Q = m·c·ΔT','ΔT = T₂ − T₁',E(`ΔT = ${T2.toFixed(1)} − ${T1.toFixed(1)} = ${DT().toFixed(1)} °C`),E(`Q = ${fx(KG(),3)} × 4180 × ${DT().toFixed(1)}`)].join('\n'):'Q = m·c·ΔT'}
+  function results(){$('r1').textContent=ok.m?E(fx(KG(),3)+' kg'):'—';$('r2').textContent=ok.a?E(T1.toFixed(1)+' °C'):'—';$('r3').textContent=ok.t?E(T2.toFixed(1)+' °C'):'—';$('r4').textContent=ok.a&&ok.t?E(DT().toFixed(1)+' °C'):'—';
+    $('r5').textContent=ok.cC?E(fx(CC(),1)+' J/°C'):'—';$('r6').textContent=ok.cQ?E(fx(QQ(),1)+' J'):'—';$('r7').textContent=ok.e?E(EN+' J'):'—';
+    const all=ok.cQ&&ok.e;$('cmpS').textContent=all?['كمية الحرارة التي اكتسبها الماء:',E(`Q = ${fx(QQ(),1)} J`),'الطاقة التي قاسها عداد الطاقة:',E(`E = ${EN} J`)].join('\n'):'أكمل الخطوات في 5.1';
+    $('cmpN').textContent=all?'كمية الحرارة التي اكتسبها الماء أقل قليلا من الطاقة الكهربائية، لأن جزءا من الحرارة انتقل إلى الكوب والسخان والهواء المحيط.':'';
+    $('rNote').innerHTML=all?'الاستنتاج: كمية الحرارة اللازمة لتسخين الماء تتناسب مع كتلته وحرارته النوعية والتغير في درجة حرارته <span dir="ltr" style="white-space:nowrap">Q = m·c·ΔT</span>، والسعة الحرارية <span dir="ltr" style="white-space:nowrap">C = m·c</span> هي الحرارة اللازمة لرفع درجة حرارة الماء كله درجة واحدة.':'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
+  $('aR').oninput=aDraw;$('sR').oninput=sDraw;
+  $('mInCk').onclick=()=>{const v=num($('mIn').value);if(isNaN(v))return fb('mInFb',false,'اكتب قراءتك بالجرام.');if(Math.abs(v-M)<0.5){ok.m=true;fb('mInFb',true,'✓ قراءة صحيحة:\n'+E(`m = ${M} g = ${fx(KG(),3)} kg`))}else fb('mInFb',false,'✗ اقرأ الرقم الظاهر على شاشة الميزان.');sub();results()};
+  const rd=(id,need,msg,val,key,lab,u,tol)=>{if(!need())return fb(id+'Fb',false,msg);const v=num($(id).value);if(isNaN(v))return fb(id+'Fb',false,`اكتب قراءتك بوحدة ${u}.`);
+    if(Math.abs(v-val)<tol){ok[key]=true;fb(id+'Fb',true,'✓ قراءة صحيحة:\n'+E(`${lab} = ${u==='J'?val:val.toFixed(1)} ${u}`))}else fb(id+'Fb',false,'✗ اكتب القراءة كما تظهر على الشاشة المكبرة.');sub();results()};
+  $('aInCk').onclick=()=>rd('aIn',()=>+$('aR').value>=100,'أنزل المجس في الماء أولا.',T1,'a','T₁','°C',0.05);
+  $('tInCk').onclick=()=>rd('tIn',()=>+$('sR').value>=100,'شغل السخان حتى يتوقف تلقائيا أولا.',T2,'t','T₂','°C',0.05);
+  $('eInCk').onclick=()=>rd('eIn',()=>+$('sR').value>=100,'شغل السخان حتى يتوقف تلقائيا أولا.',EN,'e','E','J',0.5);
+  $('cCk').onclick=()=>{if(!ok.m)return fb('cCf',false,'أكمل قياس الكتلة أولا.');const v=num($('cC').value);if(isNaN(v))return fb('cCf',false,'اكتب الناتج بوحدة J/°C.');
+    if(Math.abs(v-CC())/CC()<0.005){ok.cC=true;fb('cCf',true,'✓ إجابة صحيحة:\n'+E(`C = ${fx(KG(),3)} × 4180 = ${fx(CC(),1)} J/°C`))}else fb('cCf',false,'✗ حول الكتلة إلى kg ثم اضربها في 4180:\n'+E(`C = ${fx(KG(),3)} × 4180`));sub();results()};
+  $('cQk').onclick=()=>{if(!(ok.m&&ok.a&&ok.t))return fb('cQf',false,'أكمل قياس الكتلة ودرجتي الحرارة أولا.');const v=num($('cQ').value);if(isNaN(v))return fb('cQf',false,'اكتب الناتج بوحدة J.');
+    if(Math.abs(v-QQ())/QQ()<0.005){ok.cQ=true;fb('cQf',true,'✓ إجابة صحيحة:\n'+E(`Q = ${fx(KG(),3)} × 4180 × ${DT().toFixed(1)} = ${fx(QQ(),1)} J`))}else fb('cQf',false,'✗ اطرح أولا ثم اضرب:\n'+E(`ΔT = ${T2.toFixed(1)} − ${T1.toFixed(1)} = ${DT().toFixed(1)} °C`)+'\n'+E(`Q = ${fx(KG(),3)} × 4180 × ${DT().toFixed(1)}`));sub();results()};
+  $('nw').onclick=newObj;calcInit(box);newObj()}
+
+/* ===== 2-4 الحرارة الكامنة: Q = m·H ===== */
+function lhLab(box){
+  const HX=110,CX=228,WW=['#FECACA','#B91C1C'],c=4180,HR=336000;
+  box.innerHTML=`
+  <div class="intro"><small class="labKind">🧪 تجربة عملية تفاعلية</small><h3>1. اسم التجربة</h3><p class="labName">حساب الحرارة الكامنة لانصهار الجليد باستخدام القانون Q = m·H</p></div>
+  <div class="tags"><span class="tag">الكتلة m: <i>الميزان الرقمي</i> · g</span><span class="tag">درجة الحرارة T: <i>مجس الحرارة الرقمي</i> · °C</span><span class="tag dv">Q و H: <i>كميات مشتقة</i> · J و J/kg</span></div>
+  <div class="intro goals"><h3>2. أهداف التجربة</h3><ol class="gl">
+    <li>التعرف على الميزان الرقمي ومجس الحرارة الرقمي والكوب العازل.</li>
+    <li>قياس كتلة الماء الدافئ <span dir="ltr">mw</span> وكتلة الجليد <span dir="ltr">mi</span> ودرجة حرارة الماء <span dir="ltr">T₁</span>.</li>
+    <li>إضافة الجليد إلى الماء الدافئ وقياس درجة الحرارة النهائية <span dir="ltr">Tf</span> بعد انصهاره كاملا.</li>
+    <li>حساب الحرارة الكامنة لانصهار الجليد <span dir="ltr">H</span> من القانون <span dir="ltr" style="white-space:nowrap">Q = m·H</span> ومقارنتها بالقيمة المرجعية.</li></ol></div>
+  <div class="intro"><h3>3. الأدوات والأجهزة المستخدمة</h3>
+    <div class="tool"><div class="stage">${hxScene({cups:[{x:HX,wc:WW[0],sc:WW[1],lv:0.6},{x:CX,lv:0,ice:6}],probe:{x:HX,tz:HX_IN},R:'45.0',lbls:[[HX-30,40,40,8,24,'ماء دافئ','start'],[CX+30,40,40,200,24,'‏مكعبات جليد (0 °C)‏'],[HX,40,130,396,60,'مجس الحرارة الرقمي','end'],[320,6,30,345,264,'جهاز القراءة'],[HX,40,20,150,264,'كوب عازل']]})}</div><div class="vcap">كوب عازل فيه ماء دافئ ومكعبات جليد عند 0 °C</div>
+    <p><b>ترتيب الأجهزة:</b> ماء دافئ معلوم الكتلة في كوب عازل، ومكعبات جليد تذوب عند <span dir="ltr">0 °C</span> معلومة الكتلة، ومجس الحرارة متصل بجهاز القراءة.</p></div>
+    <div class="tool"><div class="stage">${hxBal('40','mi','ice')}</div><p><b>الميزان الرقمي:</b> يقيس كتلة الماء الدافئ وكتلة الجليد بالجرام بدقة <span dir="ltr">1 g</span>.</p>
+    <p><b>مجس الحرارة الرقمي:</b> يعرض درجة حرارة الماء بدقة <span dir="ltr">0.1 °C</span>.</p></div></div>
+  <h3 class="secH">4. القوانين المستخدمة</h3>
+  <div class="ctl">
+    <div class="law ftl"><div class="ln lw"><b>الحرارة التي يفقدها الماء الدافئ عند تبرده من T₁ إلى Tf</b><span>Q₁ = mw·c·(T₁ − Tf)</span></div>
+      <div class="ln lw"><b>الحرارة التي يكتسبها ماء الجليد المنصهر عند تسخينه من 0 °C إلى Tf</b><span>Q₂ = mi·c·(Tf − 0)</span></div>
+      <div class="ln lw"><b>الحرارة اللازمة لصهر الجليد (الحرارة الكامنة)</b><span>Q = m·H ⟹ Q₁ − Q₂ = mi·H</span></div>
+      <div class="ln lw"><b>الحرارة الكامنة لانصهار الجليد</b><span>H = (Q₁ − Q₂) / mi</span></div>
+      <div class="sym"><b>حيث:</b><ul>
+      <li><span class="chip" dir="ltr">mw</span> كتلة الماء الدافئ، و <span class="chip" dir="ltr">mi</span> كتلة الجليد، ووحدتهما <span dir="ltr">kg</span></li>
+      <li><span class="chip" dir="ltr">c</span> الحرارة النوعية للماء، وقيمتها <span dir="ltr">4180 J/kg·°C</span></li>
+      <li><span class="chip" dir="ltr">T₁</span> درجة حرارة الماء الدافئ، و <span class="chip" dir="ltr">Tf</span> درجة الحرارة النهائية بعد انصهار الجليد كاملا، ووحدتهما <span dir="ltr">°C</span></li>
+      <li><span class="chip" dir="ltr">H</span> الحرارة الكامنة للانصهار: كمية الحرارة اللازمة لصهر <span dir="ltr">1 kg</span> من الجليد دون تغير درجة حرارته، ووحدتها <span dir="ltr">J/kg</span>، وقيمتها المرجعية <span dir="ltr">336000 J/kg</span></li>
+      <li><span class="chip" dir="ltr">Q₁, Q₂, Q</span> كميات الحرارة، ووحدتها <span dir="ltr">J</span></li></ul></div>
+      ${convBox(['m(kg) = m(g) / 1000'])}</div></div>
+  <h3 class="secH">5. تنفيذ التجربة</h3>
+  <div class="startBand">▶️ لنبدأ التجربة</div>
+  <div class="btns" style="margin-bottom:12px"><button type="button" class="rs" id="nw">🔄 قراءات جديدة</button></div>
+  <div class="ctl"><h3>5.1 القياس والحساب</h3>
+    <h4 class="sbh">أ) قياس كتلة الماء الدافئ mw</h4>
+    <div class="stage"><div id="b1"></div></div>
+    ${hxAns('wIn','قراءتك لكتلة الماء الدافئ mw','g')}
+    <h4 class="sbh">ب) قياس كتلة الجليد mi</h4>
+    <div class="stage"><div id="b2"></div></div>
+    ${hxAns('iIn','قراءتك لكتلة الجليد mi','g')}
+    <h4 class="sbh">ج) قياس درجة حرارة الماء الدافئ T₁</h4>
+    <div class="stage"><div id="aS"></div><svg id="aZ" viewBox="0 0 400 112"></svg><div class="hud"><span id="aSt"></span></div></div>
+    ${hxRow('aR','إنزال المجس')}
+    <p class="slh">👆 اسحب المؤشر البرتقالي لإنزال مجس الحرارة في الماء الدافئ، ثم اقرأ درجة الحرارة.</p>
+    ${hxAns('aIn','قراءتك لدرجة حرارة الماء الدافئ T₁','°C')}
+    <h4 class="sbh">د) إضافة الجليد وقراءة درجة الحرارة النهائية Tf</h4>
+    <div class="stage"><div id="dS"></div><svg id="dZ" viewBox="0 0 400 112"></svg><div class="hud"><span id="dSt"></span></div></div>
+    ${hxRow('dR','إضافة الجليد والتحريك')}
+    <p class="slh">👆 اسحب المؤشر البرتقالي لإضافة الجليد إلى الماء الدافئ وتحريكه حتى ينصهر كاملا، ثم اقرأ درجة الحرارة النهائية.</p>
+    ${hxAns('fIn','قراءتك لدرجة الحرارة النهائية Tf','°C')}
+    <h4 class="sbh">هـ) حساب الحرارة التي فقدها الماء الدافئ</h4>
+    <p class="slh">ℹ️ <b>المعطيات:</b> الحرارة النوعية للماء <b dir="ltr">c = 4180 J/kg·°C</b></p>
+    ${hxCalcStep('1','Q₁ = mw·c·(T₁ − Tf)','احسب Q₁ بوحدة J','J')}
+    <h4 class="sbh">و) حساب الحرارة التي اكتسبها ماء الجليد المنصهر</h4>
+    ${hxCalcStep('2','Q₂ = mi·c·(Tf − 0)','احسب Q₂ بوحدة J','J')}
+    <h4 class="sbh">ز) حساب الحرارة الكامنة لانصهار الجليد</h4>
+    ${hxCalcStep('H','H = (Q₁ − Q₂) / mi','احسب H بوحدة J/kg','J/kg')}
+  </div>
+  <div class="ctl"><h3>5.2 المقارنة بالقيمة المرجعية</h3>
+    <div class="law ftl"><div class="ln lw"><b>المقارنة</b><span id="cmpS" style="white-space:pre-line;line-height:2">أكمل الخطوات في 5.1</span></div></div>
+    <p class="rn" id="cmpN"></p></div>
+  <div class="ctl res"><h3>6. نتائج التجربة</h3>
+    <div class="tw"><table class="rt"><thead><tr><th>الكمية</th><th>القيمة</th></tr></thead>
+    <tbody><tr><td>كتلة الماء الدافئ mw</td><td id="r1">—</td></tr><tr><td>كتلة الجليد mi</td><td id="r2">—</td></tr><tr><td>T₁</td><td id="r3">—</td></tr><tr><td>Tf</td><td id="r4">—</td></tr>
+    <tr><td>Q₁</td><td id="r5">—</td></tr><tr><td>Q₂</td><td id="r6">—</td></tr><tr><td>الحرارة الكامنة H</td><td id="r7">—</td></tr></tbody></table></div>
+    <p class="rn" id="rNote">تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.</p></div>`;
+  const {$,num,fb,fb0,r1,fx}=hxKit(box);let MW,MI,T1,TF,ok={};
+  const KW=()=>MW/1000,KI=()=>MI/1000,Q1=()=>KW()*c*(T1-TF),Q2=()=>KI()*c*TF,HH=()=>(Q1()-Q2())/KI();
+  function newObj(){MW=200+10*Math.floor(Math.random()*11);MI=30+2*Math.floor(Math.random()*11);T1=r1(40+Math.random()*10);const he=HR*(0.97+Math.random()*0.05);TF=r1((KW()*c*T1-KI()*he)/(c*(KW()+KI())));ok={};
+    ['aR','dR'].forEach(k=>$(k).value=0);['wIn','iIn','aIn','fIn','c1','c2','cH'].forEach(k=>$(k).value='');['wInFb','iInFb','aInFb','fInFb','c1f','c2f','cHf'].forEach(fb0);$('b1').innerHTML=hxBal(MW,'mw','warm');$('b2').innerHTML=hxBal(MI,'mi','ice');aDraw();dDraw();sub();results()}
+  function aDraw(){const v=+$('aR').value,on=v>=100;$('aRO').textContent=on?'في الماء':'';$('aSt').textContent=on?'✓ المجس في الماء الدافئ، اقرأ T₁':'أنزل المجس حتى يستقر في الماء';
+    $('aS').innerHTML=hxScene({cups:[{x:HX,wc:WW[0],sc:WW[1],lv:0.6},{x:CX,lv:0,ice:6}],probe:{x:HX,tz:HX_UP-v/100*(HX_UP-HX_IN)},R:on?T1.toFixed(1):null});$('aZ').innerHTML=hxZoom([[56,288,`T = ${on?T1.toFixed(1):'--.-'} °C`]],'شاشة جهاز القراءة (مكبرة)')}
+  function dDraw(){const v=+$('dR').value,done=v>=100,fly=v>0&&v<25,inC=v>=25,melt=inC?Math.min(1,(v-25)/75):0,T=done?TF:inC?r1(T1-(T1-TF)*Math.pow(melt,0.7)):T1;
+    $('dRO').textContent=done?'انصهر الجليد':inC?'ينصهر…':fly?'يضاف…':'';$('dSt').textContent=done?'✓ انصهر الجليد كاملا وثبتت القراءة، اقرأ Tf':inC?'الجليد يمتص الحرارة من الماء الدافئ وينصهر…':'أضف الجليد إلى الماء الدافئ';
+    const flyP=fly?[CX-(CX-HX)*v/25,14+78+30]:null;
+    $('dS').innerHTML=hxScene({cups:[{x:HX,wc:inC?(done?'#E0E7FF':'#FBCFE8'):WW[0],sc:WW[1],lv:0.6+0.12*melt,ice:inC&&!done?5:0,isz:1-melt},{x:CX,lv:0,ice:v>0?0:6}],flyIce:flyP,probe:{x:HX,tz:HX_IN},R:T.toFixed(1)});
+    $('dZ').innerHTML=hxZoom([[56,288,`T = ${T.toFixed(1)} °C`]],'شاشة جهاز القراءة (مكبرة)')}
+  function sub(){const rd=ok.w&&ok.i&&ok.a&&ok.f;
+    $('sb1').textContent=rd?['Q₁ = mw·c·(T₁ − Tf)',E(`mw = ${MW} g = ${fx(KW(),3)} kg`),E(`Q₁ = ${fx(KW(),3)} × 4180 × (${T1.toFixed(1)} − ${TF.toFixed(1)})`)].join('\n'):'Q₁ = mw·c·(T₁ − Tf)';
+    $('sb2').textContent=rd?['Q₂ = mi·c·(Tf − 0)',E(`mi = ${MI} g = ${fx(KI(),3)} kg`),E(`Q₂ = ${fx(KI(),3)} × 4180 × ${TF.toFixed(1)}`)].join('\n'):'Q₂ = mi·c·(Tf − 0)';
+    $('sbH').textContent=ok.c1&&ok.c2?['H = (Q₁ − Q₂) / mi',E(`H = (${fx(Q1(),1)} − ${fx(Q2(),1)}) / ${fx(KI(),3)}`)].join('\n'):'H = (Q₁ − Q₂) / mi'}
+  function results(){$('r1').textContent=ok.w?E(fx(KW(),3)+' kg'):'—';$('r2').textContent=ok.i?E(fx(KI(),3)+' kg'):'—';$('r3').textContent=ok.a?E(T1.toFixed(1)+' °C'):'—';$('r4').textContent=ok.f?E(TF.toFixed(1)+' °C'):'—';
+    $('r5').textContent=ok.c1?E(fx(Q1(),1)+' J'):'—';$('r6').textContent=ok.c2?E(fx(Q2(),1)+' J'):'—';$('r7').textContent=ok.cH?E(fx(HH(),0)+' J/kg'):'—';
+    const all=ok.cH;$('cmpS').textContent=all?['الحرارة الكامنة المحسوبة:',E(`H = ${fx(HH(),0)} J/kg`),'القيمة المرجعية:',E(`H = 336000 J/kg`),'الفرق:',E(`${fx(Math.abs(HH()-HR),0)} J/kg`)].join('\n'):'أكمل الخطوات في 5.1';
+    $('cmpN').textContent=all?'الحرارة الكامنة المحسوبة قريبة من القيمة المرجعية، والفرق بسبب تبادل جزء صغير من الحرارة مع الكوب والهواء المحيط.':'';
+    $('rNote').innerHTML=all?'الاستنتاج: يمتص الجليد كمية من الحرارة لينصهر دون أن ترتفع درجة حرارته عن <span dir="ltr">0 °C</span>، وهذه الحرارة تتناسب مع كتلته <span dir="ltr" style="white-space:nowrap">Q = m·H</span>، والحرارة الكامنة لانصهار الجليد نحو <span dir="ltr">336000 J/kg</span>.':'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
+  $('aR').oninput=aDraw;$('dR').oninput=dDraw;
+  const mk=(id,val,key,lab,k)=>{$(id+'Ck').onclick=()=>{const v=num($(id).value);if(isNaN(v))return fb(id+'Fb',false,'اكتب قراءتك بالجرام.');if(Math.abs(v-val())<0.5){ok[key]=true;fb(id+'Fb',true,'✓ قراءة صحيحة:\n'+E(`${lab} = ${val()} g = ${fx(k(),3)} kg`))}else fb(id+'Fb',false,'✗ اقرأ الرقم الظاهر على شاشة الميزان.');sub();results()}};
+  mk('wIn',()=>MW,'w','mw',KW);mk('iIn',()=>MI,'i','mi',KI);
+  const rd=(id,need,msg,val,key,lab)=>{$(id+'Ck').onclick=()=>{if(!need())return fb(id+'Fb',false,msg);const v=num($(id).value);if(isNaN(v))return fb(id+'Fb',false,'اكتب قراءتك بوحدة °C.');
+    if(Math.abs(v-val())<0.05){ok[key]=true;fb(id+'Fb',true,'✓ قراءة صحيحة:\n'+E(`${lab} = ${val().toFixed(1)} °C`))}else fb(id+'Fb',false,'✗ اكتب درجة الحرارة كما تظهر على الشاشة المكبرة.');sub();results()}};
+  rd('aIn',()=>+$('aR').value>=100,'أنزل المجس في الماء الدافئ أولا.',()=>T1,'a','T₁');rd('fIn',()=>+$('dR').value>=100,'أضف الجليد وحركه حتى ينصهر كاملا أولا.',()=>TF,'f','Tf');
+  const ck=(id,need,val,okTxt,bad)=>{$('c'+id+'k').onclick=()=>{if(!need())return fb('c'+id+'f',false,'أكمل القياسات والخطوات السابقة أولا.');const v=num($('c'+id).value);if(isNaN(v))return fb('c'+id+'f',false,'اكتب الناتج بالأرقام.');
+    if(Math.abs(v-val())/Math.abs(val())<0.005){ok['c'+id]=true;fb('c'+id+'f',true,'✓ إجابة صحيحة:\n'+E(okTxt()))}else fb('c'+id+'f',false,bad());sub();results()}};
+  const all4=()=>ok.w&&ok.i&&ok.a&&ok.f;
+  ck('1',all4,Q1,()=>`Q₁ = ${fx(KW(),3)} × 4180 × ${fx(T1-TF,1)} = ${fx(Q1(),1)} J`,()=>'✗ اطرح أولا ثم اضرب:\n'+E(`T₁ − Tf = ${T1.toFixed(1)} − ${TF.toFixed(1)} = ${fx(T1-TF,1)} °C`)+'\n'+E(`Q₁ = ${fx(KW(),3)} × 4180 × ${fx(T1-TF,1)}`));
+  ck('2',all4,Q2,()=>`Q₂ = ${fx(KI(),3)} × 4180 × ${TF.toFixed(1)} = ${fx(Q2(),1)} J`,()=>'✗ حول كتلة الجليد إلى kg ثم اضرب:\n'+E(`Q₂ = ${fx(KI(),3)} × 4180 × ${TF.toFixed(1)}`));
+  ck('H',()=>ok.c1&&ok.c2,HH,()=>`H = ${fx(Q1()-Q2(),1)} / ${fx(KI(),3)} = ${fx(HH(),0)} J/kg`,()=>'✗ اطرح أولا ثم اقسم على كتلة الجليد بالكيلوجرام:\n'+E(`Q₁ − Q₂ = ${fx(Q1(),1)} − ${fx(Q2(),1)} = ${fx(Q1()-Q2(),1)} J`)+'\n'+E(`H = ${fx(Q1()-Q2(),1)} / ${fx(KI(),3)}`));
+  $('nw').onclick=newObj;calcInit(box);newObj()}
+
+/* ===== 2-6 طرق انتقال الحرارة ===== */
+function cdScene(t,fall,o){/* قضبان النحاس والألومنيوم والحديد على مصدر حرارة، وكرات شمع في أطرافها؛ fall أزمنة السقوط */
+  o=o||{};const BASE=230,T=14,S=(x,d,z)=>[x+d*0.6,BASE-z-d*0.5],P=(x,d,z)=>S(x,d,z).join(',');
+  const poly=(a,f,st)=>`<polygon points="${a.map(p=>P(...p)).join(' ')}" fill="${f}" stroke="${st||'#334155'}" stroke-linejoin="round"/>`;
+  const box=(x0,x1,d0,d1,z0,z1,cf,ct,cs,st)=>poly([[x0,d0,z1],[x1,d0,z1],[x1,d1,z1],[x0,d1,z1]],ct,st)+poly([[x1,d0,z0],[x1,d1,z0],[x1,d1,z1],[x1,d0,z1]],cs,st)+poly([[x0,d0,z0],[x1,d0,z0],[x1,d0,z1],[x0,d0,z1]],cf,st);
+  const lbl=(x,y,tx,ty,tt,anc)=>`<line x1="${x}" y1="${y}" x2="${tx}" y2="${ty}" stroke="var(--muted)" stroke-width="1"/><circle cx="${x}" cy="${y}" r="2.4" fill="var(--muted)"/><text x="${tx}" y="${ty+(ty<y?-4:13)}" font-size="13" font-weight="700" text-anchor="${anc||'middle'}" fill="var(--ink)">${tt}</text>`;
+  let g='';g+=box(6,346,0,86,0,T,'#B7834A','#E9C894','#9A6A3A','#7C4A1F');
+  /* مصدر الحرارة والكتلة النحاسية الوسطى */
+  g+=box(30,80,18,62,T,T+30,'#334155','#64748B','#1F2937','#0F172A');{const [a,b]=S(55,40,T+30);g+=`<ellipse cx="${a}" cy="${b-1}" rx="18" ry="6" fill="${t>0?'#EF4444':'#94A3B8'}" opacity=".9"/>`}
+  g+=box(44,66,26,54,T+30,T+120,'#92400E','#D97706','#78350F','#451A03');
+  const rods=[['#B45309','#F59E0B',T+108,'نحاس'],['#94A3B8','#E2E8F0',T+82,'ألومنيوم'],['#334155','#64748B',T+56,'حديد']],d=40;
+  rods.forEach(([c1,c2,z,n],i)=>{g+=box(66,290,d-3,d+3,z-6,z,c1,c2,c1,'#1F2937');
+    if(t>0){const k=Math.min(1,t/fall[i]),a=S(66,d-3,z),b=S(66+224*k,d-3,z);g+=`<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="#EF4444" stroke-width="2.6" opacity=".8"/>`}
+    const [ex,ey]=S(284,d,z-6);if(t>=fall[i]){const [fx2,fy]=S(250+i*16,70,T+3);g+=`<circle cx="${fx2}" cy="${fy}" r="6" fill="#FDE68A" stroke="#A16207"/>`}else g+=`<path d="M${ex},${ey} v5" stroke="#A16207" stroke-width="2"/><circle cx="${ex}" cy="${ey+11}" r="6" fill="#FDE68A" stroke="#A16207"/>`;
+    const [lx,ly]=S(296,d,z-3);g+=`<text x="${lx}" y="${ly+4}" font-size="12" font-weight="800" fill="var(--ink)" text-anchor="start">${n}</text>`});
+  if(o.sw!=null){const [sx,sy]=S(330,80,T);g+=`<rect x="${sx-4}" y="${sy-44}" width="8" height="6" rx="1.5" fill="#475569"/><circle cx="${sx}" cy="${sy-22}" r="17" fill="#1F2937" stroke="#0F172A"/><circle cx="${sx}" cy="${sy-22}" r="13" fill="#E2E8F0"/><text x="${sx}" y="${sy-18}" font-size="10" font-weight="800" text-anchor="middle" fill="#0F172A" font-family="Consolas,monospace" direction="ltr">${o.sw} s</text>`}
+  if(o.lab){g+=lbl(...S(284,40,T+39),330,BASE+20,'كرة شمع')+lbl(...S(55,26,T+100),110,22,'كتلة نحاسية','start')+lbl(...S(40,18,T+15),20,BASE+20,'مصدر الحرارة','start')+lbl(...S(180,37,T+108),200,22,'قضبان فلزية متساوية','start')}
+  return `<svg viewBox="0 0 400 ${BASE+(o.lab?40:10)}" aria-label="قضبان فلزية على مصدر حرارة وكرات شمع في أطرافها">${g}</svg>`}
+function lcScene(sel,R,o){/* مكعب ليزلي: الوجه الأمامي أسود والجانبي لامع، ومقياس الحرارة بالأشعة تحت الحمراء؛ sel 0..100 */
+  o=o||{};const BASE=240,T=14,S=(x,d,z)=>[x+d*0.6,BASE-z-d*0.5],P=(x,d,z)=>S(x,d,z).join(',');
+  const poly=(a,f,st)=>`<polygon points="${a.map(p=>P(...p)).join(' ')}" fill="${f}" stroke="${st||'#334155'}" stroke-linejoin="round"/>`;
+  const lbl=(x,y,tx,ty,tt,anc)=>`<line x1="${x}" y1="${y}" x2="${tx}" y2="${ty}" stroke="var(--muted)" stroke-width="1"/><circle cx="${x}" cy="${y}" r="2.4" fill="var(--muted)"/><text x="${tx}" y="${ty+(ty<y?-4:13)}" font-size="13" font-weight="700" text-anchor="${anc||'middle'}" fill="var(--ink)">${tt}</text>`;
+  let g=`<defs><linearGradient id="lcSh" x1="0" x2="1"><stop offset="0" stop-color="#CBD5E1"/><stop offset=".5" stop-color="#F8FAFC"/><stop offset="1" stop-color="#94A3B8"/></linearGradient></defs>`;
+  g+=poly([[6,0,T],[346,0,T],[346,86,T],[6,86,T]],'#E9C894','#7C4A1F')+poly([[6,0,0],[346,0,0],[346,0,T],[6,0,T]],'#B7834A','#7C4A1F');
+  const X0=120,X1=210,D0=30,D1=70,Z0=T,Z1=T+90;
+  g+=poly([[X0,D0,Z1],[X1,D0,Z1],[X1,D1,Z1],[X0,D1,Z1]],'#475569','#1F2937');
+  g+=poly([[X1,D0,Z0],[X1,D1,Z0],[X1,D1,Z1],[X1,D0,Z1]],'url(#lcSh)','#475569');
+  g+=poly([[X0,D0,Z0],[X1,D0,Z0],[X1,D0,Z1],[X0,D0,Z1]],'#0F172A','#000');
+  {const [a,b]=S(165,50,Z1);g+=`<path d="M${a-6},${b} v-14 h12 v14" fill="#64748B" stroke="#334155"/>`;for(let i=-1;i<=1;i++)g+=`<path d="M${a+i*8},${b-18} c-5,-6 5,-10 0,-16" fill="none" stroke="#94A3B8" stroke-width="1.8" opacity=".6"/>`}
+  /* مقياس الحرارة بالأشعة تحت الحمراء يتحرك من أمام الوجه الأسود إلى أمام الوجه اللامع */
+  const u=sel/100,tgt=u<0.5?S(165,D0,T+45):S(X1,50,T+45),gun=u<=0?[165,D0-26]:u>=1?[X1+40,50]:[165+(X1+40-165)*u,D0-26+(50-D0+26)*u],[gx,gy]=S(gun[0],gun[1],T+45);
+  const at=u===0||u===1;if(at)g+=`<line x1="${gx}" y1="${gy}" x2="${tgt[0]}" y2="${tgt[1]}" stroke="#DC2626" stroke-width="1.6" stroke-dasharray="4 3"/><circle cx="${tgt[0]}" cy="${tgt[1]}" r="3" fill="#DC2626"/>`;
+  g+=`<rect x="${gx-18}" y="${gy-10}" width="36" height="20" rx="5" fill="#F7931E" stroke="#9A3412"/><rect x="${gx-6}" y="${gy+8}" width="12" height="22" rx="3" fill="#1F2937"/><text x="${gx}" y="${gy+4}" font-size="9" font-weight="800" text-anchor="middle" fill="#fff" direction="ltr">${R||'--.-'}</text>`;
+  if(o.lab){g+=lbl(...S(140,D0,T+70),30,26,'الوجه الأسود','start')+lbl(...S(X1,60,T+70),360,26,'الوجه اللامع','end')+lbl(...S(165,50,Z1+10),200,20,'ماء ساخن')+lbl(gx,gy+20,140,BASE+18,'‏مقياس الحرارة بالأشعة تحت الحمراء‏')}
+  return `<svg viewBox="0 0 400 ${BASE+(o.lab?40:10)}" aria-label="مكعب ليزلي ومقياس الحرارة بالأشعة تحت الحمراء">${g}</svg>`}
+function cvScene(p,o){/* الحمل: كأس ماء يسخن من أسفل جانبه الأيسر مع صبغة */
+  o=o||{};const W=400,H=230;let g=`<rect x="120" y="30" width="160" height="160" rx="6" fill="#DBEAFE" stroke="#1E3A8A" stroke-width="2.4" opacity=".9"/><rect x="120" y="44" width="160" height="146" fill="#BFDBFE" opacity=".8"/>`;
+  g+=`<rect x="130" y="196" width="40" height="10" rx="2" fill="#334155"/><path d="M140,196 c-4,-8 4,-10 0,-16 M150,196 c-4,-8 4,-10 0,-16 M160,196 c-4,-8 4,-10 0,-16" fill="none" stroke="#EF4444" stroke-width="2"/>`;
+  const L=520,dash=`stroke-dasharray="${L*p} ${L}"`;
+  g+=`<path d="M150,180 L150,70 Q150,58 162,58 L238,58 Q250,58 250,70 L250,170 Q250,182 238,182 L162,182" fill="none" stroke="#9333EA" stroke-width="5" stroke-linecap="round" ${dash} opacity=".85"/>`;
+  if(p>0.2)g+=`<path d="M144,110 l6,-10 l6,10" fill="none" stroke="#DC2626" stroke-width="3"/>`;if(p>0.6)g+=`<path d="M244,110 l6,10 l6,-10" fill="none" stroke="#2563EB" stroke-width="3"/>`;
+  if(o.lab)g+=`<text x="100" y="110" font-size="13" font-weight="700" text-anchor="end" fill="#DC2626">ماء ساخن يرتفع</text><text x="300" y="110" font-size="13" font-weight="700" text-anchor="start" fill="#2563EB">ماء بارد ينزل</text><text x="150" y="224" font-size="13" font-weight="700" text-anchor="middle" fill="var(--ink)">مصدر الحرارة</text><text x="200" y="22" font-size="13" font-weight="700" text-anchor="middle" fill="#7E22CE">صبغة ملونة</text>`;
+  return `<svg viewBox="0 0 ${W} ${H}" aria-label="تيار الحمل في كأس ماء">${g}</svg>`}
+function trLab(box){
+  box.innerHTML=`
+  <div class="intro"><small class="labKind">🧪 تجربة عملية تفاعلية</small><h3>1. اسم التجربة</h3><p class="labName">مقارنة انتقال الحرارة بالتوصيل في قضبان فلزية وبالحمل في الماء وبالإشعاع من سطح أسود وسطح لامع</p></div>
+  <div class="tags"><span class="tag">الزمن t: <i>ساعة الإيقاف</i> · s</span><span class="tag">درجة حرارة السطح T: <i>مقياس الحرارة بالأشعة تحت الحمراء</i> · °C</span></div>
+  <div class="intro goals"><h3>2. أهداف التجربة</h3><ol class="gl">
+    <li>التعرف على جهاز توصيل الحرارة في القضبان الفلزية ومكعب ليزلي ومقياس الحرارة بالأشعة تحت الحمراء.</li>
+    <li>قياس زمن سقوط كرة الشمع عن قضبان النحاس والألومنيوم والحديد بساعة الإيقاف، وترتيب الفلزات حسب التوصيل الحراري.</li>
+    <li>ملاحظة تيار الحمل في الماء عند تسخينه من أسفل.</li>
+    <li>قياس درجة حرارة الوجه الأسود والوجه اللامع لمكعب ليزلي، والمقارنة بين إشعاعهما الحراري.</li></ol></div>
+  <div class="intro"><h3>3. الأدوات والأجهزة المستخدمة</h3>
+    <div class="tool"><div class="stage">${cdScene(0,[1,1,1],{lab:true})}</div><div class="vcap">جهاز التوصيل الحراري: ثلاثة قضبان فلزية متصلة بكتلة نحاسية فوق مصدر حرارة</div>
+    <p><b>جهاز التوصيل الحراري:</b> ثلاثة قضبان متساوية الطول والسمك من النحاس والألومنيوم والحديد، متصلة بكتلة نحاسية فوق مصدر حرارة، وفي طرف كل قضيب كرة صغيرة مثبتة بالشمع.</p></div>
+    <div class="tool"><div class="stage">${cvScene(0.8,{lab:true})}</div><div class="vcap">كأس ماء يسخن من أسفل جانبه الأيسر، مع صبغة ملونة</div>
+    <p><b>كأس الماء والصبغة:</b> تسخين الماء من أسفل جانب واحد مع قطرات صبغة ملونة لرؤية حركة الماء.</p></div>
+    <div class="tool"><div class="stage">${lcScene(0,null,{lab:true})}</div><div class="vcap">مكعب ليزلي ومقياس الحرارة بالأشعة تحت الحمراء</div>
+    <p><b>مكعب ليزلي <span dir="ltr">(Leslie Cube)</span>:</b> مكعب معدني يملأ بماء ساخن، أحد وجهيه مطلي بالأسود والآخر لامع، فيكونان عند درجة الحرارة نفسها.</p>
+    <p><b>مقياس الحرارة بالأشعة تحت الحمراء:</b> يقيس الإشعاع الصادر من السطح دون تلامس، ويعرضه درجة حرارة بوحدة <span dir="ltr">°C</span>، فالسطح الذي يشع أكثر يعطي قراءة أعلى.</p></div></div>
+  <h3 class="secH">4. القوانين المستخدمة</h3>
+  <div class="ctl">
+    <div class="law ftl"><div class="ln lw"><b>التوصيل: انتقال الحرارة خلال المادة بالتلامس من جزيء لآخر دون انتقال المادة نفسها</b><span>الفلزات موصلات جيدة</span></div>
+      <div class="ln lw"><b>الحمل: في السوائل والغازات، المائع الساخن يتمدد وتقل كثافته فيرتفع، ويحل محله المائع البارد</b><span>تيار الحمل</span></div>
+      <div class="ln lw"><b>الإشعاع: انتقال الطاقة على شكل موجات كهرومغناطيسية، ولا يحتاج وسطا ماديا</b><span>السطح الأسود يشع أكثر</span></div>
+      <div class="sym"><b>حيث:</b><ul>
+      <li><span class="chip" dir="ltr">t</span> زمن سقوط كرة الشمع من لحظة تشغيل مصدر الحرارة، ووحدته <span dir="ltr">s</span>، وكلما قل الزمن كان القضيب أجود توصيلا للحرارة</li>
+      <li><span class="chip" dir="ltr">T</span> درجة حرارة السطح كما يقرؤها مقياس الأشعة تحت الحمراء، ووحدتها <span dir="ltr">°C</span>، وكلما زادت كان إشعاع السطح أكبر</li></ul></div></div></div>
+  <h3 class="secH">5. تنفيذ التجربة</h3>
+  <div class="startBand">▶️ لنبدأ التجربة</div>
+  <div class="btns" style="margin-bottom:12px"><button type="button" class="rs" id="nw">🔄 قراءات جديدة</button></div>
+  <div class="ctl"><h3>5.1 القياس</h3>
+    <h4 class="sbh">أ) التوصيل: قياس زمن سقوط كرة الشمع عن كل قضيب</h4>
+    <div class="stage"><div id="cS"></div><svg id="cZ" viewBox="0 0 400 112"></svg><div class="hud"><span id="cSt"></span></div></div>
+    <div class="row"><label for="tR">ساعة الإيقاف</label><output id="tO"></output><input id="tR" type="range" min="0" max="120" step="1" value="0"></div>
+    <p class="slh">👆 اسحب مؤشر ساعة الإيقاف ببطء، وتوقف عند لحظة سقوط كل كرة، ثم اكتب الزمن الظاهر على ساعة الإيقاف.</p>
+    ${hxAns('t1','زمن سقوط الكرة عن قضيب النحاس','s')}
+    ${hxAns('t2','زمن سقوط الكرة عن قضيب الألومنيوم','s')}
+    ${hxAns('t3','زمن سقوط الكرة عن قضيب الحديد','s')}
+    <h4 class="sbh">ب) الحمل: ملاحظة حركة الماء عند تسخينه</h4>
+    <div class="stage"><div id="vS"></div><div class="hud"><span id="vSt"></span></div></div>
+    ${hxRow('vR','تسخين الماء')}
+    <p class="slh">👆 اسحب المؤشر البرتقالي لتسخين الماء، ولاحظ مسار الصبغة الملونة.</p>
+    <h4 class="sbh">ج) الإشعاع: قياس درجة حرارة الوجه الأسود والوجه اللامع لمكعب ليزلي</h4>
+    <div class="stage"><div id="lS"></div><svg id="lZ" viewBox="0 0 400 112"></svg><div class="hud"><span id="lSt"></span></div></div>
+    ${hxRow('lR','توجيه المقياس')}
+    <p class="slh">👆 المقياس موجه إلى الوجه الأسود، اقرأ القراءة، ثم اسحب المؤشر البرتقالي لتوجيهه إلى الوجه اللامع واقرأ القراءة.</p>
+    ${hxAns('b1','قراءة المقياس أمام الوجه الأسود','°C')}
+    ${hxAns('b2','قراءة المقياس أمام الوجه اللامع','°C')}
+  </div>
+  <div class="ctl"><h3>5.2 المقارنة بين طرق انتقال الحرارة</h3>
+    <div class="law ftl"><div class="ln lw"><b>المقارنة</b><span id="cmpS" style="white-space:pre-line;line-height:2">أكمل الخطوات في 5.1</span></div></div>
+    <p class="rn" id="cmpN"></p></div>
+  <div class="ctl res"><h3>6. نتائج التجربة</h3>
+    <div class="tw"><table class="rt"><thead><tr><th>القياس</th><th>القيمة</th></tr></thead>
+    <tbody><tr><td>زمن السقوط: النحاس</td><td id="r1">—</td></tr><tr><td>زمن السقوط: الألومنيوم</td><td id="r2">—</td></tr><tr><td>زمن السقوط: الحديد</td><td id="r3">—</td></tr>
+    <tr><td>الحمل في الماء</td><td id="r4">—</td></tr><tr><td>قراءة الوجه الأسود</td><td id="r5">—</td></tr><tr><td>قراءة الوجه اللامع</td><td id="r6">—</td></tr></tbody></table></div>
+    <p class="rn" id="rNote">تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.</p></div>`;
+  const {$,num,fb,fb0,r1}=hxKit(box);let F,BK,SH,ok={};
+  function newObj(){F=[18+Math.floor(Math.random()*8),32+Math.floor(Math.random()*10),70+Math.floor(Math.random()*25)];BK=r1(76+Math.random()*6);SH=r1(30+Math.random()*6);ok={};
+    ['tR','vR','lR'].forEach(k=>$(k).value=0);['t1','t2','t3','b1','b2'].forEach(k=>$(k).value='');['t1Fb','t2Fb','t3Fb','b1Fb','b2Fb'].forEach(fb0);cDraw();vDraw();lDraw();results()}
+  function cDraw(){const t=+$('tR').value,n=F.filter(x=>t>=x).length;$('tO').textContent=t+' s';
+    $('cSt').textContent=t===0?'شغل ساعة الإيقاف مع تشغيل مصدر الحرارة':F.includes(t)?'✓ سقطت كرة الآن، اقرأ الزمن من ساعة الإيقاف':`سقط ${n} من 3 كرات`;
+    $('cS').innerHTML=cdScene(t,F,{sw:t});$('cZ').innerHTML=hxZoom([[56,288,`t = ${t} s`]],'شاشة ساعة الإيقاف (مكبرة)')}
+  function vDraw(){const v=+$('vR').value;$('vRO').textContent=v>=100?'تكون تيار الحمل':'';$('vSt').textContent=v>=100?'✓ الماء الساخن يرتفع، والبارد ينزل ليحل محله: تيار الحمل':v>0?'الصبغة تتحرك مع الماء…':'شغل مصدر الحرارة';
+    $('vS').innerHTML=cvScene(v/100,{lab:v>=100});if(v>=100&&!ok.v){ok.v=true;results()}}
+  function lDraw(){const v=+$('lR').value,R=v===0?BK.toFixed(1):v===100?SH.toFixed(1):null;$('lRO').textContent=v===0?'الوجه الأسود':v===100?'الوجه اللامع':'';
+    $('lSt').textContent=v===0?'✓ المقياس موجه إلى الوجه الأسود':v===100?'✓ المقياس موجه إلى الوجه اللامع':'حرك المقياس حتى يواجه الوجه اللامع';
+    $('lS').innerHTML=lcScene(v,R);$('lZ').innerHTML=hxZoom([[56,288,`T = ${R||'--.-'} °C`]],'شاشة مقياس الحرارة بالأشعة تحت الحمراء (مكبرة)')}
+  function results(){['r1','r2','r3'].forEach((r,i)=>$(r).textContent=ok['t'+(i+1)]?E(F[i]+' s'):'—');$('r4').textContent=ok.v?'الماء الساخن يرتفع والبارد ينزل':'—';$('r5').textContent=ok.b1?E(BK.toFixed(1)+' °C'):'—';$('r6').textContent=ok.b2?E(SH.toFixed(1)+' °C'):'—';
+    const all=ok.t1&&ok.t2&&ok.t3&&ok.v&&ok.b1&&ok.b2;
+    $('cmpS').textContent=all?['التوصيل (الأسرع أجود توصيلا):',E(`${F[0]} s < ${F[1]} s < ${F[2]} s`),'النحاس ثم الألومنيوم ثم الحديد','الإشعاع:',E(`${BK.toFixed(1)} °C > ${SH.toFixed(1)} °C`),'الوجه الأسود يشع أكثر من الوجه اللامع'].join('\n'):'أكمل الخطوات في 5.1';
+    $('cmpN').textContent=all?'الوجهان عند درجة الحرارة نفسها لأن الماء الساخن نفسه بداخلهما، لكن الوجه الأسود يصدر إشعاعا حراريا أكبر فيقرؤه المقياس أعلى.':'';
+    $('rNote').innerHTML=all?'الاستنتاج: تنتقل الحرارة بالتوصيل في المواد الصلبة، والنحاس أجود الفلزات الثلاثة توصيلا للحرارة ثم الألومنيوم ثم الحديد، وتنتقل بالحمل في السوائل بحركة المائع الساخن إلى أعلى، وتنتقل بالإشعاع على شكل موجات كهرومغناطيسية، والسطح الأسود يشع أكثر من السطح اللامع.':'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
+  $('tR').oninput=cDraw;$('vR').oninput=vDraw;$('lR').oninput=lDraw;
+  const nm=['النحاس','الألومنيوم','الحديد'];
+  [0,1,2].forEach(i=>{$('t'+(i+1)+'Ck').onclick=()=>{const id='t'+(i+1);if(+$('tR').value<F[i])return fb(id+'Fb',false,'حرك ساعة الإيقاف حتى تسقط الكرة عن قضيب '+nm[i]+' أولا.');const v=num($(id).value);if(isNaN(v))return fb(id+'Fb',false,'اكتب الزمن بالثانية.');
+    if(Math.abs(v-F[i])<=1){ok[id]=true;fb(id+'Fb',true,'✓ قراءة صحيحة:\n'+E(`t = ${F[i]} s`))}else fb(id+'Fb',false,'✗ ارجع بساعة الإيقاف إلى أول لحظة سقطت فيها الكرة، واقرأ الزمن.');results()}});
+  const rb=(id,pos,val,lab)=>{$(id+'Ck').onclick=()=>{if(+$('lR').value!==pos)return fb(id+'Fb',false,`وجه المقياس إلى ${lab} أولا.`);const v=num($(id).value);if(isNaN(v))return fb(id+'Fb',false,'اكتب القراءة بوحدة °C.');
+    if(Math.abs(v-val())<0.05){ok[id]=true;fb(id+'Fb',true,'✓ قراءة صحيحة:\n'+E(`T = ${val().toFixed(1)} °C`))}else fb(id+'Fb',false,'✗ اكتب القراءة كما تظهر على الشاشة المكبرة.');results()}};
+  rb('b1',0,()=>BK,'الوجه الأسود');rb('b2',100,()=>SH,'الوجه اللامع');
+  $('nw').onclick=newObj;newObj()}
+
 /* مراجع التجارب (نفس مراجع التقرير) */
 const LREF=[
  ['North Carolina State University. (n.d.). <i>Measurement: Lab 1, Physics Mechanics Laboratory Manual</i>. Advanced Instructional Systems (WebAssign).','https://www.webassign.net/question_assets/ncsucalcphysmechl3/lab_1/manual.html'],
@@ -2291,8 +3006,25 @@ const LREF=[
  ['West Virginia University, Department of Physics and Astronomy. (n.d.). <i>This Is Work: PHYS 201 Activity</i>. Morgantown, WV.','https://www.as.wvu.edu/phys/rotter/phys201/5_Energy/This_Is_Work.htm'],
  ['Mercer University, Department of Physics. (n.d.). <i>Conservation of Energy: Physics Lab VI, Mechanics Laboratory Manual</i>. Macon, GA.','https://physics.mercer.edu/labs/manuals/manualMECHlab/energyConservation/energyConservation.pdf'],
  ['Prairie View A&amp;M University, Department of Physics. (n.d.). <i>Experiment 6: Conservation of Mechanical Energy, Physics 2111 Laboratory Manual</i>. Prairie View, TX.','https://www.pvamu.edu/physics/wp-content/uploads/sites/55/phys-2111-lab-manual.pdf'],
- ['New York University, Department of Physics. (2016). <i>Conservation of Energy: General Physics I Laboratory Manual</i>. New York, NY.','https://physics.nyu.edu/~physlab/GenPhysI_PhysII/Intro%20I/Intro%20I/Conservation-Of-Energy-Physics-Majors-07-07-2016.pdf']];
-const LREFK={'1-9':[[17,'إسقاط جسم من السكون من ارتفاع محدد فوق بوابة ضوئية مضبوطة على قياس السرعة، ومقارنة طاقة الوضع <span dir="ltr" style="white-space:nowrap">m·g·h</span> بطاقة الحركة <span dir="ltr" style="white-space:nowrap">½·m·v²</span>.'],[15,'مقارنة طاقة الوضع المفقودة من ثقل ينزل ارتفاعا مقاسا بالمسطرة المترية بطاقة الحركة المكتسبة، وقياس السرعة بالبوابة الضوئية.']],
+ ['New York University, Department of Physics. (2016). <i>Conservation of Energy: General Physics I Laboratory Manual</i>. New York, NY.','https://physics.nyu.edu/~physlab/GenPhysI_PhysII/Intro%20I/Intro%20I/Conservation-Of-Energy-Physics-Majors-07-07-2016.pdf'],
+ ['Union College, Department of Physics and Astronomy. (2006). <i>Lab #3: Temperature and Thermal Equilibrium, Physics 123 Laboratory</i>. Schenectady, NY.','https://minerva.union.edu/labrakes/temperatureandthermalequilibrium.pdf'],
+ ['Ling, S. J., Sanny, J., &amp; Moebs, W. (2016). <i>University Physics Volume 2, Section 1.4: Heat Transfer, Specific Heat, and Calorimetry</i>. OpenStax. Houston, TX.','https://openstax.org/books/university-physics-volume-2/pages/1-4-heat-transfer-specific-heat-and-calorimetry'],
+ ['Goshen College, Department of Physics. (n.d.). <i>Lab 5: Hot and Cold, Physics 215 Laboratory</i>. Goshen, IN.','https://people.goshen.edu/~paulmr/physix/215/labs/lab5-XC.php'],
+ ['Kingsborough Community College (CUNY), Department of Physical Sciences. (n.d.). <i>Experiment 5: Electrical Equivalent of Heat</i> (adapted from PASCO, <i>Physics Labs with Computers</i>, Activity P47). Brooklyn, NY.','https://www.kbcc.cuny.edu/academicdepartments/physci/documents/phy_and_sci/Experiment5_1.pdf'],
+ ['Ling, S. J., Sanny, J., &amp; Moebs, W. (2016). <i>University Physics Volume 2, Section 1.2: Thermometers and Temperature Scales</i>. OpenStax. Houston, TX.','https://openstax.org/books/university-physics-volume-2/pages/1-2-thermometers-and-temperature-scales'],
+ ['University of Maryland, Department of Physics, Lecture Demonstration Facility. (n.d.). <i>K6-22: Energy Conversion – Immersion Heater</i>. College Park, MD.','https://lecdem.physics.umd.edu/k/k6/2320-k6-22.html'],
+ ['Clemson University, Department of Physics and Astronomy. (n.d.). <i>Specific and Latent Heat: Physics 223 Laboratory</i>. Clemson, SC.','https://science.clemson.edu/physics/labs/labs/223/spheat/index.html'],
+ ['Santa Monica College, Department of Physical Sciences. (n.d.). <i>Latent Heat: Physics Lab Manual</i>. Santa Monica, CA.','https://www.smc.edu/academics/academic-departments/physical-sciences/physics/lab-manual/Latent-Heat.php'],
+ ['University of California, Los Angeles, Department of Physics and Astronomy. (n.d.). <i>Demo 20: Conductivity, Lecture Demonstration Manual</i>. Los Angeles, CA.','https://demoweb.physics.ucla.edu/content/20-conductivity'],
+ ['The University of Iowa, Department of Physics and Astronomy. (n.d.). <i>4B40.30: Leslie\'s Cube, Lecture Demonstrations</i>. Iowa City, IA.','https://instructional-resources.physics.uiowa.edu/demos/4b4030-leslies-cube'],
+ ['The University of Melbourne, School of Physics. (n.d.). <i>Heat Transfer: Lecture Demonstrations (Hc-4 The Convection Box)</i>. Melbourne, Australia.','https://physics.unimelb.edu.au/lecture-demonstrations/heat-and-thermodynamics/heat-transfer']];
+const LREFK={'2-1':[[21,'تسخين كتلة من الماء بمقاومة كهربائية وقياس الطاقة الكهربائية بالجول والطاقة الحرارية بالسعر، وإيجاد عدد الجولات في السعر الواحد.'],[19,'الحرارة طاقة تنتقل بسبب فرق درجة الحرارة، ووحدتاها الجول والسعر <span dir="ltr" style="white-space:nowrap">1 cal = 4.186 J</span>.']],
+ '2-2':[[22,'نقطتا انصهار الجليد وغليان الماء في المقاييس الثلاثة، وقوانين التحويل بين السلسيوسي وكلفن والفهرنهايتي.'],[18,'قياس درجة حرارة الماء بالترمومتر ومجس الحرارة الرقمي في المعمل.']],
+ '2-3':[[21,'قياس كتلة الماء ودرجتي حرارته قبل التسخين وبعده بسخان كهربائي، وحساب الحرارة المكتسبة <span dir="ltr" style="white-space:nowrap">Q = m·c·ΔT</span> ومقارنتها بالطاقة الكهربائية.'],[23,'تسخين نحو <span dir="ltr">300 ml</span> من الماء بسخان غمر كهربائي وقياس درجتي حرارته قبل التسخين وبعده، ومقارنة التغير المقاس بالمحسوب من <span dir="ltr" style="white-space:nowrap">Q = m·c·ΔT</span>.']],
+ '2-4':[[24,'إضافة جليد معلوم الكتلة إلى ماء دافئ في كوب عازل، وحساب الحرارة الكامنة للانصهار من الحرارة المفقودة من الماء والحرارة اللازمة لتسخين ماء الجليد المنصهر.'],[25,'إيجاد الحرارة الكامنة لانصهار الجليد بطريقة الخلط في المسعر الحراري.']],
+ '2-6':[[26,'قضبان من فلزات مختلفة متصلة بمصدر حرارة واحد، وكرات مثبتة بالشمع تسقط في أزمنة مختلفة حسب التوصيل الحراري لكل فلز.'],[27,'مكعب ليزلي مملوء بماء ساخن، وجه أسود ووجه لامع، وقياس الإشعاع الصادر من كل وجه.'],[28,'صندوق الحمل لعرض تيارات الحمل في الموائع.']],
+ '2-5':[[20,'خلط كتلتين مقاستين من الماء الساخن والماء البارد في كوبين عازلين، وتوقع درجة حرارة الخليط بالمتوسط الموزون، ومقارنتها بدرجة الحرارة المقاسة.'],[18,'استخدام مجس الحرارة الرقمي وتسجيل درجة الحرارة مع الزمن حتى الاتزان الحراري بين الماء الساخن والماء البارد.']],
+ '1-9':[[17,'إسقاط جسم من السكون من ارتفاع محدد فوق بوابة ضوئية مضبوطة على قياس السرعة، ومقارنة طاقة الوضع <span dir="ltr" style="white-space:nowrap">m·g·h</span> بطاقة الحركة <span dir="ltr" style="white-space:nowrap">½·m·v²</span>.'],[15,'مقارنة طاقة الوضع المفقودة من ثقل ينزل ارتفاعا مقاسا بالمسطرة المترية بطاقة الحركة المكتسبة، وقياس السرعة بالبوابة الضوئية.']],
  '1-8':[[15,'قياس كتلة الثقل بالميزان وارتفاعه عن الأرض بالمسطرة المترية، وحساب طاقة الوضع <span dir="ltr" style="white-space:nowrap">PE = m·g·h</span>.'],[16,'تعريف طاقة الوضع <span dir="ltr" style="white-space:nowrap">PE = m·g·h</span>، وقياس الكتلة بالميزان والارتفاع بالمسطرة المترية.']],
  '1-7':[[13,'سحب عربة بميزان نابضي بسرعة ثابتة مسافة محددة، وحساب الشغل من تعريفه <span dir="ltr" style="white-space:nowrap">W = F·d·cos θ</span>.'],[14,'سحب قالب بميزان نابضي أفقيا بسرعة ثابتة مسافة <span dir="ltr">0.5 m</span>، وحساب الشغل بالجول حاصل ضرب القوة في المسافة.']],
  '1-5':[[11,'سحب قالب أفقيا بسرعة ثابتة بحساس قوة، فتكون القوة المقروءة أثناء الحركة هي قوة الاحتكاك الحركي <span dir="ltr" style="white-space:nowrap">fk = μk·N</span>.'],[12,'سحب قالب خشبي بسرعة ثابتة لقياس قوة الاحتكاك، وإيجاد القوة العمودية وقوة الاحتكاك من قانون نيوتن.']],
@@ -2307,7 +3039,7 @@ const LREFK={'1-9':[[17,'إسقاط جسم من السكون من ارتفاع �
 function refBox(k){const ix=LREFK[k];if(!ix)return '';
   return `<div class="intro lrefs"><h3>7. مراجع التجربة</h3><p class="rlead">بنيت هذه التجربة على تجارب منشورة في أدلة معامل الفيزياء بجامعات ومصادر تعليمية موثوقة، مع تكييفها لمحتوى الحقيبة التدريبية.</p><ol class="rl">${ix.map(([i,c],n)=>`<li><span class="en">[${n+1}] ${LREF[i][0]} <a href="${LREF[i][1]}" target="_blank" rel="noopener">${LREF[i][1]}</a></span><span class="ar">يطابق في هذه التجربة: ${c}</span></li>`).join('')}</ol></div>`}
 
-window.LABS={'0-1':{t:'القياس بأداة القدمة ذات الورنية وأداة الميكرومتر',run:measureLab},'0-2':{t:'قياس سرعة جسم متحرك والتحويل بين وحداتها',run:speedLab2},'0-4':{t:'إيجاد محصلة متجهين باستخدام طاولة القوى',run:forceLab},'0-5':{t:'تحليل قوة إلى مركبتين باستخدام طاولة القوى',run:vecLab},'0-6':{t:'الضرب القياسي لمتجهين بمتجهات الوحدة على لوحة الإحداثيات',run:dotLab},'1-1':{t:'إيجاد تسارع عربة على المسار الهوائي المائل وأثر زيادة الميل على السرعة والتسارع',run:airLab},'1-2':{t:'حساب ارتفاع سقوط كرة باستخدام معادلة الحركة الثانية',run:ffLab},'1-3':{t:'التحقق من قانون نيوتن الثاني باستخدام جهاز آتوود',run:awLab},'1-5':{t:'حساب قوة الاحتكاك الحركي والتحقق منها بالميزان النابضي',run:frLab},'1-7':{t:'حساب الشغل المبذول على صندوق خشبي بقوة أفقية',run:wkLab2},'1-8':{t:'إيجاد طاقة الوضع لجسم وعلاقتها بالارتفاع',run:peLab},'1-9':{t:'التحقق من حفظ الطاقة الميكانيكية لجسم ساقط سقوطا حرا',run:ceLab}};
+window.LABS={'0-1':{t:'القياس بأداة القدمة ذات الورنية وأداة الميكرومتر',run:measureLab},'0-2':{t:'قياس سرعة جسم متحرك والتحويل بين وحداتها',run:speedLab2},'0-4':{t:'إيجاد محصلة متجهين باستخدام طاولة القوى',run:forceLab},'0-5':{t:'تحليل قوة إلى مركبتين باستخدام طاولة القوى',run:vecLab},'0-6':{t:'الضرب القياسي لمتجهين بمتجهات الوحدة على لوحة الإحداثيات',run:dotLab},'1-1':{t:'إيجاد تسارع عربة على المسار الهوائي المائل وأثر زيادة الميل على السرعة والتسارع',run:airLab},'1-2':{t:'حساب ارتفاع سقوط كرة باستخدام معادلة الحركة الثانية',run:ffLab},'1-3':{t:'التحقق من قانون نيوتن الثاني باستخدام جهاز آتوود',run:awLab},'1-5':{t:'حساب قوة الاحتكاك الحركي والتحقق منها بالميزان النابضي',run:frLab},'1-7':{t:'حساب الشغل المبذول على صندوق خشبي بقوة أفقية',run:wkLab2},'1-8':{t:'إيجاد طاقة الوضع لجسم وعلاقتها بالارتفاع',run:peLab},'1-9':{t:'التحقق من حفظ الطاقة الميكانيكية لجسم ساقط سقوطا حرا',run:ceLab},'2-1':{t:'قياس الطاقة الحرارية الناتجة من سخان كهربائي وتحويلها بين الجول والسعر',run:q1Lab},'2-2':{t:'قياس درجتي انصهار الجليد وغليان الماء والتحويل بين مقاييس درجة الحرارة',run:tsLab},'2-3':{t:'حساب كمية الحرارة اللازمة لتسخين الماء',run:shLab},'2-4':{t:'حساب الحرارة الكامنة لانصهار الجليد',run:lhLab},'2-5':{t:'التحقق من الاتزان الحراري بخلط ماء ساخن وماء بارد',run:eqLab},'2-6':{t:'مقارنة طرق انتقال الحرارة: التوصيل والحمل والإشعاع',run:trLab}};
 /* workLab محفوظة لدرس الشغل لاحقا */
 window.renderLabCard=function(host,u,l){const L=window.LABS[u+'-'+l];if(!L)return false;css();
   (Array.isArray(L)?L:[L]).forEach(x=>{const c=document.createElement('div');c.className='card lab';c.innerHTML='<div class="labBody"></div>';host.appendChild(c);x.run(c.querySelector('.labBody'));c.querySelector('.labBody').insertAdjacentHTML('beforeend',refBox(u+'-'+l))});return true};
