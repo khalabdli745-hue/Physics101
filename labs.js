@@ -6,6 +6,9 @@ const CSS=`
 :root[data-theme="dark"] .lab .stage{background:linear-gradient(#142033,#0F1724)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .lab .stage{background:linear-gradient(#142033,#0F1724)}}
 .lab svg{display:block;width:100%;height:auto;direction:ltr}
+.lab .stage svg text[fill="var(--ink)"]{paint-order:stroke;stroke:#F2F8FF;stroke-width:3px;stroke-linejoin:round}
+:root[data-theme="dark"] .lab .stage svg text[fill="var(--ink)"]{stroke:#121C2C}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .lab .stage svg text[fill="var(--ink)"]{stroke:#121C2C}}
 .lab .hud{display:flex;justify-content:space-between;gap:8px;padding:6px 12px 10px;font-weight:700;font-size:14px;color:var(--ink)}
 .lab .hud span{direction:ltr;unicode-bidi:isolate}
 .lab .ctl{border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin-bottom:12px}
@@ -128,7 +131,7 @@ function ms3D(){/* القدمة ذات الورنية والميكرومتر ع�
   {const [cx,cb]=S(MX+16,MD,T+44),[,ct]=S(MX+16,MD,T+72),rx=7,ry=3;g+=`<path d="M${cx-rx},${ct} L${cx-rx},${cb} A${rx},${ry} 0 0 0 ${cx+rx},${cb} L${cx+rx},${ct} Z" fill="url(#msCv)" stroke="#1E3A8A"/><ellipse cx="${cx}" cy="${ct}" rx="${rx}" ry="${ry}" fill="#93C5FD" stroke="#1E3A8A"/>`}
   g+=box(MX+24,MX+60,MD-3,MD+3,T+53,T+61,'#CBD5E1','#F1F5F9','#94A3B8','#64748B')+box(MX+60,MX+92,MD-5,MD+5,T+51,T+63,'#EA580C','#FDBA74','#C2410C','#9A3412')+box(MX+92,MX+104,MD-3,MD+3,T+53,T+61,'#F97316','#FED7AA','#C2410C','#9A3412');
   for(let i=0;i<6;i++){const [a,b]=S(MX+64+i*5,MD-5,T+51),[,c]=S(MX+64+i*5,MD-5,T+63);g+=`<line x1="${a}" y1="${b}" x2="${a}" y2="${c}" stroke="#7C2D12" stroke-width=".7"/>`}
-  g+=lbl(...S(200,FD,ZB1),180,16,'المسطرة الرئيسية (التدريج الرئيسي)')+lbl(...S(JM0+38,FD-3,ZB0+2),250,BASE-150,'الورنية','start')+lbl(...S(J0+5,FD,T+30),12,BASE-70,'الفك الثابت','start')+lbl(...S(JM0+5,FD,T+20),170,BASE+24,'الفك المتحرك')+lbl(...S(70,FD+3,T+6),8,BASE+24,'الأسطوانة: الطول L','start')+lbl(...S(JM0+26,FD-3,ZB0-12),12,96,'عجلة التحريك','start')+lbl(...S(JM0+38,FD,ZB1+6),12,40,'برغي التثبيت','start')+lbl(...S(MX+16,MD,T+64),396,22,'الأسطوانة: القطر D','end')+lbl(...S(MX+80,MD-5,T+57),390,BASE+24,'أداة الميكرومتر','end');
+  g+=lbl(...S(200,FD,ZB1),180,16,'المسطرة الرئيسية (التدريج الرئيسي)')+lbl(...S(JM0+38,FD-3,ZB0+2),250,BASE-150,'الورنية','start')+lbl(...S(J0+5,FD,T+30),12,96,'الفك الثابت','start')+lbl(...S(JM0+5,FD,T+20),170,BASE+24,'الفك المتحرك')+lbl(...S(70,FD+3,T+6),8,BASE+24,'الأسطوانة: الطول L','start')+lbl(...S(JM0+26,FD-3,ZB0-12),200,134,'عجلة التحريك','start')+lbl(...S(JM0+38,FD,ZB1+6),12,40,'برغي التثبيت','start')+lbl(...S(MX+16,MD,T+64),396,22,'الأسطوانة: القطر D','end')+lbl(...S(MX+80,MD-5,T+57),390,BASE+24,'أداة الميكرومتر','end');
   return `<svg viewBox="0 0 400 ${BASE+40}" aria-label="أداة القدمة ذات الورنية وأداة الميكرومتر على طاولة المعمل">${g}</svg>`}
 function sp3D(dd,o){/* مسار العربة على طاولة: الشريط المتري والعربة وساعة الإيقاف؛ dd المسافة بالسنتيمتر */
   o=o||{};const BASE=150,T=12,K=1.6,X0=48,{S,poly,box,lbl,table}=ob3(BASE);let g=table(T);
@@ -176,7 +179,7 @@ function toolsIntro(){
   const bd=(x,y,n)=>`<circle cx="${x}" cy="${y}" r="11" fill="#2563EB" stroke="#fff" stroke-width="2"/><text x="${x}" y="${y+5}" font-size="13" font-weight="800" text-anchor="middle" fill="#fff">${n}</text>`;
   let tk='';for(let i=0;i<=105;i++){const x=62+i*3;if(x>372)break;tk+=`<line x1="${x}" y1="66" x2="${x}" y2="${i%10===0?78:i%5===0?74:71}" stroke="#1F2937" stroke-width="${i%10===0?1.3:.8}"/>`;if(i%10===0&&i>0)tk+=`<text x="${x}" y="91" font-size="9" text-anchor="middle" fill="#1F2937">${i/10}</text>`}
   let vk='';for(let i=0;i<=10;i++){const x=147+i*6.5;vk+=`<line x1="${x}" y1="96" x2="${x}" y2="${i%5===0?110:105}" stroke="#7C2D12" stroke-width=".9"/>`}
-  const cal=`<svg viewBox="16 0 372 242" aria-label="القدمة ذات الورنية">
+  const cal=`<svg viewBox="16 0 386 242" aria-label="القدمة ذات الورنية">
     <defs><linearGradient id="iCyl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#BFDBFE"/><stop offset=".5" stop-color="#3B82F6"/><stop offset="1" stop-color="#1E3A8A"/></linearGradient></defs>
     <rect x="32" y="64" width="352" height="32" rx="3" fill="#CBD5E1" stroke="#475569"/>${tk}
     <path d="M32,64 V96 H62 V196 L44,172 H32 Z" fill="#F7931E" stroke="#9A3412"/><path d="M36,64 V26 L52,36 V64 Z" fill="#F7931E" stroke="#9A3412"/>
@@ -185,7 +188,7 @@ function toolsIntro(){
     <path d="M140,114 V196 L158,172 H168 V114 Z" fill="#F7931E" stroke="#9A3412"/><path d="M140,56 V26 L126,36 V56 Z" fill="#F7931E" stroke="#9A3412"/>
     <circle cx="192" cy="124" r="8" fill="#9A3412"/><rect x="384" y="78" width="12" height="5" fill="#475569"/>
     ${lbl(48,160,24,222,'الفك الثابت','start')}${lbl(152,160,186,222,'الفك المتحرك')}${lbl(100,150,100,190,'الجسم المقيس')}
-    ${lbl(300,70,322,20,'التدريج الرئيسي')}${lbl(190,104,214,20,'تدريج الورنية')}${lbl(44,32,62,20,'فكا القياس الداخلي','start')}${lbl(390,82,380,222,'ساق قياس العمق','end')}${lbl(192,132,262,160,'عجلة التحريك','start')}
+    ${lbl(300,70,322,20,'التدريج الرئيسي')}${lbl(190,104,214,20,'تدريج الورنية')}${lbl(44,32,62,20,'فكا القياس الداخلي','start')}${lbl(392,80,380,222,'ساق قياس العمق','end')}${lbl(192,132,262,160,'عجلة التحريك','start')}
     
   </svg>`;
   let sk='';for(let i=0;i<=8;i++){sk+=`<line x1="${232+i*6}" y1="104" x2="${232+i*6}" y2="${i%2?111:96}" stroke="#1F2937" stroke-width=".9"/>`}
@@ -367,7 +370,7 @@ function speedTools(){
     <rect x="258" y="56" width="14" height="22" rx="3" transform="rotate(40 265 67)" fill="#334155"/>
     <circle cx="200" cy="122" r="76" fill="#64748B" stroke="#334155" stroke-width="2"/><circle cx="200" cy="122" r="66" fill="#F8FAFC" stroke="#94A3B8"/>${dk}
     <line x1="200" y1="122" x2="${200+55*Math.cos(7/30*2*Math.PI-Math.PI/2)}" y2="${122+55*Math.sin(7/30*2*Math.PI-Math.PI/2)}" stroke="#F7931E" stroke-width="3" stroke-linecap="round"/><circle cx="200" cy="122" r="5" fill="#F7931E"/><rect x="187" y="129" width="26" height="18" rx="5" fill="#F7931E"/><text x="200" y="143" font-size="13" font-weight="800" text-anchor="middle" fill="#fff">s</text>
-    ${lbl(200,34,120,18,'زر التشغيل والإيقاف')}${lbl(268,64,330,40,'زر التصفير')}${lbl(150,160,110,206,'القرص المدرج بالثانية')}${lbl(222,112,320,150,'العقرب','start')}${lbl(270,150,330,206,'الإطار')}
+    ${lbl(200,34,120,18,'زر التشغيل والإيقاف')}${lbl(268,64,330,40,'زر التصفير')}${lbl(150,160,110,206,'القرص المدرج بالثانية')}${lbl(227,119,320,150,'العقرب','start')}${lbl(270,150,330,206,'الإطار')}
   </svg>`;
   return `<div class="intro"><h3>3. الأدوات والأجهزة المستخدمة</h3>
     <div class="tool"><div class="stage">${sp3D(120,{tape:120,cart:14,lab:true})}</div><div class="vcap">مسار العربة وأداة الشريط المتري على طاولة المعمل: منظر ثلاثي الأبعاد</div><p><b>ترتيب الأدوات:</b> مسار مستقيم عليه خط البداية وخط النهاية، والعربة عند خط البداية، وأداة الشريط المتري عند خط البداية لقياس المسافة بين الخطين، وساعة الإيقاف لقياس زمن الحركة.</p></div>
@@ -523,7 +526,7 @@ function ft3D(strs){/* منظر ثلاثي الأبعاد لجهاز طاولة 
   strs.forEach(st=>{const [px,py]=P(st.a,1.06),[bx,by]=P(st.a,.98);g+=`<line x1="${bx}" y1="${by}" x2="${px}" y2="${py+4}" stroke="#334155" stroke-width="5"/><ellipse cx="${px}" cy="${py}" rx="9" ry="9" fill="#E2E8F0" stroke="#334155" stroke-width="2.4"/><circle cx="${px}" cy="${py}" r="2.6" fill="#334155"/>`});
   g+=`<ellipse cx="${cx}" cy="${cy-4}" rx="11" ry="5" fill="none" stroke="#F7931E" stroke-width="3.6"/><rect x="${cx-2.5}" y="${cy-18}" width="5" height="16" rx="2" fill="#1F2937"/>`;
   g+=front.map(hang).join('');
-  g+=lbl(cx,cy-18,cx-95,40,'المسمار المركزي')+lbl(cx+10,cy-4,cx+110,40,'الحلقة')+lbl(P(235,1)[0],P(235,1)[1]+T,155,240,'القرص المدرج')+lbl(cx+9,300,cx+80,335,'الحامل','start')+(()=>{const q=strs.map(st=>P(st.a,1.06)).sort((u,v)=>u[0]-v[0])[0];return lbl(q[0]-6,q[1]-7,20,75,'البكرة','start')})()+lbl(P(40,1.06)[0]+17,P(40,1.06)[1]+145,452,205,'الكتل','end');
+  g+=lbl(cx,cy-18,cx-95,40,'المسمار المركزي')+lbl(cx+10,cy-4,cx+110,40,'الحلقة')+lbl(P(235,1)[0],P(235,1)[1]+T,155,240,'القرص المدرج')+lbl(cx-3,290,cx+80,335,'الحامل','start')+(()=>{const q=strs.map(st=>P(st.a,1.06)).sort((u,v)=>u[0]-v[0])[0];return lbl(q[0]-6,q[1]-7,20,75,'البكرة','start')})()+lbl(P(40,1.06)[0]+17,P(40,1.06)[1]+145,452,205,'الكتل','end');
   return g}
 function ftTools(){
   const lbl=(x,y,tx,ty,t,anc)=>`<line x1="${x}" y1="${y}" x2="${tx}" y2="${ty}" stroke="var(--muted)" stroke-width="1"/><circle cx="${x}" cy="${y}" r="2.4" fill="var(--muted)"/><text x="${tx}" y="${ty+(ty<y?-4:13)}" font-size="13" font-weight="700" text-anchor="${anc||'middle'}" fill="var(--ink)">${t}</text>`;
@@ -1038,7 +1041,7 @@ function dpBoard(o){/* لوحة الإحداثيات: o={A:[x,y],B:[x,y],pA,pB,p
   return g}
 function dpTools(){
   const lbl=(x,y,tx,ty,t,anc)=>`<line x1="${x}" y1="${y}" x2="${tx}" y2="${ty}" stroke="var(--muted)" stroke-width="1"/><circle cx="${x}" cy="${y}" r="2.4" fill="var(--muted)"/><text x="${tx}" y="${ty+(ty<y?-4:13)}" font-size="13" font-weight="700" text-anchor="${anc||'middle'}" fill="var(--ink)">${t}</text>`;
-  const bd=`<svg viewBox="0 -30 410 462" aria-label="لوحة الإحداثيات">${dpBoard({A:[6,2],B:[3,5],unit:1})}${lbl(40,360,20,402,'نقطة الأصل','start')}${lbl(62,360,150,402,'متجها الوحدة')}${lbl(220,300,320,402,'خيط المتجه')}${lbl(300,100,392,-14,'المربع = 1 cm','end')}</svg>`;
+  const bd=`<svg viewBox="0 -30 410 462" aria-label="لوحة الإحداثيات">${dpBoard({A:[6,2],B:[3,5],unit:1})}${lbl(40,360,20,402,'نقطة الأصل','start')}${lbl(62,360,150,402,'متجها الوحدة')}${lbl(220,300,320,402,'خيط المتجه')}${lbl(300,100,392,-14,'المربع = \u202a1 cm\u202c','end')}</svg>`;
   const pr=`<svg viewBox="0 0 400 215" aria-label="المنقلة">${wkProt(200,160,140)}<line x1="40" y1="160" x2="360" y2="160" stroke="#B45309" stroke-width="2"/>${lbl(200,160,200,192,'مركز المنقلة')}${lbl(300,62,370,20,'التدريج بالدرجات','end')}${lbl(80,160,40,192,'خط القاعدة','start')}</svg>`;
   return `<div class="intro"><h3>3. الأدوات والأجهزة المستخدمة</h3>
     <div class="tool"><div class="stage">${dp3D()}</div><div class="vcap">لوحة الإحداثيات والمنقلة على طاولة المعمل: منظر ثلاثي الأبعاد</div></div>
@@ -1199,7 +1202,7 @@ function pg3D(){/* البوابة الضوئية بمنظر ثلاثي الأب�
   const C=S(172,90,126);g+=`<path d="M${C[0]},${C[1]} C${C[0]+60},${C[1]-10} ${C[0]+60},${C[1]+50} 386,${C[1]+40}" fill="none" stroke="#1F2937" stroke-width="3"/>`;
   g+=`<path d="M40,${30} h40 M72,24 l8,6 l-8,6" stroke="#2563EB" stroke-width="2" fill="none"/><text x="86" y="34" font-size="12" font-weight="700" fill="#2563EB">اتجاه الحركة</text>`;
   const mid=S(161,66,9);
-  g+=pgLbl(B1[0],B1[1],282,96,'مصدر الضوء','start')+pgLbl(B0[0],B0[1],176,234,'الكاشف الضوئي')+pgLbl(mid[0],mid[1],300,140,'الشعاع الضوئي','start')+pgLbl(...S(120,35,16),70,70,'العربة')+pgLbl(L[0],L[1],260,20,'مؤشر ضوئي','start')+pgLbl(...S(150,-12,90),66,124,'ذراعا البوابة')+pgLbl(...S(260,30,0),318,234,'المسار الهوائي');
+  g+=pgLbl(B1[0],B1[1],282,96,'مصدر الضوء','start')+pgLbl(B0[0],B0[1],176,234,'الكاشف الضوئي')+pgLbl(mid[0],mid[1],300,140,'الشعاع الضوئي','start')+pgLbl(...S(152,35,16),70,70,'العربة')+pgLbl(L[0],L[1],260,20,'مؤشر ضوئي','start')+pgLbl(...S(150,-12,90),66,124,'ذراعا البوابة')+pgLbl(...S(260,30,0),318,234,'المسار الهوائي');
   return `<svg viewBox="16 0 372 250" aria-label="البوابة الضوئية ثلاثي الأبعاد">${g}</svg>`}
 function pgTop(){/* البوابة الضوئية بمنظر علوي */
   let g=`<rect x="20" y="92" width="370" height="46" fill="#E2E8F0" stroke="#64748B"/>`;
@@ -1251,7 +1254,7 @@ function atSetup(nb){/* الأجهزة كاملة بمنظر ثلاثي الأب
   LF=true;[[137,'xi'],[269,'xf']].forEach(([x,t])=>{const [a,b]=S(x,-20,-14);g+=`<rect x="${a-28}" y="${b-4}" width="26" height="16" rx="5" fill="#F7931E"/><text x="${a-15}" y="${b+8}" font-size="12" font-weight="800" text-anchor="middle" fill="#fff">${t}</text>`});LF=false;
   LF=true;const T=[S(137,20,72),S(269,20,72),S(104,8,8),S(320,4,-8),S(353,20,18),S(136,22,13)];LF=false;
   g+=`<line x1="${T[5][0]}" y1="${T[5][1]}" x2="110" y2="74" stroke="#C2410C" stroke-width="1.3"/><circle cx="${T[5][0]}" cy="${T[5][1]}" r="3" fill="#C2410C"/><text x="72" y="70" font-size="12" font-weight="800" text-anchor="middle" direction="rtl" fill="#C2410C">العربة ساكنة Vi = 0</text><rect x="8" y="284" width="384" height="44" rx="8" fill="#FFF7ED" stroke="#F7931E"/><text x="200" y="301" font-size="12" font-weight="800" text-anchor="middle" direction="rtl" fill="#C2410C">العربة ساكنة (Vi = 0) ومقدمتها عند شعاع البوابة الأولى</text><text x="200" y="319" font-size="12" font-weight="800" text-anchor="middle" direction="rtl" fill="#C2410C">عند انطلاقها تبدأ البوابة الأولى العد من ti = 0</text>`;
-  g+=lbl(...T[0],16,40,'البوابة الضوئية الأولى','start')+lbl(...T[1],392,30,'البوابة الضوئية الثانية','end')+lbl(...T[2],200,264,'العربة')+lbl(...S(43,0,-26),16,264,nb===1?'قطعة رفع واحدة':'قطعتا رفع','start')+lbl(...T[3],384,174,'المسار الهوائي','end')+lbl(...T[4],384,98,'المصد','end')+lbl(...S(250,-78,-6),330,264,'المؤقت الرقمي')+lbl(...S(62,-70,-8),20,214,'مضخة الهواء','start');
+  g+=lbl(...T[0],16,40,'البوابة الضوئية الأولى','start')+lbl(...T[1],392,30,'البوابة الضوئية الثانية','end')+lbl(...T[2],200,264,'العربة')+lbl(...S(43,0,-26),62,241,nb===1?'قطعة رفع واحدة':'قطعتا رفع','start')+lbl(...T[3],384,174,'المسار الهوائي','end')+lbl(...T[4],384,98,'المصد','end')+lbl(...S(250,-78,-6),330,264,'المؤقت الرقمي')+lbl(...S(62,-70,-8),16,264,'مضخة الهواء','start');
   return `<svg viewBox="0 0 400 332" aria-label="الأجهزة كاملة">${g}</svg>`}
 
 function atTools(){
@@ -1262,7 +1265,7 @@ function atTools(){
     <text x="205" y="68" font-size="14" font-weight="800" text-anchor="middle" fill="#14532D" direction="ltr">ti = 0.0000 s</text><text x="205" y="92" font-size="14" font-weight="800" text-anchor="middle" fill="#14532D" direction="ltr">tf = 1.2846 s</text><text x="205" y="116" font-size="14" font-weight="800" text-anchor="middle" fill="#14532D" direction="ltr">Vf = 0.712 m/s</text>
     <rect x="144" y="146" width="50" height="20" rx="5" fill="#F7931E"/><rect x="216" y="146" width="50" height="20" rx="5" fill="#94A3B8"/>
      <path d="M120,80 C90,80 80,110 50,110" fill="none" stroke="#1F2937" stroke-width="2.4"/><path d="M290,80 C320,80 330,110 360,110" fill="none" stroke="#1F2937" stroke-width="2.4"/>
-    ${lbl(205,48,205,18,'شاشة الزمن والسرعة')}${lbl(169,166,150,206,'زر البدء')}${lbl(241,166,262,206,'زر التصفير')}${lbl(60,108,48,150,'سلك البوابة الأولى','start')}${lbl(350,108,370,150,'سلك البوابة الثانية','end')}
+    ${lbl(205,48,205,18,'شاشة الزمن والسرعة')}${lbl(169,166,160,206,'زر البدء')}${lbl(241,166,250,206,'زر التصفير')}${lbl(60,108,22,186,'سلك البوابة الأولى','start')}${lbl(350,108,388,186,'سلك البوابة الثانية','end')}
   </svg>`;
   return `<div class="intro"><h3>3. الأدوات والأجهزة المستخدمة</h3>
     <div class="tool"><div class="stage">${atSetup(1)}</div><div class="vcap">الأجهزة كاملة في المحاولة الأولى بقطعة رفع واحدة: منظر ثلاثي الأبعاد من الأعلى</div><div class="stage">${atSetup(2)}</div><div class="vcap">الأجهزة كاملة في المحاولة الثانية بقطعتي رفع (ميل أكبر): منظر ثلاثي الأبعاد من الأعلى</div><p><b>ترتيب الأجهزة:</b> توضع العربة ساكنة <span dir="ltr">(Vi = 0)</span> قبل البوابة الأولى مباشرة ومقدمتها عند شعاعها، فعند انطلاقها تبدأ البوابة الأولى العد من <span dir="ltr">ti = 0</span>، وتتحرك العربة على المسار الهوائي المائل بقطعة الرفع حتى البوابة الثانية، والبوابتان متصلتان بالمؤقت الرقمي، ومضخة الهواء تدفع الهواء في المسار.</p></div>
@@ -1441,7 +1444,7 @@ function ffScene(h,s,o){/* منظر ثلاثي الأبعاد: h الارتفا�
   {const a=S(160,20,z0),b=S(160,20,8);g+=`<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="#2563EB" stroke-width="1.6"/><path d="M${a[0]-5},${a[1]+8} L${a[0]},${a[1]} L${a[0]+5},${a[1]+8} M${b[0]-5},${b[1]-8} L${b[0]},${b[1]} L${b[0]+5},${b[1]-8}" stroke="#2563EB" stroke-width="1.6" fill="none"/><text x="${a[0]-6}" y="${(a[1]+b[1])/2+5}" font-size="15" font-weight="800" text-anchor="end" fill="#2563EB">h</text>`}
   if(o.ptr){const r1=S(204,20,z0),r2=S(218,20,z0);g+=`<line x1="${r1[0]}" y1="${r1[1]}" x2="${r2[0]}" y2="${r2[1]}" stroke="#DC2626" stroke-width="1.6" stroke-dasharray="5 3"/>`}
   if(o.ptr){const [p,q]=S(236,20,8+o.ptr.p*K);g+=`<path d="M${p+12},${q-6} L${p+2},${q} L${p+12},${q+6} Z" fill="#F7931E"/><line x1="${p+2}" y1="${q}" x2="${p+26}" y2="${q}" stroke="#F7931E" stroke-width="2.5"/>`;if(o.ptr.touch){const [c1,c2]=S(228,20,z0);g+=`<circle cx="${c1}" cy="${c2}" r="7" fill="none" stroke="#16A34A" stroke-width="2.5"/>`}}
-  if(o.lab){const B=S(196,20,z0+9-s*K);g+=lbl(...S(70,20,ZT-60),20,ZT-20>0?60:60,'الحامل','start')+lbl(...S(196,21,ZT-6),150,22,'جهاز السقوط الحر')+lbl(B[0]-9,B[1],128,B[1]+34,'الكرة','end')+lbl(...S(200,20,4),110,BASE+24,'وسادة الاستقبال')+lbl(...S(223,20,z0*0.75),292,S(0,0,z0*0.9)[1],'الشريط المتري','start')+lbl(...S(330,24,4),340,BASE+24,'المؤقت الرقمي')}
+  if(o.lab){const B=S(196,20,z0+9-s*K);g+=lbl(...S(70,20,ZT-60),20,ZT-20>0?60:60,'الحامل','start')+lbl(...S(196,21,ZT-6),150,22,'جهاز السقوط الحر')+lbl(B[0]-3,B[1]+4,128,B[1]+34,'الكرة','end')+lbl(...S(200,20,4),110,BASE+24,'وسادة الاستقبال')+lbl(...S(223,20,z0*0.75),292,S(0,0,z0*0.9)[1],'الشريط المتري','start')+lbl(...S(330,24,4),340,BASE+24,'المؤقت الرقمي')}
   if(o.note)g+=`<text x="12" y="18" font-size="12" font-weight="800" fill="#C2410C">${o.note}</text>`;
   return `<svg viewBox="0 0 400 ${BASE+(o.lab?40:14)}" aria-label="جهاز السقوط الحر">${g}</svg>`}
 function ffTools(){
@@ -1595,7 +1598,7 @@ function awScene(h,s,o){/* h ارتفاع m₁ عن الوسادة بالمتر�
    g+=`<rect x="${s1[0]}" y="${s2[1]}" width="${s2[0]-s1[0]}" height="${s1[1]-s2[1]}" rx="3" fill="#BBF7D0" stroke="#14532D"/>`;
    if(o.tm){const cx=(s1[0]+s2[0])/2,row=(l,v,y,h,u)=>`<text x="${cx}" y="${s2[1]+y}" font-size="8.6" font-weight="800" text-anchor="middle" fill="${h?'#DC2626':'#14532D'}" direction="ltr" font-family="Consolas,monospace">${l} = ${v} ${u||'s'}</text>`;g+=row('ti',o.tm.ti,11)+row('tf',o.tm.tf,23,o.tm.hl)+row('Vf',o.tm.vf||'-.---',35,o.tm.hl,'m/s')};
    const w=S(GX+GW+8,40,Zg),k=S(276,38,6);g+=`<path d="M${w[0]},${w[1]} C${w[0]+10},${w[1]+10} ${k[0]-10},${k[1]+6} ${k[0]},${k[1]}" fill="none" stroke="#1F2937" stroke-width="2"/>`}
-  if(o.lab){g+=lbl(...S(175,20,PZ+20),250,18,'البكرة','start')+lbl(...S(XL,20,(z2+hb+PZ)/2),90,BASE-200,'الخيط','start')+lbl(...S(70,20,TOP-60),20,70,'الحامل','start')+lbl(...S(XL-12,20,z2+12),40,BASE-120,'الكتلة الأخف m₂','start')+lbl(...S(XR+14,20,z1+30),262,48,'الكتلة الأثقل m₁','start')+lbl(...S(XR+8,20,ZP),300,BASE-150,'وسادة الاستقبال','start')+lbl(...S(GX+GW+4,-6,Zg-8),230,BASE+24,'البوابة الضوئية')+lbl(...S(GX-GW+12,20,Zg),70,BASE+24,'الشعاع الضوئي')+lbl(...S(GX+5,56,Zg+22),396,BASE-112,'قضيب وماسك البوابة','end')+lbl(...S(340,24,4),352,BASE+24,'المؤقت الرقمي')}
+  if(o.lab){g+=lbl(...S(175,20,PZ+20),250,18,'البكرة','start')+lbl(...S(XL,20,(z2+hb+PZ)/2),90,BASE-200,'الخيط','start')+lbl(...S(70,20,TOP-60),20,70,'الحامل','start')+lbl(...S(XL-8,20,z2+14),160,BASE-128,'الكتلة الأخف m₂','start')+lbl(...S(XR+14,20,z1+30),262,48,'الكتلة الأثقل m₁','start')+lbl(...S(XR+8,20,ZP),300,BASE-150,'وسادة الاستقبال','start')+lbl(...S(GX+GW+4,-6,Zg-8),230,BASE+24,'البوابة الضوئية')+lbl(...S(GX-GW+12,20,Zg),70,BASE+24,'الشعاع الضوئي')+lbl(...S(GX+5,56,Zg+22),396,BASE-112,'قضيب وماسك البوابة','end')+lbl(...S(340,24,4),352,BASE+24,'المؤقت الرقمي')}
   if(o.note)g+=`<text x="12" y="18" font-size="12" font-weight="800" fill="#C2410C">${o.note}</text>`;
   return `<svg viewBox="0 0 400 ${BASE+(o.lab?40:14)}" aria-label="جهاز آتوود">${g}</svg>`}
 function awBal(v,lab){return `<svg viewBox="0 0 400 150" aria-label="الميزان الرقمي"><rect x="90" y="70" width="220" height="62" rx="10" fill="#334155" stroke="#0F172A" stroke-width="2"/><rect x="110" y="84" width="130" height="34" rx="5" fill="#BBF7D0" stroke="#14532D"/><text x="175" y="108" font-size="20" font-weight="800" text-anchor="middle" fill="#14532D" direction="ltr" font-family="Consolas,monospace">${v}</text><text x="270" y="108" font-size="16" font-weight="800" fill="#fff">g</text><rect x="120" y="58" width="160" height="12" rx="3" fill="#94A3B8" stroke="#475569"/><rect x="170" y="22" width="60" height="36" rx="4" fill="${lab==='m₁'?'#2563EB':'#60A5FA'}" stroke="#1E3A8A"/><text x="200" y="45" font-size="15" font-weight="800" text-anchor="middle" fill="#fff" direction="ltr">${lab}</text><text x="12" y="146" font-size="12" font-weight="700" fill="var(--muted)">الميزان الرقمي</text></svg>`}
@@ -2411,7 +2414,7 @@ function htScene(o){/* o:{px,tz,R,t,lab,hl,cl,pour} مجس الحرارة: px م
   const poly=(a,f,st)=>`<polygon points="${a.map(p=>P(...p)).join(' ')}" fill="${f}" stroke="${st||'#334155'}" stroke-linejoin="round"/>`;
   const box=(x0,x1,d0,d1,z0,z1,cf,ct,cs,st)=>poly([[x0,d0,z1],[x1,d0,z1],[x1,d1,z1],[x0,d1,z1]],ct,st)+poly([[x1,d0,z0],[x1,d1,z0],[x1,d1,z1],[x1,d0,z1]],cs,st)+poly([[x0,d0,z0],[x1,d0,z0],[x1,d0,z1],[x0,d0,z1]],cf,st);
   const lbl=(x,y,tx,ty,t,anc)=>`<line x1="${x}" y1="${y}" x2="${tx}" y2="${ty}" stroke="var(--muted)" stroke-width="1"/><circle cx="${x}" cy="${y}" r="2.4" fill="var(--muted)"/><text x="${tx}" y="${ty+(ty<y?-4:13)}" font-size="13" font-weight="700" text-anchor="${anc||'middle'}" fill="var(--ink)">${t}</text>`;
-  const hl=o.hl==null?1:o.hl,cl=o.cl==null?0.5:o.cl,mix=cl>0.55;
+  const hl=o.hl==null?1:o.hl,cl=o.cl==null?(o.lab?1:0.5):o.cl,mix=o.cl!=null&&cl>0.55;
   let g=`<defs><linearGradient id="htCup" x1="0" x2="1"><stop offset="0" stop-color="#E2E8F0"/><stop offset=".45" stop-color="#FFFFFF"/><stop offset="1" stop-color="#CBD5E1"/></linearGradient><linearGradient id="htRod" x1="0" x2="1"><stop offset="0" stop-color="#94A3B8"/><stop offset=".5" stop-color="#F1F5F9"/><stop offset="1" stop-color="#64748B"/></linearGradient></defs>`;
   g+=box(6,346,0,86,0,T,'#B7834A','#E9C894','#9A6A3A','#7C4A1F');
   const back=(x,lv,wc,sc)=>{const [cx,yt]=S(x,D,T+CH);let s=`<ellipse cx="${cx}" cy="${yt}" rx="${RX}" ry="${RY}" fill="#94A3B8" stroke="#475569" stroke-width="1.4"/>`;if(lv>0.03){const [,yw]=S(x,D,T+6+lv*(CH-18));s+=`<ellipse cx="${cx}" cy="${yw}" rx="${RX-3}" ry="${RY-1}" fill="${wc}" stroke="${sc}" stroke-width="1"/>`}return s};
@@ -2427,8 +2430,8 @@ function htScene(o){/* o:{px,tz,R,t,lab,hl,cl,pour} مجس الحرارة: px م
   g+=front(HX)+front(CX);
   {const inCup=Math.abs(px-HX)<1||Math.abs(px-CX)<1,[,rim]=S(px,D,T+CH);if(inCup&&ay>rim)g+=`<rect x="${ax-2}" y="${ry}" width="4" height="${Math.max(0,rim+RY-ry)}" fill="url(#htRod)" stroke="#475569" stroke-width=".8"/><rect x="${ax-5}" y="${hy}" width="10" height="${ry-hy}" rx="3" fill="#1F2937" stroke="#0F172A"/>`}
   {const [sx,sy]=S(26,70,T);g+=`<rect x="${sx-4}" y="${sy-44}" width="8" height="6" rx="1.5" fill="#475569"/><circle cx="${sx}" cy="${sy-22}" r="17" fill="#1F2937" stroke="#0F172A"/><circle cx="${sx}" cy="${sy-22}" r="13" fill="#E2E8F0"/><text x="${sx}" y="${sy-18}" font-size="10" font-weight="800" text-anchor="middle" fill="#0F172A" font-family="Consolas,monospace" direction="ltr">${o.t==null?'0':o.t} s</text>`}
-  if(o.lab){const h=S(HX-RX,D,T+40),c=S(CX+RX,D,T+40),[,rt]=S(px,D,tz+40);
-    g+=lbl(h[0],h[1],8,24,'ماء ساخن m₁','start')+lbl(c[0]-4,c[1]-30,170,24,'ماء بارد m₂')+lbl(ax+2,rt,396,60,'مجس الحرارة الرقمي','end')+lbl(...S(320,6,T+30),345,BASE+28,'جهاز القراءة')+lbl(...S(26,70,T+30),6,BASE+28,'ساعة الإيقاف','start')+lbl(...S(HX,D,T+20),150,BASE+28,'كوب عازل')}
+  if(o.lab){const h=S(HX-14,D,T+6+60),c=S(CX-14,D,T+6+60),[,rt]=S(px,D,tz+40);
+    g+=lbl(h[0],h[1],8,24,'ماء ساخن m₁','start')+lbl(c[0],c[1],170,24,'ماء بارد m₂')+lbl(ax+2,rt,396,60,'مجس الحرارة الرقمي','end')+lbl(...S(320,6,T+30),345,BASE+28,'جهاز القراءة')+lbl(...S(26,70,T+30),6,BASE+28,'ساعة الإيقاف','start')+lbl(...S(HX,D,T+20),150,BASE+28,'كوب عازل')}
   return `<svg viewBox="0 0 400 ${BASE+(o.lab?44:12)}" aria-label="مجس حرارة رقمي وكوبان: ماء ساخن وماء بارد">${g}</svg>`}
 function htBal(v,lab,hot){const wc=hot?'#FCA5A5':'#93C5FD',sc=hot?'#B91C1C':'#1D4ED8';
   return `<svg viewBox="0 0 400 170" aria-label="الميزان الرقمي"><rect x="90" y="92" width="220" height="62" rx="10" fill="#334155" stroke="#0F172A" stroke-width="2"/><rect x="110" y="106" width="130" height="34" rx="5" fill="#BBF7D0" stroke="#14532D"/><text x="175" y="130" font-size="20" font-weight="800" text-anchor="middle" fill="#14532D" direction="ltr" font-family="Consolas,monospace">${v}</text><text x="270" y="130" font-size="16" font-weight="800" fill="#fff">g</text><rect x="120" y="80" width="160" height="12" rx="3" fill="#94A3B8" stroke="#475569"/>
@@ -2731,7 +2734,7 @@ function tsLab(box){
     <li>قياس درجة حرارة الماء المغلي (نقطة غليان الماء) بالمقياس السلسيوسي.</li>
     <li>تحويل القراءتين إلى مقياس كلفن والمقياس الفهرنهايتي ومقارنتها بالقيم المعيارية.</li></ol></div>
   <div class="intro"><h3>3. الأدوات والأجهزة المستخدمة</h3>
-    <div class="tool"><div class="stage">${hxScene({cups:[{x:HX,wc:BW[0],sc:BW[1],lv:1,boil:true,steam:true},{x:CX,wc:IW[0],sc:IW[1],lv:0.85,ice:4}],probe:{x:CX,tz:HX_UP},lbls:[[HX-30,40,40,8,24,'ماء يغلي','start'],[CX-30,40,40,150,24,'ماء وجليد'],[CX,40,HX_UP+40,396,60,'مجس الحرارة الرقمي','end'],[320,6,30,345,264,'جهاز القراءة'],[HX,40,20,150,264,'كوب عازل']]})}</div><div class="vcap">مجس حرارة رقمي وكوبان: ماء يغلي وماء وجليد</div>
+    <div class="tool"><div class="stage">${hxScene({cups:[{x:HX,wc:BW[0],sc:BW[1],lv:1,boil:true,steam:true},{x:CX,wc:IW[0],sc:IW[1],lv:0.85,ice:4}],probe:{x:CX,tz:HX_UP},lbls:[[HX-14,40,86,8,24,'ماء يغلي','start'],[CX-16,40,85,150,24,'ماء وجليد'],[CX,40,HX_UP+40,396,60,'مجس الحرارة الرقمي','end'],[320,6,30,345,264,'جهاز القراءة'],[HX,40,20,150,264,'كوب عازل']]})}</div><div class="vcap">مجس حرارة رقمي وكوبان: ماء يغلي وماء وجليد</div>
     <p><b>ترتيب الأجهزة:</b> كوب فيه خليط من الماء والجليد، وكوب فيه ماء يغلي، ومجس الحرارة متصل بسلك بجهاز القراءة الرقمي.</p></div>
     <div class="tool"><p><b>مجس الحرارة الرقمي <span dir="ltr">(Temperature Probe)</span>:</b> يقيس درجة الحرارة بالمقياس السلسيوسي <span dir="ltr">°C</span> بدقة <span dir="ltr">0.1 °C</span>.</p>
     <p><b>خليط الماء والجليد:</b> درجة حرارته ثابتة عند نقطة انصهار الجليد ما دام فيه جليد.</p>
@@ -2905,7 +2908,7 @@ function lhLab(box){
     <li>إضافة الجليد إلى الماء الدافئ وقياس درجة الحرارة النهائية <span dir="ltr">Tf</span> بعد انصهاره كاملا.</li>
     <li>حساب الحرارة الكامنة لانصهار الجليد <span dir="ltr">H</span> من القانون <span dir="ltr" style="white-space:nowrap">Q = m·H</span> ومقارنتها بالقيمة المرجعية.</li></ol></div>
   <div class="intro"><h3>3. الأدوات والأجهزة المستخدمة</h3>
-    <div class="tool"><div class="stage">${hxScene({cups:[{x:HX,wc:WW[0],sc:WW[1],lv:0.6},{x:CX,lv:0,ice:6}],probe:{x:HX,tz:HX_IN},R:'45.0',lbls:[[HX-30,40,40,8,24,'ماء دافئ','start'],[CX+30,40,40,200,24,'مكعبات جليد عند 0 °C'],[HX,40,130,396,60,'مجس الحرارة الرقمي','end'],[320,6,30,345,264,'جهاز القراءة'],[HX,40,20,150,264,'كوب عازل']]})}</div><div class="vcap">كوب عازل فيه ماء دافئ ومكعبات جليد عند 0 °C</div>
+    <div class="tool"><div class="stage">${hxScene({cups:[{x:HX,wc:WW[0],sc:WW[1],lv:0.6},{x:CX,lv:0,ice:6}],probe:{x:HX,tz:HX_IN},R:'45.0',lbls:[[HX-14,40,84,8,24,'ماء دافئ','start'],[CX-4,40,94,200,24,'مكعبات جليد عند \u202a0 °C\u202c'],[HX,40,130,396,60,'مجس الحرارة الرقمي','end'],[320,6,30,345,264,'جهاز القراءة'],[HX,40,20,150,264,'كوب عازل']]})}</div><div class="vcap">كوب عازل فيه ماء دافئ ومكعبات جليد عند 0 °C</div>
     <p><b>ترتيب الأجهزة:</b> ماء دافئ معلوم الكتلة في كوب عازل، ومكعبات جليد تذوب عند <span dir="ltr">0 °C</span> معلومة الكتلة، ومجس الحرارة متصل بجهاز القراءة.</p></div>
     <div class="tool"><div class="stage">${hxBal('40','mi','ice')}</div><p><b>الميزان الرقمي:</b> يقيس كتلة الماء الدافئ وكتلة الجليد بالجرام بدقة <span dir="ltr">1 g</span>.</p>
     <p><b>مجس الحرارة الرقمي:</b> يعرض درجة حرارة الماء بدقة <span dir="ltr">0.1 °C</span>.</p></div></div>
@@ -3172,7 +3175,7 @@ window.LABS={'0-1':{t:'القياس بأداة القدمة ذات الورني�
 /* إصلاح اتجاه الأقواس: عزل الأقواس ذات المحتوى اللاتيني داخل النص العربي، وضبط نصوص الرسوم العربية التي فيها أقواس */
 const BIDI_AR=/[؀-ۿ]/,BIDI_GRP=/\((?=[^()؀-ۿ⁦⁩]*[A-Za-z0-9])[^()؀-ۿ⁦⁩]*\)/g;
 function bidiNode(n){const p=n.parentNode;if(!p||!BIDI_AR.test(n.data))return;if(p.closest&&p.closest('[dir="ltr"],input,textarea,script,style'))return;
-  let d;if(p.closest&&p.closest('svg')){if(!/[()]/.test(n.data)||n.data[0]==='\u202b')return;d='\u202b'+n.data.replace(/[\u200f\u2066\u2069]/g,'')+'\u202c'}
+  let d;if(p.closest&&p.closest('svg')){if(!/[\u0600-\u06FF]/.test(n.data)||!/[()A-Za-z0-9\u00b0\u2080-\u2089\u20d7]/.test(n.data)||n.data[0]==='\u202b')return;d='\u202b'+n.data.replace(/[\u200f\u2066\u2069]/g,'')+'\u202c'}
   else d=n.data.replace(BIDI_GRP,(m,o,s)=>(s[o-1]==='\u2066'?m:'\u2066'+m+'\u2069'));
   if(d!==n.data)n.data=d}
 function bidiFix(root){const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let n;const a=[];while(n=w.nextNode())a.push(n);a.forEach(bidiNode)}
