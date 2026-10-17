@@ -585,8 +585,8 @@ const divEq=t=>String(t).replace(/÷/g,'/');const divs=divEq;
 function kfr(h){if(h.indexOf('/2')<0)return h;const parts=[];let d=0,cur='';for(let i=0;i<h.length;i++){const ch=h[i];if(ch==='(')d++;else if(ch===')')d--;
   if(d===0){const m=h.slice(i).match(/^ (=|\+|−) /);if(m){parts.push(cur,m[0]);cur='';i+=m[0].length-1;continue}}cur+=ch}parts.push(cur);
   return parts.map((p,i)=>{if(i%2)return p;const m=p.match(/^(.+?)\/2((?:\s*[A-Za-z]{1,2})?)$/);if(m&&m[1].indexOf('/')<0&&!/[\[\]]/.test(m[1]))return '<span class="kfr"><span>'+m[1]+'</span><span>2</span></span>'+m[2];return p}).join('')}
-/* درس 0-6: علامة الجذر طويلة تمتد فوق ما تحتها */
-function rad(h){try{if(key(pos.u,pos.l)!=='0-6')return h}catch(e){return h}
+/* علامة الجذر طويلة تمتد فوق ما تحتها في كل المنصة */
+function rad(h){
   let o='',i=0;while(i<h.length){const c=h[i];if(c!=='√'){o+=c;i++;continue}i++;let inner='';
     if(h[i]==='('){let d=0,j=i;for(;j<h.length;j++){if(h[j]==='(')d++;else if(h[j]===')'){d--;if(!d)break}}inner=h.slice(i+1,j);i=j+1}
     else{const m=h.slice(i).match(/^[0-9.A-Za-z²³]+/);inner=m?m[0]:'';i+=inner.length}
@@ -1948,5 +1948,32 @@ fix(document.body);qfit();new MutationObserver(ms=>{for(const m of ms)for(const 
 (()=>{let last=0,t=0;const on=e=>{const el=e.target&&e.target.scrollTop!==undefined&&e.target!==document?e.target:document.scrollingElement;const y=el?el.scrollTop:0;
 if(y>last+4)document.body.classList.add('fabHide');else if(y<last-4)document.body.classList.remove('fabHide');last=y;clearTimeout(t);t=setTimeout(()=>document.body.classList.remove('fabHide'),700)};
 document.addEventListener('scroll',on,{capture:true,passive:true})})();</script>
+<script>
+/* علامة الجذر الطويلة في كل المنصة: √(…) يتحول إلى جذر يمتد خطه فوق ما تحته (ما عدا الآلة الحاسبة والرسوم وخانات الإدخال) */
+(()=>{const st=document.createElement('style');st.textContent='.sq{direction:ltr!important;unicode-bidi:isolate!important;display:inline-flex!important;align-items:flex-start!important;white-space:nowrap!important;vertical-align:baseline;border:0!important;border-radius:0!important;background:none!important;box-shadow:none!important;padding:0!important;margin:0!important;font-size:inherit!important;color:inherit!important;width:auto!important;min-width:0!important}.sq>span{display:inline!important;border:0!important;border-radius:0!important;background:none!important;box-shadow:none!important;padding:0!important;margin:0!important;font-size:inherit!important;color:inherit!important;font-weight:inherit!important;min-width:0!important;width:auto!important}.sq>.sqr{border-top:1.6px solid currentColor!important;padding:1px 3px 0 2px!important;margin-top:.12em!important;line-height:1.15!important}';document.head.appendChild(st)})();
+(()=>{const SKIP='script,style,textarea,input,button,select,svg,.calc,.calcbtn,.sq,[contenteditable]';
+function parse(s){const out=[];let i=0,buf='';while(i<s.length){const c=s[i];if(c!=='√'){buf+=c;i++;continue}
+  let j=i+1,inner=null;if(s[j]==='('){let d=0,k=j;for(;k<s.length;k++){if(s[k]==='(')d++;else if(s[k]===')'){d--;if(!d)break}}if(k<s.length){inner=s.slice(j+1,k);j=k+1}}
+  else{const m=s.slice(j).match(/^[0-9.A-Za-z²³₀-₉]+/);if(m){inner=m[0];j+=inner.length}}
+  if(inner===null){buf+=c;i++;continue}if(buf)out.push(buf);buf='';out.push({r:inner});i=j}
+  if(buf)out.push(buf);return out}
+function build(parts){const f=document.createDocumentFragment();parts.forEach(p=>{if(typeof p==='string'){f.append(p);return}
+  const w=document.createElement('span');w.className='sq';const a=document.createElement('span');a.className='sqs';a.textContent='√';const b=document.createElement('span');b.className='sqr';b.append(build(parse(p.r)));w.append(a,b);f.append(w)});return f}
+function fix(root){if(!root)return;if(root.nodeType===3){root=root.parentNode;if(!root)return}if(root.nodeType!==1&&root.nodeType!==9)return;
+  if(root.nodeType===1&&root.closest&&root.closest(SKIP))return;const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT),L=[];let n;
+  while(n=w.nextNode()){if(n.nodeValue.indexOf('√')<0)continue;const p=n.parentElement;if(!p||p.closest(SKIP))continue;L.push(n)}
+  L.forEach(t=>{const v=t.nodeValue;if(!t.parentNode)return;
+    /* النصوص المعزولة ⁦…⁩ تحفظ اتجاهها: تصبح عنصر bdi باتجاه ltr */
+    if(v.indexOf('\u2066')>=0){const f=document.createDocumentFragment();let i=0,buf='';while(i<v.length){if(v[i]==='\u2066'){let d=0,j=i;for(;j<v.length;j++){if(v[j]==='\u2066')d++;else if(v[j]==='\u2069'){d--;if(!d)break}}const run=v.slice(i+1,j);if(buf){f.append(build(parse(buf)));buf=''}
+      if(run.indexOf('√')>=0){const bd=document.createElement('bdi');bd.setAttribute('dir','ltr');bd.append(build(parse(run.replace(/[\u2066\u2069]/g,''))));f.append(bd)}else f.append('\u2066'+run+'\u2069');i=j+1;continue}buf+=v[i];i++}
+      if(buf)f.append(build(parse(buf)));t.parentNode.replaceChild(f,t);return}
+    const parts=parse(v);if(parts.some(p=>typeof p!=='string'))t.parentNode.replaceChild(build(parts),t)})
+  /* داخل الرسوم: خط فوق ما تحت الجذر */
+  const NS='http://www.w3.org/2000/svg',sv=root.nodeType===1&&root.namespaceURI===NS?[root]:[];(root.querySelectorAll?root.querySelectorAll('svg text'):[]).forEach(x=>sv.push(x));
+  sv.forEach(el=>{if(el.closest&&el.closest('.calc,.calcbtn'))return;const tw=document.createTreeWalker(el,NodeFilter.SHOW_TEXT),T=[];let m;while(m=tw.nextNode())if(m.nodeValue.indexOf('√')>=0&&!(m.parentNode&&m.parentNode.getAttribute&&m.parentNode.getAttribute('data-sq')))T.push(m);
+    T.forEach(t=>{const parts=parse(t.nodeValue);if(!parts.some(p=>typeof p!=='string'))return;const f=document.createDocumentFragment();parts.forEach(p=>{if(typeof p==='string'){f.append(p);return}f.append('√');const ts=document.createElementNS(NS,'tspan');ts.setAttribute('data-sq','1');ts.setAttribute('text-decoration','overline');ts.style.textDecoration='overline';ts.textContent='\u2009'+p.r+'\u2009';f.append(ts)});t.parentNode.replaceChild(f,t)})})}
+const start=()=>{fix(document.body);new MutationObserver(ms=>{ms.forEach(m=>{if(m.type==='characterData')fix(m.target);else m.addedNodes.forEach(x=>fix(x))})}).observe(document.body,{childList:true,subtree:true,characterData:true})};
+if(document.body)start();else document.addEventListener('DOMContentLoaded',start)})();
+</script>
 </body>
 </html>

@@ -1739,3 +1739,20 @@ SPEC.forEach(S=>{for(const r in S.FIX){const p=find(r);if(p){Object.assign(p,S.F
   const pg=t=>{const m=t.match(/صفحة (\d+)/);return m?+m[1]:999};ex.sort((a,b)=>pg(a)-pg(b));
   if(ex.length)S[L].s=pre+con.join('')+H+'\n'+ex.join('');});
 
+/* دمج درس «قانون كولوم» (مخفي) في درس «الشحنة الكهربائية وقانون كولوم» بنفس طريقة دمج الوحدة الحرارية */
+(function(){const PAIRS=[[1,2]],U=3,S=(window.STUDY||[])[U],P=window.PROBS||{},TB=window.TABLES||{},TH=window.THEORY||{},E=window.EXTRA||{},M=window.FIGMAP=window.FIGMAP||{},SM=window.SUMM||{};
+  const ALIAS=window.LESSON_MERGE=window.LESSON_MERGE||{};
+  PAIRS.forEach(([a,b])=>{const ka=U+'-'+a,kb=U+'-'+b;ALIAS[ka]=[ka,kb];
+    if(S&&S[a]&&S[b]){const H='### أمثلة الحقيبة التدريبية محلولة',sp=t=>{t=(t||'').trim();const i=t.indexOf(H);return i<0?[t,'']:[t.slice(0,i).trim(),t.slice(i+H.length).trim()]},A=sp(S[a].s),B=sp(S[b].s),ex=[A[1],B[1]].filter(Boolean).join('\n');S[a].s=[A[0],B[0]].filter(Boolean).join('\n')+(ex?'\n'+H+'\n'+ex:'');S[a].qz=(S[a].qz||[]).concat(S[b].qz||[]);
+      if(!S[a].ex&&S[b].ex)S[a].ex=S[b].ex;}
+    if(P[kb])P[ka]=(P[ka]||[]).concat(P[kb]);
+    if(TB[kb])TB[ka]=(TB[ka]||[]).concat(TB[kb]);
+    if(!TH[ka]&&TH[kb])TH[ka]=TH[kb];
+    if(SM[kb])SM[ka]=(SM[ka]?SM[ka].trim()+'\n':'')+SM[kb].trim();
+    const ea=E[ka]||(E[ka]={}),eb=E[kb]||{};
+    if(eb.ap)ea.ap=ea.ap?(ea.ap.indexOf(eb.ap)<0?ea.ap+'\n'+eb.ap:ea.ap):eb.ap;
+    if(eb.sim){ea.sim=ea.sim||[];eb.sim.forEach(x=>{if(!ea.sim.some(y=>y.u===x.u))ea.sim.push(x)})}
+    const fa=(M[ka]||[]).slice();if(eb.fig&&eb.fig!==ea.fig&&fa.indexOf(eb.fig)<0)fa.push(eb.fig);(M[kb]||[]).forEach(f=>{if(f!==ea.fig&&fa.indexOf(f)<0)fa.push(f)});M[ka]=fa;});
+  const G=window.GENS;if(G){const has=G.has,make=G.make;
+    G.has=k=>k==='3-1'?['3-1','3-2'].some(x=>has(x)):has(k);
+    G.make=k=>{if(k!=='3-1')return make(k);const ks=['3-1','3-2'].filter(x=>has(x));return ks.length?make(ks[Math.floor(Math.random()*ks.length)]):null};}})();

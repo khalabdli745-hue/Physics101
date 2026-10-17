@@ -218,6 +218,11 @@ function toolsIntro(){
 /* ===== الوحدة الأولى — الكميات الفيزيائية وأنظمة القياس: معمل القياس (أداة القدمة ذات الورنية وأداة الميكرومتر) ===== */
 
 function convBox(rows){return `<div class="sym cv"><b>قوانين التحويل:</b><ul>`+rows.map(r=>`<li><span class="fx" dir="ltr">${r}</span></li>`).join('')+`</ul></div>`}
+/* قراءة رقم المتدرب: أرقام عربية، وفاصلة عشرية، وصيغة الأس العلمي مثل 1.23×10⁻⁸ أو 1.23x10^-8 أو 1.23e-8 */
+function labNum(v){let t=String(v).trim().replace(/[٠-٩]/g,c=>'٠١٢٣٤٥٦٧٨٩'.indexOf(c)).replace(/٫/g,'.').replace(/,/g,'.').replace(/\s+/g,'');
+  const SUP={'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9','⁻':'-','⁺':'+'};t=t.replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺]/g,c=>SUP[c]).replace(/[−–]/g,'-');
+  const m=t.match(/^([-+]?\d*\.?\d+)(?:[×xX*·]10\^?([-+]?\d+))$/);if(m)return parseFloat(m[1])*Math.pow(10,+m[2]);
+  if(/^[-+]?(\d+\.?\d*|\.\d+)(e[-+]?\d+)?$/i.test(t))return parseFloat(t);return NaN}
 function calcInit(root){if(typeof makeCalc!=='function')return;const hs=[...root.querySelectorAll('.labCalc')];if(!hs.length)return;let tgt=null;
  root.addEventListener('focusin',e=>{if(e.target.matches('.ans input'))tgt=e.target});
  hs.forEach(h=>{const P=h.parentElement;
@@ -332,7 +337,7 @@ function measureLab(box){
     $('sbL').textContent=okL?['L(cm) = L(mm) / 10',E(`L = ${L.toFixed(1)} / 10`)].join('\n'):'L(cm) = L(mm) / 10';
     $('sbD').textContent=okD?['D(cm) = D(mm) / 10',E(`D = ${D.toFixed(2)} / 10`)].join('\n'):'D(cm) = D(mm) / 10';
     $('sbV').textContent=okCL&&okCD?['V = π·D²·L / 4',E(`V = π × ${(+DC().toFixed(3))}² × ${(+LC().toFixed(2))} / 4`)].join('\n'):'V = π·D²·L / 4'}
-  const num=v=>parseFloat(String(v).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace('٫','.').replace(',','.'));
+  const num=labNum;
   const fb=(id,ok,msg)=>{$(id).textContent=msg;$(id).className='fb2 '+(ok?'ok':'no')};
   $('vR').oninput=vDraw;$('mR').oninput=mDraw;
   box.querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>{$('vR').value=r1(+$('vR').value+ +b.dataset.d);vDraw()});
@@ -434,7 +439,7 @@ function speedLab2(box){
   const $=id=>box.querySelector('#'+id);
   let d,T,okD,okT,ok1,ok2,ok3,tHint,sHint;
   const r1=x=>Math.round(x*10)/10;
-  const num=v=>parseFloat(String(v).replace(/[٠-٩]/g,c=>'٠١٢٣٤٥٦٧٨٩'.indexOf(c)).replace('٫','.').replace(',','.'));
+  const num=labNum;
   const fb=(id,ok,msg)=>{$(id).textContent=msg;$(id).className='fb2 '+(ok?'ok':'no')};
   const X0=40,PX=1.6;
   function track(svg,cartX,extra){return `<rect x="0" y="${svg==='s'?62:78}" width="400" height="10" fill="#94A3B8"/>
@@ -612,7 +617,7 @@ function forceLab(box){
     <div class="stage" id="rStage" hidden><svg id="rS" viewBox="0 0 400 428"></svg></div>
     <p class="rn" id="rNote">تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.</p></div>`;
   const $=id=>box.querySelector('#'+id),G=9.8,D2R=Math.PI/180;
-  const num=v=>parseFloat(String(v).replace(/[٠-٩]/g,c=>'٠١٢٣٤٥٦٧٨٩'.indexOf(c)).replace('٫','.').replace(',','.'));
+  const num=labNum;
   const fb=(id,ok,msg)=>{$(id).textContent=msg;$(id).className='fb2 '+(ok?'ok':'no')};
   const fx=(x,n)=>String(+x.toFixed(n));
   let m1,m2,t1,t2,ok={},hs=1,zoomOf=1,h1=false,h2=false;
@@ -771,7 +776,7 @@ function vecLab(box){
     <div class="stage" id="rStage" hidden><svg id="rS" viewBox="0 0 400 355"></svg></div>
     <p class="rn" id="rNote">تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.</p></div>`;
   const $=id=>box.querySelector('#'+id),G=9.8,D2R=Math.PI/180;
-  const num=v=>parseFloat(String(v).replace(/[٠-٩]/g,c=>'٠١٢٣٤٥٦٧٨٩'.indexOf(c)).replace('٫','.').replace(',','.'));
+  const num=labNum;
   const fb=(id,ok,msg)=>{$(id).textContent=msg;$(id).className='fb2 '+(ok?'ok':'no')};
   const fx=(x,n)=>String(+x.toFixed(n));
   let m,th,ok={},hT=false;
@@ -923,7 +928,7 @@ function workLab(box){
     <div class="stage" id="fbd" hidden style="margin-top:10px"><svg id="fbS" viewBox="0 -10 400 330"></svg><div class="vcap">القوى المؤثرة على الصندوق</div></div>
     <div class="tw" id="kT" hidden style="margin-top:10px"><table class="rt"><thead><tr><th>الكمية</th><th>نوعها</th></tr></thead><tbody><tr><td>القوة <span dir="ltr">F⃗</span></td><td>متجهة (مقدار واتجاه)</td></tr><tr><td>الإزاحة <span dir="ltr">x⃗</span></td><td>متجهة (مقدار واتجاه)</td></tr><tr><td>الشغل <span dir="ltr">W = F⃗ · x⃗</span></td><td>قياسية (مقدار فقط)</td></tr></tbody></table></div></div>`;
   const $=id=>box.querySelector('#'+id),D2R=Math.PI/180;
-  const num=v=>parseFloat(String(v).replace(/[٠-٩]/g,c=>'٠١٢٣٤٥٦٧٨٩'.indexOf(c)).replace('٫','.').replace(',','.'));
+  const num=labNum;
   const fb=(id,ok,msg)=>{$(id).textContent=msg;$(id).className='fb2 '+(ok?'ok':'no')};
   const fx=(x,n)=>String(+x.toFixed(n));
   let F,th,d,ok={},hF=false,hT=false,hD=false;
@@ -1110,7 +1115,7 @@ function dotLab(box){
     <tr><td>الضرب القياسي لمتجهين ممثلين بالإحداثيات القطبية</td><td>بالحساب:<br><span dir="ltr" style="white-space:nowrap;font-size:12px">A B cos θ</span></td><td id="r5">—</td></tr></tbody></table></div>
     <p class="rn" id="rNote">تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.</p></div>`;
   const $=id=>box.querySelector('#'+id),D2R=Math.PI/180;
-  const num=v=>parseFloat(String(v).replace(/[٠-٩]/g,c=>'٠١٢٣٤٥٦٧٨٩'.indexOf(c)).replace('٫','.').replace(',','.'));
+  const num=labNum;
   const fb=(id,ok,msg)=>{$(id).textContent=msg;$(id).className='fb2 '+(ok?'ok':'no')};
   const fx=(x,n)=>String(+x.toFixed(n));
   let A,B,aA,aB,th,ok={},hT=false;
@@ -1354,7 +1359,7 @@ function airLab(box){
     <div class="stage" id="chA" hidden><svg id="chAs" viewBox="0 0 400 290"></svg></div><div class="vcap" id="chAc" hidden>منحنى التسارع مع الزمن: الخط أفقي لأن التسارع ثابت لا يتغير مع الزمن في كل محاولة</div>
     <p class="rn" id="rNote">تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.</p></div>`;
   const $=id=>box.querySelector('#'+id);
-  const num=v=>parseFloat(String(v).replace(/[٠-٩]/g,c=>'٠١٢٣٤٥٦٧٨٩'.indexOf(c)).replace('٫','.').replace(',','.'));
+  const num=labNum;
   const fb=(id,ok,msg)=>{$(id).textContent=msg;$(id).className='fb2 '+(ok?'ok':'no')};
   function fb0(id){$(id).textContent='';$(id).className='fb2'}
   const r1=x=>Math.round(x*10)/10,r4=x=>Math.round(x*1e4)/1e4,fx=(x,n)=>String(+x.toFixed(n));
@@ -1519,7 +1524,7 @@ function ffLab(box){
     <tr><td>الارتفاع المقاس h</td><td>الشريط المتري</td><td id="rm1">—</td></tr></tbody></table></div>
     <p class="rn" id="rNote">تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.</p></div>`;
   const $=id=>box.querySelector('#'+id);
-  const num=v=>parseFloat(String(v).replace(/[٠-٩]/g,c=>'٠١٢٣٤٥٦٧٨٩'.indexOf(c)).replace('٫','.').replace(',','.'));
+  const num=labNum;
   const fb=(id,ok,msg)=>{$(id).textContent=msg;$(id).className='fb2 '+(ok?'ok':'no')};
   const fb0=id=>{$(id).textContent='';$(id).className='fb2'};
   const r1=x=>Math.round(x*10)/10,r4=x=>Math.round(x*1e4)/1e4,fx=(x,n)=>String(+x.toFixed(n)),G=9.8;
@@ -1704,7 +1709,7 @@ function awLab(box){
     <tr><td>التسارع من القانون a</td><td id="r6">—</td></tr></tbody></table></div>
     <p class="rn" id="rNote">تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.</p></div>`;
   const $=id=>box.querySelector('#'+id);
-  const num=v=>parseFloat(String(v).replace(/[٠-٩]/g,c=>'٠١٢٣٤٥٦٧٨٩'.indexOf(c)).replace('٫','.').replace(',','.'));
+  const num=labNum;
   const fb=(id,ok,msg)=>{$(id).textContent=msg;$(id).className='fb2 '+(ok?'ok':'no')};
   const fb0=id=>{$(id).textContent='';$(id).className='fb2'};
   const r1=x=>Math.round(x*10)/10,r4=x=>Math.round(x*1e4)/1e4,fx=(x,n)=>String(+x.toFixed(n)),G=9.8;
@@ -1888,7 +1893,7 @@ function frLab(box){
     <tr><td>قوة السحب (الشد) F بالميزان النابضي</td><td id="r3">—</td></tr></tbody></table></div>
     <p class="rn" id="rNote">تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.</p></div>`;
   const $=id=>box.querySelector('#'+id);
-  const num=v=>parseFloat(String(v).replace(/[٠-٩]/g,c=>'٠١٢٣٤٥٦٧٨٩'.indexOf(c)).replace('٫','.').replace(',','.'));
+  const num=labNum;
   const fb=(id,ok,msg)=>{$(id).textContent=msg;$(id).className='fb2 '+(ok?'ok':'no')};
   const fb0=id=>{$(id).textContent='';$(id).className='fb2'};
   const fx=(x,n)=>String(+x.toFixed(n)),G=9.8;
@@ -2028,7 +2033,7 @@ function wkLab2(box){
     <tr><td>الشغل W</td><td id="r3">—</td></tr></tbody></table></div>
     <p class="rn" id="rNote">تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.</p></div>`;
   const $=id=>box.querySelector('#'+id);
-  const num=v=>parseFloat(String(v).replace(/[٠-٩]/g,c=>'٠١٢٣٤٥٦٧٨٩'.indexOf(c)).replace('٫','.').replace(',','.'));
+  const num=labNum;
   const fb=(id,ok,msg)=>{$(id).textContent=msg;$(id).className='fb2 '+(ok?'ok':'no')};
   const fb0=id=>{$(id).textContent='';$(id).className='fb2'};
   const fx=(x,n)=>String(+x.toFixed(n)),r1=x=>Math.round(x*10)/10,K=1.3;
@@ -2177,7 +2182,7 @@ function peLab(box){
     <div id="peC"></div>
     <p class="rn" id="rNote">تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.</p></div>`;
   const $=id=>box.querySelector('#'+id);
-  const num=v=>parseFloat(String(v).replace(/[٠-٩]/g,c=>'٠١٢٣٤٥٦٧٨٩'.indexOf(c)).replace('٫','.').replace(',','.'));
+  const num=labNum;
   const fb=(id,ok,msg)=>{$(id).textContent=msg;$(id).className='fb2 '+(ok?'ok':'no')};
   const fb0=id=>{$(id).textContent='';$(id).className='fb2'};
   const fx=(x,n)=>String(+x.toFixed(n)),r1=x=>Math.round(x*10)/10,G=9.8;
@@ -2364,7 +2369,7 @@ function ceLab(box){
     <tr><td>طاقة الحركة KE</td><td id="r5">—</td></tr></tbody></table></div>
     <p class="rn" id="rNote">تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.</p></div>`;
   const $=id=>box.querySelector('#'+id);
-  const num=v=>parseFloat(String(v).replace(/[٠-٩]/g,c=>'٠١٢٣٤٥٦٧٨٩'.indexOf(c)).replace('٫','.').replace(',','.'));
+  const num=labNum;
   const fb=(id,ok,msg)=>{$(id).textContent=msg;$(id).className='fb2 '+(ok?'ok':'no')};
   const fb0=id=>{$(id).textContent='';$(id).className='fb2'};
   const fx=(x,n)=>String(+x.toFixed(n)),r1=x=>Math.round(x*10)/10,G=9.8;
@@ -2577,7 +2582,7 @@ function eqLab(box){
     <div id="htC"></div>
     <p class="rn" id="rNote">تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.</p></div>`;
   const $=id=>box.querySelector('#'+id);
-  const num=v=>parseFloat(String(v).replace(/[٠-٩]/g,c=>'٠١٢٣٤٥٦٧٨٩'.indexOf(c)).replace('٫','.').replace(',','.'));
+  const num=labNum;
   const fb=(id,ok,msg)=>{$(id).textContent=msg;$(id).className='fb2 '+(ok?'ok':'no')};
   const fb0=id=>{$(id).textContent='';$(id).className='fb2'};
   const r1=x=>Math.round(x*10)/10,fx=(x,n)=>String(+x.toFixed(n));
@@ -2644,7 +2649,7 @@ function eqLab(box){
     else fb('cTf',false,'✗ اضرب كل كتلة في درجة حرارتها واجمع الناتجين:\n'+E(`${M1} × ${T1.toFixed(1)} + ${M2} × ${T2.toFixed(1)} = ${fx(M1*T1+M2*T2,1)}`)+'\nثم اقسم على مجموع الكتلتين '+E(`${M1} + ${M2} = ${M1+M2}`));sub();results()};
   $('nw').onclick=newObj;
   /* القوانين في سطر واحد: يصغر الخط حتى يتسع القانون لعرض الشاشة */
-  function fitL(){box.querySelectorAll('.law .ln > span, h4.sbh').forEach(e=>{if(!e.offsetWidth)return;e.style.fontSize='';const pre=/pre-line/.test(e.getAttribute('style')||'');e.style.whiteSpace=pre?'pre':'nowrap';e.style.display='block';e.style.overflow='hidden';
+  function fitL(){box.querySelectorAll('.law .ln > span, h4.sbh').forEach(e=>{if(!e.offsetWidth)return;e.style.fontSize='';if(e.dataset.pl==null)e.dataset.pl=/pre-line/.test(e.getAttribute('style')||'')?'1':'';const pre=e.dataset.pl==='1';e.style.whiteSpace=pre?'pre':'nowrap';e.style.display='block';e.style.overflow='hidden';
     let f=parseFloat(getComputedStyle(e).fontSize),k=0;while(e.scrollWidth>e.clientWidth+1&&f>9&&k++<80){f-=0.5;e.style.fontSize=f+'px'}});const hs=[...box.querySelectorAll('h4.sbh')].filter(e=>e.offsetWidth);if(hs.some(e=>e.style.fontSize)){const m=Math.min(...hs.map(e=>parseFloat(getComputedStyle(e).fontSize)));hs.forEach(e=>e.style.fontSize=m+'px')}}
   const qf=()=>requestAnimationFrame(fitL);addEventListener('resize',qf);new MutationObserver(qf).observe(box,{childList:true,subtree:true,characterData:true});
   calcInit(box);newObj();qf();
@@ -2708,7 +2713,7 @@ function hxBal(v,lab,kind){/* kind: hot|cold|ice */const wc=kind==='hot'?'#FCA5A
 const hxZoom=(scrs,cap)=>`<rect x="20" y="4" width="360" height="86" rx="14" fill="#334155" stroke="#0F172A" stroke-width="2"/>`+scrs.map(([x,w,txt])=>`<rect x="${x}" y="16" width="${w}" height="62" rx="8" fill="#BBF7D0" stroke="#14532D"/><text x="${x+w/2}" y="57" font-size="${w<150?20:24}" font-weight="800" text-anchor="middle" fill="#14532D" direction="ltr" font-family="Consolas,monospace">${txt}</text>`).join('')+`<text x="200" y="106" font-size="12" font-weight="700" text-anchor="middle" fill="var(--muted)">‏${cap}‏</text>`;
 function hxKit(box){/* أدوات مشتركة داخل كل تجربة */
   const $=id=>box.querySelector('#'+id);
-  const num=v=>parseFloat(String(v).replace(/[٠-٩]/g,c=>'٠١٢٣٤٥٦٧٨٩'.indexOf(c)).replace('٫','.').replace(',','.'));
+  const num=labNum;
   const fb=(id,ok,msg)=>{$(id).textContent=msg;$(id).className='fb2 '+(ok?'ok':'no')};
   const fb0=id=>{$(id).textContent='';$(id).className='fb2'};
   return {$,num,fb,fb0,r1:x=>Math.round(x*10)/10,fx:(x,n)=>String(+(+x).toFixed(n))}}
@@ -3242,6 +3247,378 @@ function trLab(box){
   $('nw').onclick=newObj;newObj()}
 
 /* مراجع التجارب (نفس مراجع التقرير) */
+/* ===== تجربة الوحدة الرابعة: قانون كولوم بالميزان الرقمي ===== */
+function clScene(o){/* o:{r (cm), m (نص قراءة الميزان), lab} */
+  o=o||{};const BASE=290,T=14,PX=9,S=(x,d,z)=>[x+d*0.6,BASE-z-d*0.5],P=(x,d,z)=>S(x,d,z).join(',');
+  const poly=(a,f,st)=>`<polygon points="${a.map(p=>P(...p)).join(' ')}" fill="${f}" stroke="${st||'#334155'}" stroke-linejoin="round"/>`;
+  const box=(x0,x1,d0,d1,z0,z1,cf,ct,cs,st)=>poly([[x0,d0,z1],[x1,d0,z1],[x1,d1,z1],[x0,d1,z1]],ct,st)+poly([[x1,d0,z0],[x1,d1,z0],[x1,d1,z1],[x1,d0,z1]],cs,st)+poly([[x0,d0,z0],[x1,d0,z0],[x1,d0,z1],[x0,d0,z1]],cf,st);
+  const lbl=(x,y,tx,ty,t,anc)=>`<line x1="${x}" y1="${y}" x2="${tx}" y2="${ty}" stroke="var(--muted)" stroke-width="1"/><circle cx="${x}" cy="${y}" r="2.4" fill="var(--muted)"/><text x="${tx}" y="${ty+(ty<y?-4:13)}" font-size="13" font-weight="700" text-anchor="${anc||'middle'}" fill="var(--ink)" style="paint-order:stroke;stroke:var(--panel);stroke-width:3px">${t}</text>`;
+  const r=o.r==null?12:o.r,CX=200,D=45,ZL=96,RS=12,ZU=ZL+r*PX,ZA=ZU+40;
+  let g=`<defs><radialGradient id="clSph" cx=".35" cy=".35" r=".7"><stop offset="0" stop-color="#F8FAFC"/><stop offset=".45" stop-color="#CBD5E1"/><stop offset="1" stop-color="#475569"/></radialGradient><linearGradient id="clRod" x1="0" x2="1"><stop offset="0" stop-color="#FDE68A"/><stop offset=".5" stop-color="#FFFBEB"/><stop offset="1" stop-color="#D97706"/></linearGradient><linearGradient id="clSt" x1="0" x2="1"><stop offset="0" stop-color="#64748B"/><stop offset=".5" stop-color="#E2E8F0"/><stop offset="1" stop-color="#475569"/></linearGradient></defs>`;
+  g+=box(6,370,0,90,0,T,'#B7834A','#E9C894','#9A6A3A','#7C4A1F');
+  /* الحامل: قاعدة وعمود */
+  g+=box(40,100,30,62,T,T+6,'#334155','#475569','#1F2937','#0F172A');
+  {const [x,y0]=S(70,46,T+6),[,y1]=S(70,46,ZA+16);g+=`<rect x="${x-3}" y="${y1}" width="6" height="${y0-y1}" fill="url(#clSt)" stroke="#334155" stroke-width=".8"/>`}
+  /* الميزان الرقمي */
+  g+=box(150,250,20,70,T,T+28,'#E2E8F0','#F1F5F9','#CBD5E1','#475569');
+  {const a=S(158,20,T+22),b=S(222,20,T+6);g+=`<rect x="${a[0]}" y="${a[1]}" width="${b[0]-a[0]}" height="${b[1]-a[1]}" rx="3" fill="#BBF7D0" stroke="#14532D"/><text x="${(a[0]+b[0])/2}" y="${(a[1]+b[1])/2+4}" font-size="11" font-weight="800" text-anchor="middle" fill="#14532D" font-family="Consolas,monospace" direction="ltr">${o.m||'0.000'} g</text>`;
+   const c=S(234,20,T+14);g+=`<circle cx="${c[0]}" cy="${c[1]}" r="4" fill="#94A3B8" stroke="#334155"/>`}
+  {const [px,py]=S(CX,D,T+28);g+=`<ellipse cx="${px}" cy="${py}" rx="30" ry="9" fill="#CBD5E1" stroke="#475569"/><ellipse cx="${px}" cy="${py-2}" rx="28" ry="8" fill="#F8FAFC" stroke="#94A3B8"/>`}
+  /* الساق العازلة السفلية والكرة السفلية */
+  {const [x,y0]=S(CX,D,T+30),[,y1]=S(CX,D,ZL-RS+2);g+=`<rect x="${x-3}" y="${y1}" width="6" height="${y0-y1}" fill="url(#clRod)" stroke="#B45309" stroke-width=".8"/>`}
+  const [lx,ly]=S(CX,D,ZL),[ux,uy]=S(CX,D,ZU);
+  g+=`<circle cx="${lx}" cy="${ly}" r="${RS}" fill="url(#clSph)" stroke="#334155"/><text x="${lx}" y="${ly+5}" font-size="15" font-weight="900" text-anchor="middle" fill="#B91C1C">+</text>`;
+  /* المسطرة المترية: صفرها عند مركز الكرة السفلية (o.mode: half نصف سنتيمتر، mm مليمترية، vernier ورنية على الحامل، digital رقمية على الحامل) */
+  const MODE=o.mode||'mm',SIDE=MODE==='half'||MODE==='mm';
+  {const RX=268,[rx,ry0]=S(RX,D,ZL),[,ry1]=S(RX,D,ZL+12.5*PX),[,rb]=S(RX,D,T);
+   if(SIDE){g+=`<rect x="${rx-2}" y="${ry0}" width="4" height="${rb-ry0}" fill="#94A3B8"/><rect x="${rx}" y="${ry1-4}" width="20" height="${ry0-ry1+8}" rx="2" fill="#FEF3C7" stroke="#92400E"/>`;
+   const stp=MODE==='mm'?0.1:0.5;for(let n=0;n<=Math.round(12/stp);n++){const c=Math.round(n*stp*10)/10,[,ty]=S(RX,D,ZL+c*PX),big=c%2===0,mid=c%1===0,hf=Math.abs(c*2-Math.round(c*2))<1e-6;g+=`<line x1="${rx}" y1="${ty}" x2="${rx+(big?10:mid?7:hf?5:3)}" y2="${ty}" stroke="#78350F" stroke-width="${big?1.4:mid?1:0.5}"/>`+(big?`<text x="${rx+12}" y="${ty+3.5}" font-size="8" font-weight="700" fill="#78350F" direction="ltr">${c}</text>`:'')}
+   g+=`<line x1="${lx+RS}" y1="${ly}" x2="${rx}" y2="${ly}" stroke="#64748B" stroke-dasharray="3 3"/><line x1="${ux+RS}" y1="${uy}" x2="${rx}" y2="${uy}" stroke="#F7931E" stroke-width="1.6" stroke-dasharray="3 3"/>`}
+   const ax=lx-RS-14;g+=`<line x1="${ax}" y1="${uy}" x2="${ax}" y2="${ly}" stroke="#F7931E" stroke-width="2"/><line x1="${ax-5}" y1="${uy}" x2="${ax+5}" y2="${uy}" stroke="#F7931E" stroke-width="2"/><line x1="${ax-5}" y1="${ly}" x2="${ax+5}" y2="${ly}" stroke="#F7931E" stroke-width="2"/><text x="${ax-6}" y="${(uy+ly)/2+5}" font-size="14" font-weight="800" text-anchor="end" fill="#C2410C" direction="ltr">r</text>`}
+  /* الذراع الأفقية والماسك والساق العازلة العلوية */
+  g+=box(64,78,40,52,ZA-4,ZA+10,'#334155','#475569','#1F2937','#0F172A');
+  g+=box(78,CX+4,43,49,ZA,ZA+5,'#94A3B8','#CBD5E1','#64748B','#334155');
+  {const [x,y0]=S(CX,D,ZA),[,y1]=S(CX,D,ZU+RS-2);g+=`<rect x="${x-3}" y="${y0}" width="6" height="${y1-y0}" fill="url(#clRod)" stroke="#B45309" stroke-width=".8"/>`}
+  if(!SIDE){const [sx0,sy0]=S(80,40,ZL+40),[,sy1]=S(80,40,ZL+40+12.5*PX),[,cy]=S(80,40,ZA+3);
+    g+=`<rect x="${sx0}" y="${sy1}" width="12" height="${sy0-sy1}" fill="${MODE==='vernier'?'#F3F4F6':'#CBD5E1'}" stroke="#334155" stroke-width=".8"/>`;
+    if(MODE==='vernier'){for(let n=0;n<=120;n++){const c=n/10,[,ty]=S(80,40,ZL+40+c*PX),big=n%10===0;g+=`<line x1="${sx0}" y1="${ty}" x2="${sx0+(big?7:3)}" y2="${ty}" stroke="#111827" stroke-width="${big?1:.4}"/>`+(big&&n%20===0?`<text x="${sx0+7}" y="${ty+3}" font-size="7" font-weight="700" fill="#111827" direction="ltr">${c}</text>`:'')}
+      g+=`<rect x="${sx0+12}" y="${cy-9}" width="14" height="18" rx="2" fill="#F7931E" stroke="#9A3412"/>`;for(let k=0;k<=10;k++){const yy=cy+9-k*1.62;g+=`<line x1="${sx0+12}" y1="${yy}" x2="${sx0+(k%5?16:20)}" y2="${yy}" stroke="#431407" stroke-width=".6"/>`}}
+    else{g+=`<rect x="${sx0+12}" y="${cy-12}" width="50" height="22" rx="3" fill="#1F2937" stroke="#0F172A"/><rect x="${sx0+15}" y="${cy-9}" width="44" height="12" rx="2" fill="#BBF7D0"/><text x="${sx0+37}" y="${cy+0.5}" font-size="8.5" font-weight="800" text-anchor="middle" fill="#14532D" font-family="Consolas,monospace" direction="ltr">${r.toFixed(2)} cm</text>`}}
+  g+=`<circle cx="${ux}" cy="${uy}" r="${RS}" fill="url(#clSph)" stroke="#334155"/><text x="${ux}" y="${uy+5}" font-size="15" font-weight="900" text-anchor="middle" fill="#B91C1C">+</text>`;
+  if(o.lab){const [sx,sy]=S(70,46,ZA-30),[bx,by]=S(170,20,T+10),[dx,dy]=S(214,20,T+8),[rx]=S(268,D,0),[,ry]=S(268,D,ZL+8*PX),[,rod2]=S(CX,D,ZA-14);
+    g+=lbl(ux-RS+1,uy-3,188,uy-10,'الكرة العلوية','end')+lbl(lx-RS+1,ly+5,188,ly+26,'الكرة السفلية','end')
+      +lbl(sx-2,sy,8,22,'حامل بساق عازلة','start')+lbl(ux+3,rod2,248,20,'ساق عازلة','start')
+      +lbl(rx+20,ry,396,40,'المسطرة المليمترية','end')+lbl(bx,by,110,BASE+26,'الميزان الرقمي','middle')+lbl(dx,dy,316,BASE+26,'شاشة الميزان','middle')}
+  return `<svg viewBox="0 0 400 ${BASE+(o.lab?46:12)}" aria-label="ميزان رقمي عليه كرة مشحونة، وفوقها كرة مشحونة معلقة بحامل، ومسطرة لقياس المسافة بين مركزيهما">${g}</svg>`}
+
+function clLab(box){
+  const K=9e9,G=9.8,RS_=[4,8],RMAX=12;
+  box.innerHTML=`
+  <div class="intro"><small class="labKind">🧪 تجربة عملية تفاعلية</small><h3>1. اسم التجربة</h3><p class="labName">التحقق من قانون كولوم</p></div>
+  <div class="tags"><span class="tag">المسافة r: <i>المسطرة المليمترية</i> · cm</span><span class="tag">قراءة الميزان m: <i>الميزان الرقمي</i> · g</span><span class="tag dv">القوة الكهربائية F: <i>محسوبة</i> · N</span><span class="tag dv">الشحنة q: <i>محسوبة</i> · nC</span></div>
+  <div class="intro goals"><h3>2. أهداف التجربة</h3><ol class="gl">
+    <li>التعرف على الميزان الرقمي والمسطرة المليمترية والحامل بساق عازلة.</li>
+    <li>قياس قوة التنافر بين كرتين مشحونتين بشحنتين موجبتين متساويتين في المقدار بالميزان الرقمي عند مسافتين <span dir="ltr">r</span> تقاس بالمسطرة المليمترية.</li>
+    <li>التحقق من أن القوة الكهربائية تتناسب عكسيا مع مربع المسافة بين الشحنتين.</li>
+    <li>حساب مقدار الشحنة <span dir="ltr">q</span> على كل كرة من قانون كولوم.</li></ol></div>
+  <div class="intro"><h3>3. الأدوات والأجهزة المستخدمة</h3>
+    <div class="tool"><div class="stage">${clScene({lab:true,r:9,m:'0.000',mode:'mm'})}</div><div class="vcap">الميزان الرقمي والكرتان المشحونتان والمسطرة المليمترية: منظر ثلاثي الأبعاد</div>
+    <p><b>ترتيب الأجهزة:</b> كرة معدنية مثبتة على ساق عازلة فوق كفة الميزان الرقمي، وفوقها كرة معدنية ثانية معلقة في حامل بساق عازلة، تنزل وترتفع مع ماسك الحامل على عموده. والمسطرة المليمترية بجانبهما، وصفرها عند مركز الكرة السفلية.</p></div>
+    <p><b>الميزان الرقمي:</b> ميزان دقيق يقرأ بالجرام بدقة <span dir="ltr">0.001 g</span>، صفر قبل التجربة والكرة السفلية عليه، فيقرأ فقط الكتلة الإضافية الناتجة عن قوة التنافر.</p>
+    <p><b>الكرتان المعدنيتان:</b> مشحونتان بشحنتين موجبتين متساويتين <span dir="ltr">q</span>، فتتنافران، وتدفع الكرة العلوية الكرة السفلية إلى أسفل.</p>
+    <p><b>المسطرة المليمترية:</b> مقسمة كل <span dir="ltr">1 mm</span>، وتقاس بها المسافة <span dir="ltr">r</span> بين مركزي الكرتين بالسنتيمتر بدقة <span dir="ltr">0.1 cm</span>.</p>
+    <p><b>الحامل بساق عازلة:</b> حامل معدني بقاعدة وعمود وماسك متحرك، تعلق فيه الكرة العلوية بساق عازلة تمنع تسرب الشحنة منها، وبمثلها تثبت الكرة السفلية على الميزان.</p></div>
+  <h3 class="secH">4. القوانين المستخدمة</h3>
+  <div class="ctl">
+    <div class="law ftl"><div class="ln lw"><b>قانون كولوم: القوة بين شحنتين نقطيتين</b><span>F = k·q₁·q₂ / r²</span></div>
+      <div class="ln lw"><b>الكرتان مشحونتان بشحنتين متساويتين <bdi dir="ltr">q₁ = q₂ = q</bdi></b><span>F = k·q² / r²</span></div>
+      <div class="ln lw"><b>قوة التنافر تدفع الكرة السفلية إلى أسفل، فيقرأ الميزان كتلة إضافية m</b><span>F = m·g</span></div>
+      <div class="ln lw"><b>عند ثبات الشحنة، النسبة بين قوتين عند مسافتين</b><span>F₁ / F₂ = (r₂ / r₁)²</span></div>
+      <div class="ln lw"><b>ومن قانون كولوم نحسب الشحنة</b><span>q = r·√(F / k)</span></div>
+      <p class="slh" style="margin:2px 0 8px">ℹ️ حيث <bdi dir="ltr">F = m·g</bdi> قوة التنافر المقاسة بالميزان الرقمي.</p>
+      <div class="vfig"><svg viewBox="0 0 340 190" style="width:100%;max-width:420px;display:block;margin:6px auto" role="img" aria-label="كرتان موجبتان تتنافران">
+      <defs><marker id="clA" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#F7931E"/></marker></defs>
+      <circle cx="170" cy="60" r="15" fill="#FCA5A5" stroke="#B91C1C" stroke-width="2"/><text x="170" y="66" text-anchor="middle" font-size="17" font-weight="900" fill="#B91C1C">+</text>
+      <circle cx="170" cy="140" r="15" fill="#FCA5A5" stroke="#B91C1C" stroke-width="2"/><text x="170" y="146" text-anchor="middle" font-size="17" font-weight="900" fill="#B91C1C">+</text>
+      <line x1="170" y1="43" x2="170" y2="6" stroke="#F7931E" stroke-width="3.5" marker-end="url(#clA)"/><text x="182" y="22" font-size="14" font-weight="800" fill="#C2410C" direction="ltr">F</text>
+      <line x1="170" y1="157" x2="170" y2="186" stroke="#F7931E" stroke-width="3.5" marker-end="url(#clA)"/><text x="182" y="182" font-size="14" font-weight="800" fill="#C2410C" direction="ltr">F</text>
+      <line x1="120" y1="60" x2="120" y2="140" stroke="var(--ink)" stroke-width="1.5"/><line x1="114" y1="60" x2="126" y2="60" stroke="var(--ink)" stroke-width="1.5"/><line x1="114" y1="140" x2="126" y2="140" stroke="var(--ink)" stroke-width="1.5"/><text x="108" y="105" font-size="15" font-weight="800" text-anchor="end" fill="var(--ink)" direction="ltr">r</text>
+      <text x="148" y="66" font-size="13" font-weight="700" text-anchor="end" fill="var(--ink)" direction="ltr">q</text><text x="148" y="146" font-size="13" font-weight="700" text-anchor="end" fill="var(--ink)" direction="ltr">q</text>
+      <text x="268" y="105" font-size="13" font-weight="700" text-anchor="middle" fill="var(--ink)">‏شحنتان متشابهتان: تنافر‏</text>
+      </svg><div class="vcap">القوتان متساويتان في المقدار ومتعاكستان في الاتجاه، وتقل القوة كلما زادت المسافة</div></div>
+      <div class="sym"><b>حيث:</b><ul>
+      <li><span class="chip" dir="ltr">F</span> القوة الكهربائية بين الشحنتين، ووحدتها <span dir="ltr">N</span></li>
+      <li><span class="chip" dir="ltr">k</span> ثابت كولوم، وقيمته <span dir="ltr">9 × 10⁹ N·m²/C²</span></li>
+      <li><span class="chip" dir="ltr">q</span> شحنة كل كرة، ووحدتها <span dir="ltr">C</span>، و <span dir="ltr">1 nC = 10⁻⁹ C</span></li>
+      <li><span class="chip" dir="ltr">r</span> المسافة بين مركزي الكرتين، ووحدتها <span dir="ltr">m</span>، و <span dir="ltr">1 cm = 0.01 m</span></li>
+      <li><span class="chip" dir="ltr">m</span> قراءة الميزان الرقمي، ووحدتها <span dir="ltr">kg</span>، و <span dir="ltr">1 g = 0.001 kg</span></li>
+      <li><span class="chip" dir="ltr">g</span> تسارع الجاذبية، وقيمته <span dir="ltr">9.8 m/s²</span></li>
+      </ul></div>
+      <p class="slh">ℹ️ في نسبة القوتين لا نحتاج تحويل الوحدات، لأن <span dir="ltr">F₁ / F₂ = m₁ / m₂</span> والمسافتان بنفس الوحدة.</p></div></div>
+  <h3 class="secH">5. تنفيذ التجربة</h3>
+  <div class="startBand">▶️ لنبدأ التجربة</div>
+  <div class="btns" style="margin-bottom:12px"><button type="button" class="rs" id="nw">🔄 شحنة جديدة</button></div>
+  <div class="ctl"><h3>5.1 القياس</h3>
+    ${RS_.map((r,i)=>`<h4 class="sbh">${'أبج'[i]}) قراءة الميزان عند المسافة <bdi dir="ltr">r${'₁₂₃'[i]} = ${r} cm</bdi></h4>
+    <div class="stage"><div id="sS${i}"></div><svg id="sM${i}" viewBox="0 0 400 120"></svg><svg id="sZ${i}" viewBox="0 0 400 112"></svg><div class="hud"><span id="sSt${i}"></span></div></div>
+    <div class="row"><label for="sR${i}">إنزال الكرة العلوية</label><output id="sO${i}"></output><input id="sR${i}" type="range" min="0" max="100" step="1" value="0"></div>
+    <p class="slh">👆 اسحب المؤشر البرتقالي لإنزال الكرة العلوية حتى يقع خط مركز الكرة العلوية على التدريج <bdi dir="ltr">${r}.0 cm</bdi> في التكبير، ثم اقرأ المسافة وقراءة الميزان.</p>
+    <div class="ans"><label>قراءة المسطرة <bdi dir="ltr">r${'₁₂₃'[i]}</bdi></label><input id="d${i}" inputmode="decimal" dir="ltr" placeholder="cm"><button type="button" class="go" id="d${i}Ck">تحقق</button></div><div class="fb2" id="d${i}Fb"></div>
+    <div class="ans"><label>قراءة الميزان <bdi dir="ltr">m${'₁₂₃'[i]}</bdi> عند <bdi dir="ltr" style="white-space:nowrap">r = ${r} cm</bdi></label><input id="m${i}" inputmode="decimal" dir="ltr" placeholder="g"><button type="button" class="go" id="m${i}Ck">تحقق</button></div><div class="fb2" id="m${i}Fb"></div>`).join('')}
+  </div>
+  <div class="ctl"><h3>5.2 الحسابات</h3>
+    <p class="slh">ℹ️ <b>المعطيات:</b> <b dir="ltr">g = 9.8 m/s²</b> ، <b dir="ltr">k = 9 × 10⁹ N·m²/C²</b></p>
+    <h4 class="sbh">أ) حساب النسبة F₁ / F₂ ومقارنتها بـ (r₂ / r₁)²</h4>
+    <p class="slh">ℹ️ حيث <bdi dir="ltr">F = m·g</bdi> قوة التنافر المقاسة بالميزان الرقمي، فتختصر <bdi dir="ltr">g</bdi> في النسبة.</p>
+    ${hxCalcStep('R2','F₁ / F₂ = m₁ / m₂','احسب النسبة F₁ / F₂','')}
+    <h4 class="sbh">ب) حساب الشحنة q على كل كرة</h4>
+    <p class="slh">ℹ️ حيث <bdi dir="ltr">F₁ = m₁·g</bdi> قوة التنافر المقاسة بالميزان الرقمي عند <bdi dir="ltr">r₁</bdi>، فنعوضها في <bdi dir="ltr">q = r₁·√(F₁ / k)</bdi>.</p>
+    ${hxCalcStep('Q','q = r₁·√(m₁·g / k)','احسب الشحنة q بوحدة nC','nC')}
+  </div>
+  <div class="ctl res"><h3>6. نتائج التجربة</h3>
+    <div class="tw"><table class="rt"><thead><tr><th>الكمية</th><th>القيمة</th></tr></thead>
+    <tbody><tr><td>قراءة الميزان <bdi dir="ltr">m₁</bdi> عند <bdi dir="ltr" style="white-space:nowrap">4 cm</bdi></td><td id="r0">—</td></tr>
+    <tr><td>قراءة الميزان <bdi dir="ltr">m₂</bdi> عند <bdi dir="ltr" style="white-space:nowrap">8 cm</bdi></td><td id="r1">—</td></tr>
+    <tr><td><bdi dir="ltr">F₁ / F₂</bdi> المقاسة و <bdi dir="ltr">(r₂ / r₁)²</bdi></td><td id="r4">—</td></tr>
+    <tr><td>الشحنة <bdi dir="ltr">q</bdi> على كل كرة</td><td id="r6">—</td></tr></tbody></table></div>
+    <div id="clC"></div>
+    <p class="rn" id="rNote">تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.</p></div>`;
+  const $=id=>box.querySelector('#'+id);
+  const num=labNum;
+  const fb=(id,ok,msg)=>{$(id).textContent=msg;$(id).className='fb2 '+(ok?'ok':'no')};
+  const fb0=id=>{$(id).textContent='';$(id).className='fb2'};
+  const fx=(x,n)=>String(+x.toFixed(n));
+  const zoom=(lines,cap)=>`<rect x="20" y="4" width="360" height="86" rx="14" fill="#334155" stroke="#0F172A" stroke-width="2"/>`+lines+`<text x="200" y="106" font-size="12" font-weight="700" text-anchor="middle" fill="var(--muted)">${cap}</text>`;
+  const scr=(x,w,txt)=>`<rect x="${x}" y="16" width="${w}" height="62" rx="8" fill="#BBF7D0" stroke="#14532D"/><text x="${x+w/2}" y="57" font-size="24" font-weight="800" text-anchor="middle" fill="#14532D" direction="ltr" font-family="Consolas,monospace">${txt}</text>`;
+  const mmZ=r=>{let s=`<rect x="10" y="4" width="380" height="94" rx="12" fill="#334155" stroke="#0F172A" stroke-width="2"/><rect x="24" y="14" width="352" height="70" rx="4" fill="#FEF3C7"/>`;const X=v=>200+(v-r)*160;
+    for(let n=Math.ceil((r-1.2)*10);n<=Math.floor((r+1.2)*10);n++){const v=n/10,x=X(v);if(x<26||x>374||v<0)continue;const big=n%10===0,hf=n%5===0;s+=`<line x1="${x}" y1="14" x2="${x}" y2="${14+(big?30:hf?22:14)}" stroke="#78350F" stroke-width="${big?2:1.2}"/>`+(big?`<text x="${x}" y="66" font-size="16" font-weight="800" text-anchor="middle" fill="#78350F" direction="ltr">${Math.round(v)}</text>`:'')}
+    return s+`<line x1="200" y1="10" x2="200" y2="48" stroke="#EA580C" stroke-width="2.5"/><line x1="200" y1="72" x2="200" y2="88" stroke="#EA580C" stroke-width="2.5"/><text x="32" y="80" font-size="12" font-weight="800" text-anchor="start" fill="#78350F" direction="ltr">cm</text><text x="200" y="114" font-size="12" font-weight="700" text-anchor="middle" fill="var(--muted)">‏تدريج المسطرة المليمترية عند خط مركز الكرة العلوية (مكبر)‏</text>`};
+  let Q,NZ=[1,1,1],ok={};const MR=(r,i)=>Math.round(K*Q*Q/(r/100)**2/G*1e6*(i==null?1:NZ[i]))/1000,M=()=>RS_.map((r,i)=>MR(r,i));
+  const F1=()=>M()[0]/1000*G,QC=()=>RS_[0]/100*Math.sqrt(F1()/K)*1e9;
+  function newObj(){Q=(30+Math.floor(Math.random()*21))*1e-9;NZ=[1,0.975+Math.random()*0.05];ok={};
+    RS_.forEach((r,i)=>{$('sR'+i).value=0;$('m'+i).value='';$('d'+i).value='';fb0('m'+i+'Fb');fb0('d'+i+'Fb');sDraw(i)});['R2','Q'].forEach(k=>{$('c'+k).value='';fb0('c'+k+'f')});sub();results()}
+  function sDraw(i){const v=+$('sR'+i).value,to=RS_[i],r=Math.round((RMAX-(RMAX-to)*v/100)*10)/10,at=v>=100,m=MR(r,i).toFixed(3);
+    $('sO'+i).textContent='';
+    $('sSt'+i).textContent=at?'✓ وصلت الكرة إلى المسافة المطلوبة، اقرأ المسطرة ثم الميزان':'كلما اقتربت الكرتان زادت قوة التنافر وزادت قراءة الميزان';
+    $('sS'+i).innerHTML=clScene({r,m,mode:'mm'});$('sM'+i).innerHTML=mmZ(r);
+    $('sZ'+i).innerHTML=zoom(scr(90,220,`${m} g`),'‏شاشة الميزان الرقمي (مكبرة)‏')}
+  function sub(){const m=M();
+    $('sbR2').textContent=ok.m0&&ok.m1?['F₁ / F₂ = m₁ / m₂',E(`F₁ / F₂ = ${m[0]} / ${m[1]}`)].join('\n'):'F₁ / F₂ = m₁ / m₂';
+    $('sbQ').textContent=ok.m0?['q = r₁·√(m₁·g / k)',E(`q = 0.04 × √(${fx(m[0]/1000,6)} × 9.8 / (9 × 10⁹))`)].join('\n'):'q = r₁·√(m₁·g / k)'}
+  function chart(){const m=M();if(!(ok.m0&&ok.m1)){$('clC').innerHTML='';return}
+    const pts=RS_.map((r,i)=>[1/(r/100)**2,m[i]/1000*G]),xm=700,ym=Math.ceil(pts[0][1]*1000/2+0.5)*2/1000,X0=56,Yb=232,W=290,H=196,X=x=>X0+x/xm*W,Y=y=>Yb-y/ym*H;let s='';
+    for(let x=0;x<=xm;x+=100)s+=`<line x1="${X(x)}" y1="${Yb}" x2="${X(x)}" y2="${Yb-H}" stroke="var(--line)"/><text x="${X(x)}" y="${Yb+16}" font-size="11" text-anchor="middle" fill="var(--ink)">${x}</text>`;
+    const st=ym/4;for(let k=0;k<=4;k++){const y=st*k;s+=`<line x1="${X0}" y1="${Y(y)}" x2="${X0+W}" y2="${Y(y)}" stroke="var(--line)"/><text x="${X0-6}" y="${Y(y)+4}" font-size="11" text-anchor="end" fill="var(--ink)">${fx(y*1000,1)}</text>`}
+    s+=`<line x1="${X0}" y1="${Yb}" x2="${X0+W+8}" y2="${Yb}" stroke="var(--ink)" stroke-width="1.6"/><line x1="${X0}" y1="${Yb}" x2="${X0}" y2="${Yb-H-8}" stroke="var(--ink)" stroke-width="1.6"/>`;
+    s+=`<text x="${X0+W}" y="${Yb+34}" font-size="13" font-weight="700" text-anchor="end" fill="var(--ink)">1/r² (1/m²)</text><text x="${X0+4}" y="${Yb-H-12}" font-size="13" font-weight="700" fill="var(--ink)">F (mN)</text>`;
+    const sl=pts[0][1]/pts[0][0];s+=`<line x1="${X(0)}" y1="${Y(0)}" x2="${X(xm)}" y2="${Y(sl*xm)}" stroke="#F7931E" stroke-width="3"/>`;
+    pts.forEach(([x,y],i)=>{s+=`<circle cx="${X(x)}" cy="${Y(y)}" r="5.5" fill="#7E22CE" stroke="#fff" stroke-width="2"/><text x="${X(x)+8}" y="${Y(y)+16}" font-size="11" font-weight="700" fill="#6B21A8" direction="ltr">${RS_[i]} cm</text>`});
+    $('clC').innerHTML=`<div class="stage"><svg viewBox="0 0 380 280" style="direction:ltr;display:block;width:100%;height:auto" aria-label="القوة مقابل مقلوب مربع المسافة">${s}</svg></div><div class="vcap">النقطتان على خط مستقيم يمر بنقطة الأصل، أي أن F تتناسب طرديا مع 1/r²</div>`}
+  function results(){const m=M();
+    RS_.forEach((r,i)=>$('r'+i).textContent=ok['m'+i]?E(m[i].toFixed(3)+' g'):'—');
+    $('r4').textContent=ok.cR2?E(`${fx(m[0]/m[1],2)} ≈ ${fx((RS_[1]/RS_[0])**2,2)}`):'—';
+    $('r6').textContent=ok.cQ?E(fx(QC(),1)+' nC'):'—';
+    chart();
+    $('rNote').innerHTML=ok.cR2&&ok.cQ?'الاستنتاج: عند مضاعفة المسافة من <span dir="ltr">4 cm</span> إلى <span dir="ltr">8 cm</span> قلت القوة إلى الربع تقريبا، فالقوة الكهربائية تتناسب عكسيا مع مربع المسافة <span dir="ltr" style="white-space:nowrap">F ∝ 1/r²</span> كما في قانون كولوم، ومنه حسبنا شحنة كل كرة.':'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
+  RS_.forEach((r,i)=>{$('sR'+i).oninput=()=>sDraw(i);
+    $('d'+i+'Ck').onclick=()=>{const f='d'+i+'Fb';if(+$('sR'+i).value<100)return fb(f,false,`أنزل الكرة العلوية حتى تصل إلى ${r} cm أولا.`);const v=num($('d'+i).value);if(isNaN(v))return fb(f,false,'اكتب قراءة المسطرة بالسنتيمتر.');
+      if(Math.abs(v-r)<0.05){ok['d'+i]=true;fb(f,true,'✓ قراءة صحيحة:\n'+E(`r${'₁₂₃'[i]} = ${r.toFixed(1)} cm`))}else fb(f,false,'✗ اقرأ الرقم الكبير قبل الخط البرتقالي، ثم عد أقسام المليمتر الصغيرة حتى الخط.')};
+    $('m'+i+'Ck').onclick=()=>{const f='m'+i+'Fb';if(+$('sR'+i).value<100)return fb(f,false,`أنزل الكرة العلوية حتى تصبح المسافة ${r} cm أولا.`);const v=num($('m'+i).value);if(isNaN(v))return fb(f,false,'اكتب قراءة الميزان بالجرام.');
+      const val=M()[i];if(Math.abs(v-val)<0.0005){ok['m'+i]=true;fb(f,true,'✓ قراءة صحيحة:\n'+E(`m${'₁₂₃'[i]} = ${val.toFixed(3)} g`))}else fb(f,false,'✗ اكتب الرقم الظاهر على شاشة الميزان كما هو، بثلاثة أرقام عشرية.');sub();results()}});
+  const chk=(id,need,needMsg,val,tol,okMsg,badMsg)=>{const f='c'+id+'f';if(!need())return fb(f,false,needMsg);const v=num($('c'+id).value);if(isNaN(v))return fb(f,false,'اكتب الناتج بالأرقام.');
+    if(Math.abs(v-val)/Math.abs(val)<=tol){ok['c'+id]=true;fb(f,true,okMsg())}else fb(f,false,badMsg());sub();results()};
+  $('cR2k').onclick=()=>chk('R2',()=>ok.m0&&ok.m1,'أكمل القراءتين (أ) و (ب) أولا.',M()[0]/M()[1],.02,()=>'✓ إجابة صحيحة:\n'+E(`F₁ / F₂ = ${M()[0]} / ${M()[1]} = ${fx(M()[0]/M()[1],2)}`)+'\n'+E(`(r₂ / r₁)² = (8 / 4)² = 4`)+'\nالقيمتان متساويتان تقريبا: عند مضاعفة المسافة تقل القوة إلى الربع.',()=>'✗ اقسم قراءة الميزان الأولى على الثانية:\n'+E(`F₁ / F₂ = ${M()[0]} / ${M()[1]}`));
+  /* قبول الناتج بأي وحدة للشحنة (C أو mC أو µC أو pC) والتعرف عليها من مقداره، ثم تحويله إلى nC */
+  {const inp=$('cQ');const orig=()=>{const v=num(inp.value);if(isNaN(v)||!(ok.m0))return false;const U=[['C',1e-9,'الضرب في 10⁹'],['mC',1e-6,'الضرب في 10⁶'],['µC',1e-3,'الضرب في 1000'],['pC',1e3,'القسمة على 1000']].find(([u,f])=>Math.abs(v-QC()*f)/(QC()*f)<=.02);if(!U)return false;ok['cQ']=true;fb('cQf',true,'✓ إجابة صحيحة بوحدة '+U[0]+':\n'+E(`q = ${inp.value.trim()} ${U[0]}`)+'\nوبالتحويل إلى nC ('+U[2]+'):\n'+E(`q = ${fx(QC(),1)} nC`));sub();results();return true};
+   $('cQk').addEventListener('click',e=>{if(orig())e.stopImmediatePropagation()},true)}
+  $('cQk').onclick=()=>chk('Q',()=>ok.m0,'أكمل القراءة (أ) أولا.',QC(),.02,()=>'✓ إجابة صحيحة:\n'+E(`q = 0.04 × √(${fx(M()[0]/1000,6)} × 9.8 / (9 × 10⁹))`)+'\n'+E(`q = ${fx(QC(),1)} × 10⁻⁹ C = ${fx(QC(),1)} nC`),()=>'✗ حول m₁ إلى kg واضربها في 9.8، ثم اقسم على k، ثم خذ الجذر، ثم اضرب في 0.04، ثم في 10⁹:\n'+E(`√(${fx(M()[0]/1000,6)} × 9.8 / (9 × 10⁹)) = ${(Math.sqrt(F1()/K)).toExponential(3)}`));
+  $('nw').onclick=newObj;
+  function fitL(){box.querySelectorAll('.law .ln > span, h4.sbh').forEach(e=>{if(!e.offsetWidth)return;e.style.fontSize='';if(e.dataset.pl==null)e.dataset.pl=/pre-line/.test(e.getAttribute('style')||'')?'1':'';const pre=e.dataset.pl==='1';e.style.whiteSpace=pre?'pre':'nowrap';e.style.display='block';e.style.overflow='hidden';
+    let f=parseFloat(getComputedStyle(e).fontSize),k=0;while(e.scrollWidth>e.clientWidth+1&&f>9&&k++<80){f-=0.5;e.style.fontSize=f+'px'}});const hs=[...box.querySelectorAll('h4.sbh')].filter(e=>e.offsetWidth);if(hs.some(e=>e.style.fontSize)){const m=Math.min(...hs.map(e=>parseFloat(getComputedStyle(e).fontSize)));hs.forEach(e=>e.style.fontSize=m+'px')}}
+  const qf=()=>requestAnimationFrame(fitL);addEventListener('resize',qf);new MutationObserver(qf).observe(box,{childList:true,subtree:true,characterData:true});
+  calcInit(box);newObj();qf();
+}
+
+/* ===== تجربة الوحدة الرابعة: شدة المجال الكهربائي حول شحنة نقطية ===== */
+function efScene(o){/* o:{r (cm), e (نص قراءة المقياس), lab} */
+  o=o||{};const BASE=262,T=14,PX=10,S=(x,d,z)=>[x+d*0.6,BASE-z-d*0.5],P=(x,d,z)=>S(x,d,z).join(',');
+  const poly=(a,f,st)=>`<polygon points="${a.map(p=>P(...p)).join(' ')}" fill="${f}" stroke="${st||'#334155'}" stroke-linejoin="round"/>`;
+  const box=(x0,x1,d0,d1,z0,z1,cf,ct,cs,st)=>poly([[x0,d0,z1],[x1,d0,z1],[x1,d1,z1],[x0,d1,z1]],ct,st)+poly([[x1,d0,z0],[x1,d1,z0],[x1,d1,z1],[x1,d0,z1]],cs,st)+poly([[x0,d0,z0],[x1,d0,z0],[x1,d0,z1],[x0,d0,z1]],cf,st);
+  const lbl=(x,y,tx,ty,t,anc)=>`<line x1="${x}" y1="${y}" x2="${tx}" y2="${ty}" stroke="var(--muted)" stroke-width="1"/><circle cx="${x}" cy="${y}" r="2.4" fill="var(--muted)"/><text x="${tx}" y="${ty+(ty<y?-4:13)}" font-size="13" font-weight="700" text-anchor="${anc||'middle'}" fill="var(--ink)" style="paint-order:stroke;stroke:var(--panel);stroke-width:3px">${t}</text>`;
+  const r=o.r==null?22:o.r,SX=120,D=50,ZC=T+112,RS=22,PXr=SX+r*PX;
+  let g=`<defs><radialGradient id="efSph" cx=".35" cy=".35" r=".7"><stop offset="0" stop-color="#F8FAFC"/><stop offset=".45" stop-color="#CBD5E1"/><stop offset="1" stop-color="#475569"/></radialGradient><linearGradient id="efRod" x1="0" x2="1"><stop offset="0" stop-color="#FDE68A"/><stop offset=".5" stop-color="#FFFBEB"/><stop offset="1" stop-color="#D97706"/></linearGradient></defs>`;
+  g+=box(6,440,0,130,0,T,'#B7834A','#E9C894','#9A6A3A','#7C4A1F');
+  /* المسطرة المليمترية على الطاولة: صفرها تحت مركز الكرة */
+  const RM=o.rm||'c',UP=RM==='c'?5:0;
+  if(RM==='c'){g+=box(SX-28,SX+29*PX,D-18,D+18,T,T+5,'#CBD5E1','#E2E8F0','#94A3B8','#475569');
+   for(let n=0;n<=270;n+=5){const x=SX+n/10*PX,[x0,y0]=S(x,D-18,T+5),[,y1]=S(x,D-18,T+5-(n%50===0?5:n%10===0?3.5:2));g+=`<line x1="${x0}" y1="${y0}" x2="${x0}" y2="${y1}" stroke="#111827" stroke-width="${n%50===0?1.2:.6}"/>`;if(n%50===0)g+=`<text x="${x0}" y="${y0+15}" font-size="9" font-weight="700" text-anchor="middle" fill="#111827" direction="ltr">${n/10}</text>`}}
+  if(RM==='b'){const z=T+0.5,d0=D-34,d1=D-22;g+=poly([[SX-4,d0,z],[SX+27*PX,d0,z],[SX+27*PX,d1,z],[SX-4,d1,z]],'#FEF3C7','#92400E');
+   for(let n=0;n<=260;n+=5){const x=SX+n/10*PX,[x0,y0]=S(x,d1,z),[x1,y1]=S(x,d1-(n%50===0?8:n%10===0?5:3),z);g+=`<line x1="${x0}" y1="${y0}" x2="${x1}" y2="${y1}" stroke="#78350F" stroke-width="${n%50===0?1.2:.6}"/>`;if(n%50===0){const [tx,ty]=S(x,d0,z);g+=`<text x="${tx}" y="${ty+9}" font-size="8" font-weight="700" text-anchor="middle" fill="#78350F" direction="ltr">${n/10}</text>`}}}
+  if(RM==='old'){const z=T+0.5,d0=6,d1=18;g+=poly([[SX-4,d0,z],[SX+27*PX,d0,z],[SX+27*PX,d1,z],[SX-4,d1,z]],'#FEF3C7','#92400E');
+   for(let n=0;n<=260;n+=5){const x=SX+n/10*PX,[x0,y0]=S(x,d0,z),[x1,y1]=S(x,d0+(n%50===0?8:n%10===0?5:3),z);g+=`<line x1="${x0}" y1="${y0}" x2="${x1}" y2="${y1}" stroke="#78350F" stroke-width="${n%50===0?1.2:.6}"/>`;
+     if(n%50===0){const [tx,ty]=S(x,d0-1,z);g+=`<text x="${tx}" y="${ty+9}" font-size="8" font-weight="700" text-anchor="middle" fill="#78350F" direction="ltr">${n/10}</text>`}}}
+  const [cx,cy]=S(SX,D,ZC);
+  /* مصدر الجهد العالي ومجس الشحن: الكرة تشحن باللمس ثم يبعد المجس */
+  g+=box(10,68,96,118,T,T+40,'#E5E7EB','#F3F4F6','#CBD5E1','#475569');
+  {const a=S(14,96,T+32),b2=S(50,96,T+15);g+=`<rect x="${a[0]}" y="${a[1]}" width="${b2[0]-a[0]}" height="${b2[1]-a[1]}" rx="2" fill="#BBF7D0" stroke="#14532D"/><text x="${(a[0]+b2[0])/2}" y="${(a[1]+b2[1])/2+3}" font-size="10" font-weight="800" text-anchor="middle" fill="#14532D" font-family="Consolas,monospace" direction="ltr">5.0 kV</text>`;
+   const k1=S(56,96,T+24),k2=S(63,96,T+24);g+=`<circle cx="${k1[0]}" cy="${k1[1]}" r="3" fill="#DC2626" stroke="#7F1D1D"/><circle cx="${k2[0]}" cy="${k2[1]}" r="3" fill="#1F2937"/>`}
+  {const [kx,ky]=S(56,96,T+24);let tx,ty,hx,hy;if(o.charge){tx=cx-RS*0.72;ty=cy-RS*0.72;hx=tx-30;hy=ty-34}else{const p=S(18,110,T+40);tx=p[0];ty=p[1]-2;hx=tx+34;hy=ty-4}
+   g+=`<path d="M${kx},${ky} C${kx+12},${ky-20} ${hx+20},${hy+6} ${hx},${hy}" fill="none" stroke="#DC2626" stroke-width="1.8"/>`;
+   const ux=(tx-hx),uy=(ty-hy),L=Math.hypot(ux,uy),mx=hx+ux*0.55,my=hy+uy*0.55;
+   g+=`<line x1="${hx}" y1="${hy}" x2="${mx}" y2="${my}" stroke="#1F2937" stroke-width="6" stroke-linecap="round"/><line x1="${mx}" y1="${my}" x2="${tx}" y2="${ty}" stroke="#94A3B8" stroke-width="3" stroke-linecap="round"/><circle cx="${tx}" cy="${ty}" r="2.6" fill="#F7931E"/>`;
+   o._pr=[mx,my]}
+  /* حامل الكرة بساق عازلة */
+  g+=box(SX-24,SX+24,D-16,D+16,T+UP,T+7+UP,'#334155','#475569','#1F2937','#0F172A');
+  {const [x,y0]=S(SX,D,T+7+UP),[,y1]=S(SX,D,ZC-RS+2);g+=`<rect x="${x-4}" y="${y1}" width="8" height="${y0-y1}" fill="url(#efRod)" stroke="#B45309" stroke-width=".8"/>`}
+  if(RM==='old'){const [,ry]=S(SX,6,T+0.5);const [rx]=S(SX,6,T);g+=`<line x1="${cx}" y1="${cy}" x2="${rx}" y2="${ry}" stroke="#64748B" stroke-dasharray="3 3"/>`}
+  g+=`<circle cx="${cx}" cy="${cy}" r="${RS}" fill="url(#efSph)" stroke="#334155"/><text x="${cx}" y="${cy+8}" font-size="24" font-weight="900" text-anchor="middle" fill="#B91C1C">+</text>`;
+  /* مقياس المجال الكهربائي على حامل يتحرك على الطاولة */
+  const MX=PXr;g+=box(MX-4,MX+56,D-14,D+14,T+UP,T+6+UP,'#334155','#475569','#1F2937','#0F172A');
+  {const [x,y0]=S(MX+26,D,T+6+UP),[,y1]=S(MX+26,D,ZC-18);g+=`<rect x="${x-3.5}" y="${y1}" width="7" height="${y0-y1}" fill="#94A3B8" stroke="#475569" stroke-width=".8"/>`}
+  g+=box(MX+10,MX+70,D-12,D+12,ZC-20,ZC+30,'#1F2937','#334155','#111827','#0F172A');
+  {const a=S(MX+15,D-12,ZC+24),b=S(MX+65,D-12,ZC-8);g+=`<rect x="${a[0]}" y="${a[1]}" width="${b[0]-a[0]}" height="${b[1]-a[1]}" rx="2" fill="#BBF7D0" stroke="#14532D"/><text x="${(a[0]+b[0])/2}" y="${(a[1]+b[1])/2+3}" font-size="12" font-weight="800" text-anchor="middle" fill="#14532D" font-family="Consolas,monospace" direction="ltr">${o.e||'0.00'}</text>`}
+  {const [x0,y0]=S(MX,D,ZC),[x1]=S(MX+10,D,ZC);g+=`<line x1="${x0}" y1="${y0}" x2="${x1}" y2="${y0}" stroke="#475569" stroke-width="5"/><circle cx="${x0}" cy="${y0}" r="2.6" fill="#F7931E"/>`;
+   if(RM==='old'){const [,ry]=S(MX,6,T+0.5),[rx]=S(MX,6,T);g+=`<line x1="${x0}" y1="${y0}" x2="${rx}" y2="${ry}" stroke="#F7931E" stroke-width="1.4" stroke-dasharray="3 3"/>`}
+   if(RM==='a'){const ZR=ZC-RS-14,[r0,y0r]=S(SX,D-14,ZR),[r1,y1r]=S(SX+26*PX,D-14,ZR-12);
+     {const [p0x,p0y]=S(SX+262,D-14,ZR-12),[,pb]=S(SX+262,D-14,T);g+=`<rect x="${p0x-2}" y="${p0y}" width="4" height="${pb-p0y}" fill="#94A3B8"/>`}
+     g+=`<rect x="${r0-2}" y="${y0r}" width="${r1-r0+4}" height="${y1r-y0r}" fill="#FEF3C7" stroke="#92400E"/>`;
+     for(let n=0;n<=260;n+=5){const [x]=S(SX+n/10*PX,D-14,ZR);g+=`<line x1="${x}" y1="${y0r}" x2="${x}" y2="${y0r+(n%50===0?7:n%10===0?5:3)}" stroke="#78350F" stroke-width="${n%50===0?1.2:.6}"/>`+(n%50===0?`<text x="${x}" y="${y1r-1}" font-size="7" font-weight="700" text-anchor="middle" fill="#78350F" direction="ltr">${n/10}</text>`:'')}
+     const [a0]=S(SX,D-14,ZR),[a1]=S(MX,D-14,ZR);g+=`<line x1="${cx}" y1="${cy}" x2="${a0}" y2="${y0r}" stroke="#64748B" stroke-dasharray="3 3"/><line x1="${x0}" y1="${y0}" x2="${a1}" y2="${y0r}" stroke="#F7931E" stroke-width="1.4" stroke-dasharray="3 3"/>`}
+   if(RM==='b'){[[SX,'#64748B'],[MX,'#F7931E']].forEach(([X,c])=>{const [ax,ay]=S(X,D-16,T+1),[bx,by]=S(X,D-22,T+0.5);g+=`<line x1="${ax}" y1="${ay}" x2="${bx}" y2="${by}" stroke="${c}" stroke-width="2"/><path d="M${bx-4},${by-3} L${bx},${by+3} L${bx+4},${by-3} Z" fill="${c}"/>`});
+     g+=`<line x1="${cx}" y1="${cy}" x2="${cx}" y2="${S(SX,D,T+7)[1]}" stroke="#64748B" stroke-dasharray="3 3"/><line x1="${x0}" y1="${y0}" x2="${x0}" y2="${S(MX,D,T+6)[1]}" stroke="#F7931E" stroke-width="1.4" stroke-dasharray="3 3"/>`}
+   if(RM==='c'){[[SX,'#64748B'],[MX,'#F7931E']].forEach(([X,c])=>{const [px2,py2]=S(X,D-16,T+5);g+=`<path d="M${px2-7},${py2-10} L${px2},${py2} L${px2+7},${py2-10} Z" fill="${c}" stroke="#7C2D12" stroke-width=".6"/>`});
+     g+=`<line x1="${cx}" y1="${cy}" x2="${cx}" y2="${S(SX,D,T+7+UP)[1]}" stroke="#64748B" stroke-dasharray="3 3"/><line x1="${x0}" y1="${y0}" x2="${x0}" y2="${S(MX,D,T+6+UP)[1]}" stroke="#F7931E" stroke-width="1.4" stroke-dasharray="3 3"/>`}
+
+   const yy=cy-RS-26;g+=`<line x1="${cx}" y1="${yy}" x2="${x0}" y2="${yy}" stroke="#F7931E" stroke-width="2"/><line x1="${cx}" y1="${yy-5}" x2="${cx}" y2="${yy+5}" stroke="#F7931E" stroke-width="2"/><line x1="${x0}" y1="${yy-5}" x2="${x0}" y2="${yy+5}" stroke="#F7931E" stroke-width="2"/><text x="${(cx+x0)/2}" y="${yy-6}" font-size="14" font-weight="800" text-anchor="middle" fill="#C2410C" direction="ltr">r</text>`}
+  if(o.lab){const [mx,my]=S(MX+54,D-10,ZC+10),[px,py]=S(MX+3,D,ZC),[sx,sy]=S(SX,D,T+40),[rx,ry]=S(SX+215,D-18,T+3);
+    const [hx2,hy2]=S(30,96,T+40);g+=(o.charge?lbl(o._pr[0],o._pr[1],8,24,'مجس الشحن','start'):'')+lbl(hx2,hy2,60,hy2-34,'مصدر الجهد العالي','middle');
+    g+=lbl(cx-RS+4,cy-8,8,40,'كرة مشحونة','start')+lbl(sx-2,sy,150,BASE+26,'حامل بساق عازلة','middle')+lbl(px-1,py+2,px-10,py+46,'المجس','end')
+      +lbl(mx,my,446,40,'مقياس شدة المجال الكهربائي','end')+lbl(rx,ry+2,340,BASE+26,'المسار المدرج','middle')}
+  return `<svg viewBox="0 0 450 ${BASE+(o.lab?44:12)}" aria-label="كرة مشحونة على حامل بساق عازلة، ومقياس المجال الكهربائي على مسافة r منها، ومسطرة مليمترية على الطاولة">${g}</svg>`}
+
+function efChargeFig(){/* رسم توضيحي: شحن الكرة بالتوصيل (اللمس) من مصدر الجهد العالي */
+  const lb=(x,y,tx,ty,t,anc)=>`<line x1="${x}" y1="${y}" x2="${tx}" y2="${ty}" stroke="var(--muted)" stroke-width="1"/><circle cx="${x}" cy="${y}" r="2.4" fill="var(--muted)"/><text x="${tx}" y="${ty+(ty<y?-4:13)}" font-size="13" font-weight="700" text-anchor="${anc||'middle'}" fill="var(--ink)" style="paint-order:stroke;stroke:var(--panel);stroke-width:3px">${t}</text>`;
+  let g=`<defs><radialGradient id="efcS" cx=".35" cy=".35" r=".7"><stop offset="0" stop-color="#F8FAFC"/><stop offset=".45" stop-color="#CBD5E1"/><stop offset="1" stop-color="#475569"/></radialGradient><linearGradient id="efcR" x1="0" x2="1"><stop offset="0" stop-color="#FDE68A"/><stop offset=".5" stop-color="#FFFBEB"/><stop offset="1" stop-color="#D97706"/></linearGradient><marker id="efcA" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#DC2626"/></marker></defs>`;
+  g+=`<polygon points="10,200 330,200 380,170 60,170" fill="#E9C894" stroke="#7C4A1F"/><polygon points="10,200 330,200 330,212 10,212" fill="#B7834A" stroke="#7C4A1F"/><polygon points="330,200 380,170 380,182 330,212" fill="#9A6A3A" stroke="#7C4A1F"/>`;
+  /* الكرة على حامل بساق عازلة */
+  g+=`<polygon points="70,188 120,188 132,180 82,180" fill="#475569" stroke="#0F172A"/><rect x="70" y="188" width="50" height="7" fill="#334155" stroke="#0F172A"/><rect x="97" y="96" width="8" height="88" fill="url(#efcR)" stroke="#B45309" stroke-width=".8"/>`;
+  g+=`<circle cx="101" cy="78" r="24" fill="url(#efcS)" stroke="#334155"/>`;
+  [[-14,-8],[12,-12],[-4,12],[16,8],[-16,10],[2,-18]].forEach(([dx,dy])=>{g+=`<text x="${101+dx}" y="${78+dy+4}" font-size="11" font-weight="900" text-anchor="middle" fill="#B91C1C">+</text>`});
+  /* مصدر الجهد العالي */
+  g+=`<polygon points="250,186 340,186 356,176 266,176" fill="#F3F4F6" stroke="#475569"/><rect x="250" y="122" width="90" height="64" fill="#E5E7EB" stroke="#475569"/><polygon points="250,122 340,122 356,112 266,112" fill="#F3F4F6" stroke="#475569"/><polygon points="340,122 356,112 356,176 340,186" fill="#CBD5E1" stroke="#475569"/>`;
+  g+=`<rect x="258" y="132" width="52" height="20" rx="2" fill="#BBF7D0" stroke="#14532D"/><text x="284" y="146" font-size="11" font-weight="800" text-anchor="middle" fill="#14532D" font-family="Consolas,monospace" direction="ltr">5.0 kV</text>`;
+  g+=`<circle cx="320" cy="140" r="5" fill="#DC2626" stroke="#7F1D1D"/><text x="320" y="128" font-size="11" font-weight="900" text-anchor="middle" fill="#B91C1C">+</text><circle cx="320" cy="166" r="5" fill="#1F2937"/><text x="306" y="170" font-size="12" font-weight="900" text-anchor="middle" fill="#1F2937">−</text>`;
+  g+=`<path d="M320,171 V198" stroke="#1F2937" stroke-width="1.6"/><path d="M310,198 H330 M313,202 H327 M317,206 H323" stroke="#1F2937" stroke-width="1.6"/>`;
+  /* السلك ومجس الشحن يلمس الكرة */
+  g+=`<path d="M320,135 C330,60 230,30 176,46" fill="none" stroke="#DC2626" stroke-width="2.2"/>`;
+  g+=`<line x1="176" y1="46" x2="150" y2="58" stroke="#1F2937" stroke-width="8" stroke-linecap="round"/><line x1="150" y1="58" x2="121" y2="68" stroke="#94A3B8" stroke-width="3.5" stroke-linecap="round"/><circle cx="121" cy="68" r="3" fill="#F7931E"/>`;
+  g+=lb(162,52,180,18,'مجس الشحن (مقبض عازل)','middle')+lb(300,62,396,40,'سلك التوصيل','end')+lb(101,118,30,150,'ساق عازلة','middle')
+    +lb(84,66,8,30,'كرة معدنية','start')+lb(266,160,200,220,'مصدر الجهد العالي','middle')+lb(320,140,396,98,'القطب الموجب','end')+lb(320,204,396,220,'تأريض القطب السالب','end');
+  return `<svg viewBox="0 0 400 246" aria-label="شحن الكرة المعدنية بالتوصيل من مصدر الجهد العالي بمجس الشحن">${g}</svg>`}
+
+function efLab(box){
+  const K=9e9,RS_=[10,20],RMAX=22;
+  box.innerHTML=`
+  <div class="intro"><small class="labKind">🧪 تجربة عملية تفاعلية</small><h3>1. اسم التجربة</h3><p class="labName">قياس شدة المجال الكهربائي حول شحنة نقطية</p></div>
+  <div class="tags"><span class="tag">المسافة r: <i>المسار المدرج</i> · cm</span><span class="tag">شدة المجال E: <i>مقياس شدة المجال الكهربائي</i> · N/C</span><span class="tag dv">الشحنة q: <i>محسوبة</i> · nC</span></div>
+  <div class="intro goals"><h3>2. أهداف التجربة</h3><ol class="gl">
+    <li>التعرف على مقياس شدة المجال الكهربائي والمسار المدرج والحامل بساق عازلة.</li>
+    <li>قياس شدة المجال الكهربائي حول كرة مشحونة بشحنة موجبة بمقياس شدة المجال الكهربائي عند مسافتين <span dir="ltr">r</span> تقاس بالمسار المدرج.</li>
+    <li>التحقق من أن شدة المجال الكهربائي تتناسب عكسيا مع مربع المسافة عن الشحنة.</li>
+    <li>حساب شحنة الكرة <span dir="ltr">q</span> من قانون المجال الكهربائي الناشئ عن شحنة نقطية.</li></ol></div>
+  <div class="intro"><h3>3. الأدوات والأجهزة المستخدمة</h3>
+    <div class="tool"><div class="stage">${efScene({lab:true,r:16,e:'0'})}</div><div class="vcap">الكرة المشحونة، ومقياس شدة المجال الكهربائي، والمسار المدرج: منظر ثلاثي الأبعاد</div>
+    <p><b>ترتيب الأجهزة:</b> كرة معدنية على حامل بساق عازلة، تشحن باللمس من مصدر الجهد العالي بمجس الشحن، ومقياس شدة المجال الكهربائي على حامل، ومجسه في مستوى مركز الكرة. والقاعدتان على مسار مدرج بالمليمتر تنزلق عليه قاعدة المقياس، وفي كل قاعدة مؤشر على التدريج: مؤشر الكرة عند الصفر، ومؤشر المقياس تحت طرف المجس.</p></div>
+    <div class="tool"><div class="stage">${efChargeFig()}</div><div class="vcap">شحن الكرة بالتوصيل (اللمس) قبل القياس</div>
+    <p><b>طريقة الشحن بالتوصيل:</b> يوصل مجس الشحن بالقطب الموجب لمصدر الجهد العالي، ثم يلمس به الكرة المعدنية فتنتقل إليها شحنة موجبة، ثم يبعد المجس فتبقى الشحنة على الكرة لأنها على ساق عازلة.</p></div>
+    <p><b>مقياس شدة المجال الكهربائي <span dir="ltr">(Electric Field Meter)</span>:</b> جهاز رقمي بمجس يوضع عند النقطة المراد قياس المجال عندها، ويعرض شدة المجال بوحدة <span dir="ltr">N/C</span> (وهي نفسها <span dir="ltr">V/m</span>) بدقة <span dir="ltr">10 N/C</span>.</p>
+    <p><b>الكرة المعدنية المشحونة:</b> تشحن <b>باللمس (التوصيل)</b> قبل القياس: يلمسها مجس الشحن المتصل بالقطب الموجب لمصدر الجهد العالي، فتنتقل إليها شحنة موجبة <span dir="ltr">q</span>، ثم يبعد المجس فتبقى الشحنة عليها لأنها على ساق عازلة. ويكون مجالها خارجها كمجال شحنة نقطية في مركزها.</p>
+    <p><b>مصدر الجهد العالي <span dir="ltr">(High Voltage Power Supply)</span> ومجس الشحن <span dir="ltr">(Charging Probe)</span>:</b> مصدر يعطي جهدا حتى <span dir="ltr">10 kV</span>، ومجس معدني بمقبض عازل يوصل الشحنة إلى الكرة.</p>
+    <p><b>المسار المدرج:</b> مسار مقسم كل <span dir="ltr">1 mm</span> تنزلق عليه قاعدة المقياس، ويقرأ مؤشرها المسافة <span dir="ltr">r</span> بين مركز الكرة وطرف المجس بدقة <span dir="ltr">0.1 cm</span>.</p>
+    <p><b>الحامل بساق عازلة:</b> يمسك الكرة بساق عازلة تمنع تسرب الشحنة منها.</p></div>
+  <h3 class="secH">4. القوانين المستخدمة</h3>
+  <div class="ctl">
+    <div class="law ftl"><div class="ln lw"><b>شدة المجال الكهربائي: القوة المؤثرة على شحنة اختبار موجبة</b><span>E = F / q</span></div>
+      <div class="ln lw"><b>المجال الكهربائي الناشئ عن شحنة نقطية</b><span>E = k·q / r²</span></div>
+      <div class="ln lw"><b>عند ثبات الشحنة، النسبة بين شدتي المجال عند مسافتين</b><span>E₁ / E₂ = (r₂ / r₁)²</span></div>
+      <div class="ln lw"><b>ومن قانون المجال نحسب الشحنة</b><span>q = E·r² / k</span></div>
+      <div class="vfig"><svg viewBox="0 0 340 220" style="width:100%;max-width:420px;display:block;margin:6px auto" role="img" aria-label="خطوط المجال الكهربائي حول شحنة موجبة">
+      <defs><marker id="efA" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#F7931E"/></marker></defs>
+      ${[...Array(12)].map((_,i)=>{const a=i*Math.PI/6,x1=120+Math.cos(a)*24,y1=105+Math.sin(a)*24,x2=120+Math.cos(a)*92,y2=105+Math.sin(a)*92;return `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#F7931E" stroke-width="2.2" marker-end="url(#efA)"/>`}).join('')}
+      <circle cx="120" cy="105" r="18" fill="#FCA5A5" stroke="#B91C1C" stroke-width="2"/><text x="120" y="112" text-anchor="middle" font-size="20" font-weight="900" fill="#B91C1C">+</text>
+      <circle cx="265" cy="66" r="3.5" fill="var(--ink)"/><line x1="137" y1="100" x2="265" y2="66" stroke="var(--ink)" stroke-dasharray="4 3"/><text x="205" y="74" font-size="14" font-weight="800" text-anchor="middle" fill="var(--ink)" direction="ltr">r</text><text x="275" y="62" font-size="14" font-weight="800" fill="var(--ink)" direction="ltr">E</text>
+      </svg><div class="vcap">رسم توضيحي: خطوط المجال تخرج من الشحنة الموجبة في كل الاتجاهات، وتتباعد كلما زادت المسافة فيضعف المجال</div></div>
+      <div class="sym"><b>حيث:</b><ul>
+      <li><span class="chip" dir="ltr">E</span> شدة المجال الكهربائي، ووحدتها <span dir="ltr">N/C</span></li>
+      <li><span class="chip" dir="ltr">F</span> القوة الكهربائية المؤثرة على شحنة الاختبار، ووحدتها <span dir="ltr">N</span></li>
+      <li><span class="chip" dir="ltr">k</span> ثابت كولوم، وقيمته <span dir="ltr">9 × 10⁹ N·m²/C²</span></li>
+      <li><span class="chip" dir="ltr">q</span> شحنة الكرة، ووحدتها <span dir="ltr">C</span>، و <span dir="ltr">1 nC = 10⁻⁹ C</span></li>
+      <li><span class="chip" dir="ltr">r</span> المسافة بين مركز الكرة ونقطة القياس، ووحدتها <span dir="ltr">m</span>، و <span dir="ltr">1 cm = 0.01 m</span></li>
+      </ul></div>
+      <p class="slh">ℹ️ في نسبة شدتي المجال لا نحتاج تحويل الوحدات، لأن القراءتين بنفس الوحدة والمسافتين بنفس الوحدة.</p></div></div>
+  <h3 class="secH">5. تنفيذ التجربة</h3>
+  <div class="startBand">▶️ لنبدأ التجربة</div>
+  <div class="btns" style="margin-bottom:12px"><button type="button" class="rs" id="nw">🔄 شحنة جديدة</button></div>
+  <div class="ctl"><h3>5.1 القياس</h3>
+    ${RS_.map((r,i)=>`<h4 class="sbh">${'أب'[i]}) قراءة شدة المجال عند المسافة <bdi dir="ltr">r${'₁₂'[i]} = ${r} cm</bdi></h4>
+    <div class="stage"><div id="eS${i}"></div><svg id="eM${i}" viewBox="0 0 400 120"></svg><svg id="eZ${i}" viewBox="0 0 400 112"></svg><div class="hud"><span id="eSt${i}"></span></div></div>
+    <div class="row"><label for="eR${i}">تحريك مقياس المجال</label><output id="eO${i}"></output><input id="eR${i}" type="range" min="0" max="100" step="1" value="0"></div>
+    <p class="slh">👆 اسحب المؤشر البرتقالي لتقريب مقياس المجال من الكرة حتى يقع مؤشر قاعدة المقياس على التدريج <bdi dir="ltr">${r}.0 cm</bdi> في التكبير، ثم اقرأ المسافة وشدة المجال.</p>
+    <div class="ans"><label>قراءة المسار المدرج <bdi dir="ltr">r${'₁₂'[i]}</bdi></label><input id="ed${i}" inputmode="decimal" dir="ltr" placeholder="cm"><button type="button" class="go" id="ed${i}Ck">تحقق</button></div><div class="fb2" id="ed${i}Fb"></div>
+    <div class="ans"><label>قراءة مقياس المجال <bdi dir="ltr">E${'₁₂'[i]}</bdi> عند <bdi dir="ltr" style="white-space:nowrap">r = ${r} cm</bdi></label><input id="ee${i}" inputmode="decimal" dir="ltr" placeholder="N/C"><button type="button" class="go" id="ee${i}Ck">تحقق</button></div><div class="fb2" id="ee${i}Fb"></div>`).join('')}
+  </div>
+  <div class="ctl"><h3>5.2 الحسابات</h3>
+    <p class="slh">ℹ️ <b>المعطيات:</b> <b dir="ltr">k = 9 × 10⁹ N·m²/C²</b></p>
+    <h4 class="sbh">أ) حساب النسبة E₁ / E₂ ومقارنتها بـ (r₂ / r₁)²</h4>
+    ${hxCalcStep('ER','E₁ / E₂','احسب النسبة E₁ / E₂','')}
+    <h4 class="sbh">ب) حساب شحنة الكرة q</h4>
+    <p class="slh">ℹ️ حول <bdi dir="ltr">r₁</bdi> إلى <bdi dir="ltr">m</bdi> بالقسمة على 100.</p>
+    ${hxCalcStep('EQ','q = E₁·r₁² / k','احسب الشحنة q بوحدة nC','nC')}
+  </div>
+  <div class="ctl res"><h3>6. نتائج التجربة</h3>
+    <div class="tw"><table class="rt"><thead><tr><th>الكمية</th><th>القيمة</th></tr></thead>
+    <tbody><tr><td>شدة المجال <bdi dir="ltr">E₁</bdi> عند <bdi dir="ltr" style="white-space:nowrap">10 cm</bdi></td><td id="er0">—</td></tr>
+    <tr><td>شدة المجال <bdi dir="ltr">E₂</bdi> عند <bdi dir="ltr" style="white-space:nowrap">20 cm</bdi></td><td id="er1">—</td></tr>
+    <tr><td><bdi dir="ltr">E₁ / E₂</bdi> المقاسة و <bdi dir="ltr">(r₂ / r₁)²</bdi></td><td id="er2">—</td></tr>
+    <tr><td>شحنة الكرة <bdi dir="ltr">q</bdi></td><td id="er3">—</td></tr></tbody></table></div>
+    <div id="efC"></div>
+    <p class="rn" id="eNote">تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.</p></div>`;
+  const $=id=>box.querySelector('#'+id);
+  const num=labNum;
+  const fb=(id,ok,msg)=>{$(id).textContent=msg;$(id).className='fb2 '+(ok?'ok':'no')};
+  const fb0=id=>{$(id).textContent='';$(id).className='fb2'};
+  const fx=(x,n)=>String(+x.toFixed(n));
+  const zoom=(lines,cap)=>`<rect x="20" y="4" width="360" height="86" rx="14" fill="#334155" stroke="#0F172A" stroke-width="2"/>`+lines+`<text x="200" y="106" font-size="12" font-weight="700" text-anchor="middle" fill="var(--muted)">${cap}</text>`;
+  const scr=(x,w,txt)=>`<rect x="${x}" y="16" width="${w}" height="62" rx="8" fill="#BBF7D0" stroke="#14532D"/><text x="${x+w/2}" y="57" font-size="24" font-weight="800" text-anchor="middle" fill="#14532D" direction="ltr" font-family="Consolas,monospace">${txt}</text>`;
+  const mmZ=r=>{let s=`<rect x="10" y="4" width="380" height="94" rx="12" fill="#334155" stroke="#0F172A" stroke-width="2"/><rect x="24" y="14" width="352" height="70" rx="4" fill="#FEF3C7"/>`;const X=v=>200+(v-r)*160;
+    for(let n=Math.ceil((r-1.2)*10);n<=Math.floor((r+1.2)*10);n++){const v=n/10,x=X(v);if(x<26||x>374||v<0)continue;const big=n%10===0,hf=n%5===0;s+=`<line x1="${x}" y1="14" x2="${x}" y2="${14+(big?30:hf?22:14)}" stroke="#78350F" stroke-width="${big?2:1.2}"/>`+(big?`<text x="${x}" y="66" font-size="16" font-weight="800" text-anchor="middle" fill="#78350F" direction="ltr">${Math.round(v)}</text>`:'')}
+    return s+`<line x1="200" y1="10" x2="200" y2="48" stroke="#EA580C" stroke-width="2.5"/><line x1="200" y1="72" x2="200" y2="88" stroke="#EA580C" stroke-width="2.5"/><text x="32" y="80" font-size="12" font-weight="800" text-anchor="start" fill="#78350F" direction="ltr">cm</text><text x="200" y="114" font-size="12" font-weight="700" text-anchor="middle" fill="var(--muted)">‏تدريج المسار المدرج عند مؤشر قاعدة المقياس (مكبر)‏</text>`};
+  let Q,NZ=[1,1],ok={};const EV=(r,i)=>Math.round(K*Q/(r/100)**2*(i==null?1:NZ[i])/10)*10,EE=()=>RS_.map((r,i)=>EV(r,i));
+  const QC=()=>EE()[0]*(RS_[0]/100)**2/K*1e9;
+  function newObj(){Q=(80+Math.floor(Math.random()*81))/10*1e-9;NZ=[1,0.975+Math.random()*0.05];ok={};
+    RS_.forEach((r,i)=>{$('eR'+i).value=0;['ed','ee'].forEach(p=>{$(p+i).value='';fb0(p+i+'Fb')});eDraw(i)});['ER','EQ'].forEach(k=>{$('c'+k).value='';fb0('c'+k+'f')});sub();results()}
+  function eDraw(i){const v=+$('eR'+i).value,to=RS_[i],r=Math.round((RMAX-(RMAX-to)*v/100)*10)/10,at=v>=100,e=String(EV(r,i));
+    $('eO'+i).textContent='';
+    $('eSt'+i).textContent=at?'✓ وصل المجس إلى المسافة المطلوبة، اقرأ المسار المدرج ثم مقياس المجال':'كلما اقترب المجس من الكرة زادت شدة المجال';
+    $('eS'+i).innerHTML=efScene({r,e});$('eM'+i).innerHTML=mmZ(r);
+    $('eZ'+i).innerHTML=zoom(scr(80,240,`${e} N/C`),'‏شاشة مقياس شدة المجال الكهربائي (مكبرة)‏')}
+  function sub(){const e=EE();
+    $('sbER').textContent=ok.e0&&ok.e1?['E₁ / E₂',E(`E₁ / E₂ = ${e[0]} / ${e[1]}`)].join('\n'):'E₁ / E₂';
+    $('sbEQ').textContent=ok.e0?['q = E₁·r₁² / k',E(`q = ${e[0]} × 0.1² / (9 × 10⁹)`)].join('\n'):'q = E₁·r₁² / k'}
+  function chart(){const e=EE();if(!(ok.e0&&ok.e1)){$('efC').innerHTML='';return}
+    const pts=RS_.map((r,i)=>[1/(r/100)**2,e[i]]),xm=120,ym=Math.ceil(pts[0][1]/4000+0.25)*4000,X0=56,Yb=232,W=290,H=196,X=x=>X0+x/xm*W,Y=y=>Yb-y/ym*H;let s='';
+    for(let x=0;x<=xm;x+=20)s+=`<line x1="${X(x)}" y1="${Yb}" x2="${X(x)}" y2="${Yb-H}" stroke="var(--line)"/><text x="${X(x)}" y="${Yb+16}" font-size="11" text-anchor="middle" fill="var(--ink)">${x}</text>`;
+    for(let k=0;k<=4;k++){const y=ym/4*k;s+=`<line x1="${X0}" y1="${Y(y)}" x2="${X0+W}" y2="${Y(y)}" stroke="var(--line)"/><text x="${X0-6}" y="${Y(y)+4}" font-size="11" text-anchor="end" fill="var(--ink)">${fx(y,0)}</text>`}
+    s+=`<line x1="${X0}" y1="${Yb}" x2="${X0+W+8}" y2="${Yb}" stroke="var(--ink)" stroke-width="1.6"/><line x1="${X0}" y1="${Yb}" x2="${X0}" y2="${Yb-H-8}" stroke="var(--ink)" stroke-width="1.6"/>`;
+    s+=`<text x="${X0+W}" y="${Yb+34}" font-size="13" font-weight="700" text-anchor="end" fill="var(--ink)">1/r² (1/m²)</text><text x="${X0+4}" y="${Yb-H-12}" font-size="13" font-weight="700" fill="var(--ink)">E (N/C)</text>`;
+    const sl=pts[0][1]/pts[0][0];s+=`<line x1="${X(0)}" y1="${Y(0)}" x2="${X(xm)}" y2="${Y(sl*xm)}" stroke="#F7931E" stroke-width="3"/>`;
+    pts.forEach(([x,y],i)=>{s+=`<circle cx="${X(x)}" cy="${Y(y)}" r="5.5" fill="#7E22CE" stroke="#fff" stroke-width="2"/><text x="${X(x)+8}" y="${Y(y)+16}" font-size="11" font-weight="700" fill="#6B21A8" direction="ltr">${RS_[i]} cm</text>`});
+    $('efC').innerHTML=`<div class="stage"><svg viewBox="0 0 380 280" style="direction:ltr;display:block;width:100%;height:auto" aria-label="شدة المجال مقابل مقلوب مربع المسافة">${s}</svg></div><div class="vcap">النقطتان على خط مستقيم يمر بنقطة الأصل، أي أن E تتناسب طرديا مع 1/r²</div>`}
+  function results(){const e=EE();
+    RS_.forEach((r,i)=>$('er'+i).textContent=ok['e'+i]?E(e[i]+' N/C'):'—');
+    $('er2').textContent=ok.cER?E(`${fx(e[0]/e[1],2)} ≈ 4`):'—';
+    $('er3').textContent=ok.cEQ?E(fx(QC(),1)+' nC'):'—';
+    chart();
+    $('eNote').innerHTML=ok.cER&&ok.cEQ?'الاستنتاج: عند مضاعفة المسافة من <span dir="ltr">10 cm</span> إلى <span dir="ltr">20 cm</span> قلت شدة المجال إلى الربع تقريبا، فشدة المجال الكهربائي حول الشحنة النقطية تتناسب عكسيا مع مربع المسافة <span dir="ltr" style="white-space:nowrap">E = k·q / r²</span>، ومنه حسبنا شحنة الكرة.':'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
+  RS_.forEach((r,i)=>{$('eR'+i).oninput=()=>eDraw(i);
+    $('ed'+i+'Ck').onclick=()=>{const f='ed'+i+'Fb';if(+$('eR'+i).value<100)return fb(f,false,`حرك مقياس المجال حتى يصل المجس إلى ${r} cm أولا.`);const v=num($('ed'+i).value);if(isNaN(v))return fb(f,false,'اكتب قراءة المسار المدرج بالسنتيمتر.');
+      if(Math.abs(v-r)<0.05){ok['d'+i]=true;fb(f,true,'✓ قراءة صحيحة:\n'+E(`r${'₁₂'[i]} = ${r.toFixed(1)} cm`))}else fb(f,false,'✗ اقرأ الرقم الكبير قبل الخط البرتقالي، ثم عد أقسام المليمتر الصغيرة حتى الخط.')};
+    $('ee'+i+'Ck').onclick=()=>{const f='ee'+i+'Fb';if(+$('eR'+i).value<100)return fb(f,false,`حرك مقياس المجال حتى يصل المجس إلى ${r} cm أولا.`);const v=num($('ee'+i).value);if(isNaN(v))return fb(f,false,'اكتب قراءة المقياس بوحدة N/C.');
+      const val=EE()[i];if(Math.abs(v-val)<0.5){ok['e'+i]=true;fb(f,true,'✓ قراءة صحيحة:\n'+E(`E${'₁₂'[i]} = ${val} N/C`))}else fb(f,false,'✗ اكتب الرقم الظاهر على شاشة مقياس المجال كما هو.');sub();results()}});
+  const chk=(id,need,needMsg,val,tol,okMsg,badMsg)=>{const f='c'+id+'f';if(!need())return fb(f,false,needMsg);const v=num($('c'+id).value);if(isNaN(v))return fb(f,false,'اكتب الناتج بالأرقام.');
+    if(Math.abs(v-val)/Math.abs(val)<=tol){ok['c'+id]=true;fb(f,true,okMsg())}else fb(f,false,badMsg());sub();results()};
+  $('cERk').onclick=()=>chk('ER',()=>ok.e0&&ok.e1,'أكمل القراءتين (أ) و (ب) أولا.',EE()[0]/EE()[1],.02,()=>'✓ إجابة صحيحة:\n'+E(`E₁ / E₂ = ${EE()[0]} / ${EE()[1]} = ${fx(EE()[0]/EE()[1],2)}`)+'\n'+E(`(r₂ / r₁)² = (20 / 10)² = 4`)+'\nالقيمتان متساويتان تقريبا: عند مضاعفة المسافة يقل المجال إلى الربع.',()=>'✗ اقسم قراءة المقياس الأولى على الثانية:\n'+E(`E₁ / E₂ = ${EE()[0]} / ${EE()[1]}`));
+  /* قبول الناتج بأي وحدة للشحنة (C أو mC أو µC أو pC) والتعرف عليها من مقداره، ثم تحويله إلى nC */
+  {const inp=$('cEQ');const orig=()=>{const v=num(inp.value);if(isNaN(v)||!(ok.e0))return false;const U=[['C',1e-9,'الضرب في 10⁹'],['mC',1e-6,'الضرب في 10⁶'],['µC',1e-3,'الضرب في 1000'],['pC',1e3,'القسمة على 1000']].find(([u,f])=>Math.abs(v-QC()*f)/(QC()*f)<=.02);if(!U)return false;ok['cEQ']=true;fb('cEQf',true,'✓ إجابة صحيحة بوحدة '+U[0]+':\n'+E(`q = ${inp.value.trim()} ${U[0]}`)+'\nوبالتحويل إلى nC ('+U[2]+'):\n'+E(`q = ${fx(QC(),1)} nC`));sub();results();return true};
+   $('cEQk').addEventListener('click',e=>{if(orig())e.stopImmediatePropagation()},true)}
+  $('cEQk').onclick=()=>chk('EQ',()=>ok.e0,'أكمل القراءة (أ) أولا.',QC(),.02,()=>'✓ إجابة صحيحة:\n'+E(`q = ${EE()[0]} × 0.01 / (9 × 10⁹)`)+'\n'+E(`q = ${fx(QC(),1)} × 10⁻⁹ C = ${fx(QC(),1)} nC`),()=>'✗ اضرب E₁ في مربع المسافة بالمتر، ثم اقسم على k، ثم اضرب في 10⁹:\n'+E(`${EE()[0]} × 0.01 / (9 × 10⁹) = ${(EE()[0]*0.01/K).toExponential(3)} C`));
+  $('nw').onclick=newObj;
+  function fitL(){box.querySelectorAll('.law .ln > span, h4.sbh').forEach(e=>{if(!e.offsetWidth)return;e.style.fontSize='';if(e.dataset.pl==null)e.dataset.pl=/pre-line/.test(e.getAttribute('style')||'')?'1':'';const pre=e.dataset.pl==='1';e.style.whiteSpace=pre?'pre':'nowrap';e.style.display='block';e.style.overflow='hidden';
+    let f=parseFloat(getComputedStyle(e).fontSize),k=0;while(e.scrollWidth>e.clientWidth+1&&f>9&&k++<80){f-=0.5;e.style.fontSize=f+'px'}});const hs=[...box.querySelectorAll('h4.sbh')].filter(e=>e.offsetWidth);if(hs.some(e=>e.style.fontSize)){const m=Math.min(...hs.map(e=>parseFloat(getComputedStyle(e).fontSize)));hs.forEach(e=>e.style.fontSize=m+'px')}}
+  const qf=()=>requestAnimationFrame(fitL);addEventListener('resize',qf);new MutationObserver(qf).observe(box,{childList:true,subtree:true,characterData:true});
+  calcInit(box);newObj();qf();
+}
+
 const LREF=[
  ['North Carolina State University. (n.d.). <i>Measurement: Lab 1, Physics Mechanics Laboratory Manual</i>. Advanced Instructional Systems (WebAssign).','https://www.webassign.net/question_assets/ncsucalcphysmechl3/lab_1/manual.html'],
  ['Palestine Technical University – Kadoorie. (2022). <i>Physics Lab 1 (105) Manual: Experiment 1 – Measurements and Uncertainties; Experiment 2 – Vectors</i>. Tulkarm, Palestine.','https://lms.ptuk.edu.ps/pluginfile.php/511897/mod_resource/content/3/physlab1-105-Manual%202022-khaled.pdf'],
@@ -3271,8 +3648,18 @@ const LREF=[
  ['Santa Monica College, Department of Physical Sciences. (n.d.). <i>Latent Heat: Physics Lab Manual</i>. Santa Monica, CA.','https://www.smc.edu/academics/academic-departments/physical-sciences/physics/lab-manual/Latent-Heat.php'],
  ['University of California, Los Angeles, Department of Physics and Astronomy. (n.d.). <i>Demo 20: Conductivity, Lecture Demonstration Manual</i>. Los Angeles, CA.','https://demoweb.physics.ucla.edu/content/20-conductivity'],
  ['The University of Iowa, Department of Physics and Astronomy. (n.d.). <i>4B40.30: Leslie\'s Cube, Lecture Demonstrations</i>. Iowa City, IA.','https://instructional-resources.physics.uiowa.edu/demos/4b4030-leslies-cube'],
- ['The University of Melbourne, School of Physics. (n.d.). <i>Heat Transfer: Lecture Demonstrations (Hc-4 The Convection Box)</i>. Melbourne, Australia.','https://physics.unimelb.edu.au/lecture-demonstrations/heat-and-thermodynamics/heat-transfer']];
-const LREFK={'2-1':[[21,'تسخين كتلة من الماء بمقاومة كهربائية وقياس الطاقة الكهربائية بالجول والطاقة الحرارية بالسعر، وإيجاد عدد الجولات في السعر الواحد.'],[19,'الحرارة طاقة تنتقل بسبب فرق درجة الحرارة، ووحدتاها الجول والسعر <span dir="ltr" style="white-space:nowrap">1 cal = 4.186 J</span>.']],
+ ['The University of Melbourne, School of Physics. (n.d.). <i>Heat Transfer: Lecture Demonstrations (Hc-4 The Convection Box)</i>. Melbourne, Australia.','https://physics.unimelb.edu.au/lecture-demonstrations/heat-and-thermodynamics/heat-transfer'],
+ ['University of Central Arkansas, Department of Physics and Astronomy. (2022). <i>PHYS 1420 College Physics II, Lab Sim 07: Coulomb\'s Law</i>. Conway, AR.','https://faculty.uca.edu/njaustin/PHYS1420/Laboratory/07coloumbsLaw.pdf'],
+ ['University of Rochester, Department of Physics and Astronomy. (2020). <i>Lab 6: Coulomb\'s Law, Physics Laboratory Manual</i>. Rochester, NY.','https://www.pas.rochester.edu/~physlabs/manuals/Lab6_Manual_F20-R.pdf'],
+ ['PASCO Scientific. (n.d.). <i>Coulomb\'s Law Apparatus ES-9070</i>. Roseville, CA.','https://www.pasco.com/product/ES-9070'],
+ ['The Ohio State University, Department of Physics. (n.d.). <i>Physics 1201 Laboratory, Experiment 1: Charges and Forces</i>. Columbus, OH.','https://www.asc.ohio-state.edu/physics/svccourses/phys1201/public_html/P1201_Lab_1.pdf'],
+ ['PHYWE Systeme GmbH. (n.d.). <i>Coulomb Potential and Coulomb Field of Metal Spheres (P2420505), University Experiments</i>. Göttingen, Germany.','https://www.phywe.com/eksperimenty-i-nabory/universitet_25255'],
+ ['PHYWE Systeme GmbH. (n.d.). <i>Laboratory Experiments Physics LEP 4.2.05: Coulomb Potential and Coulomb Field of Metal Spheres</i>. Hosted by Nikhef, Amsterdam.','https://www.nikhef.nl/~h73/kn1c/praktikum/phywe/LEP/Experim/4_2_05.pdf'],
+ ['University of Minnesota, School of Physics and Astronomy. (n.d.). <i>Physics 1202 Laboratory IV: Electric Field and Potential</i>. Minneapolis, MN.','https://groups.spa.umn.edu/physed/Research/Lab%20Manuals/1202/lab%204%20Electric%20Fields.pdf']
+];
+const LREFK={'3-3':[[31,'مسار مدرج تتحرك عليه الكرة الثانية لقياس المسافة بين مركزي الكرتين بالمليمتر (فكرة المسار المدرج).'],[33,'قياس شدة المجال الكهربائي حول كرات معدنية مشحونة بمقياس المجال الكهربائي عند مسافات مختلفة، والتحقق من أن المجال يتناسب عكسيا مع مربع المسافة.'],[34,'دليل التجربة: كرة معدنية على ساق عازلة ومقياس المجال الكهربائي ومسطرة مترية، وقياس E مقابل r.'],[35,'رسم خطوط المجال الكهربائي حول شحنة موجبة وشحنة سالبة وشحنتين مختلفتين.']],
+ '3-1':[[32,'قياس القوة بين كرتين مشحونتين بميزان رقمي وتحويل قراءته بالجرام إلى قوة بالقانون F = m·g، وقياس المسافة بين مركزي الكرتين بمسطرة.'],[29,'كرة مشحونة على ميزان إلكتروني وكرة مشحونة معلقة فوقها، وقياس القوة عند مسافات مختلفة، ورسم القوة مقابل 1/r² للتحقق من قانون التربيع العكسي وحساب الشحنة.'],[30,'قياس قوة التنافر بين كرتين مشحونتين عند مسافات من 20 cm إلى 5 cm، وتحليل العلاقة بين القوة والمسافة والتحقق من قانون كولوم.'],[31,'جهاز قانون كولوم: كرتان معدنيتان موصلتان، والقوة بينهما تقاس عند مسافات مختلفة لإيجاد قانون التربيع العكسي.']],
+ '2-1':[[21,'تسخين كتلة من الماء بمقاومة كهربائية وقياس الطاقة الكهربائية بالجول والطاقة الحرارية بالسعر، وإيجاد عدد الجولات في السعر الواحد.'],[19,'الحرارة طاقة تنتقل بسبب فرق درجة الحرارة، ووحدتاها الجول والسعر <span dir="ltr" style="white-space:nowrap">1 cal = 4.186 J</span>.']],
  '2-2':[[22,'نقطتا انصهار الجليد وغليان الماء في المقاييس الثلاثة، وقوانين التحويل بين السلسيوسي وكلفن والفهرنهايتي.'],[18,'قياس درجة حرارة الماء بالميزان الحراري الرقمي في المعمل.']],
  '2-3':[[21,'قياس كتلة الماء ودرجتي حرارته قبل التسخين وبعده بسخان كهربائي، وحساب الحرارة المكتسبة <span dir="ltr" style="white-space:nowrap">Q = m·c·ΔT</span> ومقارنتها بالطاقة الكهربائية.'],[23,'تسخين نحو <span dir="ltr">300 ml</span> من الماء بسخان غمر كهربائي وقياس درجتي حرارته قبل التسخين وبعده، ومقارنة التغير المقاس بالمحسوب من <span dir="ltr" style="white-space:nowrap">Q = m·c·ΔT</span>.']],
  '2-4':[[24,'إضافة جليد معلوم الكتلة إلى ماء دافئ في مسعر حراري، وحساب الحرارة الكامنة للانصهار من الحرارة المفقودة من الماء والحرارة اللازمة لتسخين ماء الجليد المنصهر.'],[25,'إيجاد الحرارة الكامنة لانصهار الجليد بطريقة الخلط في المسعر الحراري.']],
@@ -3293,7 +3680,7 @@ const LREFK={'2-1':[[21,'تسخين كتلة من الماء بمقاومة كه
 function refBox(k){const ix=LREFK[k];if(!ix)return '';
   return `<div class="intro lrefs"><h3>7. مراجع التجربة</h3><p class="rlead">بنيت هذه التجربة على تجارب منشورة في أدلة معامل الفيزياء بجامعات ومصادر تعليمية موثوقة، مع تكييفها لمحتوى الحقيبة التدريبية.</p><ol class="rl">${ix.map(([i,c],n)=>`<li><span class="en">[${n+1}] ${LREF[i][0]} <a href="${LREF[i][1]}" target="_blank" rel="noopener">${LREF[i][1]}</a></span><span class="ar">يطابق في هذه التجربة: ${c}</span></li>`).join('')}</ol></div>`}
 
-window.LABS={'0-1':{t:'القياس بأداة القدمة ذات الورنية وأداة الميكرومتر',run:measureLab},'0-2':{t:'قياس سرعة جسم متحرك والتحويل بين وحداتها',run:speedLab2},'0-4':{t:'إيجاد محصلة متجهين باستخدام طاولة القوى',run:forceLab},'0-5':{t:'تحليل قوة إلى مركبتين باستخدام طاولة القوى',run:vecLab},'0-6':{t:'الضرب القياسي لمتجهين بمتجهات الوحدة على لوحة الإحداثيات',run:dotLab},'1-1':{t:'إيجاد تسارع عربة على المسار الهوائي المائل وأثر زيادة الميل على السرعة والتسارع',run:airLab},'1-2':{t:'حساب ارتفاع سقوط كرة باستخدام معادلة الحركة الثانية',run:ffLab},'1-3':{t:'التحقق من قانون نيوتن الثاني باستخدام جهاز آتوود',run:awLab},'1-5':{t:'حساب قوة الاحتكاك الحركي والتحقق منها بالميزان النابضي',run:frLab},'1-7':{t:'حساب الشغل المبذول على صندوق خشبي بقوة أفقية',run:wkLab2},'1-8':{t:'إيجاد طاقة الوضع لجسم وعلاقتها بالارتفاع',run:peLab},'1-9':{t:'التحقق من حفظ الطاقة الميكانيكية لجسم ساقط سقوطا حرا',run:ceLab},'2-1':{t:'قياس الطاقة الحرارية الناتجة من سخان كهربائي وتحويلها بين الجول والسعر',run:q1Lab},'2-2':{t:'قياس درجتي انصهار الجليد وغليان الماء والتحويل بين مقاييس درجة الحرارة',run:tsLab},'2-3':{t:'حساب كمية الحرارة اللازمة لتسخين الماء',run:shLab},'2-4':{t:'حساب الحرارة الكامنة لانصهار الجليد',run:lhLab},'2-5':{t:'التحقق من الاتزان الحراري بخلط ماء ساخن وماء بارد',run:eqLab},'2-6':{t:'مقارنة طرق انتقال الحرارة: التوصيل والحمل والإشعاع',run:trLab}};
+window.LABS={'0-1':{t:'القياس بأداة القدمة ذات الورنية وأداة الميكرومتر',run:measureLab},'0-2':{t:'قياس سرعة جسم متحرك والتحويل بين وحداتها',run:speedLab2},'0-4':{t:'إيجاد محصلة متجهين باستخدام طاولة القوى',run:forceLab},'0-5':{t:'تحليل قوة إلى مركبتين باستخدام طاولة القوى',run:vecLab},'0-6':{t:'الضرب القياسي لمتجهين بمتجهات الوحدة على لوحة الإحداثيات',run:dotLab},'1-1':{t:'إيجاد تسارع عربة على المسار الهوائي المائل وأثر زيادة الميل على السرعة والتسارع',run:airLab},'1-2':{t:'حساب ارتفاع سقوط كرة باستخدام معادلة الحركة الثانية',run:ffLab},'1-3':{t:'التحقق من قانون نيوتن الثاني باستخدام جهاز آتوود',run:awLab},'1-5':{t:'حساب قوة الاحتكاك الحركي والتحقق منها بالميزان النابضي',run:frLab},'1-7':{t:'حساب الشغل المبذول على صندوق خشبي بقوة أفقية',run:wkLab2},'1-8':{t:'إيجاد طاقة الوضع لجسم وعلاقتها بالارتفاع',run:peLab},'1-9':{t:'التحقق من حفظ الطاقة الميكانيكية لجسم ساقط سقوطا حرا',run:ceLab},'2-1':{t:'قياس الطاقة الحرارية الناتجة من سخان كهربائي وتحويلها بين الجول والسعر',run:q1Lab},'2-2':{t:'قياس درجتي انصهار الجليد وغليان الماء والتحويل بين مقاييس درجة الحرارة',run:tsLab},'2-3':{t:'حساب كمية الحرارة اللازمة لتسخين الماء',run:shLab},'2-4':{t:'حساب الحرارة الكامنة لانصهار الجليد',run:lhLab},'2-5':{t:'التحقق من الاتزان الحراري بخلط ماء ساخن وماء بارد',run:eqLab},'2-6':{t:'مقارنة طرق انتقال الحرارة: التوصيل والحمل والإشعاع',run:trLab},'3-1':{t:'التحقق من قانون كولوم',run:clLab},'3-3':{t:'قياس شدة المجال الكهربائي حول شحنة نقطية',run:efLab}};
 
 /* الدروس المدمجة في الوحدة الثالثة: تجربة واحدة لكل درس — الانصهار والغليان، والحرارة الكامنة لانصهار الجليد، والاتزان الحراري بخلط الماء */
 (function(){const L=window.LABS;if(L['2-2'])L['2-1']=Object.assign({k:'2-2'},L['2-2']);if(L['2-4'])L['2-3']=Object.assign({k:'2-4'},L['2-4'])})();
