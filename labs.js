@@ -2080,47 +2080,48 @@ function peScene(h,o){/* h ارتفاع أسفل الجسم (الثقل) عن س
   g+=box(10,330,0,82,0,T,'#B7834A','#E9C894','#9A6A3A','#7C4A1F');
   /* قاعدة الحامل وقضيبه */
   g+=box(56,156,42,80,T,T+6,'#334155','#64748B','#1F2937','#0F172A');
-  g+=box(74,94,52,62,T+6,T+200,'#94A3B8','#E2E8F0','#64748B','#475569');
-  /* المسطرة المترية وماسكها: تقف على سطح الطاولة أمام قاعدة الحامل، وصفرها على سطح الطاولة */
-  const Z0=T+h*K,Z1=Z0+44,ZA=Z1+16;
+  g+=box(74,94,52,62,T+6,T+232,'#94A3B8','#E2E8F0','#64748B','#475569');
+    const Z0=T+h*K,Z1=Z0+44,ZA=Z1+16,TX=MX+58,TD=MD;
   /* ذراع الحامل وماسكه والخطاف */
   g+=box(94,MX+4,55,59,ZA,ZA+5,'#94A3B8','#E2E8F0','#64748B','#475569');
   g+=box(70,98,48,66,ZA-6,ZA+11,'#1F2937','#475569','#0F172A','#0F172A');
   {const [a,b]=S(MX,MD,ZA),[,c]=S(MX,MD,Z1);g+=`<line x1="${a}" y1="${b}" x2="${a}" y2="${c-8}" stroke="#334155" stroke-width="2"/><path d="M${a},${c-12} a4,4 0 1 0 0.1,0" fill="none" stroke="#334155" stroke-width="2"/>`}
-  g+=box(94,RX,40,55,T+60*K,T+60*K+6,'#334155','#64748B','#1F2937','#0F172A');
-  g+=box(RX,RX+12,36,40,T,T+105*K,'#FCD34D','#FEF3C7','#D97706','#A16207');
-  for(let c=0;c<=100;c++){const [a,b]=S(RX,36,T+c*K),w=c%10===0?9:c%5===0?6:3;g+=`<line x1="${a}" y1="${b}" x2="${a+w}" y2="${b}" stroke="#1F2937" stroke-width="${c%10?.5:1}"/>`;if(c%10===0)g+=`<text x="${a-3}" y="${b+3.5}" font-size="9" font-weight="700" text-anchor="end" fill="#1F2937" stroke="#fff" stroke-width="2.6" paint-order="stroke">${c}</text>`}
+  /* أداة الشريط المتري الرأسي يمين الجسم (الثقل): الخطاف (الصفر) على سطح الطاولة، والشريط ممدود لأعلى، والعلبة في الأعلى */
+  {const ZT=T+120*K;
+   g+=box(TX,TX+14,TD,TD+2,T,ZT,'#FACC15','#FEF08A','#CA8A04','#A16207');
+   for(let c=0;c<=120;c++){const [a,b]=S(TX,TD,T+c*K),w=c%10===0?9:c%5===0?6:3.5;g+=`<line x1="${a}" y1="${b}" x2="${a+w}" y2="${b}" stroke="#1F2937" stroke-width="${c%10?.55:1.1}"/>`;if(c%10===0&&c>0&&c<120)g+=`<text x="${a-3}" y="${b+3.5}" font-size="9.5" font-weight="800" text-anchor="end" fill="#1F2937" stroke="#fff" stroke-width="2.6" paint-order="stroke">${c}</text>`}
+   {const [a,b]=S(TX,TD,T);g+=`<text x="${a-3}" y="${b+3.5}" font-size="9.5" font-weight="800" text-anchor="end" fill="#1F2937" stroke="#fff" stroke-width="2.6" paint-order="stroke">0</text>`;const p1=S(TX-2,TD-6,T),p2=S(TX+16,TD-6,T),p3=S(TX+16,TD+4,T),p4=S(TX-2,TD+4,T);g+=`<polygon points="${p1} ${p2} ${p3} ${p4}" fill="#F7931E" stroke="#9A3412" stroke-width=".9"/>`}
+   g+=box(TX-5,TX+19,TD-6,TD+10,ZT,ZT+24,'#EA580C','#FB923C','#C2410C','#9A3412');{const [cx,cy]=S(TX+7,TD-6,ZT+12);g+=`<circle cx="${cx}" cy="${cy}" r="7.5" fill="#FDBA74" stroke="#9A3412" stroke-width="1.3"/><circle cx="${cx}" cy="${cy}" r="2.5" fill="#9A3412"/>`}g+=box(TX+2,TX+12,34,TD+4,ZT+24,ZT+27,'#1F2937','#475569','#0F172A','#000')}
   /* الجسم (الثقل) (أسطوانة) */
   const [cx,cb]=S(MX,MD,Z0),[,ct]=S(MX,MD,Z1),rx=20,ry=7;
   g+=`<path d="M${cx-rx},${ct} L${cx-rx},${cb} A${rx},${ry} 0 0 0 ${cx+rx},${cb} L${cx+rx},${ct} Z" fill="url(#peBl)" stroke="#1E3A8A"/><ellipse cx="${cx}" cy="${ct}" rx="${rx}" ry="${ry}" fill="#93C5FD" stroke="#1E3A8A"/><text x="${cx}" y="${(ct+cb)/2+6}" font-size="13" font-weight="800" text-anchor="middle" fill="#fff" direction="ltr">m</text>`;
-  /* أسفل الجسم (الثقل) حتى المسطرة */
-  if(h>0){const b=S(RX+12,36,Z0);g+=`<line x1="${cx-rx}" y1="${cb}" x2="${b[0]}" y2="${b[1]}" stroke="#DC2626" stroke-width="1.6" stroke-dasharray="5 3"/>`}
-  if(o.harr&&h>0){const a=S(MX+46,MD,T),b=S(MX+46,MD,Z0);g+=`<line x1="${a[0]}" y1="${a[1]-2}" x2="${b[0]}" y2="${b[1]+2}" stroke="#2563EB" stroke-width="2"/><path d="M${a[0]-5},${a[1]-10} L${a[0]},${a[1]-2} L${a[0]+5},${a[1]-10} M${b[0]-5},${b[1]+10} L${b[0]},${b[1]+2} L${b[0]+5},${b[1]+10}" stroke="#2563EB" stroke-width="2" fill="none"/><text x="${a[0]+8}" y="${(a[1]+b[1])/2+5}" font-size="15" font-weight="800" fill="#2563EB" direction="ltr">h</text>`}
-  if(o.ptr){const [p,q]=S(RX+12,36,T+o.ptr.p*K);g+=`<path d="M${p+14},${q-6} L${p+3},${q} L${p+14},${q+6} Z" fill="#F7931E"/><line x1="${p+3}" y1="${q}" x2="${p+30}" y2="${q}" stroke="#F7931E" stroke-width="2.5"/>`;if(o.ptr.touch)g+=`<circle cx="${p+3}" cy="${q}" r="7" fill="none" stroke="#16A34A" stroke-width="2.5"/>`}
+  /* أسفل الجسم (الثقل) حتى الشريط المتري */
+  if(h>0){const b=S(TX,TD,Z0);g+=`<line x1="${cx+rx}" y1="${cb}" x2="${b[0]}" y2="${b[1]}" stroke="#DC2626" stroke-width="1.6" stroke-dasharray="5 3"/>`}
+  if(o.harr&&h>0){const a=S(MX-52,MD,T),b=S(MX-52,MD,Z0);g+=`<line x1="${a[0]}" y1="${a[1]-2}" x2="${b[0]}" y2="${b[1]+2}" stroke="#2563EB" stroke-width="2"/><path d="M${a[0]-5},${a[1]-10} L${a[0]},${a[1]-2} L${a[0]+5},${a[1]-10} M${b[0]-5},${b[1]+10} L${b[0]},${b[1]+2} L${b[0]+5},${b[1]+10}" stroke="#2563EB" stroke-width="2" fill="none"/><text x="${a[0]-18}" y="${(a[1]+b[1])/2+5}" font-size="15" font-weight="800" fill="#2563EB" direction="ltr">h</text>`}
+  if(o.ptr){const [p,q]=S(TX+14,TD,T+o.ptr.p*K);g+=`<path d="M${p+14},${q-6} L${p+3},${q} L${p+14},${q+6} Z" fill="#F7931E"/><line x1="${p+3}" y1="${q}" x2="${p+30}" y2="${q}" stroke="#F7931E" stroke-width="2.5"/>`;if(o.ptr.touch)g+=`<circle cx="${p+3}" cy="${q}" r="7" fill="none" stroke="#16A34A" stroke-width="2.5"/>`}
   if(o.arr){const [a,b]=S(68,48,ZA+2);g+=`<path d="M${a-14},${b+10} v-26 m-5,7 l5,-7 l5,7 M${a-14},${b+18} v14 m-5,-7 l5,7 l5,-7" stroke="#F7931E" stroke-width="2.4" fill="none"/>`}
-  if(o.lab){const [bx,by]=S(90,57,ZA+3);g+=lbl(...S(90,57,T+185),40,22,'الحامل المعملي','start')+lbl(bx,by,12,Math.min(by+50,BASE-60),'ماسك الذراع','start')+lbl(...S(160,57,ZA+5),250,22,'ذراع الحامل','start')+lbl(cx+rx-4,(ct+cb)/2,300,BASE-120,'‏الجسم (الثقل)‏','start')+lbl(...S(RX+6,36,T+15*K),190,BASE+26,'المسطرة المترية')+lbl(...S(60,60,T+6),60,BASE+26,'قاعدة الحامل')+lbl(...S(290,50,T),320,BASE+26,'سطح الطاولة')}
+  if(o.lab){const [bx,by]=S(90,57,ZA+3);g+=lbl(...S(90,57,T+185),40,22,'الحامل المعملي','start')+lbl(bx,by,12,Math.min(by+50,BASE-60),'الماسك المزدوج','start')+lbl(...S(160,57,ZA+5),250,22,'ذراع الحامل','start')+lbl(cx,cb-4,cx-10,cb+22,'‏الجسم (الثقل)‏')+lbl(...S(TX+6,TD,T+15*K),330,BASE+26,'أداة الشريط المتري')+lbl(...S(60,60,T+6),60,BASE+26,'قاعدة الحامل')+lbl(...S(170,20,T),195,BASE+26,'سطح الطاولة')}
   return `<svg viewBox="0 0 400 ${BASE+(o.lab?44:14)}" aria-label="الجسم (الثقل) معلق في ذراع حامل معملي وقياس ارتفاعه">${g}</svg>`}
 function peLab(box){
   box.innerHTML=`
   <div class="intro"><small class="labKind">🧪 تجربة عملية تفاعلية</small><h3>1. اسم التجربة</h3><p class="labName">إيجاد طاقة الوضع لجسم وعلاقتها بالارتفاع باستخدام القانون <span dir="ltr" style="white-space:nowrap">PE = m·g·h</span></p></div>
-  <div class="tags"><span class="tag">الكتلة m: <i>الميزان الرقمي</i> · g</span><span class="tag">الارتفاع h: <i>المسطرة المترية</i> · cm</span><span class="tag dv">طاقة الوضع PE: <i>كمية مشتقة</i> · J</span></div>
+  <div class="tags"><span class="tag">الكتلة m: <i>الميزان الرقمي</i> · g</span><span class="tag">الارتفاع h: <i>أداة الشريط المتري</i> · cm</span><span class="tag dv">طاقة الوضع PE: <i>كمية مشتقة</i> · J</span></div>
   <div class="intro goals"><h3>2. أهداف التجربة</h3><ol class="gl">
-    <li>التعرف على الحامل المعملي والجسم (الثقل) والميزان الرقمي والمسطرة المترية الرأسية.</li>
+    <li>التعرف على الحامل المعملي والجسم (الثقل) والميزان الرقمي وأداة الشريط المتري.</li>
     <li>قياس كتلة الجسم (الثقل) <span dir="ltr">m</span> بالميزان الرقمي.</li>
-    <li>قياس ارتفاع الجسم (الثقل) <span dir="ltr">h</span> عن سطح الطاولة بالمسطرة المترية عند ارتفاعين مختلفين.</li>
+    <li>قياس ارتفاع الجسم (الثقل) <span dir="ltr">h</span> عن سطح الطاولة بأداة الشريط المتري عند ارتفاعين مختلفين.</li>
     <li>حساب طاقة الوضع <span dir="ltr" style="white-space:nowrap">PE = m·g·h</span> عند كل ارتفاع.</li>
     <li>المقارنة بين طاقتي الوضع، وبيان أثر زيادة الارتفاع على طاقة الوضع.</li></ol></div>
   <div class="intro"><h3>3. الأدوات والأجهزة المستخدمة</h3>
     <div class="tool"><div class="stage">${peScene(45,{lab:true,harr:true})}</div><div class="vcap">الجسم (الثقل) معلق في ذراع حامل معملي: منظر ثلاثي الأبعاد</div>
-    <p><b>ترتيب الأجهزة:</b> حامل معملي على سطح الطاولة، فيه ذراع أفقية بماسك يتحرك على القضيب لأعلى ولأسفل، ويعلق الجسم (الثقل) في خطاف طرف الذراع. والمسطرة المترية مثبتة رأسيا على الحامل بماسك، وصفرها عند سطح الطاولة <span dir="ltr">(hi = 0)</span>.</p></div>
+    <p><b>ترتيب الأجهزة:</b> حامل معملي على سطح الطاولة، فيه ذراع أفقية بماسك يتحرك على القضيب لأعلى ولأسفل، ويعلق الجسم (الثقل) في خطاف طرف الذراع. وأداة الشريط المتري ممدودة رأسيا يمين الجسم (الثقل): علبتها في الأعلى، وخطافها (الصفر) على سطح الطاولة، فيقاس الارتفاع من الأسفل إلى الأعلى.</p></div>
     <div class="tool"><p><b>الحامل المعملي:</b> قاعدة ثقيلة وقضيب رأسي، عليه ماسك يثبت الذراع على أي ارتفاع، فيبقى الجسم (الثقل) ثابتا أثناء القياس.</p>
     <p><b>الجسم (الثقل):</b> ثقل ذو خطاف <span dir="ltr">(Hooked Mass)</span>، وهو أسطوانة معدنية معلومة الكتلة لها خطاف في أعلاها، ويسمى في المراجع الكتلة المعلقة <span dir="ltr">(Hanging Mass)</span>.</p>
     <p><b>الميزان الرقمي:</b> يقيس كتلة الجسم (الثقل) بالجرام بدقة <span dir="ltr">1 g</span>.</p>
-    <p><b>المسطرة المترية:</b> مسطرة رأسية يقاس بها ارتفاع أسفل الجسم (الثقل) عن سطح الطاولة بالسنتيمتر، بدقة <span dir="ltr">0.1 cm</span>.</p></div></div>
+    <p><b>أداة الشريط المتري:</b> شريط رأسي يقاس به ارتفاع أسفل الجسم (الثقل) عن سطح الطاولة بالسنتيمتر، بدقة <span dir="ltr">0.1 cm</span>.</p></div></div>
   <h3 class="secH">4. القوانين المستخدمة</h3>
   <div class="ctl">
-    <div class="law ftl"><div class="ln lw"><b>الارتفاع</b><span>h = hf − hi</span></div>
-      <div class="ln lw"><b>الوزن</b><span>W = m·g</span></div>
+    <div class="law ftl">      <div class="ln lw"><b>الوزن</b><span>W = m·g</span></div>
       <div class="ln lw"><b>طاقة الوضع (الوزن × الارتفاع)</b><span>PE = W·h = m·g·h</span></div>
       <p class="slh">ℹ️ طاقة الوضع هي الطاقة المختزنة في الجسم (الثقل) بسبب ارتفاعه، وتقاس بالنسبة لمستوى إسناد، وهنا مستوى الإسناد سطح الطاولة <bdi dir="ltr">h = 0</bdi>.</p>
       <div class="sym"><b>حيث:</b><ul>
@@ -2128,8 +2129,7 @@ function peLab(box){
       <li><span class="chip" dir="ltr">m</span> كتلة الجسم (الثقل)، وتقاس بالميزان الرقمي، ووحدتها <span dir="ltr">kg</span></li>
       <li><span class="chip" dir="ltr">g</span> تسارع الجاذبية، وقيمته <span dir="ltr">9.8 m/s²</span></li>
       <li><span class="chip" dir="ltr">W</span> وزن الجسم (الثقل)، ووحدته <span dir="ltr">N</span></li>
-      <li><span class="chip" dir="ltr">h</span> ارتفاع الجسم (الثقل) عن مستوى الإسناد، ووحدته <span dir="ltr">m</span></li>
-      <li><span class="chip" dir="ltr">hi, hf</span> قراءتا المسطرة عند سطح الطاولة وعند أسفل الجسم (الثقل)، و <span dir="ltr">hi = 0</span></li>
+      <li><span class="chip" dir="ltr">h</span> الارتفاع: المسافة الرأسية من سطح الطاولة (مستوى الإسناد) إلى السطح السفلي للجسم (الثقل)، ويقرأ مباشرة من أداة الشريط المتري لأن صفرها عند سطح الطاولة، ووحدته <span dir="ltr">m</span></li>
       </ul></div>
       ${convBox(['m(kg) = m(g) / 1000','h(m) = h(cm) / 100'])}</div></div>
   <h3 class="secH">5. تنفيذ التجربة</h3>
@@ -2141,12 +2141,12 @@ function peLab(box){
     <div class="ans"><label>قراءتك لكتلة الجسم (الثقل) m</label><input id="mIn" inputmode="decimal" dir="ltr" placeholder="g"><button type="button" class="go" id="mCk">تحقق</button></div><div class="fb2" id="mFb"></div>
   </div>
   <div class="ctl"><h3>5.2 المحاولة الأولى: ارتفاع منخفض</h3>
-    <h4 class="sbh">أ) رفع الجسم (الثقل) وقياس ارتفاعه بالمسطرة المترية</h4>
+    <h4 class="sbh">أ) رفع الجسم (الثقل) وقياس ارتفاعه بأداة الشريط المتري</h4>
     <div class="stage"><div id="gS1"></div><svg id="pZ1" viewBox="0 0 400 110"></svg><div class="hud"><span id="gSt1"></span></div></div>
     <div class="row"><label for="gR1">رفع ذراع الحامل</label><output id="gO1"></output><input id="gR1" type="range" min="0" max="100" step="1" value="0"></div>
     <div class="row"><label for="pR1">مؤشر القياس</label><output id="pO1"></output><input id="pR1" type="range" min="0" max="100" step="0.1" value="0"></div>
-    <p class="slh">👆 اسحب مؤشر «رفع ذراع الحامل» حتى نهايته ليرتفع الجسم (الثقل) ويثبت، ثم اسحب «مؤشر القياس» على المسطرة المترية من سطح الطاولة <bdi dir="ltr">hi = 0</bdi> حتى يلامس أسفل الجسم (الثقل).</p>
-    <div class="ans"><label>قراءتك لارتفاع أسفل الجسم (الثقل) hf</label><input id="hIn1" inputmode="decimal" dir="ltr" placeholder="cm"><button type="button" class="go" id="hCk1">تحقق</button><button type="button" class="rs" id="hHn1">تلميح</button></div><div class="fb2" id="hFb1"></div>
+    <p class="slh">👆 اسحب مؤشر «رفع ذراع الحامل» حتى نهايته ليرتفع الجسم (الثقل)، وثبت الماسك المزدوج، ثم اسحب «مؤشر القياس» على أداة الشريط المتري من صفرها عند سطح الطاولة حتى يلامس السطح السفلي للجسم (الثقل).</p>
+    <div class="ans"><label>قراءتك للارتفاع h بوحدة m</label><input id="hIn1" inputmode="decimal" dir="ltr" placeholder="m"><button type="button" class="go" id="hCk1">تحقق</button><button type="button" class="rs" id="hHn1">تلميح</button></div><div class="fb2" id="hFb1"></div>
     <h4 class="sbh">ب) حساب طاقة الوضع</h4>
     <p class="slh">ℹ️ <b>المعطيات:</b> تسارع الجاذبية <b dir="ltr">g = 9.8 m/s²</b></p>
     <div class="cstep"><div class="law ftl"><div class="ln lw"><b>التعويض</b><span id="sbP1" style="white-space:pre-line;line-height:2">PE = m·g·h</span></div></div>
@@ -2154,12 +2154,12 @@ function peLab(box){
     <div class="ans"><label>احسب طاقة الوضع PE = m·g·h بوحدة J</label><input id="cP1" inputmode="decimal" dir="ltr" placeholder="J"><button type="button" class="go" id="cPk1">تحقق</button></div><div class="fb2" id="cPf1"></div></div>
   </div>
   <div class="ctl"><h3>5.3 المحاولة الثانية: ارتفاع أعلى</h3>
-    <h4 class="sbh">أ) رفع الجسم (الثقل) وقياس ارتفاعه بالمسطرة المترية</h4>
+    <h4 class="sbh">أ) رفع الجسم (الثقل) وقياس ارتفاعه بأداة الشريط المتري</h4>
     <div class="stage"><div id="gS2"></div><svg id="pZ2" viewBox="0 0 400 110"></svg><div class="hud"><span id="gSt2"></span></div></div>
     <div class="row"><label for="gR2">رفع ذراع الحامل</label><output id="gO2"></output><input id="gR2" type="range" min="0" max="100" step="1" value="0"></div>
     <div class="row"><label for="pR2">مؤشر القياس</label><output id="pO2"></output><input id="pR2" type="range" min="0" max="100" step="0.1" value="0"></div>
-    <p class="slh">👆 اسحب مؤشر «رفع ذراع الحامل» حتى نهايته ليرتفع الجسم (الثقل) ويثبت، ثم اسحب «مؤشر القياس» على المسطرة المترية من سطح الطاولة <bdi dir="ltr">hi = 0</bdi> حتى يلامس أسفل الجسم (الثقل).</p>
-    <div class="ans"><label>قراءتك لارتفاع أسفل الجسم (الثقل) hf</label><input id="hIn2" inputmode="decimal" dir="ltr" placeholder="cm"><button type="button" class="go" id="hCk2">تحقق</button><button type="button" class="rs" id="hHn2">تلميح</button></div><div class="fb2" id="hFb2"></div>
+    <p class="slh">👆 اسحب مؤشر «رفع ذراع الحامل» حتى نهايته ليرتفع الجسم (الثقل)، وثبت الماسك المزدوج، ثم اسحب «مؤشر القياس» على أداة الشريط المتري من صفرها عند سطح الطاولة حتى يلامس السطح السفلي للجسم (الثقل).</p>
+    <div class="ans"><label>قراءتك للارتفاع h بوحدة m</label><input id="hIn2" inputmode="decimal" dir="ltr" placeholder="m"><button type="button" class="go" id="hCk2">تحقق</button><button type="button" class="rs" id="hHn2">تلميح</button></div><div class="fb2" id="hFb2"></div>
     <h4 class="sbh">ب) حساب طاقة الوضع</h4>
     <p class="slh">ℹ️ <b>المعطيات:</b> تسارع الجاذبية <b dir="ltr">g = 9.8 m/s²</b></p>
     <div class="cstep"><div class="law ftl"><div class="ln lw"><b>التعويض</b><span id="sbP2" style="white-space:pre-line;line-height:2">PE = m·g·h</span></div></div>
@@ -2191,16 +2191,16 @@ function peLab(box){
   const pTouch=k=>done(k)&&Math.abs(pVal(k)-H[k])<1e-6;
   function draw(k){const v=+$('gR'+k).value,dn=done(k),p=pVal(k),touch=pTouch(k),hl=hX[k]&&touch,h=v/100*H[k],HH=H[k];
     $('gO'+k).textContent=dn?'استقر الجسم (الثقل)':v>0?'يرتفع…':'';$('pO'+k).textContent=p.toFixed(1)+' cm';
-    $('gSt'+k).textContent=!dn?(v>0?'ذراع الحامل يرتفع بالجسم (الثقل)…':'الجسم (الثقل) على سطح الطاولة، ارفع ذراع الحامل بمؤشر «رفع ذراع الحامل»'):touch?'✓ المؤشر عند أسفل الجسم (الثقل)، اقرأ الارتفاع من المسطرة':'اسحب «مؤشر القياس» حتى يلامس أسفل الجسم (الثقل)';
+    $('gSt'+k).textContent=!dn?(v>0?'ذراع الحامل يرتفع بالجسم (الثقل)…':'الجسم (الثقل) على سطح الطاولة، ارفع ذراع الحامل بمؤشر «رفع ذراع الحامل»'):touch?'✓ المؤشر عند أسفل الجسم (الثقل)، اقرأ الارتفاع من الشريط المتري':'اسحب «مؤشر القياس» حتى يلامس أسفل الجسم (الثقل)';
     $('gS'+k).innerHTML=peScene(h,{ptr:{p,touch},arr:!dn});
     const c0=Math.max(0,Math.floor(HH)-7),XX=c=>(c-c0)*26;
     let z=`<rect x="0" y="34" width="400" height="58" fill="#FEF3C7" stroke="#A16207"/>`;
     for(let m=Math.ceil(c0*10);m<=Math.floor((c0+15.4)*10);m++){const x=XX(m/10),big=m%10===0,mid=m%5===0,hh=hl&&m===Math.round(HH*10);z+=`<line x1="${x}" y1="34" x2="${x}" y2="${34+(big?22:mid?15:9)}" stroke="${hh?'#2563EB':'#1F2937'}" stroke-width="${hh?2.6:big?1.4:.8}"/>`;if(big)z+=`<text x="${x}" y="74" font-size="13" font-weight="700" text-anchor="middle" fill="#1F2937">${m/10}</text>`}
     if(dn){const xb=XX(HH);z+=`<line x1="${xb}" y1="8" x2="${xb}" y2="98" stroke="#C2410C" stroke-width="2.2" stroke-dasharray="6 4"/><text x="${xb-6}" y="20" font-size="12" font-weight="700" text-anchor="end" fill="var(--ink)">‏أسفل الجسم (الثقل)‏</text>`}
     const xp=XX(p);if(xp>=0&&xp<=400)z+=`<line x1="${xp}" y1="30" x2="${xp}" y2="96" stroke="#F7931E" stroke-width="3.5"/><path d="M${xp-7},104 L${xp},94 L${xp+7},104 Z" fill="#F7931E"/>`;
-    z+=`<rect x="352" y="82" width="44" height="24" rx="6" fill="#F7931E"/><text x="374" y="99" font-size="15" font-weight="800" text-anchor="middle" fill="#fff">cm</text><text x="6" y="106" font-size="12" font-weight="700" fill="var(--muted)">تكبير المسطرة المترية</text>`;
+    z+=`<rect x="352" y="82" width="44" height="24" rx="6" fill="#F7931E"/><text x="374" y="99" font-size="15" font-weight="800" text-anchor="middle" fill="#fff">cm</text><text x="6" y="106" font-size="12" font-weight="700" fill="var(--muted)">تكبير الشريط المتري</text>`;
     $('pZ'+k).innerHTML=z}
-  function sub(){[1,2].forEach(k=>{$('sbP'+k).textContent=ok.m&&ok['h'+k]?['PE = m·g·h',E(`m = ${M} g = ${fx(KG(),3)} kg`),'h = hf − hi',E(`h = ${H[k].toFixed(1)} − 0 = ${H[k].toFixed(1)} cm = ${fx(HM(k),3)} m`),E(`PE = ${fx(KG(),3)} × 9.8 × ${fx(HM(k),3)}`)].join('\n'):'PE = m·g·h'})}
+  function sub(){[1,2].forEach(k=>{$('sbP'+k).textContent=ok.m&&ok['h'+k]?['PE = m·g·h',E(`m = ${M} g = ${fx(KG(),3)} kg`),E(`h = ${H[k].toFixed(1)} cm = ${fx(HM(k),3)} m`),E(`PE = ${fx(KG(),3)} × 9.8 × ${fx(HM(k),3)}`)].join('\n'):'PE = m·g·h'})}
   function chart(){if(!(ok.cP1&&ok.cP2)){$('peC').innerHTML='';return}
     const hs=[0,HM(1),HM(2)],ps=hs.map(h=>KG()*G*h),hx=Math.ceil((HM(2)+0.3)*5)/5,pxm=Math.ceil(PE(2)*2+0.0001)/2;
     const X0=48,Y0=232,W=300,H=200,X=h=>X0+h/hx*W,Y=p=>Y0-p/pxm*H;let s='';
@@ -2223,16 +2223,16 @@ function peLab(box){
     if(Math.abs(v-M)<0.5){ok.m=true;fb('mFb',true,'✓ قراءة صحيحة:\n'+E(`m = ${M} g = ${fx(KG(),3)} kg`))}else fb('mFb',false,'✗ اقرأ الرقم الظاهر على شاشة الميزان.');sub();results()};
   [1,2].forEach(k=>{
     $('gR'+k).oninput=()=>draw(k);$('pR'+k).oninput=()=>draw(k);
-    $('hHn'+k).onclick=()=>{hX[k]=true;draw(k);fb('hFb'+k,true,'تلميح: الأرقام الكبيرة بالسنتيمتر، وبين كل رقمين 10 أقسام صغيرة كل قسم '+E('0.1 cm')+'. اقرأ آخر رقم قبل المؤشر، ثم احسب عدد الأقسام الصغيرة حتى الخط الأزرق.')};
-    $('hCk'+k).onclick=()=>{if(!done(k))return fb('hFb'+k,false,'ارفع ذراع الحامل بمؤشر «رفع ذراع الحامل» حتى نهايته أولا.');if(!pTouch(k))return fb('hFb'+k,false,'اسحب «مؤشر القياس» حتى يلامس أسفل الجسم (الثقل) أولا.');const v=num($('hIn'+k).value);if(isNaN(v))return fb('hFb'+k,false,'اكتب قراءتك بالسنتيمتر.');
-      if(Math.abs(v-H[k])<0.05){ok['h'+k]=true;fb('hFb'+k,true,'✓ قراءة صحيحة:\n'+E(`hf = ${H[k].toFixed(1)} cm`)+'\n'+E(`h = hf − hi = ${H[k].toFixed(1)} − 0 = ${H[k].toFixed(1)} cm = ${fx(HM(k),3)} m`))}else fb('hFb'+k,false,'✗ القراءة غير صحيحة، أعد القراءة أو استخدم التلميح.');sub();results()};
+    $('hHn'+k).onclick=()=>{hX[k]=true;draw(k);fb('hFb'+k,true,'تلميح: الأرقام الكبيرة بالسنتيمتر، وبين كل رقمين 10 أقسام صغيرة كل قسم '+E('0.1 cm')+'. اقرأ آخر رقم قبل المؤشر، ثم احسب عدد الأقسام الصغيرة حتى الخط الأزرق، ثم اقسم القراءة على 100 لتصبح بوحدة '+E('m')+'.')};
+    $('hCk'+k).onclick=()=>{if(!done(k))return fb('hFb'+k,false,'ارفع ذراع الحامل بمؤشر «رفع ذراع الحامل» حتى نهايته أولا.');if(!pTouch(k))return fb('hFb'+k,false,'اسحب «مؤشر القياس» حتى يلامس أسفل الجسم (الثقل) أولا.');const v=num($('hIn'+k).value);if(isNaN(v))return fb('hFb'+k,false,'اكتب قراءتك بوحدة m.');
+      if(Math.abs(v-H[k]/100)<0.0005){ok['h'+k]=true;fb('hFb'+k,true,'✓ قراءة صحيحة:\n'+E(`h = ${H[k].toFixed(1)} cm = ${fx(HM(k),3)} m`))}else fb('hFb'+k,false,'✗ القراءة غير صحيحة، اقرأ الشريط المتري بالسنتيمتر ثم اقسم على 100 لتصبح بوحدة m، أو استخدم التلميح.');sub();results()};
     $('cPk'+k).onclick=()=>{if(!(ok.m&&ok['h'+k]))return fb('cPf'+k,false,'أكمل قياس الكتلة والارتفاع أولا.');const v=num($('cP'+k).value);if(isNaN(v))return fb('cPf'+k,false,'اكتب الناتج بوحدة J.');
       if(Math.abs(v-PE(k))/PE(k)<0.01){ok['cP'+k]=true;fb('cPf'+k,true,'✓ إجابة صحيحة:\n'+E(`PE = ${fx(KG(),3)} × 9.8 × ${fx(HM(k),3)} = ${fx(PE(k),3)} J`))}else fb('cPf'+k,false,'✗ اكتب الكتلة بوحدة kg والارتفاع بوحدة m، ثم اضرب الكتلة في 9.8 في الارتفاع.');results()}});
   $('nw').onclick=newObj;
   calcInit(box);newObj();
 }
 
-function ceScene(h,s,o){/* h ارتفاع الإفلات (سم) فوق شعاع البوابة، s المسافة التي سقطها الجسم (سم) */
+function ceScene(h,s,o){/* h الارتفاع (سم) من شعاع البوابة إلى أسفل الجسم، s المسافة التي سقطها الجسم (سم) */
   o=o||{};const BASE=330,K=1.55,T=14,G=T+56,RX=100,MX=210,MD=57,S=(x,d,z)=>[x+d*0.6,BASE-z-d*0.5],P=(x,d,z)=>S(x,d,z).join(',');
   const poly=(a,f,st)=>`<polygon points="${a.map(p=>P(...p)).join(' ')}" fill="${f}" stroke="${st||'#334155'}" stroke-linejoin="round"/>`;
   const box=(x0,x1,d0,d1,z0,z1,cf,ct,cs,st)=>poly([[x0,d0,z1],[x1,d0,z1],[x1,d1,z1],[x0,d1,z1]],ct,st)+poly([[x1,d0,z0],[x1,d1,z0],[x1,d1,z1],[x1,d0,z1]],cs,st)+poly([[x0,d0,z0],[x1,d0,z0],[x1,d0,z1],[x0,d0,z1]],cf,st);
@@ -2291,15 +2291,14 @@ function ceLab(box){
     <li>المقارنة بينهما للتحقق من حفظ الطاقة الميكانيكية.</li></ol></div>
   <div class="intro"><h3>3. الأدوات والأجهزة المستخدمة</h3>
     <div class="tool"><div class="stage">${ceScene(50,0,{lab:true,harr:true})}</div><div class="vcap">إفلات جسم فوق بوابة ضوئية: منظر ثلاثي الأبعاد</div>
-    <p><b>ترتيب الأجهزة:</b> الجسم (الثقل) ممسوك بآلية الإطلاق في طرف ذراع الحامل المعملي، وتحته بوابة ضوئية مثبتة على الحامل، ثم وسادة استقبال على الطاولة. صفر المسطرة المترية عند شعاع البوابة الضوئية <span dir="ltr">(hi = 0)</span>.</p></div>
+    <p><b>ترتيب الأجهزة:</b> الجسم (الثقل) ممسوك بآلية الإطلاق في طرف ذراع الحامل المعملي، وتحته بوابة ضوئية مثبتة على الحامل، ثم وسادة استقبال على الطاولة. صفر المسطرة المترية عند شعاع البوابة الضوئية.</p></div>
     <div class="tool"><p><b>آلية الإطلاق:</b> تمسك الجسم (الثقل) ساكنا، وعند الضغط على ذراعها الحمراء ينفتح الفكان فيسقط الجسم من السكون دون دفع <span dir="ltr">(Vi = 0)</span>.</p>
     <p><b>البوابة الضوئية (Photogate):</b> مضبوطة على وضع قياس السرعة، فتعرض سرعة الجسم لحظة قطعه لشعاعها مباشرة بوحدة <span dir="ltr">m/s</span>.</p>
     <p><b>المسطرة المترية:</b> يقاس بها ارتفاع أسفل الجسم (الثقل) فوق شعاع البوابة بدقة <span dir="ltr">0.1 cm</span>.</p>
     <p><b>الميزان الرقمي:</b> يقيس كتلة الجسم (الثقل) بالجرام بدقة <span dir="ltr">1 g</span>.</p></div></div>
   <h3 class="secH">4. القوانين المستخدمة</h3>
   <div class="ctl">
-    <div class="law ftl"><div class="ln lw"><b>ارتفاع الإفلات</b><span>h = hf − hi</span></div>
-      <div class="ln lw"><b>طاقة الوضع عند الإفلات (الجسم ساكن، فطاقة حركته صفر)</b><span>PE = m·g·h</span></div>
+    <div class="law ftl">      <div class="ln lw"><b>طاقة الوضع عند الإفلات (الجسم ساكن، فطاقة حركته صفر)</b><span>PE = m·g·h</span></div>
       <div class="ln lw"><b>طاقة الحركة عند البوابة الضوئية (مستوى الإسناد، فطاقة الوضع صفر)</b><span>KE = ½·m·v²</span></div>
       <div class="ln lw"><b>الطاقة الميكانيكية</b><span>ME = PE + KE</span></div>
       <div class="ln lw"><b>حفظ الطاقة الميكانيكية (بإهمال مقاومة الهواء)</b><span>MEi = MEf  ⟹  m·g·h = ½·m·v²</span></div>
@@ -2315,8 +2314,7 @@ function ceLab(box){
       <div class="sym"><b>حيث:</b><ul>
       <li><span class="chip" dir="ltr">m</span> كتلة الجسم (الثقل)، وتقاس بالميزان الرقمي، ووحدتها <span dir="ltr">kg</span></li>
       <li><span class="chip" dir="ltr">g</span> تسارع الجاذبية، وقيمته <span dir="ltr">9.8 m/s²</span></li>
-      <li><span class="chip" dir="ltr">h</span> ارتفاع الإفلات فوق شعاع البوابة الضوئية، ووحدته <span dir="ltr">m</span></li>
-      <li><span class="chip" dir="ltr">hi, hf</span> قراءتا المسطرة عند شعاع البوابة وعند أسفل الجسم (الثقل)، و <span dir="ltr">hi = 0</span></li>
+      <li><span class="chip" dir="ltr">h</span> الارتفاع: المسافة الرأسية من شعاع البوابة الضوئية إلى السطح السفلي للجسم (الثقل) قبل الإطلاق، ويقرأ مباشرة من المسطرة المترية لأن صفرها عند الشعاع، ووحدته <span dir="ltr">m</span></li>
       <li><span class="chip" dir="ltr">v</span> سرعة الجسم (الثقل) عند البوابة الضوئية، ووحدتها <span dir="ltr">m/s</span></li>
       <li><span class="chip" dir="ltr">PE</span> طاقة الوضع، و <span class="chip" dir="ltr">KE</span> طاقة الحركة، ووحدتهما الجول <span dir="ltr">J</span></li>
       <li><span class="chip" dir="ltr">ME</span> الطاقة الميكانيكية، وهي مجموع طاقتي الوضع والحركة، ووحدتها <span dir="ltr">J</span></li>
@@ -2329,11 +2327,11 @@ function ceLab(box){
     <h4 class="sbh">أ) قياس كتلة الجسم (الثقل) بالميزان الرقمي</h4>
     <div class="stage"><div id="bl"></div></div>
     <div class="ans"><label>قراءتك لكتلة الجسم (الثقل) m</label><input id="mIn" inputmode="decimal" dir="ltr" placeholder="g"><button type="button" class="go" id="mCk">تحقق</button></div><div class="fb2" id="mFb"></div>
-    <h4 class="sbh">ب) قياس ارتفاع الإفلات بالمسطرة المترية</h4>
+    <h4 class="sbh">ب) قياس الارتفاع بالمسطرة المترية</h4>
     <div class="stage"><div id="pS"></div><svg id="pZ" viewBox="0 0 400 110"></svg><div class="hud"><span id="pSt"></span></div></div>
     <div class="row"><label for="pR">مؤشر القياس</label><output id="pO"></output><input id="pR" type="range" min="0" max="100" step="0.1" value="0"></div>
-    <p class="slh">👆 اسحب المؤشر البرتقالي على المسطرة المترية من شعاع البوابة <bdi dir="ltr">hi = 0</bdi> حتى يلامس أسفل الجسم (الثقل).</p>
-    <div class="ans"><label>قراءتك لارتفاع أسفل الجسم (الثقل) hf</label><input id="hIn" inputmode="decimal" dir="ltr" placeholder="cm"><button type="button" class="go" id="hCk">تحقق</button><button type="button" class="rs" id="hHn">تلميح</button></div><div class="fb2" id="hFb"></div>
+    <p class="slh">👆 اسحب المؤشر البرتقالي على المسطرة المترية من صفرها عند شعاع البوابة حتى يلامس السطح السفلي للجسم (الثقل).</p>
+    <div class="ans"><label>قراءتك للارتفاع h</label><input id="hIn" inputmode="decimal" dir="ltr" placeholder="cm"><button type="button" class="go" id="hCk">تحقق</button><button type="button" class="rs" id="hHn">تلميح</button></div><div class="fb2" id="hFb"></div>
     <h4 class="sbh">ج) إفلات الجسم (الثقل) وقراءة سرعته بالبوابة الضوئية</h4>
     <div class="stage"><div id="gS"></div><svg id="vS" viewBox="0 0 400 112"></svg><div class="hud"><span id="gSt"></span></div></div>
     <div class="row"><label for="gR">فتح آلية الإطلاق</label><output id="gO"></output><input id="gR" type="range" min="0" max="100" step="1" value="0"></div>
@@ -2355,7 +2353,7 @@ function ceLab(box){
   <div class="ctl res"><h3>6. نتائج التجربة</h3>
     <div class="tw"><table class="rt"><thead><tr><th>الكمية</th><th>القيمة</th></tr></thead>
     <tbody><tr><td>الكتلة m</td><td id="r1">—</td></tr>
-    <tr><td>ارتفاع الإفلات h</td><td id="r2">—</td></tr>
+    <tr><td>الارتفاع h</td><td id="r2">—</td></tr>
     <tr><td>السرعة v</td><td id="r3">—</td></tr>
     <tr><td>طاقة الوضع PE</td><td id="r4">—</td></tr>
     <tr><td>طاقة الحركة KE</td><td id="r5">—</td></tr></tbody></table></div>
@@ -2388,7 +2386,7 @@ function ceLab(box){
     $('gS').innerHTML=ceScene(H,s,{v:dn?V.toFixed(2):null});
     $('vS').innerHTML=`<rect x="40" y="4" width="320" height="86" rx="14" fill="#334155" stroke="#0F172A" stroke-width="2"/><rect x="56" y="16" width="288" height="62" rx="8" fill="#BBF7D0" stroke="#14532D"/><text x="200" y="58" font-size="26" font-weight="800" text-anchor="middle" fill="#14532D" direction="ltr" font-family="Consolas,monospace">v = ${dn?V.toFixed(2):'-.--'} m/s</text><text x="200" y="106" font-size="12" font-weight="700" text-anchor="middle" fill="var(--muted)">‏شاشة عداد البوابة الضوئية (مكبرة)‏</text>`}
   function sub(){
-    $('sbP').textContent=ok.m&&ok.h?['PE = m·g·h',E(`m = ${M} g = ${fx(KG(),3)} kg`),'h = hf − hi',E(`h = ${H.toFixed(1)} − 0 = ${H.toFixed(1)} cm = ${fx(HM(),3)} m`),E(`PE = ${fx(KG(),3)} × 9.8 × ${fx(HM(),3)}`)].join('\n'):'PE = m·g·h';
+    $('sbP').textContent=ok.m&&ok.h?['PE = m·g·h',E(`m = ${M} g = ${fx(KG(),3)} kg`),E(`h = ${H.toFixed(1)} cm = ${fx(HM(),3)} m`),E(`PE = ${fx(KG(),3)} × 9.8 × ${fx(HM(),3)}`)].join('\n'):'PE = m·g·h';
     $('sbK').textContent=ok.m&&ok.v?['KE = ½·m·v²',E(`m = ${fx(KG(),3)} kg , v = ${V.toFixed(2)} m/s`),E(`KE = 0.5 × ${fx(KG(),3)} × ${V.toFixed(2)}²`)].join('\n'):'KE = ½·m·v²'}
   function results(){
     $('r1').textContent=ok.m?E(fx(KG(),3)+' kg'):'—';$('r2').textContent=ok.h?E(fx(HM(),3)+' m'):'—';$('r3').textContent=ok.v?E(V.toFixed(2)+' m/s'):'—';
@@ -2402,7 +2400,7 @@ function ceLab(box){
     if(Math.abs(v-M)<0.5){ok.m=true;fb('mFb',true,'✓ قراءة صحيحة:\n'+E(`m = ${M} g = ${fx(KG(),3)} kg`))}else fb('mFb',false,'✗ اقرأ الرقم الظاهر على شاشة الميزان.');sub();results()};
   $('hHn').onclick=()=>{hX=true;pDraw();fb('hFb',true,'تلميح: الأرقام الكبيرة بالسنتيمتر، وبين كل رقمين 10 أقسام صغيرة كل قسم '+E('0.1 cm')+'. اقرأ آخر رقم قبل المؤشر، ثم احسب عدد الأقسام الصغيرة حتى الخط الأزرق.')};
   $('hCk').onclick=()=>{if(!pTouch())return fb('hFb',false,'اسحب المؤشر حتى يلامس أسفل الجسم (الثقل) أولا.');const v=num($('hIn').value);if(isNaN(v))return fb('hFb',false,'اكتب قراءتك بالسنتيمتر.');
-    if(Math.abs(v-H)<0.05){ok.h=true;fb('hFb',true,'✓ قراءة صحيحة:\n'+E(`hf = ${H.toFixed(1)} cm`)+'\n'+E(`h = hf − hi = ${H.toFixed(1)} − 0 = ${H.toFixed(1)} cm = ${fx(HM(),3)} m`))}else fb('hFb',false,'✗ القراءة غير صحيحة، أعد القراءة أو استخدم التلميح.');sub();results()};
+    if(Math.abs(v-H)<0.05){ok.h=true;fb('hFb',true,'✓ قراءة صحيحة:\n'+E(`h = ${H.toFixed(1)} cm = ${fx(HM(),3)} m`))}else fb('hFb',false,'✗ القراءة غير صحيحة، أعد القراءة أو استخدم التلميح.');sub();results()};
   $('vCk').onclick=()=>{if(!fallen())return fb('vFb',false,'افتح آلية الإطلاق حتى يعبر الجسم (الثقل) البوابة الضوئية أولا.');const v=num($('vIn').value);if(isNaN(v))return fb('vFb',false,'اكتب قراءتك بوحدة m/s.');
     if(Math.abs(v-V)<0.005){ok.v=true;fb('vFb',true,'✓ قراءة صحيحة:\n'+E(`v = ${V.toFixed(2)} m/s`))}else fb('vFb',false,'✗ اكتب السرعة كما تظهر على الشاشة المكبرة.');sub();results()};
   const chk=(c,need,needMsg,val,okMsg,bad)=>{if(!need())return fb(c+'f',false,needMsg);const v=num($(c).value);if(isNaN(v))return fb(c+'f',false,'اكتب الناتج بوحدة J.');
