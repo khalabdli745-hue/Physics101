@@ -2077,25 +2077,25 @@ function peScene(h,o){/* h ارتفاع أسفل الجسم (الثقل) عن س
   g+=box(10,330,0,82,0,T,'#B7834A','#E9C894','#9A6A3A','#7C4A1F');
   /* قاعدة الحامل وقضيبه */
   g+=box(56,156,42,80,T,T+6,'#334155','#64748B','#1F2937','#0F172A');
-  g+=box(86,94,54,60,T+6,T+200,'#94A3B8','#E2E8F0','#64748B','#475569');
-  /* المسطرة المترية وماسكها */
+  g+=box(74,94,52,62,T+6,T+200,'#94A3B8','#E2E8F0','#64748B','#475569');
+  /* المسطرة المترية وماسكها: تقف على سطح الطاولة أمام قاعدة الحامل، وصفرها على سطح الطاولة */
   const Z0=T+h*K,Z1=Z0+44,ZA=Z1+16;
-  g+=box(94,RX,51,55,T+60*K,T+60*K+6,'#334155','#64748B','#1F2937','#0F172A');
-  g+=box(RX,RX+12,48,52,T+6,T+105*K,'#FCD34D','#FEF3C7','#D97706','#A16207');
-  for(let c=0;c<=100;c++){const [a,b]=S(RX,48,T+c*K),w=c%10===0?9:c%5===0?6:3;g+=`<line x1="${a}" y1="${b}" x2="${a+w}" y2="${b}" stroke="#1F2937" stroke-width="${c%10?.5:1}"/>`;if(c%10===0)g+=`<text x="${a-3}" y="${b+3.5}" font-size="9" font-weight="700" text-anchor="end" fill="#1F2937">${c}</text>`}
   /* ذراع الحامل وماسكه والخطاف */
   g+=box(94,MX+4,55,59,ZA,ZA+5,'#94A3B8','#E2E8F0','#64748B','#475569');
-  g+=box(82,98,50,64,ZA-6,ZA+11,'#1F2937','#475569','#0F172A','#0F172A');
+  g+=box(70,98,48,66,ZA-6,ZA+11,'#1F2937','#475569','#0F172A','#0F172A');
   {const [a,b]=S(MX,MD,ZA),[,c]=S(MX,MD,Z1);g+=`<line x1="${a}" y1="${b}" x2="${a}" y2="${c-8}" stroke="#334155" stroke-width="2"/><path d="M${a},${c-12} a4,4 0 1 0 0.1,0" fill="none" stroke="#334155" stroke-width="2"/>`}
+  g+=box(94,RX,40,55,T+60*K,T+60*K+6,'#334155','#64748B','#1F2937','#0F172A');
+  g+=box(RX,RX+12,36,40,T,T+105*K,'#FCD34D','#FEF3C7','#D97706','#A16207');
+  for(let c=0;c<=100;c++){const [a,b]=S(RX,36,T+c*K),w=c%10===0?9:c%5===0?6:3;g+=`<line x1="${a}" y1="${b}" x2="${a+w}" y2="${b}" stroke="#1F2937" stroke-width="${c%10?.5:1}"/>`;if(c%10===0)g+=`<text x="${a-3}" y="${b+3.5}" font-size="9" font-weight="700" text-anchor="end" fill="#1F2937" stroke="#fff" stroke-width="2.6" paint-order="stroke">${c}</text>`}
   /* الجسم (الثقل) (أسطوانة) */
   const [cx,cb]=S(MX,MD,Z0),[,ct]=S(MX,MD,Z1),rx=20,ry=7;
   g+=`<path d="M${cx-rx},${ct} L${cx-rx},${cb} A${rx},${ry} 0 0 0 ${cx+rx},${cb} L${cx+rx},${ct} Z" fill="url(#peBl)" stroke="#1E3A8A"/><ellipse cx="${cx}" cy="${ct}" rx="${rx}" ry="${ry}" fill="#93C5FD" stroke="#1E3A8A"/><text x="${cx}" y="${(ct+cb)/2+6}" font-size="13" font-weight="800" text-anchor="middle" fill="#fff" direction="ltr">m</text>`;
   /* أسفل الجسم (الثقل) حتى المسطرة */
-  if(h>0){const b=S(RX+12,48,Z0);g+=`<line x1="${cx-rx}" y1="${cb}" x2="${b[0]}" y2="${b[1]}" stroke="#DC2626" stroke-width="1.6" stroke-dasharray="5 3"/>`}
+  if(h>0){const b=S(RX+12,36,Z0);g+=`<line x1="${cx-rx}" y1="${cb}" x2="${b[0]}" y2="${b[1]}" stroke="#DC2626" stroke-width="1.6" stroke-dasharray="5 3"/>`}
   if(o.harr&&h>0){const a=S(MX+46,MD,T),b=S(MX+46,MD,Z0);g+=`<line x1="${a[0]}" y1="${a[1]-2}" x2="${b[0]}" y2="${b[1]+2}" stroke="#2563EB" stroke-width="2"/><path d="M${a[0]-5},${a[1]-10} L${a[0]},${a[1]-2} L${a[0]+5},${a[1]-10} M${b[0]-5},${b[1]+10} L${b[0]},${b[1]+2} L${b[0]+5},${b[1]+10}" stroke="#2563EB" stroke-width="2" fill="none"/><text x="${a[0]+8}" y="${(a[1]+b[1])/2+5}" font-size="15" font-weight="800" fill="#2563EB" direction="ltr">h</text>`}
-  if(o.ptr){const [p,q]=S(RX+12,48,T+o.ptr.p*K);g+=`<path d="M${p+14},${q-6} L${p+3},${q} L${p+14},${q+6} Z" fill="#F7931E"/><line x1="${p+3}" y1="${q}" x2="${p+30}" y2="${q}" stroke="#F7931E" stroke-width="2.5"/>`;if(o.ptr.touch)g+=`<circle cx="${p+3}" cy="${q}" r="7" fill="none" stroke="#16A34A" stroke-width="2.5"/>`}
-  if(o.arr){const [a,b]=S(82,50,ZA+2);g+=`<path d="M${a-14},${b+10} v-26 m-5,7 l5,-7 l5,7 M${a-14},${b+18} v14 m-5,-7 l5,7 l5,-7" stroke="#F7931E" stroke-width="2.4" fill="none"/>`}
-  if(o.lab){const [bx,by]=S(90,57,ZA+3);g+=lbl(...S(90,57,T+185),40,22,'الحامل المعملي','start')+lbl(bx,by,12,Math.min(by+50,BASE-60),'ماسك الذراع','start')+lbl(...S(160,57,ZA+5),250,22,'ذراع الحامل','start')+lbl(cx+rx-4,(ct+cb)/2,300,BASE-120,'‏الجسم (الثقل)‏','start')+lbl(...S(RX+6,48,T+15*K),190,BASE+26,'المسطرة المترية')+lbl(...S(60,60,T+6),60,BASE+26,'قاعدة الحامل')+lbl(...S(290,50,T),320,BASE+26,'سطح الطاولة')}
+  if(o.ptr){const [p,q]=S(RX+12,36,T+o.ptr.p*K);g+=`<path d="M${p+14},${q-6} L${p+3},${q} L${p+14},${q+6} Z" fill="#F7931E"/><line x1="${p+3}" y1="${q}" x2="${p+30}" y2="${q}" stroke="#F7931E" stroke-width="2.5"/>`;if(o.ptr.touch)g+=`<circle cx="${p+3}" cy="${q}" r="7" fill="none" stroke="#16A34A" stroke-width="2.5"/>`}
+  if(o.arr){const [a,b]=S(68,48,ZA+2);g+=`<path d="M${a-14},${b+10} v-26 m-5,7 l5,-7 l5,7 M${a-14},${b+18} v14 m-5,-7 l5,7 l5,-7" stroke="#F7931E" stroke-width="2.4" fill="none"/>`}
+  if(o.lab){const [bx,by]=S(90,57,ZA+3);g+=lbl(...S(90,57,T+185),40,22,'الحامل المعملي','start')+lbl(bx,by,12,Math.min(by+50,BASE-60),'ماسك الذراع','start')+lbl(...S(160,57,ZA+5),250,22,'ذراع الحامل','start')+lbl(cx+rx-4,(ct+cb)/2,300,BASE-120,'‏الجسم (الثقل)‏','start')+lbl(...S(RX+6,36,T+15*K),190,BASE+26,'المسطرة المترية')+lbl(...S(60,60,T+6),60,BASE+26,'قاعدة الحامل')+lbl(...S(290,50,T),320,BASE+26,'سطح الطاولة')}
   return `<svg viewBox="0 0 400 ${BASE+(o.lab?44:14)}" aria-label="الجسم (الثقل) معلق في ذراع حامل معملي وقياس ارتفاعه">${g}</svg>`}
 function peLab(box){
   box.innerHTML=`
