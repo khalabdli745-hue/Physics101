@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>فيزياء ١٠١ — منصة الشرح التفاعلي</title>
-<meta name="description" content="منصة مجانية لشرح حقيبة الفيزياء العامة ١٠١: صفحات الحقيبة التدريبية، ملخصات، أمثلة محلولة، اختبارات، شرح صوتي بالعربية وتجارب تفاعلية">
+<title>فيزياء 101 — منصة الشرح التفاعلي</title>
+<meta name="description" content="منصة مجانية لشرح حقيبة الفيزياء العامة 101: صفحات الحقيبة التدريبية، ملخصات، أمثلة محلولة، اختبارات، شرح صوتي بالعربية وتجارب تفاعلية">
 <meta name="theme-color" content="#0369A1">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-180.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="فيزياء ١٠١">
+<meta name="apple-mobile-web-app-title" content="فيزياء 101">
 <link rel="icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -341,7 +341,7 @@ details.card summary{cursor:pointer}
 .lgHint{font-size:13px;color:var(--muted);margin:0}
 .lgMsg{min-height:1.2em;margin:0;font-size:14px;color:var(--good)}.lgMsg.bad{color:var(--bad)}
 .lgBtn{padding:11px;font-size:16px}
-.lgTabs{display:grid;grid-template-columns:repeat(3,1fr);background:var(--soft);border-radius:10px;padding:3px;gap:3px}
+.lgTabs{display:grid;grid-template-columns:repeat(4,1fr);background:var(--soft);border-radius:10px;padding:3px;gap:3px}
 .lgTabs button{border:0;background:transparent;border-radius:8px;padding:7px;font-weight:600;font-size:14.5px;color:var(--muted)}
 .lgTabs button[aria-selected="true"]{background:var(--panel);color:var(--accent);box-shadow:0 1px 3px rgba(0,0,0,.12)}
 .lgHint a{color:var(--accent)}
@@ -477,13 +477,70 @@ sub.ss{font-size:.6em;line-height:0;vertical-align:-.25em}
 #view .summCard{border-inline-start:5px solid #16A34A}
 #view .summCard .md li::before{inset-inline-start:10px!important;top:1em!important}#view .summCard .md li{padding:6px 10px;padding-inline-start:28px;position:relative;border-radius:10px;background:rgba(22,163,74,.08);border:1px solid rgba(22,163,74,.30);list-style:none;margin:6px 0}
 #view .card > h2{display:inline-block;padding:4px 12px;border-radius:10px;background:var(--accent-soft)}
+
+.exSteps{display:grid;gap:10px;margin-top:6px}.exStep{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--paper)}
+.exStep.live{border:2px solid var(--accent)}.exStep.done{opacity:.85}.exStH{font-weight:800;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.exN{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--accent);color:var(--accent-ink,#fff);font-size:13px}
+.exOk{font-weight:600;color:var(--good);font-size:13px}.exNote{margin:8px 0 4px;font-size:13.5px;color:var(--muted);min-height:1em}.exNext{width:100%;margin-top:4px}.exNext:disabled{opacity:.45}
+body.examOnly #menuBtn,body.examOnly .progress,body.examOnly #aiLink,body.examOnly #doneBtn,body.examOnly #tabs,body.examOnly #pager,body.examOnly .aiFab,body.examOnly #nav,body.examOnly .scrim,body.examOnly #examBar{display:none!important}
+.exRes{display:flex;gap:8px;align-items:center;direction:ltr}.exRes input{flex:1;font-size:18px;padding:10px 12px;border:2px solid var(--line);border-radius:10px;background:var(--panel);color:var(--ink);text-align:left}.exRes input:focus{border-color:var(--accent);outline:0}.exRes input.bad{border-color:var(--bad)}.exU{font-weight:700;font-size:16px;white-space:nowrap}
+.exModal{position:fixed;inset:0;z-index:4000;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:16px}.exMBox{background:var(--panel);color:var(--ink);border-radius:14px;padding:18px;max-width:420px;width:100%;box-shadow:0 10px 30px rgba(0,0,0,.35)}.exMBox p{margin:0 0 14px;line-height:1.8;font-size:16px}.exMBtns{display:flex;gap:8px}.exMBtns .btn{flex:1;padding:11px;font-size:16px;border-radius:10px}.exMBtns .exMNo{flex:1;padding:11px;font-size:16px;font-weight:700;border-radius:10px;background:transparent;color:var(--ink);border:1.5px solid var(--line);cursor:pointer}
+.exWork{scroll-margin-top:130px;margin-top:10px;padding:10px 12px;border-radius:10px;border:2px dashed var(--accent);background:var(--accent-soft)}.exStep.flash{animation:exFl 1.6s ease}@keyframes exFl{0%,40%{box-shadow:0 0 0 4px var(--accent)}100%{box-shadow:none}}.exWork .exWl,.exWork .exWg{margin:0 0 6px;line-height:1.9;font-size:15px}
+.exSheet{position:fixed;left:0;right:0;bottom:0;z-index:1200;max-height:86vh;overflow:auto;background:var(--panel);border-radius:18px 18px 0 0;box-shadow:0 -10px 30px rgba(0,0,0,.35);padding:0 10px calc(10px + env(safe-area-inset-bottom))}
+.exSheet[hidden]{display:none}.exSheet .calc{margin:6px 0 0;box-shadow:none}
+.exSH{position:sticky;top:0;z-index:2;display:flex;gap:8px;align-items:flex-start;background:var(--accent-soft);border:2px solid var(--accent);border-radius:12px;padding:8px 10px;margin-top:10px}
+.exSHt{flex:1;font-size:15px;line-height:1.8}.exSHx{border:0;background:var(--panel);color:var(--ink);border-radius:50%;width:32px;height:32px;font-size:16px;flex:none}
+body.exSheetOn .view::after{height:70vh}.exOpenCalc{width:100%;margin-top:8px}
+.exRules{max-height:62vh;overflow:auto;margin:0 0 14px;line-height:1.85;font-size:15px}.exRules h3{margin:0 0 8px;font-size:17px;color:var(--accent)}.exRules ol{margin:0;padding-inline-start:24px;list-style:decimal}.exRules li{margin-bottom:4px}
+.exDoneBar{position:fixed;left:0;right:0;bottom:0;z-index:1100;display:flex;gap:10px;align-items:center;justify-content:space-between;padding:12px 14px calc(12px + env(safe-area-inset-bottom));background:var(--good,#16a34a);color:#fff;font-weight:800;box-shadow:0 -6px 18px rgba(0,0,0,.25)}.exDoneBar .btn{background:#fff;color:#15803d;font-size:16px;padding:10px 14px;border-radius:10px}
+body.exSheetOn .exDoneBar{display:none}
+.exSheet .calc{padding:6px 6px 8px;margin-top:6px}.exSheet .calc .chead{display:none}.exSheet .calc .cscr{padding:3px 8px 4px;margin-bottom:6px}
+.exSheet .calc .cexp{font-size:16px}.exSheet .calc .cres{font-size:18px;min-height:1.2em}.exSheet .calc .cind{min-height:10px}
+.exSheet .calc .cnav{gap:4px;margin-bottom:4px}.exSheet .calc .cnav .ck{min-height:26px;padding:2px 0;font-size:13px}
+.exSheet .calc .cfn{gap:4px;margin-bottom:6px}.exSheet .calc .cfn .ck{min-height:32px;padding:2px 0;font-size:12.5px}
+.exSheet .calc .ck small{font-size:8.5px;min-height:9px;margin-bottom:0}
+.exSheet .calc .cnum{gap:4px}.exSheet .calc .cnum .ck{min-height:36px;font-size:17px;padding:2px 0}.exSheet .calc .cnum .ck.ce{font-size:19px}.exSheet .calc .cnum .ck.cd,.exSheet .calc .cnum .ck.cf{font-size:13px}
+.exSheet .calc .cuse{margin-top:6px;font-size:14px;padding:8px}
+.exSheet .exSH{padding:6px 8px;margin-top:8px}.exSheet .exSHt{font-size:14px;line-height:1.6}
+.exSheet{max-height:72vh}
+.exSheet{left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));max-width:520px;margin:0 auto;border-radius:22px;padding:0 8px 8px;border:1px solid var(--line);box-shadow:0 18px 50px rgba(0,0,0,.45),0 4px 14px rgba(0,0,0,.25);animation:exFloat .25s ease-out}
+.exSheet .calc{border-radius:16px}
+.exIso{unicode-bidi:isolate;display:inline-block}
+.exCodeL{display:flex;flex-direction:column;gap:6px;margin-top:12px;padding:10px;border:2px solid var(--accent);border-radius:12px;background:var(--accent-soft);font-weight:700}.exCodeL small{font-weight:400;opacity:.8}
+.exCodeIn{font-size:24px;letter-spacing:8px;text-align:center;padding:8px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--ink)}
+.exRules li.exRed,.exRules li.exRed b{color:#dc2626;font-weight:700}
+.exWM{display:none;position:fixed;inset:0;z-index:1100;pointer-events:none;opacity:.16;background-repeat:repeat}
+body.examMode .exWM{display:block}@media (prefers-color-scheme:dark){:root:not([data-theme=light]) .exWM{opacity:.24}}:root[data-theme=dark] .exWM{opacity:.24}body.examMode .view{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.exSHm{margin-top:4px;color:var(--bad);font-weight:700;font-size:13px}
+.exRes input[readonly]{background:var(--accent-soft);cursor:default}
+.exSheet{max-height:80vh}.exSheet .calc .cscr{padding:5px 8px 6px}.exSheet .calc .cnav .ck{min-height:30px}.exSheet .calc .cfn .ck{min-height:36px}.exSheet .calc .cnum .ck{min-height:42px}.exSheet .calc .cuse{padding:10px}
+.exSheet .exWl>*:not(b):not(small),.exSheet .exWg>*:not(b):not(small){display:inline}
+body.exSheetOn::before{content:'';position:fixed;inset:0;z-index:1199;background:rgba(0,0,0,.35);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
+@keyframes exFloat{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}
+/* الاختبارات الفصلية */
+.examBar{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;margin:0 0 10px;padding:10px 14px;border-radius:12px;border:0;background:#F7931E;color:#fff;font:700 15px system-ui,sans-serif;cursor:pointer;text-align:right;box-shadow:0 4px 14px rgba(247,147,30,.35)}
+.examBar[hidden]{display:none}.examBar .go{white-space:nowrap;background:rgba(255,255,255,.22);border-radius:999px;padding:4px 10px;font-size:13.5px}
+.exItem{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-top:12px;background:var(--paper)}
+.exItem h3{margin:0 0 4px;font-size:18px;color:var(--accent)}.exCov,.exInfo{margin:2px 0;font-size:14px;color:var(--muted)}
+.exAct{margin-top:10px}.exStart{width:100%;font-size:17px;padding:12px}
+.exDone{padding:10px 12px;border-radius:10px;background:var(--accent-soft);font-weight:700}.exEmpty{padding:14px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:10px}
+.exBar{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;justify-content:space-between;padding:10px 14px;margin:0 0 12px;border-radius:12px;background:var(--panel);border:2px solid var(--accent);box-shadow:0 4px 12px rgba(0,0,0,.12)}
+.exBar .exTime{font:800 20px ui-monospace,monospace;direction:ltr;color:var(--accent)}.exBar .exTime.low{color:var(--bad)}.exBar .exCnt{font-size:14px;color:var(--muted)}
+.exQ .opts button[aria-pressed="true"]{border:2px solid var(--accent);background:var(--accent-soft);font-weight:700}
+.exQ .opts button{direction:rtl;unicode-bidi:isolate;text-align:right;display:flex;align-items:center;flex-wrap:wrap;gap:6px}.exQ .opts button .exL{flex:none;order:-1}
+.exQ .exL{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;border:1.5px solid var(--line);font-size:13px;font-weight:800;margin-inline-end:6px}
+.exQ .opts button[aria-pressed="true"] .exL{background:var(--accent);color:var(--accent-ink,#fff);border-color:var(--accent)}
+.exPts{font-weight:400;color:var(--muted);font-size:13px}.exSubmit{width:100%;font-size:17px;padding:12px}
+.exScore{margin:12px 0;padding:16px;border-radius:12px;background:var(--accent-soft);text-align:center;font-size:20px}.exScore b{font-size:30px;color:var(--accent)}
+body.examMode .aiFab,body.examMode #aiLink,body.examSec .aiFab,body.examSec #aiLink{display:none!important}
+.exMine{opacity:.75;font-size:12px;white-space:nowrap}
 </style>
 </head>
 <body>
 <div class="app" id="app">
   <header class="top">
     <button class="iconbtn" id="menuBtn" aria-label="فهرس المقرر">☰ الفهرس</button>
-    <div class="brand"><b>فيزياء ١٠١</b><span>حقيبة الدبلوم · ٥ وحدات · ٨٠ ساعة تدريبية</span></div>
+    <div class="brand"><b>فيزياء 101</b><span>حقيبة الدبلوم · 5 وحدات · 80 ساعة تدريبية</span></div>
     <div class="topr">
       <div class="progress"><span id="progTxt"></span><div class="bar"><i id="progBar"></i></div></div>
       <button class="iconbtn userChip" id="userChip" hidden></button>
@@ -494,6 +551,7 @@ sub.ss{font-size:.6em;line-height:0;vertical-align:-.25em}
   <div class="scrim" id="scrim"></div>
   <main>
     <div class="lessonHead">
+      <button type="button" class="examBar" id="examBar" hidden onclick="examOpen()"></button>
       <div class="crumb" id="crumb"></div>
       <div class="hrow"><h1 id="lessonTitle"></h1><button class="doneBtn" id="doneBtn" aria-pressed="false">أنهيت الدرس</button></div>
       <div class="tabs" role="tablist" id="tabs">
@@ -514,9 +572,9 @@ sub.ss{font-size:.6em;line-height:0;vertical-align:-.25em}
 </div>
 <div class="loginWrap" id="loginWrap" hidden>
   <form class="loginBox" id="loginForm" autocomplete="on">
-    <img class="lgLogo" src="icon-180.png" alt="فيزياء ١٠١">
-    <h1>فيزياء ١٠١</h1>
-    <div class="lgTabs" role="tablist" id="lgTabs"><button type="button" role="tab" data-r="s" aria-selected="true">متدرب</button><button type="button" role="tab" data-r="t" aria-selected="false">مدرب</button><button type="button" role="tab" data-r="d" aria-selected="false">تجريبي</button></div>
+    <img class="lgLogo" src="icon-180.png" alt="فيزياء 101">
+    <h1>فيزياء 101</h1>
+    <div class="lgTabs" role="tablist" id="lgTabs"><button type="button" role="tab" data-r="s" aria-selected="true">متدرب</button><button type="button" role="tab" data-r="t" aria-selected="false">مدرب</button><button type="button" role="tab" data-r="d" aria-selected="false">تجريبي</button><button type="button" role="tab" data-r="e" aria-selected="false">الاختبارات</button></div>
     <p class="lgSub" id="lgSub">سجّل دخولك برقمك التدريبي</p>
     <div id="lgStep1">
       <label><span id="lgIdLab">الرقم التدريبي</span><input id="lgId" inputmode="numeric" autocapitalize="off" autocorrect="off" spellcheck="false" autocomplete="username" required></label>
@@ -524,7 +582,7 @@ sub.ss{font-size:.6em;line-height:0;vertical-align:-.25em}
       <p class="lgHint" id="lgHint">أول مرة تدخل؟ اكتب رقمك التدريبي واترك كلمة المرور فارغة، ثم اختر كلمة مرورك.</p>
     </div>
     <div id="lgStep2" hidden>
-      <label>اختر كلمة مرور (٤ أحرف أو أرقام على الأقل)<input id="lgNew1" type="password" autocomplete="new-password"></label>
+      <label>اختر كلمة مرور (4 أحرف أو أرقام على الأقل)<input id="lgNew1" type="password" autocomplete="new-password"></label>
       <label>أعد كتابة كلمة المرور<input id="lgNew2" type="password" autocomplete="new-password"></label>
     </div>
     <p class="lgMsg" id="lgMsg" aria-live="polite"></p>
@@ -550,7 +608,7 @@ sub.ss{font-size:.6em;line-height:0;vertical-align:-.25em}
 <script>
 const UNITS=window.UNITS,STUDY=window.STUDY,EXTRA=window.EXTRA||{},FIGS=window.FIGS||{};
 window.PAGES=window.PAGES||{};
-const AR=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+const AR=n=>String(n);   // الأرقام بالإنجليزية في كل المنصة
 const ORD=['الأولى','الثانية','الثالثة','الرابعة','الخامسة'];
 const $=id=>document.getElementById(id);
 const AUTH=(()=>{try{return JSON.parse(localStorage.getItem('p101-auth')||'null')}catch(e){return null}})();
@@ -782,7 +840,7 @@ const TTS=(()=>{
     return t.trim().replace(/^[,.\s]+|[,\s]+$/g,'');
   }
   const NUMW=['صِفْر','وَاحِد','اثْنَان','ثَلَاثَة','أَرْبَعَة','خَمْسَة','سِتَّة','سَبْعَة','ثَمَانِيَة','تِسْعَة','عَشَرَة'];
-  /* «مثال ٣» تُقرأ «مثال ثلاثة» لا «ثلاث» */
+  /* «مثال 3» تُقرأ «مثال ثلاثة» لا «ثلاث» */
   const numNoun=x=>x.replace(/((?:مِ?|م)[\u064B-\u0652]*ث[\u064B-\u0652]*ا[\u064B-\u0652]*ل|ت[\u064B-\u0652]*م[\u064B-\u0652]*ر[\u064B-\u0652]*ي[\u064B-\u0652]*ن|س[\u064B-\u0652]*ؤ[\u064B-\u0652]*ا[\u064B-\u0652]*ل|د[\u064B-\u0652]*ر[\u064B-\u0652]*س)[\u064B-\u0652]*(\s+)([0-9٠-٩]{1,2})(?![0-9٠-٩]|[.,٫][0-9٠-٩])/g,(m,w,sp,d)=>{const n=+String(d).replace(/[٠-٩]/g,c=>'٠١٢٣٤٥٦٧٨٩'.indexOf(c));return n<=10?w+'\u0652'+sp+NUMW[n]:m});
   function arPart(t,cont){t=t.replace(/[←⇐]/g,'، إذن ').replace(/[→⇒]/g,' إلى ').replace(/[()«»]/g,' ').replace(/\s·\s|^\s*·|·\s*$/g,'، ').replace(/\s[—–]\s/g,'، ');t=arFix(numNoun(tvocal(t,cont)),cont);return t.replace(/\s+([،.:؟])/g,'$1').replace(/\s+/g,' ')}
   const AR_CH=/[؀-ۿ]/;
@@ -920,13 +978,14 @@ function buildNav(){
       it.appendChild(lb);ol.appendChild(it)});
     d.append(b,ol);nav.appendChild(d)});
   const f=document.createElement('div');f.className='navfoot';
-  f.innerHTML='<button id="survBtn">📝 استبانة رضا المتدرب</button><button id="refsBtn">📚 المراجع العربية للمقرر</button><button id="themeBtn">◐ تبديل الوضع الفاتح/الداكن</button>';
+  f.innerHTML='<button id="examBtn" hidden>📝 الاختبارات الفصلية</button><button id="survBtn">📝 استبانة رضا المتدرب</button><button id="refsBtn">📚 المراجع العربية للمقرر</button><button id="themeBtn">◐ تبديل الوضع الفاتح/الداكن</button>';
   nav.appendChild(f);
   $('refsBtn').onclick=()=>{pos.t='refs';closeNav();render()};
+  $('examBtn').hidden=true;
   $('survBtn').onclick=()=>{pos.t='survey';closeNav();render()};
   $('themeBtn').onclick=()=>{const r=document.documentElement;const dark=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches;r.dataset.theme=dark?'light':'dark';store.set('p101-theme',r.dataset.theme)};
 }
-function updateProgress(){const pct=Math.min(100,Math.round([...done].filter(k=>{const[a,b]=k.split('-').map(Number);return !HID(a,b)}).length/total*100));$('progTxt').textContent=AR(pct)+'٪ مكتمل';$('progBar').style.width=pct+'%'}
+function updateProgress(){const pct=Math.min(100,Math.round([...done].filter(k=>{const[a,b]=k.split('-').map(Number);return !HID(a,b)}).length/total*100));$('progTxt').textContent=AR(pct)+'% مكتمل';$('progBar').style.width=pct+'%'}
 
 /* ---------- التحميل الكسول للصفحات ---------- */
 const loading={};
@@ -941,7 +1000,7 @@ function loadUnit(ui){
 
 /* اختبار نطق حرف E (دلتا إي): افتح الرابط مع #voicetest */
 function voiceTest(){if(!/voicetest/i.test(location.hash+location.search)||document.getElementById('vtCard'))return;
-  const V=[['١','إِي'],['٢','إِيْ'],['٣','إي'],['٤','إِ'],['٥','إِيْه'],['٦','اِي'],['٧','إيّ']];
+  const V=[['1','إِي'],['2','إِيْ'],['3','إي'],['4','إِ'],['5','إِيْه'],['6','اِي'],['7','إيّ']];
   const c=document.createElement('div');c.id='vtCard';c.className='card';c.style.cssText='position:fixed;top:10px;left:10px;right:10px;z-index:2000;border:3px solid #0B7A70;max-height:80vh;overflow:auto;box-shadow:0 10px 30px rgba(0,0,0,.35)';
   c.innerHTML='<button type="button" onclick="this.parentNode.remove()" style="float:left;font-size:20px;background:none;border:0;cursor:pointer">✕</button><h2>🔊 اختبار نطق «دلتا إي»</h2><p>كل زر يقرأ بصوت حامد: «دلتا إي يساوي صفر». أخبرني برقم الزر الذي ينطق «إي» صحيحة.</p>';
   const w=document.createElement('div');w.style.cssText='display:flex;flex-wrap:wrap;gap:8px;margin:10px 0';
@@ -955,7 +1014,8 @@ function render(){
   const u=UNITS[pos.u],l=lesson();
   const refs=GT(pos.t);
   $('crumb').textContent=refs?'المقرر كاملًا':`الوحدة ${ORD[pos.u]} · ${u.t}`;
-  $('lessonTitle').textContent=refs?'المراجع العربية والمصادر':l.t;
+  $('lessonTitle').textContent=refs?(pos.t==='exam'?'📝 الاختبارات الفصلية':'المراجع العربية والمصادر'):l.t;
+  if(pos.t!=='exam'){clearInterval(EXAM.timer);document.body.classList.remove('examMode')}document.body.classList.toggle('examSec',pos.t==='exam');examBar();
   $('doneBtn').hidden=refs;$('tabs').hidden=refs;
   const isDone=done.has(key(pos.u,pos.l));
   $('doneBtn').setAttribute('aria-pressed',isDone);$('doneBtn').textContent=isDone?'✓ مكتمل':'أنهيت الدرس';
@@ -963,13 +1023,13 @@ function render(){
   try{const sel=document.querySelector('#tabs button[aria-selected="true"]');if(sel)sel.scrollIntoView({block:'nearest',inline:'nearest'})}catch(e){}
   $('pager').hidden=pos.t!=='page';
   const v=$('view');v.scrollTop=0;
-  ({sum:renderSum,page:renderPage,ex:renderEx,quiz:renderQuiz,rate:renderRate,lab:renderLab,refs:renderRefs,survey:renderSurvey}[pos.t]||renderSum)(v);
+  ({sum:renderSum,page:renderPage,ex:renderEx,quiz:renderQuiz,rate:renderRate,lab:renderLab,refs:renderRefs,survey:renderSurvey,exam:renderExam}[pos.t]||renderSum)(v);
   TTS.refreshNotes();
   store.set('p101-pos',pos);
 }
 function card(title,sub){const c=document.createElement('div');c.className='card';c.innerHTML=`<h2>${title}</h2>${sub?`<p class="sub">${sub}</p>`:''}`;return c}
 function wrap(v){v.innerHTML='';const i=document.createElement('div');i.className='inner';v.appendChild(i);return i}
-const GT=t=>t==='refs';
+const GT=t=>t==='refs'||t==='exam';
 /* ---------- استبانة رضا المتدرب ---------- */
 const SURVEY=[['الدروس والشرح',['محتوى الدروس واضح ومنظم','الشرح على السبورة مع المدرب الذكي ساعدني على الفهم','الصوت ونطق المصطلحات واضح','صفحات الحقيبة التدريبية في المنصة مفيدة']],
  ['الأمثلة والتمارين',['الأمثلة المحلولة واضحة ومفيدة','خطوات الحل (المعطيات ← المطلوب ← القانون ← النتيجة) ساعدتني على حل المسائل','الآلة الحاسبة العلمية سهلة الاستخدام','التمارين التفاعلية مناسبة لمستواي']],
@@ -1279,7 +1339,7 @@ function openBoard(dry){dry=dry===true;
     const openA=()=>{was=auto;stopAuto();aP.hidden=false;B.classList.add('asking');aBtn.hidden=true};
     const closeA=()=>{if(aMic._abort)aMic._abort();busy=false;aSend.disabled=false;runId++;TTS.stop();B.classList.remove('talking','asking');aP.hidden=true;aBtn.hidden=false;if(was)startAuto()};
     aBtn.onclick=openA;aP.querySelector('.bAskX').onclick=closeA;
-    const ERRS={timeout:'تأخر الرد. حاول مرة أخرى أو اضغط «أكمل الشرح».',ai_off:'لم يُفعَّل المدرب الذكي بعد، ويفعّله المدرب من لوحة المدرب.',limit:'وصلت إلى الحد المسموح (١٥ سؤالًا كل ٦ ساعات). حاول لاحقًا.',ai_busy:'المدرب الذكي مشغول الآن لكثرة الأسئلة. حاول بعد دقيقة.',ai_key:'مفتاح الذكاء الاصطناعي غير صالح. أبلغ المدرب.',auth:'سجّل الدخول من جديد.'};
+    const ERRS={timeout:'تأخر الرد. حاول مرة أخرى أو اضغط «أكمل الشرح».',ai_off:'لم يُفعَّل المدرب الذكي بعد، ويفعّله المدرب من لوحة المدرب.',limit:'وصلت إلى الحد المسموح (15 سؤالًا كل 6 ساعات). حاول لاحقًا.',ai_busy:'المدرب الذكي مشغول الآن لكثرة الأسئلة. حاول بعد دقيقة.',ai_key:'مفتاح الذكاء الاصطناعي غير صالح. أبلغ المدرب.',auth:'سجّل الدخول من جديد.'};
     const bub=(cls,html)=>{const d=document.createElement('div');d.className='bAskM '+cls;d.innerHTML=html;aLog.appendChild(d);d.scrollIntoView({block:'nearest',behavior:'smooth'});return d};
     const slideNow=()=>{const sl=out[cur];return ((sl&&sl.title)||'')+' — '+(ct.innerText||'').replace(/\s+/g,' ').slice(0,500)};
     async function ask(q){q=(q||'').trim();if(!q||busy)return;busy=true;aSend.disabled=true;aTa.value='';
@@ -1395,7 +1455,7 @@ function makeCalc(onUse){
   P.innerHTML=`<div class="chead" dir="rtl"><b>🧮 الآلة الحاسبة العلمية</b><button type="button" class="cx" aria-label="إغلاق">✕</button></div>
   <div class="cscr"><div class="cind"></div><div class="cexp"></div><div class="cres"></div></div>
   <div class="cnav"></div><div class="cfn"></div><div class="cnum"></div>
-  <button type="button" class="btn cuse" dir="rtl" disabled>✓ سجّل النتيجة في الخطوة ٤</button>`;
+  <button type="button" class="btn cuse" dir="rtl" disabled>✓ سجّل النتيجة في الخطوة 4</button>`;
   // [label, key, shiftLabel, shiftKey, class]
   const NAV=[['SHIFT','sh','','','csh'],['MODE','mode','','','cm'],['◀','L','','','cn'],['▶','Rt','','','cn'],['▲','up','','','cn'],['▼','dn','','','cn']];
   const F=[['<span class="kfr"><i>□</i><i>□</i></span>','frac'],['x⁻¹','i','x!','!'],['√','r','∛','u'],['x²','q','x³','k'],['xʸ','^'],['log','l','10ˣ','X'],['ln','n','eˣ','Y'],
@@ -1497,7 +1557,7 @@ function makeCalc(onUse){
   const btn=document.createElement('button');btn.type='button';btn.className='calcbtn';btn.innerHTML='🧮<span>الآلة الحاسبة</span>';btn.setAttribute('aria-expanded','false');
   const toggle=o=>{P.hidden=!o;btn.setAttribute('aria-expanded',o);btn.classList.toggle('on',o);if(o)P.scrollIntoView({block:'nearest',behavior:'smooth'})};
   btn.onclick=()=>toggle(P.hidden);P.querySelector('.cx').onclick=()=>toggle(false);
-  use.onclick=()=>{if(last==null)return;onUse(fill(last));toggle(false)};
+  use.onclick=()=>{if(last==null)return;if(onUse(fill(last),T.join(''))!==false)toggle(false)};
   show();ind();return {btn,panel:P,close:()=>{toggle(false);btn.hidden=true}}}
 
 /* ---------- المسألة التفاعلية ---------- */
@@ -1523,7 +1583,7 @@ function unitCard(p,title,onFinish){
         fb(s,'ليست هذه. حاول مرة أخرى.','bad')};w.appendChild(b)});bd.appendChild(w)};
   const close=s=>{const ok=!s.dataset.miss;s.classList.add(ok?'ok':'shown');s.querySelector('.pstat').textContent=ok?'✓':'تم التصحيح'};
   const go=i=>{const s=steps[i];if(!s)return;s.hidden=false;s.scrollIntoView({block:'nearest',behavior:'smooth'})};
-  /* ١: الرموز ووحدة الطرف الأيسر */
+  /* 1: الرموز ووحدة الطرف الأيسر */
   const s1=mkStep(1,'أولًا: الرموز ووحداتها');
   s1.querySelector('.pbody').insertAdjacentHTML('beforeend','<p class="psub"><b>القانون:</b></p><div class="eqblock">'+kfr(rad(esc(p.law)))+'</div><p class="psub"><b>حيث:</b></p><ul>'+p.sy.map(x=>'<li>'+inl(x)+'</li>').join('')+'</ul>');
   const s2=mkStep(2,'ثانيًا: الطرف الأيسر'),s3=mkStep(3,'ثالثًا: الطرف الأيمن'),s4=mkStep(4,'رابعًا: المقارنة والنتيجة');
@@ -1712,7 +1772,7 @@ function aiCard(){
     log.appendChild(d);return d};
   hist.forEach(m=>bubble(m.role,m.content));
   let busy=false;
-  const ERRS={timeout:'تأخر الرد. حاول مرة أخرى.',ai_off:'لم يفعّل المدرب المساعد الذكي بعد.',limit:'وصلت إلى الحد المسموح (١٥ سؤالًا كل ٦ ساعات). حاول لاحقًا.',ai_busy:'المساعد مشغول الآن لكثرة الأسئلة. حاول بعد دقيقة.',ai_key:'مفتاح المساعد غير صالح. أبلغ المدرب.',auth:'انتهت الجلسة، سجّل الدخول من جديد.'};
+  const ERRS={timeout:'تأخر الرد. حاول مرة أخرى.',ai_off:'لم يفعّل المدرب المساعد الذكي بعد.',limit:'وصلت إلى الحد المسموح (15 سؤالًا كل 6 ساعات). حاول لاحقًا.',ai_busy:'المساعد مشغول الآن لكثرة الأسئلة. حاول بعد دقيقة.',ai_key:'مفتاح المساعد غير صالح. أبلغ المدرب.',auth:'انتهت الجلسة، سجّل الدخول من جديد.'};
   async function send(q,ex){q=(q||'').trim();if(!q||busy)return;busy=true;sb.disabled=true;ta.value='';ex=ex||{};
     bubble('user',ex.show||q);const w=document.createElement('div');w.className='aiMsg bot wait';w.innerHTML='<span class="dots">يفكّر</span>';log.appendChild(w);w.scrollIntoView({block:'nearest',behavior:'smooth'});
     const ctx=('الدرس: '+l.t+'\n'+(s?s.s:'')+(s&&s.ex?'\nمثال: '+s.ex.q+'\n'+s.ex.st.join('\n'):'')).slice(0,3800);
@@ -1821,6 +1881,152 @@ function renderLab(v){
   (window.REFS||[]).filter(f=>f.u.includes(pos.u)).forEach(f=>{const li=document.createElement('li');li.innerHTML=`<b></b><br><small></small>`;li.querySelector('b').textContent=f.t;li.querySelector('small').textContent=f.a;ul.appendChild(li)});
   r.appendChild(ul);i.appendChild(r);
 }
+/* ---------- الاختبارات الفصلية ---------- */
+const EXAM={list:null,cur:null,timer:0,saveT:0};
+/* معرف هذا الجهاز للاختبار: الاختبار يحل من جهاز واحد فقط */
+function exDev(){let d=null;try{d=localStorage.getItem('p101-exdev')}catch(e){}if(!d){d=EXAM.dev||(Math.random().toString(36).slice(2)+Date.now().toString(36));try{localStorage.setItem('p101-exdev',d)}catch(e){}}EXAM.dev=d;return d}
+const EX_OTHER='هذا الاختبار بدأته من جهاز آخر، ويحل من جهاز واحد فقط. أكمله من الجهاز الذي بدأت منه، أو اطلب من المدرب السماح بهذا الجهاز.';
+const examParse=v=>{let t=String(v==null?'':v).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/[٫,]/g,'.').replace(/[−–]/g,'-').replace(/\s/g,'');
+  const m=t.match(/^(-?[\d.]+)×10([⁻⁰¹²³⁴⁵⁶⁷⁸⁹]+)$/);if(m){const e=+m[2].replace(/./g,c=>'⁰¹²³⁴⁵⁶⁷⁸⁹'.indexOf(c)<0?'-':'⁰¹²³⁴⁵⁶⁷⁸⁹'.indexOf(c));t=m[1]+'e'+e}
+  return t!==''&&isFinite(+t)?+t:null};
+/* نافذة تأكيد داخل الصفحة بدل confirm و alert (لا تعمل في بعض المتصفحات المضمنة) */
+/* تعليمات الاختبار: تظهر عند الضغط على «ابدأ الاختبار» */
+function examRules(e){const dur=e.min%60?AR(e.min)+' دقيقة':e.min===60?'ساعة واحدة':AR(e.min/60)+' ساعات';
+  return `<h3>📋 تعليمات ${esc(e.t)}</h3><ol>
+  <li>تأكد من <b>جودة اتصال الإنترنت</b> لديك قبل البدء.</li>
+  <li>تأكد من <b>شحن جهازك</b> قبل البدء في الاختبار.</li>
+  <li><b>جرب الدخول قبل يوم الاختبار</b> من تبويب «الاختبارات»، وتأكد أن رقمك وكلمة مرورك تعمل.</li>
+  <li>فعل <b>وضع عدم الإزعاج</b> في جوالك أثناء الاختبار حتى لا تقطعك المكالمات والإشعارات.</li>
+  <li>مدة الاختبار <b>${dur}</b>، ويبدأ الوقت عند دخول الاختبار برمز الدخول، ولا يتوقف بالخروج من الصفحة أو إغلاقها.</li>
+  <li>لك <b>محاولة واحدة فقط لحل الاختبار كاملا</b>؛ بعد الإرسال لا يمكن إعادة الحل أو تعديل أي إجابة. الدرجة الكلية <b>${AR(e.max)}</b>.</li>
+  <li>عدد الأسئلة <b>${AR(e.n)}</b>: أسئلة نظرية اختيار من متعدد، ثم مسائل حسابية.</li>
+  <li>يمكنك <b>تغيير إجابة الأسئلة النظرية</b> في أي وقت قبل الإرسال.</li>
+  <li class="exRed">المسألة الحسابية <b>أربع خطوات بالترتيب</b>: (1) المعطيات، (2) المطلوب، (3) القانون والحساب، (4) النتيجة.</li>
+  <li class="exRed">في الخطوتين 1 و2: اختر الإجابة ثم اضغط <b>«التالي»</b> للانتقال، وبعد الضغط <b>لا يمكن تغييرها أو الرجوع إليها</b>.</li>
+  <li class="exRed">في الخطوة 3: اختر القانون فتظهر الآلة الحاسبة وفوقها القانون وأرقام التعويض، احسب بها ثم اضغط <b>«سجل النتيجة في الخطوة 4»</b> للانتقال؛ ولا يقبل رقم يكتب بدون حساب.</li>
+  <li class="exRed">في الخطوة 4: تظهر النتيجة تلقائيا ولا تكتب يدويا، ويمكنك تصحيحها بزر «أعد الحساب بالآلة الحاسبة».</li>
+  <li class="exRed">في المسائل الحسابية: إذا توقفت عند خطوة تحسب لك درجات الخطوات التي أنهيتها فقط.</li>
+  <li>استخدم <b>الآلة الحاسبة الموجودة في الاختبار فقط</b>؛ فالنتيجة لا تسجل إلا منها.</li>
+  <li>تحفظ إجاباتك تلقائيا؛ إذا انقطع الإنترنت ادخل مرة أخرى وأكمل من حيث توقفت.</li>
+  <li>إذا واجهت أي مشكلة أثناء الاختبار <b>أبلغ المدرب فورا</b>، ولا تغلق الصفحة أو تبدأ من جهاز آخر.</li>
+  <li>بعد الانتهاء اضغط <b>«إنهاء الاختبار وإرساله»</b>، وإذا لم تضغطه يرسل تلقائيا عند انتهاء الوقت. لا تظهر الدرجة بعد الإرسال بل تصل إلى المدرب.</li></ol>`}
+/* لوحة الآلة الحاسبة المنبثقة: أعلاها القانون المختار وأرقام التعويض، والناتج يسجل منها فقط بعد حساب فعلي (لا يقبل رقم بدون عملية) */
+function calcSheet(law,giv,onRes){document.querySelectorAll('.exSheet').forEach(x=>x.remove());document.body.classList.remove('exSheetOn');
+  const sh=document.createElement('div');sh.className='exSheet';
+  sh.innerHTML='<div class="exSH"><div class="exSHt"><div class="exWl"></div><div class="exWg"></div><div class="exSHm" hidden></div></div><button type="button" class="exSHx" aria-label="إغلاق">✕</button></div>';
+  sh.querySelector('.exWl').innerHTML='<b>القانون:</b> '+'<span class="exIso">'+inl(law)+'</span>'+' <small class="exMine">(حسب اختيارك)</small>';
+  sh.querySelector('.exWg').innerHTML='<b>التعويض:</b> '+'<span class="exIso">'+inl(giv)+'</span>'+' <small class="exMine">(حسب اختيارك)</small>';
+  const m=sh.querySelector('.exSHm'),close=()=>{sh.remove();document.body.classList.remove('exSheetOn')};
+  const C=makeCalc((v,expr)=>{const n=examParse(v);if(n==null)return;
+    if(/^[\s\d.,−\-]*$/.test(String(expr||''))){m.hidden=false;m.textContent='عوض في القانون واحسب بالآلة الحاسبة، ولا تكتب الناتج مباشرة.';return false}
+    close();onRes(n)});
+  C.panel.hidden=false;C.panel.querySelector('.cx').style.display='none';sh.appendChild(C.panel);document.body.appendChild(sh);document.body.classList.add('exSheetOn');
+  sh.querySelector('.exSHx').onclick=close}
+function examAsk(msg,yes,no,html){return new Promise(res=>{const w=document.createElement('div');w.className='exModal';
+  w.innerHTML=`<div class="exMBox" role="dialog"><p></p><div class="exMBtns"><button type="button" class="btn exY"></button>${no?'<button type="button" class="exMNo"></button>':''}</div></div>`;
+  if(html){const d=document.createElement('div');d.className='exRules';d.innerHTML=html;w.querySelector('p').replaceWith(d)}else w.querySelector('p').textContent=msg;w.querySelector('.exY').textContent=yes||'حسنا';if(no)w.querySelector('.exMNo').textContent=no;
+  const done=v=>{w.remove();res(v)};w.querySelector('.exY').onclick=()=>done(true);if(no)w.querySelector('.exMNo').onclick=()=>done(false);document.body.appendChild(w)})}
+const examMM=s=>{s=Math.max(0,Math.round(s));const m=Math.floor(s/60),x=s%60;return AR(m)+':'+AR(String(x).padStart(2,'0'))};
+function examBar(){const b=$('examBar');if(!b)return;const L=(EXAM.list||[]).filter(e=>e.open&&e.status!=='done');
+  b.hidden=true;if(L.length)b.innerHTML=`<span>📝 <b>${esc(L[0].t)}</b> متاح الآن</span><span class="go">${L[0].status==='started'?'أكمل الاختبار':'ادخل الاختبار'} ←</span>`;
+  const nb=$('examBtn');if(nb)nb.hidden=true}
+function examCheck(){if(!API||!AUTH)return;SYNC.post({a:'exams',token:AUTH.token}).then(r=>{if(r&&r.ok){EXAM.list=r.list;examBar();if(pos.t==='exam'&&!EXAM.cur)render()}}).catch(()=>{})}
+function examOpen(){pos.t='exam';closeNav();buildNav();render()}
+function renderExam(v){
+  const i=wrap(v);clearInterval(EXAM.timer);document.body.classList.remove('examMode');{const d=document.getElementById('exDoneBar');if(d)d.remove()}document.querySelectorAll('.exSheet').forEach(x=>x.remove());document.body.classList.remove('exSheetOn');
+  if(!API||!AUTH){i.appendChild(card('📝 الاختبارات الفصلية','تظهر الاختبارات الفصلية للمتدربين بعد تسجيل الدخول برقمهم التدريبي.'));return}
+  if(EXAM.cur)return examPaper(i);
+  const c=card('📝 الاختبارات الفصلية','أهلا '+esc((AUTH.name||'').split(' ')[0])+'. يفتح المدرب الاختبار لجميع الشعب، فيظهر هنا. لكل اختبار محاولة واحدة ووقت محدد، وتصل درجتك إلى المدرب تلقائيا.');i.appendChild(c);
+  const box=document.createElement('div');box.innerHTML='<p class="sub"><span class="spin"></span> جار التحميل…</p>';c.appendChild(box);
+  SYNC.post({a:'exams',token:AUTH.token}).then(r=>{
+    if(r.error==='auth')return SYNC.logout(true);
+    if(!r.ok){box.innerHTML='<p class="sub">تعذر تحميل الاختبارات. تأكد أن المدرب نشر الإصدار الجديد من الخادم.</p>';return}
+    EXAM.list=r.list;examBar();
+    if(!r.list.length){box.innerHTML='<p class="exEmpty">لا يوجد اختبار متاح الآن. سيظهر هنا عندما يفتحه المدرب.</p>';return}
+    box.innerHTML='';r.list.forEach(e=>{const d=document.createElement('div');d.className='exItem';
+      const info=`عدد الأسئلة ${AR(e.n)} (اختيار من متعدد) · الدرجة ${AR(e.max)} · المدة ${e.min%60?AR(e.min)+' دقيقة':e.min===60?'ساعة':AR(e.min/60)+' ساعات'} · محاولة واحدة`;
+      d.innerHTML=`<h3>${esc(e.t)}</h3>${e.cover?`<p class="exCov">${esc(e.cover)}</p>`:''}<p class="exInfo">${info}</p><div class="exAct"></div>`;
+      const a=d.querySelector('.exAct');
+      if(e.status==='done'){a.innerHTML=`<div class="exDone">✓ تم تسليم الاختبار، ووصلت إجاباتك إلى المدرب.</div>`}
+      else{const b=document.createElement('button');b.className='btn exStart';b.textContent=e.status==='started'?`أكمل الاختبار (متبقي ${examMM(e.left)})`:'ابدأ الاختبار';
+        b.onclick=async()=>{EXAM.code='';if(e.status!=='started'){if(!(await examAsk('','لنبدأ الاختبار','ليس الآن',examRules(e))))return;setTimeout(()=>{const x=document.querySelector('.exCodeIn');if(x)x.focus()},80);if(!(await examAsk('','دخول الاختبار','رجوع',`<h3>🔑 رمز الدخول</h3><label class="exCodeL">اكتب رمز الدخول الذي أرسله المدرب لشعبتك<input class="exCodeIn" type="text" inputmode="numeric" maxlength="4" dir="ltr" autocomplete="off" placeholder="0000" oninput="EXAM.code=this.value"></label>`)))return}
+          b.disabled=true;b.textContent='جار تجهيز الأسئلة…';
+          SYNC.post({a:'examstart',token:AUTH.token,id:e.id,code:EXAM.code||'',dev:exDev()}).then(s=>{
+            if(s.status==='done'){e.status='done';return render()}
+            if(!s.ok){b.disabled=false;b.textContent='ابدأ الاختبار';examAsk(s.error==='exam_closed'?'أغلق المدرب هذا الاختبار.':s.error==='bad_code'?'رمز الدخول غير صحيح. اطلب الرمز من المدرب ثم حاول مرة أخرى.':s.error==='other_device'?EX_OTHER:'تعذر بدء الاختبار، حاول مرة أخرى.');return}
+            EXAM.cur={id:e.id,t:s.t,max:s.max,qs:s.qs,ans:s.answers,end:Date.now()+s.left*1000};render()}).catch(()=>{b.disabled=false;b.textContent='ابدأ الاختبار';examAsk('تعذر الاتصال. تحقق من الإنترنت ثم حاول مرة أخرى.')})};
+        a.appendChild(b)}
+      box.appendChild(d)})
+  }).catch(()=>{box.innerHTML='<p class="sub">تعذر الاتصال. تحقق من الإنترنت ثم أعد فتح الصفحة.</p>'});
+}
+/* العلامة المائية: اسم المتدرب ورقمه متكرران بخط باهت ومائل فوق صفحة الاختبار كلها، فتظهر في أي صورة للشاشة */
+function examWM(){let w=document.getElementById('exWM');if(!w){w=document.createElement('div');w.id='exWM';w.className='exWM';w.setAttribute('aria-hidden','true');document.body.appendChild(w)}
+  const t=String((AUTH&&AUTH.name)||'')+' · '+String((AUTH&&AUTH.id)||''),x=t.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="260" height="170"><text x="130" y="95" text-anchor="middle" transform="rotate(-28 130 85)" font-family="Tahoma,Arial,sans-serif" font-size="17" font-weight="700" fill="#808080">${x}</text></svg>`;
+  w.style.backgroundImage='url("data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg)+'")'}
+document.addEventListener('copy',e=>{if(document.body.classList.contains('examMode')){e.preventDefault()}});
+document.addEventListener('contextmenu',e=>{if(document.body.classList.contains('examMode'))e.preventDefault()});
+function examPaper(i){
+  const X=EXAM.cur;document.body.classList.add('examMode');examWM();
+  const bar=document.createElement('div');bar.className='exBar';bar.innerHTML=`<b>${esc(X.t)}</b><span class="exCnt"></span><span class="exTime"></span>`;i.appendChild(bar);
+  const isDone=(a,qi)=>X.qs[qi].st?Array.isArray(a)&&a.length===X.qs[qi].st.length:a!=null;
+  const cnt=()=>{bar.querySelector('.exCnt').textContent=`أجبت ${AR(X.ans.filter(isDone).length)} من ${AR(X.qs.length)}`;const all=X.ans.filter(isDone).length===X.qs.length;let dn=document.getElementById('exDoneBar');
+    if(all&&!dn){dn=document.createElement('div');dn.id='exDoneBar';dn.className='exDoneBar';dn.innerHTML='<span>✓ أنهيت جميع الأسئلة</span><button type="button" class="btn">إنهاء الاختبار وإرساله</button>';dn.querySelector('button').onclick=()=>submit(false);document.body.appendChild(dn)}
+    if(!all&&dn)dn.remove()};
+  const save=()=>{clearTimeout(EXAM.saveT);EXAM.saveT=setTimeout(()=>SYNC.post({a:'examsave',token:AUTH.token,id:X.id,answers:X.ans,dev:exDev()}).then(r=>{if(r&&r.error==='other_device'&&EXAM.cur){EXAM.cur=null;clearInterval(EXAM.timer);document.body.classList.remove('examMode','exSheetOn');document.querySelectorAll('.exSheet,#exDoneBar').forEach(x=>x.remove());examAsk(EX_OTHER).then(()=>render())}}).catch(()=>{}),500)};
+  const STEPS=['المعطيات','المطلوب','القانون المستخدم والتعويض والحساب بالآلة الحاسبة','النتيجة'];
+  const pts=w=>w===1?'درجة واحدة':w===2?'درجتان':AR(w)+' درجات';
+  X.qs.forEach((q,qi)=>{const d=document.createElement('div');d.className='qcard exQ';
+    d.innerHTML=`<div class="qn">السؤال ${AR(qi+1)} من ${AR(X.qs.length)} <span class="exPts">(${pts(q.w||1)}${q.st?'، نصف درجة لكل خطوة':''})</span></div><div class="qq"></div>`;
+    d.querySelector('.qq').innerHTML=inl(q.q);
+    if(!q.st){const o=document.createElement('div');o.className='opts';d.appendChild(o);
+      q.o.forEach((t,oi)=>{const b=document.createElement('button');b.type='button';b.innerHTML=`<span class="exL">${'ABCD'[oi]}</span> `+inl(t);b.setAttribute('aria-pressed',X.ans[qi]===oi);
+        b.onclick=()=>{X.ans[qi]=oi;o.querySelectorAll('button').forEach((x,xi)=>x.setAttribute('aria-pressed',xi===oi));cnt();save()};o.appendChild(b)});
+      i.appendChild(d);return}
+    /* مسألة حسابية: خطوة بعد خطوة، ولا ينتقل المتدرب حتى يجيب عن الخطوة الحالية، والحساب بالآلة الحاسبة شرط للانتقال إلى النتيجة */
+    if(!Array.isArray(X.ans[qi]))X.ans[qi]=[];
+    const box=document.createElement('div');box.className='exSteps';d.appendChild(box);
+    const draw=()=>{box.innerHTML='';const A=X.ans[qi],cur=A.length;
+      q.st.forEach((opts,j)=>{if(j>cur)return;const live=j===cur;let pick=live?null:A[j],calcUsed=false;
+        const sb=document.createElement('div');sb.className='exStep'+(live?' live':' done');
+        sb.innerHTML=`<div class="exStH"><span class="exN">${AR(j+1)}</span>${STEPS[j]}${live?'':' <span class="exOk">✓ تم</span>'}</div><div class="opts"></div>`;
+        const o=sb.querySelector('.opts');
+        /* النتيجة لا تكتب يدويا: تسجل من الآلة الحاسبة فقط، ويمكن إعادة الحساب بنفس القانون والتعويض */
+        if(!Array.isArray(opts)){o.className='exRes';o.innerHTML=`<input type="text" dir="ltr" readonly tabindex="-1" placeholder="تسجل من الآلة الحاسبة" autocomplete="off"><span class="exU" dir="ltr">${esc(opts.u||'')}</span>`;
+          const inp=o.querySelector('input');if(A[j]!=null)inp.value=A[j];
+          if(A[2]!=null&&typeof makeCalc==='function'){const rb=document.createElement('button');rb.type='button';rb.className='btn exOpenCalc';rb.innerHTML='🧮 أعد الحساب بالآلة الحاسبة';sb.appendChild(rb);
+            rb.onclick=()=>calcSheet(q.st[2][A[2]],q.st[0][A[0]],n=>{A[3]=n;cnt();save();draw();setTimeout(()=>{const r=box.querySelector('.exRes');if(r){r.closest('.exStep').classList.add('flash');r.scrollIntoView({block:'center',behavior:'smooth'})}},80)})}
+          box.appendChild(sb);return}
+        opts.forEach((t,oi)=>{const b=document.createElement('button');b.type='button';b.innerHTML=`<span class="exL">${'ABCD'[oi]}</span> `+inl(t);b.setAttribute('aria-pressed',pick===oi);b.disabled=!live;
+          b.onclick=()=>{pick=oi;o.querySelectorAll('button').forEach((x,xi)=>x.setAttribute('aria-pressed',xi===oi));
+            if(j===q.st.length-1){A[j]=oi;cnt();save()}if(j===2&&showWork)showWork(oi);upd()};o.appendChild(b)});
+        let nx=null,note=null,work=null,showWork=null;
+        if(live&&j===2&&typeof makeCalc==='function'){
+          const ob=document.createElement('button');ob.type='button';ob.className='btn exOpenCalc';ob.innerHTML='🧮 افتح الآلة الحاسبة';ob.hidden=true;sb.appendChild(ob);
+          const go=()=>{if(pick==null){note.textContent='اختر القانون أولا.';return}calcSheet(opts[pick],q.st[0][A[0]],n=>{A[j]=pick;A[3]=n;cnt();save();draw();setTimeout(()=>{const r=box.querySelector('.exRes');if(r){r.closest('.exStep').classList.add('flash');r.scrollIntoView({block:'center',behavior:'smooth'})}},80)})};
+          ob.onclick=go;work=true;showWork=()=>{ob.hidden=false;go()}}
+        if(live&&j<q.st.length-1){note=document.createElement('p');note.className='exNote';nx=document.createElement('button');nx.type='button';nx.className='btn exNext';nx.textContent='التالي ←';
+          nx.onclick=()=>{if(pick==null||j===2)return;A[j]=pick;cnt();save();draw()};sb.append(note);if(j!==2)sb.append(nx)}
+        /* خطوة القانون لا تنتهي بزر «التالي»، بل بتسجيل الناتج من الآلة الحاسبة */
+        const upd=()=>{if(!note)return;if(nx)nx.disabled=pick==null;
+          note.textContent=pick==null?(j===2?'اختر القانون، فتظهر الآلة الحاسبة مع أرقام التعويض.':'اختر إجابة ثم اضغط «التالي».'):j===2?'احسب الناتج بالآلة الحاسبة، ثم اضغط «سجل النتيجة في الخطوة 4».':''};upd();
+        box.appendChild(sb)})};
+    draw();i.appendChild(d)});
+  cnt();
+  const f=card('إنهاء الاختبار');f.insertAdjacentHTML('beforeend','<p class="sub">إذا لم تضغط الزر يرسل الاختبار تلقائيا بإجاباتك المحفوظة عند انتهاء الوقت.</p>');const sb=document.createElement('button');sb.className='btn exSubmit';sb.textContent='إنهاء الاختبار وإرساله';const msg=document.createElement('p');msg.className='rmsg';f.append(sb,msg);i.appendChild(f);
+  const submit=async auto=>{const left=X.qs.length-X.ans.filter(isDone).length;
+    if(!auto&&!(await examAsk(left?`لم تكمل ${AR(left)} من الأسئلة. هل تنهي الاختبار وترسله الآن؟ لا يمكنك تعديله بعد الإرسال.`:'هل تنهي الاختبار وترسله الآن؟ لا يمكنك تعديله بعد الإرسال.','إنهاء وإرسال','رجوع')))return;
+    clearInterval(EXAM.timer);sb.disabled=true;msg.className='rmsg';msg.textContent='جار التسليم…';
+    const go=n=>SYNC.post({a:'examsubmit',token:AUTH.token,id:X.id,answers:X.ans,dev:exDev()}).then(r=>{if(r.error==='other_device'){sb.disabled=false;msg.className='rmsg bad';msg.textContent=EX_OTHER;return}if(!r.ok)throw 0;
+        EXAM.cur=null;document.body.classList.remove('examMode');{const d=document.getElementById('exDoneBar');if(d)d.remove()}document.querySelectorAll('.exSheet').forEach(x=>x.remove());document.body.classList.remove('exSheetOn');(EXAM.list||[]).forEach(e=>{if(e.id===X.id){e.status='done';e.score=r.score}});
+        if(pos.t!=='exam'){examBar();return}const v=$('view');const w=wrap(v);const c=card('✓ تم تسليم الاختبار',`${esc(X.t)}`);c.insertAdjacentHTML('beforeend',`<div class="exScore">وصلت إجاباتك إلى المدرب.</div>`);
+        const bk=document.createElement('button');bk.className='btn';bk.textContent='العودة إلى الاختبارات';bk.onclick=()=>render();c.appendChild(bk);w.appendChild(c);examBar()})
+      .catch(()=>{if(n<4)return setTimeout(()=>go(n+1),2500);sb.disabled=false;msg.className='rmsg bad';msg.textContent='تعذر التسليم. تحقق من الإنترنت ثم اضغط «تسليم الاختبار» مرة أخرى؛ إجاباتك محفوظة.'});
+    go(0)};
+  sb.onclick=()=>submit(false);
+  const tick=()=>{const s=(X.end-Date.now())/1000;const t=bar.querySelector('.exTime');t.textContent='⏱ '+examMM(s);t.classList.toggle('low',s<=300);if(s<=0){clearInterval(EXAM.timer);msg.textContent='انتهى الوقت، جار تسليم إجاباتك…';submit(true)}};
+  tick();EXAM.timer=setInterval(tick,1000);
+}
 function renderRefs(v){
   const i=wrap(v);
   const c=card('المراجع العربية للمقرر','المراجع المعتمدة في الحقيبة التدريبية. الأمثلة والتطبيقات في المنصة كُتبت بأسلوب هذه المراجع.');
@@ -1868,6 +2074,7 @@ function showLogin(){
   $('loginWrap').hidden=false;let step=1,lastId='',role='s';
   const ROLES={s:{sub:'سجّل دخولك برقمك التدريبي',lab:'الرقم التدريبي',im:'numeric',hint:'أول مرة تدخل؟ اكتب رقمك التدريبي واترك كلمة المرور فارغة، ثم اختر كلمة مرورك.',val:''},
     t:{sub:'دخول المدرب إلى لوحة المتابعة',lab:'اسم المستخدم',im:'text',hint:'أول مرة؟ أنشئ حساب المدرب من <a href="teacher.html">هنا</a>.',val:''},
+    e:{sub:'دخول الاختبارات الفصلية',lab:'الرقم التدريبي',im:'numeric',hint:'ادخل برقمك التدريبي. إذا كنت مسجلا في المنصة فكلمة المرور نفسها، وإذا كان أول دخول لك فاترك كلمة المرور فارغة ثم اختر كلمة مرورك.',val:''},
     d:{sub:'الحساب التجريبي الخاص بالمدرب',lab:'اسم المستخدم',im:'text',hint:'اسم المستخدم demo، وكلمة المرور يحددها المدرب من لوحته.',val:'demo'}};
   const setRole=r=>{role=r;step=1;$('lgStep1').hidden=false;$('lgStep2').hidden=true;$('lgBtn').textContent='دخول';
     document.querySelectorAll('#lgTabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.r===r));
@@ -1875,17 +2082,17 @@ function showLogin(){
     (R.val?$('lgPw'):$('lgId')).focus()};
   document.querySelectorAll('#lgTabs button').forEach(b=>b.onclick=()=>setRole(b.dataset.r));
   const msg=(m,bad)=>{$('lgMsg').textContent=m;$('lgMsg').className='lgMsg'+(bad?' bad':'')};
-  const ERR={not_found:'هذا الرقم غير مسجّل في المنصة. تأكد منه أو راجع المدرب.',wrong_password:'كلمة المرور غير صحيحة. إذا نسيتها اطلب من المدرب إعادة تعيينها.',short_password:'كلمة المرور قصيرة، اكتب ٤ أحرف أو أرقام على الأقل.',already_set:'تم تعيين كلمة المرور مسبقًا، ادخل بها.'};
-  const ok=r=>{const demo=/^demo$/i.test(lastId);localStorage.setItem('p101-auth',JSON.stringify({id:demo?'DEMO':lastId,token:r.token,name:r.name,section:r.section,demo}));location.reload()};
+  const ERR={not_in_exam:'رقمك غير موجود في كشف الاختبارات. راجع المدرب.',not_found:'هذا الرقم غير مسجّل في المنصة. تأكد منه أو راجع المدرب.',wrong_password:'كلمة المرور غير صحيحة. إذا نسيتها اطلب من المدرب إعادة تعيينها.',short_password:'كلمة المرور قصيرة، اكتب 4 أحرف أو أرقام على الأقل.',already_set:'تم تعيين كلمة المرور مسبقًا، ادخل بها.'};
+  const ok=r=>{const demo=/^demo$/i.test(lastId);localStorage.setItem('p101-auth',JSON.stringify({id:demo?'DEMO':lastId,token:r.token,name:r.name,section:r.section,demo,exam:role==='e'}));if(role==='e')store.set('p101-pos',Object.assign({},pos,{t:'exam'}));location.reload()};
   $('loginForm').onsubmit=e=>{e.preventDefault();const b=$('lgBtn');b.disabled=true;msg('جارٍ التحقق…');
     const id=$('lgId').value.replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).trim();lastId=id;
     if(role==='t'){SYNC.post({a:'tlogin',user:id,pw:$('lgPw').value}).then(r=>{b.disabled=false;
         if(r.ok){localStorage.setItem('p101-tauth',JSON.stringify(r.token));location.href='teacher.html';return}
         msg(r.error==='not_setup'?'لم يُنشأ حساب المدرب بعد. افتح لوحة المدرب لإنشائه.':r.error==='wrong_user'?'اسم المستخدم غير صحيح.':ERR[r.error]||'تعذّر الدخول.',1)}).catch(()=>{b.disabled=false;msg('تعذّر الاتصال بالخادم.',1)});return}
     let req;
-    if(step===1)req=SYNC.post({a:'login',id,pw:$('lgPw').value,device:SYNC.dev});
+    if(step===1)req=SYNC.post({a:role==='e'?'exlogin':'login',id,pw:$('lgPw').value,device:SYNC.dev});
     else{const a=$('lgNew1').value,c=$('lgNew2').value;if(a.length<4){b.disabled=false;return msg(ERR.short_password,1)}if(a!==c){b.disabled=false;return msg('كلمتا المرور غير متطابقتين.',1)}
-      req=SYNC.post({a:'setpw',id,pw:a,device:SYNC.dev})}
+      req=SYNC.post({a:role==='e'?'exsetpw':'setpw',id,pw:a,device:SYNC.dev})}
     req.then(r=>{b.disabled=false;
       if(r.firstTime){step=2;$('lgStep1').hidden=true;$('lgStep2').hidden=false;$('lgSub').textContent='أهلًا '+r.name+'، هذا أول دخول لك';b.textContent='حفظ كلمة المرور والدخول';msg('');$('lgNew1').focus();return}
       if(r.ok&&r.token)return ok(r);
@@ -1896,19 +2103,21 @@ if(API&&!AUTH&&TAUTH){const u=$('userChip');u.hidden=false;u.textContent='👨�
 else if(API&&!AUTH){showLogin()}
 else{
   if(API&&AUTH){
-    const u=$('userChip');u.hidden=false;u.textContent=AUTH.demo?'🧪 حساب تجريبي':'👤 '+(AUTH.name||AUTH.id).split(' ')[0];u.title='خروج';
+    if(AUTH.exam){document.body.classList.add('examOnly');pos.t='exam'}else if(pos.t==='exam')pos.t='sum';
+    const u=$('userChip');u.hidden=false;u.textContent=(AUTH.exam?'📝 ':AUTH.demo?'🧪 ':'👤 ')+(AUTH.demo&&!AUTH.exam?'حساب تجريبي':(AUTH.name||AUTH.id).split(' ')[0])+(AUTH.exam?' · خروج':'');u.title='خروج';
     u.onclick=()=>{if(AUTH.demo){if(confirm('الخروج من الحساب التجريبي والعودة إلى لوحة المدرب؟')){try{localStorage.removeItem('p101-auth')}catch(e){}location.href='teacher.html'}return}
       if(confirm('تسجيل الخروج من حساب '+(AUTH.name||AUTH.id)+'؟'))SYNC.logout()};
-    SYNC.post({a:'me',token:AUTH.token}).then(r=>{
+    if(!AUTH.exam)SYNC.post({a:'me',token:AUTH.token}).then(r=>{
       if(r.error==='auth')return SYNC.logout(true);
       if(!r.ok)return;
       let ch=false;(r.done||[]).forEach(k=>{if(!done.has(k)){done.add(k);ch=true}});
       if(ch){store.set('p101-done',[...done]);buildNav();updateProgress();render()}
     }).catch(()=>{});
+    if(AUTH.exam)setInterval(()=>{if(document.visibilityState==='visible'&&!EXAM.cur&&pos.t==='exam')render()},120e3);
     SYNC.flush();
   }
   buildNav();updateProgress();render();
-  setTimeout(voiceTest,600);
+  if(!(AUTH&&AUTH.exam))setTimeout(voiceTest,600);
 }
 /* الرموز السفلية: Vi ← V<sub>i</sub> */
 (()=>{const RX=/([A-Za-zΔμ]+)_([A-Za-z0-9]+)|(?<![A-Za-z])(V|F|f|T|KE|PE|ME|μ)([ifsk])(?![a-z0-9])|(μ)/g,NS='http://www.w3.org/2000/svg',SKIP=/^(SCRIPT|STYLE|TEXTAREA|INPUT|SUB|tspan|OPTION|TITLE)$/;
