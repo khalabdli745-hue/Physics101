@@ -221,7 +221,7 @@ async function load(){
   try{const r=await api({a:'tdata',token:TOKEN});if(!r.ok){if(r.error!=='auth')m.innerHTML=`<p class="empty">${esc(errText(r.error))}</p>`;return}
     DATA=r;DATA.students.forEach(enrich);DATA.demo=DATA.students.find(x=>x.id==='DEMO')||null;DATA.students=DATA.students.filter(x=>x.id!=='DEMO');DATA.sections=DATA.sections.filter(x=>DATA.students.some(y=>y.sectionId===x.id)||!(DATA.demo&&DATA.demo.sectionId===x.id));STATS=null;
     $('#sheetLink').innerHTML=r.sheetUrl?`<a href="${esc(r.sheetUrl)}" target="_blank" rel="noopener">جدول Google ↗</a>`:'';
-    draw()}catch(e){m.innerHTML='<p class="empty">تعذّر الاتصال بالخادم. تحقق من الإنترنت ثم اضغط «تحديث».</p>'}
+    draw();exPrefetch()}catch(e){m.innerHTML='<p class="empty">تعذّر الاتصال بالخادم. تحقق من الإنترنت ثم اضغط «تحديث».</p>'}
 }
 function draw(){if(!DATA)return;({exams:drawExams,students:drawStudents,stats:drawStats,reports:drawReports,ratings:drawRatings,ai:drawAI,sections:drawSections,import:drawImport,export:drawExport,demo:drawDemo,settings:drawSettings}[tab]||drawStudents)()}
 
@@ -574,9 +574,14 @@ async function drawTrainer(m,ctl,st,sec,secLabel,today,n,logged){
 /* ---------- الشعب ---------- */
 /* ---------- الاختبارات الفصلية ---------- */
 let EXR=null,EXSEC=ls.get('p101-exsec','all');
+/* تحميل تبويب الاختبارات مسبقا في الخلفية بعد فتح اللوحة، فيفتح التبويب فورا */
+let EXP=null;function exPrefetch(){if(!EXP)EXP=api({a:'texams',token:TOKEN}).then(r=>{if(r&&r.ok){EXR=r;if(tab==='exams')exDraw()}return r}).catch(()=>null).finally(()=>{EXP=null});return EXP}
 async function drawExams(){
-  const m=$('#main');if(!EXR)m.innerHTML='<p class="empty"><span class="spin"></span> جارٍ تحميل الاختبارات…</p>';
-  let r;try{r=await api({a:'texams',token:TOKEN})}catch(e){m.innerHTML='<p class="empty">تعذّر الاتصال بالخادم.</p>';return}
+  const m=$('#main');
+  /* المعروض أولا: آخر بيانات محملة فورا، ثم تحدث في الخلفية */
+  if(EXR)exDraw();else m.innerHTML='<p class="empty"><span class="spin"></span> جار تحميل الاختبارات…</p>';
+  let r;try{r=EXP?await EXP:await api({a:'texams',token:TOKEN})}catch(e){if(!EXR)m.innerHTML='<p class="empty">تعذر الاتصال بالخادم.</p>';return}
+  if(!r){try{r=await api({a:'texams',token:TOKEN})}catch(e){if(!EXR)m.innerHTML='<p class="empty">تعذر الاتصال بالخادم.</p>';return}}
   if(!r.ok){m.innerHTML=`<p class="empty">${r.error==='unknown_action'?'انسخ ملف code.gs الجديد إلى Google Apps Script وانشر إصدارًا جديدًا حتى يعمل قسم الاختبارات.':esc(errText(r.error))}</p>`;return}
   EXR=r;if(tab!=='exams')return;exDraw()}
 /* الأعمال الفصلية (20) لمتدربي المنصة فقط، تحسب تلقائيا من: «اختبر نفسك» و«الأمثلة والتمارين التفاعلية» و«التجارب العملية التفاعلية»
