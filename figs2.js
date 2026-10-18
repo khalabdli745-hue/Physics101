@@ -287,3 +287,58 @@ g+=T(wL[0]-74,wL[1]-8,'سلك توصيل','class="lb xs" text-anchor="end"');
 g+=T(445,230,'C = ε₀·A / d','class="lb ac" text-anchor="end" direction="ltr"')+T(445,254,'C = q / V','class="lb ac" text-anchor="end" direction="ltr"');
 F.cap3D=`<figure class="fig"><svg viewBox="-10 -50 460 415" role="img" aria-label="مكثف ذو لوحين متوازيين ثلاثي الأبعاد موصل بمصدر جهد">${g}</svg><figcaption>المكثف ذو اللوحين المتوازيين موصل بمصدر جهد مستمر من جانبيه: اللوح الموجب يحمل +q والسالب −q، ومساحة كل لوح A، والمسافة بينهما d، وبينهما وسط عازل ومجال كهربائي منتظم E</figcaption></figure>`;
 })();
+/* رموز المقاومة في الدوائر الكهربائية وأنواع المقاومات ثلاثية الأبعاد (درس 4-5) */
+(function(){
+const F=window.FIGS=window.FIGS||{};
+const svg=(vb,body,cap)=>`<figure class="fig"><svg viewBox="${vb}" role="img" aria-label="${cap}">${body}</svg><figcaption>${cap}</figcaption></figure>`;
+const T=(x,y,s,o='')=>`<text x="${x}" y="${y}" text-anchor="middle" ${o}>${s}</text>`;
+const W='stroke="var(--ink)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"';
+const wires=(x,y,h)=>`<line x1="${x-62}" y1="${y}" x2="${x-h}" y2="${y}" ${W}/><line x1="${x+h}" y1="${y}" x2="${x+62}" y2="${y}" ${W}/>`;
+const zig=(x,y)=>wires(x,y,30)+`<polyline points="${x-30},${y} ${x-25},${y-12} ${x-15},${y+12} ${x-5},${y-12} ${x+5},${y+12} ${x+15},${y-12} ${x+25},${y+12} ${x+30},${y}" ${W}/>`;
+const box=(x,y)=>wires(x,y,30)+`<rect x="${x-30}" y="${y-12}" width="60" height="24" rx="2" ${W}/>`;
+const arrowM=`<defs><marker id="rsA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4.5" markerHeight="4.5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#F7931E"/></marker></defs>`;
+const vr=(x,y)=>zig(x,y)+`<line x1="${x-28}" y1="${y+26}" x2="${x+28}" y2="${y-26}" stroke="#F7931E" stroke-width="3" marker-end="url(#rsA)"/>`;
+const pot=(x,y)=>zig(x,y)+`<line x1="${x}" y1="${y+42}" x2="${x}" y2="${y+16}" stroke="#F7931E" stroke-width="3" marker-end="url(#rsA)"/>`;
+const ldr=(x,y)=>zig(x,y)+[-14,4].map(d=>`<line x1="${x+d-14}" y1="${y-44}" x2="${x+d}" y2="${y-20}" stroke="#F7931E" stroke-width="2.6" marker-end="url(#rsA)"/>`).join('');
+const thm=(x,y)=>box(x,y)+`<polyline points="${x-30},${y+22} ${x-18},${y+22} ${x+22},${y-22}" stroke="#F7931E" stroke-width="2.6" fill="none"/><text x="${x+28}" y="${y-22}" font-size="13" font-weight="800" fill="#F7931E" direction="ltr">t°</text>`;
+const cellS=(fn,x,y,a,b)=>fn(x,y)+T(x,y+60,a,'class="lb sm"')+T(x,y+79,b,'class="lb xs"');
+F.resSymbols=svg('0 0 480 300',arrowM
+ +cellS(zig,80,60,'مقاومة ثابتة','الرمز المتعرج')+cellS(box,240,60,'مقاومة ثابتة','الرمز الدولي (مستطيل)')+cellS(vr,400,60,'مقاومة متغيرة','(ريوستات) سهم مائل')
+ +cellS(pot,80,200,'مجزئ الجهد','(بوتنشيوميتر) ثلاثة أطراف')+cellS(ldr,240,200,'مقاومة ضوئية','تقل مقاومتها بالضوء')+cellS(thm,400,200,'مقاومة حرارية','تتغير مقاومتها بالحرارة'),
+ 'رموز المقاومة في الدوائر الكهربائية');
+/* الأنواع ثلاثية الأبعاد */
+const C=['#111827','#7C2D12','#DC2626','#EA580C','#EAB308','#16A34A','#2563EB','#7C3AED','#6B7280','#F9FAFB'],G='#D4AF37';
+const leg=(x1,y1,x2,y2)=>`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#9CA3AF" stroke-width="3" stroke-linecap="round"/><line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#E5E7EB" stroke-width="1.2" stroke-linecap="round"/>`;
+const grad=(id,a,b,c)=>`<linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${a}"/><stop offset=".45" stop-color="${b}"/><stop offset="1" stop-color="${c}"/></linearGradient>`;
+const defs=`<defs>${grad('rtC','#FDE7C3','#E8C48E','#A87B3E')}${grad('rtM','#BFDBFE','#60A5FA','#1E40AF')}${grad('rtW','#FFFFFF','#E5E7EB','#9CA3AF')}${grad('rtP','#94A3B8','#475569','#1E293B')}${grad('rtB','#FDE68A','#F59E0B','#92400E')}${grad('rtK','#4B5563','#1F2937','#030712')}${grad('rtG','#86EFAC','#22C55E','#14532D')}<radialGradient id="rtL" cx=".4" cy=".35" r=".7"><stop offset="0" stop-color="#FEF3C7"/><stop offset=".6" stop-color="#F59E0B"/><stop offset="1" stop-color="#78350F"/></radialGradient></defs>`;
+/* أسطوانة ممددة بحلقات (كربونية أو معدنية) */
+const cyl=(x,y,fill,bands)=>leg(x-62,y,x-38,y)+leg(x+38,y,x+62,y)+leg(x-62,y,x-62,y+40)+leg(x+62,y,x+62,y+40)
+ +`<rect x="${x-40}" y="${y-13}" width="80" height="26" rx="13" fill="url(#${fill})" stroke="#334155"/>`
+ +bands.map((c,i)=>`<rect x="${x-26+i*11+(i===bands.length-1?10:0)}" y="${y-13}" width="6" height="26" fill="${c}" opacity=".95"/>`).join('')
+ +`<rect x="${x-34}" y="${y-9}" width="68" height="5" rx="2.5" fill="#fff" opacity=".35"/>`;
+const carbon=(x,y)=>cyl(x,y,'rtC',[C[1],C[0],C[2],G]);
+const metal=(x,y)=>cyl(x,y,'rtM',[C[1],C[0],C[0],C[1],C[1]]);
+const wound=(x,y)=>leg(x-62,y+4,x-46,y+4)+leg(x+46,y+4,x+62,y+4)+leg(x-62,y+4,x-62,y+40)+leg(x+62,y+4,x+62,y+40)
+ +`<polygon points="${x-46},${y-10} ${x+38},${y-10} ${x+48},${y-20} ${x-36},${y-20}" fill="#F3F4F6" stroke="#475569"/><polygon points="${x+38},${y-10} ${x+48},${y-20} ${x+48},${y+8} ${x+38},${y+18}" fill="#D1D5DB" stroke="#475569"/><rect x="${x-46}" y="${y-10}" width="84" height="28" fill="url(#rtW)" stroke="#475569"/>`
+ +`<text x="${x-4}" y="${y+9}" font-size="11" font-weight="800" fill="#334155" text-anchor="middle" direction="ltr">5W 10Ω</text>`;
+const pot3=(x,y)=>[-14,0,14].map(d=>leg(x+d,y+16,x+d,y+44)).join('')
+ +`<rect x="${x-26}" y="${y-6}" width="52" height="22" rx="4" fill="url(#rtG)" stroke="#14532D"/><ellipse cx="${x}" cy="${y-6}" rx="26" ry="9" fill="#4ADE80" stroke="#14532D"/>`
+ +`<rect x="${x-7}" y="${y-36}" width="14" height="30" fill="url(#rtP)"/><ellipse cx="${x}" cy="${y-36}" rx="7" ry="3" fill="#CBD5E1" stroke="#334155"/><line x1="${x}" y1="${y-34}" x2="${x}" y2="${y-24}" stroke="#F7931E" stroke-width="2"/>`;
+const trim=(x,y)=>[-12,0,12].map(d=>leg(x+d,y+16,x+d,y+44)).join('')
+ +`<polygon points="${x-22},${y-6} ${x+14},${y-6} ${x+22},${y-14} ${x-14},${y-14}" fill="#60A5FA" stroke="#1E3A8A"/><polygon points="${x+14},${y-6} ${x+22},${y-14} ${x+22},${y+8} ${x+14},${y+16}" fill="#1D4ED8" stroke="#1E3A8A"/><rect x="${x-22}" y="${y-6}" width="36" height="22" fill="#3B82F6" stroke="#1E3A8A"/>`
+ +`<ellipse cx="${x}" cy="${y-10}" rx="8" ry="3.4" fill="#F9FAFB" stroke="#334155"/><line x1="${x-5}" y1="${y-10}" x2="${x+5}" y2="${y-10}" stroke="#F7931E" stroke-width="2"/>`;
+const ldr3=(x,y)=>leg(x-8,y+14,x-8,y+46)+leg(x+8,y+14,x+8,y+46)
+ +`<ellipse cx="${x}" cy="${y+6}" rx="24" ry="9" fill="#78350F"/><ellipse cx="${x}" cy="${y}" rx="24" ry="9" fill="url(#rtL)" stroke="#78350F"/>`
+ +`<path d="M${x-16},${y-2} h8 v4 h8 v-4 h8 v4 h8" fill="none" stroke="#7C2D12" stroke-width="1.6"/>`
+ +[-10,8].map(d=>`<line x1="${x+d-12}" y1="${y-36}" x2="${x+d}" y2="${y-14}" stroke="#F7931E" stroke-width="2.4"/><polygon points="${x+d},${y-12} ${x+d-6},${y-18} ${x+d+1},${y-20}" fill="#F7931E"/>`).join('');
+const thm3=(x,y)=>leg(x-6,y+10,x-8,y+46)+leg(x+6,y+10,x+8,y+46)
+ +`<ellipse cx="${x}" cy="${y-4}" rx="15" ry="17" fill="url(#rtB)" stroke="#78350F"/><ellipse cx="${x-5}" cy="${y-10}" rx="5" ry="6" fill="#FEF3C7" opacity=".6"/><text x="${x}" y="${y+1}" font-size="9" font-weight="800" fill="#78350F" text-anchor="middle" direction="ltr">NTC</text>`;
+const smd=(x,y)=>`<polygon points="${x-30},${y+6} ${x+22},${y+6} ${x+32},${y-4} ${x-20},${y-4}" fill="#374151" stroke="#111827"/><polygon points="${x+22},${y+6} ${x+32},${y-4} ${x+32},${y+8} ${x+22},${y+18}" fill="#111827"/><rect x="${x-30}" y="${y+6}" width="52" height="12" fill="url(#rtK)" stroke="#111827"/>`
+ +`<rect x="${x-30}" y="${y+5}" width="10" height="14" fill="#D1D5DB" stroke="#6B7280"/><rect x="${x+12}" y="${y+5}" width="10" height="14" fill="#D1D5DB" stroke="#6B7280"/><text x="${x+1}" y="${y+4}" font-size="9" font-weight="800" fill="#F9FAFB" text-anchor="middle" direction="ltr">103</text>`;
+const cell=(fn,x,y,a,b)=>fn(x,y)+T(x,y+72,a,'class="lb sm"')+T(x,y+90,b,'class="lb xs"');
+F.resTypes=svg('0 0 480 490',defs
+ +cell(carbon,80,50,'كربونية','رخيصة · قيمتها بالألوان')+cell(metal,240,50,'غشاء معدني','دقيقة · 5 حلقات')+cell(wound,400,50,'سلكية','تتحمل قدرة كبيرة')
+ +cell(pot3,80,210,'مجزئ جهد','(بوتنشيوميتر) بمقبض')+cell(trim,240,210,'متغيرة للضبط','(تريمر) بمفك')+cell(ldr3,400,210,'ضوئية LDR','تقل مقاومتها بالضوء')
+ +cell(thm3,160,380,'حرارية (ثرمستور)','تتغير مقاومتها بالحرارة')+cell(smd,320,385,'سطحية SMD','صغيرة جدا · تلحم على اللوحة'),
+ 'أنواع المقاومات الشائعة');
+})();
