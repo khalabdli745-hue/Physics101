@@ -575,15 +575,17 @@ async function drawTrainer(m,ctl,st,sec,secLabel,today,n,logged){
 /* ---------- الاختبارات الفصلية ---------- */
 let EXR=null,EXSEC=ls.get('p101-exsec','all');
 /* تحميل تبويب الاختبارات مسبقا في الخلفية بعد فتح اللوحة، فيفتح التبويب فورا */
-let EXP=null;function exPrefetch(){if(!EXP)EXP=api({a:'texams',token:TOKEN}).then(r=>{if(r&&r.ok){EXR=r;if(tab==='exams')exDraw()}return r}).catch(()=>null).finally(()=>{EXP=null});return EXP}
+let EXP=null;function exPrefetch(){if(!EXP)EXP=api({a:'texams',token:TOKEN}).then(r=>{if(r&&r.ok){EXR=r;if(tab==='exams')exSafe()}return r}).catch(()=>null).finally(()=>{EXP=null});return EXP}
 async function drawExams(){
   const m=$('#main');
   /* المعروض أولا: آخر بيانات محملة فورا، ثم تحدث في الخلفية */
-  if(EXR)exDraw();else m.innerHTML='<p class="empty"><span class="spin"></span> جار تحميل الاختبارات…</p>';
+  if(EXR)exSafe();else m.innerHTML='<p class="empty"><span class="spin"></span> جار تحميل الاختبارات…</p>';
   let r;try{r=EXP?await EXP:await api({a:'texams',token:TOKEN})}catch(e){if(!EXR)m.innerHTML='<p class="empty">تعذر الاتصال بالخادم.</p>';return}
   if(!r){try{r=await api({a:'texams',token:TOKEN})}catch(e){if(!EXR)m.innerHTML='<p class="empty">تعذر الاتصال بالخادم.</p>';return}}
   if(!r.ok){m.innerHTML=`<p class="empty">${r.error==='unknown_action'?'انسخ ملف code.gs الجديد إلى Google Apps Script وانشر إصدارًا جديدًا حتى يعمل قسم الاختبارات.':esc(errText(r.error))}</p>`;return}
-  EXR=r;if(tab!=='exams')return;exDraw()}
+  EXR=r;if(tab!=='exams')return;exSafe()}
+/* إذا حدث خطأ أثناء عرض التبويب يظهر نصه بدل التحميل المستمر */
+function exSafe(){try{exDraw()}catch(e){console.error(e);$('#main').innerHTML=`<p class="empty">تعذر عرض الاختبارات: <b dir="ltr">${esc(String(e&&e.message||e))}</b><br><small dir="ltr">${esc(String(e&&e.stack||'').split('\n').slice(0,3).join(' | '))}</small></p>`}}
 /* الأعمال الفصلية (20) لمتدربي المنصة فقط، تحسب تلقائيا من: «اختبر نفسك» و«الأمثلة والتمارين التفاعلية» و«التجارب العملية التفاعلية»
    لكل جزء ثلث الدرجة، وهو متوسط أفضل نسبة في دروسه حتى الدرس المختار (الدرس الذي لم يحله المتدرب = 0) */
 const WK_PROB=new Set('0-1 0-2 0-4 0-5 0-6 1-1 1-2 1-3 1-5 1-7 1-8 1-9 2-1 2-3 2-5 3-1 3-3 3-4 3-5 3-6 4-1 4-2 4-3 4-5 4-6 4-7 4-8'.split(' '));
@@ -610,7 +612,7 @@ function exDraw(){
   const m=$('#main'),r=EXR,st=r.students,secs=r.sections,sn=id=>(secs.find(s=>s.id===id)||{}).name||'بدون شعبة';
   const sel=EXSEC!=='all'&&secs.some(s=>s.id===EXSEC)?EXSEC:'all';
   const by={};r.rows.forEach(x=>{(by[x.studentId]=by[x.studentId]||{})[x.examId]=x});
-  const list=st.filter(s=>sel==='all'||s.sectionId===sel).sort((a,b)=>sn(a.sectionId).localeCompare(sn(b.sectionId),'ar')||a.name.localeCompare(b.name,'ar'));
+  const list=st.filter(s=>sel==='all'||s.sectionId===sel).sort((a,b)=>sn(a.sectionId).localeCompare(sn(b.sectionId),'ar')||String(a.name||'').localeCompare(String(b.name||''),'ar'));
   const nOf=(id,f)=>r.rows.filter(x=>x.examId===id&&f(x)).length;
   /* الاختبار الذي فتح أو سلّمه أحد يعد «أُجري»: من لم يختبره درجته صفر */
   const held=e=>e.open||r.rows.some(x=>x.examId===e.id);
