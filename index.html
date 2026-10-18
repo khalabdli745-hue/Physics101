@@ -1927,7 +1927,7 @@ function examAsk(msg,yes,no,html){return new Promise(res=>{const w=document.crea
   if(html){const d=document.createElement('div');d.className='exRules';d.innerHTML=html;w.querySelector('p').replaceWith(d)}else w.querySelector('p').textContent=msg;w.querySelector('.exY').textContent=yes||'حسنا';if(no)w.querySelector('.exMNo').textContent=no;
   const done=v=>{w.remove();res(v)};w.querySelector('.exY').onclick=()=>done(true);if(no)w.querySelector('.exMNo').onclick=()=>done(false);document.body.appendChild(w)})}
 const examMM=s=>{s=Math.max(0,Math.round(s));const m=Math.floor(s/60),x=s%60;return AR(m)+':'+AR(String(x).padStart(2,'0'))};
-function examBar(){const b=$('examBar');if(!b)return;const L=(EXAM.list||[]).filter(e=>e.open&&e.status!=='done');
+function examBar(){const b=$('examBar');if(!b)return;const L=(EXAM.list||[]).filter(e=>e.open&&e.status!=='done'&&e.phase!=='before'&&e.phase!=='after');
   b.hidden=true;if(L.length)b.innerHTML=`<span>📝 <b>${esc(L[0].t)}</b> متاح الآن</span><span class="go">${L[0].status==='started'?'أكمل الاختبار':'ادخل الاختبار'} ←</span>`;
   const nb=$('examBtn');if(nb)nb.hidden=true}
 function examCheck(){if(!API||!AUTH)return;SYNC.post({a:'exams',token:AUTH.token}).then(r=>{if(r&&r.ok){EXAM.list=r.list;examBar();if(pos.t==='exam'&&!EXAM.cur)render()}}).catch(()=>{})}
@@ -1947,13 +1947,17 @@ function renderExam(v){
       const info=`عدد الأسئلة ${AR(e.n)} (اختيار من متعدد) · الدرجة ${AR(e.max)} · المدة ${e.min%60?AR(e.min)+' دقيقة':e.min===60?'ساعة':AR(e.min/60)+' ساعات'} · محاولة واحدة`;
       d.innerHTML=`<h3>${esc(e.t)}</h3>${e.cover?`<p class="exCov">${esc(e.cover)}</p>`:''}<p class="exInfo">${info}</p><div class="exAct"></div>`;
       const a=d.querySelector('.exAct');
-      if(e.status==='done'){a.innerHTML=`<div class="exDone">✓ تم تسليم الاختبار، ووصلت إجاباتك إلى المدرب.</div>`}
+      const wF=x=>new Date(x).toLocaleString('ar-SA-u-ca-gregory-nu-latn',{weekday:'long',day:'numeric',month:'long',hour:'numeric',minute:'2-digit'}),wT=x=>new Date(x).toLocaleTimeString('ar-SA-u-nu-latn',{hour:'numeric',minute:'2-digit'});
+      if(e.from&&e.status!=='done')d.querySelector('.exInfo').insertAdjacentHTML('afterend',`<p class="exInfo">🗓 موعد الاختبار: ${esc(wF(e.from))} إلى ${esc(wT(e.to))}، وينتهي وقت الجميع عند ${esc(wT(e.to))}</p>`);
+      if(e.phase==='before'){a.innerHTML=`<div class="exDone" style="opacity:.85">⏳ لم يبدأ الاختبار بعد. يبدأ ${esc(wF(e.from))}</div>`}
+      else if(e.phase==='after'){a.innerHTML=`<div class="exDone" style="opacity:.85">⛔ انتهى موعد الاختبار.</div>`}
+      else if(e.status==='done'){a.innerHTML=`<div class="exDone">✓ تم تسليم الاختبار، ووصلت إجاباتك إلى المدرب.</div>`}
       else{const b=document.createElement('button');b.className='btn exStart';b.textContent=e.status==='started'?`أكمل الاختبار (متبقي ${examMM(e.left)})`:'ابدأ الاختبار';
         b.onclick=async()=>{EXAM.code='';if(e.status!=='started'){if(!(await examAsk('','لنبدأ الاختبار','ليس الآن',examRules(e))))return;setTimeout(()=>{const x=document.querySelector('.exCodeIn');if(x)x.focus()},80);if(!(await examAsk('','دخول الاختبار','رجوع',`<h3>🔑 رمز الدخول</h3><label class="exCodeL">اكتب رمز الدخول الذي أرسله المدرب لشعبتك<input class="exCodeIn" type="text" inputmode="numeric" maxlength="4" dir="ltr" autocomplete="off" placeholder="0000" oninput="EXAM.code=this.value"></label>`)))return}
           b.disabled=true;b.textContent='جار تجهيز الأسئلة…';
           SYNC.post({a:'examstart',token:AUTH.token,id:e.id,code:EXAM.code||'',dev:exDev()}).then(s=>{
             if(s.status==='done'){e.status='done';return render()}
-            if(!s.ok){b.disabled=false;b.textContent='ابدأ الاختبار';examAsk(s.error==='exam_closed'?'أغلق المدرب هذا الاختبار.':s.error==='bad_code'?'رمز الدخول غير صحيح. اطلب الرمز من المدرب ثم حاول مرة أخرى.':s.error==='other_device'?EX_OTHER:'تعذر بدء الاختبار، حاول مرة أخرى.');return}
+            if(!s.ok){b.disabled=false;b.textContent='ابدأ الاختبار';examAsk(s.error==='not_yet'?'لم يبدأ الاختبار بعد. يبدأ '+new Date(s.from).toLocaleString('ar-SA-u-ca-gregory-nu-latn',{weekday:'long',day:'numeric',month:'long',hour:'numeric',minute:'2-digit'}):s.error==='exam_ended'?'انتهى موعد الاختبار.':s.error==='exam_closed'?'أغلق المدرب هذا الاختبار.':s.error==='bad_code'?'رمز الدخول غير صحيح. اطلب الرمز من المدرب ثم حاول مرة أخرى.':s.error==='other_device'?EX_OTHER:'تعذر بدء الاختبار، حاول مرة أخرى.');return}
             EXAM.cur={id:e.id,t:s.t,max:s.max,qs:s.qs,ans:s.answers,end:Date.now()+s.left*1000};render()}).catch(()=>{b.disabled=false;b.textContent='ابدأ الاختبار';examAsk('تعذر الاتصال. تحقق من الإنترنت ثم حاول مرة أخرى.')})};
         a.appendChild(b)}
       box.appendChild(d)})
@@ -1973,7 +1977,7 @@ function examPaper(i){
   const cnt=()=>{bar.querySelector('.exCnt').textContent=`أجبت ${AR(X.ans.filter(isDone).length)} من ${AR(X.qs.length)}`;const all=X.ans.filter(isDone).length===X.qs.length;let dn=document.getElementById('exDoneBar');
     if(all&&!dn){dn=document.createElement('div');dn.id='exDoneBar';dn.className='exDoneBar';dn.innerHTML='<span>✓ أنهيت جميع الأسئلة</span><button type="button" class="btn">إنهاء الاختبار وإرساله</button>';dn.querySelector('button').onclick=()=>submit(false);document.body.appendChild(dn)}
     if(!all&&dn)dn.remove()};
-  const save=()=>{clearTimeout(EXAM.saveT);EXAM.saveT=setTimeout(()=>SYNC.post({a:'examsave',token:AUTH.token,id:X.id,answers:X.ans,dev:exDev()}).then(r=>{if(r&&r.error==='other_device'&&EXAM.cur){EXAM.cur=null;clearInterval(EXAM.timer);document.body.classList.remove('examMode','exSheetOn');document.querySelectorAll('.exSheet,#exDoneBar').forEach(x=>x.remove());examAsk(EX_OTHER).then(()=>render())}}).catch(()=>{}),500)};
+  const save=()=>{clearTimeout(EXAM.saveT);EXAM.saveT=setTimeout(()=>{if(EXAM.saving)return save();EXAM.saving=true;SYNC.post({a:'examsave',token:AUTH.token,id:X.id,answers:X.ans,dev:exDev()}).then(r=>{if(r&&r.error==='other_device'&&EXAM.cur){EXAM.cur=null;clearInterval(EXAM.timer);document.body.classList.remove('examMode','exSheetOn');document.querySelectorAll('.exSheet,#exDoneBar').forEach(x=>x.remove());examAsk(EX_OTHER).then(()=>render())}}).catch(()=>{}).finally(()=>{EXAM.saving=false})},4000)};
   const STEPS=['المعطيات','المطلوب','القانون المستخدم والتعويض والحساب بالآلة الحاسبة','النتيجة'];
   const pts=w=>w===1?'درجة واحدة':w===2?'درجتان':AR(w)+' درجات';
   X.qs.forEach((q,qi)=>{const d=document.createElement('div');d.className='qcard exQ';

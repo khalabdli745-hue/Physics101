@@ -143,6 +143,8 @@ details.res .when{color:var(--muted);font-size:12.5px;margin-inline-start:auto}
 .exT{border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--panel)}.exT.on{border:2px solid var(--good)}
 .exTh{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:16px}.exSt{font-size:13.5px;margin:6px 0 10px}
 .exZ{color:var(--bad);font-weight:800}.exRaw{color:var(--muted);font-weight:400}
+.exWin{margin:10px 0;border:1px dashed var(--line);border-radius:12px;padding:8px 10px}.exWin summary{cursor:pointer}.exWR{display:grid;gap:6px;padding:8px 0;border-top:1px solid var(--line);margin-top:6px}.exWR label{display:flex;gap:8px;align-items:center;justify-content:space-between}.exWR input{flex:1;max-width:220px}.exWNow{font-size:13px;opacity:.85}
+.bkG{border-bottom:1px solid var(--line);padding:8px 0}.bkG summary{cursor:pointer;line-height:1.8}.bkQ{padding:8px 4px;border-top:1px dashed var(--line)}.bkN{font-weight:600;line-height:1.8}.bkB{font-size:13px;opacity:.8;margin-bottom:4px}.bkO{margin:4px 18px 0 0;padding:0;line-height:1.8}.bkO li{list-style:none}.bkO li.ok{color:var(--good,#15803D);font-weight:700}.bkM{unicode-bidi:isolate}
 .exCode{margin:6px 0;padding:8px 10px;border:2px dashed var(--accent,#0b6aa2);border-radius:10px;font-size:15px}.exCode b.exCT{font-size:15px;letter-spacing:0}.exCR{display:flex;align-items:center;gap:8px;padding:6px 0;border-top:1px solid var(--line,#e5e7eb)}.exCR span{flex:1}.exCR b{font-size:20px;letter-spacing:4px}.exCode small{opacity:.8}
 .exStats{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin:6px 0 12px}.exStat{border:1px solid var(--line);border-radius:10px;padding:8px 10px;display:flex;flex-direction:column;gap:2px;font-size:13.5px;background:var(--panel)}.exStat b{font-size:14.5px;color:var(--accent)}
 .exSecs{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.exSec{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:10px;padding:6px 10px;background:var(--panel)}
@@ -172,6 +174,8 @@ let DATA=null,tab=ls.get('p101-ttab','students'),secFilter=ls.get('p101-tsec','a
 const ERR={tts_bad_key:'مفتاح Azure غير صحيح الشكل. انسخ KEY 1 كما هو.',tts_key:'مفتاح Azure غير صالح. انسخ KEY 1 مرة أخرى من صفحة Keys and endpoint.',tts_region:'المنطقة غير صحيحة. اكتبها كما في Azure، مثل uaenorth.',tts_off:'الصوت الطبيعي غير مفعّل.',tts_quota:'انتهت الحصة المجانية لهذا الشهر.',tts_busy:'الخدمة مشغولة، حاول بعد دقيقة.',tts_error:'تعذّر توليد الصوت. تأكد أنك نشرت الإصدار الجديد من الكود ومنحت صلاحية Google Drive.',bad_key:'المفتاح غير صحيح الشكل. مفتاح Gemini يبدأ بـ AIza ومفتاح Groq يبدأ بـ gsk_',ai_key:'المفتاح غير صالح أو منتهي. أنشئ مفتاحًا جديدًا.',wrong_user:'اسم المستخدم غير صحيح.',short_user:'اسم المستخدم قصير (3 أحرف على الأقل).',bad_user:'اختر اسم مستخدم آخر (ليس demo ولا أرقامًا فقط).',wrong_password:'كلمة المرور غير صحيحة.',short_password:'كلمة المرور قصيرة (6 أحرف على الأقل).',already_set:'تم إنشاء كلمة مرور المدرب مسبقًا. استخدم «دخول».',not_setup:'لم تُنشأ كلمة مرور المدرب بعد.',section_not_empty:'لا يمكن حذف شعبة فيها متدربون. انقلهم أو احذفهم أولًا.',name_required:'اكتب اسم الشعبة.',not_found:'غير موجود.',auth:'انتهت الجلسة، سجّل الدخول مرة أخرى.'};
 const errText=e=>ERR[e]||('حدث خطأ: '+e);
 function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2600)}
+/* عند ضغط الخادم وقت الاختبار: يعاد الطلب تلقائيا حتى 3 مرات قبل إظهار الخطأ */
+async function apiR(o,n=3){for(let i=0;;i++){try{const r=await api(o);if(r&&(r.ok||r.error==='auth'||i>=n-1))return r}catch(e){if(i>=n-1)throw e}await new Promise(z=>setTimeout(z,1500*(i+1)))}}
 async function api(o){const r=await fetch(API,{method:'POST',body:JSON.stringify(o),redirect:'follow'});const j=await r.json();if(j.error==='auth'&&o.token){ls.del('p101-tauth');TOKEN=null;toast(ERR.auth);boot()}return j}
 const xd=d=>{if(!d)return '';const x=new Date(d),z=n=>String(n).padStart(2,'0');return `${x.getFullYear()}-${z(x.getMonth()+1)}-${z(x.getDate())} ${z(x.getHours())}:${z(x.getMinutes())}`};
 const fmtTime=s=>{s=+s||0;const h=Math.floor(s/3600),m=Math.round(s%3600/60);return h?`${h} س ${m} د`:`${m} د`};
@@ -191,7 +195,7 @@ function boot(){
   if(!TOKEN)return authScreen();
   root.innerHTML=`<header><b>لوحة المدرب</b><span class="tag" id="sheetLink"></span><div class="sp">
     <button class="btn ghost sm" id="reload">↻ تحديث</button><a class="btn ghost sm" href="index.html">المنصة</a><button class="btn ghost sm" id="logout">خروج</button></div></header>
-  <nav class="tabs" role="tablist">${[['students','المتدربون والدرجات'],['exams','📝 الاختبارات الفصلية والنهائية'],['stats','الإحصائيات'],['reports','التقارير'],['ratings','تقييم المتدربين للمنصة'],['ai','المساعد الذكي والصوت'],['sections','الشعب'],['import','استيراد Excel'],['export','تصدير Excel'],['demo','حسابي التجريبي'],['settings','الإعدادات']].map(([k,n])=>`<button role="tab" data-t="${k}" aria-selected="${tab===k}">${n}</button>`).join('')}</nav>
+  <nav class="tabs" role="tablist">${[['students','المتدربون والدرجات'],['exams','📝 الاختبارات الفصلية والنهائية'],['bank','🗂 بنك الأسئلة'],['stats','الإحصائيات'],['reports','التقارير'],['ratings','تقييم المتدربين للمنصة'],['ai','المساعد الذكي والصوت'],['sections','الشعب'],['import','استيراد Excel'],['export','تصدير Excel'],['demo','حسابي التجريبي'],['settings','الإعدادات']].map(([k,n])=>`<button role="tab" data-t="${k}" aria-selected="${tab===k}">${n}</button>`).join('')}</nav>
   <main id="main"><p class="empty"><span class="spin"></span> جارٍ تحميل البيانات…</p></main>`;
   document.documentElement.style.setProperty('--hh',$('header').offsetHeight+'px');
   document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>{tab=b.dataset.t;ls.set('p101-ttab',tab);document.querySelectorAll('nav.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b));draw()});
@@ -218,12 +222,48 @@ async function authScreen(){
 }
 async function load(){
   const m=$('#main');if(!DATA)m.innerHTML='<p class="empty"><span class="spin"></span> جارٍ تحميل البيانات…</p>';
-  try{const r=await api({a:'tdata',token:TOKEN});if(!r.ok){if(r.error!=='auth')m.innerHTML=`<p class="empty">${esc(errText(r.error))}</p>`;return}
+  try{const r=await apiR({a:'tdata',token:TOKEN});if(!r.ok){if(r.error!=='auth')m.innerHTML=`<p class="empty">${esc(errText(r.error))}</p>`;return}
     DATA=r;DATA.students.forEach(enrich);DATA.demo=DATA.students.find(x=>x.id==='DEMO')||null;DATA.students=DATA.students.filter(x=>x.id!=='DEMO');DATA.sections=DATA.sections.filter(x=>DATA.students.some(y=>y.sectionId===x.id)||!(DATA.demo&&DATA.demo.sectionId===x.id));STATS=null;
     $('#sheetLink').innerHTML=r.sheetUrl?`<a href="${esc(r.sheetUrl)}" target="_blank" rel="noopener">جدول Google ↗</a>`:'';
-    draw();exPrefetch()}catch(e){m.innerHTML='<p class="empty">تعذّر الاتصال بالخادم. تحقق من الإنترنت ثم اضغط «تحديث».</p>'}
+    draw();exPrefetch()}catch(e){if(DATA){toast('تعذر التحديث الآن، المعروض آخر بيانات محملة');return}m.innerHTML='<p class="empty">تعذّر الاتصال بالخادم. تحقق من الإنترنت ثم اضغط «تحديث».</p>'}
 }
-function draw(){if(!DATA)return;({exams:drawExams,students:drawStudents,stats:drawStats,reports:drawReports,ratings:drawRatings,ai:drawAI,sections:drawSections,import:drawImport,export:drawExport,demo:drawDemo,settings:drawSettings}[tab]||drawStudents)()}
+function draw(){if(!DATA)return;({exams:drawExams,bank:drawBank,students:drawStudents,stats:drawStats,reports:drawReports,ratings:drawRatings,ai:drawAI,sections:drawSections,import:drawImport,export:drawExport,demo:drawDemo,settings:drawSettings}[tab]||drawStudents)()}
+
+/* ---------- بنك الأسئلة (للاطلاع والتصدير إلى Word فقط؛ الأسئلة تولدها المنصة) ---------- */
+let BANK=null,BKQ='',BKT=ls.get('p101-bkt','theory');
+const bkMath=s=>esc(String(s==null?'':s)).replace(/`([^`]*)`/g,'<span dir="ltr" class="bkM">$1</span>');
+const STEPN=['المعطيات','المطلوب','القانون المستخدم'];
+async function drawBank(force){const m=$('#main');
+  if(!BANK||force){m.innerHTML='<p class="empty"><span class="spin"></span> جار تحميل بنك الأسئلة…</p>';let r;try{r=await apiR({a:'tbank',token:TOKEN})}catch(e){m.innerHTML='<p class="empty">تعذر الاتصال بالخادم. اضغط «تحديث».</p>';return}
+    if(!r.ok){m.innerHTML=`<p class="empty">${r.error==='unknown_action'?'انسخ ملف code.gs الجديد إلى Google Apps Script وانشر إصدارًا جديدًا حتى يعمل بنك الأسئلة.':esc(errText(r.error))}</p>`;return}BANK=r}
+  if(tab!=='bank')return;
+  const nT=BANK.theory.reduce((a,g)=>a+g.qs.length,0),nN=BANK.num.reduce((a,g)=>a+g.items.length,0),isT=BKT==='theory';
+  const hit=s=>!BKQ||String(s).includes(BKQ);
+  const groups=isT?BANK.theory.map(g=>Object.assign({},g,{list:g.qs.filter(x=>hit(x.q)||hit(x.c)||x.o.some(hit))})):BANK.num.map(g=>Object.assign({},g,{list:g.items.filter(x=>hit(x.b)||hit(x.q))}));
+  const L='أبجد';
+  const body=groups.filter(g=>g.list.length).map(g=>`<details class="bkG"${BKQ?' open':''}><summary><b>${esc(g.t)}</b> <span class="tag">${AR(g.list.length)}${isT?' سؤالا':' نموذجا'}</span>${g.uses.length?`<small class="sub"> · يستخدم في: ${esc(g.uses.join('، '))}</small>`:''}</summary>
+    ${g.list.map((x,i)=>isT?`<div class="bkQ"><div class="bkN">${AR(i+1)}. ${bkMath(x.q)}</div><ol class="bkO">${[x.c].concat(x.o).map((o,j)=>`<li class="${j?'':'ok'}">${L[j]}) ${bkMath(o)}${j?'':' ✓'}</li>`).join('')}</ol></div>`
+      :`<div class="bkQ"><div class="bkB">📌 ${bkMath(x.b)}</div>${x.err?'<p class="sub">تعذر توليد مثال</p>':`<div class="bkN">مثال مولد: ${bkMath(x.q)}</div><ul class="bkO">${x.st.map((s,j)=>`<li><b>${STEPN[j]}:</b> ${bkMath(s)}</li>`).join('')}<li class="ok"><b>النتيجة:</b> <span dir="ltr">${AR(x.v)} ${esc(x.u||'')}</span></li></ul>`}</div>`).join('')}</details>`).join('');
+  m.innerHTML=`<div class="card"><h2>🗂 بنك الأسئلة</h2><p class="sub">أسئلة الاختبارات الفصلية والنهائية كما تولدها المنصة. لكل متدرب أسئلة مختلفة تسحب عشوائيا من هذه المجموعات، وخيارات كل سؤال بترتيب عشوائي، وأرقام المسائل الحسابية تتغير لكل متدرب. للاطلاع والتصدير فقط.</p>
+   <div class="row" style="flex-wrap:wrap;gap:6px"><button class="btn ${isT?'':'ghost'} sm" id="bkT">📝 النظرية (${AR(nT)})</button><button class="btn ${isT?'ghost':''} sm" id="bkN">🧮 الحسابية (${AR(nN)} نموذجا)</button></div>
+   <div class="row" style="flex-wrap:wrap;gap:6px;margin-top:8px"><input type="search" id="bkS" placeholder="بحث في الأسئلة" value="${esc(BKQ)}" style="flex:1;min-width:160px">
+   <button class="btn ghost sm" id="bkW">⬇ تصدير Word</button>${isT?'':'<button class="btn ghost sm" id="bkR">🔄 أمثلة جديدة</button>'}</div>
+   ${isT?'':'<p class="sub" style="margin-top:6px">كل نموذج يولد مسألة بأرقام مختلفة لكل متدرب؛ المعروض مثال واحد، واضغط «أمثلة جديدة» لتوليد غيره.</p>'}</div>
+   <div class="card">${body||'<p class="empty">لا توجد نتائج.</p>'}</div>`;
+  $('#bkT').onclick=()=>{BKT='theory';ls.set('p101-bkt',BKT);drawBank()};$('#bkN').onclick=()=>{BKT='num';ls.set('p101-bkt',BKT);drawBank()};
+  let st;$('#bkS').oninput=e=>{clearTimeout(st);st=setTimeout(()=>{BKQ=e.target.value.trim();drawBank();const s=$('#bkS');s.focus();s.setSelectionRange(s.value.length,s.value.length)},350)};
+  if($('#bkR'))$('#bkR').onclick=()=>drawBank(true);
+  $('#bkW').onclick=async()=>{const withA=await new Promise(res=>{const ok=confirm('تصدير مع الإجابات الصحيحة؟\n«موافق» = مع الإجابات، «إلغاء» = بدون إجابات');res(ok)});bankWord(groups.filter(g=>g.list.length),isT,withA)}}
+function bankWord(groups,isT,withA){
+  const mm=s=>esc(String(s==null?'':s)).replace(/`([^`]*)`/g,'<span dir="ltr" style="font-family:Calibri">$1</span>'),L='أبجد';
+  const sec=g=>`<h2>${esc(g.t)} (${g.list.length})</h2>`+g.list.map((x,i)=>isT
+    ?`<p class="q">${i+1}. ${mm(x.q)}</p>`+[x.c].concat(x.o).map((o,j)=>`<p class="o">${L[j]}) ${mm(o)}${withA&&!j?' <b style="color:#15803D">✓</b>':''}</p>`).join('')
+    :`<p class="q">${i+1}. ${mm(x.b)}</p>`+(x.err?'':`<p class="o">مثال: ${mm(x.q)}</p>`+(withA?x.st.map((s,j)=>`<p class="o"><b>${STEPN[j]}:</b> ${mm(s)}</p>`).join('')+`<p class="o"><b>النتيجة:</b> <span dir="ltr">${x.v} ${esc(x.u||'')}</span></p>`:''))).join('');
+  const html=`<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"><title>بنك الأسئلة</title>
+  <style>body{direction:rtl;font-family:Arial;font-size:13pt}h1{color:#4C1D95;font-size:18pt}h2{color:#1D4ED8;font-size:15pt;border-bottom:1px solid #93C5FD;margin-top:18pt}p{margin:2pt 0}.q{font-weight:bold;margin-top:8pt}.o{margin-right:18pt}</style></head>
+  <body dir="rtl"><h1>بنك أسئلة فيزياء 101 — ${isT?'الأسئلة النظرية':'المسائل الحسابية (نماذج مع مثال مولد)'}${withA?'':' (بدون إجابات)'}</h1>
+  <p>المدرب: خليل بن موسى المالكي · ${new Date().toLocaleDateString('ar-SA-u-ca-gregory-nu-latn')}</p>${isT&&withA?'<p>الإجابة الصحيحة هي الخيار (أ) ومعلمة بـ ✓، وفي الاختبار تعرض الخيارات بترتيب عشوائي.</p>':''}${groups.map(sec).join('')}</body></html>`;
+  const b=new Blob(['\ufeff'+html],{type:'application/msword'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=(isT?'بنك-الأسئلة-النظرية':'بنك-المسائل-الحسابية')+(withA?'':'-بدون-إجابات')+'.doc';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500);toast('تم إنشاء ملف Word')}
 
 /* ---------- المتدربون ---------- */
 function filtered(){return DATA.students.filter(s=>(secFilter==='all'||s.sectionId===secFilter)&&(!q||s.name.includes(q)||s.id.includes(q)))}
@@ -573,16 +613,17 @@ async function drawTrainer(m,ctl,st,sec,secLabel,today,n,logged){
 
 /* ---------- الشعب ---------- */
 /* ---------- الاختبارات الفصلية ---------- */
-let EXR=null,EXSEC=ls.get('p101-exsec','all');
+let EXR=null,EXSEC=ls.get('p101-exsec','all'),EXTS=ls.get('p101-extrs','all');
 /* تحميل تبويب الاختبارات مسبقا في الخلفية بعد فتح اللوحة، فيفتح التبويب فورا */
-let EXP=null;function exPrefetch(){if(!EXP)EXP=api({a:'texams',token:TOKEN}).then(r=>{if(r&&r.ok){EXR=r;if(tab==='exams')exSafe()}return r}).catch(()=>null).finally(()=>{EXP=null});return EXP}
+let EXP=null;function exPrefetch(){if(!EXP)EXP=apiR({a:'texams',token:TOKEN}).then(r=>{if(r&&r.ok&&Array.isArray(r.rows)){EXR=r;if(tab==='exams')exSafe()}return r}).catch(()=>null).finally(()=>{EXP=null});return EXP}
 async function drawExams(){
   const m=$('#main');
   /* المعروض أولا: آخر بيانات محملة فورا، ثم تحدث في الخلفية */
   if(EXR)exSafe();else m.innerHTML='<p class="empty"><span class="spin"></span> جار تحميل الاختبارات…</p>';
-  let r;try{r=EXP?await EXP:await api({a:'texams',token:TOKEN})}catch(e){if(!EXR)m.innerHTML='<p class="empty">تعذر الاتصال بالخادم.</p>';return}
-  if(!r){try{r=await api({a:'texams',token:TOKEN})}catch(e){if(!EXR)m.innerHTML='<p class="empty">تعذر الاتصال بالخادم.</p>';return}}
-  if(!r.ok){m.innerHTML=`<p class="empty">${r.error==='unknown_action'?'انسخ ملف code.gs الجديد إلى Google Apps Script وانشر إصدارًا جديدًا حتى يعمل قسم الاختبارات.':esc(errText(r.error))}</p>`;return}
+  let r;try{r=EXP?await EXP:await apiR({a:'texams',token:TOKEN})}catch(e){if(!EXR)m.innerHTML='<p class="empty">تعذر الاتصال بالخادم. اضغط «تحديث».</p>';else toast('تعذر التحديث الآن، المعروض آخر بيانات محملة');return}
+  if(!r){try{r=await apiR({a:'texams',token:TOKEN})}catch(e){if(!EXR)m.innerHTML='<p class="empty">تعذر الاتصال بالخادم. اضغط «تحديث».</p>';else toast('تعذر التحديث الآن، المعروض آخر بيانات محملة');return}}
+  if(r.ok&&!Array.isArray(r.rows))r={ok:false,error:'busy'};
+  if(!r.ok){if(EXR&&r.error!=='unknown_action'){toast('تعذر التحديث الآن، المعروض آخر بيانات محملة');return}m.innerHTML=`<p class="empty">${r.error==='unknown_action'?'انسخ ملف code.gs الجديد إلى Google Apps Script وانشر إصدارًا جديدًا حتى يعمل قسم الاختبارات.':esc(errText(r.error))}</p>`;return}
   EXR=r;if(tab!=='exams')return;exSafe()}
 /* إذا حدث خطأ أثناء عرض التبويب يظهر نصه بدل التحميل المستمر */
 function exSafe(){try{exDraw()}catch(e){console.error(e);$('#main').innerHTML=`<p class="empty">تعذر عرض الاختبارات: <b dir="ltr">${esc(String(e&&e.message||e))}</b><br><small dir="ltr">${esc(String(e&&e.stack||'').split('\n').slice(0,3).join(' | '))}</small></p>`}}
@@ -635,6 +676,27 @@ function exDraw(){
   const exStats=()=>`<div class="exStats">${r.exams.map(e=>{const v=list.map(s=>(by[s.id]||{})[e.id]).filter(x=>x&&x.submittedAt).map(x=>x.score);
     const f=x=>AR(Math.round(x*100)/100);return `<div class="exStat"><b>${esc(e.t)}</b><span>سلّم ${AR(v.length)} من ${AR(list.length)}</span>${v.length?`<span>المتوسط ${f(v.reduce((a,x)=>a+x,0)/v.length)} من ${AR(e.max)}</span><span>الأعلى ${f(Math.max(...v))} · الأدنى ${f(Math.min(...v))}</span><span>النجاح (${AR(e.max*0.6)} فأكثر) ${AR(Math.round(v.filter(x=>x>=e.max*0.6).length/v.length*100))}%</span>${e.id==='E3'?`<span style="color:var(--bad)">أقل من 25% (راسب في المقرر): ${AR(v.filter(x=>x<e.max*0.25).length)}</span>`:''}`:'<span>لا توجد درجات بعد</span>'}</div>`}).join('')}</div>`;
   const secOpts=(cur,all)=>(all?`<option value="all">جميع شعب الاختبارات</option>`:'')+secs.map(s=>`<option value="${esc(s.id)}" ${s.id===cur?'selected':''}>${esc(s.name)}</option>`).join('');
+  /* موعد الاختبار لكل شعبة: بدون موعد = مفتوح طوال فتح الاختبار (كما هو الآن) */
+  const wLoc=iso=>{if(!iso)return '';const d=new Date(iso);d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,16)};
+  const wFmt=iso=>new Date(iso).toLocaleString('ar-SA-u-ca-gregory-nu-latn',{weekday:'long',day:'numeric',month:'long',hour:'numeric',minute:'2-digit'});
+  const wSt=w=>{const n=Date.now(),f=new Date(w.from).getTime(),t=new Date(w.to).getTime();return n<f?'⏳ لم يبدأ':n>t?'⛔ انتهى':'🟢 جار الآن'};
+  const exWinHtml=e=>{const W=e.win||{},L=secs.concat(st.some(x=>!x.sectionId)?[{id:'_',name:'بدون شعبة'}]:[]),k=L.filter(x=>W[x.id]).length;
+    return `<details class="exWin"><summary>🗓 <b>موعد الاختبار لكل شعبة</b> <small>(${k?AR(k)+' محدد':'بدون موعد: مفتوح ما دام الاختبار مفتوحا'})</small></summary>
+    <small class="sub">الشعبة بدون موعد تختبر في أي وقت ما دام الاختبار مفتوحا (كما هو الآن). الشعبة بموعد لا تبدأ قبل وقت البداية، وينتهي وقت الجميع عند وقت النهاية ولو دخل متأخرا، وتصحح إجابات من لم يسلّم تلقائيا. ويجب أن يكون الاختبار مفتوحا.</small>
+    ${L.map(x=>{const w=W[x.id];return `<div class="exWR" data-sec="${esc(x.id)}"><b>${esc(x.name)}</b>${w?`<span class="exWNow">${wSt(w)} · ${esc(wFmt(w.from))} ← ${esc(new Date(w.to).toLocaleTimeString('ar-SA-u-nu-latn',{hour:'numeric',minute:'2-digit'}))}</span>`:'<span class="exWNow">بدون موعد (مفتوح)</span>'}
+      <label>البداية<input type="datetime-local" class="exWF" value="${wLoc(w&&w.from)}"></label><label>النهاية<input type="datetime-local" class="exWT" value="${wLoc(w&&w.to)}"></label>
+      <div class="row" style="gap:6px"><button class="btn sm exWS">حفظ الموعد</button>${w?'<button class="btn ghost sm exWC">إلغاء الموعد</button>':''}</div></div>`}).join('')}</details>`};
+  /* درجات الاختبار التجريبي لكل متدرب (للاطلاع فقط، لا تدخل في الدرجات) */
+  const TE=AX.find(e=>e.trial),tsel=EXTS!=='all'&&secs.some(s=>s.id===EXTS)?EXTS:'all';
+  const tList=TE?st.filter(s=>tsel==='all'||s.sectionId===tsel).map(s=>({s,x:(by[s.id]||{})[TE.id]})).sort((a,b)=>sn(a.s.sectionId).localeCompare(sn(b.s.sectionId),'ar')||String(a.s.name).localeCompare(String(b.s.name),'ar')):[];
+  const tSc=x=>Math.round((x.raw!=null?x.raw:x.score)*100)/100,tSt=x=>!x?'لم يدخل':!x.submittedAt?'يحل الآن':null;
+  const tDone=tList.filter(o=>o.x&&o.x.submittedAt),tAvg=tDone.length?tDone.reduce((a,o)=>a+tSc(o.x),0)/tDone.length:0;
+  const trialHtml=TE?`<div class="card"><h2>🧪 درجات الاختبار التجريبي</h2><p class="sub">للاطلاع فقط، ولا تدخل في الدرجات ولا المجموع. الدرجة من ${AR(TE.max)}.</p>
+   <div class="row" style="flex-wrap:wrap;gap:6px"><select id="exTrSec">${secOpts(tsel,true)}</select><button class="btn ghost sm" id="exTrX">⬇ تصدير Excel</button><button class="btn ghost sm" id="exTrR">↻ تحديث</button></div>
+   <p class="sub" style="margin-top:8px">سلّم ${AR(tDone.length)} من ${AR(tList.length)}${tDone.length?` · المتوسط <b>${AR(Math.round(tAvg*100)/100)}</b> من ${AR(TE.max)}`:''}</p>
+   ${tList.length?`<div class="tableWrap"><table><thead><tr><th>الرقم</th><th>الاسم</th><th>الشعبة</th><th>الدرجة<br><small>(${AR(TE.max)})</small></th></tr></thead><tbody>
+   ${tList.map(o=>`<tr style="cursor:default"><td class="num">${esc(o.s.id)}</td><td>${esc(o.s.name)}</td><td>${esc(sn(o.s.sectionId))}</td><td class="num">${tSt(o.x)?`<span class="exRaw">${tSt(o.x)}</span>`:`<b>${AR(tSc(o.x))}</b>`}</td></tr>`).join('')}
+   </tbody></table></div>`:'<p class="empty">لا يوجد متدربون في هذه الشعبة.</p>'}</div>`:'';
   m.innerHTML=`<div class="card"><h2>📝 الاختبارات الفصلية والنهائية</h2><p class="sub">أي اختبار تفتحه يظهر مباشرة لجميع متدربي كشف الاختبارات، ويختفي عند إغلاقه. يدخل المتدرب من تبويب «الاختبارات» في صفحة الدخول، ولكل متدرب محاولة واحدة.</p>
   <div class="exGrid">${AX.map(e=>`<div class="exT ${e.open?'on':''}" data-e="${e.id}"><div class="exTh"><b>${esc(e.t)}</b><span class="tag">${AR(e.max)} درجة</span></div>
    <p class="sub">${e.soon?'⏳ سيضاف لاحقا':e.n?`عدد الأسئلة ${AR(e.n)} · ${esc(e.cover)}`+(e.ready===false?' · <b style="color:var(--bad)">بانتظار اكتمال بنك الأسئلة</b>':''):'لم تحدد أسئلته بعد'}</p>
@@ -642,8 +704,10 @@ function exDraw(){
    <div class="exSt">${e.trial?(e.open?'🟢 مفتوح لجميع الشعب':'⚪ مغلق'):e.open&&!e.soon?'🟢 مفتوح لجميع الشعب':'⚪ مغلق'} · سلّم ${AR(nOf(e.id,x=>x.submittedAt))} · يحل الآن ${AR(nOf(e.id,x=>!x.submittedAt))}</div>
    ${e.open&&!e.soon&&e.codes?`<div class="exCode"><div>🔑 <b class="exCT">رمز الدخول لكل شعبة</b></div><small>أرسل لكل شعبة رمزها قبل بداية الاختبار؛ لا يبدأ أحد بدونه، ومن انقطع يكمل بدون رمز.</small>
      ${secs.concat(st.some(x=>!x.sectionId)?[{id:'_',name:'بدون شعبة'}]:[]).filter(x=>e.codes[x.id]).map(x=>`<div class="exCR"><span>${esc(x.name)}</span><b dir="ltr">${e.codes[x.id]}</b><button class="btn ghost sm exNC" data-sec="${esc(x.id)}">رمز جديد</button></div>`).join('')}</div>`:''}
+   ${e.n&&!e.soon?exWinHtml(e):''}
    <div class="row"><label class="exMin">المدة <input type="number" min="5" max="180" value="${e.min}" ${e.n&&!e.soon?'':'disabled'}> دقيقة</label>
    <button class="btn ${e.open?'danger':''} exTg" ${e.n&&e.ready!==false?'':'disabled'}>${e.open?'إغلاق الاختبار':'فتح الاختبار'}</button></div></div>`).join('')}</div></div>
+  ${trialHtml}
   <div class="card"><h2>👥 شعب الاختبارات وكشف المتدربين</h2><p class="sub">شعب خاصة بالاختبارات، مستقلة عن شعب المنصة. متدرب المنصة يدخل الاختبار بكلمة مرور المنصة، ومتدرب من خارج المنصة يختار كلمة مروره في أول دخول.</p>
    <div class="row" style="flex-wrap:wrap;gap:6px"><button class="btn" id="exFromP">⬇ استيراد متدربي المنصة</button><label class="btn ghost" style="cursor:pointer">📄 استيراد Excel<input type="file" id="exFile" accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv" hidden></label><button class="btn ghost" id="exTpl">⬇ نموذج Excel</button></div>
    <div class="row exAddF" style="margin-top:10px;flex-wrap:wrap;gap:6px"><b style="width:100%">➕ إضافة متدرب (من المنصة أو من خارجها)</b><input type="text" id="exAid" inputmode="numeric" placeholder="الرقم التدريبي" style="flex:1;min-width:120px"><input type="text" id="exAnm" placeholder="الاسم" style="flex:2;min-width:150px"><select id="exAsec">${secs.map(s=>`<option value="${esc(s.name)}">${esc(s.name)}</option>`).join('')}<option value="__new">شعبة جديدة…</option></select><button class="btn sm" id="exAdd">إضافة</button></div>
@@ -663,6 +727,11 @@ function exDraw(){
     c.querySelector('.exTg').onclick=async()=>{if(!confirm(e.open?`إغلاق «${e.t}»؟ يختفي عن جميع المتدربين، ومن بدأ الحل لا يستطيع إكماله.`:(e.trial?`فتح «${e.t}» لجميع الشعب الآن؟ لا يدخل في الدرجات.`:`فتح «${e.t}» لجميع الشعب الآن؟`)))return;
       const x=await api({a:'texams',token:TOKEN,op:'set',id,open:!e.open});if(x.ok){toast(e.open?'تم إغلاق الاختبار':e.trial?'تم فتح الاختبار التجريبي لجميع الشعب':'تم فتح الاختبار لجميع الشعب');drawExams()}else toast(errText(x.error))};
     c.querySelectorAll('.exNC').forEach(nc=>nc.onclick=async()=>{if(!confirm('إنشاء رمز دخول جديد لهذه الشعبة؟ الرمز القديم لن يعمل لمن لم يبدأ بعد.'))return;const x=await api({a:'texams',token:TOKEN,op:'set',id,newcode:true,sectionId:nc.dataset.sec});if(x.ok){toast('تم إنشاء رمز جديد للشعبة');drawExams()}else toast(errText(x.error))});
+    c.querySelectorAll('.exWR').forEach(wr=>{const sid=wr.dataset.sec,f=wr.querySelector('.exWF'),to=wr.querySelector('.exWT');
+      f.onchange=()=>{if(f.value&&!to.value){const d=new Date(f.value);d.setMinutes(d.getMinutes()+e.min);to.value=wLoc(d.toISOString())}};
+      wr.querySelector('.exWS').onclick=async()=>{if(!f.value||!to.value)return toast('حدد وقت البداية والنهاية');const a=new Date(f.value),b=new Date(to.value);if(b<=a)return toast('وقت النهاية يجب أن يكون بعد البداية');
+        const x=await api({a:'texams',token:TOKEN,op:'set',id,win:{sectionId:sid,from:a.toISOString(),to:b.toISOString()}});if(x.ok){toast('تم حفظ موعد الشعبة');drawExams()}else toast(x.error==='bad_window'?'وقت النهاية يجب أن يكون بعد البداية':errText(x.error))};
+      const cl=wr.querySelector('.exWC');if(cl)cl.onclick=async()=>{if(!confirm('إلغاء موعد هذه الشعبة؟ يصبح الاختبار مفتوحا لها ما دام مفتوحا.'))return;const x=await api({a:'texams',token:TOKEN,op:'set',id,win:{sectionId:sid}});if(x.ok){toast('تم إلغاء الموعد');drawExams()}else toast(errText(x.error))}});
     const inp=c.querySelector('.exMin input');inp.onchange=async()=>{const x=await api({a:'texams',token:TOKEN,op:'set',id,min:+inp.value});if(x.ok){toast('تم حفظ المدة');drawExams()}else toast(errText(x.error))}});
   $('#exFromP').onclick=()=>{if(!confirm('إضافة جميع متدربي المنصة إلى كشف الاختبارات بشعبهم الحالية؟ تنشأ شعب الاختبارات بأسماء شعب المنصة.'))return;run({op:'fromplatform'},'تم استيراد متدربي المنصة')};
   $('#exTpl').onclick=()=>saveBook([['متدربو الاختبارات',[['الرقم التدريبي','الاسم','الشعبة'],['441001','أحمد محمد','شعبة 101'],['441002','خالد سعد','شعبة 102']],[18,28,18]]],'نموذج-متدربي-الاختبارات.xlsx');
@@ -683,6 +752,8 @@ function exDraw(){
     c.querySelector('.exSd').onclick=()=>{if(confirm('حذف شعبة «'+sn(id)+'»؟'))run({op:'secdel',id},'تم الحذف')}});
   $('#exSec').onchange=e=>{EXSEC=e.target.value;ls.set('p101-exsec',EXSEC);exDraw()};
   $('#exR').onclick=()=>drawExams();
+  if(TE){$('#exTrSec').onchange=e=>{EXTS=e.target.value;ls.set('p101-extrs',EXTS);exDraw()};$('#exTrR').onclick=()=>drawExams();
+    $('#exTrX').onclick=()=>saveBook([['الاختبار التجريبي',[['الرقم التدريبي','الاسم','الشعبة','الدرجة ('+TE.max+')','الحالة'],...tList.map(o=>[o.s.id,o.s.name,sn(o.s.sectionId),tSt(o.x)?'':tSc(o.x),tSt(o.x)||'سلّم'])],[16,28,18,14,12]]],'درجات-الاختبار-التجريبي.xlsx')}
     document.querySelectorAll('.exWkW').forEach(x=>x.onchange=()=>{const v=Math.max(0,Math.min(WK_UNIT,+x.value||0));WKW[+x.dataset.i]=v;const t=Math.round(WKW.reduce((a,y)=>a+(+y||0),0)*100)/100;if(t!==WK_UNIT){const e=$('#exWkSum');e.textContent='المجموع '+t+' من 4 — يجب أن يكون 4';e.className='bad';return}ls.set('p101-wkw4b',WKW);exDraw()});
   m.querySelectorAll('tbody tr[data-id]').forEach(tr=>{const id=tr.dataset.id,s=st.find(x=>x.id===id);
     tr.querySelector('.exMv').onchange=e=>run({op:'move',id,sectionId:e.target.value},'تم نقل المتدرب');
