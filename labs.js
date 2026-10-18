@@ -17,6 +17,13 @@ const CSS=`
 .lab .row label{font-weight:700;font-size:14px}
 .lab .row output{direction:ltr;font-weight:800;color:var(--accent);min-width:64px;text-align:left}
 .lab .row input{grid-column:1/-1;width:100%;accent-color:var(--lo);height:28px}
+:root[data-theme="dark"] .lab .stage svg [fill="#1F2937"]:not(text):not(tspan),:root[data-theme="dark"] .lab .stage svg [fill="#111827"]:not(text):not(tspan),:root[data-theme="dark"] .lab .stage svg [fill="#334155"]:not(text):not(tspan){fill:#4B5563}:root[data-theme="dark"] .lab .stage svg [fill="#1F2937"][stroke="#1F2937"]:not(text):not(tspan),:root[data-theme="dark"] .lab .stage svg [fill="#1F2937"][stroke="#111827"]:not(text):not(tspan),:root[data-theme="dark"] .lab .stage svg [fill="#1F2937"][stroke="#334155"]:not(text):not(tspan),:root[data-theme="dark"] .lab .stage svg [fill="#1F2937"][stroke="#0F172A"]:not(text):not(tspan),:root[data-theme="dark"] .lab .stage svg [fill="#111827"][stroke="#1F2937"]:not(text):not(tspan),:root[data-theme="dark"] .lab .stage svg [fill="#111827"][stroke="#111827"]:not(text):not(tspan),:root[data-theme="dark"] .lab .stage svg [fill="#111827"][stroke="#334155"]:not(text):not(tspan),:root[data-theme="dark"] .lab .stage svg [fill="#111827"][stroke="#0F172A"]:not(text):not(tspan),:root[data-theme="dark"] .lab .stage svg [fill="#334155"][stroke="#1F2937"]:not(text):not(tspan),:root[data-theme="dark"] .lab .stage svg [fill="#334155"][stroke="#111827"]:not(text):not(tspan),:root[data-theme="dark"] .lab .stage svg [fill="#334155"][stroke="#334155"]:not(text):not(tspan),:root[data-theme="dark"] .lab .stage svg [fill="#334155"][stroke="#0F172A"]:not(text):not(tspan),:root[data-theme="dark"] .lab .stage svg [fill="#0F172A"][stroke="#1F2937"]:not(text):not(tspan),:root[data-theme="dark"] .lab .stage svg [fill="#0F172A"][stroke="#111827"]:not(text):not(tspan),:root[data-theme="dark"] .lab .stage svg [fill="#0F172A"][stroke="#334155"]:not(text):not(tspan),:root[data-theme="dark"] .lab .stage svg [fill="#0F172A"][stroke="#0F172A"]:not(text):not(tspan){stroke:#A3B1C6}:root[data-theme="dark"] .lab .stage svg [fill="#1F2937"]:not(text):not(tspan):not([stroke]),:root[data-theme="dark"] .lab .stage svg [fill="#111827"]:not(text):not(tspan):not([stroke]),:root[data-theme="dark"] .lab .stage svg [fill="#334155"]:not(text):not(tspan):not([stroke]),:root[data-theme="dark"] .lab .stage svg [fill="#0F172A"]:not(text):not(tspan):not([stroke]){stroke:#A3B1C6;stroke-width:1.2}:root[data-theme="dark"] .lab .stage svg text[style*="paint-order"][fill="#1F2937"],:root[data-theme="dark"] .lab .stage svg text[style*="paint-order"][fill="#111827"],:root[data-theme="dark"] .lab .stage svg text[style*="paint-order"][fill="#334155"],:root[data-theme="dark"] .lab .stage svg text[style*="paint-order"][fill="#0F172A"],:root[data-theme="dark"] .lab .stage svg text[style*="paint-order"][fill="#475569"]{fill:var(--ink)}:root[data-theme="dark"] .lab .stage svg text[style*="paint-order"][fill="#2563EB"]{fill:#7DA6FF}:root[data-theme="dark"] .lab .stage svg text[style*="paint-order"][fill="#DC2626"]{fill:#F87171}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .lab .stage svg [fill="#1F2937"]:not(text):not(tspan),:root:not([data-theme="light"]) .lab .stage svg [fill="#111827"]:not(text):not(tspan),:root:not([data-theme="light"]) .lab .stage svg [fill="#334155"]:not(text):not(tspan){fill:#4B5563}:root:not([data-theme="light"]) .lab .stage svg [fill="#1F2937"][stroke="#1F2937"]:not(text):not(tspan),:root:not([data-theme="light"]) .lab .stage svg [fill="#1F2937"][stroke="#111827"]:not(text):not(tspan),:root:not([data-theme="light"]) .lab .stage svg [fill="#1F2937"][stroke="#334155"]:not(text):not(tspan),:root:not([data-theme="light"]) .lab .stage svg [fill="#1F2937"][stroke="#0F172A"]:not(text):not(tspan),:root:not([data-theme="light"]) .lab .stage svg [fill="#111827"][stroke="#1F2937"]:not(text):not(tspan),:root:not([data-theme="light"]) .lab .stage svg [fill="#111827"][stroke="#111827"]:not(text):not(tspan),:root:not([data-theme="light"]) .lab .stage svg [fill="#111827"][stroke="#334155"]:not(text):not(tspan),:root:not([data-theme="light"]) .lab .stage svg [fill="#111827"][stroke="#0F172A"]:not(text):not(tspan),:root:not([data-theme="light"]) .lab .stage svg [fill="#334155"][stroke="#1F2937"]:not(text):not(tspan),:root:not([data-theme="light"]) .lab .stage svg [fill="#334155"][stroke="#111827"]:not(text):not(tspan),:root:not([data-theme="light"]) .lab .stage svg [fill="#334155"][stroke="#334155"]:not(text):not(tspan),:root:not([data-theme="light"]) .lab .stage svg [fill="#334155"][stroke="#0F172A"]:not(text):not(tspan),:root:not([data-theme="light"]) .lab .stage svg [fill="#0F172A"][stroke="#1F2937"]:not(text):not(tspan),:root:not([data-theme="light"]) .lab .stage svg [fill="#0F172A"][stroke="#111827"]:not(text):not(tspan),:root:not([data-theme="light"]) .lab .stage svg [fill="#0F172A"][stroke="#334155"]:not(text):not(tspan),:root:not([data-theme="light"]) .lab .stage svg [fill="#0F172A"][stroke="#0F172A"]:not(text):not(tspan){stroke:#A3B1C6}:root:not([data-theme="light"]) .lab .stage svg [fill="#1F2937"]:not(text):not(tspan):not([stroke]),:root:not([data-theme="light"]) .lab .stage svg [fill="#111827"]:not(text):not(tspan):not([stroke]),:root:not([data-theme="light"]) .lab .stage svg [fill="#334155"]:not(text):not(tspan):not([stroke]),:root:not([data-theme="light"]) .lab .stage svg [fill="#0F172A"]:not(text):not(tspan):not([stroke]){stroke:#A3B1C6;stroke-width:1.2}:root:not([data-theme="light"]) .lab .stage svg text[style*="paint-order"][fill="#1F2937"],:root:not([data-theme="light"]) .lab .stage svg text[style*="paint-order"][fill="#111827"],:root:not([data-theme="light"]) .lab .stage svg text[style*="paint-order"][fill="#334155"],:root:not([data-theme="light"]) .lab .stage svg text[style*="paint-order"][fill="#0F172A"],:root:not([data-theme="light"]) .lab .stage svg text[style*="paint-order"][fill="#475569"]{fill:var(--ink)}:root:not([data-theme="light"]) .lab .stage svg text[style*="paint-order"][fill="#2563EB"]{fill:#7DA6FF}:root:not([data-theme="light"]) .lab .stage svg text[style*="paint-order"][fill="#DC2626"]{fill:#F87171}}
+.lab input[type=range]{-webkit-appearance:none;appearance:none;background:transparent;height:32px;touch-action:pan-y}
+.lab input[type=range]::-webkit-slider-runnable-track{height:8px;border-radius:4px;background:#CBD5E1}
+.lab input[type=range]::-moz-range-track{height:8px;border-radius:4px;background:#CBD5E1}
+.lab input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:28px;height:28px;margin-top:-10px;border-radius:50%;background:#F7931E;border:3px solid #fff;box-shadow:0 0 0 2px #F7931E,0 2px 6px rgba(0,0,0,.35)}
+.lab input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:#F7931E;border:3px solid #fff;box-shadow:0 0 0 2px #F7931E,0 2px 6px rgba(0,0,0,.35)}
 .lab .btns{display:flex;gap:8px;margin-top:6px}
 .lab .btns button{flex:1;border:0;border-radius:10px;padding:10px;font:inherit;font-weight:800;cursor:pointer}
 .lab .go{background:var(--lo);color:#fff}
@@ -3800,6 +3807,342 @@ function pdLab(box){
   calcInit(box);newObj();qf();
 }
 
+function capScene(o){/* الرسم المعتمد — o:{d (mm), s (إدخال العازل 0..1), c (قراءة الجهاز), lab} */
+  o=o||{};const B=330,S=(x,d,z)=>[x+d*0.6,B-z-d*0.5],F=n=>(+n).toFixed(1),P=(...a)=>a.map(p=>F(p[0])+','+F(p[1])).join(' ');
+  const box=(x0,x1,d0,d1,z0,z1,top,front,side,st)=>{st=st||'#334155';return `<polygon points="${P(S(x0,d0,z0),S(x1,d0,z0),S(x1,d0,z1),S(x0,d0,z1))}" fill="${front}" stroke="${st}"/><polygon points="${P(S(x1,d0,z0),S(x1,d1,z0),S(x1,d1,z1),S(x1,d0,z1))}" fill="${side}" stroke="${st}"/><polygon points="${P(S(x0,d0,z1),S(x1,d0,z1),S(x1,d1,z1),S(x0,d1,z1))}" fill="${top}" stroke="${st}"/>`};
+  const line=(a,b,c,w,ex)=>`<line x1="${F(a[0])}" y1="${F(a[1])}" x2="${F(b[0])}" y2="${F(b[1])}" stroke="${c||'#334155'}" stroke-width="${w||1.2}" ${ex||''}/>`;
+  const curve=(pts,c,w)=>{let d=`M${F(pts[0][0])},${F(pts[0][1])}`;for(let i=1;i<pts.length-1;i+=2)d+=` Q${F(pts[i][0])},${F(pts[i][1])} ${F(pts[i+1][0])},${F(pts[i+1][1])}`;return `<path d="${d}" fill="none" stroke="${c}" stroke-width="${w||2.6}" stroke-linecap="round"/>`};
+  const lbl=(t,x,y,anc,col,sz)=>`<text x="${F(x)}" y="${F(y)}" text-anchor="${anc||'middle'}" font-size="${sz||15}" font-weight="700" fill="${col||'var(--ink)'}" style="paint-order:stroke;stroke:var(--panel);stroke-width:3.5px">${t}</text>`;
+  const dot=(p,c,r)=>`<circle cx="${F(p[0])}" cy="${F(p[1])}" r="${r||3.5}" fill="${c}" stroke="#1F2937" stroke-width="0.8"/>`;
+  const Z=8,TX0=40,TX1=400,TD0=40,TD1=70,XF=170,dm=o.d==null?3:o.d,XM=XF+dm*20,PD0=0,PD1=110,PZ0=70,PZ1=180,ZC=125,sl=o.s||0;
+  let g=`<defs><linearGradient id="capPl" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F1F5F9"/><stop offset=".5" stop-color="#CBD5E1"/><stop offset="1" stop-color="#94A3B8"/></linearGradient><marker id="capAr" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#C2410C"/></marker></defs>`;
+  /* الطاولة والمسار المدرج: صفره عند اللوح الثابت، وكل قسم 0.1 mm */
+  g+=box(-60,470,-30,150,0,8,'#E9C894','#B7834A','#9A6A3A','#7C4A1F')+box(TX0,TX1,TD0,TD1,Z,Z+10,'#CBD5E1','#94A3B8','#64748B');
+  for(let n=0;n<=150;n++){const x=XF+n*2;if(x>TX1-4)break;const L=n%10===0?7:n%5===0?4.5:2.5;g+=line(S(x,TD0,Z+10),S(x,TD0+L,Z+10),'#1F2937',n%10?0.6:1);
+    if(n%10===0){const p=S(x,TD0-2,Z+10);g+=`<text x="${F(p[0])}" y="${F(p[1]+9)}" font-size="8" font-weight="700" text-anchor="middle" fill="#111827">${n/10}</text>`}}
+  const holder=(x,mov)=>{let s=box(x-14,x+14,TD0-4,TD1+4,Z+10,Z+18,'#475569','#334155','#1F2937','#0F172A');const a=S(x,55,Z+18),b=S(x,55,PZ0);
+    s+=`<rect x="${F(a[0]-4)}" y="${F(b[1])}" width="8" height="${F(a[1]-b[1])}" fill="#FDE68A" stroke="#B45309" stroke-width=".8"/>`;const p=S(x,TD0-4,Z+12);
+    return s+`<path d="M${F(p[0]-6)},${F(p[1]+10)} L${F(p[0])},${F(p[1])} L${F(p[0]+6)},${F(p[1]+10)} Z" fill="${mov?'#F7931E':'#64748B'}" stroke="${mov?'#7C2D12':'#1F2937'}" stroke-width=".6"/>`};
+  const plate=x=>`<polygon points="${P(S(x-2,PD0,PZ0),S(x-2,PD1,PZ0),S(x-2,PD1,PZ1),S(x-2,PD0,PZ1))}" fill="#94A3B8" stroke="#334155"/><polygon points="${P(S(x+2,PD0,PZ0),S(x+2,PD1,PZ0),S(x+2,PD1,PZ1),S(x+2,PD0,PZ1))}" fill="url(#capPl)" stroke="#334155"/><polygon points="${P(S(x-2,PD0,PZ1),S(x+2,PD0,PZ1),S(x+2,PD1,PZ1),S(x-2,PD1,PZ1))}" fill="#E2E8F0" stroke="#334155"/><polygon points="${P(S(x-2,PD0,PZ0),S(x+2,PD0,PZ0),S(x+2,PD0,PZ1),S(x-2,PD0,PZ1))}" fill="#64748B" stroke="#334155"/>`;
+  g+=holder(XF,false)+plate(XF);
+  /* اللوح العازل (أكريليك) ينزلق بين اللوحين من الخلف */
+  if(sl>0){const off=(1-sl)*150;g+=box(XF+3,XM-3,PD0+off,PD1+off,PZ0+4,PZ1-4,'#BAE6FD','#7DD3FC','#38BDF8','#0369A1').replace(/fill="#/g,'fill-opacity=".85" fill="#')}
+  g+=holder(XM,true)+plate(XM);
+  {const a=S(XF+2,PD1,PZ1+14),b=S(XM-2,PD1,PZ1+14);g+=line(S(XF+2,PD1,PZ1),S(XF+2,PD1,PZ1+22),'#C2410C',1,'stroke-dasharray="3 2"')+line(S(XM+2,PD1,PZ1),S(XM+2,PD1,PZ1+22),'#C2410C',1,'stroke-dasharray="3 2"')
+    +`<line x1="${F(a[0])}" y1="${F(a[1])}" x2="${F(b[0])}" y2="${F(b[1])}" stroke="#C2410C" stroke-width="1.6" marker-start="url(#capAr)" marker-end="url(#capAr)"/>`+lbl('d',(a[0]+b[0])/2,a[1]-6,'middle','#C2410C')}
+  /* جهاز قياس السعة الرقمي */
+  const MX=-140;g+=box(MX,MX+90,-20,6,Z,Z+56,'#E2E8F0','#F59E0B','#D97706');
+  const v0=S(MX+10,-20,Z+30);g+=`<rect x="${F(v0[0])}" y="${F(v0[1])}" width="70" height="20" fill="#0F172A" rx="2"/><text x="${F(v0[0]+35)}" y="${F(v0[1]+15)}" font-size="13" font-weight="700" fill="#22C55E" text-anchor="middle" font-family="monospace" direction="ltr">${o.c||'0.0'} pF</text>`;
+  const jr=S(MX+22,-20,Z+46),jb=S(MX+68,-20,Z+46);
+  g+=`<text x="${F(jr[0])}" y="${F(jr[1]+13)}" font-size="8" font-weight="700" text-anchor="middle" fill="#111827">+</text><text x="${F(jb[0])}" y="${F(jb[1]+13)}" font-size="8" font-weight="700" text-anchor="middle" fill="#111827">COM</text>`;
+  const tf=S(XF,0,ZC-25),tm=S(XM,0,ZC+5);
+  g+=curve([jb,[jb[0]+30,tf[1]+20],[tf[0]-110,tf[1]+4],[tf[0]-40,tf[1]],tf],'#2563EB')+curve([jr,[jr[0]+6,tm[1]],[jr[0]+120,tm[1]],[tm[0]-200,tm[1]],tm],'#DC2626');
+  g+=dot(jr,'#DC2626',4)+dot(jb,'#111827',4)+dot(tf,'#94A3B8',3)+dot(tm,'#94A3B8',3);
+  {const c=S(XM+2,67,131);g+=lbl('A',c[0],c[1],'middle','#1D4ED8',18)}
+  let H=300;
+  if(o.lab){let q=S(XF-2,20,165);g+=lbl('اللوح الثابت (ألومنيوم)',q[0]-50,q[1]-10,'end','#334155')+line([q[0]-48,q[1]-14],[q[0]+2,q[1]],'#334155',1);
+    q=S(XM+2,93.5,163.5);g+=lbl('اللوح المتحرك (ألومنيوم)',q[0]+14,q[1]+2,'start','#334155');
+    q=S(MX+45,-20,Z);g+=lbl('جهاز قياس السعة الرقمي',q[0],q[1]+22);
+    q=S(TX1-30,TD1,Z+10);g+=lbl('المسار المدرج (mm)',q[0]+6,q[1]-12,'start','#92400E');
+    {const b=S(XM-2,PD1,PZ1+14);g+=lbl('الوسط بين اللوحين: هواء',b[0]+14,b[1]+5,'start','#0369A1',13)}
+    q=S(XM,55,(Z+18+PZ0)/2);g+=lbl('حامل عازل',q[0]+14,q[1]+4,'start','#B45309');
+    q=S(XM+2,110,105);g+=lbl('مساحة اللوح',q[0]+10,q[1]-8,'start','#1D4ED8',13)+`<text x="${F(q[0]+10)}" y="${F(q[1]+12)}" font-size="13" font-weight="700" fill="#1D4ED8" direction="ltr">A = 0.08 m²</text>`;
+    const steps=['① لوحان معدنيان متوازيان من الألومنيوم، مساحة كل منهما A = 0.08 m²، والمسافة بينهما d تقرأ على المسار المدرج.','② طرفا جهاز قياس السعة الرقمي متصلان باللوحين، ويعرض السعة C بوحدة البيكوفاراد.','③ يحرك المتدرب اللوح المتحرك إلى المسافة d₁، ويقرأ المسار المدرج ثم جهاز قياس السعة.','④ يكرر عند مسافتين أكبر d₂ و d₃ (كل قراءة خطوة مستقلة)، فيلاحظ أن السعة تقل.','⑤ الوسط العازل بين اللوحين هو الهواء، وسماحيته النسبية εᵣ = 1، فتكون ε = ε₀·εᵣ = ε₀ في القانون.','⑥ يحسب السعة من القانون عند كل مسافة ويقارنها بالقراءة، ويرسم السعة مقابل 1/d فيظهر خط مستقيم.'];
+    const py=360;g+=`<rect x="-180" y="${py}" width="770" height="${30+steps.length*24}" rx="10" fill="#FFF7ED" stroke="#F7931E" stroke-width="1.5"/><text x="575" y="${py+22}" font-size="15" font-weight="800" text-anchor="start" direction="rtl" fill="#C2410C">خطوات التجربة</text>`;
+    steps.forEach((t,i)=>{g+=`<text x="575" y="${py+48+i*24}" font-size="13.5" font-weight="600" text-anchor="start" fill="#0F172A" direction="rtl">${t}</text>`});H=py+30+steps.length*24+10-40}
+  return `<svg viewBox="-190 ${o.lab?40:44} 790 ${o.lab?H:H+26}" aria-label="مكثف متوازي اللوحين من الألومنيوم على مسار مدرج، وجهاز قياس السعة الرقمي متصل باللوحين">${g}</svg>`}
+
+function capLab(box){
+  const A=0.08,E0=8.85e-12,DX=[2,4,6],DMAX=10,SB='₁₂₃',AL='أبج';
+  box.innerHTML=`
+  <div class="intro"><small class="labKind">🧪 تجربة عملية تفاعلية</small><h3>1. اسم التجربة</h3><p class="labName">دراسة العلاقة بين سعة المكثف والمسافة بين لوحيه</p></div>
+  <div class="tags"><span class="tag">المسافة d: <i>المسار المدرج</i> · mm</span><span class="tag">السعة C: <i>جهاز قياس السعة الرقمي</i> · pF</span><span class="tag dv">السعة من القانون: <i>محسوبة</i> · pF</span></div>
+  <div class="intro goals"><h3>2. أهداف التجربة</h3><ol class="gl">
+    <li>التعرف على المكثف متوازي اللوحين وجهاز قياس السعة الرقمي والمسار المدرج.</li>
+    <li>قياس سعة المكثف بجهاز قياس السعة الرقمي عند ثلاث مسافات بين اللوحين تقاس بالمسار المدرج.</li>
+    <li>حساب سعة المكثف من القانون <span dir="ltr">C = ε₀·A / d</span> عند كل مسافة ومقارنتها بقراءة الجهاز.</li>
+    <li>رسم السعة مقابل مقلوب المسافة <span dir="ltr">1/d</span>، والتحقق من أن السعة تتناسب عكسيا مع المسافة بين اللوحين.</li></ol></div>
+  <div class="intro"><h3>3. الأدوات والأجهزة المستخدمة</h3>
+    <div class="tool"><div class="stage">${capScene({lab:true,d:3,c:'236.0'})}</div><div class="vcap">المكثف متوازي اللوحين وجهاز قياس السعة الرقمي والمسار المدرج: منظر ثلاثي الأبعاد</div>
+    <p><b>ترتيب الأجهزة:</b> لوحان معدنيان متوازيان من الألومنيوم، كل لوح على حامل بساق عازلة، والحاملان على مسار مدرج بالمليمتر صفره عند اللوح الثابت، والمؤشر البرتقالي تحت اللوح المتحرك يقرأ المسافة <span dir="ltr">d</span>. وطرفا جهاز قياس السعة الرقمي متصلان بالحافتين الأماميتين للوحين.</p></div>
+    <p><b>المكثف متوازي اللوحين <span dir="ltr">(Parallel Plate Capacitor)</span>:</b> لوحان معدنيان من الألومنيوم، مساحة كل لوح <span dir="ltr">A = 0.08 m²</span> (معطاة).</p>
+    <p><b>الوسط العازل بين اللوحين:</b> الهواء. وسماحية أي وسط عازل <span dir="ltr" style="white-space:nowrap">ε = ε₀·εᵣ</span>، حيث <span dir="ltr">ε₀</span> سماحية الفراغ و <span dir="ltr">εᵣ</span> السماحية النسبية للوسط (ثابت العزل). وللهواء <span dir="ltr">εᵣ = 1</span>، فسماحية الهواء <span dir="ltr" style="white-space:nowrap">ε = ε₀ = 8.85 × 10⁻¹² F/m</span>، لذلك نستخدم <span dir="ltr">ε₀</span> في قانون السعة.</p>
+    <p><b>جهاز قياس السعة الرقمي <span dir="ltr">(Capacitance Meter)</span>:</b> يقيس سعة المكثف المتصل بطرفيه ويعرضها بوحدة البيكوفاراد <span dir="ltr">pF</span> بدقة <span dir="ltr">0.1 pF</span>، و <span dir="ltr">1 pF = 10⁻¹² F</span>.</p>
+    <p><b>المسار المدرج:</b> مقسم كل <span dir="ltr">0.1 mm</span>، وينزلق عليه حامل اللوح المتحرك، ويقرأ مؤشره المسافة بين اللوحين.</p>
+    <p><b>الحامل بساق عازلة:</b> يمسك اللوح ويمنع تسرب الشحنة منه إلى المسار.</p></div>
+  <h3 class="secH">4. القوانين المستخدمة</h3>
+  <div class="ctl">
+    <div class="law ftl"><div class="ln lw"><b>السعة الكهربائية: الشحنة اللازمة لتغيير جهد المكثف بمقدار فولت واحد</b><span>C = q / V</span></div>
+      <div class="ln lw"><b>سماحية الوسط العازل بين اللوحين</b><span>ε = ε₀·εᵣ</span></div>
+      <div class="ln lw"><b>سعة المكثف متوازي اللوحين والوسط بينهما هواء (εᵣ = 1)</b><span>C = ε₀·A / d</span></div>
+      
+      <div class="vfig">${(window.FIGS||{}).efUniform||''}</div>
+      <div class="sym"><b>حيث:</b><ul>
+      <li><span class="chip" dir="ltr">C</span> سعة المكثف، ووحدتها الفاراد <span dir="ltr">F</span>، و <span dir="ltr">1 pF = 10⁻¹² F</span></li>
+      <li><span class="chip" dir="ltr">ε₀</span> سماحية الفراغ (ابسلون نوت)، وهي مقدار ثابت يصف قدرة الفراغ على السماح بنشوء المجال الكهربائي فيه، وقيمتها <span dir="ltr">8.85 × 10⁻¹² F/m</span></li>
+      <li><span class="chip" dir="ltr">εᵣ</span> السماحية النسبية للوسط العازل بين اللوحين (ثابت العزل)، ليس لها وحدة، وللهواء <span dir="ltr">εᵣ = 1</span></li>
+      <li><span class="chip" dir="ltr">A</span> مساحة اللوح الواحد، ووحدتها <span dir="ltr">m²</span>، وهي معطاة <span dir="ltr">A = 0.08 m²</span></li>
+      <li><span class="chip" dir="ltr">d</span> المسافة بين اللوحين، ووحدتها <span dir="ltr">m</span>، و <span dir="ltr">1 mm = 0.001 m</span></li>
+      <li><span class="chip" dir="ltr">q</span> شحنة المكثف، و <span class="chip" dir="ltr">V</span> فرق الجهد بين لوحيه</li>
+      </ul></div>
+      <p class="slh">ℹ️ العوامل المؤثرة في سعة المكثف: مساحة اللوحين (تزيد السعة بزيادتها)، والمسافة بينهما (تقل السعة بزيادتها)، والوسط العازل بينهما.</p></div></div>
+  <h3 class="secH">5. تنفيذ التجربة</h3>
+  <div class="startBand">▶️ لنبدأ التجربة</div>
+  <div class="btns" style="margin-bottom:12px"><button type="button" class="rs" id="nw">🔄 قراءات جديدة</button></div>
+  <div class="ctl"><h3>5.1 القياس</h3>
+    ${DX.map((d,i)=>`<h4 class="sbh">${AL[i]}) قراءة السعة عند المسافة <bdi dir="ltr">d${SB[i]} = ${d} mm</bdi></h4>
+    <div class="stage"><div id="kS${i}"></div><svg id="kM${i}" viewBox="0 0 400 120"></svg><svg id="kZ${i}" viewBox="0 0 400 112"></svg><div class="hud"><span id="kSt${i}"></span></div></div>
+    <div class="row"><label for="kR${i}">تحريك اللوح المتحرك</label><output id="kO${i}"></output><input id="kR${i}" type="range" min="0" max="100" step="1" value="0"></div>
+    <p class="slh">👆 اسحب المؤشر البرتقالي لتقريب اللوح المتحرك من اللوح الثابت حتى يقع مؤشر حامله على التدريج <bdi dir="ltr">${d}.0 mm</bdi> في التكبير، ثم اقرأ المسافة والسعة.</p>
+    <div class="ans"><label>قراءة المسار المدرج <bdi dir="ltr">d${SB[i]}</bdi></label><input id="kd${i}" inputmode="decimal" dir="ltr" placeholder="mm"><button type="button" class="go" id="kd${i}Ck">تحقق</button></div><div class="fb2" id="kd${i}Fb"></div>
+    <div class="ans"><label>قراءة جهاز قياس السعة <bdi dir="ltr">C${SB[i]}</bdi> عند <bdi dir="ltr" style="white-space:nowrap">d = ${d} mm</bdi></label><input id="kc${i}" inputmode="decimal" dir="ltr" placeholder="pF"><button type="button" class="go" id="kc${i}Ck">تحقق</button></div><div class="fb2" id="kc${i}Fb"></div>`).join('')}
+  </div>
+  <div class="ctl"><h3>5.2 الحسابات</h3>
+    <p class="slh">ℹ️ <b>المعطيات:</b> <b dir="ltr">A = 0.08 m²</b> · <b dir="ltr">ε₀ = 8.85 × 10⁻¹² F/m</b> (الوسط بين اللوحين هواء، <b dir="ltr">εᵣ = 1</b>)</p>
+    <p class="slh">ℹ️ حول المسافة من <bdi dir="ltr">mm</bdi> إلى <bdi dir="ltr">m</bdi> بالقسمة على 1000. ويمكن كتابة الناتج بأي وحدة: <bdi dir="ltr">pF</bdi> أو <bdi dir="ltr">nF</bdi> أو <bdi dir="ltr">µF</bdi> أو <bdi dir="ltr">F</bdi>، حيث <bdi dir="ltr">1 µF = 10⁻⁶ F</bdi> و <bdi dir="ltr">1 nF = 10⁻⁹ F</bdi> و <bdi dir="ltr">1 pF = 10⁻¹² F</bdi>.</p>
+    ${DX.map((d,i)=>`<h4 class="sbh">${AL[i]}) حساب السعة من القانون عند <bdi dir="ltr">d${SB[i]} = ${d} mm</bdi></h4>
+    ${hxCalcStep('T'+i,'C'+SB[i]+' = ε₀·A / d'+SB[i],'احسب C'+SB[i]+' (بوحدة pF أو nF أو µF أو F)','pF / nF / µF')}`).join('')}
+  </div>
+  <div class="ctl res"><h3>6. نتائج التجربة</h3>
+    <div class="tw"><table class="rt"><thead><tr><th>المسافة d</th><th>1/d (1/m)</th><th>C المقاسة</th><th>C من القانون</th></tr></thead>
+    <tbody>${DX.map((d,i)=>`<tr><td><bdi dir="ltr">${d} mm</bdi></td><td><bdi dir="ltr">${Math.round(1000/d)}</bdi></td><td id="kq${i}">—</td><td id="kl${i}">—</td></tr>`).join('')}</tbody></table></div>
+    <div id="kC"></div>
+    <p class="rn" id="kNote">تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.</p></div>`;
+  const $=id=>box.querySelector('#'+id);
+  const num=labNum;
+  const fb=(id,ok,msg)=>{$(id).textContent=msg;$(id).className='fb2 '+(ok?'ok':'no')};
+  const fb0=id=>{$(id).textContent='';$(id).className='fb2'};
+  const fx=(x,n)=>String(+(+x).toFixed(n));
+  const zoom=(lines,cap)=>`<rect x="20" y="4" width="360" height="86" rx="14" fill="#334155" stroke="#0F172A" stroke-width="2"/>`+lines+`<text x="200" y="106" font-size="12" font-weight="700" text-anchor="middle" fill="var(--muted)">${cap}</text>`;
+  const scr=(x,w,txt)=>`<rect x="${x}" y="16" width="${w}" height="62" rx="8" fill="#0F172A" stroke="#14532D"/><text x="${x+w/2}" y="57" font-size="26" font-weight="800" text-anchor="middle" fill="#22C55E" direction="ltr" font-family="Consolas,monospace">${txt}</text>`;
+  const mmZ=r=>{let s=`<rect x="10" y="4" width="380" height="94" rx="12" fill="#334155" stroke="#0F172A" stroke-width="2"/><rect x="24" y="14" width="352" height="70" rx="4" fill="#E2E8F0"/>`;const X=v=>200+(v-r)*160;
+    for(let n=Math.ceil((r-1.2)*10);n<=Math.floor((r+1.2)*10);n++){const v=n/10,x=X(v);if(x<26||x>374||v<0)continue;const big=n%10===0,hf=n%5===0;s+=`<line x1="${x}" y1="14" x2="${x}" y2="${14+(big?30:hf?22:14)}" stroke="#1F2937" stroke-width="${big?2:1.2}"/>`+(big?`<text x="${x}" y="66" font-size="16" font-weight="800" text-anchor="middle" fill="#1F2937" direction="ltr">${Math.round(v)}</text>`:'')}
+    return s+`<line x1="200" y1="10" x2="200" y2="48" stroke="#EA580C" stroke-width="2.5"/><line x1="200" y1="72" x2="200" y2="88" stroke="#EA580C" stroke-width="2.5"/><text x="32" y="80" font-size="12" font-weight="800" text-anchor="start" fill="#1F2937" direction="ltr">mm</text><text x="200" y="114" font-size="12" font-weight="700" text-anchor="middle" fill="var(--muted)">‏تدريج المسار المدرج عند مؤشر اللوح المتحرك (مكبر)‏</text>`};
+  let NZ=[1,1,1],ok={};
+  const CV=(d,i)=>Math.round(E0*A/(d/1000)*1e12*(i==null?1:NZ[i])*10)/10,CC=()=>[CV(DX[0],0),CV(DX[1],1),CV(DX[2],2)];
+  const TH=i=>E0*A/(DX[i]/1000)*1e12;
+  function kDraw(i){const v=+$('kR'+i).value,at=v>=100;let d,s=0,c;
+    {const to=DX[i];d=Math.round((DMAX-(DMAX-to)*v/100)*10)/10;c=at?CC()[i]:CV(d)}
+    const t=c.toFixed(1);$('kO'+i).textContent='';$('kS'+i).innerHTML=capScene({d,s,c:t});
+    $('kM'+i).innerHTML=mmZ(d);$('kSt'+i).textContent=at?'✓ وصل اللوح إلى المسافة المطلوبة، اقرأ المسار المدرج ثم جهاز قياس السعة':'كلما اقترب اللوحان زادت السعة';
+    $('kZ'+i).innerHTML=zoom(scr(80,240,`${t} pF`),'‏شاشة جهاز قياس السعة الرقمي (مكبرة)‏')}
+  function newObj(){NZ=[0,0,0].map(()=>0.99+Math.random()*0.02);ok={};
+    [0,1,2].forEach(i=>{$('kR'+i).value=0;kDraw(i)});['kd0','kd1','kd2','kc0','kc1','kc2'].forEach(p=>{$(p).value='';fb0(p+'Fb')});['T0','T1','T2'].forEach(k=>{$('c'+k).value='';fb0('c'+k+'f')});sub();results()}
+  function sub(){const c=CC();
+    DX.forEach((d,i)=>{const n=SB[i];$('sbT'+i).textContent=(ok['d'+i]||ok['c'+i])?['C'+n+' = ε₀·A / d'+n,E(`C${n} = (8.85 × 10⁻¹²) × 0.08 / ${fx(d/1000,3)}`)].join('\n'):'C'+n+' = ε₀·A / d'+n});
+}
+  function chart(){const c=CC();if(!(ok.c0&&ok.c1&&ok.c2)){$('kC').innerHTML='';return}
+    const pts=DX.map((d,i)=>[1000/d,c[i]]),xm=600,ym=Math.ceil(c[0]/100+0.5)*100,X0=56,Yb=232,W=290,H=196,X=x=>X0+x/xm*W,Y=y=>Yb-y/ym*H;let s='';
+    for(let x=0;x<=xm;x+=100)s+=`<line x1="${X(x)}" y1="${Yb}" x2="${X(x)}" y2="${Yb-H}" stroke="var(--line)"/><text x="${X(x)}" y="${Yb+16}" font-size="11" text-anchor="middle" fill="var(--ink)">${x}</text>`;
+    for(let k=0;k<=4;k++){const y=ym/4*k;s+=`<line x1="${X0}" y1="${Y(y)}" x2="${X0+W}" y2="${Y(y)}" stroke="var(--line)"/><text x="${X0-6}" y="${Y(y)+4}" font-size="11" text-anchor="end" fill="var(--ink)">${fx(y,0)}</text>`}
+    s+=`<line x1="${X0}" y1="${Yb}" x2="${X0+W+8}" y2="${Yb}" stroke="var(--ink)" stroke-width="1.6"/><line x1="${X0}" y1="${Yb}" x2="${X0}" y2="${Yb-H-8}" stroke="var(--ink)" stroke-width="1.6"/>`;
+    s+=`<text x="${X0+W}" y="${Yb+34}" font-size="13" font-weight="700" text-anchor="end" fill="var(--ink)">1/d (1/m)</text><text x="${X0+4}" y="${Yb-H-12}" font-size="13" font-weight="700" fill="var(--ink)">C (pF)</text>`;
+    const sl=E0*A*1e12;s+=`<line x1="${X(0)}" y1="${Y(0)}" x2="${X(xm)}" y2="${Y(sl*xm)}" stroke="#F7931E" stroke-width="3"/>`;
+    pts.forEach(([x,y],i)=>{s+=`<circle cx="${X(x)}" cy="${Y(y)}" r="5.5" fill="#7E22CE" stroke="#fff" stroke-width="2"/><text x="${X(x)+8}" y="${Y(y)+16}" font-size="11" font-weight="700" fill="#6B21A8" direction="ltr">${DX[i]} mm</text>`});
+    $('kC').innerHTML=`<div class="stage"><svg viewBox="0 0 380 280" style="direction:ltr;display:block;width:100%;height:auto" aria-label="السعة مقابل مقلوب المسافة">${s}</svg></div><div class="vcap">النقاط الثلاث على خط مستقيم يمر بنقطة الأصل (الخط البرتقالي من القانون)، أي أن السعة تتناسب طرديا مع 1/d وعكسيا مع d</div>`}
+  function results(){const c=CC();
+    [0,1,2].forEach(i=>$('kq'+i).textContent=ok['c'+i]?E(c[i].toFixed(1)+' pF'):'—');
+    [0,1,2].forEach(i=>$('kl'+i).textContent=ok['cT'+i]?E(fx(TH(i),1)+' pF'):'—');
+    chart();
+    $('kNote').innerHTML=ok.cT0&&ok.cT1&&ok.cT2?'الاستنتاج: السعة المحسوبة من القانون عند كل مسافة قريبة من قراءة الجهاز، ونقاط السعة مقابل <span dir="ltr">1/d</span> على خط مستقيم يمر بنقطة الأصل، فسعة المكثف تتناسب عكسيا مع المسافة بين اللوحين <span dir="ltr" style="white-space:nowrap">C = ε₀·A / d</span>. والوسط العازل بين اللوحين في هذه التجربة هو الهواء (<span dir="ltr">εᵣ = 1</span>).':'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
+  DX.forEach((d,i)=>{const n=SB[i];$('kR'+i).oninput=()=>kDraw(i);
+    $('kd'+i+'Ck').onclick=()=>{const f='kd'+i+'Fb';if(+$('kR'+i).value<100)return fb(f,false,`حرك اللوح المتحرك حتى يصل إلى ${d} mm أولا.`);const v=num($('kd'+i).value);if(isNaN(v))return fb(f,false,'اكتب قراءة المسار المدرج بالمليمتر.');
+      if(Math.abs(v-d)<0.05){ok['d'+i]=true;fb(f,true,'✓ قراءة صحيحة:\n'+E(`d${n} = ${d.toFixed(1)} mm`))}else fb(f,false,'✗ اقرأ الرقم الكبير قبل الخط البرتقالي، ثم عد الأقسام الصغيرة (كل قسم 0.1 mm) حتى الخط.');sub()};
+    $('kc'+i+'Ck').onclick=()=>{const f='kc'+i+'Fb';if(+$('kR'+i).value<100)return fb(f,false,`حرك اللوح المتحرك حتى يصل إلى ${d} mm أولا.`);const v=num($('kc'+i).value);if(isNaN(v))return fb(f,false,'اكتب قراءة جهاز قياس السعة بوحدة pF.');
+      const val=CC()[i];if(Math.abs(v-val)<0.05){ok['c'+i]=true;fb(f,true,'✓ قراءة صحيحة:\n'+E(`C${n} = ${val.toFixed(1)} pF`))}else fb(f,false,'✗ اكتب الرقم الظاهر على شاشة جهاز قياس السعة كما هو.');sub();results()}});
+  const chk=(id,need,needMsg,val,tol,okMsg,badMsg)=>{const f='c'+id+'f';if(!need())return fb(f,false,needMsg);const v=num($('c'+id).value);if(isNaN(v))return fb(f,false,'اكتب الناتج بالأرقام.');
+    if(Math.abs(v-val())/Math.abs(val())<=tol){ok['c'+id]=true;fb(f,true,okMsg())}else fb(f,false,badMsg());sub();results()};
+  /* السعة من القانون: تقبل بوحدة pF أو بالفاراد F */
+  DX.forEach((d,i)=>{const k='T'+i,n=SB[i],inp=$('c'+k);
+    $('c'+k+'k').addEventListener('click',e=>{const v=num(inp.value);if(isNaN(v)||!(ok['d'+i]||ok['c'+i]))return;const t=TH(i);const U=[['F',1e12,'الضرب في 10¹²'],['µF',1e6,'الضرب في 10⁶'],['nF',1e3,'الضرب في 1000']].find(([u,m])=>v>0&&Math.abs(v*m-t)/t<=.02);if(U){e.stopImmediatePropagation();ok['c'+k]=true;fb('c'+k+'f',true,'✓ إجابة صحيحة بوحدة '+U[0]+':\n'+E(`C${n} = ${inp.value.trim()} ${U[0]}`)+'\nوبالتحويل إلى pF ('+U[2]+'):\n'+E(`C${n} = ${fx(t,1)} pF`)+(ok['c'+i]?'\nوقراءة الجهاز '+E(CC()[i].toFixed(1)+' pF')+' قريبة منها.':''));sub();results()}},true);
+    $('c'+k+'k').onclick=()=>chk(k,()=>ok['d'+i]||ok['c'+i],`أكمل قراءة المسافة (${AL[i]}) أولا.`,()=>TH(i),.02,()=>'✓ إجابة صحيحة:\n'+E(`C${n} = (8.85 × 10⁻¹²) × 0.08 / ${fx(d/1000,3)}`)+'\n'+E(`C${n} = ${fx(TH(i)/100,2)} × 10⁻¹⁰ F = ${fx(TH(i),1)} pF = ${fx(TH(i)/1e6,6)} µF`)+(ok['c'+i]?'\nوقراءة الجهاز '+E(CC()[i].toFixed(1)+' pF')+' قريبة منها.':''),()=>'✗ اضرب ε₀ في المساحة، ثم اقسم على المسافة بالمتر، ثم حول إلى pF:\n'+E(`C${n} = (8.85 × 10⁻¹²) × 0.08 / ${fx(d/1000,3)}`))});
+  $('nw').onclick=newObj;
+  function fitL(){box.querySelectorAll('.law .ln > span, h4.sbh').forEach(e=>{if(!e.offsetWidth)return;e.style.fontSize='';if(e.dataset.pl==null)e.dataset.pl=/pre-line/.test(e.getAttribute('style')||'')?'1':'';const pre=e.dataset.pl==='1';e.style.whiteSpace=pre?'pre':'nowrap';e.style.display='block';e.style.overflow='hidden';
+    let f=parseFloat(getComputedStyle(e).fontSize),k=0;while(e.scrollWidth>e.clientWidth+1&&f>9&&k++<80){f-=0.5;e.style.fontSize=f+'px'}});const hs=[...box.querySelectorAll('h4.sbh')].filter(e=>e.offsetWidth);if(hs.some(e=>e.style.fontSize)){const m=Math.min(...hs.map(e=>parseFloat(getComputedStyle(e).fontSize)));hs.forEach(e=>e.style.fontSize=m+'px')}}
+  const qf=()=>requestAnimationFrame(fitL);addEventListener('resize',qf);new MutationObserver(qf).observe(box,{childList:true,subtree:true,characterData:true});
+  calcInit(box);newObj();qf();
+}
+
+function parScene(o){/* الرسم المعتمد — o:{sel (رقم المكثف الذي يلمسه المجسان أو -1), t (0..1 تقدم المجسين), v (قراءة الفولتميتر), v0 (جهد المصدر), cv (قيم المكثفات), lab} */
+  o=o||{};const B=330,S=(x,d,z)=>[x+d*0.6,B-z-d*0.5],F=n=>(+n).toFixed(1),P=(...a)=>a.map(p=>F(p[0])+','+F(p[1])).join(' ');
+  const box=(x0,x1,d0,d1,z0,z1,top,front,side,st)=>{st=st||'#334155';return `<polygon points="${P(S(x0,d0,z0),S(x1,d0,z0),S(x1,d0,z1),S(x0,d0,z1))}" fill="${front}" stroke="${st}"/><polygon points="${P(S(x1,d0,z0),S(x1,d1,z0),S(x1,d1,z1),S(x1,d0,z1))}" fill="${side}" stroke="${st}"/><polygon points="${P(S(x0,d0,z1),S(x1,d0,z1),S(x1,d1,z1),S(x0,d1,z1))}" fill="${top}" stroke="${st}"/>`};
+  const wire=(pts,c,w)=>`<polyline points="${P(...pts)}" fill="none" stroke="${c}" stroke-width="${w||2.4}" stroke-linejoin="round"/>`;
+  const curve=(a,c1,c2,b,c,w)=>`<path d="M${F(a[0])},${F(a[1])} C${F(c1[0])},${F(c1[1])} ${F(c2[0])},${F(c2[1])} ${F(b[0])},${F(b[1])}" fill="none" stroke="${c}" stroke-width="${w||2.2}" stroke-linecap="round"/>`;
+  const lbl=(t,x,y,anc,col,sz)=>`<text x="${F(x)}" y="${F(y)}" text-anchor="${anc||'middle'}" font-size="${sz||14}" font-weight="700" fill="${col||'var(--ink)'}" style="paint-order:stroke;stroke:var(--panel);stroke-width:3.5px">${t}</text>`;
+  const dot=(p,c,r)=>`<circle cx="${F(p[0])}" cy="${F(p[1])}" r="${r||3.2}" fill="${c}" stroke="#1F2937" stroke-width="0.8"/>`;
+  const leg=pts=>wire(pts,'#334155',3.4)+wire(pts,'#E5E7EB',1.8);
+  const cap=(x,d,h,r,col,txt,z0,val)=>{const c0=S(x,d,z0),c1=S(x,d,z0+h),rx=r,ry=r*0.45,my=(c0[1]+c1[1])/2;
+    return `<rect x="${F(c0[0]-rx)}" y="${F(c1[1])}" width="${F(2*rx)}" height="${F(c0[1]-c1[1])}" fill="${col}" stroke="#0F172A"/><ellipse cx="${F(c0[0])}" cy="${F(c0[1])}" rx="${rx}" ry="${F(ry)}" fill="${col}" stroke="#0F172A"/><rect x="${F(c0[0]-rx+1)}" y="${F(c1[1])}" width="${F(2*rx-2)}" height="${F(c0[1]-c1[1])}" fill="${col}"/>`
+     +`<rect x="${F(c0[0]-rx*0.8)}" y="${F(c1[1]+2)}" width="${F(rx*0.45)}" height="${F(c0[1]-c1[1]-2)}" fill="#E5E7EB" opacity=".85"/>`
+     +`<ellipse cx="${F(c1[0])}" cy="${F(c1[1])}" rx="${rx}" ry="${F(ry)}" fill="#94A3B8" stroke="#0F172A"/><text x="${F(c1[0]-rx*0.5)}" y="${F(c1[1]+6)}" font-size="17" font-weight="900" fill="#1E3A8A" text-anchor="middle">−</text><text x="${F(c1[0]+rx*0.5)}" y="${F(c1[1]+6)}" font-size="16" font-weight="900" fill="#B91C1C" text-anchor="middle">+</text>`
+     +`<text x="${F(c0[0]+3)}" y="${F(my-4)}" font-size="13" font-weight="800" fill="#fff" text-anchor="middle" transform="rotate(-90 ${F(c0[0]+3)} ${F(my-4)})">${txt}</text>`
+     +`<text x="${F(c0[0]+14)}" y="${F(my+2)}" font-size="9" font-weight="800" fill="#fff" text-anchor="middle" direction="ltr" transform="rotate(-90 ${F(c0[0]+14)} ${F(my+2)})">${val} µF</text>`};
+  const Z=8,ZT=14,X0=40,X1=420,LIFT=30,XS=[124,236,348],CL=['#1D4ED8','#7C3AED','#0F766E'],NM=['C₁','C₂','C₃'],CV=o.cv||[10,22,47];
+  let g='';
+  g+=box(-80,480,-40,170,0,8,'#E9C894','#B7834A','#9A6A3A','#7C4A1F');
+  /* مصدر الجهد المستمر */
+  g+=box(-150,-50,175,210,0,48,'#CBD5E1','#475569','#334155');
+  const pn=S(-125,175,32),pp=S(-75,175,32),dp=S(-120,175,14);
+  g+=`<rect x="${F(dp[0])}" y="${F(dp[1]-10)}" width="40" height="13" fill="#0F172A"/><text x="${F(dp[0]+20)}" y="${F(dp[1]+1)}" font-size="10" font-weight="700" fill="#22C55E" text-anchor="middle" direction="ltr">${o.v0||'12.0'} V</text>`;
+  {const kc=S(-100,175,32),ang=-135+270*(o.knob==null?1:o.knob),r=7,a=ang*Math.PI/180;g+=`<circle cx="${F(kc[0])}" cy="${F(kc[1])}" r="${r}" fill="#1F2937" stroke="#94A3B8"/><line x1="${F(kc[0])}" y1="${F(kc[1])}" x2="${F(kc[0]+r*Math.sin(a))}" y2="${F(kc[1]-r*Math.cos(a))}" stroke="#F7931E" stroke-width="2"/>`}
+  g+=`<text x="${F(pp[0])}" y="${F(pp[1]-8)}" font-size="12" font-weight="700" text-anchor="middle" fill="#fff">+</text><text x="${F(pn[0])}" y="${F(pn[1]-8)}" font-size="12" font-weight="700" text-anchor="middle" fill="#fff">−</text>`;
+  /* لوحة التوصيل */
+  g+=box(X0,X1,0,130,Z,ZT,'#F8FAFC','#E5E7EB','#CBD5E1','#94A3B8');
+  const stripe=(d,c)=>{const a=S(X0+8,d,ZT+.1),b=S(X1-8,d,ZT+.1);return `<line x1="${F(a[0])}" y1="${F(a[1])}" x2="${F(b[0])}" y2="${F(b[1])}" stroke="${c}" stroke-width="1.4"/>`};
+  g+=stripe(80,'#DC2626')+stripe(50,'#2563EB');
+  for(let x=X0+12;x<=X1-12;x+=8){for(const d of [8,14,114,122])if((x-X0-12)%48!==40){const p=S(x,d,ZT+.1);g+=`<rect x="${F(p[0]-1.3)}" y="${F(p[1]-1)}" width="2.6" height="2" fill="#334155" rx=".4"/>`}
+    for(const d of [26,32,38,44,50,80,86,92,98,104]){const p=S(x,d,ZT+.1);g+=`<rect x="${F(p[0]-1.3)}" y="${F(p[1]-1)}" width="2.6" height="2" fill="#334155" rx=".4"/>`}}
+  g+=`<polygon points="${P(S(X0+6,62,ZT+.1),S(X1-6,62,ZT+.1),S(X1-6,68,ZT+.1),S(X0+6,68,ZT+.1))}" fill="#CBD5E1"/>`;
+  [[80,'#DC2626','+'],[50,'#2563EB','−']].forEach(([d,c,t])=>{[X0+2].forEach(xx=>{const p=S(xx,d,ZT);g+=`<circle cx="${F(p[0])}" cy="${F(p[1])}" r="6.5" fill="${c}"/><text x="${F(p[0])}" y="${F(p[1]+4.5)}" font-size="13" font-weight="900" fill="#fff" text-anchor="middle">${t}</text>`})});
+  /* أسلاك المصدر */
+  const rp=S(X0+12,80,ZT),rn=S(X0+12,50,ZT);
+  g+=wire([pp,S(-75,175,0),S(-75,80,0),S(X0,80,Z),rp],'#DC2626')+wire([pn,S(-125,175,0),S(-125,50,0),S(X0,50,Z),rn],'#2563EB');
+  g+=dot(pp,'#DC2626',4.5)+dot(pn,'#111827',4.5)+dot(rp,'#DC2626',2.6)+dot(rn,'#2563EB',2.6);
+  /* المكثفات */
+  const hole2=(x,d)=>{const p=S(x,d,ZT+.1);return `<rect x="${F(p[0]-2.4)}" y="${F(p[1]-1.7)}" width="4.8" height="3.4" fill="#0F172A" rx=".6"/>`};
+  XS.forEach(X=>{g+=hole2(X+8,80)+leg([S(X+8,80,ZT+LIFT+2),S(X+8,80,ZT+.6)])});
+  XS.forEach((X,i)=>{g+=cap(X,65,84,24,CL[i],NM[i],ZT+LIFT,CV[i])});
+  XS.forEach(X=>{g+=hole2(X-8,50)+leg([S(X-8,50,ZT+LIFT+2),S(X-8,50,ZT+.6)]);const p1=S(X+8,80,ZT+LIFT/2),p2=S(X-8,50,ZT+LIFT/2);
+    g+=`<text x="${F(p1[0]+5)}" y="${F(p1[1]+2)}" font-size="11" font-weight="900" fill="#DC2626">+</text><text x="${F(p2[0]-11)}" y="${F(p2[1]+6)}" font-size="12" font-weight="900" fill="#2563EB">−</text>`});
+  XS.forEach((X,i)=>{const q=S(X,65,ZT+LIFT+90);g+=lbl(NM[i],q[0],q[1]-10,'middle',CL[i],15)});
+  /* جهاز الفولتميتر الرقمي ومجساه */
+  const VX=470;g+=box(VX,VX+70,-100,-74,0,64,'#F59E0B','#E2E8F0','#D97706');
+  {const a=S(VX+6,-100,54),b=S(VX+64,-100,36);g+=`<rect x="${F(a[0])}" y="${F(a[1])}" width="${F(b[0]-a[0])}" height="${F(b[1]-a[1])}" rx="2" fill="#0F172A"/><text x="${F((a[0]+b[0])/2)}" y="${F((a[1]+b[1])/2+4)}" font-size="12" font-weight="800" text-anchor="middle" fill="#22C55E" font-family="Consolas,monospace" direction="ltr">${o.v||'0.00'} V</text>`}
+  const jc=S(VX+18,-100,16),jv=S(VX+52,-100,16);
+  g+=`<text x="${F(jc[0])}" y="${F(jc[1]+11)}" font-size="7" font-weight="700" text-anchor="middle" fill="#111827">COM</text><text x="${F(jv[0])}" y="${F(jv[1]+11)}" font-size="7" font-weight="700" text-anchor="middle" fill="#111827">V</text>`;
+  const sel=o.sel==null?-1:o.sel,t=o.t||0,lerp=(a,b)=>[a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t];
+  const restR=S(VX-20,-70,30),restB=S(VX-45,-80,30);
+  const tipR=sel>=0?lerp(restR,S(XS[sel]+8,80,ZT+LIFT*0.55)):restR,tipB=sel>=0?lerp(restB,S(XS[sel]-8,50,ZT+LIFT*0.55)):restB;
+  const probe=(tip,c,ax,ay)=>{const L=Math.hypot(ax,ay),ux=ax/L,uy=ay/L,nx=-uy,ny=ux,A=(s,w)=>[tip[0]+ux*s+nx*w,tip[1]+uy*s+ny*w];
+    const seg=(s0,w0,s1,w1,f)=>`<polygon points="${P(A(s0,-w0),A(s1,-w1),A(s1,w1),A(s0,w0))}" fill="${f}" stroke="#1F2937" stroke-width=".7" stroke-linejoin="round"/>`;
+    return {svg:seg(0,.4,12,1.1,'#E5E7EB')+seg(12,2,17,4,c)+seg(17,6.5,20,6.5,'#1F2937')+seg(20,4,44,4.3,c)+seg(44,3,52,1.6,'#1F2937'),top:A(52,0)}};
+  const pr=probe(tipR,'#DC2626',14,-46),pb=probe(tipB,'#2563EB',-10,-46);
+  g+=curve(pb.top,[pb.top[0]+10,pb.top[1]-30],[jc[0]-30,jc[1]-50],jc,'#2563EB',2.6)+curve(pr.top,[pr.top[0]+20,pr.top[1]-30],[jv[0]-10,jv[1]-60],jv,'#DC2626');
+  g+=pb.svg+pr.svg+dot(jc,'#111827',3)+dot(jv,'#DC2626',3);
+  let VB='-180 115 860 310';
+  if(o.lab){let q=S(-100,210,48);g+=lbl('مصدر جهد مستمر',q[0],q[1]-10);
+    q=S(X1,80,ZT);g+=lbl('خط التوصيل الموجب (+)',q[0]+4,q[1]-4,'start','#DC2626',12);
+    q=S(X1,50,ZT);g+=lbl('خط التوصيل السالب (−)',q[0]+4,q[1]+8,'start','#2563EB',12);
+    q=S(230,0,Z);g+=lbl('لوحة التوصيل (Breadboard)',q[0],q[1]+20,'middle','#334155',13);
+    q=S(VX+35,-100,0);g+=lbl('جهاز الفولتميتر الرقمي',q[0],q[1]+20,'middle');
+    q=S(XS[0]-8,50,ZT+LIFT/2);g+=lbl('الطرف السالب (−)',q[0]-40,q[1]+66,'end','#2563EB',12)+`<line x1="${F(q[0]-38)}" y1="${F(q[1]+60)}" x2="${F(q[0]-4)}" y2="${F(q[1]+8)}" stroke="#2563EB"/>`;
+    q=S(XS[2]+8,80,ZT+LIFT/2);g+=lbl('الطرف الموجب (+)',q[0]+60,q[1]-60,'start','#DC2626',12)+`<line x1="${F(q[0]+58)}" y1="${F(q[1]-56)}" x2="${F(q[0]+16)}" y2="${F(q[1]-6)}" stroke="#DC2626"/>`;
+    VB='-190 100 880 335'}
+  return `<svg viewBox="${VB}" aria-label="ثلاثة مكثفات على التوازي في لوحة توصيل موصلة بمصدر جهد مستمر، وجهاز الفولتميتر الرقمي يقيس الجهد على كل مكثف">${g}</svg>`}
+
+function parLab(box){
+  const CV=[10,22,47],SB='₁₂₃',AL='أبج',AM='بجد',CEQ=CV[0]+CV[1]+CV[2];
+  box.innerHTML=`
+  <div class="intro"><small class="labKind">🧪 تجربة عملية تفاعلية</small><h3>1. اسم التجربة</h3><p class="labName">حساب السعة المكافئة لمكثفات موصلة على التوازي</p></div>
+  <div class="tags"><span class="tag">الجهد V: <i>جهاز الفولتميتر الرقمي</i> · V</span><span class="tag">السعات C₁ و C₂ و C₃: <i>مكتوبة على المكثفات</i> · µF</span><span class="tag dv">الشحنة والسعة المكافئة: <i>محسوبة</i></span></div>
+  <div class="intro goals"><h3>2. أهداف التجربة</h3><ol class="gl">
+    <li>التعرف على لوحة التوصيل والمكثفات الإلكتروليتية ومصدر الجهد المستمر وجهاز الفولتميتر الرقمي.</li>
+    <li>قياس الجهد على كل مكثف بجهاز الفولتميتر الرقمي، والتحقق من أنه متساو في التوصيل على التوازي.</li>
+    <li>حساب شحنة كل مكثف والشحنة الكلية.</li>
+    <li>حساب السعة المكافئة للمكثفات الموصلة على التوازي.</li></ol></div>
+  <div class="intro"><h3>3. الأدوات والأجهزة المستخدمة</h3>
+    <div class="tool"><div class="stage">${parScene({lab:true,v0:'12.0',v:'0.00',cv:CV})}</div><div class="vcap">ثلاثة مكثفات على التوازي في لوحة التوصيل، ومصدر الجهد المستمر، وجهاز الفولتميتر الرقمي: منظر ثلاثي الأبعاد</div>
+    <p><b>ترتيب الأجهزة:</b> ثلاثة مكثفات مغروسة في لوحة التوصيل، الطرف الموجب لكل مكثف في خط التوصيل الموجب، والطرف السالب في خط التوصيل السالب، فهي موصلة على التوازي. ومصدر الجهد المستمر موصل بالخطين: السلك الأحمر بالخط الموجب، والسلك الأزرق بالخط السالب.</p></div>
+    <p><b>المكثف الإلكتروليتي:</b> مكثف أسطواني له طرفان، وسعته مكتوبة عليه بالميكروفاراد <span dir="ltr">µF</span>. والشريط الفاتح بعلامة <span dir="ltr">−</span> على جانبه يدل على الطرف السالب، فيوصل الطرف السالب بالخط السالب. والسعات: <span dir="ltr">C₁ = 10 µF</span> و <span dir="ltr">C₂ = 22 µF</span> و <span dir="ltr">C₃ = 47 µF</span>.</p>
+    <p class="slh">⚠️ <b>تنبيه سلامة:</b> المكثف الإلكتروليتي له قطبية: يوصل الطرف الموجب (+) بالخط الموجب، والطرف السالب (جهة الشريط الفاتح بعلامة −) بالخط السالب. التوصيل العكسي يتلف المكثف، وقد يسخن وينفجر. ولا يتجاوز جهد المصدر الجهد المكتوب على المكثف.</p>
+    <p><b>لوحة التوصيل <span dir="ltr">(Breadboard)</span>:</b> لوحة بلاستيكية فيها ثقوب صغيرة متصلة من الداخل بشرائح معدنية، تغرس فيها أطراف العناصر الكهربائية فتتصل دون لحام.</p>
+    <p><b>مصدر الجهد المستمر <span dir="ltr">(DC Power Supply)</span>:</b> يعطي فرق جهد ثابتا يظهر على شاشته بالفولت.</p>
+    <p><b>جهاز الفولتميتر الرقمي <span dir="ltr">(Digital Voltmeter)</span>:</b> يقيس فرق الجهد بين طرفي المكثف بمجسيه، المجس الأحمر على الطرف الموجب والمجس الأزرق على الطرف السالب، ويعرضه بدقة <span dir="ltr">0.01 V</span>.</p></div>
+  <h3 class="secH">4. القوانين المستخدمة</h3>
+  <div class="ctl">
+    <div class="law ftl"><div class="ln lw"><b>في التوصيل على التوازي يتساوى الجهد على المكثفات</b><span>V = V₁ = V₂ = V₃</span></div>
+      <div class="ln lw"><b>شحنة كل مكثف</b><span>q = C·V</span></div>
+      <div class="ln lw"><b>الشحنة الكلية</b><span>q = q₁ + q₂ + q₃</span></div>
+      <div class="ln lw"><b>السعة المكافئة (الكلية) للتوصيل على التوازي</b><span>C = C₁ + C₂ + C₃</span></div>
+      <div class="sym"><b>حيث:</b><ul>
+      <li><span class="chip" dir="ltr">V</span> فرق الجهد على المكثف، ووحدته الفولت <span dir="ltr">V</span></li>
+      <li><span class="chip" dir="ltr">C</span> سعة المكثف، ووحدتها الفاراد <span dir="ltr">F</span>، و <span dir="ltr">1 µF = 10⁻⁶ F</span></li>
+      <li><span class="chip" dir="ltr">q</span> شحنة المكثف، ووحدتها الكولوم <span dir="ltr">C</span>، و <span dir="ltr">1 µC = 10⁻⁶ C</span></li>
+      </ul></div>
+      <p class="slh">ℹ️ في التوصيل على التوازي يتساوى الجهد على المكثفات، أما الشحنة فتختلف: يأخذ المكثف الأكبر سعة شحنة أكبر.</p></div></div>
+  <h3 class="secH">5. تنفيذ التجربة</h3>
+  <div class="startBand">▶️ لنبدأ التجربة</div>
+  <div class="btns" style="margin-bottom:12px"><button type="button" class="rs" id="nw">🔄 جهد جديد للمصدر</button></div>
+  <div class="ctl"><h3>5.1 القياس</h3>
+    <h4 class="sbh">أ) تشغيل مصدر الجهد المستمر وضبط جهده</h4>
+    <div class="stage"><div id="sS"></div><svg id="sZ" viewBox="0 0 400 112"></svg><div class="hud"><span id="sSt"></span></div></div>
+    <div class="row"><label for="sR">مقبض ضبط الجهد</label><output id="sO"></output><input id="sR" type="range" min="0" max="100" step="1" value="0"></div>
+    <p class="slh">👆 اسحب المؤشر البرتقالي لتدوير مقبض مصدر الجهد حتى نهايته، فيتولد فرق جهد بين خطي التوصيل وتشحن المكثفات، ثم اقرأ شاشة المصدر.</p>
+    <div class="ans"><label>قراءة شاشة مصدر الجهد <bdi dir="ltr">V</bdi></label><input id="vs" inputmode="decimal" dir="ltr" placeholder="V"><button type="button" class="go" id="vsCk">تحقق</button></div><div class="fb2" id="vsFb"></div>
+    ${CV.map((c,i)=>`<h4 class="sbh">${AM[i]}) قراءة الجهد على المكثف <bdi dir="ltr">C${SB[i]} = ${c} µF</bdi></h4>
+    <div class="stage"><div id="vS${i}"></div><svg id="vZ${i}" viewBox="0 0 400 112"></svg><div class="hud"><span id="vSt${i}"></span></div></div>
+    <div class="row"><label for="vR${i}">تحريك المجسين</label><output id="vO${i}"></output><input id="vR${i}" type="range" min="0" max="100" step="1" value="0"></div>
+    <p class="slh">👆 اسحب المؤشر البرتقالي حتى يلمس المجس الأحمر الطرف الموجب والمجس الأزرق الطرف السالب للمكثف <bdi dir="ltr">C${SB[i]}</bdi>، ثم اقرأ الفولتميتر.</p>
+    <div class="ans"><label>قراءة الفولتميتر <bdi dir="ltr">V${SB[i]}</bdi></label><input id="vv${i}" inputmode="decimal" dir="ltr" placeholder="V"><button type="button" class="go" id="vv${i}Ck">تحقق</button></div><div class="fb2" id="vv${i}Fb"></div>`).join('')}
+  </div>
+  <div class="ctl"><h3>5.2 الحسابات</h3>
+    <p class="slh">ℹ️ <b>المعطيات:</b> <b dir="ltr">C₁ = 10 µF</b> · <b dir="ltr">C₂ = 22 µF</b> · <b dir="ltr">C₃ = 47 µF</b>، و <b dir="ltr">1 µF = 10⁻⁶ F</b></p>
+    ${CV.map((c,i)=>`<h4 class="sbh">${AL[i]}) حساب شحنة المكثف <bdi dir="ltr">C${SB[i]}</bdi></h4>
+    ${hxCalcStep('Q'+i,'q'+SB[i]+' = C'+SB[i]+'·V','احسب q'+SB[i]+' (بوحدة µC أو mC أو C)','µC / mC / C')}`).join('')}
+    <h4 class="sbh">د) حساب الشحنة الكلية</h4>
+    ${hxCalcStep('QT','q = q₁ + q₂ + q₃','احسب الشحنة الكلية q (بوحدة µC أو mC أو C)','µC / mC / C')}
+    <h4 class="sbh">هـ) حساب السعة المكافئة</h4>
+    ${hxCalcStep('CE','C = C₁ + C₂ + C₃','احسب السعة المكافئة C (بوحدة µF أو F)','µF / F')}
+  </div>
+  <div class="ctl res"><h3>6. نتائج التجربة</h3>
+    <div class="tw"><table class="rt"><thead><tr><th>المكثف</th><th>السعة</th><th>الجهد V</th><th>الشحنة q</th></tr></thead>
+    <tbody>${CV.map((c,i)=>`<tr><td><bdi dir="ltr">C${SB[i]}</bdi></td><td><bdi dir="ltr">${c} µF</bdi></td><td id="tv${i}">—</td><td id="tq${i}">—</td></tr>`).join('')}
+    <tr><td>المجموع</td><td id="tce">—</td><td id="tvx">—</td><td id="tqt">—</td></tr></tbody></table></div>
+    <p class="rn" id="vNote">تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.</p></div>`;
+  const $=id=>box.querySelector('#'+id);
+  const num=labNum;
+  const fb=(id,ok,msg)=>{$(id).textContent=msg;$(id).className='fb2 '+(ok?'ok':'no')};
+  const fb0=id=>{$(id).textContent='';$(id).className='fb2'};
+  const fx=(x,n)=>String(+(+x).toFixed(n));
+  const zoom=(lines,cap)=>`<rect x="20" y="4" width="360" height="86" rx="14" fill="#334155" stroke="#0F172A" stroke-width="2"/>`+lines+`<text x="200" y="106" font-size="12" font-weight="700" text-anchor="middle" fill="var(--muted)">${cap}</text>`;
+  const scr=(x,w,txt)=>`<rect x="${x}" y="16" width="${w}" height="62" rx="8" fill="#0F172A" stroke="#14532D"/><text x="${x+w/2}" y="57" font-size="26" font-weight="800" text-anchor="middle" fill="#22C55E" direction="ltr" font-family="Consolas,monospace">${txt}</text>`;
+  let V0=12,NZ=[1,1,1],ok={};
+  const VV=()=>NZ.map(n=>Math.round(V0*n*100)/100),VM=()=>VV()[0];
+  const Q=i=>CV[i]*VV()[i],QT=()=>Q(0)+Q(1)+Q(2);
+  function sDraw(){const v=+$('sR').value,at=v>=100,sv=(V0*v/100).toFixed(1);$('sO').textContent='';
+    $('sS').innerHTML=parScene({sel:-1,t:0,v:'0.00',v0:sv,cv:CV,knob:v/100});
+    $('sSt').textContent=at?'✓ وصل الجهد إلى قيمته، اقرأ شاشة المصدر':'كلما دار المقبض زاد جهد المصدر';
+    $('sZ').innerHTML=zoom(scr(80,240,`${sv} V`),'‏شاشة مصدر الجهد المستمر (مكبرة)‏')}
+  function vDraw(i){const v=+$('vR'+i).value,t=v/100,at=v>=100,rd=at&&ok.vs?VV()[i].toFixed(2):'0.00';
+    $('vO'+i).textContent='';$('vS'+i).innerHTML=parScene({sel:i,t,v:rd,v0:ok.vs?V0.toFixed(1):'0.0',cv:CV});
+    $('vSt'+i).textContent=at?'✓ لمس المجسان طرفي المكثف، اقرأ الفولتميتر':'حرك المجسين حتى يلمسا طرفي المكثف';
+    $('vZ'+i).innerHTML=zoom(scr(80,240,`${rd} V`),'‏شاشة جهاز الفولتميتر الرقمي (مكبرة)‏')}
+  const ALLK=['Q0','Q1','Q2','QT','CE'];
+  const SUP='⁰¹²³⁴⁵⁶⁷⁸⁹',sci=x=>{const e=Math.floor(Math.log10(Math.abs(x))),m=x/10**e;return fx(m,3)+' × 10'+(e<0?'⁻':'')+String(Math.abs(e)).split('').map(d=>SUP[d]).join('')};
+  function newObj(){V0=(12+Math.floor(Math.random()*13))/2;NZ=[0,0,0].map(()=>0.997+Math.random()*0.006);ok={};
+    $('sR').value=0;sDraw();$('vs').value='';fb0('vsFb');[0,1,2].forEach(i=>{$('vR'+i).value=0;vDraw(i);$('vv'+i).value='';fb0('vv'+i+'Fb')});ALLK.forEach(k=>{$('c'+k).value='';fb0('c'+k+'f')});sub();results()}
+  function sub(){const v=VV();
+    CV.forEach((c,i)=>{const n=SB[i];$('sbQ'+i).textContent=ok['v'+i]?['q'+n+' = C'+n+'·V',E(`q${n} = (${c} × 10⁻⁶) × ${v[i].toFixed(2)}`)].join('\n'):'q'+n+' = C'+n+'·V'});
+    $('sbQT').textContent=ok.v0&&ok.v1&&ok.v2?['q = q₁ + q₂ + q₃',E(`q = ${fx(Q(0),1)} + ${fx(Q(1),1)} + ${fx(Q(2),1)}`)+'   (µC)'].join('\n'):'q = q₁ + q₂ + q₃';
+    $('sbCE').textContent=['C = C₁ + C₂ + C₃',E(`C = ${CV[0]} + ${CV[1]} + ${CV[2]}`)+'   (µF)'].join('\n');}
+  function results(){const v=VV();
+    CV.forEach((c,i)=>{$('tv'+i).textContent=ok['v'+i]?E(v[i].toFixed(2)+' V'):'—';$('tq'+i).textContent=ok['cQ'+i]?E(fx(Q(i),1)+' µC'):'—'});
+    $('tce').textContent=ok.cCE?E(CEQ+' µF'):'—';$('tvx').textContent=ok.v0&&ok.v1&&ok.v2?'متساو':'—';
+    $('tqt').textContent=ok.cQT?E(fx(QT(),1)+' µC'):'—';
+    $('vNote').innerHTML=ALLK.every(k=>ok['c'+k])?`الاستنتاج: في التوصيل على التوازي كان الجهد على المكثفات الثلاثة متساويا ويساوي جهد المصدر، واختلفت الشحنة فأخذ المكثف الأكبر سعة الشحنة الأكبر. والشحنة الكلية تساوي مجموع الشحنات، والسعة المكافئة تساوي مجموع السعات <span dir="ltr" style="white-space:nowrap">C = C₁ + C₂ + C₃ = ${CEQ} µF</span>، فهي أكبر من سعة كل مكثف.`:'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
+  $('sR').oninput=sDraw;
+  $('vsCk').onclick=()=>{const f='vsFb';if(+$('sR').value<100)return fb(f,false,'أدر مقبض مصدر الجهد حتى نهايته أولا.');const v=num($('vs').value);if(isNaN(v))return fb(f,false,'اكتب قراءة شاشة المصدر بالفولت.');
+    if(Math.abs(v-V0)<0.05){ok.vs=true;fb(f,true,'✓ قراءة صحيحة:\n'+E(`V = ${V0.toFixed(1)} V`)+'\nتولد فرق جهد بين خطي التوصيل، فشحنت المكثفات الثلاثة.');[0,1,2].forEach(vDraw)}else fb(f,false,'✗ اكتب الرقم الظاهر على شاشة مصدر الجهد كما هو.')};
+  [0,1,2].forEach(i=>{$('vR'+i).oninput=()=>vDraw(i);
+    $('vv'+i+'Ck').onclick=()=>{const f='vv'+i+'Fb';if(!ok.vs)return fb(f,false,'شغل مصدر الجهد في الخطوة (أ) أولا.');if(+$('vR'+i).value<100)return fb(f,false,'حرك المجسين حتى يلمسا طرفي المكثف أولا.');const v=num($('vv'+i).value);if(isNaN(v))return fb(f,false,'اكتب قراءة الفولتميتر بالفولت.');
+      const val=VV()[i];if(Math.abs(v-val)<0.005){ok['v'+i]=true;fb(f,true,'✓ قراءة صحيحة:\n'+E(`V${SB[i]} = ${val.toFixed(2)} V`)+(i>0?'\nالجهد يساوي جهد المكثف '+(i>1?'السابق':'الأول')+' تقريبا، لأن المكثفات على التوازي.':''))}else fb(f,false,'✗ اكتب الرقم الظاهر على شاشة الفولتميتر كما هو.');sub();results()}});
+  /* التحقق مع قبول الوحدات: الناتج المتوقع بالوحدة الأساسية للعرض و U قائمة [الوحدة، معامل التحويل من الوحدة إلى وحدة العرض] */
+  const chkU=(k,need,needMsg,val,U,base,okMsg,badMsg)=>{const f='c'+k+'f';if(!need())return fb(f,false,needMsg);const v=num($('c'+k).value);if(isNaN(v))return fb(f,false,'اكتب الناتج بالأرقام.');
+    const t=val(),m=U.find(([u,f2])=>Math.abs(v*f2-t)/Math.abs(t)<=.02);
+    if(m){ok['c'+k]=true;fb(f,true,okMsg()+(m[0]!==base?'\nكتبت الناتج بوحدة '+m[0]+': '+E(`${$('c'+k).value.trim()} ${m[0]}`)+' = '+E(`${fx(t,2)} ${base}`):''))}else fb(f,false,badMsg());sub();results()};
+  const UQ=[['µC',1],['mC',1000],['C',1e6]],UC=[['µF',1],['F',1e6]];
+  CV.forEach((c,i)=>{const n=SB[i];$('cQ'+i+'k').onclick=()=>chkU('Q'+i,()=>ok['v'+i],`أكمل قراءة الجهد (${AM[i]}) أولا.`,()=>Q(i),UQ,'µC',
+    ()=>'✓ إجابة صحيحة:\n'+E(`q${n} = (${c} × 10⁻⁶) × ${VV()[i].toFixed(2)}`)+'\n'+E(`q${n} = ${sci(Q(i)*1e-6)} C = ${fx(Q(i),1)} µC`),
+    ()=>'✗ اضرب السعة بالفاراد في الجهد:\n'+E(`q${n} = (${c} × 10⁻⁶) × ${VV()[i].toFixed(2)}`))});
+  $('cQTk').onclick=()=>chkU('QT',()=>ok.v0&&ok.v1&&ok.v2,'أكمل قراءات الجهد الثلاث (ب) و (ج) و (د) أولا.',QT,UQ,'µC',()=>'✓ إجابة صحيحة:\n'+E(`q = ${fx(Q(0),1)} + ${fx(Q(1),1)} + ${fx(Q(2),1)} = ${fx(QT(),1)} µC`),()=>'✗ اجمع شحنات المكثفات الثلاثة:\n'+E(`q = ${fx(Q(0),1)} + ${fx(Q(1),1)} + ${fx(Q(2),1)}`));
+  $('cCEk').onclick=()=>chkU('CE',()=>true,'',()=>CEQ,UC,'µF',()=>'✓ إجابة صحيحة:\n'+E(`C = ${CV[0]} + ${CV[1]} + ${CV[2]} = ${CEQ} µF`)+'\nالسعة المكافئة أكبر من سعة كل مكثف.',()=>'✗ اجمع سعات المكثفات الثلاثة:\n'+E(`C = ${CV[0]} + ${CV[1]} + ${CV[2]}`));
+  $('nw').onclick=newObj;
+  function fitL(){box.querySelectorAll('.law .ln > span, h4.sbh').forEach(e=>{if(!e.offsetWidth)return;e.style.fontSize='';if(e.dataset.pl==null)e.dataset.pl=/pre-line/.test(e.getAttribute('style')||'')?'1':'';const pre=e.dataset.pl==='1';e.style.whiteSpace=pre?'pre':'nowrap';e.style.display='block';e.style.overflow='hidden';
+    let f=parseFloat(getComputedStyle(e).fontSize),k=0;while(e.scrollWidth>e.clientWidth+1&&f>9&&k++<80){f-=0.5;e.style.fontSize=f+'px'}});const hs=[...box.querySelectorAll('h4.sbh')].filter(e=>e.offsetWidth);if(hs.some(e=>e.style.fontSize)){const m=Math.min(...hs.map(e=>parseFloat(getComputedStyle(e).fontSize)));hs.forEach(e=>e.style.fontSize=m+'px')}}
+  const qf=()=>requestAnimationFrame(fitL);addEventListener('resize',qf);new MutationObserver(qf).observe(box,{childList:true,subtree:true,characterData:true});
+  calcInit(box);newObj();qf();
+}
+
 const LREF=[
  ['North Carolina State University. (n.d.). <i>Measurement: Lab 1, Physics Mechanics Laboratory Manual</i>. Advanced Instructional Systems (WebAssign).','https://www.webassign.net/question_assets/ncsucalcphysmechl3/lab_1/manual.html'],
  ['Palestine Technical University – Kadoorie. (2022). <i>Physics Lab 1 (105) Manual: Experiment 1 – Measurements and Uncertainties; Experiment 2 – Vectors</i>. Tulkarm, Palestine.','https://lms.ptuk.edu.ps/pluginfile.php/511897/mod_resource/content/3/physlab1-105-Manual%202022-khaled.pdf'],
@@ -3840,10 +4183,20 @@ const LREF=[
  ['University of Mississippi, Department of Physics and Astronomy. (n.d.). <i>Electric Field and Potentials: PHYS 224 Laboratory Manual</i>. Oxford, MS.','https://www.phy.olemiss.edu/lab/LabPDFs/224/LabManual/2_ElectricFieldAndPotentials_224/WS_E&amp;V_224.pdf'],
  ['Auburn University, Department of Physics. (n.d.). <i>Electric Fields Lab: PHYS 1500 Laboratory</i>. Auburn, AL.','https://php.auburn.edu/academic/cosam/departments/physics/intro-courses/ugrad-lab/physics1500/lab-files/Electric%20Fields%20Lab.pdf'],
  ['Texas Christian University, Department of Physics and Astronomy. (n.d.). <i>Lab 1: Electric Field Mapping, PHYS 10164</i>. Fort Worth, TX.','https://personal.tcu.edu/dingram/phys10164/lab1.pdf'],
- ['University of North Carolina at Charlotte. (n.d.). <i>Electric Fields and Potentials: Lab 1, Physics Laboratory Manual</i>. Advanced Instructional Systems (WebAssign).','https://www.webassign.net/question_assets/unccolphyseml1/lab_1/manual.html']
+ ['University of North Carolina at Charlotte. (n.d.). <i>Electric Fields and Potentials: Lab 1, Physics Laboratory Manual</i>. Advanced Instructional Systems (WebAssign).','https://www.webassign.net/question_assets/unccolphyseml1/lab_1/manual.html'],
+ ['Western Washington University, Department of Physics &amp; Astronomy. (n.d.). <i>Parallel Plate Capacitor</i>. Bellingham, WA.','https://physics.wwu.edu/parallel-plate-capacitor'],
+ ['California State University, Long Beach, Department of Physics and Astronomy. (n.d.). <i>Lab 4: Build a Capacitor, PHYS 152 Laboratory</i>. Long Beach, CA.','https://home.csulb.edu/~tgredig/phys152lab/build-a-capacitor.html'],
+ ['Randolph College, Department of Physics. (n.d.). <i>Physics 116: Capacitors</i>. Lynchburg, VA.','https://physics.randolphcollege.edu/online11/online116/capacitors'],
+ ['PHYWE Systeme GmbH. (n.d.). <i>Plate Capacitor, 283 × 283 mm (06233-02)</i>. Göttingen, Germany.','https://www.phywe.com/print/?item=979'],
+ ['PASCO Scientific. (n.d.). <i>Basic Variable Capacitor ES-9079</i>. Roseville, CA.','https://www.pasco.com/product/ES-9079'],
+ ['Purdue University, Department of Physics and Astronomy. (n.d.). <i>Charges and Fields (E2): Data Sheets, Physics 221/252 Laboratory</i>. West Lafayette, IN.','https://www.physics.purdue.edu/academic-programs/lab-materials/Physics%20221%20and%20252%20lab%20files/e2---data-sheets.pdf'],
+ ['University of Michigan-Dearborn, Department of Physics. (n.d.). <i>Electric Fields I (Version 5.0), Introductory Physics Laboratory</i>. Dearborn, MI.','https://www-personal.umd.umich.edu/~jameshet/IntroLabs/IntroLabDocuments/151-02%20Electric%20Fields%20I/Electric%20Fields%20I%205.0.pdf'],
+ ['The University of Alabama, Department of Physics and Astronomy. (n.d.). <i>Capacitors Lab, PH 106 Laboratory</i>. Tuscaloosa, AL.','https://pleclair.ua.edu/ph106/Labs/Capacitors_lab.pdf'],
+ ['University of Hawaii, Department of Physics and Astronomy. (n.d.). <i>Capacitors Lab</i>. Honolulu, HI.','https://www2.hawaii.edu/~jmcfatri/labs/capacitors.html'],
+ ['University of Central Florida, Department of Physics. (n.d.). <i>Capacitors: Lab 3, Physics Laboratory Manual</i>. Advanced Instructional Systems (WebAssign).','https://webassign.net/question_assets/ucfcalcphyseml1/lab_3/manual.html']
 ];
-const LREFK={'3-4':[[36,'ورقة موصلة عليها قطبان متصلان بمصدر جهد مستمر، وقياس الجهد عند نقاط مختلفة بالفولتميتر الرقمي، ورسم خطوط تساوي الجهد وخطوط المجال.'],[37,'قياس الجهد بين قطبين متوازيين على ورقة موصلة، وحساب شدة المجال من تغير الجهد مع المسافة.'],[38,'رسم خريطة المجال الكهربائي: تحديد نقاط الجهد المتساوي بمجس الفولتميتر على ورقة موصلة.'],[39,'خطوط تساوي الجهد عمودية على خطوط المجال، وشدة المجال بين لوحين متوازيين E = ΔV / d.'],[35,'قياس فرق الجهد والمجال الكهربائي بين لوحين متوازيين ومقارنتهما.']],'3-3':[[31,'مسار مدرج تتحرك عليه الكرة الثانية لقياس المسافة بين مركزي الكرتين بالمليمتر (فكرة المسار المدرج).'],[33,'قياس شدة المجال الكهربائي حول كرات معدنية مشحونة بمقياس المجال الكهربائي عند مسافات مختلفة، والتحقق من أن المجال يتناسب عكسيا مع مربع المسافة.'],[34,'دليل التجربة: كرة معدنية على ساق عازلة ومقياس المجال الكهربائي ومسطرة مترية، وقياس E مقابل r.'],[35,'رسم خطوط المجال الكهربائي حول شحنة موجبة وشحنة سالبة وشحنتين مختلفتين.']],
- '3-1':[[32,'قياس القوة بين كرتين مشحونتين بميزان رقمي وتحويل قراءته بالجرام إلى قوة بالقانون F = m·g، وقياس المسافة بين مركزي الكرتين بمسطرة.'],[29,'كرة مشحونة على ميزان إلكتروني وكرة مشحونة معلقة فوقها، وقياس القوة عند مسافات مختلفة، ورسم القوة مقابل 1/r² للتحقق من قانون التربيع العكسي وحساب الشحنة.'],[30,'قياس قوة التنافر بين كرتين مشحونتين عند مسافات من 20 cm إلى 5 cm، وتحليل العلاقة بين القوة والمسافة والتحقق من قانون كولوم.'],[31,'جهاز قانون كولوم: كرتان معدنيتان موصلتان، والقوة بينهما تقاس عند مسافات مختلفة لإيجاد قانون التربيع العكسي.']],
+const LREFK={'3-6':[[47,''],[48,''],[49,'']],'3-5':[[40,'قياس سعة مكثف متوازي اللوحين عند مسافات مختلفة، والتحقق من تناسب السعة عكسيا مع المسافة.'],[41,'بناء مكثف من ورق الألومنيوم وقياس سعته بجهاز قياس السعة الرقمي.'],[42,'محاكاة لدراسة أثر المسافة بين اللوحين في سعة المكثف.']],'3-4':[[36,'ورقة موصلة عليها قطبان متصلان بمصدر جهد مستمر، وقياس الجهد عند نقاط مختلفة بالفولتميتر الرقمي، ورسم خطوط تساوي الجهد وخطوط المجال.'],[37,'قياس الجهد بين قطبين متوازيين على ورقة موصلة، وحساب شدة المجال من تغير الجهد مع المسافة.'],[38,'رسم خريطة المجال الكهربائي: تحديد نقاط الجهد المتساوي بمجس الفولتميتر على ورقة موصلة.'],[39,'خطوط تساوي الجهد عمودية على خطوط المجال، وشدة المجال بين لوحين متوازيين E = ΔV / d.'],[35,'قياس فرق الجهد والمجال الكهربائي بين لوحين متوازيين ومقارنتهما.']],'3-3':[[45,'قياس شدة المجال حول شحنة نقطية عند مسافات مختلفة والتحقق من تناسبها مع 1/r².'],[46,'قياس المجال عند مسافات مختلفة من شحنة وإيجاد علاقة التربيع العكسي.'],[35,'رسم خطوط المجال الكهربائي حول شحنة موجبة وشحنة سالبة وشحنتين مختلفتين.']],
+ '3-1':[[32,'قياس القوة بين كرتين مشحونتين بميزان رقمي وتحويل قراءته بالجرام إلى قوة بالقانون F = m·g، وقياس المسافة بين مركزي الكرتين بمسطرة.'],[29,'كرة مشحونة على ميزان إلكتروني وكرة مشحونة معلقة فوقها، وقياس القوة عند مسافات مختلفة، ورسم القوة مقابل 1/r² للتحقق من قانون التربيع العكسي وحساب الشحنة.'],[30,'قياس قوة التنافر بين كرتين مشحونتين عند مسافات من 20 cm إلى 5 cm، وتحليل العلاقة بين القوة والمسافة والتحقق من قانون كولوم.']],
  '2-1':[[21,'تسخين كتلة من الماء بمقاومة كهربائية وقياس الطاقة الكهربائية بالجول والطاقة الحرارية بالسعر، وإيجاد عدد الجولات في السعر الواحد.'],[19,'الحرارة طاقة تنتقل بسبب فرق درجة الحرارة، ووحدتاها الجول والسعر <span dir="ltr" style="white-space:nowrap">1 cal = 4.186 J</span>.']],
  '2-2':[[22,'نقطتا انصهار الجليد وغليان الماء في المقاييس الثلاثة، وقوانين التحويل بين السلسيوسي وكلفن والفهرنهايتي.'],[18,'قياس درجة حرارة الماء بالميزان الحراري الرقمي في المعمل.']],
  '2-3':[[21,'قياس كتلة الماء ودرجتي حرارته قبل التسخين وبعده بسخان كهربائي، وحساب الحرارة المكتسبة <span dir="ltr" style="white-space:nowrap">Q = m·c·ΔT</span> ومقارنتها بالطاقة الكهربائية.'],[23,'تسخين نحو <span dir="ltr">300 ml</span> من الماء بسخان غمر كهربائي وقياس درجتي حرارته قبل التسخين وبعده، ومقارنة التغير المقاس بالمحسوب من <span dir="ltr" style="white-space:nowrap">Q = m·c·ΔT</span>.']],
@@ -3863,9 +4216,9 @@ const LREFK={'3-4':[[36,'ورقة موصلة عليها قطبان متصلان 
  '1-2':[[7,'إفلات كرة من السكون وقياس زمن سقوطها، واستخدام العلاقة <span dir="ltr" style="white-space:nowrap">y = ½·g·t²</span> بين الإزاحة الرأسية والزمن.'],[8,'جهاز السقوط الحر ووسادة الاستقبال يشغلان المؤقت ويوقفانه تلقائيا، وحساب ارتفاع السقوط من العلاقة <span dir="ltr" style="white-space:nowrap">h = ½·g·t²</span>.']],
  '1-1':[[6,'الطريقة الأساسية: انطلاق العربة من السكون بين بوابتين ضوئيتين على مسار هوائي مائل، وحساب التسارع <span dir="ltr" style="white-space:nowrap">a = (Vf − Vi) / Δt</span>، ومقارنته عند تغيير الميل.'],[5,'علاقة الإزاحة بالزمن <span dir="ltr" style="white-space:nowrap">Δx = ½·a·Δt²</span> لعربة تبدأ من السكون، ومنها استنتجت السرعة النهائية <span dir="ltr" style="white-space:nowrap">Vf = 2Δx / Δt</span>.']]};
 function refBox(k){const ix=LREFK[k];if(!ix)return '';
-  return `<div class="intro lrefs"><h3>7. مراجع التجربة</h3><p class="rlead">بنيت هذه التجربة على تجارب منشورة في أدلة معامل الفيزياء بجامعات ومصادر تعليمية موثوقة، مع تكييفها لمحتوى الحقيبة التدريبية.</p><ol class="rl">${ix.map(([i,c],n)=>`<li><span class="en">[${n+1}] ${LREF[i][0]} <a href="${LREF[i][1]}" target="_blank" rel="noopener">${LREF[i][1]}</a></span><span class="ar">يطابق في هذه التجربة: ${c}</span></li>`).join('')}</ol></div>`}
+  return `<div class="intro lrefs"><h3>7. مراجع التجربة</h3><p class="rlead">بنيت هذه التجربة على تجارب منشورة في أدلة معامل الفيزياء بجامعات ومصادر تعليمية موثوقة، مع تكييفها لمحتوى الحقيبة التدريبية.</p><ol class="rl">${ix.map(([i,c],n)=>`<li><span class="en">[${n+1}] ${LREF[i][0]} <a href="${LREF[i][1]}" target="_blank" rel="noopener">${LREF[i][1]}</a></span></li>`).join('')}</ol></div>`}
 
-window.LABS={'0-1':{t:'القياس بأداة القدمة ذات الورنية وأداة الميكرومتر',run:measureLab},'0-2':{t:'قياس سرعة جسم متحرك والتحويل بين وحداتها',run:speedLab2},'0-4':{t:'إيجاد محصلة متجهين باستخدام طاولة القوى',run:forceLab},'0-5':{t:'تحليل قوة إلى مركبتين باستخدام طاولة القوى',run:vecLab},'0-6':{t:'الضرب القياسي لمتجهين بمتجهات الوحدة على لوحة الإحداثيات',run:dotLab},'1-1':{t:'إيجاد تسارع عربة على المسار الهوائي المائل وأثر زيادة الميل على السرعة والتسارع',run:airLab},'1-2':{t:'حساب ارتفاع سقوط كرة باستخدام معادلة الحركة الثانية',run:ffLab},'1-3':{t:'التحقق من قانون نيوتن الثاني باستخدام جهاز آتوود',run:awLab},'1-5':{t:'حساب قوة الاحتكاك الحركي والتحقق منها بالميزان النابضي',run:frLab},'1-7':{t:'حساب الشغل المبذول على صندوق خشبي بقوة أفقية',run:wkLab2},'1-8':{t:'إيجاد طاقة الوضع لجسم وعلاقتها بالارتفاع',run:peLab},'1-9':{t:'التحقق من حفظ الطاقة الميكانيكية لجسم ساقط سقوطا حرا',run:ceLab},'2-1':{t:'قياس الطاقة الحرارية الناتجة من سخان كهربائي وتحويلها بين الجول والسعر',run:q1Lab},'2-2':{t:'قياس درجتي انصهار الجليد وغليان الماء والتحويل بين مقاييس درجة الحرارة',run:tsLab},'2-3':{t:'حساب كمية الحرارة اللازمة لتسخين الماء',run:shLab},'2-4':{t:'حساب الحرارة الكامنة لانصهار الجليد',run:lhLab},'2-5':{t:'التحقق من الاتزان الحراري بخلط ماء ساخن وماء بارد',run:eqLab},'2-6':{t:'مقارنة طرق انتقال الحرارة: التوصيل والحمل والإشعاع',run:trLab},'3-1':{t:'التحقق من قانون كولوم',run:clLab},'3-3':{t:'قياس شدة المجال الكهربائي حول شحنة نقطية',run:efLab},'3-4':{t:'قياس فرق الجهد في مجال كهربائي منتظم',run:pdLab}};
+window.LABS={'0-1':{t:'القياس بأداة القدمة ذات الورنية وأداة الميكرومتر',run:measureLab},'0-2':{t:'قياس سرعة جسم متحرك والتحويل بين وحداتها',run:speedLab2},'0-4':{t:'إيجاد محصلة متجهين باستخدام طاولة القوى',run:forceLab},'0-5':{t:'تحليل قوة إلى مركبتين باستخدام طاولة القوى',run:vecLab},'0-6':{t:'الضرب القياسي لمتجهين بمتجهات الوحدة على لوحة الإحداثيات',run:dotLab},'1-1':{t:'إيجاد تسارع عربة على المسار الهوائي المائل وأثر زيادة الميل على السرعة والتسارع',run:airLab},'1-2':{t:'حساب ارتفاع سقوط كرة باستخدام معادلة الحركة الثانية',run:ffLab},'1-3':{t:'التحقق من قانون نيوتن الثاني باستخدام جهاز آتوود',run:awLab},'1-5':{t:'حساب قوة الاحتكاك الحركي والتحقق منها بالميزان النابضي',run:frLab},'1-7':{t:'حساب الشغل المبذول على صندوق خشبي بقوة أفقية',run:wkLab2},'1-8':{t:'إيجاد طاقة الوضع لجسم وعلاقتها بالارتفاع',run:peLab},'1-9':{t:'التحقق من حفظ الطاقة الميكانيكية لجسم ساقط سقوطا حرا',run:ceLab},'2-1':{t:'قياس الطاقة الحرارية الناتجة من سخان كهربائي وتحويلها بين الجول والسعر',run:q1Lab},'2-2':{t:'قياس درجتي انصهار الجليد وغليان الماء والتحويل بين مقاييس درجة الحرارة',run:tsLab},'2-3':{t:'حساب كمية الحرارة اللازمة لتسخين الماء',run:shLab},'2-4':{t:'حساب الحرارة الكامنة لانصهار الجليد',run:lhLab},'2-5':{t:'التحقق من الاتزان الحراري بخلط ماء ساخن وماء بارد',run:eqLab},'2-6':{t:'مقارنة طرق انتقال الحرارة: التوصيل والحمل والإشعاع',run:trLab},'3-1':{t:'التحقق من قانون كولوم',run:clLab},'3-3':{t:'قياس شدة المجال الكهربائي حول شحنة نقطية',run:efLab},'3-4':{t:'قياس فرق الجهد في مجال كهربائي منتظم',run:pdLab},'3-5':{t:'دراسة العلاقة بين سعة المكثف والمسافة بين لوحيه',run:capLab},'3-6':{t:'حساب السعة المكافئة لمكثفات موصلة على التوازي',run:parLab}};
 
 /* الدروس المدمجة في الوحدة الثالثة: تجربة واحدة لكل درس — الانصهار والغليان، والحرارة الكامنة لانصهار الجليد، والاتزان الحراري بخلط الماء */
 (function(){const L=window.LABS;if(L['2-2'])L['2-1']=Object.assign({k:'2-2'},L['2-2']);if(L['2-4'])L['2-3']=Object.assign({k:'2-4'},L['2-4'])})();

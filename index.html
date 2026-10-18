@@ -413,6 +413,8 @@ body:has(#pager:not([hidden])) .aiFab{bottom:calc(84px + env(safe-area-inset-bot
 .aiFab{transition:opacity .2s,transform .2s}body.fabHide .aiFab{opacity:0;transform:translateY(24px);pointer-events:none}
 .view::after{content:'';display:block;height:84px}
 .aiFab[hidden],body.boardOpen .aiFab,body.aiOpen .aiFab{display:none}
+/* يختفي زر المساعد ما دامت الآلة الحاسبة مفتوحة أو أثناء الكتابة في خانة إجابة */
+body:has(.calc:not([hidden])) .aiFab,body:has(input:not([type=range]):focus) .aiFab,body:has(textarea:focus) .aiFab{display:none}
 .aiSheet{position:fixed;inset:0;z-index:950;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center}.aiSheet[hidden]{display:none}
 .aiSheetIn{position:relative;width:100%;max-width:760px;max-height:88vh;overflow:auto;background:transparent;border-radius:18px 18px 0 0;padding:0 0 env(safe-area-inset-bottom)}
 .aiSheetIn .aiCard{margin:0;border-radius:18px 18px 0 0}.aiSheetX{position:absolute;top:10px;left:12px;z-index:2;border:0;background:var(--soft,#eee);color:var(--ink);border-radius:50%;width:34px;height:34px;font-size:16px;cursor:pointer}

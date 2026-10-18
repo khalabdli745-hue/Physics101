@@ -216,3 +216,74 @@ F.vPoint=svg('0 30 380 210',
   +T(300,112,'خطوط تساوي الجهد','class="lb xs" text-anchor="middle" style="fill:var(--fig2)"')+L(280,124,320,124,'var(--fig2)',null,2,'6 4'),
   'الجهد حول شحنة نقطية: خطوط تساوي الجهد دوائر حول الشحنة، ويقل الجهد كلما زادت r');
 })();
+/* رموز المكثف في الدوائر الكهربائية وأنواع المكثفات (درس 3-5) */
+(function(){
+const F=window.FIGS=window.FIGS||{};
+const svg=(vb,body,cap)=>`<figure class="fig"><svg viewBox="${vb}" role="img" aria-label="${cap}">${body}</svg><figcaption>${cap}</figcaption></figure>`;
+const T=(x,y,s,o='')=>`<text x="${x}" y="${y}" text-anchor="middle" ${o}>${s}</text>`;
+const W='stroke="var(--ink)" stroke-width="3" stroke-linecap="round"';
+/* الرموز */
+const sym1=(x,y)=>`<line x1="${x-60}" y1="${y}" x2="${x-8}" y2="${y}" ${W}/><line x1="${x+8}" y1="${y}" x2="${x+60}" y2="${y}" ${W}/><line x1="${x-8}" y1="${y-24}" x2="${x-8}" y2="${y+24}" ${W} stroke-width="5"/><line x1="${x+8}" y1="${y-24}" x2="${x+8}" y2="${y+24}" ${W} stroke-width="5"/>`;
+const sym2=(x,y)=>`<line x1="${x-60}" y1="${y}" x2="${x-8}" y2="${y}" ${W}/><line x1="${x+12}" y1="${y}" x2="${x+60}" y2="${y}" ${W}/><line x1="${x-8}" y1="${y-24}" x2="${x-8}" y2="${y+24}" ${W} stroke-width="5"/><path d="M${x+18},${y-24} Q${x+6},${y} ${x+18},${y+24}" fill="none" ${W} stroke-width="4"/>`
+  +`<circle cx="${x-26}" cy="${y-30}" r="10" fill="#DC2626"/><text x="${x-26}" y="${y-24.5}" font-size="17" font-weight="900" fill="#fff" text-anchor="middle">+</text><circle cx="${x+30}" cy="${y-30}" r="10" fill="#2563EB"/><text x="${x+30}" y="${y-24.5}" font-size="17" font-weight="900" fill="#fff" text-anchor="middle">−</text>`;
+const sym3=(x,y)=>sym1(x,y)+`<line x1="${x-30}" y1="${y+30}" x2="${x+30}" y2="${y-30}" stroke="#F7931E" stroke-width="3" marker-end="url(#csA)"/>`;
+F.capSymbols=svg('0 0 420 190',
+ `<defs><marker id="csA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#F7931E"/></marker></defs>`
+ +sym1(75,70)+sym2(210,70)+sym3(345,70)
+ +T(75,135,'مكثف ثابت','class="lb sm"')+T(75,155,'(غير قطبي)','class="lb xs"')
+ +T(210,135,'مكثف إلكتروليتي','class="lb sm"')+T(210,155,'(قطبي: موجب + وسالب −)','class="lb xs"')
+ +T(345,135,'مكثف متغير','class="lb sm"')+T(345,155,'(تتغير سعته)','class="lb xs"'),
+ 'رموز المكثف في الدوائر الكهربائية');
+/* الأنواع */
+const pm=(x,y,t)=>{const c=t=='+'?'#DC2626':'#2563EB',dx=0;y+=12;return `<circle cx="${x+dx}" cy="${y-4}" r="8" fill="${c}"/><text x="${x+dx}" y="${y+1}" font-size="14" font-weight="900" fill="#fff" text-anchor="middle">${t}</text>`};
+const leg=(x1,y1,x2,y2)=>`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#9CA3AF" stroke-width="2.6" stroke-linecap="round"/>`;
+const elec=(x,y)=>leg(x-9,y+38,x-9,y+62)+leg(x+9,y+38,x+9,y+70)+pm(x+9,y+70,'+')+pm(x-9,y+62,'−')
+ +`<rect x="${x-22}" y="${y-40}" width="44" height="80" rx="6" fill="#1D4ED8" stroke="#0F172A"/><rect x="${x-18}" y="${y-36}" width="10" height="72" fill="#E5E7EB"/><ellipse cx="${x}" cy="${y-40}" rx="22" ry="7" fill="#94A3B8" stroke="#0F172A"/><path d="M${x-10},${y-40} L${x+10},${y-40} M${x},${y-46} L${x},${y-34}" stroke="#475569" stroke-width="1.5"/>`
+ +`<text x="${x-13}" y="${y-14}" font-size="12" font-weight="900" fill="#0F172A" text-anchor="middle">−</text><text x="${x-13}" y="${y+14}" font-size="12" font-weight="900" fill="#0F172A" text-anchor="middle">−</text><text x="${x+6}" y="${y+4}" font-size="8" font-weight="800" fill="#fff" text-anchor="middle" direction="ltr">100µF</text>`;
+const cer=(x,y)=>leg(x-8,y+18,x-10,y+70)+leg(x+8,y+18,x+10,y+70)+`<ellipse cx="${x}" cy="${y}" rx="26" ry="24" fill="#F59E0B" stroke="#92400E" stroke-width="1.5"/><ellipse cx="${x-6}" cy="${y-6}" rx="10" ry="7" fill="#FCD34D" opacity=".7"/><text x="${x}" y="${y+5}" font-size="12" font-weight="800" fill="#78350F" text-anchor="middle" direction="ltr">104</text>`;
+const film=(x,y)=>leg(x-10,y+22,x-10,y+70)+leg(x+10,y+22,x+10,y+70)+`<rect x="${x-26}" y="${y-28}" width="52" height="50" rx="6" fill="#DC2626" stroke="#7F1D1D"/><rect x="${x-22}" y="${y-24}" width="12" height="42" rx="3" fill="#F87171" opacity=".6"/><text x="${x}" y="${y+2}" font-size="10" font-weight="800" fill="#fff" text-anchor="middle" direction="ltr">0.47µF</text>`;
+const tant=(x,y)=>leg(x-9,y+18,x-9,y+70)+leg(x+9,y+18,x+9,y+62)+pm(x-9,y+70,'+')+pm(x+9,y+62,'−')+`<path d="M${x-16},${y+18} Q${x-20},${y-24} ${x},${y-26} Q${x+20},${y-24} ${x+16},${y+18} Z" fill="#EAB308" stroke="#713F12"/><text x="${x-6}" y="${y-6}" font-size="12" font-weight="900" fill="#713F12" text-anchor="middle">+</text><text x="${x+2}" y="${y+10}" font-size="9" font-weight="800" fill="#713F12" text-anchor="middle" direction="ltr">10µF</text>`;
+const vari=(x,y)=>leg(x-14,y+26,x-14,y+70)+leg(x+14,y+26,x+14,y+70)+`<rect x="${x-30}" y="${y-6}" width="60" height="32" rx="4" fill="#E5E7EB" stroke="#475569"/>`
+ +[0,1,2,3].map(k=>`<path d="M${x-24+k*4},${y-4} A26 26 0 0 1 ${x+24-k*4},${y-4}" fill="none" stroke="#94A3B8" stroke-width="2"/>`).join('')
+ +`<rect x="${x-4}" y="${y-36}" width="8" height="30" fill="#334155"/><circle cx="${x}" cy="${y-38}" r="9" fill="#1F2937"/><line x1="${x}" y1="${y-38}" x2="${x+6}" y2="${y-44}" stroke="#F7931E" stroke-width="2"/>`;
+const supc=(x,y)=>leg(x-10,y+30,x-10,y+62)+leg(x+10,y+30,x+10,y+70)+pm(x+10,y+70,'+')+pm(x-10,y+62,'−')+`<rect x="${x-30}" y="${y-30}" width="60" height="60" rx="10" fill="#111827" stroke="#0F172A"/><rect x="${x-30}" y="${y-30}" width="14" height="60" rx="6" fill="#4B5563"/><text x="${x-23}" y="${y+5}" font-size="14" font-weight="900" fill="#fff" text-anchor="middle">−</text><text x="${x+6}" y="${y-2}" font-size="11" font-weight="800" fill="#FDE68A" text-anchor="middle" direction="ltr">1F</text><text x="${x+6}" y="${y+14}" font-size="9" font-weight="700" fill="#FDE68A" text-anchor="middle" direction="ltr">5.5V</text>`;
+const cell=(fn,x,y,a,b)=>fn(x,y)+T(x,y+104,a,'class="lb sm"')+T(x,y+122,b,'class="lb xs"');
+F.capTypes=svg('0 0 480 400',
+ cell(elec,80,60,'إلكتروليتي','سعة كبيرة · قطبي')+cell(cer,240,60,'سيراميكي','سعة صغيرة · غير قطبي')+cell(film,400,60,'بلاستيكي (فيلم)','دقيق وثابت · غير قطبي')
+ +cell(tant,80,240,'تنتالوم','صغير الحجم · قطبي')+cell(vari,240,240,'متغير','تتغير سعته بالمقبض')+cell(supc,400,240,'فائق السعة','سعة كبيرة جدا · قطبي'),
+ 'أنواع المكثفات الشائعة');
+})();
+/* المكثف ذو اللوحين المتوازيين: رسم ثلاثي الأبعاد موصل بمصدر جهد من جانبيه (درس 3-5) */
+(function(){
+const F=window.FIGS=window.FIGS||{};
+const S=(x,d,z)=>[x+d*0.55,250-z-d*0.45],f=n=>n.toFixed(1),P=(...a)=>a.map(p=>f(p[0])+','+f(p[1])).join(' ');
+const plate=(x,fill,st)=>`<polygon points="${P(S(x,0,60),S(x,90,60),S(x,90,190),S(x,0,190))}" fill="${fill}" stroke="${st}" stroke-width="1.5"/><polygon points="${P(S(x,0,190),S(x+6,0,190),S(x+6,90,190),S(x,90,190))}" fill="#E2E8F0" stroke="${st}"/><polygon points="${P(S(x,0,60),S(x+6,0,60),S(x+6,0,190),S(x,0,190))}" fill="#94A3B8" stroke="${st}"/>`;
+const XL=150,XR=250,ZM=125,DM=45;
+const T=(x,y,t,o)=>`<text x="${f(x)}" y="${f(y)}" ${o}>${t}</text>`;
+let g=`<defs><linearGradient id="pp3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F1F5F9"/><stop offset="1" stop-color="#94A3B8"/></linearGradient><marker id="pp3a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/></marker><marker id="pp3d" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#C2410C"/></marker></defs>`;
+/* السلكان من جانبي اللوحين إلى مصدر الجهد */
+const wL=S(XL,DM,ZM),wR=S(XR+6,DM,ZM);
+g+=`<path d="M${f(wL[0])},${f(wL[1])} L${f(wL[0]-70)},${f(wL[1])} L${f(wL[0]-70)},300 L193,300" fill="none" stroke="#DC2626" stroke-width="2.4"/>`;
+g+=plate(XL,'#FCA5A5','#B91C1C');
+g+=`<polygon points="${P(S(XL+8,4,64),S(XR-2,4,64),S(XR-2,4,186),S(XL+8,4,186))}" fill="#BAE6FD" opacity=".35"/>`;
+[80,115,150,175].forEach(z=>[20,50,80].forEach(d=>{const a=S(XL+8,d,z),b=S(XR-4,d,z);g+=`<line x1="${f(a[0])}" y1="${f(a[1])}" x2="${f(b[0])}" y2="${f(b[1])}" stroke="var(--accent)" stroke-width="1.6" marker-end="url(#pp3a)"/>`}));
+g+=plate(XR,'url(#pp3)','#1D4ED8');
+/* المساحة A مظللة على اللوح السالب */
+g+=`<polygon points="${P(S(XR+6,8,68),S(XR+6,82,68),S(XR+6,82,182),S(XR+6,8,182))}" fill="none" stroke="#1D4ED8" stroke-width="1.4" stroke-dasharray="5 3"/>`;
+[[XL,'+','#B91C1C',-1],[XR+6,'−','#1D4ED8',3]].forEach(([x,t,c,o])=>[80,120,160].forEach(z=>[25,65].forEach(d=>{const p=S(x,d,z);g+=T(p[0]+o,p[1]+4,t,`font-size="14" font-weight="900" fill="${c}" text-anchor="middle"`)})));
+g+=`<path d="M${f(wR[0])},${f(wR[1])} L${f(wR[0]+60)},${f(wR[1])} L${f(wR[0]+60)},300 L213,300" fill="none" stroke="#2563EB" stroke-width="2.4"/>`;
+g+=`<circle cx="${f(wL[0])}" cy="${f(wL[1])}" r="3.5" fill="#DC2626"/><circle cx="${f(wR[0])}" cy="${f(wR[1])}" r="3.5" fill="#2563EB"/>`;
+/* مصدر الجهد */
+g+=`<line x1="195" y1="286" x2="195" y2="314" stroke="var(--ink)" stroke-width="2.6"/><line x1="207" y1="292" x2="207" y2="308" stroke="var(--ink)" stroke-width="6"/>`+T(186,288,'+','class="lb" text-anchor="middle" style="fill:#DC2626"')+T(217,288,'−','class="lb" text-anchor="middle" style="fill:#2563EB"')+T(201,334,'V','class="lb" text-anchor="middle"')+T(201,352,'مصدر جهد مستمر','class="lb xs" text-anchor="middle"');
+/* d */
+{const a=S(XL+6,90,204),b=S(XR,90,204);g+=`<line x1="${f(S(XL+6,90,190)[0])}" y1="${f(S(XL+6,90,190)[1])}" x2="${f(a[0])}" y2="${f(a[1]-4)}" stroke="#C2410C" stroke-dasharray="3 2"/><line x1="${f(S(XR,90,190)[0])}" y1="${f(S(XR,90,190)[1])}" x2="${f(b[0])}" y2="${f(b[1]-4)}" stroke="#C2410C" stroke-dasharray="3 2"/><line x1="${f(a[0])}" y1="${f(a[1])}" x2="${f(b[0])}" y2="${f(b[1])}" stroke="#C2410C" stroke-width="1.8" marker-start="url(#pp3d)" marker-end="url(#pp3d)"/>`+T((a[0]+b[0])/2,a[1]-8,'d','class="lb" text-anchor="middle" style="fill:#C2410C"')}
+/* الأسماء */
+{const p=S(XR+6,82,140);g+=T(p[0]+10,p[1]+4,'A مساحة اللوح','class="lb xs" text-anchor="start" style="fill:#1D4ED8"')}
+{const p=S(XL,0,190);g+=T(p[0]-8,p[1]+14,'اللوح الموجب +q','class="lb xs" text-anchor="end" style="fill:#B91C1C"')}
+{const p=S(XR+6,0,60);g+=T(p[0]+70,p[1]+14,'اللوح السالب −q','class="lb xs" text-anchor="start" style="fill:#1D4ED8"')+`<line x1="${f(p[0]+68)}" y1="${f(p[1]+10)}" x2="${f(p[0]+4)}" y2="${f(p[1]-6)}" stroke="#1D4ED8"/>`}
+{const p=S(XL,0,190);g+=T(p[0]-8,p[1]-6,'وسط عازل: هواء','class="lb xs" text-anchor="end" style="fill:#0369A1"')}
+{const a=S(XL+10,-30,60),b=S(XR-4,-30,60);g+=`<line x1="${f(a[0])}" y1="${f(a[1])}" x2="${f(b[0])}" y2="${f(b[1])}" stroke="var(--accent)" stroke-width="4" marker-end="url(#pp3a)"/>`+T((a[0]+b[0])/2,a[1]-8,'E','class="lb" text-anchor="middle" style="fill:var(--accent);font-size:20px;font-weight:800" direction="ltr"')+T((a[0]+b[0])/2,a[1]+18,'خطوط المجال، واتجاهه','class="lb xs" text-anchor="middle" style="fill:var(--accent)"')+T((a[0]+b[0])/2,a[1]+34,'من الموجب إلى السالب','class="lb xs" text-anchor="middle" style="fill:var(--accent)"')}
+g+=T(wL[0]-74,wL[1]-8,'سلك توصيل','class="lb xs" text-anchor="end"');
+g+=T(445,230,'C = ε₀·A / d','class="lb ac" text-anchor="end" direction="ltr"')+T(445,254,'C = q / V','class="lb ac" text-anchor="end" direction="ltr"');
+F.cap3D=`<figure class="fig"><svg viewBox="-10 -50 460 415" role="img" aria-label="مكثف ذو لوحين متوازيين ثلاثي الأبعاد موصل بمصدر جهد">${g}</svg><figcaption>المكثف ذو اللوحين المتوازيين موصل بمصدر جهد مستمر من جانبيه: اللوح الموجب يحمل +q والسالب −q، ومساحة كل لوح A، والمسافة بينهما d، وبينهما وسط عازل ومجال كهربائي منتظم E</figcaption></figure>`;
+})();
