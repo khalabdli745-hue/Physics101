@@ -609,6 +609,8 @@ function exDraw(){
   /* الرصد: تجبر درجة كل اختبار إلى الأعلى (17.5 ← 18)، وتبقى الدرجة الأصلية في raw للمراجعة */
   EXR.rows.forEach(x=>{if(x.raw==null&&x.score!=null){x.raw=x.score;x.score=Math.ceil(x.score-1e-9)}});
   EXR.students.forEach(s=>{if(s.platform){s.aw=autoWork(s.id);s.work=s.aw?s.aw.w:0}else{s.aw=null;s.work=null}});
+  /* الأسماء قد تصل أرقاما من Google Sheets (مثل اسم الشعبة 42821)، فتحول نصوصا */
+  EXR.sections.forEach(x=>{x.id=String(x.id);x.name=String(x.name==null?'':x.name)});EXR.students.forEach(x=>{x.id=String(x.id);x.name=String(x.name==null?'':x.name);x.sectionId=String(x.sectionId==null?'':x.sectionId)});
   const m=$('#main'),r=EXR,st=r.students,secs=r.sections,sn=id=>(secs.find(s=>s.id===id)||{}).name||'بدون شعبة';
   const sel=EXSEC!=='all'&&secs.some(s=>s.id===EXSEC)?EXSEC:'all';
   const by={};r.rows.forEach(x=>{(by[x.studentId]=by[x.studentId]||{})[x.examId]=x});
