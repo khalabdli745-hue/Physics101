@@ -1356,7 +1356,7 @@ function openBoard(dry){dry=dry===true;
     const openA=()=>{was=auto;stopAuto();aP.hidden=false;B.classList.add('asking');aBtn.hidden=true};
     const closeA=()=>{if(aMic._abort)aMic._abort();busy=false;aSend.disabled=false;runId++;TTS.stop();B.classList.remove('talking','asking');aP.hidden=true;aBtn.hidden=false;if(was)startAuto()};
     aBtn.onclick=openA;aP.querySelector('.bAskX').onclick=closeA;
-    const ERRS={timeout:'تأخر الرد. حاول مرة أخرى أو اضغط «أكمل الشرح».',ai_off:'لم يُفعَّل المدرب الذكي بعد، ويفعّله المدرب من لوحة المدرب.',limit:'وصلت إلى الحد المسموح (15 سؤالًا كل 6 ساعات). حاول لاحقًا.',ai_busy:'المدرب الذكي مشغول الآن لكثرة الأسئلة. حاول بعد دقيقة.',ai_key:'مفتاح الذكاء الاصطناعي غير صالح. أبلغ المدرب.',auth:'سجّل الدخول من جديد.'};
+    const ERRS={timeout:'تأخر الرد. حاول مرة أخرى أو اضغط «أكمل الشرح».',ai_off:'لم يفعّل المطور المدرب الذكي التفاعلي بعد.',limit:'وصلت إلى الحد المسموح (15 سؤالًا كل 6 ساعات). حاول لاحقًا.',ai_busy:'المدرب الذكي مشغول الآن لكثرة الأسئلة. حاول بعد دقيقة.',ai_key:'مفتاح الذكاء الاصطناعي غير صالح. أبلغ المدرب.',auth:'سجّل الدخول من جديد.'};
     const bub=(cls,html)=>{const d=document.createElement('div');d.className='bAskM '+cls;d.innerHTML=html;aLog.appendChild(d);d.scrollIntoView({block:'nearest',behavior:'smooth'});return d};
     const slideNow=()=>{const sl=out[cur];return ((sl&&sl.title)||'')+' — '+(ct.innerText||'').replace(/\s+/g,' ').slice(0,500)};
     async function ask(q){q=(q||'').trim();if(!q||busy)return;busy=true;aSend.disabled=true;aTa.value='';
@@ -1801,7 +1801,7 @@ function aiCard(){
     log.appendChild(d);return d};
   hist.forEach(m=>bubble(m.role,m.content));
   let busy=false;
-  const ERRS={timeout:'تأخر الرد. حاول مرة أخرى.',ai_off:'لم يفعّل المدرب المساعد الذكي بعد.',limit:'وصلت إلى الحد المسموح (15 سؤالًا كل 6 ساعات). حاول لاحقًا.',ai_busy:'المساعد مشغول الآن لكثرة الأسئلة. حاول بعد دقيقة.',ai_key:'مفتاح المساعد غير صالح. أبلغ المدرب.',auth:'انتهت الجلسة، سجّل الدخول من جديد.'};
+  const ERRS={timeout:'تأخر الرد. حاول مرة أخرى.',ai_off:'لم يفعّل المطور المساعد الذكي بعد.',limit:'وصلت إلى الحد المسموح (15 سؤالًا كل 6 ساعات). حاول لاحقًا.',ai_busy:'المساعد مشغول الآن لكثرة الأسئلة. حاول بعد دقيقة.',ai_key:'مفتاح المساعد غير صالح. أبلغ المدرب.',auth:'انتهت الجلسة، سجّل الدخول من جديد.'};
   async function send(q,ex){q=(q||'').trim();if(!q||busy)return;busy=true;sb.disabled=true;ta.value='';ex=ex||{};
     bubble('user',ex.show||q);const w=document.createElement('div');w.className='aiMsg bot wait';w.innerHTML='<span class="dots">يفكّر</span>';log.appendChild(w);w.scrollIntoView({block:'nearest',behavior:'smooth'});
     const ctx=('الدرس: '+l.t+'\n'+(s?s.s:'')+(s&&s.ex?'\nمثال: '+s.ex.q+'\n'+s.ex.st.join('\n'):'')).slice(0,3800);
