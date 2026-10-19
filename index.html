@@ -534,6 +534,7 @@ body.exSheetOn::before{content:'';position:fixed;inset:0;z-index:1199;background
 .exScore{margin:12px 0;padding:16px;border-radius:12px;background:var(--accent-soft);text-align:center;font-size:20px}.exScore b{font-size:30px;color:var(--accent)}
 body.examMode .aiFab,body.examMode #aiLink,body.examSec .aiFab,body.examSec #aiLink{display:none!important}
 .exMine{opacity:.75;font-size:12px;white-space:nowrap}
+.lgGuide{display:block;text-align:center;margin:10px 0 0;font-weight:700;color:var(--accent,#0b6aa2);text-decoration:none;font-size:14px}
 </style>
 </head>
 <body>
@@ -587,6 +588,7 @@ body.examMode .aiFab,body.examMode #aiLink,body.examSec .aiFab,body.examSec #aiL
     </div>
     <p class="lgMsg" id="lgMsg" aria-live="polite"></p>
     <button class="btn lgBtn" id="lgBtn" type="submit">دخول</button>
+    <a class="lgGuide" href="guide.html">📘 دليل المتدرب: خطوات استخدام المنصة بالصور</a>
     <div class="credit">إعداد وتطوير المدرب / <b>خليل موسى المالكي</b></div>
   </form>
 </div>
@@ -978,11 +980,12 @@ function buildNav(){
       it.appendChild(lb);ol.appendChild(it)});
     d.append(b,ol);nav.appendChild(d)});
   const f=document.createElement('div');f.className='navfoot';
-  f.innerHTML='<button id="examBtn" hidden>📝 الاختبارات الفصلية</button><button id="survBtn">📝 استبانة رضا المتدرب</button><button id="refsBtn">📚 المراجع العربية للمقرر</button><button id="themeBtn">◐ تبديل الوضع الفاتح/الداكن</button>';
+  f.innerHTML='<button id="examBtn" hidden>📝 الاختبارات الفصلية</button><button id="guideBtn">📘 دليل المتدرب</button><button id="survBtn">📝 استبانة رضا المتدرب</button><button id="refsBtn">📚 المراجع العربية للمقرر</button><button id="themeBtn">◐ تبديل الوضع الفاتح/الداكن</button>';
   nav.appendChild(f);
   $('refsBtn').onclick=()=>{pos.t='refs';closeNav();render()};
   $('examBtn').hidden=true;
   $('survBtn').onclick=()=>{pos.t='survey';closeNav();render()};
+  $('guideBtn').onclick=()=>{location.href='guide.html'};
   $('themeBtn').onclick=()=>{const r=document.documentElement;const dark=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches;r.dataset.theme=dark?'light':'dark';store.set('p101-theme',r.dataset.theme)};
 }
 function updateProgress(){const pct=Math.min(100,Math.round([...done].filter(k=>{const[a,b]=k.split('-').map(Number);return !HID(a,b)}).length/total*100));$('progTxt').textContent=AR(pct)+'% مكتمل';$('progBar').style.width=pct+'%'}
@@ -1902,7 +1905,7 @@ function examRules(e){const dur=e.min%60?AR(e.min)+' دقيقة':e.min===60?'س�
   <li>عدد الأسئلة <b>${AR(e.n)}</b>: أسئلة نظرية اختيار من متعدد، ثم مسائل حسابية.</li>
   <li>يمكنك <b>تغيير إجابة الأسئلة النظرية</b> في أي وقت قبل الإرسال.</li>
   <li class="exRed">المسألة الحسابية <b>أربع خطوات بالترتيب</b>: (1) المعطيات، (2) المطلوب، (3) القانون والحساب، (4) النتيجة.</li>
-  <li class="exRed">في الخطوتين 1 و2: اختر الإجابة ثم اضغط <b>«التالي»</b> للانتقال، وبعد الضغط <b>لا يمكن تغييرها أو الرجوع إليها</b>.</li>
+  <li class="exRed">في الخطوتين 1 و2: اختر الإجابة ثم اضغط <b>«التالي»</b> للانتقال. ولتغيير خطوة سابقة اضغط <b>«✏️ تعديل»</b> بجانبها، فتمسح الخطوات التي بعدها وتعيد اختيارها والحساب بالآلة الحاسبة من جديد.</li>
   <li class="exRed">في الخطوة 3: اختر القانون فتظهر الآلة الحاسبة وفوقها القانون وأرقام التعويض، احسب بها ثم اضغط <b>«سجل النتيجة في الخطوة 4»</b> للانتقال؛ ولا يقبل رقم يكتب بدون حساب.</li>
   <li class="exRed">في الخطوة 4: تظهر النتيجة تلقائيا ولا تكتب يدويا، ويمكنك تصحيحها بزر «أعد الحساب بالآلة الحاسبة».</li>
   <li class="exRed">في المسائل الحسابية: إذا توقفت عند خطوة تحسب لك درجات الخطوات التي أنهيتها فقط.</li>
