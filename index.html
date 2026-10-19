@@ -481,7 +481,7 @@ sub.ss{font-size:.6em;line-height:0;vertical-align:-.25em}
 .exSteps{display:grid;gap:10px;margin-top:6px}.exStep{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--paper)}
 .exStep.live{border:2px solid var(--accent)}.exStep.done{opacity:.85}.exStH{font-weight:800;margin-bottom:8px;display:flex;align-items:center;gap:8px}
 .exN{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--accent);color:var(--accent-ink,#fff);font-size:13px}
-.exOk{font-weight:600;color:var(--good);font-size:13px}.exEdit{margin-inline-start:auto;padding:2px 10px;font-size:13px}.exNote{margin:8px 0 4px;font-size:13.5px;color:var(--muted);min-height:1em}.exNext{width:100%;margin-top:4px}.exNext:disabled{opacity:.45}
+.exOk{font-weight:600;color:var(--good);font-size:13px}.exNote{margin:8px 0 4px;font-size:13.5px;color:var(--muted);min-height:1em}.exNext{width:100%;margin-top:4px}.exNext:disabled{opacity:.45}
 body.examOnly #menuBtn,body.examOnly .progress,body.examOnly #aiLink,body.examOnly #doneBtn,body.examOnly #tabs,body.examOnly #pager,body.examOnly .aiFab,body.examOnly #nav,body.examOnly .scrim,body.examOnly #examBar{display:none!important}
 .exRes{display:flex;gap:8px;align-items:center;direction:ltr}.exRes input{flex:1;font-size:18px;padding:10px 12px;border:2px solid var(--line);border-radius:10px;background:var(--panel);color:var(--ink);text-align:left}.exRes input:focus{border-color:var(--accent);outline:0}.exRes input.bad{border-color:var(--bad)}.exU{font-weight:700;font-size:16px;white-space:nowrap}
 .exModal{position:fixed;inset:0;z-index:4000;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:16px}.exMBox{background:var(--panel);color:var(--ink);border-radius:14px;padding:18px;max-width:420px;width:100%;box-shadow:0 10px 30px rgba(0,0,0,.35)}.exMBox p{margin:0 0 14px;line-height:1.8;font-size:16px}.exMBtns{display:flex;gap:8px}.exMBtns .btn{flex:1;padding:11px;font-size:16px;border-radius:10px}.exMBtns .exMNo{flex:1;padding:11px;font-size:16px;font-weight:700;border-radius:10px;background:transparent;color:var(--ink);border:1.5px solid var(--line);cursor:pointer}
@@ -1905,7 +1905,7 @@ function examRules(e){const dur=e.min%60?AR(e.min)+' دقيقة':e.min===60?'س�
   <li>عدد الأسئلة <b>${AR(e.n)}</b>: أسئلة نظرية اختيار من متعدد، ثم مسائل حسابية.</li>
   <li>يمكنك <b>تغيير إجابة الأسئلة النظرية</b> في أي وقت قبل الإرسال.</li>
   <li class="exRed">المسألة الحسابية <b>أربع خطوات بالترتيب</b>: (1) المعطيات، (2) المطلوب، (3) القانون والحساب، (4) النتيجة.</li>
-  <li class="exRed">في الخطوتين 1 و2: اختر الإجابة ثم اضغط <b>«التالي»</b> للانتقال. ولتغيير خطوة سابقة اضغط <b>«✏️ تعديل»</b> بجانبها، فتمسح الخطوات التي بعدها وتعيد اختيارها والحساب بالآلة الحاسبة من جديد.</li>
+  <li class="exRed">في الخطوتين 1 و2: اختر الإجابة ثم اضغط <b>«التالي»</b> للانتقال، وبعد الضغط <b>لا يمكن تغييرها أو الرجوع إليها</b>.</li>
   <li class="exRed">في الخطوة 3: اختر القانون فتظهر الآلة الحاسبة وفوقها القانون وأرقام التعويض، احسب بها ثم اضغط <b>«سجل النتيجة في الخطوة 4»</b> للانتقال؛ ولا يقبل رقم يكتب بدون حساب.</li>
   <li class="exRed">في الخطوة 4: تظهر النتيجة تلقائيا ولا تكتب يدويا، ويمكنك تصحيحها بزر «أعد الحساب بالآلة الحاسبة».</li>
   <li class="exRed">في المسائل الحسابية: إذا توقفت عند خطوة تحسب لك درجات الخطوات التي أنهيتها فقط.</li>
@@ -1997,9 +1997,6 @@ function examPaper(i){
       q.st.forEach((opts,j)=>{if(j>cur)return;const live=j===cur;let pick=live?null:A[j],calcUsed=false;
         const sb=document.createElement('div');sb.className='exStep'+(live?' live':' done');
         sb.innerHTML=`<div class="exStH"><span class="exN">${AR(j+1)}</span>${STEPS[j]}${live?'':' <span class="exOk">✓ تم</span>'}</div><div class="opts"></div>`;
-        /* تعديل خطوة سابقة: يرجع المتدرب إليها فتفتح من جديد، وتمسح الخطوات التي بعدها لأنها مبنية عليها */
-        if(!live&&Array.isArray(opts)){const eb=document.createElement('button');eb.type='button';eb.className='btn ghost sm exEdit';eb.textContent='✏️ تعديل';sb.querySelector('.exStH').appendChild(eb);
-          eb.onclick=async()=>{if(A.length>j+1&&!(await examAsk('عند تعديل هذه الخطوة تمسح الخطوات التي بعدها، وتعيد اختيارها والحساب بالآلة الحاسبة من جديد. هل تريد التعديل؟','نعم، عدل','رجوع')))return;A.length=j;cnt();save();draw();setTimeout(()=>{const l=box.querySelector('.exStep.live');if(l)l.scrollIntoView({block:'center',behavior:'smooth'})},60)}}
         const o=sb.querySelector('.opts');
         /* النتيجة لا تكتب يدويا: تسجل من الآلة الحاسبة فقط، ويمكن إعادة الحساب بنفس القانون والتعويض */
         if(!Array.isArray(opts)){o.className='exRes';o.innerHTML=`<input type="text" dir="ltr" readonly tabindex="-1" placeholder="تسجل من الآلة الحاسبة" autocomplete="off"><span class="exU" dir="ltr">${esc(opts.u||'')}</span>`;
