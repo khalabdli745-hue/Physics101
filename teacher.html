@@ -149,6 +149,11 @@ details.res .when{color:var(--muted);font-size:12.5px;margin-inline-start:auto}
 .exStats{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin:6px 0 12px}.exStat{border:1px solid var(--line);border-radius:10px;padding:8px 10px;display:flex;flex-direction:column;gap:2px;font-size:13.5px;background:var(--panel)}.exStat b{font-size:14.5px;color:var(--accent)}
 .exSecs{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.exSec{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:10px;padding:6px 10px;background:var(--panel)}
 .exMin{display:flex;align-items:center;gap:6px;font-size:14px}.exMin input{width:64px}.exc{cursor:pointer}.exc:hover{background:var(--accent-soft,#eef)}
+.ppD .ppH{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid var(--accent);margin:14px 0 6px;padding-bottom:4px}.ppSc{font-weight:800;color:var(--good);border:1.5px solid var(--good);border-radius:8px;padding:0 10px}.ppSc.wip{color:var(--mid);border-color:var(--mid)}
+.ppQ{border:1px solid var(--line);border-radius:8px;padding:5px 8px;margin:5px 0;font-size:14px;break-inside:avoid}.ppOs{display:flex;flex-wrap:wrap;gap:4px 6px;align-items:center;margin-top:3px}.ppO{border:1px solid var(--line);border-radius:6px;padding:0 6px;font-size:13.5px}
+.ppO.ok{border-color:var(--good);background:color-mix(in srgb,var(--good) 15%,transparent);font-weight:700}.ppO.bad{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 13%,transparent);text-decoration:line-through}.ppD .ok{color:var(--good);font-weight:800}.ppD .bad{color:var(--bad);font-weight:800}
+.ppM{unicode-bidi:isolate;font-family:ui-monospace,Consolas,monospace}.ppD h4{margin:8px 0 2px;color:var(--accent)}.ppTitle{margin:6px 0}
+@media print{body.ppPrinting>*:not(.ppD){display:none!important}body.ppPrinting .ppD{position:static;background:#fff;display:block}body.ppPrinting .ppD>div{width:100%;height:auto;overflow:visible;padding:0;background:#fff;color:#000}body.ppPrinting .ppCtl{display:none!important}body.ppPrinting .ppS{break-before:page}body.ppPrinting .ppS:first-of-type{break-before:auto}}
 </style>
 </head>
 <body>
@@ -613,6 +618,45 @@ async function drawTrainer(m,ctl,st,sec,secLabel,today,n,logged){
 
 /* ---------- الشعب ---------- */
 /* ---------- الاختبارات الفصلية ---------- */
+/* أوراق المتدربين: ورقة كل متدرب كما ولدت له لحظة البدء، قبل الحل (دون إجابات) أو بعده (مع الإجابات والتصحيح) */
+const PPC={};
+function ppNumOk(a,v){if(a==null||a===''||!isFinite(+a))return false;a=+a;if(Math.abs(a-v)<=Math.max(0.0100001,Math.abs(v)*0.01))return true;if(a===0&&v!==0)return false;
+  for(let d=0;d<=6;d++){const m=10**d,r=Math.round(v*m)/m,t=Math.trunc(v*m+(v<0?-1e-9:1e-9))/m;if((r!==0&&Math.abs(a-r)<1e-9)||(d>0&&t!==0&&Math.abs(a-t)<1e-9))return true}return false}
+function ppT(x){return esc(String(x==null?'':x)).replace(/`([^`]*)`/g,(m,y)=>`<span class="ppM" dir="ltr">${y}</span>`)}
+function ppPaper(row,name,sec,withAns){const L='أبجد',STP=['المعطيات','المطلوب','القانون'],p=row.paper||[],a=row.answers||[];
+  const op=(o,c,me)=>o.map((x,k)=>`<span class="ppO${withAns&&k===c?' ok':''}${withAns&&me===k&&k!==c?' bad':''}">${L[k]}) ${ppT(x)}</span>`).join('');
+  const t=x=>x?new Date(x).toLocaleTimeString('ar-SA-u-nu-latn',{hour:'2-digit',minute:'2-digit'}):'';
+  let h=`<section class="ppS"><div class="ppH"><div><b>${esc(name)}</b><div class="sub">الرقم ${esc(row.studentId)} · ${esc(sec)}${withAns?' · بدأ '+t(row.startedAt)+(row.submittedAt?' · سلم '+t(row.submittedAt):''):''}</div></div>${withAns?(row.submittedAt&&row.score!=null?`<span class="ppSc">${AR(row.score)} / ${AR(row.max)}</span>`:'<span class="ppSc wip">لم يسلم بعد</span>'):''}</div>`;
+  const nT=p.filter(q=>!q.n).length;
+  p.forEach((q,i)=>{const me=a[i];if(i===0&&nT)h+=`<h4>أولا: الأسئلة النظرية</h4>`;if(i===nT)h+=`<h4>ثانيا: المسائل الحسابية (درجتان لكل مسألة)</h4>`;
+    if(!q.n){const mk=!withAns?'':me==null?(row.submittedAt?' <span class="bad">لم يجب</span>':''):me===q.c?' <span class="ok">✓</span>':' <span class="bad">✗</span>';
+      h+=`<div class="ppQ"><div><b>${AR(i+1)}.</b> ${ppT(q.q)}${mk}</div><div class="ppOs">${op(q.o,q.c,me)}</div></div>`;return}
+    const ma=Array.isArray(me)?me:[];h+=`<div class="ppQ"><div><b>${AR(i+1)}.</b> ${ppT(q.q)}</div>`;
+    (q.st||[]).forEach((s2,j)=>{if(s2.o){h+=`<div class="ppOs"><b>${STP[j]||''}:</b> ${op(s2.o,s2.c,ma[j])}</div>`;return}
+      if(!withAns){h+=`<div class="ppOs"><b>النتيجة:</b> ........................</div>`;return}
+      const v=ma[j],good=v!=null&&ppNumOk(v,s2.v);h+=`<div class="ppOs"><b>النتيجة:</b> <span class="ppO ok"><span class="ppM" dir="ltr">${+(+s2.v).toPrecision(6)} ${esc(s2.u||'')}</span></span>${v==null?'':` إجابته: <span class="ppM ${good?'ok':'bad'}" dir="ltr">${esc(v)}</span>`}</div>`});
+    h+='</div>'});
+  return h+'</section>'}
+async function exPapers(r,st,sn){const exs=r.exams.filter(e=>!e.soon);let eid=(exs.find(e=>e.open&&!e.trial)||exs.find(e=>!e.trial)||exs[0]||{}).id,who='all',sec='all',mode='before';
+  const d=document.createElement('div');d.className='drawer ppD';document.body.appendChild(d);d.onclick=e=>{if(e.target===d)d.remove()};
+  const nm=id=>(st.find(x=>x.id===id)||{}).name||id;
+  async function draw(){d.innerHTML=`<div role="dialog" aria-label="أوراق المتدربين"><div class="dhead ppCtl"><h2>📄 أوراق المتدربين</h2><button class="btn ghost sm" id="ppX">إغلاق</button></div>
+    <div class="row ppCtl" style="flex-wrap:wrap;gap:6px;margin-bottom:8px"><select id="ppE">${exs.map(e=>`<option value="${e.id}" ${e.id===eid?'selected':''}>${esc(e.t)}</option>`).join('')}</select><select id="ppS"></select><select id="ppW"></select>
+    <select id="ppMd"><option value="before" ${mode==='before'?'selected':''}>قبل الحل (دون إجابات)</option><option value="after" ${mode==='after'?'selected':''}>بعد الحل (الإجابات والتصحيح)</option></select><button class="btn sm" id="ppPr">🖨 طباعة / حفظ PDF</button></div>
+    <div id="ppB"><p class="sub">جار التحميل…</p></div></div>`;
+    d.querySelector('#ppX').onclick=()=>d.remove();d.querySelector('#ppPr').onclick=()=>{document.body.classList.add('ppPrinting');window.print();setTimeout(()=>document.body.classList.remove('ppPrinting'),500)};
+    d.querySelector('#ppE').onchange=e=>{eid=e.target.value;who='all';draw()};d.querySelector('#ppMd').onchange=e=>{mode=e.target.value;show()};d.querySelector('#ppW').onchange=e=>{who=e.target.value;show()};d.querySelector('#ppS').onchange=e=>{sec=e.target.value;who='all';fill();show()};
+    let res=PPC[eid];if(!res){res=await apiR({a:'tpapers',token:TOKEN,id:eid});if(res&&res.ok)PPC[eid]=res}
+    if(!res||!res.ok){d.querySelector('#ppB').innerHTML=`<p class="msg bad">${res&&res.error==='bad_action'?'حدث الخادم (code.gs) إلى الإصدار 13 أولا.':'تعذر تحميل الأوراق، حاول مرة أخرى.'}</p>`;return}
+    const rows=res.rows.slice().sort((x,y)=>nm(x.studentId).localeCompare(nm(y.studentId),'ar'));
+    const sOf=x=>(st.find(y=>y.id===x.studentId)||{}).sectionId||x.sectionId,secIds=[...new Set(rows.map(sOf))];
+    d.querySelector('#ppS').innerHTML=`<option value="all">جميع الشعب</option>`+secIds.map(i=>`<option value="${esc(i)}" ${i===sec?'selected':''}>الشعبة ${esc(sn(i))}</option>`).join('');
+    const inSec=()=>rows.filter(x=>sec==='all'||sOf(x)===sec);
+    function fill(){const R2=inSec();d.querySelector('#ppW').innerHTML=`<option value="all">${sec==='all'?'جميع المتدربين':'الشعبة كاملة'} (${AR(R2.length)})</option>`+R2.map(x=>`<option value="${esc(x.studentId)}" ${x.studentId===who?'selected':''}>${esc(nm(x.studentId))}</option>`).join('')}fill();
+    function show(){const L2=inSec().filter(x=>who==='all'||x.studentId===who);
+      d.querySelector('#ppB').innerHTML=L2.length?`<p class="sub ppCtl">الورقة كما ولدت للمتدرب لحظة بدء الاختبار، بترتيب الأسئلة والخيارات نفسه.${mode==='after'?' الأخضر: الإجابة الصحيحة، والأحمر المشطوب: إجابة المتدرب الخاطئة.':''}</p><h3 class="ppTitle">${esc(res.t)}${mode==='before'?' — الأسئلة قبل الحل':' — الإجابات والتصحيح'}</h3>`+L2.map(x=>ppPaper(x,nm(x.studentId),sn((st.find(y=>y.id===x.studentId)||{}).sectionId||x.sectionId),mode==='after')).join(''):'<p class="empty">لم يبدأ أحد هذا الاختبار بعد. تتولد ورقة كل متدرب عند ضغطه «ابدأ الاختبار».</p>'}
+    window.__ppShow=show;show()}
+  draw()}
 let EXR=null,EXSEC=ls.get('p101-exsec','all'),EXTS=ls.get('p101-extrs','all');
 /* تحميل تبويب الاختبارات مسبقا في الخلفية بعد فتح اللوحة، فيفتح التبويب فورا */
 let EXP=null;function exPrefetch(){if(!EXP)EXP=apiR({a:'texams',token:TOKEN}).then(r=>{if(r&&r.ok&&Array.isArray(r.rows)){EXR=r;if(tab==='exams')exSafe()}return r}).catch(()=>null).finally(()=>{EXP=null});return EXP}
@@ -715,7 +759,7 @@ function exDraw(){
    <div class="row" style="margin-top:10px;flex-wrap:wrap;gap:6px"><input type="text" id="exNs" placeholder="اسم شعبة اختبار جديدة" style="flex:1;min-width:160px"><button class="btn sm" id="exAddS">إضافة شعبة</button></div>
    <div class="exSecs">${secs.length?secs.map(s=>`<span class="exSec" data-id="${esc(s.id)}"><b>${esc(s.name)}</b> <small>${AR(st.filter(x=>x.sectionId===s.id).length)} متدرب</small> <button class="btn ghost sm exSr">تعديل</button> <button class="btn danger sm exSd">حذف</button></span>`).join(''):'<p class="empty">لا توجد شعب اختبارات بعد. استورد متدربي المنصة أو ملف Excel فتنشأ الشعب تلقائيا.</p>'}</div></div>
   <div class="card"><h2>درجات الاختبارات الفصلية والنهائية</h2>${exStats()}<div class="row" style="flex-wrap:wrap;gap:6px;margin-bottom:8px"></div><div class="row" style="flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:6px;font-size:14px"><b>درجة كل وحدة (4) = </b>${['اختبر نفسك','الأمثلة والتمارين','التجارب'].map((t,i)=>`<label style="display:flex;gap:4px;align-items:center">${t}<input class="exWkW" data-i="${i}" type="number" min="0" max="4" step="0.25" value="${WKW[i]}" style="width:62px"></label>`).join('')}<span id="exWkSum" class="${WKW.reduce((a,x)=>a+(+x||0),0)===WK_UNIT?'good':'bad'}">المجموع ${WKW.reduce((a,x)=>a+(+x||0),0)} من 4</span></div><p class="sub" style="margin:0 0 8px">لمتدربي المنصة فقط. الأعمال الفصلية (20) = 4 درجات لكل وحدة × 5 وحدات. في كل وحدة: نسبة كل بند = متوسط أفضل نسبة في كل درس (الدرس غير المحلول صفر) × درجة البند. الدرجة تراكمية: كل درس يحله المتدرب يضيف نصيبه تلقائيا، وتكتمل 20 بنهاية المقرر. درجات الوحدات تحت الدرجة.</p>
-  <div class="row"><select id="exSec">${secOpts(sel,true)}</select><button class="btn ghost sm" id="exX">⬇ تصدير Excel</button><button class="btn ghost sm" id="exR">↻ تحديث</button></div>
+  <div class="row"><select id="exSec">${secOpts(sel,true)}</select><button class="btn ghost sm" id="exX">⬇ تصدير Excel</button><button class="btn ghost sm" id="exPp">📄 أوراق المتدربين</button><button class="btn ghost sm" id="exR">↻ تحديث</button></div>
   ${list.length?`<div class="tableWrap"><table><thead><tr><th>الرقم</th><th>الاسم</th>${r.exams.map(e=>`<th>${esc(e.t.replace('الاختبار ','').replace('الفصلي ',''))}<br><small>(${AR(e.max)})</small></th>`).join('')}<th>الأعمال الفصلية<br><small>(20، لمتدربي المنصة)</small></th><th>المجموع<br><small>(100 للمنصة، ${AR(EXMAX)} للخارجي)</small></th><th>نتيجة المقرر<br><small>(60% فأكثر، و${AR(finMin)} من ${AR(FIN?FIN.max:40)} في النهائي)</small></th><th>الشعبة</th><th>الدخول</th><th></th></tr></thead><tbody>
   ${list.map(s=>`<tr style="cursor:default" data-id="${esc(s.id)}"><td class="num">${esc(s.id)}</td><td>${esc(s.name)}</td>${r.exams.map(e=>cell(s,e)).join('')}<td class="num">${s.platform?`<b>${AR(s.work)}</b><br><small class="exRaw" title="درجة كل وحدة من 4">${s.aw?s.aw.units.map(x=>'و'+(x.u+1)+': '+Math.round(x.m*10)/10).join(' · '):''}</small>`:'<span class="exRaw">لا يوجد</span>'}</td><td class="num"><b>${total(s)}</b></td><td>${(f=>f.c?`<span class="tag ${f.c==='bad'?'warn':''}" style="font-weight:700;color:${f.c==='bad'?'var(--bad)':'var(--good)'}">${f.t}</span>`:f.t)(finStat(s))}</td>
    <td><select class="exMv">${secOpts(s.sectionId,false)}</select></td><td>${s.platform?'<span class="tag">المنصة</span>':'<span class="tag">خارجي</span>'} ${s.hasPw?'':'<span class="tag warn">لم يضبط كلمة المرور</span>'}</td>
@@ -765,6 +809,7 @@ function exDraw(){
   m.querySelectorAll('.exc').forEach(td=>td.onclick=async()=>{const s=st.find(x=>x.id===td.dataset.s),e=r.exams.find(x=>x.id===td.dataset.e);
     if(!confirm(`إعادة فتح «${e.t}» للمتدرب ${s.name}؟ تحذف محاولته ودرجته، ويبدأ من جديد بأسئلة جديدة.`))return;
     const x=await api({a:'texams',token:TOKEN,op:'reset',id:e.id,studentId:s.id});if(x.ok){toast('تمت إعادة فتح الاختبار للمتدرب');drawExams()}else toast(errText(x.error))});
+  $('#exPp').onclick=()=>exPapers(r,st,sn);
   $('#exX').onclick=()=>saveBook([['درجات الاختبارات',[['الرقم التدريبي','الاسم','الشعبة',...r.exams.map(e=>e.t+' ('+e.max+')'),'الأعمال الفصلية (20)','المجموع','من','نتيجة المقرر',...r.exams.map(e=>e.t+' قبل الجبر')],
     ...list.map(s=>[s.id,s.name,sn(s.sectionId),...r.exams.map(e=>{const x=(by[s.id]||{})[e.id];return x&&x.submittedAt?x.score:held(e)&&!x?0:''}),s.work==null?'':s.work,Math.round(sumOf(s)*100)/100,outOf(s),finStat(s).t==='—'?'':finStat(s).t,...r.exams.map(e=>{const x=(by[s.id]||{})[e.id];return x&&x.submittedAt?x.raw:''})])],[14,26,18,16,16,16,14,12,8,26,18,18,18]]],'درجات-الاختبارات'+(sel==='all'?'':'-'+sn(sel))+'.xlsx');
 }
