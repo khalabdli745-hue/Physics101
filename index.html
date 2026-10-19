@@ -535,6 +535,20 @@ body.exSheetOn::before{content:'';position:fixed;inset:0;z-index:1199;background
 body.examMode .aiFab,body.examMode #aiLink,body.examSec .aiFab,body.examSec #aiLink{display:none!important}
 .exMine{opacity:.75;font-size:12px;white-space:nowrap}
 .lgGuide{display:block;text-align:center;margin:10px 0 0;font-weight:700;color:var(--accent,#0b6aa2);text-decoration:none;font-size:14px}
+.calc .crt{display:inline-block;white-space:nowrap;line-height:1.25}.calc .crs{display:inline-block;font-size:1.2em;line-height:1;transform:scaleY(1.18);transform-origin:bottom;margin-right:-1px}.calc .crb{display:inline-block;border-top:2px solid currentColor;padding:2px 2px 0;white-space:pre;min-width:.6em;line-height:1.15}.calc .crn{font-size:.6em;vertical-align:.9em;margin-right:-3px}
+.calc .cnav{grid-template-columns:1fr 1.15fr 1fr!important;align-items:stretch;gap:8px!important}
+.calc .cnav>.ck{align-self:stretch;min-height:0!important;display:flex;align-items:center;justify-content:center;font-size:16px!important;font-weight:700;padding:0!important}.calc .cnav>.ck small{display:none}
+.calc .cpad{display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:auto auto auto;grid-template-areas:". u ." "l c r" ". d .";gap:2px;background:#334155;border-radius:999px;padding:3px 5px;box-shadow:inset 0 0 0 2px #475569}
+.calc .cpad .ck{min-height:17px!important;padding:0!important;font-size:10px!important;border-radius:6px;background:#475569}
+.calc .cpad .pu{grid-area:u}.calc .cpad .pd{grid-area:d}.calc .cpad .pl{grid-area:l}.calc .cpad .pr{grid-area:r}
+.calc .cpad .pc{grid-area:c;width:10px;height:10px;border-radius:50%;background:#1e293b;justify-self:center;align-self:center}
+.calc .cpad .ck small{display:none}
+.calc .cnav>.ck.cm{background:#60a5fa!important;color:#0b1b33!important;box-shadow:0 3px 0 #1d4ed8!important}
+/* ألوان الآلة الحاسبة الموحدة في كل المنصة والاختبارات */
+.calc .cnum .ck.ce{background:#0369A1!important;color:#fff!important}
+.calc .cuse{background:#F7931E!important;color:#fff!important;border:0!important;border-radius:12px;font-weight:700}
+.calc .cuse:disabled{opacity:.45}
+.calc .cind{justify-content:flex-end!important}.calc .cind .cmd{order:9;margin-left:auto}.calc .cind .cmd i{font-style:normal;font-size:9px;font-weight:600;opacity:.75}
 </style>
 </head>
 <body>
@@ -1482,6 +1496,11 @@ function makeCalc(onUse){
       if(i===b)break;const k=T[i];
       if(k==='{'){const [m,e]=match(i);const nu=seg(i+1,m),de=seg(m+1,e),bx='<span class="cbx">□</span>';
         h+='<span class="cfr"><span>'+(m===i+1?(cur===m&&!shown?CUR:'')+bx:nu)+'</span><span>'+(e===m+1?(cur===e&&!shown?CUR:'')+bx:de)+'</span></span>';i=e;inSup=false;continue}
+      /* الجذر يعرض بخط ممتد فوق ما بداخله كما في الدرس، والقوس المغلق لا يظهر */
+      if(k==='r'||k==='u'){let d=0,cl=T.length;for(let j=i;j<T.length;j++){const q=T[j];if(q==='('||FN.includes(q))d++;else if(q===')'){d--;if(d===0){cl=j;break}}}
+        const end=Math.min(cl,b),inner=seg(i+1,end);
+        h+='<span class="crt">'+(k==='u'?'<sup class="crn">3</sup>':'')+'<span class="crs">√</span><span class="crb">'+(inner||'&nbsp;')+'</span></span>';inSup=false;
+        if(cl<b){i=cl;continue}return h}
       if(inSup&&!(/[\d.]/.test(k)||(k==='-'&&(T[i-1]==='^'||T[i-1]==='E'))))inSup=false;
       if(k==='^'||k==='E'){const nx=T[i+1];if(nx===undefined||/[\d.\-]/.test(nx)){inSup=true;h+=k==='E'?'<span>×10</span>':'<span class="cpw"></span>';if(nx===undefined)h+='<sup class="cbx">□</sup>';continue}}
       const bin='*/+PK'.includes(k)||(k==='-'&&i>a&&/[\d.pxAMRqki!%)}]/.test(T[i-1])&&!inSup);
@@ -1490,7 +1509,7 @@ function makeCalc(onUse){
   const show=()=>{
     if(!T.length)ex.innerHTML=shown?'':CUR+'<span class="cph">0</span>';else ex.innerHTML=seg(0,T.length);
     const c=ex.querySelector('.ccur');if(c)c.scrollIntoView({block:'nearest',inline:'nearest'});else ex.scrollLeft=ex.scrollWidth};
-  const ind=()=>{indE.innerHTML=(shift?'<b class="ish">S</b>':'')+(hyp?'<b>hyp</b>':'')+(mem!==0?'<b>M</b>':'')+'<b>'+'DRG'[mode]+'</b>'+(fmtM==='f'?'<b>a/b</b>':'')+(fmtM==='e'?'<b>ENG</b>':'')+(fmtM==='s'?'<b>SCI</b>':'');P.classList.toggle('shifted',shift);P.classList.toggle('hyped',hyp)};
+  const ind=()=>{indE.innerHTML=(shift?'<b class="ish">S</b>':'')+(hyp?'<b>hyp</b>':'')+(mem!==0?'<b>M</b>':'')+'<b class="cmd">'+'DRG'[mode]+' <i>('+['Degree','Radian','Grad'][mode]+')</i></b>'+(fmtM==='f'?'<b>a/b</b>':'')+(fmtM==='e'?'<b>ENG</b>':'')+(fmtM==='s'?'<b>SCI</b>':'');P.classList.toggle('shifted',shift);P.classList.toggle('hyped',hyp)};
   const fact=n=>{if(n<0||n!==Math.floor(n)||n>170)throw 0;let r=1;for(let j=2;j<=n;j++)r*=j;return r};
   const calc=str=>{let i=0;const pk=()=>str[i],R=[Math.PI/180,1,Math.PI/200][mode],cl=v=>Math.abs(v)<1e-12?0:+v.toFixed(12);
     const num=()=>{const m=str.slice(i).match(/^(\d*\.?\d+\.?|\d+\.)/);if(!m)throw 0;i+=m[0].length;return parseFloat(m[0])};
@@ -1528,14 +1547,14 @@ function makeCalc(onUse){
   const fill=v=>{const a=Math.abs(v);if(a!==0&&(a>=1e6||a<1e-3)){let e=Math.floor(Math.log10(a)),m=+(v/Math.pow(10,e)).toPrecision(4);if(Math.abs(m)>=10){m=+(m/10).toPrecision(4);e++}return m+'×10'+sup(e)}return String(+v.toPrecision(6))};
   const paint=()=>{if(last==null)return;const o=out(last);rs.innerHTML=o.h?o.h:esc2(o.t);rs.classList.remove('cerr')};
   const reset=()=>{shown=false;rs.textContent='';use.disabled=true;last=null;fmtM='n';engE=null};
-  const evalNow=()=>{if(!T.length)return false;try{const v=calc(T.join(''));if(!isFinite(v))throw 0;ans=v;last=v;shown=true;fmtM=(/[\/{]/.test(T.join(''))&&frac(v))?'f':'n';engE=null;paint();ind();use.disabled=false;
+  const evalNow=()=>{if(!T.length)return false;try{const v=calc(T.join(''));if(!isFinite(v))throw 0;ans=v;last=v;shown=true;fmtM='n';/* الناتج عشري دائما، والكسر عند الضغط على S⇔D فقط */engE=null;paint();ind();use.disabled=false;
       if(hist[hist.length-1]!==T.join('\u0001'))hist.push(T.join('\u0001'));hi=hist.length;return true}
     catch(e){rs.textContent='Math ERROR';rs.classList.add('cerr');use.disabled=true;last=null;return false}};
   const press=(k)=>{
     if(k==='sh'){shift=!shift;ind();return}
     if(k==='hyp'){hyp=!hyp;shift=false;ind();return}
     const sh=shift;shift=false;
-    if(k==='mode'){mode=(mode+1)%3;ind();if(shown)evalNow();show();return}
+    if(k==='mode'){/* MODE يبدل بين الدرجات والراديان فقط */mode=mode===0?1:0;ind();if(shown)evalNow();show();return}
     if(k==='sd'){if(!shown&&!evalNow()){ind();show();return}fmtM=fmtM==='f'?'n':(frac(last)?'f':(fmtM==='s'?'n':'s'));paint();ind();show();return}
     if(k==='eng'||k==='engb'){if(!shown&&!evalNow()){ind();show();return}if(last===0){ind();return}if(fmtM!=='e'){fmtM='e';engE=null;out(last)}else engE+=k==='eng'?-3:3;paint();ind();show();return}
     if(k==='m+'||k==='m-'){if(!shown&&!evalNow()){ind();show();return}mem+=k==='m+'?last:-last;mem=+mem.toPrecision(12);ind();show();return}
@@ -1544,7 +1563,10 @@ function makeCalc(onUse){
     if(hyp&&'sct'.includes(k)&&k.length===1){k={s:'y',c:'z',t:'w'}[k];hyp=false}
     ind();
     if(k==='ac'){T=[];cur=0;reset();show();return}
-    if(k==='L'||k==='Rt'){if(shown){reset();cur=k==='L'?T.length:0;show();return}cur=k==='L'?(cur>0?cur-1:T.length):(cur<T.length?cur+1:0);show();return}
+    if(k==='L'||k==='Rt'){if(shown){reset();cur=k==='L'?T.length:0;show();return}if(k==='Rt'&&cur===T.length){/* الخروج من الجذر بالسهم كالآلة الحديثة: يغلق الجذر المفتوح بدل الرجوع إلى البداية */let d=0,op=false;for(let j=0;j<T.length;j++){const q=T[j];if(q==='('||FN.includes(q))d++;else if(q===')')d--}
+        if(d>0){let st=[];for(let j=0;j<T.length;j++){const q=T[j];if(q==='('||FN.includes(q))st.push(q);else if(q===')')st.pop()}op=st.some(q=>q==='r'||q==='u')}
+        if(op){T.push(')');cur=T.length;show();return}}
+      cur=k==='L'?(cur>0?cur-1:T.length):(cur<T.length?cur+1:0);show();return}
     if(k==='up'||k==='dn'){if(!hist.length)return;hi=Math.max(0,Math.min(hist.length-1,hi+(k==='up'?-1:1)));T=hist[hi].split('\u0001');cur=T.length;reset();show();return}
     if(k==='del'){if(shown){reset();cur=T.length;show();return}if(cur>0){const d=T[cur-1];
         if(d==='{'||d==='~'||d==='}'){let st=cur-1;if(d!=='{'){let dp=0;for(let j=cur-2;j>=0;j--){if(T[j]==='}')dp++;else if(T[j]==='{'){if(dp===0){st=j;break}dp--}}}
@@ -1556,9 +1578,13 @@ function makeCalc(onUse){
     T.splice(cur,0,k);cur+=1;show()};
   const mk=(box,arr)=>arr.forEach(([t,k,st,sk,c])=>{const b=document.createElement('button');b.type='button';b.className='ck'+(c?' '+c:'')+(st?' hs':'')+(k==='s'||k==='c'||k==='t'?' hh':'');
     b.innerHTML='<small>'+(st||'&nbsp;')+'</small><span>'+t+'</span>';b.onclick=()=>press(shift&&sk?sk:k);box.appendChild(b)});
-  mk(P.querySelector('.cnav'),NAV);mk(P.querySelector('.cfn'),F);mk(P.querySelector('.cnum'),N);
+  mk(P.querySelector('.cnav'),NAV);
+  /* الأسهم في لوحة دائرية كالآلة الحديثة: SHIFT يسارا، والأسهم في الوسط، وMODE يمينا */
+  {const nv=P.querySelector('.cnav'),bs=[...nv.children],pd=document.createElement('div');pd.className='cpad';
+    [[2,'pl'],[3,'pr'],[4,'pu'],[5,'pd']].forEach(([i,c])=>{bs[i].classList.add(c);pd.appendChild(bs[i])});
+    const ctr=document.createElement('span');ctr.className='pc';pd.appendChild(ctr);nv.insertBefore(pd,bs[1])}mk(P.querySelector('.cfn'),F);mk(P.querySelector('.cnum'),N);
   const btn=document.createElement('button');btn.type='button';btn.className='calcbtn';btn.innerHTML='🧮<span>الآلة الحاسبة</span>';btn.setAttribute('aria-expanded','false');
-  const toggle=o=>{P.hidden=!o;btn.setAttribute('aria-expanded',o);btn.classList.toggle('on',o);if(o)P.scrollIntoView({block:'nearest',behavior:'smooth'})};
+  const toggle=o=>{if(o&&P.hidden){mode=0;ind()}/* تفتح دائما على الدرجات */P.hidden=!o;btn.setAttribute('aria-expanded',o);btn.classList.toggle('on',o);if(o)P.scrollIntoView({block:'nearest',behavior:'smooth'})};
   btn.onclick=()=>toggle(P.hidden);P.querySelector('.cx').onclick=()=>toggle(false);
   use.onclick=()=>{if(last==null)return;if(onUse(fill(last),T.join(''))!==false)toggle(false)};
   show();ind();return {btn,panel:P,close:()=>{toggle(false);btn.hidden=true}}}
