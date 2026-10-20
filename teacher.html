@@ -284,7 +284,7 @@ function drawStudents(){
   list.forEach(s=>{let a=null;try{a=autoWork(s.id)}catch(e){}s.cw=a?r2(a.w):null;s.cwU=a?a.units:null;const U=a?a.units:[];
     s.cwP=a?r2(U.reduce((t,u)=>t+(u.p||0)/100*(+WKW[1]||0),0)):null;s.cwQ=a?r2(U.reduce((t,u)=>t+(u.q||0)/100*(+WKW[0]||0),0)):null;s.cwB=a?r2(U.reduce((t,u)=>t+(u.b||0)/100*(+WKW[2]||0),0)):null});
   const avN=k=>{const v=real.filter(s=>s.loginCount>0&&s[k]!=null).map(s=>s[k]);return v.length?r2(avg(v)):null};const cwa=avg(real.filter(s=>s.loginCount>0&&s.cw!=null).map(s=>s.cw));
-  const cols=[['#',''],['id','الرقم'],['name','الاسم'],['sectionId','الشعبة'],['cwP','الأمثلة والتمارين التفاعلية ('+WT[1]+')'],['cwQ','اختبر نفسك ('+WT[0]+')'],['cwB','التجارب العملية التفاعلية ('+WT[2]+')'],['cw','الأعمال الفصلية (20)'],['doneN','الدروس'],['loginCount','مرات الدخول'],['lastLogin','آخر دخول'],['totalSec','مجموع وقت الاستخدام'],['hasPw','حالة الحساب']];
+  const cols=[['#',''],['id','الرقم'],['name','الاسم'],['sectionId','الشعبة'],['cwP','الأمثلة والتمارين التفاعلية ('+WT[1]+')'],['cwQ','اختبر نفسك ('+WT[0]+')'],['cwB','التجارب العملية التفاعلية ('+WT[2]+')'],['cw','الأعمال الفصلية (20)'],['doneN','إنهاء الدرس'],['loginCount','مرات الدخول'],['lastLogin','آخر دخول'],['totalSec','مجموع وقت الاستخدام'],['hasPw','حالة الحساب']];
   const sorted=list.slice().sort((a,b)=>{const k=sortBy.k;let x=a[k],y=b[k];if(k==='sectionId'){x=secName(x);y=secName(y)}
     if(x==null)x=-1;if(y==null)y=-1;const c=typeof x==='string'?x.localeCompare(y,'ar'):x-y;return sortBy.asc?c:-c});
   m.innerHTML=`<div class="row" style="margin-bottom:12px"><select id="sf">${opts}</select><input type="search" id="qs" placeholder="بحث بالاسم أو الرقم" value="${esc(q)}" style="flex:1;min-width:160px"><button class="btn sm" id="addSt">+ متدرب</button></div>
@@ -312,13 +312,14 @@ async function openStudent(id){
   const d=document.createElement('div');d.className='drawer';d.innerHTML=`<div role="dialog" aria-label="تفاصيل المتدرب"><div class="dhead"><div><h2>${esc(s.name)}</h2><span class="sub">الرقم ${esc(s.id)} · ${esc(secName(s.sectionId))}</span></div><button class="btn ghost sm x">إغلاق ✕</button></div><div id="dbody"></div></div>`;
   document.body.appendChild(d);const close=()=>d.remove();d.onclick=e=>{if(e.target===d)close()};d.querySelector('.x').onclick=close;
   const b=d.querySelector('#dbody');
-  const units=UNITS.map((u,ui)=>{const ks=u.l.map((_,li)=>ui+'-'+li).filter((_,li)=>!u.l[li].hide);const qz=avg(ks.map(k=>s.quiz[k]).filter(v=>v!=null).map(Number));const pr=avg(ks.map(k=>s.probL[k]).filter(v=>v!=null));const dn=ks.filter(k=>s.done.includes(k)).length;
-    return `<div><b>الوحدة ${ORD[ui]}</b>اختبارات ${pct(qz)}<br>تمارين ${pct(pr)}<br>دروس ${dn}/${ks.length}</div>`}).join('');
-  b.innerHTML=`<div class="stats"><div class="stat"><small>مرات الدخول</small><b>${AR(s.loginCount)}</b></div><div class="stat"><small>مجموع الوقت</small><b style="font-size:18px">${fmtTime(s.totalSec)}</b></div><div class="stat"><small>المعدل</small><b>${s.overall==null?'—':AR(Math.round(s.overall))+'%'}</b></div><div class="stat"><small>التقدم</small><b>${AR(s.progress)}%</b></div></div>
+  const AWd=(()=>{try{return autoWork(s.id)}catch(e){return null}})(),gU=(v,w)=>v==null?'—':AR(Math.round(v/100*w*100)/100);
+  const units=UNITS.map((u,ui)=>{const ks=u.l.map((_,li)=>ui+'-'+li).filter((_,li)=>!u.l[li].hide);const dn=ks.filter(k=>s.done.includes(k)).length;const U=(AWd&&AWd.units||[]).find(x=>x.u===ui)||{};
+    return `<div><b>الوحدة ${ORD[ui]}</b>الأمثلة والتمارين ${gU(U.p,+WKW[1]||0)} من ${AR(+WKW[1]||0)}<br>اختبر نفسك ${gU(U.q,+WKW[0]||0)} من ${AR(+WKW[0]||0)}<br>التجارب العملية ${gU(U.b,+WKW[2]||0)} من ${AR(+WKW[2]||0)}<br><b style="display:inline">المجموع ${U.m==null?'—':AR(Math.round(U.m*100)/100)} من ${AR(WK_UNIT)}</b></div>`}).join('');
+  b.innerHTML=`<div class="stats"><div class="stat"><small>مرات الدخول</small><b>${AR(s.loginCount)}</b></div><div class="stat"><small>مجموع الوقت</small><b style="font-size:18px">${fmtTime(s.totalSec)}</b></div><div class="stat"><small>إنهاء الدرس</small><b>${AR(s.doneN)} / ${AR(TOTAL)}</b></div><div class="stat"><small>الأعمال الفصلية</small><b>${(()=>{let a=null;try{a=autoWork(s.id)}catch(e){}return a?AR(Math.round(a.w*100)/100)+' من 20':'—'})()}</b></div></div>
   <div class="card"><h2>بيانات الدخول</h2><p class="sub">أول دخول: ${fmtDate(s.firstLogin)} · آخر دخول: ${fmtDate(s.lastLogin)} · آخر نشاط: ${fmtDate(s.lastSeen)}</p>
   <div class="row"><button class="btn ghost sm" id="eName">تعديل الاسم</button><select id="eSec"><option value="">نقل إلى شعبة…</option>${DATA.sections.map(x=>`<option value="${esc(x.id)}">${esc(x.name)}</option>`).join('')}</select><button class="btn ghost sm" id="rPw">إعادة تعيين كلمة المرور</button><button class="btn danger sm" id="del">حذف المتدرب</button></div></div>
-  <div class="card"><h2>الدرجات حسب الوحدة</h2><div class="unitGrid">${units}</div></div>
-  <div class="card"><h2>الاختبارات والتمارين</h2><div id="resList"><p class="empty"><span class="spin"></span></p></div></div>
+  <div class="card"><h2>درجات الأعمال الفصلية حسب الوحدة</h2><div class="unitGrid">${units}</div></div>
+  <div class="card"><h2>محاولات المتدرب: الأمثلة والتمارين واختبر نفسك والتجارب</h2><div id="resList"><p class="empty"><span class="spin"></span></p></div></div>
   <div class="card"><h2>سجل الدخول</h2><div id="logList"></div></div>`;
   b.querySelector('#eName').onclick=async()=>{const n=prompt('الاسم الجديد:',s.name);if(!n)return;const r=await api({a:'tstudents',token:TOKEN,op:'update',id:s.id,name:n});if(r.ok){toast('تم التعديل');close();load()}else toast(errText(r.error))};
   b.querySelector('#eSec').onchange=async e=>{if(!e.target.value)return;const r=await api({a:'tstudents',token:TOKEN,op:'update',id:s.id,sectionId:e.target.value});if(r.ok){toast('تم النقل');close();load()}else toast(errText(r.error))};
@@ -327,7 +328,7 @@ async function openStudent(id){
   try{const r=await api({a:'tstudent',token:TOKEN,id:s.id});if(!r.ok)return;
     const res=r.results.filter(x=>x.kind!=='done').sort((a,b)=>b.time.localeCompare(a.time));
     b.querySelector('#resList').innerHTML=res.length?res.map(x=>{let det=[];try{det=JSON.parse(x.detail)}catch(e){}
-      const kind=x.kind==='quiz'?'اختبار':'تمرين حسابي';const lk=String(x.lessonKey).split('.')[0];
+      const kind=x.kind==='quiz'?'اختبر نفسك':x.kind==='lab'?'تجربة عملية':'تمرين تفاعلي';const lk=String(x.lessonKey).split('.')[0];
       let body='';
       if(Array.isArray(det)&&det.length)body='<ol class="det">'+det.map(a=>`<li class="${a.ok?'ok':'no'}">${a.ok?'✓':'✗'} ${esc(a.q)}<br><small>إجابته: ${esc(a.chosen||'—')}</small></li>`).join('')+'</ol>';
       else if(det&&det.q)body=`<ul class="det"><li>${esc(det.q)}</li><li class="${det.correct?'ok':'no'}">ناتجه: ${esc(det.answer||'—')} ${det.correct?'✓':'✗ (الصحيح '+esc(det.expected)+')'}</li></ul>`;
