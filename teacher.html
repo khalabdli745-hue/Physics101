@@ -166,10 +166,10 @@ details.res .when{color:var(--muted);font-size:12.5px;margin-inline-start:auto}
 const API=(window.P101_API||'').trim();
 const UNITS=window.UNITS||[];
 const ORD=['الأولى','الثانية','الثالثة','الرابعة','الخامسة'];
-const LESSONS=[];UNITS.forEach((u,ui)=>u.l.forEach((l,li)=>{if(!l.hide)LESSONS.push({k:ui+'-'+li,u:ui,t:l.pre?l.pre+'، و'+l.t:l.t})}));
+const LESSONS=[];UNITS.forEach((u,ui)=>u.l.forEach((l,li)=>{if(!l.hide)LESSONS.push({k:ui+'-'+li,u:ui,raw:l.t,t:l.pre?l.pre+'، و'+l.t:l.t})}));
 const LT=Object.fromEntries(LESSONS.map(x=>[x.k,x.t]));
 const TOTAL=LESSONS.length;
-const NONLES=/^مقدمة الوحدة|ورقة عمل|مراجعة وتمارين/,TEACH=LESSONS.filter(l=>!NONLES.test(l.t)),TEACH_N=TEACH.length,N_INTRO=LESSONS.filter(l=>/^مقدمة الوحدة/.test(l.t)).length,N_WS=LESSONS.filter(l=>/ورقة عمل/.test(l.t)).length,N_REV=LESSONS.filter(l=>/مراجعة وتمارين/.test(l.t)).length;
+const NONLES=/^مقدمة الوحدة|ورقة عمل|مراجعة وتمارين/,TEACH=LESSONS.filter(l=>!NONLES.test(l.raw||l.t)),TEACH_N=TEACH.length,N_INTRO=LESSONS.filter(l=>/^مقدمة الوحدة/.test(l.raw||l.t)).length,N_WS=LESSONS.filter(l=>/ورقة عمل/.test(l.t)).length,N_REV=LESSONS.filter(l=>/مراجعة وتمارين/.test(l.t)).length;
 const LES_NOTE=()=>(N_INTRO?AR(N_INTRO)+' مقدمات · ':'')+AR(N_WS)+' أوراق عمل محلولة · '+AR(N_REV)+' مراجعات';
 const $=s=>document.querySelector(s);
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -414,9 +414,9 @@ async function drawDur(){
   const dt=k=>{const e=D[k+'|'+DURV];if(!e||!e.t)return '';const d=new Date(e.t);return d.toLocaleDateString('ar-SA-u-ca-gregory-nu-latn',{day:'numeric',month:'numeric'})};
   let rows='',tot=0,miss=0,rows2='',tot2=0;
   UNITS.forEach((u,ui)=>{let ut=0;const ls=LESSONS.filter(l=>l.u===ui);
-    ls.filter(l=>!NONLES.test(l.t)).forEach(l=>{const s=secOf(l.k);if(s==null)miss++;else{ut+=s;tot+=s}rows+=`<tr><td style="white-space:normal">${esc(l.t)}</td><td><b>${fm(s)}</b></td></tr>`});
+    ls.filter(l=>!NONLES.test(l.raw||l.t)).forEach(l=>{const s=secOf(l.k);if(s==null)miss++;else{ut+=s;tot+=s}rows+=`<tr><td style="white-space:normal">${esc(l.t)}</td><td><b>${fm(s)}</b></td></tr>`});
     rows+=`<tr style="background:var(--soft)"><td><b>مجموع الوحدة ${ORD[ui]||ui+1}</b></td><td><b>${hm(ut)}</b></td></tr>`;
-    ls.filter(l=>NONLES.test(l.t)).forEach(l=>{const s=secOf(l.k);if(s!=null)tot2+=s;rows2+=`<tr><td style="white-space:normal">الوحدة ${ORD[ui]||ui+1}: ${esc(l.t)}</td><td><b>${fm(s)}</b></td></tr>`})});
+    ls.filter(l=>NONLES.test(l.raw||l.t)).forEach(l=>{const s=secOf(l.k);if(s!=null)tot2+=s;rows2+=`<tr><td style="white-space:normal">الوحدة ${ORD[ui]||ui+1}: ${esc(l.t)}</td><td><b>${fm(s)}</b></td></tr>`})});
   m.innerHTML=`<div class="card"><h2>⏱ مدة شرح الدروس على السبورة</h2>
   <p style="color:var(--muted);margin:0 0 10px">المدة الدقيقة نفسها الظاهرة على السبورة، محسوبة من ملفات الصوت المحفوظة بالسرعة العادية. بعد تعديل محتوى أي درس أو دمج الدروس اضغط «⚙️ حساب مدة كل الدروس» لتحديث المدد كلها، ثم «↻ تحديث».</p>
   <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px"><select id="durv"><option value="ar-SA-HamedNeural" ${DURV==='ar-SA-HamedNeural'?'selected':''}>صوت حامد</option><option value="ar-SA-ZariyahNeural" ${DURV==='ar-SA-ZariyahNeural'?'selected':''}>صوت زارية</option></select><button class="btn ghost" id="durr">↻ تحديث</button><a class="btn" href="index.html?durall=1" target="_blank" rel="noopener">⚙️ حساب مدة كل الدروس</a></div>
