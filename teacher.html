@@ -166,7 +166,7 @@ details.res .when{color:var(--muted);font-size:12.5px;margin-inline-start:auto}
 const API=(window.P101_API||'').trim();
 const UNITS=window.UNITS||[];
 const ORD=['الأولى','الثانية','الثالثة','الرابعة','الخامسة'];
-const LESSONS=[];UNITS.forEach((u,ui)=>u.l.forEach((l,li)=>{if(!l.hide)LESSONS.push({k:ui+'-'+li,u:ui,t:l.t})}));
+const LESSONS=[];UNITS.forEach((u,ui)=>u.l.forEach((l,li)=>{if(!l.hide)LESSONS.push({k:ui+'-'+li,u:ui,t:l.pre?l.pre+'، و'+l.t:l.t})}));
 const LT=Object.fromEntries(LESSONS.map(x=>[x.k,x.t]));
 const TOTAL=LESSONS.length;
 const NONLES=/^مقدمة الوحدة|ورقة عمل|مراجعة وتمارين/,TEACH=LESSONS.filter(l=>!NONLES.test(l.t)),TEACH_N=TEACH.length,N_INTRO=LESSONS.filter(l=>/^مقدمة الوحدة/.test(l.t)).length,N_WS=LESSONS.filter(l=>/ورقة عمل/.test(l.t)).length,N_REV=LESSONS.filter(l=>/مراجعة وتمارين/.test(l.t)).length;
