@@ -1285,9 +1285,12 @@ function openBoard(dry){dry=dry===true;
     if(/^\[\[(fig|img):/.test(t))return pick(['تأمل هذا الرسم جيدًا.','انظر إلى الرسم التوضيحي.','لاحظ ذلك في الرسم.','والرسم يوضح ذلك.'],k);
     if(/^\|/.test(t))return 'لننظر إلى هذا الجدول على السبورة، ونقرأه معًا: '+t.split('\n').map(r=>r.replace(/^\||\|$/g,'').split('|').map(c=>c.trim()).filter(c=>c&&!/^-+$/.test(c)).join('، ')).filter(Boolean).join('. ')+'.';
     let b=t.replace(/^[-•]\s*/,'');
-    const lb=b.match(/^\*\*([^*:]+?):?\*\*:?\s*/);if(lb){const key=lb[1].trim();const ph=LBL[key];b=b.slice(lb[0].length);if(ph)return pick(ph,k)+' '+b}
+    const lb=b.match(/^\*\*([^*:]+?):?\*\*:?\s*/);if(lb){const key=lb[1].trim();const ph=LBL[key];b=b.slice(lb[0].length);if(ph)return pick(ph,k)+' '+b;
+      /* العنوان الغامق قبل النقطتين يُنطق ثم الشرح بعده (مثل: قياسية: تتحدد بالمقدار...) */
+      const pre0=n>1&&k>=0&&k<ORDW.length?ORDW[k]+'، ':'';return pre0+key+': '+b}
     if(/^`[^`]+`[.،]?$/.test(b))return pick(['اكتب معي هذا القانون المهم: ','انتبه لهذه العلاقة: ','وهذه هي الصيغة: '],k)+b;
-    const pre=n>1&&k>=0&&k<ORDW.length?ORDW[k]+'، ':'';
+    /* لا يُسبق البند بأولا/ثانيا إذا بدأ بكلمة ربط أو ملاحظة (لكن، ملاحظة، و...) */
+    const pre=n>1&&k>=0&&k<ORDW.length&&!/^(لكن|ملاحظة|ملحوظة|حيث|أي|مثل|و\s|و`)/.test(b)?ORDW[k]+'، ':'';
     return pre+b};
   const narr=()=>narrAt(cur,step);
   const narrAt=(cur,step)=>{const sl=out[cur];
