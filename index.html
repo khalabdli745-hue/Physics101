@@ -2171,7 +2171,7 @@ function showLogin(){
   const ROLES={s:{sub:'سجّل دخولك برقمك التدريبي',lab:'الرقم التدريبي',im:'numeric',hint:'أول مرة تدخل؟ اكتب رقمك التدريبي واترك كلمة المرور فارغة، ثم اختر كلمة مرورك.',val:''},
     t:{sub:'دخول المدرب إلى لوحة المتابعة',lab:'اسم المستخدم',im:'text',hint:'أول مرة؟ أنشئ حساب المدرب من <a href="teacher.html">هنا</a>.',val:''},
     e:{sub:'دخول الاختبارات الفصلية',lab:'الرقم التدريبي',im:'numeric',hint:'ادخل برقمك التدريبي. إذا كنت مسجلا في المنصة فكلمة المرور نفسها، وإذا كان أول دخول لك فاترك كلمة المرور فارغة ثم اختر كلمة مرورك.',val:''},
-    d:{sub:'الحساب التجريبي الخاص بالمدرب',lab:'اسم المستخدم',im:'text',hint:'اسم المستخدم demo، وكلمة المرور يحددها المدرب من لوحته.',val:'demo'}};
+    d:{sub:'الحساب التجريبي الخاص بالمدرب',lab:'اسم المستخدم',im:'text',hint:'خاص بالمدرب لمعاينة المنصة كما يراها المتدرب.',val:''}};
   const setRole=r=>{role=r;step=1;$('lgStep1').hidden=false;$('lgStep2').hidden=true;$('lgBtn').textContent='دخول';
     document.querySelectorAll('#lgTabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.r===r));
     const R=ROLES[r];$('lgSub').textContent=R.sub;$('lgIdLab').textContent=R.lab;$('lgId').inputMode=R.im;$('lgId').value=R.val;$('lgPw').value='';$('lgHint').innerHTML=R.hint;$('lgMsg').textContent='';
