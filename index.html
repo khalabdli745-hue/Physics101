@@ -549,6 +549,7 @@ body.examMode .aiFab,body.examMode #aiLink,body.examSec .aiFab,body.examSec #aiL
 .calc .cuse{background:#F7931E!important;color:#fff!important;border:0!important;border-radius:12px;font-weight:700}
 .calc .cuse:disabled{opacity:.45}
 .calc .cind{justify-content:flex-end!important}.calc .cind .cmd{order:9;margin-left:auto}.calc .cind .cmd i{font-style:normal;font-size:9px;font-weight:600;opacity:.75}
+.lpre{display:block;font-size:.72em;font-weight:600;opacity:.75;line-height:1.4;margin-bottom:1px}
 </style>
 </head>
 <body>
@@ -641,13 +642,21 @@ let done=new Set(store.get('p101-done',[]));
 let best=store.get('p101-best',{});
 let pos=store.get('p101-pos',{u:0,l:0,p:0,t:'sum'});
 if(!UNITS[pos.u]||!UNITS[pos.u].l[pos.l])pos={u:0,l:0,p:0,t:'sum'};
+while(UNITS[pos.u].l[pos.l].hide&&UNITS[pos.u].l[pos.l+1]){pos.l++;pos.p=0}
 if(!UNITS[pos.u].l[pos.l].p[pos.p])pos.p=0;
 const HID=(u,l)=>!!(UNITS[u]&&UNITS[u].l[l]&&UNITS[u].l[l].hide);
 if(HID(pos.u,pos.l))pos={u:pos.u,l:Math.max(0,pos.l-1),p:0,t:'sum'};
 const total=UNITS.reduce((s,u)=>s+u.l.filter(l=>!l.hide).length,0);
 const key=(u,l)=>u+'-'+l;
 const lesson=()=>UNITS[pos.u].l[pos.l];
-const study=()=>(STUDY[pos.u]||[])[pos.l]||null;
+/* درس أول يضم مقدمة الوحدة وأهدافها (المقدمة مخفية من الفهرس ومحتواها يبدأ به الدرس) */
+const MERGED={};
+const study=()=>{const S=STUDY[pos.u]||[],cur=S[pos.l]||null,l=UNITS[pos.u].l[pos.l];
+  if(!cur||!l||l.pi==null||!S[l.pi])return cur;const k=key(pos.u,pos.l);if(MERGED[k])return MERGED[k];
+  const it=S[l.pi];const m=Object.assign({},cur);
+  m.s='### مقدمة الوحدة وأهدافها\n'+String(it.s||'').trim()+'\n\n'+String(cur.s||'');
+  if(Array.isArray(cur.qz))m.qz=cur.qz.concat(Array.isArray(it.qz)?it.qz.slice(0,3):[]);
+  return MERGED[k]=m};
 const extra=()=>EXTRA[key(pos.u,pos.l)]||{};
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 const NU=/(?:[A-Za-zθαρμΔ][A-Za-z₀-₉]*\s*=\s*)?[-−]?\d[\d.]*(?:\s*×\s*10[⁻⁰¹²³⁴⁵⁶⁷⁸⁹]+)?(?:\s?(?:[A-Za-zµΩ°][A-Za-zµΩ°²³⁻¹/·]*))?/g;
@@ -988,7 +997,7 @@ function buildNav(){
     const ol=document.createElement('ol');
     u.l.forEach((l,li)=>{if(l.hide)return;
       const it=document.createElement('li');if(done.has(key(ui,li)))it.classList.add('done');
-      const lb=document.createElement('button');lb.innerHTML='<span class="tick"></span><span></span>';lb.lastChild.textContent=l.t;
+      const lb=document.createElement('button');lb.innerHTML='<span class="tick"></span><span></span>';if(l.pre){const sm=document.createElement('small');sm.className='lpre';sm.textContent=l.pre;lb.lastChild.appendChild(sm);lb.lastChild.appendChild(document.createTextNode(l.t))}else lb.lastChild.textContent=l.t;
       if(ui===pos.u&&li===pos.l&&!GT(pos.t))lb.setAttribute('aria-current','true');
       lb.onclick=()=>{go(ui,li,0,GT(pos.t)?'sum':pos.t);closeNav()};
       it.appendChild(lb);ol.appendChild(it)});
@@ -1031,7 +1040,7 @@ function render(){
   const u=UNITS[pos.u],l=lesson();
   const refs=GT(pos.t);
   $('crumb').textContent=refs?'المقرر كاملًا':`الوحدة ${ORD[pos.u]} · ${u.t}`;
-  $('lessonTitle').textContent=refs?(pos.t==='exam'?'📝 الاختبارات الفصلية':'المراجع العربية والمصادر'):l.t;
+  $('lessonTitle').textContent=refs?(pos.t==='exam'?'📝 الاختبارات الفصلية':'المراجع العربية والمصادر'):l.t;if(!refs&&l.pre){const sm=document.createElement('small');sm.className='lpre';sm.textContent=l.pre;$('lessonTitle').prepend(sm)}
   if(pos.t!=='exam'){clearInterval(EXAM.timer);document.body.classList.remove('examMode')}document.body.classList.toggle('examSec',pos.t==='exam');examBar();
   $('doneBtn').hidden=refs;$('tabs').hidden=refs;
   const isDone=done.has(key(pos.u,pos.l));

@@ -170,7 +170,7 @@ const LESSONS=[];UNITS.forEach((u,ui)=>u.l.forEach((l,li)=>{if(!l.hide)LESSONS.p
 const LT=Object.fromEntries(LESSONS.map(x=>[x.k,x.t]));
 const TOTAL=LESSONS.length;
 const NONLES=/^مقدمة الوحدة|ورقة عمل|مراجعة وتمارين/,TEACH=LESSONS.filter(l=>!NONLES.test(l.t)),TEACH_N=TEACH.length,N_INTRO=LESSONS.filter(l=>/^مقدمة الوحدة/.test(l.t)).length,N_WS=LESSONS.filter(l=>/ورقة عمل/.test(l.t)).length,N_REV=LESSONS.filter(l=>/مراجعة وتمارين/.test(l.t)).length;
-const LES_NOTE=()=>AR(N_INTRO)+' مقدمات · '+AR(N_WS)+' أوراق عمل · '+AR(N_REV)+' مراجعات';
+const LES_NOTE=()=>(N_INTRO?AR(N_INTRO)+' مقدمات · ':'')+AR(N_WS)+' أوراق عمل محلولة · '+AR(N_REV)+' مراجعات';
 const $=s=>document.querySelector(s);
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const AR=n=>String(n);   // الأرقام بالإنجليزية في كل المنصة
@@ -637,7 +637,7 @@ async function drawTrainer(m,ctl,st,sec,secLabel,today,n,logged){
     $('#rpr').onclick=async()=>{STATS=null;TLOG=null;await load()};
     $('#rpp').onclick=printReport;
     $('#rpx').onclick=()=>{if(!TLOG)return;saveBook([
-      ['إنجاز المدرب',[['البند','القيمة'],['المدرب',P.name||''],['الكلية',P.college||''],['القسم',P.dept||''],['المقرر',P.course||''],['الفصل',P.term||''],['الشعبة',secLabel],['دروس تفاعلية',TEACH_N],['مقدمات الوحدات',N_INTRO],['أوراق العمل',N_WS],['مراجعات نهاية الوحدات',N_REV],['أسئلة اختبارات',CONTENT.quiz],['مسائل تفاعلية',CONTENT.probs],['مولدات تمارين',CONTENT.gens],['رسوم توضيحية',CONTENT.figs],['جداول تعليمية',CONTENT.tables],['تجارب ومحاكاة',CONTENT.sims],['متدربون مستفيدون',n],['دخلوا المنصة',logged],['مرات الدخول',T.logins||0],['محاولات الحل',T.results||0],['أسئلة المساعد',T.questions||0],['متوسط المعدل %',avgOv==null?'':Math.round(avgOv)],['إنجاز الدروس %',compl],['الدروس المنفذة في التدريب',covered.size],['تغطية المقرر %',cov],['عدد اللقاءات',log.length],['الساعات التدريبية',hrs]],[26,34]],
+      ['إنجاز المدرب',[['البند','القيمة'],['المدرب',P.name||''],['الكلية',P.college||''],['القسم',P.dept||''],['المقرر',P.course||''],['الفصل',P.term||''],['الشعبة',secLabel],['دروس تفاعلية',TEACH_N],['أوراق العمل',N_WS],['مراجعات نهاية الوحدات',N_REV],['أسئلة اختبارات',CONTENT.quiz],['مسائل تفاعلية',CONTENT.probs],['مولدات تمارين',CONTENT.gens],['رسوم توضيحية',CONTENT.figs],['جداول تعليمية',CONTENT.tables],['تجارب ومحاكاة',CONTENT.sims],['متدربون مستفيدون',n],['دخلوا المنصة',logged],['مرات الدخول',T.logins||0],['محاولات الحل',T.results||0],['أسئلة المساعد',T.questions||0],['متوسط المعدل %',avgOv==null?'':Math.round(avgOv)],['إنجاز الدروس %',compl],['الدروس المنفذة في التدريب',covered.size],['تغطية المقرر %',cov],['عدد اللقاءات',log.length],['الساعات التدريبية',hrs]],[26,34]],
       ['سجل اللقاءات',[['التاريخ','الوحدة','الدرس','الشعبة','الساعات','التنفيذ','ملاحظات'],...log.map(x=>[x.date,'الوحدة '+(ORD[+x.lessonKey.split('-')[0]]||''),LT[x.lessonKey]||x.lessonKey,x.sectionId?secName(x.sectionId):'',x.hours,x.method,x.notes])],[12,14,34,14,8,16,40]]
     ],'تقرير-إنجاز-المدرب.xlsx')}}
 }
