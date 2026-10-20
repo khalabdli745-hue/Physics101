@@ -1390,7 +1390,28 @@ const DUR=(()=>{const SK='p101-dur';let map=store.get(SK,{}),loaded=null;const a
     return SYNC.post({a:'durcalc',token:tok(),key:i.k,voice:i.v,rate:-5,fp:i.f,says:i.sc.length,chunks:ch}).then(r=>{if(r&&r.ok&&r.e){map[i.k+'|'+i.v]=r.e;store.set(SK,map);return r.e}return null}).catch(()=>null)}
   function badge(el,k){const show=i=>{el.textContent='⏱ '+AR(i.min)+' '+(i.min>=3&&i.min<=10?'دقائق':'دقيقة');el.title='مدة شرح الدرس'};
     const i=info(k);show(i);load().then(()=>{const j=info(k);show(j);if(!j.exact)compute(j).then(e=>{if(e)show(info(k))})})}
-  return {badge,info,load}})();
+  /* حساب مدة كل الدروس دفعة واحدة (من لوحة المدرب: index.html?durall=1) */
+  async function all(cb){const keep={u:pos.u,l:pos.l},out=[],L=[];await load();
+    UNITS.forEach((u,ui)=>u.l.forEach((l,li)=>{if(!l.hide)L.push([ui,li,l.t])}));
+    for(let n=0;n<L.length;n++){const [ui,li,t]=L[n];pos.u=ui;pos.l=li;let i=null,err='';
+      try{i=info(key(ui,li))}catch(e){}
+      if(i&&i.sc.length&&!i.exact){const ch=[];i.sc.forEach(x=>{try{TTS.chunksAz(x).forEach(c=>ch.push(c))}catch(e){}});
+        try{const r=await SYNC.post({a:'durcalc',token:tok(),key:i.k,voice:i.v,rate:-5,fp:i.f,says:i.sc.length,chunks:ch});
+          if(r&&r.ok&&r.e){map[i.k+'|'+i.v]=r.e;store.set(SK,map)}else err=(r&&r.error)||'error'}catch(e){err='net'}}
+      let j=null;try{j=info(key(ui,li))}catch(e){}
+      out.push({t,min:j?j.min:null,exact:!!(j&&j.exact),err});cb&&cb(n+1,L.length,t)}
+    pos.u=keep.u;pos.l=keep.l;return out}
+  return {badge,info,load,all}})();
+/* index.html?durall=1 : حساب مدة شرح كل الدروس وحفظها في الخادم (يفتح من لوحة المدرب) */
+if(/[?&]durall=1/.test(location.search))setTimeout(async()=>{
+  const ov=document.createElement('div');ov.style.cssText='position:fixed;inset:0;z-index:99999;background:rgba(10,20,40,.88);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:24px;text-align:center;font-size:17px';
+  document.body.appendChild(ov);
+  if(!API||!AUTH||!AUTH.token){ov.innerHTML='<b>سجّل الدخول أولا (حسابي التجريبي من لوحة المدرب)، ثم افتح الرابط مرة أخرى.</b><a href="index.html" style="color:#7dd3fc">رجوع</a>';return}
+  ov.innerHTML='<b>⏱ جار حساب مدة شرح الدروس…</b><div id="dua">0</div><small>لا تغلق الصفحة</small>';
+  const res=await DUR.all((n,N,t)=>{const d=document.getElementById('dua');if(d)d.textContent=n+' / '+N+' — '+t});
+  const ok=res.filter(r=>r.exact).length,bad=res.filter(r=>r.err);
+  ov.innerHTML='<b>✅ انتهى الحساب: '+ok+' من '+res.length+' محسوبة بدقة</b>'+(bad.length?'<small>تعذر: '+bad.map(r=>r.t+' ('+r.err+')').join('، ')+'</small>':'')+'<small>ارجع إلى لوحة المدرب واضغط «↻ تحديث» في تبويب «⏱ مدة شرح الدروس».</small><a href="teacher.html" style="color:#7dd3fc;font-weight:700">العودة إلى لوحة المدرب</a>';
+},1500);
 function renderSum(v){
   const i=wrap(v),s=study(),x=extra();
   if(!s){i.innerHTML='<p class="empty">لا يوجد ملخص لهذا الدرس.</p>';return}
