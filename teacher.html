@@ -201,7 +201,7 @@ function boot(){
   if(!TOKEN)return authScreen();
   root.innerHTML=`<header><b>لوحة المدرب</b><span class="tag" id="sheetLink"></span><div class="sp">
     <button class="btn ghost sm" id="reload">↻ تحديث</button><a class="btn ghost sm" href="index.html">المنصة</a><button class="btn ghost sm" id="logout">خروج</button></div></header>
-  <nav class="tabs" role="tablist">${[['students','المتدربون والدرجات'],['exams','📝 الاختبارات الفصلية والنهائية'],['bank','🗂 بنك الأسئلة'],['stats','الإحصائيات'],['reports','التقارير'],['ratings','تقييم المتدربين للمنصة'],['ai','المساعد الذكي والصوت'],['sections','الشعب'],['import','استيراد Excel'],['export','تصدير Excel'],['demo','حسابي التجريبي'],['settings','الإعدادات']].map(([k,n])=>`<button role="tab" data-t="${k}" aria-selected="${tab===k}">${n}</button>`).join('')}</nav>
+  <nav class="tabs" role="tablist">${[['students','المتدربون والدرجات'],['exams','📝 الاختبارات الفصلية والنهائية'],['bank','🗂 بنك الأسئلة'],['stats','الإحصائيات'],['reports','التقارير'],['ratings','تقييم المتدربين للمنصة'],['dur','⏱ مدة شرح الدروس'],['ai','المساعد الذكي والصوت'],['sections','الشعب'],['import','استيراد Excel'],['export','تصدير Excel'],['demo','حسابي التجريبي'],['settings','الإعدادات']].map(([k,n])=>`<button role="tab" data-t="${k}" aria-selected="${tab===k}">${n}</button>`).join('')}</nav>
   <main id="main"><p class="empty"><span class="spin"></span> جارٍ تحميل البيانات…</p></main>`;
   document.documentElement.style.setProperty('--hh',$('header').offsetHeight+'px');
   document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>{tab=b.dataset.t;ls.set('p101-ttab',tab);document.querySelectorAll('nav.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b));draw()});
@@ -233,7 +233,7 @@ async function load(){
     $('#sheetLink').innerHTML=r.sheetUrl?`<a href="${esc(r.sheetUrl)}" target="_blank" rel="noopener">جدول Google ↗</a>`:'';
     draw();exPrefetch()}catch(e){if(DATA){toast('تعذر التحديث الآن، المعروض آخر بيانات محملة');return}m.innerHTML='<p class="empty">تعذّر الاتصال بالخادم. تحقق من الإنترنت ثم اضغط «تحديث».</p>'}
 }
-function draw(){if(!DATA)return;({exams:drawExams,bank:drawBank,students:drawStudents,stats:drawStats,reports:drawReports,ratings:drawRatings,ai:drawAI,sections:drawSections,import:drawImport,export:drawExport,demo:drawDemo,settings:drawSettings}[tab]||drawStudents)()}
+function draw(){if(!DATA)return;({exams:drawExams,bank:drawBank,students:drawStudents,stats:drawStats,reports:drawReports,ratings:drawRatings,dur:drawDur,ai:drawAI,sections:drawSections,import:drawImport,export:drawExport,demo:drawDemo,settings:drawSettings}[tab]||drawStudents)()}
 
 /* ---------- بنك الأسئلة (للاطلاع والتصدير إلى Word فقط؛ الأسئلة تولدها المنصة) ---------- */
 let BANK=null,BKQ='',BKT=ls.get('p101-bkt','theory');
@@ -401,6 +401,31 @@ const RT_STAGE={board:'شرح الدرس',ex:'الأمثلة والتمارين'
 const P5=v=>v==null?null:Math.round(v/5*100);
 const rbar=(lab,val,max,cls,txt)=>`<div class="bar"><span class="lab" title="${esc(lab)}">${esc(lab)}</span><span class="trk"><span class="fil ${cls||''}" style="width:${max?Math.max(1,val/max*100):0}%;display:block"></span></span><span class="val">${txt!=null?txt:val}</span></div>`;
 let RT=null;
+/* مدة شرح الدروس على السبورة: المدد المحفوظة في الخادم من ملفات الصوت (نفس رقم السبورة) */
+let DURV='ar-SA-HamedNeural';
+async function drawDur(){
+  const m=$('#main');m.innerHTML='<p class="empty"><span class="spin"></span></p>';
+  let r;try{r=await api({a:'durget'})}catch(e){m.innerHTML='<p class="empty">تعذّر الاتصال بالخادم.</p>';return}
+  if(!r||!r.ok){m.innerHTML='<p class="empty">تعذّر جلب المدد.</p>';return}
+  const D=r.d||{};
+  const secOf=k=>{const e=D[k+'|'+DURV];return e?e.sec+e.says*0.6+e.chunks*0.1:null};
+  const fm=s=>s==null?'<span style="color:var(--muted)">لم يحسب بعد</span>':Math.max(1,Math.round(s/60))+' '+(Math.round(s/60)>=3&&Math.round(s/60)<=10?'دقائق':'دقيقة');
+  const hm=s=>{const t=Math.round(s/60),h=Math.floor(t/60),mm=t%60;const hs=h===1?'ساعة':h===2?'ساعتان':h+(h<=10?' ساعات':' ساعة');return (h?hs+(mm?' و'+mm+' دقيقة':''):mm+' دقيقة')};
+  const dt=k=>{const e=D[k+'|'+DURV];if(!e||!e.t)return '';const d=new Date(e.t);return d.toLocaleDateString('ar-SA-u-ca-gregory-nu-latn',{day:'numeric',month:'numeric'})};
+  let rows='',tot=0,miss=0,rows2='',tot2=0;
+  UNITS.forEach((u,ui)=>{let ut=0;const ls=LESSONS.filter(l=>l.u===ui);
+    ls.filter(l=>!NONLES.test(l.t)).forEach(l=>{const s=secOf(l.k);if(s==null)miss++;else{ut+=s;tot+=s}rows+=`<tr><td style="white-space:normal">${esc(l.t)}</td><td><b>${fm(s)}</b></td></tr>`});
+    rows+=`<tr style="background:var(--soft)"><td><b>مجموع الوحدة ${ORD[ui]||ui+1}</b></td><td><b>${hm(ut)}</b></td></tr>`;
+    ls.filter(l=>NONLES.test(l.t)).forEach(l=>{const s=secOf(l.k);if(s!=null)tot2+=s;rows2+=`<tr><td style="white-space:normal">الوحدة ${ORD[ui]||ui+1}: ${esc(l.t)}</td><td><b>${fm(s)}</b></td></tr>`})});
+  m.innerHTML=`<div class="card"><h2>⏱ مدة شرح الدروس على السبورة</h2>
+  <p style="color:var(--muted);margin:0 0 10px">المدة الدقيقة نفسها الظاهرة على السبورة، محسوبة من ملفات الصوت المحفوظة بالسرعة العادية. الدرس الذي يظهر «لم يحسب بعد» يكفي فتح شرحه مرة واحدة في المنصة ثم تحديث هذه الصفحة.</p>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px"><select id="durv"><option value="ar-SA-HamedNeural" ${DURV==='ar-SA-HamedNeural'?'selected':''}>صوت حامد</option><option value="ar-SA-ZariyahNeural" ${DURV==='ar-SA-ZariyahNeural'?'selected':''}>صوت زارية</option></select><button class="btn ghost" id="durr">↻ تحديث</button></div>
+  <div class="stats"><div class="stat"><small>مجموع شرح الدروس (${TEACH_N} درسا)</small><b>${hm(tot)}</b></div><div class="stat"><small>متوسط الدرس</small><b>${TEACH_N-miss?Math.round(tot/60/(TEACH_N-miss))+' دقيقة':'—'}</b></div>${miss?`<div class="stat"><small>دروس لم تحسب بعد</small><b>${miss}</b></div>`:''}</div>
+  <div class="tableWrap"><table><thead><tr><th>الدرس</th><th>مدة الشرح</th></tr></thead><tbody>${rows}</tbody></table></div>
+  <h2 style="margin-top:18px">المقدمات وأوراق العمل والمراجعات</h2><div class="tableWrap"><table><thead><tr><th>القسم</th><th>مدة الشرح</th></tr></thead><tbody>${rows2}</tbody></table></div>
+  <p style="color:var(--muted)">مجموعها: ${hm(tot2)}</p></div>`;
+  $('#durv').onchange=e=>{DURV=e.target.value;drawDur()};$('#durr').onclick=drawDur;
+}
 async function drawRatings(){
   const m=$('#main');m.innerHTML='<p class="empty"><span class="spin"></span></p>';
   let r;try{r=await api({a:'tratings',token:TOKEN,sectionId:secFilter==='all'?'':secFilter})}catch(e){m.innerHTML='<p class="empty">تعذّر الاتصال بالخادم.</p>';return}

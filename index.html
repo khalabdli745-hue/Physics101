@@ -1383,7 +1383,7 @@ const DUR=(()=>{const SK='p101-dur';let map=store.get(SK,{}),loaded=null;const a
   function load(){if(loaded)return loaded;loaded=(API?SYNC.post({a:'durget'}).then(r=>{if(r&&r.ok&&r.d){map=r.d;store.set(SK,map)}return map}):Promise.resolve(map)).catch(()=>map);return loaded}
   function info(k){let sc=[];try{sc=openBoard(true)||[]}catch(e){}const v=voice(),f=fp(v+'|'+sc.join('\n')),e=map[k+'|'+v];
     const r=(TTS.getRate&&TTS.getRate())||0.95,sp=0.95/r,exact=!!(e&&e.fp===f);
-    const sec=exact?e.sec*sp+e.says*0.6+e.chunks*0.1:sc.join('').length*0.075*sp+sc.length*0.6;
+    const sec=exact?e.sec*sp+e.says*0.6+e.chunks*0.1:sc.join('').length*0.16*sp+sc.length*0.6;
     return {k,v,f,sc,exact,min:Math.max(1,Math.round(sec/60))}}
   function compute(i){if(!API||!tok()||asked[i.k+i.f])return Promise.resolve(null);asked[i.k+i.f]=1;
     const ch=[];i.sc.forEach(t=>{try{TTS.chunksAz(t).forEach(c=>ch.push(c))}catch(e){}});
