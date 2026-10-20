@@ -1379,7 +1379,7 @@ function openBoard(dry){dry=dry===true;
 const DUR=(()=>{const SK='p101-dur';let map=store.get(SK,{}),loaded=null;const asked={};
   const fp=t=>{let h=5381;for(let i=0;i<t.length;i++)h=((h<<5)+h+t.charCodeAt(i))|0;return (h>>>0).toString(36)+'_'+t.length};
   const voice=()=>{try{return localStorage.getItem('p101-bvo')==='z'?'ar-SA-ZariyahNeural':'ar-SA-HamedNeural'}catch(e){return 'ar-SA-HamedNeural'}};
-  const tok=()=>(typeof AUTH!=='undefined'&&AUTH&&AUTH.token)||'';
+  const tok=()=>(typeof AUTH!=='undefined'&&AUTH&&AUTH.token)||(typeof TAUTH!=='undefined'&&TAUTH&&(TAUTH.token||(typeof TAUTH==='string'?TAUTH:'')))||'';
   function load(){if(loaded)return loaded;loaded=(API?SYNC.post({a:'durget'}).then(r=>{if(r&&r.ok&&r.d){map=r.d;store.set(SK,map)}return map}):Promise.resolve(map)).catch(()=>map);return loaded}
   function info(k){let sc=[];try{sc=openBoard(true)||[]}catch(e){}const v=voice(),f=fp(v+'|'+sc.join('\n')),e=map[k+'|'+v];
     const r=(TTS.getRate&&TTS.getRate())||0.95,sp=0.95/r,exact=!!(e&&e.fp===f);
@@ -1406,7 +1406,7 @@ const DUR=(()=>{const SK='p101-dur';let map=store.get(SK,{}),loaded=null;const a
 if(/[?&]durall=1/.test(location.search))setTimeout(async()=>{
   const ov=document.createElement('div');ov.style.cssText='position:fixed;inset:0;z-index:99999;background:rgba(10,20,40,.88);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:24px;text-align:center;font-size:17px';
   document.body.appendChild(ov);
-  if(!API||!AUTH||!AUTH.token){ov.innerHTML='<b>سجّل الدخول أولا (حسابي التجريبي من لوحة المدرب)، ثم افتح الرابط مرة أخرى.</b><a href="index.html" style="color:#7dd3fc">رجوع</a>';return}
+  if(!API||!((AUTH&&AUTH.token)||TAUTH)){ov.innerHTML='<b>سجّل الدخول إلى لوحة المدرب أولا، ثم افتح الرابط مرة أخرى.</b><a href="index.html" style="color:#7dd3fc">رجوع</a>';return}
   ov.innerHTML='<b>⏱ جار حساب مدة شرح الدروس…</b><div id="dua">0</div><small>لا تغلق الصفحة</small>';
   const res=await DUR.all((n,N,t)=>{const d=document.getElementById('dua');if(d)d.textContent=n+' / '+N+' — '+t});
   const ok=res.filter(r=>r.exact).length,bad=res.filter(r=>r.err);
