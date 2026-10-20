@@ -1179,6 +1179,12 @@ function openBoard(dry){dry=dry===true;
     let sub=its.map(x=>x[0]==='#'?{h:x.slice(1)}:{md:x});
     if(isS4(sub)){let hz=false;sub=sub.filter(y=>{const m=(y.md||'').trim();if(m==='حيث:'){hz=true;return false}if(hz&&/^[-•]\s*`[^`]+`\s/.test(m)&&!/=/.test(m.split('`')[1]))return false;hz=false;return true})}
     const s4=isS4(sub);let b0=0;const bn=sub.filter(isBul).length;pack(sub).forEach((ch,j)=>{slides.push({type:'c',title:title+(j?' (تابع)':''),steps:ch,s4,b0,bn});b0+=ch.filter(isBul).length})});
+  /* أوراق العمل والمراجعات: المحاور الطويلة تجمع في سطر لكل نوع من الأسئلة، فتظهر كلها على السبورة ويتطابق المقروء مع المشاهد */
+  if(heads.length>12){const EX=/^(صح وخطأ|اختر الإجابة|سؤال)\s*[0-9٠-٩]/;const fi=heads.findIndex(h=>EX.test(h));
+    if(fi>=0){const keep=heads.slice(0,fi),cnt={};heads.slice(fi).forEach(h=>{const m=h.match(EX);if(m)cnt[m[1]]=(cnt[m[1]]||0)+1});
+      const nq=n=>n===1?'سؤال واحد':n===2?'سؤالان':n<=10?AR(n)+' أسئلة':AR(n)+' سؤالًا';
+      const lab={'صح وخطأ':'أسئلة صح وخطأ','اختر الإجابة':'أسئلة اختر الإجابة','سؤال':'أسئلة ورقة العمل'};
+      heads.length=0;keep.forEach(h=>heads.push(h));['صح وخطأ','اختر الإجابة','سؤال'].forEach(k=>{if(cnt[k])heads.push(lab[k]+': '+nq(cnt[k]))})}}
   const out=[{type:'t'}];slides.forEach(sl=>out.push(sl));
   const K2=key(pos.u,pos.l),x=extra();
   /* الرسومات التوضيحية */
@@ -1246,13 +1252,18 @@ function openBoard(dry){dry=dry===true;
     else if(sl.type==='q'){const q=sl.q;h=`<div class="bQ"><div class="bQh">🙋 سؤال للمتدرب</div><p class="bQq">${inl(q.q)}</p><div class="bOpts">${q.o.map((o,j)=>`<button type="button" data-j="${j}">${inl(o)}</button>`).join('')}</div><div class="bQf" aria-live="polite"></div></div>`}
     else{h=(sl.title?`<h2 class="bH">${inl(sl.title)}</h2>`:'')+sl.steps.map((x,j)=>`<div class="bStep${j<step?' in':''}">${x.html?x.html:x.h!==undefined?'<h3>'+inl(x.h)+'</h3>':md(x.md)}</div>`).join('')}
     ct.innerHTML=h;
+    /* شريحة العنوان: محاور الدرس كلها تظهر في الشاشة دون تمرير (تصغير تدريجي وعمودان عند الحاجة) */
+    if(sl.type==='t'){const T=ct.querySelector('.bTitle'),H=T&&T.querySelector('h1'),O=T&&T.querySelector('ol');
+      const fit=()=>{if(!T||!O)return;const L=[()=>{T.style.paddingTop='1vh';H.style.fontSize='24px';H.style.margin='.2em 0 .3em'},()=>{O.style.fontSize='16px'},()=>{O.style.columnCount=2;O.style.columnGap='22px';O.style.display='block';O.style.width='100%';O.style.paddingInlineStart='1.4em'},()=>{O.style.fontSize='14.5px';H.style.fontSize='21px'},()=>{O.style.fontSize='13px';O.style.lineHeight='1.5'},()=>{H.style.fontSize='18px';O.style.fontSize='12px'}];
+        for(let i=0;i<L.length&&slideEl.scrollHeight>slideEl.clientHeight+2;i++)L[i]()};
+      requestAnimationFrame(()=>requestAnimationFrame(fit))}
     if(sl.type==='q'){const q=sl.q,f=ct.querySelector('.bQf');let tries=0;ct.querySelectorAll('.bOpts button').forEach(b=>b.onclick=()=>{if(ct.querySelector('.bOpts').dataset.done)return;const j=+b.dataset.j;
       if(j===q.a){b.classList.add('ok');ct.querySelector('.bOpts').dataset.done=1;f.className='bQf good';f.innerHTML='✓ إجابة صحيحة! '+(q.w?inl(q.w):'');step=1}
       else{tries++;b.classList.add('no');b.disabled=true;if(tries>=2){ct.querySelector('.bOpts').dataset.done=1;ct.querySelectorAll('.bOpts button')[q.a].classList.add('ok');f.className='bQf bad';f.innerHTML='الإجابة الصحيحة مظللة بالأخضر. '+(q.w?inl(q.w):'');step=1}else{f.className='bQf bad';f.textContent='ليست هذه، فكّر مرة أخرى.'}}})}
     upd()};
   const upd=()=>{const sl=out[cur],n=nSteps(sl);
     ct.querySelectorAll('.bStep').forEach((e,j)=>e.classList.toggle('in',j<step));
-    const last=ct.querySelectorAll('.bStep.in');if(last.length){const e=last[last.length-1];setTimeout(()=>{slideEl.scrollTo({top:Math.max(0,e.offsetTop+e.offsetHeight-slideEl.clientHeight+30),behavior:'smooth'})},30)}
+    const last=ct.querySelectorAll('.bStep.in');if(last.length){const e=last[last.length-1];setTimeout(()=>{/* الخطوة الأطول من الشاشة (جدول كبير) تظهر من أولها */const tall=e.offsetHeight>slideEl.clientHeight-40;slideEl.scrollTo({top:Math.max(0,tall?e.offsetTop-8:e.offsetTop+e.offsetHeight-slideEl.clientHeight+30),behavior:'smooth'})},30)}
     B.querySelector('.bNum').textContent=AR(cur+1)+' / '+AR(out.length);
     B.querySelector('.bProg i').style.width=((cur+(n?step/n:1))/out.length*100)+'%';
     B.querySelector('.bPrev').disabled=cur===0&&step===0;
