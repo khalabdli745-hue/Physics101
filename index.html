@@ -550,6 +550,9 @@ body.examMode .aiFab,body.examMode #aiLink,body.examSec .aiFab,body.examSec #aiL
 .calc .cuse:disabled{opacity:.45}
 .calc .cind{justify-content:flex-end!important}.calc .cind .cmd{order:9;margin-left:auto}.calc .cind .cmd i{font-style:normal;font-size:9px;font-weight:600;opacity:.75}
 .lpre{display:block;font-size:.72em;font-weight:600;opacity:.75;line-height:1.4;margin-bottom:1px}
+.exSheet.exInline{position:static;max-height:none;overflow:visible;z-index:auto;border:1.5px solid var(--accent);border-radius:14px;box-shadow:none;margin-top:10px;padding:0 8px 8px}
+.exSheet.exInline .exSHx{display:none}.exSheet.exInline .exSH{position:static}
+.exRules li.exBold{font-size:1.05em}
 </style>
 </head>
 <body>
@@ -1962,7 +1965,8 @@ function examRules(e){const dur=e.min%60?AR(e.min)+' دقيقة':e.min===60?'س�
   <li>يمكنك <b>تغيير إجابة الأسئلة النظرية</b> في أي وقت قبل الإرسال.</li>
   <li class="exRed">المسألة الحسابية <b>أربع خطوات بالترتيب</b>: (1) المعطيات، (2) المطلوب، (3) القانون والحساب، (4) النتيجة.</li>
   <li class="exRed">في الخطوتين 1 و2: اختر الإجابة ثم اضغط <b>«التالي»</b> للانتقال، وبعد الضغط <b>لا يمكن تغييرها أو الرجوع إليها</b>.</li>
-  <li class="exRed">في الخطوة 3: اختر القانون فتظهر الآلة الحاسبة وفوقها القانون وأرقام التعويض، احسب بها ثم اضغط <b>«سجل النتيجة في الخطوة 4»</b> للانتقال؛ ولا يقبل رقم يكتب بدون حساب.</li>
+  <li class="exRed">في الخطوة 3: اختر القانون فتظهر الآلة الحاسبة تحت السؤال وفوقها القانون الذي اخترته، احسب بها ثم اضغط <b>«سجل النتيجة في الخطوة 4»</b> للانتقال؛ ولا يقبل رقم يكتب بدون حساب.</li>
+  <li class="exRed exBold"><b>الحساب في آلة المنصة بالتعويض: اكتب العملية الحسابية كاملة بأرقام معطيات المسألة كما هي. لا يقبل رقم جاهز، ولا أي رقم من خارج معطيات المسألة والقانون.</b></li>
   <li class="exRed">في الخطوة 4: تظهر النتيجة تلقائيا ولا تكتب يدويا، ويمكنك تصحيحها بزر «أعد الحساب بالآلة الحاسبة».</li>
   <li class="exRed">في المسائل الحسابية: إذا توقفت عند خطوة تحسب لك درجات الخطوات التي أنهيتها فقط.</li>
   <li>استخدم <b>الآلة الحاسبة الموجودة في الاختبار فقط</b>؛ فالنتيجة لا تسجل إلا منها.</li>
@@ -1970,16 +1974,29 @@ function examRules(e){const dur=e.min%60?AR(e.min)+' دقيقة':e.min===60?'س�
   <li>إذا واجهت أي مشكلة أثناء الاختبار <b>أبلغ المدرب فورا</b>، ولا تغلق الصفحة أو تبدأ من جهاز آخر.</li>
   <li>بعد الانتهاء اضغط <b>«إنهاء الاختبار وإرساله»</b>، وإذا لم تضغطه يرسل تلقائيا عند انتهاء الوقت. لا تظهر الدرجة بعد الإرسال بل تصل إلى المدرب.</li></ol>`}
 /* لوحة الآلة الحاسبة المنبثقة: أعلاها القانون المختار وأرقام التعويض، والناتج يسجل منها فقط بعد حساب فعلي (لا يقبل رقم بدون عملية) */
-function calcSheet(law,giv,onRes){document.querySelectorAll('.exSheet').forEach(x=>x.remove());document.body.classList.remove('exSheetOn');
-  const sh=document.createElement('div');sh.className='exSheet';
+/* الأرقام المسموح بها في عملية الاختبار: أرقام نص المسألة والقانون المختار (والأسس المكتوبة بأرقام علوية)، مع 0 و0.5 و1 و2 و10، وأعداد الكلمات (ثلاثة، أربعة...) */
+const EXNUMS=t=>{t=String(t||'').replace(/[⁻⁰¹²³⁴⁵⁶⁷⁸⁹]+/g,m=>' '+m.replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹]/g,c=>'⁰¹²³⁴⁵⁶⁷⁸⁹'.indexOf(c)).replace('⁻','')+' ');return (t.match(/\d*\.?\d+/g)||[]).map(Number)};
+function exAllowed(q,law){const a=new Set([0,0.5,1,2,10]);EXNUMS(q).concat(EXNUMS(law)).forEach(x=>a.add(x));
+  const W=[[/ثلاث/,3],[/أربع|اربع/,4],[/خمس/,5],[/(^|\s)(ست|ستة)(\s|$)/,6]];W.forEach(([r,v])=>{if(r.test(String(q||'')))a.add(v)});return [...a]}
+function exExprCheck(expr,allow){const e=String(expr||'');if(/[AMR]/.test(e))return 'اكتب العملية كاملة بأرقام المسألة، دون Ans أو الذاكرة أو الرقم العشوائي.';
+  /* أسس قوى العشرة لبادئات الوحدات (×10^3 و×10^-6 ...) مسموحة */
+  const e2=e.replace(/10\^\(?(-?)(\d+)/g,(m,sg,d)=>[1,2,3,6,9,12].includes(+d)||allow.includes(+d)?'10^':m).replace(/(E|X)(-?)(\d+)/g,(m,k,sg,d)=>[1,2,3,6,9,12].includes(+d)||allow.includes(+d)?k:m);
+  const L=e2.match(/\d*\.?\d+/g)||[];const bad=L.map(Number).find(v=>!allow.some(a=>Math.abs(a-v)<=1e-9*Math.max(1,Math.abs(a))));
+  return bad==null?'':`الرقم ${bad} ليس من معطيات المسألة أو القانون. عوض بأرقام المسألة كما هي، واستخدم دوال الآلة (sin وcos و√) بدل أرقام محسوبة خارجها.`}
+function calcSheet(law,giv,onRes,opt){opt=opt||{};document.querySelectorAll('.exSheet').forEach(x=>x.remove());document.body.classList.remove('exSheetOn');
+  const sh=document.createElement('div');sh.className='exSheet'+(opt.host?' exInline':'');
   sh.innerHTML='<div class="exSH"><div class="exSHt"><div class="exWl"></div><div class="exWg"></div><div class="exSHm" hidden></div></div><button type="button" class="exSHx" aria-label="إغلاق">✕</button></div>';
   sh.querySelector('.exWl').innerHTML='<b>القانون:</b> '+'<span class="exIso">'+inl(law)+'</span>'+' <small class="exMine">(حسب اختيارك)</small>';
-  sh.querySelector('.exWg').innerHTML='<b>التعويض:</b> '+'<span class="exIso">'+inl(giv)+'</span>'+' <small class="exMine">(حسب اختيارك)</small>';
+  if(opt.host)sh.querySelector('.exWg').innerHTML='<small class="exMine">اكتب في الآلة العملية الحسابية بالتعويض بأرقام المسألة كما هي.</small>';
+  else sh.querySelector('.exWg').innerHTML='<b>التعويض:</b> '+'<span class="exIso">'+inl(giv)+'</span>'+' <small class="exMine">(حسب اختيارك)</small>';
+  const allow=exAllowed(opt.q,law);
   const m=sh.querySelector('.exSHm'),close=()=>{sh.remove();document.body.classList.remove('exSheetOn')};
   const C=makeCalc((v,expr)=>{const n=examParse(v);if(n==null)return;
     if(/^[\s\d.,−\-]*$/.test(String(expr||''))){m.hidden=false;m.textContent='عوض في القانون واحسب بالآلة الحاسبة، ولا تكتب الناتج مباشرة.';return false}
+    if(opt.host){const w=exExprCheck(expr,allow);if(w){m.hidden=false;m.textContent=w;return false}}
     close();onRes(n)});
-  C.panel.hidden=false;C.panel.querySelector('.cx').style.display='none';sh.appendChild(C.panel);document.body.appendChild(sh);document.body.classList.add('exSheetOn');
+  C.panel.hidden=false;C.panel.querySelector('.cx').style.display='none';sh.appendChild(C.panel);
+  if(opt.host){opt.host.appendChild(sh);setTimeout(()=>{try{sh.scrollIntoView({block:'nearest',behavior:'smooth'})}catch(e){}},60)}else{document.body.appendChild(sh);document.body.classList.add('exSheetOn')}
   sh.querySelector('.exSHx').onclick=close}
 function examAsk(msg,yes,no,html){return new Promise(res=>{const w=document.createElement('div');w.className='exModal';
   w.innerHTML=`<div class="exMBox" role="dialog"><p></p><div class="exMBtns"><button type="button" class="btn exY"></button>${no?'<button type="button" class="exMNo"></button>':''}</div></div>`;
@@ -1989,7 +2006,7 @@ const examMM=s=>{s=Math.max(0,Math.round(s));const m=Math.floor(s/60),x=s%60;ret
 function examBar(){const b=$('examBar');if(!b)return;const L=(EXAM.list||[]).filter(e=>e.open&&e.status!=='done'&&e.phase!=='before'&&e.phase!=='after');
   b.hidden=true;if(L.length)b.innerHTML=`<span>📝 <b>${esc(L[0].t)}</b> متاح الآن</span><span class="go">${L[0].status==='started'?'أكمل الاختبار':'ادخل الاختبار'} ←</span>`;
   const nb=$('examBtn');if(nb)nb.hidden=true}
-function examCheck(){if(!API||!AUTH)return;SYNC.post({a:'exams',token:AUTH.token}).then(r=>{if(r&&r.ok){EXAM.list=r.list;examBar();if(pos.t==='exam'&&!EXAM.cur)render()}}).catch(()=>{})}
+function examCheck(){if(!API||!AUTH)return;SYNC.post({a:'exams',token:AUTH.token}).then(r=>{if(r&&r.ok){(r.list||[]).forEach(e=>{if(e.status!=='done'&&e.left!=null)e.status='started'});EXAM.list=r.list;examBar();if(pos.t==='exam'&&!EXAM.cur)render()}}).catch(()=>{})}
 function examOpen(){pos.t='exam';closeNav();buildNav();render()}
 function renderExam(v){
   const i=wrap(v);clearInterval(EXAM.timer);document.body.classList.remove('examMode');{const d=document.getElementById('exDoneBar');if(d)d.remove()}document.querySelectorAll('.exSheet').forEach(x=>x.remove());document.body.classList.remove('exSheetOn');
@@ -2002,7 +2019,7 @@ function renderExam(v){
     if(!r.ok){box.innerHTML='<p class="sub">تعذر تحميل الاختبارات. تأكد أن المدرب نشر الإصدار الجديد من الخادم.</p>';return}
     EXAM.list=r.list;examBar();
     if(!r.list.length){box.innerHTML='<p class="exEmpty">لا يوجد اختبار متاح الآن. سيظهر هنا عندما يفتحه المدرب.</p>';return}
-    box.innerHTML='';r.list.forEach(e=>{const d=document.createElement('div');d.className='exItem';
+    box.innerHTML='';r.list.forEach(e=>{if(e.status!=='done'&&e.left!=null)e.status='started';const d=document.createElement('div');d.className='exItem';
       const info=`عدد الأسئلة ${AR(e.n)} (اختيار من متعدد) · الدرجة ${AR(e.max)} · المدة ${e.min%60?AR(e.min)+' دقيقة':e.min===60?'ساعة':AR(e.min/60)+' ساعات'} · محاولة واحدة`;
       d.innerHTML=`<h3>${esc(e.t)}</h3>${e.cover?`<p class="exCov">${esc(e.cover)}</p>`:''}<p class="exInfo">${info}</p><div class="exAct"></div>`;
       const a=d.querySelector('.exAct');
@@ -2058,7 +2075,7 @@ function examPaper(i){
         if(!Array.isArray(opts)){o.className='exRes';o.innerHTML=`<input type="text" dir="ltr" readonly tabindex="-1" placeholder="تسجل من الآلة الحاسبة" autocomplete="off"><span class="exU" dir="ltr">${esc(opts.u||'')}</span>`;
           const inp=o.querySelector('input');if(A[j]!=null)inp.value=A[j];
           if(A[2]!=null&&typeof makeCalc==='function'){const rb=document.createElement('button');rb.type='button';rb.className='btn exOpenCalc';rb.innerHTML='🧮 أعد الحساب بالآلة الحاسبة';sb.appendChild(rb);
-            rb.onclick=()=>calcSheet(q.st[2][A[2]],q.st[0][A[0]],n=>{A[3]=n;cnt();save();draw();setTimeout(()=>{const r=box.querySelector('.exRes');if(r){r.closest('.exStep').classList.add('flash');r.scrollIntoView({block:'center',behavior:'smooth'})}},80)})}
+            rb.onclick=()=>calcSheet(q.st[2][A[2]],q.st[0][A[0]],n=>{A[3]=n;cnt();save();draw();setTimeout(()=>{const r=box.querySelector('.exRes');if(r){r.closest('.exStep').classList.add('flash');r.scrollIntoView({block:'center',behavior:'smooth'})}},80)},{host:sb,q:q.q})}
           box.appendChild(sb);return}
         opts.forEach((t,oi)=>{const b=document.createElement('button');b.type='button';b.innerHTML=`<span class="exL">${'ABCD'[oi]}</span> `+inl(t);b.setAttribute('aria-pressed',pick===oi);b.disabled=!live;
           b.onclick=()=>{pick=oi;o.querySelectorAll('button').forEach((x,xi)=>x.setAttribute('aria-pressed',xi===oi));
@@ -2066,13 +2083,13 @@ function examPaper(i){
         let nx=null,note=null,work=null,showWork=null;
         if(live&&j===2&&typeof makeCalc==='function'){
           const ob=document.createElement('button');ob.type='button';ob.className='btn exOpenCalc';ob.innerHTML='🧮 افتح الآلة الحاسبة';ob.hidden=true;sb.appendChild(ob);
-          const go=()=>{if(pick==null){note.textContent='اختر القانون أولا.';return}calcSheet(opts[pick],q.st[0][A[0]],n=>{A[j]=pick;A[3]=n;cnt();save();draw();setTimeout(()=>{const r=box.querySelector('.exRes');if(r){r.closest('.exStep').classList.add('flash');r.scrollIntoView({block:'center',behavior:'smooth'})}},80)})};
+          const go=()=>{if(pick==null){note.textContent='اختر القانون أولا.';return}calcSheet(opts[pick],q.st[0][A[0]],n=>{A[j]=pick;A[3]=n;cnt();save();draw();setTimeout(()=>{const r=box.querySelector('.exRes');if(r){r.closest('.exStep').classList.add('flash');r.scrollIntoView({block:'center',behavior:'smooth'})}},80)},{host:sb,q:q.q})};
           ob.onclick=go;work=true;showWork=()=>{ob.hidden=false;go()}}
         if(live&&j<q.st.length-1){note=document.createElement('p');note.className='exNote';nx=document.createElement('button');nx.type='button';nx.className='btn exNext';nx.textContent='التالي ←';
           nx.onclick=()=>{if(pick==null||j===2)return;A[j]=pick;cnt();save();draw()};sb.append(note);if(j!==2)sb.append(nx)}
         /* خطوة القانون لا تنتهي بزر «التالي»، بل بتسجيل الناتج من الآلة الحاسبة */
         const upd=()=>{if(!note)return;if(nx)nx.disabled=pick==null;
-          note.textContent=pick==null?(j===2?'اختر القانون، فتظهر الآلة الحاسبة مع أرقام التعويض.':'اختر إجابة ثم اضغط «التالي».'):j===2?'احسب الناتج بالآلة الحاسبة، ثم اضغط «سجل النتيجة في الخطوة 4».':''};upd();
+          note.textContent=pick==null?(j===2?'اختر القانون، فتظهر الآلة الحاسبة تحت السؤال.':'اختر إجابة ثم اضغط «التالي».'):j===2?'اكتب العملية بالتعويض بأرقام المسألة في الآلة، ثم اضغط «سجل النتيجة في الخطوة 4».':''};upd();
         box.appendChild(sb)})};
     draw();i.appendChild(d)});
   cnt();

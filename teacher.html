@@ -155,6 +155,7 @@ details.res .when{color:var(--muted);font-size:12.5px;margin-inline-start:auto}
 .ppM{unicode-bidi:isolate;font-family:ui-monospace,Consolas,monospace}.ppD h4{margin:8px 0 2px;color:var(--accent)}.ppTitle{margin:6px 0}
 @media print{body.ppPrinting>*:not(.ppD){display:none!important}body.ppPrinting .ppD{position:static;background:#fff;display:block}body.ppPrinting .ppD>div{width:100%;height:auto;overflow:visible;padding:0;background:#fff;color:#000}body.ppPrinting .ppCtl{display:none!important}body.ppPrinting .ppS{break-before:page}body.ppPrinting .ppS:first-of-type{break-before:auto}}
 .exCRn{display:block;font-size:12px;color:var(--muted);font-weight:400;margin-top:2px}
+.exAb{color:var(--bad,#b91c1c)!important}.exTm{display:block;font-size:11px;color:var(--muted);font-weight:400;line-height:1.5;white-space:nowrap;margin-top:2px}
 </style>
 </head>
 <body>
@@ -422,7 +423,7 @@ async function drawDur(){
   <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px"><select id="durv"><option value="ar-SA-HamedNeural" ${DURV==='ar-SA-HamedNeural'?'selected':''}>صوت حامد</option><option value="ar-SA-ZariyahNeural" ${DURV==='ar-SA-ZariyahNeural'?'selected':''}>صوت زارية</option></select><button class="btn ghost" id="durr">↻ تحديث</button><a class="btn" href="index.html?durall=1" target="_blank" rel="noopener">⚙️ حساب مدة كل الدروس</a></div>
   <div class="stats"><div class="stat"><small>مجموع شرح الدروس (${TEACH_N} درسا)</small><b>${hm(tot)}</b></div><div class="stat"><small>متوسط الدرس</small><b>${TEACH_N-miss?Math.round(tot/60/(TEACH_N-miss))+' دقيقة':'—'}</b></div>${miss?`<div class="stat"><small>دروس لم تحسب بعد</small><b>${miss}</b></div>`:''}</div>
   <div class="tableWrap"><table><thead><tr><th>الدرس</th><th>مدة الشرح</th></tr></thead><tbody>${rows}</tbody></table></div>
-  <h2 style="margin-top:18px">المقدمات وأوراق العمل والمراجعات</h2><div class="tableWrap"><table><thead><tr><th>القسم</th><th>مدة الشرح</th></tr></thead><tbody>${rows2}</tbody></table></div>
+  <h2 style="margin-top:18px">أوراق العمل المحلولة والمراجعات</h2><div class="tableWrap"><table><thead><tr><th>القسم</th><th>مدة الشرح</th></tr></thead><tbody>${rows2}</tbody></table></div>
   <p style="color:var(--muted)">مجموعها: ${hm(tot2)}</p></div>`;
   $('#durv').onchange=e=>{DURV=e.target.value;drawDur()};$('#durr').onclick=drawDur;
 }
@@ -730,8 +731,12 @@ function exDraw(){
   const nOf=(id,f)=>r.rows.filter(x=>x.examId===id&&f(x)).length;
   /* الاختبار الذي فتح أو سلّمه أحد يعد «أُجري»: من لم يختبره درجته صفر */
   const held=e=>e.open||r.rows.some(x=>x.examId===e.id);
-  const cell=(s,e)=>{const x=(by[s.id]||{})[e.id];if(!x)return `<td class="num">${held(e)?'<span class="exZ">0</span>':'—'}</td>`;
-    return `<td class="num exc" data-s="${esc(s.id)}" data-e="${e.id}" title="اضغط لإعادة فتح الاختبار لهذا المتدرب">${x.submittedAt?`<b>${AR(x.score)}</b>${x.raw!==x.score?`<br><small class="exRaw">(${AR(x.raw)})</small>`:''}`:'<span class="tag">يحل الآن</span>'+(x.dev?`<br><button class="btn ghost sm exFree" data-s="${esc(s.id)}" data-e="${e.id}" title="إذا تعطل جواله أو انتقل إلى جهاز آخر">🔓 السماح بجهاز آخر</button>`:'')}</td>`};
+  /* وقت دخول المتدرب ووقت تسليمه (أو نهاية وقته لمن يحل الآن) */
+  const hm=d=>{const t=new Date(d);return isNaN(t)?'':t.toLocaleTimeString('ar-SA-u-nu-latn',{hour:'numeric',minute:'2-digit'})};
+  const tm=(x,e)=>{if(!x.startedAt)return '';const a=new Date(x.startedAt);if(x.submittedAt){const m=Math.max(1,Math.round((new Date(x.submittedAt)-a)/60000));return `<br><small class="exTm">دخل ${hm(x.startedAt)} · سلّم ${hm(x.submittedAt)}<br>(${AR(m)} دقيقة)</small>`}
+    return `<br><small class="exTm">دخل ${hm(x.startedAt)}${e.min?' · ينتهي '+hm(new Date(a.getTime()+e.min*60000)):''}</small>`};
+  const cell=(s,e)=>{const x=(by[s.id]||{})[e.id];if(!x)return `<td class="num">${held(e)?'<span class="exZ">0</span><br><small class="exTm exAb">غائب · لم يدخل</small>':'—'}</td>`;
+    return `<td class="num exc" data-s="${esc(s.id)}" data-e="${e.id}" title="اضغط لإعادة فتح الاختبار لهذا المتدرب">${x.submittedAt?`<b${+x.score===0?' class="exZ"':''}>${AR(x.score)}</b>${+x.score===0?'<br><small class="exTm">دخل وحل · درجته صفر</small>':''}${x.raw!==x.score?`<br><small class="exRaw">(${AR(x.raw)})</small>`:''}${tm(x,e)}`:'<span class="tag">يحل الآن</span>'+tm(x,e)+(x.dev?`<br><button class="btn ghost sm exFree" data-s="${esc(s.id)}" data-e="${e.id}" title="إذا تعطل جواله أو انتقل إلى جهاز آخر">🔓 السماح بجهاز آخر</button>`:'')}</td>`};
   /* لائحة المؤسسة: من لم يحصل على 25% من درجة الاختبار النهائي (10 من 40) يرسب في المقرر مهما كان مجموعه */
   const FIN=r.exams.find(e=>e.id==='E3'),finMin=FIN?FIN.max*0.25:0;
   /* نتيجة المقرر: المجموع من 100 = الاختبارات (80) + الأعمال الفصلية (20)، والنجاح 60 فأكثر بشرط 25% من النهائي */
