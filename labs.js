@@ -4328,7 +4328,7 @@ function dmmFace(cfg){cfg=cfg||{};const F=n=>(+n).toFixed(1),cx=200,cy=196,R=78;
   let s=`<svg viewBox="0 0 400 380" class="labSvg dmmF" role="img" aria-label="واجهة جهاز الملتيميتر"><rect x="58" y="6" width="284" height="368" rx="22" fill="#FACC15" stroke="#713F12" stroke-width="2"/><rect x="72" y="20" width="256" height="340" rx="14" fill="#1F2937"/>
   <rect x="104" y="30" width="192" height="44" rx="6" fill="#C7D2B2" stroke="#4B5563"/><text x="200" y="61" font-size="24" font-weight="800" text-anchor="middle" fill="#111827" direction="ltr" font-family="Consolas,monospace">${sel?'0.00':''}</text>`;
   G.forEach(([k,t,c,ps])=>{const a0=ps[0][1]-12,a1=ps[ps.length-1][1]+12,[x0,y0]=pt(a0,104),[x1,y1]=pt(a1,104),[lx,ly]=pt((a0+a1)/2,120);
-    s+=`<path d="M${F(x0)},${F(y0)} A104,104 0 0 1 ${F(x1)},${F(y1)}" fill="none" stroke="${c}" stroke-width="7" stroke-linecap="round"/><text x="${F(lx)}" y="${F(ly+5)}" font-size="15" font-weight="900" text-anchor="middle" fill="${c}" direction="ltr" style="paint-order:stroke;stroke:#1F2937;stroke-width:3px">${t}</text>`;
+    s+=`<path d="M${F(x0)},${F(y0)} A104,104 0 0 1 ${F(x1)},${F(y1)}" fill="none" stroke="${c}" stroke-width="7" stroke-linecap="round"/><g><rect x="${k==='v'?92:262}" y="86" width="46" height="26" rx="13" fill="${c}"/><text x="${k==='v'?115:285}" y="105" font-size="17" font-weight="900" text-anchor="middle" fill="#fff" direction="ltr">${t}</text></g>`;
     ps.forEach(([v,a,r])=>{const [x,y]=pt(a,R),on=sel===v;s+=`<g data-k="mode" data-v="${v}" style="cursor:pointer"><circle cx="${F(x)}" cy="${F(y)}" r="17" fill="${on?c:'#374151'}" stroke="${on?'#F7931E':c}" stroke-width="${on?3:2}"/><text x="${F(x)}" y="${F(y+4.5)}" font-size="${r.length>3?10:12}" font-weight="900" text-anchor="middle" fill="#F9FAFB" direction="ltr">${r}</text></g>`})});
   {const [x,y]=pt(0,R);s+=`<text x="${F(x)}" y="${F(y+4)}" font-size="11" font-weight="800" text-anchor="middle" fill="#9CA3AF">OFF</text>`}
   s+=`<circle cx="${cx}" cy="${cy}" r="44" fill="#374151" stroke="#9CA3AF" stroke-width="2"/><line x1="${cx}" y1="${cy}" x2="${F(cx+38*Math.sin(pa))}" y2="${F(cy-38*Math.cos(pa))}" stroke="#F7931E" stroke-width="9" stroke-linecap="round"/><circle cx="${cx}" cy="${cy}" r="8" fill="#111827"/>`;
@@ -4639,7 +4639,7 @@ function ohColors(bd,lab){const F=n=>(+n).toFixed(1),bc=[OH_C[bd[0]],OH_C[bd[1]]
   return s+'</svg>'}
 
 /* الرسم البياني: الجهد V على المحور الرأسي، والتيار I على المحور الأفقي */
-function ohGraph(pts,fit,R){const x0=62,x1=380,y0=250,y1=22,Vm=12,Imax=10.6/R,st=[0.01,0.02,0.025,0.05,0.1].find(s=>Math.ceil(Imax/s)<=6)||0.1,n=Math.ceil(Imax/st),Im=n*st;
+function ohGraph(pts,fit,R){const x0=62,x1=380,y0=250,y1=22,Vm=8,Imax=7/R,st=[0.01,0.02,0.025,0.05,0.1].find(s=>Math.ceil(Imax/s)<=6)||0.1,n=Math.ceil(Imax/st),Im=n*st;
   const X=i=>x0+(x1-x0)*i/Im,Y=v=>y0-(y0-y1)*v/Vm,F=k=>(+k).toFixed(1);let s=`<svg viewBox="0 0 400 300" class="labSvg" role="img" aria-label="الرسم البياني للجهد مع التيار">`;
   for(let k=0;k<=n;k++){const x=X(k*st);s+=`<line x1="${F(x)}" y1="${y1}" x2="${F(x)}" y2="${y0}" stroke="var(--line,#E2E8F0)"/><text x="${F(x)}" y="${y0+18}" font-size="12" font-weight="700" text-anchor="middle" fill="var(--ink,#0F172A)" direction="ltr">${+(k*st).toFixed(3)}</text>`}
   for(let v=0;v<=Vm;v+=2){const y=Y(v);s+=`<line x1="${x0}" y1="${F(y)}" x2="${x1}" y2="${F(y)}" stroke="var(--line,#E2E8F0)"/><text x="${x0-8}" y="${F(y+4)}" font-size="12" font-weight="700" text-anchor="end" fill="var(--ink,#0F172A)" direction="ltr">${v}</text>`}
@@ -4678,39 +4678,165 @@ function ohWiring(){const H=(x,y)=>`<rect x="${x-3}" y="${y-3}" width="6" height
   s+=T(200,306,'رفعت وصلة التوصيل، ووضع مجسا الأميتر في ثقبيها','#334155',12);
   s+=T(200,334,'مسار التيار: من المصدر إلى الأميتر ثم المقاومة ثم الخط السالب','#C2410C',12);
   return s+'</svg>'}
+/* مشهد تركيب الأجهزة وطريقة القياس — تجربة قانون أوم (نموذج)
+   أ) مشاهدة: مشهد متحرك خطوة خطوة مع شرح كل خطوة
+   ب) طبق بنفسك: يوصل المتدرب المجسات بنفسه، وتتحقق المنصة من صحة التوصيل وتشرح الخطأ */
+(function(){
+const CSS=`.wsc{border:2px solid var(--line,#DDE2EA);border-radius:14px;padding:10px;margin:8px 0;background:var(--panel,#fff)}
+.wsc svg{width:100%;height:auto;display:block;touch-action:manipulation}
+.wsc .cap{min-height:3.4em;border-radius:10px;padding:8px 12px;margin:8px 0 6px;background:rgba(247,147,30,.10);border-right:4px solid #F7931E;line-height:1.8;font-size:14.5px}
+.wsc .cap b{color:#C2410C}
+.wsc .row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.wsc button{font:inherit;border:1.5px solid var(--line,#DDE2EA);background:var(--panel,#fff);color:inherit;border-radius:10px;padding:7px 12px;font-weight:700;cursor:pointer}
+.wsc button.pri{background:#F7931E;border-color:#F7931E;color:#fff}
+.wsc button.on{outline:3px solid #F7931E}
+.wsc button:disabled{opacity:.45;cursor:default}
+.wsc .pb{display:flex;gap:4px;margin:6px 0}.wsc .pb i{flex:1;height:5px;border-radius:3px;background:var(--line,#DDE2EA)}.wsc .pb i.d{background:#F7931E}
+.wsc .msg{border-radius:10px;padding:8px 12px;margin:8px 0;line-height:1.8;font-size:14px}
+.wsc .msg.ok{background:rgba(22,163,74,.12);border-right:4px solid #16A34A}
+.wsc .msg.bad{background:rgba(220,38,38,.10);border-right:4px solid #DC2626}
+.wsc .msg.warn{background:rgba(234,179,8,.14);border-right:4px solid #CA8A04}
+.wsc .chk{list-style:none;margin:6px 0;padding:0;font-size:13.5px;line-height:1.9}.wsc .chk li::before{content:'⬜ '}.wsc .chk li.d::before{content:'✅ '}
+.wsc .pt{cursor:pointer}.wsc .pt circle.h{fill:#F7931E;opacity:.35}
+.wsc .lead{fill:none;stroke-width:3.2;stroke-linecap:round}
+.wsc .dot{fill:#F7931E}
+.wsc .row.done button:not(#wtReset){display:none}
+details.wsDet{border:2px solid #F7931E;border-radius:14px;padding:4px 10px;margin:8px 0}details.wsDet>summary{cursor:pointer;font-weight:800;padding:8px 2px;color:#C2410C}details.wsDet .wsc{border:0;padding:0}
+@keyframes wscGlow{0%,100%{opacity:1}50%{opacity:.35}}.wsc .glow{animation:wscGlow .8s ease-in-out 3}`;
+const P={A:[194,38],B:[230,38],R1:[330,49],R2:[330,95],C:[260,102]};
+const JACK={ar:[197,210],ab:[227,210],vr:[318,210],vb:[348,210]};
+const COL={ar:'#DC2626',ab:'#1F2937',vr:'#DC2626',vb:'#1F2937'};
+const NAME={ar:'المجس الأحمر للأميتر',ab:'المجس الأسود للأميتر',vr:'المجس الأحمر للفولتميتر',vb:'المجس الأسود للفولتميتر'};
+const PN={A:'قبل الفجوة',B:'بعد الفجوة',R1:'ساق المقاومة الموجبة',R2:'ساق المقاومة السالبة',C:'الخط السالب'};
+const BOX={a:[179,245],v:[300,366]};
+/* ثقوب لوحة التوصيل */
+function holes(){let h='';for(let x=106;x<=382;x+=12){if(x>196&&x<228)continue;h+=`<rect x="${x-2}" y="36" width="4" height="4" rx="1" fill="#94A3B8"/><rect x="${x-2}" y="100" width="4" height="4" rx="1" fill="#94A3B8"/>`}
+  for(let y=58;y<=86;y+=7)for(let x=106;x<=382;x+=12)h+=`<rect x="${x-1.5}" y="${y-1.5}" width="3" height="3" rx=".8" fill="#CBD5E1"/>`;return h}
+function svg(){return `<svg viewBox="0 0 400 240" aria-label="دائرة قانون أوم على لوحة التوصيل">
+<defs><linearGradient id="wsR" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#F5DEB3"/><stop offset="1" stop-color="#D2B48C"/></linearGradient></defs>
+<rect x="90" y="20" width="302" height="100" rx="6" fill="#F8FAFC" stroke="#94A3B8"/>
+<line x1="100" y1="28" x2="386" y2="28" stroke="#DC2626" stroke-width="1.5"/><line x1="100" y1="112" x2="386" y2="112" stroke="#2563EB" stroke-width="1.5"/>
+<text x="96" y="32" font-size="10" fill="#DC2626" font-weight="800" text-anchor="middle">+</text><text x="96" y="116" font-size="11" fill="#2563EB" font-weight="800" text-anchor="middle">−</text>
+${holes()}
+<path d="M106 38 H194" stroke="#DC2626" stroke-width="2" opacity=".55"/><path d="M230 38 H382" stroke="#DC2626" stroke-width="2" opacity=".55"/><path d="M106 102 H382" stroke="#2563EB" stroke-width="2" opacity=".55"/>
+<text x="212" y="54" text-anchor="middle" font-size="9.5" font-weight="700" fill="#64748B">الفجوة</text>
+<text x="150" y="13" text-anchor="middle" font-size="10.5" font-weight="700" fill="#64748B">لوحة التوصيل</text>
+<path d="M70 75 C88 75 88 38 106 38" stroke="#DC2626" stroke-width="3" fill="none"/><path d="M70 125 C88 125 88 102 106 102" stroke="#111827" stroke-width="3" fill="none"/>
+<rect x="10" y="60" width="60" height="80" rx="8" fill="#1E3A8A"/><text x="40" y="80" text-anchor="middle" fill="#fff" font-size="10.5" font-weight="700">مصدر</text>
+<text x="40" y="95" text-anchor="middle" fill="#93C5FD" font-size="9" font-weight="700">جهد مستمر</text>
+<rect x="16" y="104" width="44" height="17" rx="4" fill="#0B1220"/><text id="wsPS" direction="ltr" unicode-bidi="embed" x="38" y="116.5" text-anchor="middle" fill="#334155" font-size="10" font-family="monospace">0.0 V</text>
+<circle id="wsLed" cx="60" cy="68" r="3.5" fill="#475569"/>
+<circle cx="70" cy="75" r="4.5" fill="#DC2626"/><circle cx="70" cy="125" r="4.5" fill="#111"/>
+<line x1="330" y1="38" x2="330" y2="102" stroke="#64748B" stroke-width="2.4"/>
+<rect x="321" y="56" width="18" height="34" rx="8" fill="url(#wsR)" stroke="#92400E"/>
+<rect id="wsB0" x="321" y="61" width="18" height="4" fill="#8B4513"/><rect id="wsB1" x="321" y="68" width="18" height="4" fill="#111"/><rect id="wsB2" x="321" y="75" width="18" height="4" fill="#8B4513"/><rect id="wsB3" x="321" y="83" width="18" height="3.5" fill="#D4AF37"/>
+<text id="wsRl" x="330" y="13" text-anchor="middle" font-size="10.5" font-weight="700" fill="currentColor">المقاومة R = 100 Ω</text>
+<g id="wsJump"><path d="M194 38 Q212 20 230 38" stroke="#7C2D12" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M194 38 Q212 20 230 38" stroke="#F7931E" stroke-width="4.5" fill="none" stroke-linecap="round"/></g>
+<g id="wsLeads"></g><g id="wsDots"></g>
+<g><rect x="179" y="150" width="66" height="52" rx="8" fill="#FACC15" stroke="#A16207"/><rect x="185" y="156" width="54" height="20" rx="3" fill="#0B1220"/>
+<text id="wsAd" direction="ltr" x="212" y="171" text-anchor="middle" fill="#22D3EE" font-size="12" font-family="monospace">0.000</text>
+<text x="212" y="193" text-anchor="middle" font-size="11" font-weight="800" fill="#1E3A8A">أميتر (A)</text>
+<circle cx="197" cy="210" r="4.5" fill="#DC2626"/><circle cx="227" cy="210" r="4.5" fill="#111"/></g>
+<g><rect x="300" y="150" width="66" height="52" rx="8" fill="#FACC15" stroke="#A16207"/><rect x="306" y="156" width="54" height="20" rx="3" fill="#0B1220"/>
+<text id="wsVd" direction="ltr" x="333" y="171" text-anchor="middle" fill="#22D3EE" font-size="12" font-family="monospace">0.00</text>
+<text x="333" y="193" text-anchor="middle" font-size="11" font-weight="800" fill="#B91C1C">فولتميتر (V)</text>
+<circle cx="318" cy="210" r="4.5" fill="#DC2626"/><circle cx="348" cy="210" r="4.5" fill="#111"/></g>
+${Object.entries(P).map(([k,[x,y]])=>`<g class="pt" data-p="${k}"><circle class="h" cx="${x}" cy="${y}" r="10" style="opacity:0"/><circle cx="${x}" cy="${y}" r="4" fill="#F7931E" stroke="#fff" stroke-width="1"/></g>`).join('')}
+<g id="wsTag"></g></svg>`}
+/* مسار السلك: ينزل من منفذ الجهاز ثم يلتف حول جانبه (الأحمر يسارا والأسود يمينا) ويصعد إلى الثقب، فلا يمر فوق الشاشة */
+const route=(j,p)=>{const [x1,y1]=JACK[j],[tx,ty]=P[p],[l,r]=BOX[j[0]],red=j[1]==='r',sx=red?l-10:r+10,yb=red?222:229,dx=sx>x1?6:-6,ye=Math.max(ty+18,ty);
+  return `M${x1} ${y1} V${yb-6} Q${x1} ${yb} ${x1+dx} ${yb} H${sx-dx} Q${sx} ${yb} ${sx} ${yb-6} V${ty+22} Q${sx} ${ty} ${tx} ${ty}`};
+const lead=(j,p)=>{const d=route(j,p),blk=j[1]==='b';
+  return `<g data-j="${j}"><path class="lead" stroke="#fff" style="stroke-width:${blk?8:6.5};stroke-linejoin:round" d="${d}"/><path class="lead" stroke="${blk?'#111827':COL[j]}" style="stroke-width:${blk?4.2:3.6};stroke-linejoin:round" d="${d}"/></g>`};
+function mount(host,opts){opts=opts||{};
+  const WH=opts.watchHost||host;WH.insertAdjacentHTML('beforeend',`<style>${CSS}</style>
+  <div class="wsc"><h4 style="margin:2px 0 6px">🎬 شاهد: تركيب الأجهزة وطريقة القياس</h4>
+   ${svg()}<div class="pb">${'<i></i>'.repeat(8)}</div><div class="cap" id="wsCap">اضغط «▶ شاهد التركيب» لترى خطوات توصيل الأجهزة وطريقة القراءة خطوة خطوة.</div>
+   <div class="row"><button class="pri" id="wsPlay">▶ شاهد التركيب</button><button id="wsPrev">→ السابقة</button><button id="wsNext">التالية ←</button></div></div>`);
+  host.insertAdjacentHTML('beforeend',`
+  <div class="wsc"><h4 style="margin:2px 0 6px">🔌 طبق بنفسك: وصّل المجسات</h4>
+   <p style="margin:0 0 6px;font-size:14px;line-height:1.8">اختر مجسا من الأزرار، ثم اضغط على النقطة البرتقالية التي تريد توصيله بها. ابدأ برفع وصلة التوصيل.</p>
+   ${svg().replace(/id="ws/g,'id="wt')}
+   <div class="row" id="wtBtns"><button id="wtJ">⬆ ارفع وصلة التوصيل</button>${Object.keys(JACK).map(j=>`<button data-j="${j}" style="color:${COL[j]==='#1F2937'?'inherit':COL[j]}">${NAME[j]}</button>`).join('')}<button id="wtReset">↺ من جديد</button></div>
+   <ul class="chk" id="wtChk"><li>رفع وصلة التوصيل</li><li>الأميتر على التوالي مكان الفجوة (الأحمر قبلها والأسود بعدها)</li><li>الفولتميتر على التوازي على طرفي المقاومة (الأحمر على الموجب)</li></ul>
+   <div class="msg" id="wtMsg" hidden></div>
+   <div class="row" ${opts.lab?'style="display:none"':''}><button class="pri" id="wtOn" disabled>⚡ شغّل المصدر على 6 V واقرأ</button></div></div>`);
+  /* ===== أ) المشاهدة ===== */
+  const Q=q=>host.querySelector(q)||WH.querySelector(q),W=id=>Q('#'+id);
+  const STEPS=[
+   ['<b>الخطوة 1: أطفئ المصدر</b> قبل أي توصيل، واضبط الجهاز الأول على <b>التيار A⎓</b> والثاني على <b>الجهد V⎓</b>.',()=>{}],
+   ['<b>الخطوة 2: ارفع وصلة التوصيل</b> البرتقالية عن الفجوة، فتنفتح الدائرة. لو بقيت الوصلة لمر التيار فيها وقرأ الأميتر صفرا.',()=>{W('wsJump').style.transition='transform .9s, opacity .9s';W('wsJump').style.transform='translateY(-18px)';W('wsJump').style.opacity='0'}],
+   ['<b>الخطوة 3:</b> المجس <b style="color:#DC2626">الأحمر للأميتر</b> في النقطة <b>قبل الفجوة</b> (جهة القطب الموجب للمصدر).',()=>addL('ws','ar','A')],
+   ['<b>الخطوة 4:</b> المجس <b>الأسود للأميتر</b> في النقطة <b>بعد الفجوة</b>. صار الأميتر مكان الوصلة، فيمر فيه التيار كله: هذا <b>التوصيل على التوالي</b>.',()=>addL('ws','ab','B')],
+   ['<b>الخطوة 5:</b> المجس <b style="color:#DC2626">الأحمر للفولتميتر</b> على <b>طرف المقاومة الموجب</b>.',()=>addL('ws','vr','R1')],
+   ['<b>الخطوة 6:</b> المجس <b>الأسود للفولتميتر</b> على <b>طرفها السالب</b>. الفولتميتر على طرفي المقاومة: هذا <b>التوصيل على التوازي</b>.',()=>addL('ws','vb','R2')],
+   ['<b>الخطوة 7: شغّل المصدر</b> وارفع الجهد إلى <b>6 V</b>. يتحرك التيار من القطب الموجب، ويمر في الأميتر ثم المقاومة ويعود إلى القطب السالب.',()=>power('ws',true)],
+   ['<b>الخطوة 8: طريقة القراءة:</b> اقرأ الرقم مع وحدته من كل شاشة: الفولتميتر <b>6.00 V</b>، والأميتر <b>0.060 A</b>. فالمقاومة <span dir="ltr" style="unicode-bidi:isolate;white-space:nowrap"><b>R = V / I = 6 / 0.06 = 100 Ω</b></span>.',()=>{W('wsAd').classList.add('glow');W('wsVd').classList.add('glow')}]];
+  let k=-1,timer=null;
+  function addL(p,j,pt){const g=Q('#'+p+'Leads');if(g.querySelector(`[data-j="${j}"]`))return;g.insertAdjacentHTML('beforeend',lead(j,pt));g.lastElementChild.querySelectorAll('path').forEach(e=>{const L=e.getTotalLength();e.style.strokeDasharray=L;e.style.strokeDashoffset=L;e.getBoundingClientRect();e.style.transition='stroke-dashoffset 1s ease';e.style.strokeDashoffset=0})}
+  function power(p,on,o){o=o||{ps:'6.0 V',a:'0.060',v:'6.00'};const g=Q('#'+p+'Dots');Q('#'+p+'Led').setAttribute('fill',on?'#22C55E':'#475569');Q('#'+p+'PS').setAttribute('fill',on?'#22D3EE':'#334155');Q('#'+p+'PS').textContent=on?o.ps:'0.0 V';
+    Q('#'+p+'Ad').textContent=on?o.a:'0.000';Q('#'+p+'Vd').textContent=on?o.v:'0.00';g.innerHTML='';if(!on)return;
+    const path='M70 75 C88 75 88 38 106 38 H194 Q169 38 169 60 V222 H197 V210 H227 V229 H255 V60 Q255 38 230 38 H330 V102 H106 C88 102 88 125 70 125';
+    for(let i=0;i<7;i++)g.insertAdjacentHTML('beforeend',`<circle class="dot" r="3.2"><animateMotion dur="3.5s" repeatCount="indefinite" begin="${-i*0.5}s" path="${path}"/></circle>`)}
+  function reset(){k=-1;W('wsLeads').innerHTML='';W('wsJump').style.transition='none';W('wsJump').style.transform='';W('wsJump').style.opacity='1';power('ws',false);W('wsAd').classList.remove('glow');W('wsVd').classList.remove('glow')}
+  function go(n){if(n<k){reset()}while(k<n){k++;STEPS[k][1]()}W('wsCap').innerHTML=STEPS[k][0];WH.querySelectorAll('.wsc .pb i').forEach((x,i)=>x.classList.toggle('d',i<=k));W('wsPrev').disabled=k<=0;W('wsNext').disabled=k>=STEPS.length-1}
+  W('wsPlay').onclick=()=>{clearInterval(timer);reset();go(0);timer=setInterval(()=>{if(k>=STEPS.length-1){clearInterval(timer);return}go(k+1)},3200)};
+  W('wsNext').onclick=()=>{clearInterval(timer);go(Math.min(STEPS.length-1,k+1))};
+  W('wsPrev').onclick=()=>{clearInterval(timer);go(Math.max(0,k-1))};
+  W('wsPrev').disabled=true;
+  /* ===== ب) التطبيق ===== */
+  let sel=null,jump=true;const con={};
+  const msg=(t,c)=>{const m=W('wtMsg');m.hidden=false;m.className='msg '+c;m.innerHTML=t};
+  const svgT=W('wtLeads').ownerSVGElement;
+  svgT.querySelectorAll('.pt').forEach(g=>{g.onclick=()=>{if(!sel){msg('اختر مجسا من الأزرار أولا، ثم اضغط على النقطة.','warn');return}
+    const p=g.dataset.p;con[sel]=p;const L=W('wtLeads');const old=L.querySelector(`[data-j="${sel}"]`);if(old)old.remove();L.insertAdjacentHTML('beforeend',lead(sel,p));
+    host.querySelectorAll('#wtBtns button[data-j]').forEach(b=>b.classList.remove('on'));const j=sel;sel=null;check(j)}});
+  host.querySelectorAll('#wtBtns button[data-j]').forEach(b=>b.onclick=()=>{sel=b.dataset.j;host.querySelectorAll('#wtBtns button[data-j]').forEach(x=>x.classList.toggle('on',x===b));
+    svgT.querySelectorAll('.pt circle.h').forEach(c=>c.style.opacity='1')});
+  W('wtJ').onclick=()=>{jump=false;W('wtJump').style.transition='transform .7s, opacity .7s';W('wtJump').style.transform='translateY(-18px)';W('wtJump').style.opacity='0';W('wtJ').disabled=true;check()};
+  W('wtReset').onclick=()=>{for(const j in con)delete con[j];sel=null;jump=true;W('wtLeads').innerHTML='';W('wtJump').style.transition='none';W('wtJump').style.transform='';W('wtJump').style.opacity='1';W('wtJ').disabled=false;W('wtMsg').hidden=true;power('wt',false);W('wtOn').disabled=true;W('wtBtns').classList.remove('done');mark();opts.onWired&&opts.onWired(false)};
+  function mark(){const li=host.querySelectorAll('#wtChk li');const aOk=con.ar==='A'&&con.ab==='B',vOk=con.vr==='R1'&&con.vb==='R2';li[0].classList.toggle('d',!jump);li[1].classList.toggle('d',aOk);li[2].classList.toggle('d',vOk);return !jump&&aOk&&vOk}
+  function check(j){svgT.querySelectorAll('.pt circle.h').forEach(c=>c.style.opacity='0');
+    const a=[con.ar,con.ab],v=[con.vr,con.vb],has=x=>x.includes;
+    if(j&&j[0]==='a'&&jump&&['A','B'].includes(con[j])){msg('⚠️ <b>وصلة التوصيل ما زالت في مكانها.</b> التيار سيمر فيها ويترك الأميتر، فيقرأ صفرا. ارفع الوصلة أولا.','warn')}
+    else if(j&&j[0]==='a'&&['R1','R2'].includes(con[j])){msg('❌ <b>الأميتر لا يوصل على طرفي المقاومة.</b> هذا توصيل على التوازي، ومقاومة الأميتر صغيرة جدا، فيمر فيه تيار كبير قد يتلف المنصهر أو الجهاز. الأميتر يوصل على <b>التوالي</b> مكان الفجوة.','bad')}
+    else if(j&&j[0]==='v'&&['A','B'].includes(con[j])){msg('❌ <b>الفولتميتر لا يوضع مكان الفجوة.</b> هذا توصيل على التوالي، ومقاومة الفولتميتر كبيرة جدا فتوقف التيار تقريبا. الفولتميتر يوصل على <b>التوازي</b> على طرفي المقاومة.','bad')}
+    else if(j&&con[j]==='C'){msg('❌ هذه النقطة على السلك السفلي، ولا تحقق التوصيل المطلوب. راجع مكان كل مجس في القائمة.','bad')}
+    else if(con.ar==='B'&&con.ab==='A'){msg('⚠️ <b>مجسا الأميتر معكوسان:</b> ستظهر القراءة بإشارة سالبة. الأحمر قبل الفجوة (جهة الموجب)، والأسود بعدها.','warn')}
+    else if(con.vr==='R2'&&con.vb==='R1'){msg('⚠️ <b>مجسا الفولتميتر معكوسان:</b> ستظهر القراءة بإشارة سالبة. الأحمر على طرف المقاومة الموجب.','warn')}
+    else if(j)msg('✓ '+NAME[j]+' على '+PN[con[j]]+'.','ok');
+    const ok=mark();W('wtOn').disabled=!ok;opts.onWired&&opts.onWired(ok);W('wtBtns').classList.toggle('done',ok&&!!opts.lab);if(ok)msg(opts.lab?'✅ <b>التوصيل صحيح:</b> الأميتر على التوالي، والفولتميتر على التوازي. انتقل إلى الخطوة ج وارفع جهد المصدر.':'✅ <b>التوصيل صحيح:</b> الأميتر على التوالي، والفولتميتر على التوازي. شغّل المصدر الآن واقرأ.','ok')}
+  W('wtOn').onclick=()=>{power('wt',true);msg('📟 <b>القراءات:</b> الفولتميتر <b>6.00 V</b>، والأميتر <b>0.060 A</b>. اقرأ الرقم مع وحدته، فالمقاومة <span dir="ltr" style="unicode-bidi:isolate;white-space:nowrap"><b>R = 6 / 0.06 = 100 Ω</b></span>.','ok')};
+  return {setR(lab,cols){W('wtRl').textContent=lab;cols.forEach((c,i)=>W('wtB'+i).setAttribute('fill',c))},show(on,o){power('wt',on,o)}}
+}
+window.WIRE_OHM=mount;
+})();
+
 function ohmLab(box){
   const setup=(m,expect)=>`<div class="amSet"><p class="slh">${expect}</p><p class="slh">👆 اختر المدى من التدريج حول مفتاح الوضع: <b style="color:#DC2626">الأحمر للجهد V⎓</b>، و<b style="color:#2563EB">الأزرق للتيار A⎓</b>. ثم اضغط على منفذ المجس الأحمر، والمجس الأسود موصول دائما بالمنفذ <span dir="ltr">COM</span>.</p><div class="stage dmmBox" data-m="${m}" id="${m}F"></div><div class="fb2" id="${m}Fb"></div></div>`;
-  const stage=(id,lab,txt)=>`<div class="stage"><div id="${id}S"></div><svg id="${id}Z" viewBox="0 0 400 112"></svg><div class="hud"><span id="${id}St"></span></div></div>${hxRow(id+'R',lab)}<p class="slh">${txt}</p>`;
-  box.innerHTML=`<style>.amSet{border:1px dashed var(--line);border-radius:12px;padding:10px;margin:8px 0}.amWhy{border:2px dashed #F7931E;background:rgba(247,147,30,.08);border-radius:12px;padding:8px 12px;margin:8px 0;line-height:1.85;font-size:14px}.amWhy ol{margin:4px 18px 0 0;padding:0}.amTwo{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}.amTwo>div{border:2px solid;border-radius:12px;padding:8px 10px;display:flex;flex-direction:column;gap:4px;line-height:1.8;font-size:14px}.amFlow{margin:4px 18px 0 0;padding:0;line-height:1.9}.amFlow li{margin:2px 0}.pathN{color:#EA580C;border-right:4px solid #EA580C;padding-right:8px}.amRef{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}.amRef .vcap{font-size:12.5px;line-height:1.7}.ohT td,.ohT th{text-align:center}.ohT tr.cur td{background:rgba(247,147,30,.15)}</style>
+  box.innerHTML=`<style>.amSet{border:1px dashed var(--line);border-radius:12px;padding:10px;margin:8px 0}.amTwo{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}.amTwo>div{border:2px solid;border-radius:12px;padding:8px 10px;display:flex;flex-direction:column;gap:4px;line-height:1.8;font-size:14px}.amFlow{margin:4px 18px 0 0;padding:0;line-height:1.9}.amFlow li{margin:2px 0}.pathN{color:#EA580C;border-right:4px solid #EA580C;padding-right:8px}.amRef{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}.amRef .vcap{font-size:12.5px;line-height:1.7}.ohT td,.ohT th{text-align:center}.ohT tr.cur td{background:rgba(247,147,30,.15)}.rt.ohRes td,.rt.ohRes th{white-space:normal!important;min-width:0!important}.tw:has(.ohRes){overflow-x:visible}.rt.ohRes{min-width:0!important;width:100%}</style>
   <div class="intro"><small class="labKind">🧪 تجربة عملية تفاعلية</small><h3>1. اسم التجربة</h3><p class="labName">التحقق من قانون أوم</p></div>
-  <div class="tags"><span class="tag">الجهد V: <i>جهاز الملتيميتر 2 (فولتميتر)</i> · V</span><span class="tag">شدة التيار I: <i>جهاز الملتيميتر 1 (أميتر)</i> · A</span><span class="tag dv">المقاومة R: <i>من ميل الخط ومن ألوان الحلقات</i> · Ω</span></div>
+  <div class="tags"><span class="tag">الجهد V: <i>جهاز الملتيميتر 2 (فولتميتر)</i> · V</span><span class="tag">شدة التيار I: <i>جهاز الملتيميتر 1 (أميتر)</i> · A</span><span class="tag dv">المقاومة R: <i>من ميل الخط</i> · Ω</span></div>
   <div class="intro goals"><h3>2. أهداف التجربة</h3><ol class="gl">
     <li>توصيل جهاز الملتيميتر الرقمي أميترا على التوالي مع المقاومة، وجهاز ملتيميتر ثان فولتميترا على التوازي معها.</li>
-    <li>تغيير جهد مصدر الجهد المستمر وتسجيل خمس قراءات للجهد والتيار.</li>
+    <li>تغيير جهد مصدر الجهد المستمر وتسجيل ثلاث قراءات للجهد والتيار.</li>
     <li>رسم العلاقة بين الجهد والتيار، واستنتاج أنها خط مستقيم يمر بنقطة الأصل.</li>
-    <li>حساب المقاومة من ميل الخط المستقيم.</li>
-    <li>قراءة قيمة المقاومة من ألوان حلقاتها ومقارنتها بالقيمة المحسوبة.</li></ol></div>
+    <li>حساب المقاومة من ميل الخط المستقيم.</li></ol></div>
   <div class="intro amIdea"><h3>💡 فكرة التجربة وطريقة العمل</h3>
     <p><b>الفكرة:</b> ينص قانون أوم على أن التيار المار في موصل يتناسب طرديا مع الجهد بين طرفيه عند ثبوت درجة الحرارة: <span dir="ltr">V = I × R</span>. فإذا رفعنا الجهد على مقاومة ثابتة وقسنا التيار في كل مرة، ورسمنا الجهد مع التيار، ظهر <b>خط مستقيم يمر بنقطة الأصل، ميله يساوي المقاومة R</b>.</p>
     <div class="amTwo"><div style="border-color:#2563EB"><b style="color:#2563EB">الأميتر (الجهاز 1)</b><span>على تدريج <span dir="ltr">A⎓</span> والمنفذ <span dir="ltr">A</span>، ويوصل <b>على التوالي</b> فيمر فيه تيار المقاومة كله.</span></div>
     <div style="border-color:#DC2626"><b style="color:#DC2626">الفولتميتر (الجهاز 2)</b><span>على تدريج <span dir="ltr">V⎓</span> والمنفذ <span dir="ltr">V</span>، ويوصل <b>على التوازي</b> بوضع مجسيه على طرفي المقاومة.</span></div></div>
     <div class="stage">${ohSchem()}</div>
     <p><b>طريقة العمل:</b></p>
-    <ol class="amFlow"><li><b>إعداد الجهازين:</b> الأول للتيار والثاني للجهد.</li><li><b>توصيل الجهازين:</b> نرفع وصلة التوصيل عن الفجوة ونضع الأميتر مكانها (على التوالي)، والفولتميتر على طرفي المقاومة (على التوازي).</li><li><b>رفع جهد المصدر</b> خمس مرات: <span dir="ltr">2, 4, 6, 8, 10 V</span>، وتسجيل قراءتي الجهازين في كل مرة.</li><li><b>رسم الجهد مع التيار</b> وملاحظة شكل الخط.</li><li><b>حساب المقاومة</b> من الميل <span dir="ltr">R = ΔV / ΔI</span>.</li><li><b>المقارنة</b> بقيمة المقاومة من ألوان حلقاتها.</li></ol></div>
+    <ol class="amFlow"><li><b>إعداد الجهازين:</b> الأول للتيار والثاني للجهد.</li><li><b>توصيل المجسات:</b> نرفع وصلة التوصيل عن الفجوة ونضع الأميتر مكانها (على التوالي)، والفولتميتر على طرفي المقاومة (على التوازي).</li><li><b>رفع جهد المصدر</b> ثلاث مرات: <span dir="ltr">2, 4, 6 V</span>، وتسجيل قراءتي الجهازين في كل مرة.</li><li><b>رسم الجهد مع التيار</b> وملاحظة شكل الخط.</li><li><b>حساب المقاومة</b> من الميل <span dir="ltr">R = ΔV / ΔI</span>.</li></ol></div>
   <div class="intro"><h3>3. الأدوات والأجهزة المستخدمة</h3>
-    <div class="tool"><div class="stage">${ohm3d({lab:true,tc:1,mA:{mode:'a2',port:'a'},mV:{mode:'v20',port:'v'}})}</div><div class="vcap">مقاومة في لوحة التوصيل موصولة بمصدر الجهد المستمر، والأميتر على التوالي، والفولتميتر على التوازي: منظر ثلاثي الأبعاد</div>
-    <p><b>ترتيب الأجهزة:</b> سلكا المصدر موصولان بخطي التوصيل: الأحمر بالخط الموجب <span dir="ltr" style="color:#DC2626;font-weight:800">+</span> والأسود بالخط السالب <span dir="ltr" style="color:#2563EB;font-weight:800">−</span>. الخط الموجب <b>مقطوع بفجوة</b> بين ثقبين متجاورين، فصار جزأين: الأيسر موصول بالمصدر، والأيمن فيه طرف المقاومة الأيسر، وطرفها الأيمن في الخط السالب. وتوضع على الفجوة <b>وصلة توصيل قصيرة <span dir="ltr">(Jumper)</span></b> تصل الجزأين فتعمل الدائرة، ثم ترفع ويوضع الأميتر مكانها. فلا يمر التيار إلا عبر الأميتر: <b>مجسه الأحمر قبل الفجوة، ومجسه الأسود بعد الفجوة قبل طرف المقاومة</b>. أما الفولتميتر فمجساه على ساقي المقاومة.</p><p><b>قطبية المقاومة:</b> المقاومة ليس لها قطبية، فيمكن توصيلها في أي اتجاه. لكن طرفها المتصل بجهة الموجب جهده أعلى، وعليه في الرسم علامة <span dir="ltr" style="color:#DC2626;font-weight:800">+</span>، والطرف المتصل بالخط السالب علامة <span dir="ltr" style="font-weight:800">−</span>. لذلك يوضع المجس الأحمر للفولتميتر على الطرف <span dir="ltr" style="color:#DC2626;font-weight:800">+</span> والأسود على الطرف <span dir="ltr" style="font-weight:800">−</span>.</p><p><b>لماذا المجس الأسود للأميتر بعد الفجوة؟</b> التيار يدخل الأميتر من المنفذ <span dir="ltr">A</span> (المجس الأحمر) ويخرج من المنفذ <span dir="ltr">COM</span> (المجس الأسود). فالأحمر جهة المصدر، والأسود جهة المقاومة، فتظهر القراءة موجبة. ولو عكسا تظهر القراءة سالبة.</p><div class="stage">${ohm3d({zoom:1,jl:1,tc:0,mA:{mode:'a2',port:'a'},mV:{mode:'v20',port:'v'}})}</div><div class="vcap">قبل القياس: وصلة التوصيل على الفجوة، والتيار يمر فيها</div><div class="stage">${ohm3d({zoom:1,zl:1,tc:1,mA:{mode:'a2',port:'a'},mV:{mode:'v20',port:'v'}})}</div><div class="vcap">أثناء القياس: رفعت الوصلة، ووضع مجسا الأميتر في ثقبيها</div></div>
+    <div class="tool"><div class="stage">${ohm3d({lab:true,tc:1,mA:{mode:'a2',port:'a'},mV:{mode:'v20',port:'v'}})}</div><div class="vcap">مقاومة في لوحة التوصيل موصولة بمصدر الجهد المستمر، والأميتر على التوالي، والفولتميتر على التوازي: منظر ثلاثي الأبعاد</div></div>
     <div class="tool"><p><b>مصدر الجهد المستمر <span dir="ltr">(DC Power Supply)</span>:</b> يعطي جهدا ثابت الاتجاه يضبط بمقبض الضبط، وطرفه الموجب أحمر والسالب أسود.</p>
-    <p><b>جهازا الملتيميتر الرقمي <span dir="ltr">(Digital Multimeter)</span>:</b> نستخدم جهازين لنقرأ الجهد والتيار معا عند كل قيمة للجهد. الأول أميتر على تدريج <span dir="ltr">A⎓</span> (الأزرق) والمنفذ <span dir="ltr">A</span>، والثاني فولتميتر على تدريج <span dir="ltr">V⎓</span> (الأحمر) والمنفذ <span dir="ltr">V</span>، والمجس الأسود في كليهما بالمنفذ <span dir="ltr">COM</span>.</p>
-    <div class="amRef"><div><div class="stage">${dmmFace({mode:'a2',port:'a'})}</div><div class="vcap"><b style="color:#2563EB">الجهاز 1 (أميتر):</b> المفتاح على تدريج <span dir="ltr">A⎓</span> مدى <span dir="ltr">2 A</span>، والمجس الأحمر في المنفذ <span dir="ltr">A</span>.</div></div>
-    <div><div class="stage">${dmmFace({mode:'v20',port:'v'})}</div><div class="vcap"><b style="color:#DC2626">الجهاز 2 (فولتميتر):</b> المفتاح على تدريج <span dir="ltr">V⎓</span> مدى <span dir="ltr">20 V</span>، والمجس الأحمر في المنفذ <span dir="ltr">V</span>.</div></div></div>
-    <p><b>المقاومة وألوان حلقاتها:</b> تكتب قيمة المقاومة على جسمها بحلقات ملونة: الحلقتان الأولى والثانية رقمان، والثالثة المضاعف (عدد الأصفار)، والرابعة الذهبية التفاوت ±5%.</p><div class="stage">${ohColors([1,0,1],true)}</div>
-    <p><b>لوحة التوصيل <span dir="ltr">(Breadboard)</span>:</b> لوحة تثبت فيها العناصر دون لحام. خطا التوصيل الموجب والسالب يمتدان بطول اللوحة، ويمكن ترك فجوة في الخط بين ثقبين فيصير جزأين غير موصولين، تصلهما وصلة توصيل أو جهاز الأميتر.</p><p><b>وصلة التوصيل <span dir="ltr">(Jumper)</span>:</b> سلك قصير معزول، طرفاه معدنيان مكشوفان يغرسان في ثقبي لوحة التوصيل. توضع على الفجوة في الخط الموجب فتصل جزأيه وتكمل الدائرة، وترفع عند قياس التيار ليوضع الأميتر مكانها.</p><div class="stage"><svg viewBox="0 0 400 170" class="labSvg" role="img" aria-label="وصلة التوصيل">
-  <path d="M120,120 L120,60 Q120,40 140,40 L260,40 Q280,40 280,60 L280,120" fill="none" stroke="#7C2D12" stroke-width="16" stroke-linecap="round"/><path d="M120,120 L120,60 Q120,40 140,40 L260,40 Q280,40 280,60 L280,120" fill="none" stroke="#F7931E" stroke-width="11" stroke-linecap="round"/>
-  <rect x="115" y="118" width="10" height="34" rx="3" fill="#CBD5E1" stroke="#475569"/><rect x="275" y="118" width="10" height="34" rx="3" fill="#CBD5E1" stroke="#475569"/>
-  <line x1="200" y1="40" x2="200" y2="14" stroke="var(--muted,#64748B)"/><text x="200" y="12" font-size="13" font-weight="700" text-anchor="middle" fill="var(--ink,#0F172A)">سلك معزول</text>
-  <line x1="285" y1="140" x2="320" y2="140" stroke="var(--muted,#64748B)"/><text x="324" y="145" font-size="13" font-weight="700" text-anchor="start" fill="var(--ink,#0F172A)">طرف معدني</text>
-  <line x1="115" y1="140" x2="80" y2="140" stroke="var(--muted,#64748B)"/><text x="76" y="145" font-size="13" font-weight="700" text-anchor="end" fill="var(--ink,#0F172A)">طرف معدني</text></svg></div></div></div>
+    <p><b>جهازا الملتيميتر الرقمي <span dir="ltr">(Digital Multimeter)</span>:</b> الأول أميتر للتيار، والثاني فولتميتر للجهد، لنقرأهما معا عند كل قيمة للجهد.</p>
+    <div class="amRef"><div><div class="stage">${dmmFace({mode:'a2',port:'a'})}</div><div class="vcap"><b style="color:#2563EB">الجهاز 1 (أميتر):</b> تدريج <span dir="ltr">A⎓</span> مدى <span dir="ltr">2 A</span>، والمجس الأحمر في المنفذ <span dir="ltr">A</span>.</div></div>
+    <div><div class="stage">${dmmFace({mode:'v20',port:'v'})}</div><div class="vcap"><b style="color:#DC2626">الجهاز 2 (فولتميتر):</b> تدريج <span dir="ltr">V⎓</span> مدى <span dir="ltr">20 V</span>، والمجس الأحمر في المنفذ <span dir="ltr">V</span>.</div></div></div>
+    <p><b>المقاومة:</b> عنصر يقاوم مرور التيار، ونريد إيجاد قيمتها من قراءات الجهد والتيار.</p>
+    <p><b>لوحة التوصيل <span dir="ltr">(Breadboard)</span> ووصلة التوصيل <span dir="ltr">(Jumper)</span>:</b> لوحة تثبت فيها العناصر دون لحام، وفي خطها الموجب فجوة تصلها وصلة توصيل قصيرة، ترفع عند القياس ليوضع الأميتر مكانها.</p></div></div>
   <h3 class="secH">4. القوانين المستخدمة</h3>
   <div class="ctl">
     <div class="law ftl"><div class="ln lw"><b>قانون أوم</b><span>V = I × R</span></div>
@@ -4725,89 +4851,81 @@ function ohmLab(box){
   <div class="startBand">▶️ لنبدأ التجربة</div>
   <div class="btns" style="margin-bottom:12px"><button type="button" class="rs" id="nw">🔄 مقاومة جديدة</button></div>
   <div class="ctl"><h3>5.1 القياس</h3>
-    <h4 class="sbh">أ) إعداد الجهاز 1 لقياس التيار (أميتر)</h4>
+    <details class="wsDet"><summary>🎬 شاهد خطوات التركيب وطريقة القياس (8 خطوات)</summary><div id="wW"></div></details>
+    <h4 class="sbh">أ) إعداد الجهازين</h4>
+    <p class="slh"><b style="color:#2563EB">الجهاز 1: أميتر لقياس التيار</b></p>
     ${setup('a','التيار المتوقع أقل من 1 A.')}
-    <h4 class="sbh">ب) إعداد الجهاز 2 لقياس الجهد (فولتميتر)</h4>
-    ${setup('v','الجهد المتوقع حتى 10 V.')}
-    <h4 class="sbh">ج) توصيل الجهازين</h4>
-    <div class="amWhy"><b>❓ لماذا جهازان؟ ولماذا هذا التوصيل؟</b><ol><li><b>جهازان:</b> لنقرأ الجهد والتيار معا عند كل قيمة للجهد، دون فك الدائرة وتركيبها في كل قراءة.</li><li><b>الأميتر على التوالي:</b> الخط الموجب مقطوع بفجوة، والأميتر يصل جزأيه، فلا يكتمل المسار إلا عبره، فيمر فيه تيار المقاومة كله.</li><li><b>الفولتميتر على التوازي:</b> مجساه على طرفي المقاومة، فيقيس الجهد بينهما فقط.</li></ol></div>
-    <p class="slh"><b>أين يوضع كل مجس؟</b> <b style="color:#2563EB">الأميتر:</b> الأحمر في الخط الموجب قبل الفجوة، والأسود بعد الفجوة قبل طرف المقاومة. <b style="color:#DC2626">الفولتميتر:</b> الأحمر على طرف المقاومة <span dir="ltr">+</span>، والأسود على طرفها <span dir="ltr">−</span>.</p>
-    <div class="amWhy"><b>❓ لماذا نرفع وصلة التوصيل ونضع الأميتر مكانها؟</b><ol><li><b>الفجوة تقطع الخط الموجب</b> إلى جزأين، و<b>وصلة التوصيل</b> القصيرة تصل بينهما، فتعمل الدائرة ويمر التيار في الوصلة.</li><li><b>لو وضعنا الأميتر والوصلة موجودة</b> لمر التيار في الوصلة وترك الأميتر، فيقرأ صفرا تقريبا.</li><li><b>لذلك نرفع الوصلة</b> فتنفتح الدائرة، ثم نضع مجسي الأميتر في ثقبيها: الأحمر قبل الفجوة والأسود بعده. فيصير الأميتر مكان الوصلة، ويمر فيه التيار كله: وهذا هو التوصيل على التوالي.</li></ol></div>
-    <p class="slh">💡 <b>ملحوظة:</b> في المعمل الحقيقي: نطفئ المصدر قبل تغيير أي توصيل، ونضع الأميتر على التوالي دائما.</p>
-    ${stage('k','رفع الوصلة وتوصيل المجسات','👆 اسحب المؤشر البرتقالي: ترفع وصلة التوصيل البرتقالية عن الفجوة أولا، ثم يدخل مجسا الأميتر في ثقبيها (الأحمر قبل الفجوة، والأسود بعده)، ثم يلامس مجسا الفولتميتر طرفي المقاومة.')}
-    <h4 class="sbh">د) رفع جهد المصدر وتسجيل القراءات</h4>
-    <div class="amWhy"><b>📌 المجسات ثابتة طوال القراءات</b><ol><li>مجسا الأميتر يبقيان على طرفي الفجوة، ومجسا الفولتميتر على طرفي المقاومة، ولا يحرك أي مجس.</li><li>الذي يتغير فقط هو <b>مقبض المصدر</b>: 2 ثم 4 ثم 6 ثم 8 ثم 10 V، وتقرأ الشاشتان في كل مرة.</li><li>هذه فائدة استخدام جهازين: لا نفك الدائرة بين القراءات.</li></ol></div>
-    ${stage('n','مقبض ضبط الجهد','👆 اسحب المؤشر البرتقالي لرفع جهد المصدر خطوة خطوة: 2 ثم 4 ثم 6 ثم 8 ثم 10 V. وعند كل خطوة اقرأ الشاشتين المكبرتين وسجل القراءتين.')}
-    <p class="slh pathN">➜ <b>مسار التيار</b> (الأسهم البرتقالية): يخرج من موجب المصدر، ويمر في الأميتر ثم المقاومة، ويعود في الخط السالب إلى سالب المصدر.</p>
+    <p class="slh"><b style="color:#DC2626">الجهاز 2: فولتميتر لقياس الجهد</b></p>
+    ${setup('v','الجهد المتوقع حتى 6 V.')}
+    <h4 class="sbh">ب) توصيل المجسات</h4>
+    <div id="wT"></div>
+    <h4 class="sbh">ج) رفع جهد المصدر وتسجيل القراءات</h4>
+    <p class="slh">المجسات ثابتة طوال القراءات، والذي يتغير فقط مقبض المصدر. تظهر القراءتان على الجهازين في الدائرة أعلاه، ومكبرتين هنا.</p>
+    <div class="stage"><svg id="nZ" viewBox="0 0 400 112"></svg><div class="hud"><span id="nSt"></span></div></div>
+    ${hxRow('nR','مقبض ضبط الجهد')}
+    <p class="slh">👆 اسحب المؤشر البرتقالي لرفع جهد المصدر خطوة خطوة: 2 ثم 4 ثم 6 V، وسجل القراءتين عند كل خطوة.</p>
     <div class="ans"><label>قراءة الفولتميتر V</label><input id="mV" inputmode="decimal" dir="ltr" placeholder="V"></div>
     <div class="ans"><label>قراءة الأميتر I</label><input id="mI" inputmode="decimal" dir="ltr" placeholder="A"><button type="button" class="go" id="mCk">سجل القراءة</button></div><div class="fb2" id="mFb"></div>
     <div class="tw"><table class="rt ohT"><thead><tr><th>#</th><th>جهد المصدر</th><th>V (V)</th><th>I (A)</th><th>V / I (Ω)</th></tr></thead><tbody id="oTb"></tbody></table></div>
-    <h4 class="sbh">هـ) رسم العلاقة بين الجهد والتيار</h4>
-    <p class="slh">تظهر كل قراءة نقطة على الرسم. بعد تسجيل القراءات الخمس اضغط الزر لرسم الخط المستقيم.</p>
+    <h4 class="sbh">د) رسم العلاقة بين الجهد والتيار</h4>
+    <p class="slh">تظهر كل قراءة نقطة على الرسم. بعد تسجيل القراءات الثلاث اضغط الزر لرسم الخط المستقيم.</p>
     <div class="stage" id="gS"></div>
     <div class="btns"><button type="button" class="go" id="gB" style="width:100%;font-size:17px;padding:11px">📈 ارسم الخط المستقيم</button></div><div class="fb2" id="gFb"></div>
   </div>
   <div class="ctl"><h3>5.2 الحسابات</h3>
-    <h4 class="sbh">أ) حساب المقاومة من ميل الخط</h4>
-    <p class="slh">استخدم النقطتين الأولى والخامسة: <span dir="ltr">ΔV = V₅ − V₁</span> و<span dir="ltr">ΔI = I₅ − I₁</span>.</p>
+    <h4 class="sbh">حساب المقاومة من ميل الخط</h4>
+    <p class="slh">استخدم النقطتين الأولى والثالثة: <span dir="ltr">ΔV = V₃ − V₁</span> و<span dir="ltr">ΔI = I₃ − I₁</span>.</p>
     ${hxCalcStep('R','R = ΔV / ΔI','احسب المقاومة R','Ω')}
-    <h4 class="sbh">ب) قراءة قيمة المقاومة من ألوان حلقاتها</h4>
-    <div class="stage" id="ccS"></div>
-    <p class="slh">👆 اكتب الرقمين الأول والثاني، ثم اضرب في 10 مرفوعة لرقم حلقة المضاعف. مثال: بني، أسود، بني ← <span dir="ltr">10 × 10¹ = 100 Ω</span>.</p>
-    ${hxAns('cc','قيمة المقاومة من الألوان','Ω')}
   </div>
   <div class="ctl res"><h3>6. نتائج التجربة</h3>
-    <div class="tw"><table class="rt"><thead><tr><th>الكمية</th><th>الطريقة</th><th>القيمة</th></tr></thead>
+    <div class="tw"><table class="rt ohRes"><thead><tr><th>الكمية</th><th>الطريقة</th><th>القيمة</th></tr></thead>
     <tbody><tr><td>قراءات الجهد والتيار</td><td>الفولتميتر والأميتر</td><td id="r1">—</td></tr><tr><td>شكل العلاقة</td><td>الرسم البياني</td><td id="r2">—</td></tr>
-    <tr><td>المقاومة R</td><td>ميل الخط</td><td id="r3">—</td></tr><tr><td>المقاومة R</td><td>ألوان الحلقات</td><td id="r4">—</td></tr></tbody></table></div>
+    <tr><td>المقاومة R</td><td>ميل الخط</td><td id="r3">—</td></tr></tbody></table></div>
     <p class="rn" id="rNote">تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.</p></div>`;
-  const {$,num,fb,fb0,fx}=hxKit(box);const VS=[2,4,6,8,10],RS=[33,39,47,56,68,82,100];
-  let R,bd,Vm,Im,rows,ok,cfg,fit;
-  const good={v:{mode:'v20',port:'v'},a:{mode:'a2',port:'a'}},setOk=m=>['mode','port'].every(k=>cfg[m][k]===good[m][k]);
-  const slope=()=>(Vm[4]-Vm[0])/(Im[4]-Im[0]);
+  const {$,num,fb,fb0,fx}=hxKit(box);const VS=[2,4,6],RS=[33,39,47,56,68,82,100];
+  let R,bd,Vm,Im,rows,ok,cfg,fit,wired=false;
+  const good={v:{mode:'v20',port:'v'},a:{mode:'a2',port:'a'}},setOk=m=>['mode','port'].every(k=>cfg[m][k]===good[m][k]),ready=()=>wired&&setOk('a')&&setOk('v');
+  const slope=()=>(Vm[2]-Vm[0])/(Im[2]-Im[0]);
   const MSG={a:{mode:{v2:'✗ هذا تدريج الجهد (V⎓)، والمطلوب تدريج التيار (A⎓).',v20:'✗ هذا تدريج الجهد (V⎓)، والمطلوب تدريج التيار (A⎓).',v200:'✗ هذا تدريج الجهد (V⎓)، والمطلوب تدريج التيار (A⎓).',
       a200m:'✗ مدى 200 mA أصغر من التيار المتوقع (حتى 1 A)، فقد يحترق مصهر الجهاز. اختر المدى الأصغر الذي يزيد على القيمة المتوقعة.',a10:'✗ مدى 10 A أكبر من اللازم فتقل دقة القراءة. اختر المدى الأصغر الذي يزيد على القيمة المتوقعة (2 A).'},port:{v:'✗ المنفذ V للجهد. التيار يقاس من المنفذ A.'}},
     v:{mode:{a200m:'✗ هذا تدريج التيار (A⎓)، والمطلوب تدريج الجهد (V⎓).',a2:'✗ هذا تدريج التيار (A⎓)، والمطلوب تدريج الجهد (V⎓).',a10:'✗ هذا تدريج التيار (A⎓)، والمطلوب تدريج الجهد (V⎓).',
-      v2:'✗ مدى 2 V أصغر من الجهد المتوقع (حتى 10 V)، فتظهر على الشاشة إشارة تجاوز المدى. اختر المدى الأصغر الذي يزيد على القيمة المتوقعة.',v200:'✗ مدى 200 V أكبر من اللازم فتقل دقة القراءة. اختر المدى الأصغر الذي يزيد على القيمة المتوقعة (20 V).'},port:{a:'✗ المنفذ A للتيار. الجهد يقاس من المنفذ V.'}}};
-  function draw(){const tc=+$('kR').value/100,k=Math.round(+$('nR').value/20),on=k>0,conn=tc>=1;
-    const rv=on&&conn&&setOk('v')?Vm[k-1].toFixed(2):'',ra=on&&conn&&setOk('a')?Im[k-1].toFixed(3):'';
-    const o={Vs:on?VS[k-1]:0,on,tc,mA:cfg.a,mV:cfg.v,ra,rv,bands:bd};
-    $('kS').innerHTML=ohm3d(Object.assign({zoom:1},o));$('nS').innerHTML=ohm3d(Object.assign({cl:1},o));
-    const z=hxZoom([[30,165,(ra||'0.000')+' A'],[205,165,(rv||'0.00')+' V']],'شاشة الأميتر (يسار) وشاشة الفولتميتر (يمين) مكبرتان');$('kZ').innerHTML=z;$('nZ').innerHTML=z;
-    $('kRO').textContent=tc>=1?'تم التوصيل':tc>2/3?'مجسا الفولتميتر…':tc>1/3?'مجسا الأميتر…':tc>0?'رفع الوصلة…':'';$('nRO').textContent=on?VS[k-1]+' V':'0 V';
-    $('kSt').textContent=!(setOk('a')&&setOk('v'))?'أعد الجهازين أولا (الخطوتان أ و ب)':conn?'✓ الأميتر مكان الوصلة (على التوالي) والفولتميتر على التوازي':tc>1/3?'رفعت الوصلة: الدائرة مفتوحة حتى يكتمل وضع الأميتر':'وصلة التوصيل على الفجوة';
-    $('nSt').textContent=!conn?'وصل الجهازين أولا (الخطوة ج)':!on?'ارفع جهد المصدر إلى 2 V':rows.length>=k?'✓ سجلت هذه القراءة، ارفع الجهد إلى الخطوة التالية':'✓ اقرأ الشاشتين وسجل القراءتين';
+      v2:'✗ مدى 2 V أصغر من الجهد المتوقع (حتى 6 V)، فتظهر على الشاشة إشارة تجاوز المدى. اختر المدى الأصغر الذي يزيد على القيمة المتوقعة.',v200:'✗ مدى 200 V أكبر من اللازم فتقل دقة القراءة. اختر المدى الأصغر الذي يزيد على القيمة المتوقعة (20 V).'},port:{a:'✗ المنفذ A للتيار. الجهد يقاس من المنفذ V.'}}};
+  const W=WIRE_OHM($('wT'),{watchHost:$('wW'),lab:true,onWired:w=>{wired=w;if(!w)$('nR').value=0;draw()}});
+  function draw(){const k=+$('nR').value,on=k>0&&ready();
+    const rv=on?Vm[k-1].toFixed(2):'',ra=on?Im[k-1].toFixed(3):'';
+    W.show(on,{ps:on?VS[k-1].toFixed(1)+' V':'0.0 V',v:rv||'0.00',a:ra||'0.000'});
+    $('nZ').innerHTML=hxZoom([[30,165,(ra||'0.000')+' A'],[205,165,(rv||'0.00')+' V']],'شاشة الأميتر (يسار) وشاشة الفولتميتر (يمين) مكبرتان');
+    $('nRO').textContent=on?VS[k-1]+' V':'0 V';
+    $('nSt').textContent=!(setOk('a')&&setOk('v'))?'أعد الجهازين أولا (الخطوة أ)':!wired?'وصل المجسات أولا (الخطوة ب)':!on?'ارفع جهد المصدر إلى 2 V':rows.length>=k?'✓ سجلت هذه القراءة، ارفع الجهد إلى الخطوة التالية':'✓ اقرأ الشاشتين وسجل القراءتين';
     $('gS').innerHTML=ohGraph(rows.map(i=>[Vm[i],Im[i]]),fit,R);
     $('oTb').innerHTML=VS.map((v,i)=>{const d=rows.includes(i);return `<tr class="${!d&&i===rows.length?'cur':''}"><td>${i+1}</td><td dir="ltr">${v} V</td><td dir="ltr">${d?Vm[i].toFixed(2):''}</td><td dir="ltr">${d?Im[i].toFixed(3):''}</td><td dir="ltr">${d?(Vm[i]/Im[i]).toFixed(1):''}</td></tr>`}).join('')}
   function newObj(){R=RS[Math.floor(Math.random()*RS.length)];bd=ohBands(R);Vm=VS.map(v=>Math.round(v*(0.985+Math.random()*0.012)*100)/100);Im=Vm.map(v=>Math.round(v/R*1000)/1000);
-    rows=[];ok={};cfg={v:{},a:{}};fit=false;['kR','nR'].forEach(k=>$(k).value=0);$('nR').step=20;['mV','mI','cR','cc'].forEach(k=>$(k).value='');['vFb','aFb','mFb','gFb','cRf','ccFb'].forEach(fb0);
-    $('ccS').innerHTML=ohColors(bd,false);faces();draw();sub();results()}
-  function sub(){$('sbR').textContent=fit?['R = ΔV / ΔI',E(`R = (${fx(Vm[4],2)} − ${fx(Vm[0],2)}) / (${fx(Im[4],3)} − ${fx(Im[0],3)})`)].join('\n'):'R = ΔV / ΔI'}
-  function results(){$('r1').textContent=rows.length?rows.length+' / 5':'—';$('r2').textContent=fit?'خط مستقيم يمر بنقطة الأصل':'—';
-    $('r3').textContent=ok.cR?E(fx(slope(),1)+' Ω'):'—';$('r4').textContent=ok.cc?E(R+' Ω'):'—';
-    $('rNote').innerHTML=ok.cR&&ok.cc?`الاستنتاج: عند ثبوت المقاومة، تضاعف التيار كلما تضاعف الجهد، وبقيت النسبة <span dir="ltr">V / I</span> ثابتة تقريبا، وكان الرسم البياني خطا مستقيما يمر بنقطة الأصل. فالتيار يتناسب طرديا مع الجهد، وهذا هو قانون أوم <span dir="ltr">V = I × R</span>. والمقاومة من الميل <span dir="ltr">${fx(slope(),1)} Ω</span> قريبة من قيمتها من الألوان <span dir="ltr">${R} Ω</span>، والفرق الصغير من دقة القراءات وتفاوت المقاومة.`:'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
+    rows=[];ok={};cfg={v:{},a:{}};fit=false;$('nR').value=0;$('nR').max=3;$('nR').step=1;['mV','mI','cR'].forEach(k=>$(k).value='');['vFb','aFb','mFb','gFb','cRf'].forEach(fb0);
+    W.setR('المقاومة R',[OH_C[bd[0]],OH_C[bd[1]],OH_C[bd[2]],OH_G]);
+    faces();draw();sub();results()}
+  function sub(){$('sbR').textContent=fit?['R = ΔV / ΔI',E(`R = (${fx(Vm[2],2)} − ${fx(Vm[0],2)}) / (${fx(Im[2],3)} − ${fx(Im[0],3)})`)].join('\n'):'R = ΔV / ΔI'}
+  function results(){$('r1').textContent=rows.length?rows.length+' / 3':'—';$('r2').textContent=fit?'خط مستقيم يمر بنقطة الأصل':'—';
+    $('r3').textContent=ok.cR?E(fx(slope(),1)+' Ω'):'—';
+    $('rNote').innerHTML=ok.cR?`الاستنتاج: عند ثبوت المقاومة، تضاعف التيار كلما تضاعف الجهد، وبقيت النسبة <span dir="ltr">V / I</span> ثابتة تقريبا، وكان الرسم البياني خطا مستقيما يمر بنقطة الأصل. فالتيار يتناسب طرديا مع الجهد، وهذا هو قانون أوم <span dir="ltr">V = I × R</span>. والمقاومة من ميل الخط <span dir="ltr">${fx(slope(),1)} Ω</span>، وهي تساوي تقريبا النسبة <span dir="ltr">V / I</span> في كل قراءة.`:'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
   function pick(m,k,v){cfg[m][k]=v;const bad=['mode','port'].map(kk=>cfg[m][kk]&&cfg[m][kk]!==good[m][kk]?MSG[m][kk][cfg[m][kk]]:null).filter(Boolean);
     if(bad.length)fb(m+'Fb',false,bad.join('\n'));else if(setOk(m))fb(m+'Fb',true,m==='a'?'✓ إعداد صحيح: وضع DC A بمدى 2 A، والمجس الأحمر في المنفذ A والأسود في COM.':'✓ إعداد صحيح: وضع DC V بمدى 20 V، والمجس الأحمر في المنفذ V والأسود في COM.');else fb0(m+'Fb');
-    if(!(setOk('a')&&setOk('v'))){$('kR').value=0;$('nR').value=0}faces();draw()}
+    if(!(setOk('a')&&setOk('v')))$('nR').value=0;faces();draw()}
   function faces(){['v','a'].forEach(m=>{$(m+'F').innerHTML=dmmFace(cfg[m])})}
   box.querySelectorAll('.dmmBox').forEach(d=>d.addEventListener('click',e=>{const g=e.target.closest('[data-k]');if(!g)return;pick(d.dataset.m,g.dataset.k,g.dataset.v)}));
-  $('kR').oninput=()=>{if(!(setOk('a')&&setOk('v'))||+$('nR').value>0)$('kR').value=+$('nR').value>0?100:0;draw()};
-  $('nR').oninput=()=>{if(+$('kR').value<100)$('nR').value=0;draw()};
-  $('mCk').onclick=()=>{const k=Math.round(+$('nR').value/20);if(+$('kR').value<100||!k)return fb('mFb',false,'وصل الجهازين ثم ارفع جهد المصدر أولا.');
+  $('nR').oninput=()=>{if(!ready())$('nR').value=0;draw()};
+  $('mCk').onclick=()=>{const k=+$('nR').value;if(!ready()||!k)return fb('mFb',false,'أعد الجهازين ووصل المجسات، ثم ارفع جهد المصدر أولا.');
     if(rows.includes(k-1))return fb('mFb',false,'سجلت هذه القراءة، ارفع الجهد إلى الخطوة التالية.');if(k-1!==rows.length)return fb('mFb',false,`ارفع الجهد بالترتيب: القراءة التالية عند ${VS[rows.length]} V.`);
     const v=num($('mV').value),i=num($('mI').value);if(isNaN(v)||isNaN(i))return fb('mFb',false,'اكتب قراءة الفولتميتر بالفولت وقراءة الأميتر بالأمبير.');
     const okv=Math.abs(v-Vm[k-1])<0.006,oki=Math.abs(i-Im[k-1])<0.0006;
-    if(okv&&oki){rows.push(k-1);$('mV').value='';$('mI').value='';fb('mFb',true,`✓ سجلت القراءة ${k}: `+E(`V = ${fx(Vm[k-1],2)} V ، I = ${fx(Im[k-1],3)} A`)+(rows.length<5?`\nارفع الجهد إلى ${VS[rows.length]} V.`:'\nاكتملت القراءات الخمس، انتقل إلى الرسم البياني.'))}
+    if(okv&&oki){rows.push(k-1);$('mV').value='';$('mI').value='';fb('mFb',true,`✓ سجلت القراءة ${k}: `+E(`V = ${fx(Vm[k-1],2)} V ، I = ${fx(Im[k-1],3)} A`)+(rows.length<3?`\nارفع الجهد إلى ${VS[rows.length]} V.`:'\nاكتملت القراءات الثلاث، انتقل إلى الرسم البياني.'))}
     else fb('mFb',false,(okv?'':'✗ قراءة الجهد غير صحيحة: اكتب رقم شاشة الفولتميتر (اليمنى).\n')+(oki?'':'✗ قراءة التيار غير صحيحة: اكتب رقم شاشة الأميتر (اليسرى) بوحدة A.'));draw();results()};
-  $('gB').onclick=()=>{if(rows.length<5)return fb('gFb',false,`سجل القراءات الخمس أولا (سجلت ${rows.length}).`);fit=true;ok.g=true;draw();sub();results();
+  $('gB').onclick=()=>{if(rows.length<3)return fb('gFb',false,`سجل القراءات الثلاث أولا (سجلت ${rows.length}).`);fit=true;ok.g=true;draw();sub();results();
     fb('gFb',true,'✓ النقاط على خط مستقيم يمر بنقطة الأصل: التيار يتناسب طرديا مع الجهد (قانون أوم). وميل الخط ΔV / ΔI يساوي المقاومة R.')};
   $('cRk').onclick=()=>{if(!fit)return fb('cRf',false,'ارسم الخط المستقيم أولا.');const v=num($('cR').value);if(isNaN(v))return fb('cRf',false,'اكتب الناتج بوحدة Ω.');
-    if(Math.abs(v-slope())/slope()<0.01){ok.cR=true;fb('cRf',true,'✓ إجابة صحيحة:\n'+E(`R = (${fx(Vm[4],2)} − ${fx(Vm[0],2)}) / (${fx(Im[4],3)} − ${fx(Im[0],3)}) = ${fx(slope(),1)} Ω`))}
-    else fb('cRf',false,'✗ اقسم فرق الجهدين على فرق التيارين:\n'+E(`R = (${fx(Vm[4],2)} − ${fx(Vm[0],2)}) / (${fx(Im[4],3)} − ${fx(Im[0],3)})`));results()};
-  $('ccCk').onclick=()=>{const v=num($('cc').value);if(isNaN(v))return fb('ccFb',false,'اكتب القيمة بالأوم.');
-    if(Math.abs(v-R)<0.5){ok.cc=true;fb('ccFb',true,`✓ صحيح: ${OH_N[bd[0]]} (${bd[0]})، ${OH_N[bd[1]]} (${bd[1]})، ${OH_N[bd[2]]} (المضاعف 10${bd[2]?'¹':'⁰'})\n`+E(`R = ${bd[0]}${bd[1]} × 10${bd[2]?'¹':'⁰'} = ${R} Ω`))}
-    else fb('ccFb',false,`✗ الحلقة الأولى ${OH_N[bd[0]]} والثانية ${OH_N[bd[1]]} والثالثة ${OH_N[bd[2]]}. استخدم جدول الألوان في البند 3.`);results()};
+    if(Math.abs(v-slope())/slope()<0.01){ok.cR=true;fb('cRf',true,'✓ إجابة صحيحة:\n'+E(`R = (${fx(Vm[2],2)} − ${fx(Vm[0],2)}) / (${fx(Im[2],3)} − ${fx(Im[0],3)}) = ${fx(slope(),1)} Ω`))}
+    else fb('cRf',false,'✗ اقسم فرق الجهدين على فرق التيارين:\n'+E(`R = (${fx(Vm[2],2)} − ${fx(Vm[0],2)}) / (${fx(Im[2],3)} − ${fx(Im[0],3)})`));results()};
   $('nw').onclick=newObj;calcInit(box);newObj()}
+
 {const n=LREF.length;LREF.push(
  ['Michigan State University, Department of Physics and Astronomy. (2012). <i>PHY 252 Laboratory: Ohm\'s Law</i>. East Lansing, MI.','https://web.pa.msu.edu/courses/2012spring/PHY252/Ohms_law_spr12.pdf'],
  ['University of North Carolina at Greensboro, Department of Physics and Astronomy. (n.d.). <i>Ohm\'s Law: DC Circuits</i>. Greensboro, NC.','https://physics.uncg.edu/phylabs-2/ohmdc/ohmdc.pdf'],
