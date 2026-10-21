@@ -85,7 +85,7 @@ const CSS=`
 .lab .ftl .ln.lw b{white-space:normal;line-height:1.6}
 .lab .ftl .ln.lw span.mu{display:inline;padding:0;border:0;border-radius:0;background:none;color:inherit;font-size:1.1em!important;overflow:visible}
 /* قوانين التحويل والحاسبة */
-.lab .labCalc{margin-top:12px}.lab .labCalc .calcbtn{width:100%;justify-content:center}
+.labSheet .exMine{display:none}.labSheet .exWg{overflow-x:auto}.labSheet .exWg .exIso{white-space:nowrap}.lab .labCalc{margin-top:12px}.lab .labCalc .calcbtn{width:100%;justify-content:center}
 .lab .law .cv li{text-align:center}
 .lab .law .cv .fx{display:inline-block;font-family:"Cambria Math","STIX Two Math","Times New Roman",serif;font-size:19px;font-weight:700;color:var(--ink)}
 /* مراجع التجربة */
@@ -233,8 +233,21 @@ function labNum(v){let t=String(v).trim().replace(/[٠-٩]/g,c=>'٠١٢٣٤٥٦�
 function calcInit(root){if(typeof makeCalc!=='function')return;const hs=[...root.querySelectorAll('.labCalc')];if(!hs.length)return;let tgt=null;
  root.addEventListener('focusin',e=>{if(e.target.matches('.ans input'))tgt=e.target});
  hs.forEach(h=>{const P=h.parentElement;
- const C=makeCalc(v=>{let t=tgt;if(!t||!P.contains(t))t=[...P.querySelectorAll('.ans input')].find(i=>!i.value)||P.querySelector('.ans input');if(!t)return;t.value=v;t.focus()});
- const u=C.panel.querySelector('.cuse');if(u)u.textContent='✓ ضع النتيجة في خانة الحساب';h.appendChild(C.btn);h.appendChild(C.panel)})}
+ const put=v=>{let t=tgt;if(!t||!P.contains(t))t=[...P.querySelectorAll('.ans input')].find(i=>!i.value)||P.querySelector('.ans input');if(!t)return;t.value=v;t.focus()};
+ const C=makeCalc(put);
+ const u=C.panel.querySelector('.cuse');if(u)u.textContent='✓ ضع النتيجة في خانة الحساب';
+ /* مثل الاختبارات: الآلة الحاسبة في نافذة عائمة، وفوقها صندوق ثابت فيه القانون والتعويض */
+ if(typeof calcSheet==='function'){const b=C.btn.cloneNode(true);b.addEventListener('click',()=>{
+   const old=h.querySelector('.exSheet');if(old){old.remove();b.setAttribute('aria-expanded','false');return}
+   const sp=P.querySelector('.law .lw span');const L=(sp?sp.textContent:'').split('\n').map(x=>x.trim()).filter(Boolean);
+   const law=L[0]||'—',giv=L.length>1?L.slice(1).join('  '):'أكمل الخطوات السابقة، ثم عوض بأرقامها';
+   calcSheet(law,giv,n=>{b.setAttribute('aria-expanded','false');put(String(+(+n).toPrecision(8)))},{});
+   /* مثل الاختبار: الآلة داخل خطوة الحساب لا فوق الصفحة، والقانون والتعويض في صندوق فوقها */
+   const sh=document.querySelector('.exSheet');if(sh){document.body.classList.remove('exSheetOn');sh.classList.add('exInline','labSheet');h.appendChild(sh);b.setAttribute('aria-expanded','true');
+     const c=sh.querySelector('.cuse');if(c)c.textContent='✓ ضع النتيجة في خانة الحساب';
+     setTimeout(()=>{try{sh.scrollIntoView({block:'nearest',behavior:'smooth'})}catch(e){}},60)}});
+   h.appendChild(b)}
+ else{h.appendChild(C.btn);h.appendChild(C.panel)}})}
 function measureLab(box){
   box.innerHTML=`
   <div class="intro"><small class="labKind">🧪 تجربة عملية تفاعلية</small><h3>1. اسم التجربة</h3><p class="labName">القياس بأداة القدمة ذات الورنية وأداة الميكرومتر</p></div>
