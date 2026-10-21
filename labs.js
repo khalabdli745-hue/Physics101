@@ -4743,8 +4743,8 @@ ${holes()}
 <line x1="330" y1="38" x2="330" y2="102" stroke="#64748B" stroke-width="2.4"/>
 <rect x="321" y="56" width="18" height="34" rx="8" fill="url(#wsR)" stroke="#92400E"/>
 <rect id="wsB0" x="321" y="61" width="18" height="4" fill="#8B4513"/><rect id="wsB1" x="321" y="68" width="18" height="4" fill="#111"/><rect id="wsB2" x="321" y="75" width="18" height="4" fill="#8B4513"/><rect id="wsB3" x="321" y="83" width="18" height="3.5" fill="#D4AF37"/>
-<text id="wsRl" x="330" y="13" text-anchor="middle" font-size="10.5" font-weight="700" fill="currentColor">المقاومة R = 100 Ω</text>
-<g id="wsJump"><path d="M194 38 Q212 20 230 38" stroke="#7C2D12" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M194 38 Q212 20 230 38" stroke="#F7931E" stroke-width="4.5" fill="none" stroke-linecap="round"/></g>
+<text id="wsRl" x="333" y="135" text-anchor="middle" font-size="10.5" font-weight="700" fill="currentColor">المقاومة R = 100 Ω</text>
+<text id="wsJl" x="282" y="14" text-anchor="middle" font-size="10" font-weight="800" fill="#C2410C" opacity="0">⬆ الوصلة مرفوعة</text><g id="wsJump"><path d="M194 38 Q212 20 230 38" stroke="#7C2D12" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M194 38 Q212 20 230 38" stroke="#F7931E" stroke-width="4.5" fill="none" stroke-linecap="round"/></g>
 <g id="wsLeads"></g><g id="wsDots"></g>
 <g><rect x="179" y="150" width="66" height="52" rx="8" fill="#FACC15" stroke="#A16207"/><rect x="185" y="156" width="54" height="20" rx="3" fill="#0B1220"/>
 <text id="wsAd" direction="ltr" x="212" y="171" text-anchor="middle" fill="#22D3EE" font-size="12" font-family="monospace">0.000</text>
@@ -4778,7 +4778,7 @@ function mount(host,opts){opts=opts||{};
   const Q=q=>host.querySelector(q)||WH.querySelector(q),W=id=>Q('#'+id);
   const STEPS=[
    ['<b>الخطوة 1: أطفئ المصدر</b> قبل أي توصيل، واضبط الجهاز الأول على <b>التيار A⎓</b> والثاني على <b>الجهد V⎓</b>.',()=>{}],
-   ['<b>الخطوة 2: ارفع وصلة التوصيل</b> البرتقالية عن الفجوة، فتنفتح الدائرة. لو بقيت الوصلة لمر التيار فيها وقرأ الأميتر صفرا.',()=>{W('wsJump').style.transition='transform .9s, opacity .9s';W('wsJump').style.transform='translateY(-18px)';W('wsJump').style.opacity='0'}],
+   ['<b>الخطوة 2: ارفع وصلة التوصيل</b> البرتقالية عن الفجوة، فتنفتح الدائرة. لو بقيت الوصلة لمر التيار فيها وقرأ الأميتر صفرا.',()=>{W('wsJump').style.transition='transform .9s, opacity .9s';W('wsJump').style.transform='translateY(-18px)';W('wsJump').style.opacity='1';W('wsJl').setAttribute('opacity','1')}],
    ['<b>الخطوة 3:</b> المجس <b style="color:#DC2626">الأحمر للأميتر</b> في النقطة <b>قبل الفجوة</b> (جهة القطب الموجب للمصدر).',()=>addL('ws','ar','A')],
    ['<b>الخطوة 4:</b> المجس <b>الأسود للأميتر</b> في النقطة <b>بعد الفجوة</b>. صار الأميتر مكان الوصلة، فيمر فيه التيار كله: هذا <b>التوصيل على التوالي</b>.',()=>addL('ws','ab','B')],
    ['<b>الخطوة 5:</b> المجس <b style="color:#DC2626">الأحمر للفولتميتر</b> على <b>طرف المقاومة الموجب</b>.',()=>addL('ws','vr','R1')],
@@ -4791,7 +4791,7 @@ function mount(host,opts){opts=opts||{};
     Q('#'+p+'Ad').textContent=on?o.a:'0.000';Q('#'+p+'Vd').textContent=on?o.v:'0.00';g.innerHTML='';if(!on)return;
     const path='M70 75 C88 75 88 38 106 38 H194 Q169 38 169 60 V222 H197 V210 H227 V229 H255 V60 Q255 38 230 38 H330 V102 H106 C88 102 88 125 70 125';
     for(let i=0;i<7;i++)g.insertAdjacentHTML('beforeend',`<circle class="dot" r="3.2"><animateMotion dur="3.5s" repeatCount="indefinite" begin="${-i*0.5}s" path="${path}"/></circle>`)}
-  function reset(){k=-1;W('wsLeads').innerHTML='';W('wsJump').style.transition='none';W('wsJump').style.transform='';W('wsJump').style.opacity='1';power('ws',false);W('wsAd').classList.remove('glow');W('wsVd').classList.remove('glow')}
+  function reset(){k=-1;W('wsLeads').innerHTML='';W('wsJump').style.transition='none';W('wsJump').style.transform='';W('wsJump').style.opacity='1';W('wsJl').setAttribute('opacity','0');power('ws',false);W('wsAd').classList.remove('glow');W('wsVd').classList.remove('glow')}
   function go(n){if(n<k){reset()}while(k<n){k++;STEPS[k][1]()}W('wsCap').innerHTML=STEPS[k][0];WH.querySelectorAll('.wsc .pb i').forEach((x,i)=>x.classList.toggle('d',i<=k));W('wsPrev').disabled=k<=0;W('wsNext').disabled=k>=STEPS.length-1}
   W('wsPlay').onclick=()=>{clearInterval(timer);reset();go(0);timer=setInterval(()=>{if(k>=STEPS.length-1){clearInterval(timer);return}go(k+1)},3200)};
   W('wsNext').onclick=()=>{clearInterval(timer);go(Math.min(STEPS.length-1,k+1))};
@@ -4806,8 +4806,8 @@ function mount(host,opts){opts=opts||{};
     host.querySelectorAll('#wtBtns button[data-j]').forEach(b=>b.classList.remove('on'));const j=sel;sel=null;check(j)}});
   host.querySelectorAll('#wtBtns button[data-j]').forEach(b=>b.onclick=()=>{sel=b.dataset.j;host.querySelectorAll('#wtBtns button[data-j]').forEach(x=>x.classList.toggle('on',x===b));
     svgT.querySelectorAll('.pt circle.h').forEach(c=>c.style.opacity='1')});
-  W('wtJ').onclick=()=>{jump=false;W('wtJump').style.transition='transform .7s, opacity .7s';W('wtJump').style.transform='translateY(-18px)';W('wtJump').style.opacity='0';W('wtJ').disabled=true;check()};
-  W('wtReset').onclick=()=>{for(const j in con)delete con[j];sel=null;jump=true;W('wtLeads').innerHTML='';W('wtJump').style.transition='none';W('wtJump').style.transform='';W('wtJump').style.opacity='1';W('wtJ').disabled=false;W('wtMsg').hidden=true;power('wt',false);W('wtOn').disabled=true;W('wtBtns').classList.remove('done');mark();opts.onWired&&opts.onWired(false)};
+  W('wtJ').onclick=()=>{jump=false;W('wtJump').style.transition='transform .7s, opacity .7s';W('wtJump').style.transform='translateY(-18px)';W('wtJump').style.opacity='1';W('wtJl').setAttribute('opacity','1');W('wtJ').disabled=true;check()};
+  W('wtReset').onclick=()=>{for(const j in con)delete con[j];sel=null;jump=true;W('wtLeads').innerHTML='';W('wtJump').style.transition='none';W('wtJump').style.transform='';W('wtJump').style.opacity='1';W('wtJl').setAttribute('opacity','0');W('wtJ').disabled=false;W('wtMsg').hidden=true;power('wt',false);W('wtOn').disabled=true;W('wtBtns').classList.remove('done');mark();opts.onWired&&opts.onWired(false)};
   function mark(){const li=host.querySelectorAll('#wtChk li');const aOk=con.ar==='A'&&con.ab==='B',vOk=con.vr==='R1'&&con.vb==='R2';li[0].classList.toggle('d',!jump);li[1].classList.toggle('d',aOk);li[2].classList.toggle('d',vOk);return !jump&&aOk&&vOk}
   function check(j){svgT.querySelectorAll('.pt circle.h').forEach(c=>c.style.opacity='0');
     const a=[con.ar,con.ab],v=[con.vr,con.vb],has=x=>x.includes;
@@ -4849,7 +4849,12 @@ function ohmLab(box){
     <div class="amRef"><div><div class="stage">${dmmFace({mode:'a2',port:'a'})}</div><div class="vcap"><b style="color:#2563EB">الجهاز 1 (أميتر):</b> تدريج <span dir="ltr">A⎓</span> مدى <span dir="ltr">2 A</span>، والمجس الأحمر في المنفذ <span dir="ltr">A</span>.</div></div>
     <div><div class="stage">${dmmFace({mode:'v20',port:'v'})}</div><div class="vcap"><b style="color:#DC2626">الجهاز 2 (فولتميتر):</b> تدريج <span dir="ltr">V⎓</span> مدى <span dir="ltr">20 V</span>، والمجس الأحمر في المنفذ <span dir="ltr">V</span>.</div></div></div>
     <p><b>المقاومة:</b> عنصر يقاوم مرور التيار، ونريد إيجاد قيمتها من قراءات الجهد والتيار.</p>
-    <p><b>لوحة التوصيل <span dir="ltr">(Breadboard)</span> ووصلة التوصيل <span dir="ltr">(Jumper)</span>:</b> لوحة تثبت فيها العناصر دون لحام، وفي خطها الموجب فجوة تصلها وصلة توصيل قصيرة، ترفع عند القياس ليوضع الأميتر مكانها.</p></div></div>
+    <p><b>لوحة التوصيل <span dir="ltr">(Breadboard)</span> ووصلة التوصيل <span dir="ltr">(Jumper)</span>:</b> لوحة تثبت فيها العناصر دون لحام، وفي خطها الموجب فجوة تصلها وصلة توصيل قصيرة، ترفع عند القياس ليوضع الأميتر مكانها.</p><div class="stage"><svg viewBox="0 0 400 170" class="labSvg" role="img" aria-label="وصلة التوصيل">
+  <path d="M120,120 L120,60 Q120,40 140,40 L260,40 Q280,40 280,60 L280,120" fill="none" stroke="#7C2D12" stroke-width="16" stroke-linecap="round"/><path d="M120,120 L120,60 Q120,40 140,40 L260,40 Q280,40 280,60 L280,120" fill="none" stroke="#F7931E" stroke-width="11" stroke-linecap="round"/>
+  <rect x="115" y="118" width="10" height="34" rx="3" fill="#CBD5E1" stroke="#475569"/><rect x="275" y="118" width="10" height="34" rx="3" fill="#CBD5E1" stroke="#475569"/>
+  <line x1="200" y1="40" x2="200" y2="14" stroke="var(--muted,#64748B)"/><text x="200" y="12" font-size="13" font-weight="700" text-anchor="middle" fill="var(--ink,#0F172A)">سلك معزول</text>
+  <line x1="285" y1="140" x2="320" y2="140" stroke="var(--muted,#64748B)"/><text x="324" y="145" font-size="13" font-weight="700" text-anchor="start" fill="var(--ink,#0F172A)">طرف معدني</text>
+  <line x1="115" y1="140" x2="80" y2="140" stroke="var(--muted,#64748B)"/><text x="76" y="145" font-size="13" font-weight="700" text-anchor="end" fill="var(--ink,#0F172A)">طرف معدني</text></svg></div><div class="vcap">وصلة التوصيل: توضع على الفجوة في الخط الموجب فتكمل الدائرة، وترفع عند قياس التيار</div></div></div>
   <h3 class="secH">4. القوانين المستخدمة</h3>
   <div class="ctl">
     <div class="law ftl"><div class="ln lw"><b>قانون أوم</b><span>V = I × R</span></div>
