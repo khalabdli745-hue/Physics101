@@ -355,7 +355,8 @@ details.card summary{cursor:pointer}
 .lgHint{font-size:13px;color:var(--muted);margin:0}
 .lgMsg{min-height:1.2em;margin:0;font-size:14px;color:var(--good)}.lgMsg.bad{color:var(--bad)}
 .lgBtn{padding:11px;font-size:16px}
-.lgTabs{display:grid;grid-template-columns:repeat(4,1fr);background:var(--soft);border-radius:10px;padding:3px;gap:3px}
+.lgT2{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:10px 0 0}.lgT2 button{border:1.5px solid var(--line);background:transparent;border-radius:9px;padding:8px 6px;font-weight:600;font-size:13.5px;color:var(--muted)}.lgT2 button[aria-pressed="true"]{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+.lgTabs{display:grid;grid-template-columns:repeat(3,1fr);background:var(--soft);border-radius:10px;padding:3px;gap:3px}
 .lgTabs button{border:0;background:transparent;border-radius:8px;padding:7px;font-weight:600;font-size:14.5px;color:var(--muted)}
 .lgTabs button[aria-selected="true"]{background:var(--panel);color:var(--accent);box-shadow:0 1px 3px rgba(0,0,0,.12)}
 .lgHint a{color:var(--accent)}
@@ -617,7 +618,8 @@ body.calcNew .view .calc{margin:6px 0 0;box-shadow:none}body.calcNew .view .calc
   <form class="loginBox" id="loginForm" autocomplete="on">
     <img class="lgLogo" src="icon-180.png" alt="فيزياء 101">
     <h1>فيزياء 101</h1>
-    <div class="lgTabs" role="tablist" id="lgTabs"><button type="button" role="tab" data-r="s" aria-selected="true">متدرب</button><button type="button" role="tab" data-r="t" aria-selected="false">مدرب</button><button type="button" role="tab" data-r="d" aria-selected="false">تجريبي</button><button type="button" role="tab" data-r="e" aria-selected="false">الاختبارات</button></div>
+    <div class="lgTabs" role="tablist" id="lgTabs"><button type="button" role="tab" data-r="s" aria-selected="true">متدرب</button><button type="button" role="tab" data-r="t" aria-selected="false">مدرب</button><button type="button" role="tab" data-r="e" aria-selected="false">الاختبارات</button></div>
+    <div class="lgT2" id="lgT2" hidden><button type="button" data-r="t" aria-pressed="true">🧑‍🏫 لوحة المدرب</button><button type="button" data-r="d" aria-pressed="false">👁 معاينة كمتدرب</button></div>
     <p class="lgSub" id="lgSub">سجّل دخولك برقمك التدريبي</p>
     <div id="lgStep1">
       <label><span id="lgIdLab">الرقم التدريبي</span><input id="lgId" inputmode="numeric" autocapitalize="off" autocorrect="off" spellcheck="false" autocomplete="username" required></label>
@@ -2210,12 +2212,12 @@ function showLogin(){
   const ROLES={s:{sub:'سجّل دخولك برقمك التدريبي',lab:'الرقم التدريبي',im:'numeric',hint:'أول مرة تدخل؟ اكتب رقمك التدريبي واترك كلمة المرور فارغة، ثم اختر كلمة مرورك.',val:''},
     t:{sub:'دخول المدرب إلى لوحة المتابعة',lab:'اسم المستخدم',im:'text',hint:'أول مرة؟ أنشئ حساب المدرب من <a href="teacher.html">هنا</a>.',val:''},
     e:{sub:'دخول الاختبارات الفصلية',lab:'الرقم التدريبي',im:'numeric',hint:'ادخل برقمك التدريبي. إذا كنت مسجلا في المنصة فكلمة المرور نفسها، وإذا كان أول دخول لك فاترك كلمة المرور فارغة ثم اختر كلمة مرورك.',val:''},
-    d:{sub:'الحساب التجريبي الخاص بالمدرب',lab:'اسم المستخدم',im:'text',hint:'خاص بالمدرب لمعاينة المنصة كما يراها المتدرب.',val:''}};
+    d:{sub:'معاينة المنصة كما يراها المتدرب',lab:'اسم المستخدم',im:'text',hint:'خاص بالمدرب لمعاينة المنصة كما يراها المتدرب.',val:''}};
   const setRole=r=>{role=r;step=1;$('lgStep1').hidden=false;$('lgStep2').hidden=true;$('lgBtn').textContent='دخول';
-    document.querySelectorAll('#lgTabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.r===r));
+    document.querySelectorAll('#lgTabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.r===r||(r==='d'&&b.dataset.r==='t')));$('lgT2').hidden=!(r==='t'||r==='d');document.querySelectorAll('#lgT2 button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.r===r));
     const R=ROLES[r];$('lgSub').textContent=R.sub;$('lgIdLab').textContent=R.lab;$('lgId').inputMode=R.im;$('lgId').value=R.val;$('lgPw').value='';$('lgHint').innerHTML=R.hint;$('lgMsg').textContent='';
     (R.val?$('lgPw'):$('lgId')).focus()};
-  document.querySelectorAll('#lgTabs button').forEach(b=>b.onclick=()=>setRole(b.dataset.r));
+  document.querySelectorAll('#lgTabs button,#lgT2 button').forEach(b=>b.onclick=()=>setRole(b.dataset.r));
   const msg=(m,bad)=>{$('lgMsg').textContent=m;$('lgMsg').className='lgMsg'+(bad?' bad':'')};
   const ERR={not_in_exam:'رقمك غير موجود في كشف الاختبارات. راجع المدرب.',not_found:'هذا الرقم غير مسجّل في المنصة. تأكد منه أو راجع المدرب.',wrong_password:'كلمة المرور غير صحيحة. إذا نسيتها اطلب من المدرب إعادة تعيينها.',short_password:'كلمة المرور قصيرة، اكتب 4 أحرف أو أرقام على الأقل.',already_set:'تم تعيين كلمة المرور مسبقًا، ادخل بها.'};
   const ok=r=>{const demo=/^demo$/i.test(lastId);localStorage.setItem('p101-auth',JSON.stringify({id:demo?'DEMO':lastId,token:r.token,name:r.name,section:r.section,demo,exam:role==='e'}));if(role==='e')store.set('p101-pos',Object.assign({},pos,{t:'exam'}));location.reload()};
@@ -2239,7 +2241,7 @@ else if(API&&!AUTH){showLogin()}
 else{
   if(API&&AUTH){
     if(AUTH.exam){document.body.classList.add('examOnly');pos.t='exam'}else if(pos.t==='exam')pos.t='sum';
-    const u=$('userChip');u.hidden=false;u.textContent=(AUTH.exam?'📝 ':AUTH.demo?'🧪 ':'👤 ')+(AUTH.demo&&!AUTH.exam?'حساب تجريبي':(AUTH.name||AUTH.id).split(' ')[0])+(AUTH.exam?' · خروج':'');u.title='خروج';
+    const u=$('userChip');u.hidden=false;u.textContent=(AUTH.exam?'📝 ':AUTH.demo?'👁 ':'👤 ')+(AUTH.demo&&!AUTH.exam?'معاينة المدرب':(AUTH.name||AUTH.id).split(' ')[0])+(AUTH.exam?' · خروج':'');u.title='خروج';
     u.onclick=()=>{if(AUTH.demo){if(confirm('الخروج من الحساب التجريبي والعودة إلى لوحة المدرب؟')){try{localStorage.removeItem('p101-auth')}catch(e){}location.href='teacher.html'}return}
       if(confirm('تسجيل الخروج من حساب '+(AUTH.name||AUTH.id)+'؟'))SYNC.logout()};
     if(!AUTH.exam)SYNC.post({a:'me',token:AUTH.token}).then(r=>{

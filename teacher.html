@@ -157,9 +157,32 @@ details.res .when{color:var(--muted);font-size:12.5px;margin-inline-start:auto}
 .exCRn{display:block;font-size:12px;color:var(--muted);font-weight:400;margin-top:2px}
 .exAb{color:var(--bad,#b91c1c)!important}.exTm{display:block;font-size:11px;color:var(--muted);font-weight:400;line-height:1.5;white-space:nowrap;margin-top:2px}
 .exSecT{margin:10px 0;border:2px solid var(--line);border-radius:12px;overflow:hidden}.exSecH{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:baseline;padding:8px 10px;background:var(--soft,#f6f8fb)}.exSecH small{color:var(--muted)}
-.exSR{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:'n c' 'w w' 'm m' 'k k' 'a a' 'f f';gap:4px 10px;align-items:center;padding:8px 10px;border-top:1px solid var(--line);font-size:14px}
-.exSRn{grid-area:n}.exSRa{grid-area:a}.exSRw{grid-area:w}.exSRc{grid-area:c;white-space:nowrap}.exSRk{grid-area:k;font-size:13px}.exSRm{grid-area:m;display:flex;align-items:center;gap:6px;font-size:14px;flex-wrap:wrap}.exSRm input{width:68px}.exSRm small{color:var(--muted)}.exSR .exWR{grid-area:f;border-top:1px dashed var(--line);padding-top:8px}
-.exSRn b{font-size:15px;margin-left:8px}.exSRs{font-size:13px;white-space:nowrap}.exSR.closed .exSRs{color:var(--muted)}.exSR.soon .exSRs{color:#b45309}.exSRw{color:var(--muted);font-size:13px}.exSRc b{font-size:16px;letter-spacing:1px}.exSRa{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-start}
+.exPick{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 12px}.exPk{font:inherit;font-size:15px;font-weight:700;border:2px solid var(--line);background:var(--panel);color:var(--ink);border-radius:999px;padding:7px 16px;cursor:pointer}.exPk.on{border-color:var(--accent);background:var(--accent);color:#fff}
+.exOne .exT{padding:14px 16px}
+.exSRh,.exSR{display:grid;grid-template-columns:minmax(120px,1.3fr) minmax(90px,1fr) minmax(80px,.9fr) 90px minmax(170px,auto);gap:6px 12px;align-items:center;padding:9px 14px}
+.exSRh{font-size:13px;color:var(--muted);font-weight:700;background:var(--soft,#f6f8fb)}.exSR{border-top:1px solid var(--line);font-size:14px}
+.exSRn b{display:block;font-size:16px}.exSRs{font-size:13px;white-space:nowrap}.exSR.closed .exSRs{color:var(--muted)}.exSR.soon .exSRs{color:#b45309}.exSRw{display:block;font-size:12px;color:var(--muted)}
+.exSRc{white-space:nowrap}.exSRc b{font-size:17px;letter-spacing:1px}.exSRk{white-space:nowrap}.exSRk b{font-size:16px}.exNw{color:#b45309;font-weight:700}
+.exSRm input{width:70px}.exSRm input.gen{color:var(--muted)}.exSRa{display:flex;gap:6px;justify-content:flex-end;flex-wrap:wrap}.exSR .exWR{grid-column:1/-1;border-top:1px dashed var(--line);padding-top:8px}.exCols{display:flex;align-items:flex-start;gap:12px;margin:6px 0}.exCol{display:flex;flex-direction:column;gap:6px;flex:0 0 auto}.exCol .exPk{text-align:right;min-width:120px}.exCol .exRoot{margin:0}.exCols .exOne{flex:1 1 380px;min-width:0}.exCols .exOne .exT{margin:0}
+.exCols{flex-wrap:nowrap;overflow-x:auto;padding-bottom:6px;scrollbar-width:thin}.exCols>*{flex-shrink:0}.exCols .exOne:not(:has(*)){display:none}.exCols .exOne:not(:has(> :not([hidden]))){display:none}.exCols .exOne{flex:1 0 360px}
+@media (max-width:640px){.exCols{gap:6px}.exCols .exOne{flex:0 0 min(330px,82vw)}.exCol .exPk{min-width:0;font-size:13.5px;padding:6px 9px}.exCol .exRoot{font-size:15px;padding:8px 10px}}
+.exIn>.card{border:0;box-shadow:none;padding:0;margin:16px 0 0;background:transparent}.exIn[hidden]{display:none!important}.exIn #exSec,.exIn #exTrSec{display:none}.exBulk{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:10px 0 0;padding:8px 10px;border-radius:10px;background:var(--soft,#f6f8fb)}
+.exFlow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:6px 0 10px}.exFlow .exRoot{margin:0}.exFlowL{font-weight:800;color:var(--muted);margin-left:4px}.exFlow .exPk{padding:6px 14px}
+.exPR{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;margin-top:10px}.exPI{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}.exPI.exSRc b{font-size:19px;letter-spacing:1px}.exPI input{width:62px}.exPR .exSRa{margin:0!important}.exPan .exSRa .btn{font-size:16px;padding:8px 18px}
+.exOne .exT>.sub{margin:2px 0 0;font-size:13px}.exOne .exT .exSt{font-size:13px}.exOne .exPan{margin:10px 0 4px;padding:12px}.exOne .exPH .exSRn b{font-size:20px}
+.exSel{display:flex;flex-wrap:wrap;gap:10px;margin:6px 0 10px}.exDD{font:inherit;font-size:17px;font-weight:700;border:2px solid var(--accent);border-radius:12px;padding:9px 14px;min-width:230px;background:var(--panel);color:var(--accent);cursor:pointer}.exDD.on{background:var(--accent);color:#fff}.exDD option{background:var(--panel);color:var(--ink)}
+.exRoot{font:inherit;font-size:18px;font-weight:800;border:2px solid var(--accent);background:var(--panel);color:var(--accent);border-radius:14px;padding:10px 22px;cursor:pointer;margin:4px 0 8px}.exRoot.on{background:var(--accent);color:#fff}
+.rkP h3{margin:0 0 8px;font-size:17px}.rkP{border:2px solid var(--line);border-radius:14px;padding:14px}.rkSteps{margin:0 0 12px;padding-inline-start:22px;line-height:2.1}.rkF{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px}.rkF label{display:flex;flex-direction:column;gap:4px;font-weight:700;font-size:13.5px;flex:1 1 160px}.rkT td,.rkT th{padding:8px 10px}.rkList{max-height:300px;overflow:auto;border:1px solid var(--line);border-radius:12px}.rkR{display:flex;align-items:center;gap:10px;padding:8px 12px;border-bottom:1px solid var(--line);cursor:pointer}.rkR[hidden]{display:none}.rkE select{max-width:110px}.rkE .btn{white-space:nowrap}.rkE{flex-wrap:wrap}.rkR.on{background:var(--accent-soft,#e8efff)}.rkR small{color:var(--muted);margin-inline-start:auto}.rkR .num{color:var(--muted);font-size:13px}
+.exRO{display:flex;align-items:center;gap:8px;border:1.5px solid var(--line);border-radius:10px;padding:8px 10px;margin:0 0 6px;cursor:pointer}.exRO small{color:var(--muted)}.exRD{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:999;padding:16px}.exRD>div{background:var(--panel);color:var(--ink);border-radius:16px;padding:18px;max-width:420px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,.3)}.exRD h3{margin:0 0 8px}.exRD p{line-height:1.9;margin:0 0 10px}.exRDw{color:var(--bad,#b91c1c);font-weight:700}
+.rkAll{display:flex;align-items:center;gap:8px;font-weight:700;margin:0 0 8px;cursor:pointer}
+.rkChk{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}.rkC{display:flex;align-items:center;gap:8px;border:2px solid var(--line);border-radius:12px;padding:8px 12px;cursor:pointer}.rkC.on{border-color:var(--accent);background:var(--accent-soft,#e8efff)}.rkC small{color:var(--muted)}tr.exSec{display:table-row;border:0;padding:0;background:none}
+.exStep{margin:6px 0 4px}.exStep>b{display:block;font-size:14px;color:var(--muted);margin-bottom:6px}.exStepT{font-size:14px;color:var(--muted);font-weight:700;margin-bottom:6px}
+.exPan{display:block;border:2px solid var(--line);border-radius:14px;padding:14px;margin:12px 0}.exPan.isOpen{border-color:var(--good)}.exPH{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline}.exPH .exSRn{font-size:18px}.exPH .exSRn b{display:inline;font-size:22px}.exPH .exSRs{font-size:16px;font-weight:700}
+.exPan .exSRa{justify-content:flex-start;margin:12px 0}.exPan .exSRa .btn{font-size:17px;padding:10px 22px}
+.exPG{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.exPB{border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:6px;align-items:flex-start}.exPB>small{color:var(--muted);font-weight:700}.exPB .exSRc b{font-size:22px}
+.exAll{margin-top:10px;border-top:1px dashed var(--line);padding-top:8px}.exAll summary{cursor:pointer;color:var(--muted);font-weight:700}
+.exL{display:none;font-style:normal;color:var(--muted);font-size:12.5px}
+@media (max-width:640px){.exSRh{display:none}.exSR{grid-template-columns:1fr 1fr}.exSRa{justify-content:flex-start}.exL{display:inline}}
 </style>
 </head>
 <body>
@@ -181,7 +204,7 @@ const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;',
 const AR=n=>String(n);   // الأرقام بالإنجليزية في كل المنصة
 const ls={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
 let TOKEN=ls.get('p101-tauth',null);
-let DATA=null,tab=ls.get('p101-ttab','students'),secFilter=ls.get('p101-tsec','all'),sortBy={k:'name',asc:true},q='';
+let WOPEN=false,WSET=[],WREC='',DATA=null,tab=ls.get('p101-ttab','students'),secFilter=ls.get('p101-tsec','all'),sortBy={k:'name',asc:true},q='';
 const ERR={tts_bad_key:'مفتاح Azure غير صحيح الشكل. انسخ KEY 1 كما هو.',tts_key:'مفتاح Azure غير صالح. انسخ KEY 1 مرة أخرى من صفحة Keys and endpoint.',tts_region:'المنطقة غير صحيحة. اكتبها كما في Azure، مثل uaenorth.',tts_off:'الصوت الطبيعي غير مفعّل.',tts_quota:'انتهت الحصة المجانية لهذا الشهر.',tts_busy:'الخدمة مشغولة، حاول بعد دقيقة.',tts_error:'تعذّر توليد الصوت. تأكد أنك نشرت الإصدار الجديد من الكود ومنحت صلاحية Google Drive.',bad_key:'المفتاح غير صحيح الشكل. مفتاح Gemini يبدأ بـ AIza ومفتاح Groq يبدأ بـ gsk_',ai_key:'المفتاح غير صالح أو منتهي. أنشئ مفتاحًا جديدًا.',wrong_user:'اسم المستخدم غير صحيح.',short_user:'اسم المستخدم قصير (3 أحرف على الأقل).',bad_user:'اختر اسم مستخدم آخر (ليس demo ولا أرقامًا فقط).',wrong_password:'كلمة المرور غير صحيحة.',short_password:'كلمة المرور قصيرة (6 أحرف على الأقل).',already_set:'تم إنشاء كلمة مرور المدرب مسبقًا. استخدم «دخول».',not_setup:'لم تُنشأ كلمة مرور المدرب بعد.',section_not_empty:'لا يمكن حذف شعبة فيها متدربون. انقلهم أو احذفهم أولًا.',name_required:'اكتب اسم الشعبة.',not_found:'غير موجود.',auth:'انتهت الجلسة، سجّل الدخول مرة أخرى.'};
 const errText=e=>ERR[e]||('حدث خطأ: '+e);
 function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2600)}
@@ -279,7 +302,8 @@ function bankWord(groups,isT,withA){
 /* ---------- المتدربون ---------- */
 function filtered(){return DATA.students.filter(s=>(secFilter==='all'||s.sectionId===secFilter)&&(!q||s.name.includes(q)||s.id.includes(q)))}
 function drawStudents(){
-  const m=$('#main'),list=filtered();
+  WSET=WSET.filter(id=>DATA.sections.some(x=>x.id===id));if(!WOPEN)WSET=[];if(!WSET.length)WREC='';
+  const m=$('#main'),list=DATA.students.filter(s=>WSET.includes(s.sectionId)&&(!q||s.name.includes(q)||s.id.includes(q)));
   const opts=`<option value="all">كل الشعب (${AR(DATA.students.length)})</option>`+DATA.sections.map(s=>`<option value="${esc(s.id)}" ${secFilter===s.id?'selected':''}>${esc(s.name)} (${AR(DATA.students.filter(x=>x.sectionId===s.id).length)})</option>`).join('');
   const real=list.filter(s=>s.id!=='DEMO');const logged=real.filter(s=>s.loginCount>0);
   const qa=avg(real.map(s=>s.quizAvg).filter(x=>x!=null)),pa=avg(real.map(s=>s.probAvg).filter(x=>x!=null)),la=avg(real.map(s=>s.labAvg).filter(x=>x!=null));
@@ -291,23 +315,40 @@ function drawStudents(){
   const cols=[['#',''],['id','الرقم'],['name','الاسم'],['sectionId','الشعبة'],['cwP','الأمثلة والتمارين التفاعلية ('+WT[1]+')'],['cwQ','اختبر نفسك ('+WT[0]+')'],['cwB','التجارب العملية التفاعلية ('+WT[2]+')'],['cw','الأعمال الفصلية (20)'],['doneN','إنهاء الدرس'],['loginCount','مرات الدخول'],['lastLogin','آخر دخول'],['totalSec','مجموع وقت الاستخدام'],['hasPw','حالة الحساب']];
   const sorted=list.slice().sort((a,b)=>{const k=sortBy.k;let x=a[k],y=b[k];if(k==='sectionId'){x=secName(x);y=secName(y)}
     if(x==null)x=-1;if(y==null)y=-1;const c=typeof x==='string'?x.localeCompare(y,'ar'):x-y;return sortBy.asc?c:-c});
-  m.innerHTML=`<div class="row" style="margin-bottom:12px"><select id="sf">${opts}</select><input type="search" id="qs" placeholder="بحث بالاسم أو الرقم" value="${esc(q)}" style="flex:1;min-width:160px"><button class="btn sm" id="addSt">+ متدرب</button></div>
-  <div class="stats"><div class="stat"><small>المتدربون</small><b>${AR(real.length)}</b></div><div class="stat"><small>دخلوا المنصة</small><b>${AR(logged.length)}</b></div>
+  const wAll=DATA.sections.length&&WSET.length===DATA.sections.length;
+  const recs=[['all','☑ الكل'],['full','📊 الأعمال الفصلية (20)'],['cwP','الأمثلة والتمارين التفاعلية ('+WT[1]+')'],['cwQ','اختبر نفسك ('+WT[0]+')'],['cwB','التجارب العملية التفاعلية ('+WT[2]+')'],['act','⏱ الدخول والاستخدام']];
+  const keys={all:cols.map(c=>c[0]),full:['#','id','name','sectionId','cwP','cwQ','cwB','cw'],cwP:['#','id','name','sectionId','cwP','cw'],cwQ:['#','id','name','sectionId','cwQ','cw'],cwB:['#','id','name','sectionId','cwB','cw'],act:['#','id','name','sectionId','doneN','loginCount','lastLogin','totalSec','hasPw']};
+  const vc=cols.filter(c=>(keys[WREC]||[]).includes(c[0]));
+  const cell={'#':(s,i)=>`<td class="num">${i+1}</td>`,id:s=>`<td class="num">${esc(s.id)}</td>`,name:s=>`<td>${esc(s.name)}</td>`,sectionId:s=>`<td>${esc(secName(s.sectionId))}</td>`,
+    cwP:s=>`<td class="num">${s.cwP==null?'—':AR(s.cwP)}</td>`,cwQ:s=>`<td class="num">${s.cwQ==null?'—':AR(s.cwQ)}</td>`,cwB:s=>`<td class="num">${s.cwB==null?'—':AR(s.cwB)}</td>`,
+    cw:s=>`<td class="num">${s.cw==null?'—':`<b>${AR(s.cw)}</b><br><small class="exRaw" title="درجة كل وحدة من 4">${(s.cwU||[]).map(x=>'و'+(x.u+1)+': '+Math.round(x.m*10)/10).join(' · ')}</small>`}</td>`,doneN:s=>`<td class="num">${s.doneN} / ${TOTAL}</td>`,loginCount:s=>`<td class="num">${s.loginCount}</td>`,lastLogin:s=>`<td>${fmtDate(s.lastLogin)}</td>`,totalSec:s=>`<td>${fmtTime(s.totalSec)}</td>`,
+    hasPw:s=>`<td>${s.hasPw?'<span class="tag" title="دخل المنصة واختار كلمة المرور">✅ مفعّل: دخل المنصة</span>':'<span class="tag warn" title="مضاف في الكشف ولم يدخل المنصة ولم يختر كلمة مرور">⛔ لم يدخل المنصة بعد</span>'}</td>`};
+  m.innerHTML=`<div class="card"><h2>📊 سجل درجات الأعمال الفصلية لمتدربي المنصة (20 درجة)</h2>
+   <div class="exCols"><div class="exCol"><button class="exRoot wRoot ${WOPEN?'on':''}">🏫 الشعبة</button></div>
+   ${WOPEN?`<div class="exCol"><button class="exPk wPa ${wAll?'on':''}">☑ الكل</button>${DATA.sections.map(x=>`<button class="exPk wPs ${WSET.includes(x.id)?'on':''}" data-s="${esc(x.id)}">${WSET.includes(x.id)?'✓ ':''}${esc(x.name)} <small>(${AR(DATA.students.filter(y=>y.sectionId===x.id).length)})</small></button>`).join('')}</div>`:''}
+   ${WSET.length?`<div class="exCol">${recs.map(([k,t])=>`<button class="exPk wPr ${WREC===k?'on':''}" data-r="${k}">${t}</button>`).join('')}</div>`:''}</div>
+   ${WREC?`<div style="margin-top:14px"><div class="stats"><div class="stat"><small>المتدربون</small><b>${AR(real.length)}</b></div><div class="stat"><small>دخلوا المنصة</small><b>${AR(logged.length)}</b></div>
   <div class="stat"><small>متوسط الأمثلة والتمارين التفاعلية</small><b>${avN('cwP')==null?'—':AR(avN('cwP'))+' من '+WT[1]}</b></div><div class="stat"><small>متوسط اختبر نفسك</small><b>${avN('cwQ')==null?'—':AR(avN('cwQ'))+' من '+WT[0]}</b></div><div class="stat"><small>متوسط التجارب العملية التفاعلية</small><b>${avN('cwB')==null?'—':AR(avN('cwB'))+' من '+WT[2]}</b></div><div class="stat"><small>متوسط الأعمال الفصلية</small><b>${cwa==null?'—':AR(r2(cwa))+' من 20'}</b></div><div class="stat"><small>مجموع وقت الاستخدام</small><b style="font-size:18px">${fmtTime(tt)}</b></div></div>
-  <h2 style="margin:14px 0 8px">📊 سجل درجات الأعمال الفصلية لمتدربي المنصة (20 درجة)</h2>
-  ${list.length?`<div class="tableWrap"><table><thead><tr>${cols.map(([k,n])=>`<th data-k="${k}" class="${sortBy.k===k?'sorted'+(sortBy.asc?' asc':''):''}">${n}</th>`).join('')}</tr></thead><tbody>
-  ${sorted.map((s,i)=>`<tr data-id="${esc(s.id)}"><td class="num">${i+1}</td><td class="num">${esc(s.id)}</td><td>${esc(s.name)}</td><td>${esc(secName(s.sectionId))}</td><td class="num">${s.cwP==null?'—':AR(s.cwP)}</td><td class="num">${s.cwQ==null?'—':AR(s.cwQ)}</td><td class="num">${s.cwB==null?'—':AR(s.cwB)}</td><td class="num">${s.cw==null?'—':`<b>${AR(s.cw)}</b><br><small class="exRaw" title="درجة كل وحدة من 4">${(s.cwU||[]).map(x=>'و'+(x.u+1)+': '+Math.round(x.m*10)/10).join(' · ')}</small>`}</td><td class="num">${s.doneN} / ${TOTAL}</td><td class="num">${s.loginCount}</td><td>${fmtDate(s.lastLogin)}</td><td>${fmtTime(s.totalSec)}</td><td>${s.hasPw?'<span class="tag" title="دخل المنصة واختار كلمة المرور">✅ مفعّل: دخل المنصة</span>':'<span class="tag warn" title="مضاف في الكشف ولم يدخل المنصة ولم يختر كلمة مرور">⛔ لم يدخل المنصة بعد</span>'}</td></tr>`).join('')}
-  </tbody></table></div><p class="sub" style="margin-top:8px">الدرجات تراكمية من الأعمال الفصلية (20): الأمثلة والتمارين التفاعلية ${WT[1]}، واختبر نفسك ${WT[0]}، والتجارب العملية التفاعلية ${WT[2]}. كل درس يحله المتدرب يضيف نصيبه تلقائيا، والدرس غير المحلول صفر، فتكتمل الدرجات بنهاية المقرر. وتحت الأعمال الفصلية درجة كل وحدة من 4. حالة الحساب: «مفعّل» = دخل المنصة واختار كلمة مروره، و«لم يدخل المنصة بعد» = مضاف في الكشف ولم يدخل ولا مرة. اضغط على أي متدرب لعرض التفاصيل.</p>`
-  :`<div class="card empty">لا يوجد متدربون${secFilter!=='all'?' في هذه الشعبة':''}. أضفهم من تبويب «استيراد Excel» أو زر «+ متدرب».</div>`}`;
-  $('#sf').onchange=e=>{secFilter=e.target.value;ls.set('p101-tsec',secFilter);drawStudents()};
+   ${WREC==='all'||WREC==='full'?`<div style="margin-top:12px"><div class="row" style="flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:6px;font-size:14px;"><b>درجة كل وحدة (4) = </b>${[[1,'الأمثلة والتمارين التفاعلية'],[0,'اختبر نفسك'],[2,'التجارب العملية التفاعلية']].map(([i,t])=>`<label style="display:flex;gap:4px;align-items:center">${t}<input class="wWkW" data-i="${i}" type="number" min="0" max="4" step="0.25" value="${WKW[i]}" style="width:62px"></label>`).join('')}<span id="wWkSum" class="${WKW.reduce((a,x)=>a+(+x||0),0)===WK_UNIT?'good':'bad'}">المجموع ${WKW.reduce((a,x)=>a+(+x||0),0)} من 4</span></div><p class="sub" style="margin:0 0 8px;">لمتدربي المنصة: الأعمال الفصلية (20) = 4 درجات لكل وحدة × 5 وحدات، وهي تراكمية.</p></div>`:''}
+   <div class="row" style="margin:12px 0 8px"><input type="search" id="qs" placeholder="بحث بالاسم أو الرقم" value="${esc(q)}" style="flex:1;min-width:160px"><button class="btn sm" id="addSt">+ متدرب</button></div>
+   ${list.length?`<div class="tableWrap"><table><thead><tr>${vc.map(([k,n])=>`<th data-k="${k}" class="${sortBy.k===k?'sorted'+(sortBy.asc?' asc':''):''}">${n}</th>`).join('')}</tr></thead><tbody>
+   ${sorted.map((s,i)=>`<tr data-id="${esc(s.id)}">${vc.map(([k])=>cell[k](s,i)).join('')}</tr>`).join('')}
+   </tbody></table></div><p class="sub" style="margin-top:8px">الدرجات تراكمية من الأعمال الفصلية (20): الأمثلة والتمارين التفاعلية ${WT[1]}، واختبر نفسك ${WT[0]}، والتجارب العملية التفاعلية ${WT[2]}. كل درس يحله المتدرب يضيف نصيبه تلقائيا، والدرس غير المحلول صفر، فتكتمل الدرجات بنهاية المقرر. وتحت الأعمال الفصلية درجة كل وحدة من 4. حالة الحساب: «مفعّل» = دخل المنصة واختار كلمة مروره، و«لم يدخل المنصة بعد» = مضاف في الكشف ولم يدخل ولا مرة. اضغط على أي متدرب لعرض التفاصيل.</p>`:'<div class="empty">لا يوجد متدربون في الشعب المحددة.</div>'}</div>`:''}</div>`;
+  m.querySelectorAll('.exCols').forEach(c=>{if(c.scrollWidth>c.clientWidth+4)c.scrollLeft=-(c.scrollWidth-c.clientWidth)});
+  {const r=m.querySelector('.wRoot');if(r)r.onclick=()=>{WOPEN=!WOPEN;drawStudents()}}
+  m.querySelectorAll('.wPs').forEach(b=>b.onclick=()=>{const id=b.dataset.s;WSET=WSET.includes(id)?WSET.filter(z=>z!==id):WSET.concat(id);drawStudents()});
+  {const a=m.querySelector('.wPa');if(a)a.onclick=()=>{WSET=wAll?[]:DATA.sections.map(x=>x.id);drawStudents()}}
+  m.querySelectorAll('.wPr').forEach(b=>b.onclick=()=>{WREC=WREC===b.dataset.r?'':b.dataset.r;drawStudents()});
+  if(!WREC)return;
   $('#qs').oninput=e=>{q=e.target.value.trim();const p=e.target.selectionStart;drawStudents();const n=$('#qs');n.focus();n.setSelectionRange(p,p)};
   $('#addSt').onclick=addStudent;
+  m.querySelectorAll('.wWkW').forEach(x=>x.onchange=()=>{const v=Math.max(0,Math.min(WK_UNIT,+x.value||0));WKW[+x.dataset.i]=v;const t=Math.round(WKW.reduce((a,y)=>a+(+y||0),0)*100)/100;if(t!==WK_UNIT){const e=$('#wWkSum');e.textContent='المجموع '+t+' من 4 — يجب أن يكون 4';e.className='bad';return}ls.set('p101-wkw4b',WKW);drawStudents()});
   m.querySelectorAll('th[data-k]').forEach(th=>th.onclick=()=>{const k=th.dataset.k;if(k==='#')return;sortBy=sortBy.k===k?{k,asc:!sortBy.asc}:{k,asc:k==='name'||k==='id'};drawStudents()});
   m.querySelectorAll('tbody tr').forEach(tr=>tr.onclick=()=>openStudent(tr.dataset.id));
 }
 async function addStudent(){
   const id=prompt('الرقم التدريبي:');if(!id)return;const name=prompt('اسم المتدرب:');if(!name)return;
-  let sec=secFilter!=='all'?secName(secFilter):(prompt('اسم الشعبة (اتركه فارغًا إن لم توجد):')||'');
+  let sec=WSET.length===1?secName(WSET[0]):(prompt('اسم الشعبة (اتركه فارغًا إن لم توجد):')||'');
   const r=await api({a:'tstudents',token:TOKEN,op:'import',rows:[{id,name,section:sec}]});
   if(r.ok){toast(r.added?'تمت إضافة المتدرب':'تم تحديث بيانات المتدرب');load()}else toast(errText(r.error));
 }
@@ -694,7 +735,7 @@ async function exPapers(r,st,sn){const exs=r.exams.filter(e=>!e.soon);let eid=(e
       d.querySelector('#ppB').innerHTML=L2.length?`<p class="sub ppCtl">الورقة كما ولدت للمتدرب لحظة بدء الاختبار، بترتيب الأسئلة والخيارات نفسه.${mode==='after'?' الأخضر: الإجابة الصحيحة، والأحمر المشطوب: إجابة المتدرب الخاطئة.':''}</p><h3 class="ppTitle">${esc(res.t)}${mode==='before'?' — الأسئلة قبل الحل':' — الإجابات والتصحيح'}</h3>`+L2.map(x=>ppPaper(x,nm(x.studentId),sn((st.find(y=>y.id===x.studentId)||{}).sectionId||x.sectionId),mode==='after')).join(''):'<p class="empty">لم يبدأ أحد هذا الاختبار بعد. تتولد ورقة كل متدرب عند ضغطه «ابدأ الاختبار».</p>'}
     window.__ppShow=show;show()}
   draw()}
-let EXR=null,EXSEC=ls.get('p101-exsec','all'),EXTS=ls.get('p101-extrs','all');
+let EXR=null,RKOPEN=false,RKM='',RKA='',RK='',RKS='',RKP=[],EXSEL='',EXSET=[],EXOPEN=false,GOPEN=false,GSET=[],GREC='',EXSEC=ls.get('p101-exsec','all'),EXTS=ls.get('p101-extrs','all');
 /* تحميل تبويب الاختبارات مسبقا في الخلفية بعد فتح اللوحة، فيفتح التبويب فورا */
 let EXP=null;function exPrefetch(){if(!EXP)EXP=apiR({a:'texams',token:TOKEN}).then(r=>{if(r&&r.ok&&Array.isArray(r.rows)){EXR=r;if(tab==='exams')exSafe()}return r}).catch(()=>null).finally(()=>{EXP=null});return EXP}
 async function drawExams(){
@@ -735,9 +776,10 @@ function exDraw(){
   EXR.sections.forEach(x=>{x.id=String(x.id);x.name=String(x.name==null?'':x.name)});EXR.students.forEach(x=>{x.id=String(x.id);x.name=String(x.name==null?'':x.name);x.sectionId=String(x.sectionId==null?'':x.sectionId)});
   /* الاختبار التجريبي للمدرب لا يدخل في جدول الدرجات ولا المجموع، ويظهر كبطاقة فقط */
   const m=$('#main'),r=Object.assign({},EXR,{exams:EXR.exams.filter(e=>!e.trial),students:EXR.students.filter(x=>x.id!=='1000')}),AX=EXR.exams,st=r.students,secs=r.sections,sn=id=>(secs.find(s=>s.id===id)||{}).name||'بدون شعبة';
-  const sel=EXSEC!=='all'&&secs.some(s=>s.id===EXSEC)?EXSEC:'all';
+  const selA=String(EXSEC).split(',').filter(id=>secs.some(s=>s.id===id)),sel=selA.length===1?selA[0]:'all';
+  const rx=r.exams.some(e=>e.id===GREC)?r.exams.filter(e=>e.id===GREC):r.exams,one=rx.length===1&&r.exams.length>1;
   const by={};r.rows.forEach(x=>{(by[x.studentId]=by[x.studentId]||{})[x.examId]=x});
-  const list=st.filter(s=>sel==='all'||s.sectionId===sel).sort((a,b)=>sn(a.sectionId).localeCompare(sn(b.sectionId),'ar')||String(a.name||'').localeCompare(String(b.name||''),'ar'));
+  const list=st.filter(s=>!selA.length||selA.includes(s.sectionId)).sort((a,b)=>sn(a.sectionId).localeCompare(sn(b.sectionId),'ar')||String(a.name||'').localeCompare(String(b.name||''),'ar'));
   const nOf=(id,f)=>r.rows.filter(x=>x.examId===id&&f(x)).length;
   /* الاختبار الذي فتح أو سلّمه أحد يعد «أُجري»: من لم يختبره درجته صفر */
   const held=e=>e.open||r.rows.some(x=>x.examId===e.id);
@@ -750,7 +792,7 @@ function exDraw(){
   const dcell=(s,e)=>{const x=(by[s.id]||{})[e.id];if(!x||!x.startedAt)return '<td class="num">—</td>';const m=durM(x);
     return m!=null?`<td class="num"><b>${AR(m)}</b> <small>دقيقة</small><br><small class="exTm">دخل ${hm(x.startedAt)} · سلّم ${hm(x.submittedAt)}</small></td>`:`<td class="num"><small class="exTm">يحل الآن</small>${tm(x,e)}</td>`};
   const cell=(s,e)=>{const x=(by[s.id]||{})[e.id];if(!x)return `<td class="num">${held(e)?'<span class="exZ">0</span><br><small class="exTm exAb">غائب · لم يدخل</small>':'—'}</td>`;
-    return `<td class="num exc" data-s="${esc(s.id)}" data-e="${e.id}" title="اضغط لإعادة فتح الاختبار لهذا المتدرب">${x.submittedAt?`<b${+x.score===0?' class="exZ"':''}>${AR(x.score)}</b>${+x.score===0?'<br><small class="exTm">دخل وحل · درجته صفر</small>':''}${x.raw!==x.score?`<br><small class="exRaw">(${AR(x.raw)})</small>`:''}`:'<span class="tag">يحل الآن</span>'+(x.dev?`<br><button class="btn ghost sm exFree" data-s="${esc(s.id)}" data-e="${e.id}" title="إذا تعطل جواله أو انتقل إلى جهاز آخر">🔓 السماح بجهاز آخر</button>`:'')}</td>`};
+    return `<td class="num" data-s="${esc(s.id)}" data-e="${e.id}">${x.submittedAt?`<b${+x.score===0?' class="exZ"':''}>${AR(x.score)}</b>${+x.score===0?'<br><small class="exTm">دخل وحل · درجته صفر</small>':''}${x.raw!==x.score?`<br><small class="exRaw">(${AR(x.raw)})</small>`:''}`:'<span class="tag">يحل الآن</span>'+(x.dev?`<br><button class="btn ghost sm exFree" data-s="${esc(s.id)}" data-e="${e.id}" title="إذا تعطل جواله أو انتقل إلى جهاز آخر">🔓 السماح بجهاز آخر</button>`:'')}</td>`};
   /* لائحة المؤسسة: من لم يحصل على 25% من درجة الاختبار النهائي (10 من 40) يرسب في المقرر مهما كان مجموعه */
   const FIN=r.exams.find(e=>e.id==='E3'),finMin=FIN?FIN.max*0.25:0;
   /* نتيجة المقرر: المجموع من 100 = الاختبارات (80) + الأعمال الفصلية (20)، والنجاح 60 فأكثر بشرط 25% من النهائي */
@@ -762,7 +804,7 @@ function exDraw(){
     return t>=passOf(s)?{t:'ناجح',c:'good'}:{t:'راسب: المجموع أقل من '+passOf(s),c:'bad'}};
   const total=s=>{if(!(r.exams.some(held)||s.work!=null))return '—';const t=Math.round(sumOf(s)*100)/100;return (t?AR(t):'<span class="exZ">0</span>')+`<br><small class="exRaw">من ${outOf(s)}</small>`};
   /* ملخص كل اختبار في الشعبة المختارة: المسلمون والمتوسط والأعلى والأدنى ونسبة النجاح (60% فأكثر) */
-  const exStats=()=>`<div class="exStats">${r.exams.map(e=>{const v=list.map(s=>(by[s.id]||{})[e.id]).filter(x=>x&&x.submittedAt).map(x=>x.score);
+  const exStats=()=>`<div class="exStats">${rx.map(e=>{const v=list.map(s=>(by[s.id]||{})[e.id]).filter(x=>x&&x.submittedAt).map(x=>x.score);
     const f=x=>AR(Math.round(x*100)/100);return `<div class="exStat"><b>${esc(e.t)}</b><span>سلّم ${AR(v.length)} من ${AR(list.length)}</span>${v.length?`<span>المتوسط ${f(v.reduce((a,x)=>a+x,0)/v.length)} من ${AR(e.max)}</span><span>الأعلى ${f(Math.max(...v))} · الأدنى ${f(Math.min(...v))}</span><span>النجاح (${AR(e.max*0.6)} فأكثر) ${AR(Math.round(v.filter(x=>x>=e.max*0.6).length/v.length*100))}%</span>${e.id==='E3'?`<span style="color:var(--bad)">أقل من 25% (راسب في المقرر): ${AR(v.filter(x=>x<e.max*0.25).length)}</span>`:''}`:'<span>لا توجد درجات بعد</span>'}</div>`}).join('')}</div>`;
   const secOpts=(cur,all)=>(all?`<option value="all">جميع شعب الاختبارات</option>`:'')+secs.map(s=>`<option value="${esc(s.id)}" ${s.id===cur?'selected':''}>${esc(s.name)}</option>`).join('');
   /* موعد الاختبار لكل شعبة: بدون موعد = مفتوح طوال فتح الاختبار (كما هو الآن) */
@@ -782,23 +824,30 @@ function exDraw(){
     const stOf=w=>{if(!w)return {k:'open',t:'🟢 مفتوحة'};const f=new Date(w.from).getTime(),t=new Date(w.to).getTime();return now>t?{k:'closed',t:'⚪ مغلقة'}:now<f?{k:'soon',t:'⏳ مجدولة'}:{k:'live',t:'🟢 في موعدها'}};
     const cnt=id=>{const R2=r.rows.filter(w=>w.examId===e.id&&((st.find(q=>q.id===w.studentId)||{}).sectionId||w.sectionId||'_')===id),dn=R2.filter(w=>w.submittedAt).length,nw=R2.length-dn,tot=st.filter(q=>(q.sectionId||'_')===id).length;return {dn,nw,tot}};
     const tFmt=iso=>new Date(iso).toLocaleString('ar-SA-u-ca-gregory-nu-latn',{weekday:'short',day:'numeric',month:'short',hour:'numeric',minute:'2-digit'});
-    return `<div class="exSecT"><div class="exSecH"><b>🏫 الشعب</b><small>كل شعبة يفتح ويغلق اختبارها وحدها، ولها مدتها وموعدها ورمز دخولها، ولا تتأثر الشعب الأخرى.</small></div>
-    ${L.map(x=>{const w=W[x.id],S=stOf(w),c=cnt(x.id),code=e.open&&e.codes?e.codes[x.id]:'';
-      return `<div class="exSR ${S.k}" data-sec="${esc(x.id)}" data-nw="${c.nw}">
-        <div class="exSRn"><b>${esc(x.name)}</b><span class="exSRs">${e.open?S.t:'⚪ مغلقة'}</span></div>
-        <div class="exSRw">${w?(S.k==='closed'?`مغلقة منذ ${esc(new Date(w.to).toLocaleTimeString('ar-SA-u-nu-latn',{hour:'numeric',minute:'2-digit'}))}`:`${esc(tFmt(w.from))} ← ${esc(new Date(w.to).toLocaleTimeString('ar-SA-u-nu-latn',{hour:'numeric',minute:'2-digit'}))}`):'بدون موعد'}</div>
-        <div class="exSRc">${code?`🔑 <b dir="ltr">${code}</b> <button class="btn ghost sm exNC" data-sec="${esc(x.id)}">رمز جديد</button>`:'<span class="exRaw">🔑 —</span>'}</div>
-        <div class="exSRk">سلّم <b>${AR(c.dn)}</b>${c.tot?` من ${AR(c.tot)}`:''} · يحل الآن <b>${AR(c.nw)}</b></div>
-        <label class="exSRm">⏱ المدة <input type="number" class="exSMin" min="5" max="180" value="${sMin(e,x.id)}"> دقيقة ${(e.smin||{})[x.id]?'':'<small>(العامة)</small>'}</label>
-        <div class="exSRa">${e.ready===false?'':e.open&&(S.k==='open'||S.k==='live')?`<button class="btn danger sm exSC">إغلاق الاختبار للشعبة</button>`:`<button class="btn sm exSO">${e.open&&S.k==='soon'?'فتح الآن للشعبة':'فتح الاختبار للشعبة'}</button>`}
+    return `${L.filter(x=>EXSET.includes(x.id)).map(x=>{const w=W[x.id],S=stOf(w),c=cnt(x.id),code=e.open&&e.codes?e.codes[x.id]:'',own=(e.smin||{})[x.id],isOpen=e.open&&(S.k==='open'||S.k==='live');
+      const hm=iso=>new Date(iso).toLocaleTimeString('ar-SA-u-nu-latn',{hour:'numeric',minute:'2-digit'});
+      return `<div class="exSR exPan ${S.k} ${isOpen?'isOpen':''}" data-sec="${esc(x.id)}" data-nw="${c.nw}">
+        <div class="exPH"><span class="exSRn">شعبة <b>${esc(x.name)}</b></span><span class="exSRs">${e.open?S.t:'⚪ مغلقة'}</span>${w?`<span class="exSRw">${S.k==='closed'?'أغلقت '+esc(hm(w.to)):'الموعد: '+esc(tFmt(w.from))+' ← '+esc(hm(w.to))}</span>`:''}</div>
+        <div class="exPR"><span class="exSRa">${e.ready===false?'<span class="exRaw">بانتظار بنك الأسئلة</span>':isOpen?`<button class="btn danger exSC">🔒 إغلاق</button>`:`<button class="btn exSO">🔓 فتح</button>`}</span>
+          <span class="exPI exSRc">🔑 ${code?`<b dir="ltr">${code}</b><button class="btn ghost sm exNC" data-sec="${esc(x.id)}" title="رمز جديد">↻</button>`:'<span class="exRaw">—</span>'}</span>
+          <span class="exPI exSRk">سلّم <b>${AR(c.dn)}</b>${c.tot?` من ${AR(c.tot)}`:''} · يحل <b class="${c.nw?'exNw':''}">${AR(c.nw)}</b></span>
+          <label class="exPI exSRm">⏱ <input type="number" class="exSMin ${own?'':'gen'}" min="5" max="180" value="${sMin(e,x.id)}" title="${own?'مدة خاصة بالشعبة':'المدة العامة'}"> د</label>
           <button class="btn ghost sm exSW">🗓 موعد</button></div>
         <div class="exWR" hidden><label>البداية<input type="datetime-local" class="exWF" value="${wLoc(w&&w.from)}"></label><label>النهاية<input type="datetime-local" class="exWT" value="${wLoc(w&&w.to)}"></label>
           <div class="row" style="gap:6px"><button class="btn sm exWS">حفظ الموعد</button>${w?'<button class="btn ghost sm exWC">إلغاء الموعد</button>':''}</div>
           <small class="sub">الشعبة بموعد لا تبدأ قبل وقت البداية، وينتهي وقت الجميع عند وقت النهاية ولو دخل متأخرا، وتصحح إجابات من لم يسلّم تلقائيا.</small></div>
-      </div>`}).join('')}</div>`};
+      </div>`}).join('')}`};
+  const SL=secs.concat(st.some(x=>!x.sectionId)?[{id:'_',name:'بدون شعبة'}]:[]);
+  EXSET=EXSET.filter(id=>SL.some(x=>x.id===id));if(!EXSET.length||!AX.some(e=>e.id===EXSEL))EXSEL='';if(!EXOPEN){EXSET=[];EXSEL=''}
+  const allOn=SL.length&&EXSET.length===SL.length,dotM=e=>{const d=EXSET.map(id=>dotOf(e,id));return d.every(x=>x===d[0])?d[0]:'🟡'};
+  const dotOf=(e,sid)=>{if(e.soon||!e.n)return '⏳';if(!e.open)return '⚪';const w=(e.win||{})[sid];if(!w)return '🟢';const n=Date.now(),f=+new Date(w.from),t=+new Date(w.to);return n>t?'⚪':n<f?'⏳':'🟢'};
+  const pickHtml=`<div class="exCol"><button class="exRoot ${EXOPEN?'on':''}">🏫 الشعبة</button></div>
+   ${EXOPEN?`<div class="exCol"><button class="exPk exPa ${allOn?'on':''}">☑ الكل</button>${SL.map(x=>`<button class="exPk exPs ${EXSET.includes(x.id)?'on':''}" data-s="${esc(x.id)}">${EXSET.includes(x.id)?'✓ ':''}${esc(x.name)}</button>`).join('')}</div>`:''}
+   ${EXSET.length?`<div class="exCol">${AX.map(e=>`<button class="exPk exPe ${e.id===EXSEL?'on':''}" data-e="${e.id}">${dotM(e)} ${esc(e.t.replace(/^الاختبار /,''))}</button>`).join('')}</div>`:''}
+   `;
   /* درجات الاختبار التجريبي لكل متدرب (للاطلاع فقط، لا تدخل في الدرجات) */
-  const TE=AX.find(e=>e.trial),tsel=EXTS!=='all'&&secs.some(s=>s.id===EXTS)?EXTS:'all';
-  const tList=TE?st.filter(s=>tsel==='all'||s.sectionId===tsel).map(s=>({s,x:(by[s.id]||{})[TE.id]})).sort((a,b)=>sn(a.s.sectionId).localeCompare(sn(b.s.sectionId),'ar')||String(a.s.name).localeCompare(String(b.s.name),'ar')):[];
+  const TE=AX.find(e=>e.trial),tA=String(EXTS).split(',').filter(id=>secs.some(s=>s.id===id)),tsel=tA.length===1?tA[0]:'all';
+  const tList=TE?st.filter(s=>!tA.length||tA.includes(s.sectionId)).map(s=>({s,x:(by[s.id]||{})[TE.id]})).sort((a,b)=>sn(a.s.sectionId).localeCompare(sn(b.s.sectionId),'ar')||String(a.s.name).localeCompare(String(b.s.name),'ar')):[];
   const tSc=x=>Math.round((x.raw!=null?x.raw:x.score)*100)/100,tSt=x=>!x?'لم يدخل':!x.submittedAt?'يحل الآن':null;
   const tDone=tList.filter(o=>o.x&&o.x.submittedAt),tAvg=tDone.length?tDone.reduce((a,o)=>a+tSc(o.x),0)/tDone.length:0;
   const trialHtml=TE?`<div class="card"><h2>🧪 درجات الاختبار التجريبي</h2><p class="sub">للاطلاع فقط، ولا تدخل في الدرجات ولا المجموع. الدرجة من ${AR(TE.max)}.</p>
@@ -807,33 +856,115 @@ function exDraw(){
    ${tList.length?`<div class="tableWrap"><table><thead><tr><th>الرقم</th><th>الاسم</th><th>الدرجة<br><small>(${AR(TE.max)})</small></th><th>الشعبة</th></tr></thead><tbody>
    ${tList.map(o=>`<tr style="cursor:default"><td class="num">${esc(o.s.id)}</td><td>${esc(o.s.name)}</td><td class="num">${tSt(o.x)?`<span class="exRaw">${tSt(o.x)}</span>`:`<b>${AR(tSc(o.x))}</b>`}</td><td>${esc(sn(o.s.sectionId))}</td></tr>`).join('')}
    </tbody></table></div>`:'<p class="empty">لا يوجد متدربون في هذه الشعبة.</p>'}</div>`:'';
-  m.innerHTML=`<div class="card"><h2>📝 الاختبارات الفصلية والنهائية</h2><p class="sub">أي اختبار تفتحه يظهر مباشرة لجميع متدربي كشف الاختبارات، ويختفي عند إغلاقه. يدخل المتدرب من تبويب «الاختبارات» في صفحة الدخول، ولكل متدرب محاولة واحدة.</p>
-  <div class="exGrid">${AX.map(e=>`<div class="exT ${e.open?'on':''}" data-e="${e.id}"><div class="exTh"><b>${esc(e.t)}</b><span class="tag">${AR(e.max)} درجة</span></div>
+  GSET=GSET.filter(id=>secs.some(x=>x.id===id));if(!GOPEN)GSET=[];if(!GSET.length)GREC='';const gAll=secs.length&&GSET.length===secs.length;
+  const rkN=st.length,rkP=st.filter(x=>x.platform).length;
+  const rkM=[['add','➕ إضافة'],['edit','✏ تعديل'],['del','🗑 حذف']],rkA=[['sec','🏫 الشعب'],['stu','👨‍🎓 متدرب']],rkL={sec:[['snew','➕ شعبة جديدة'],['secs','✏ تعديل وحذف الشعب ('+AR(secs.length)+')']],stu:[['sp','🏫 متدرب من المنصة'],['so','🌐 متدرب من خارج المنصة']]};
+  if(!RKOPEN)RKM='';if(!RKM)RKA='';if(!RKA){RK='';RKS=''}
+  if(RKA==='sec')RK=RKM==='add'?'snew':'secs';else if(RKA==='stu'&&RKM!=='add')RK='stl';else if(RKA==='stu'&&!['sp','so'].includes(RK))RK='';
+  if(RK!=='snew'&&RK!=='so')RKS='';
+  const pSecs=((DATA&&DATA.sections)||[]).map(x=>({id:x.id,name:x.name,n:DATA.students.filter(y=>y.sectionId===x.id).length,inEx:secs.some(z=>String(z.name)===String(x.name))}));RKP=RKP.filter(id=>pSecs.some(x=>x.id===id));
+  m.innerHTML=`<div class="card"><h2>👥 إعدادات الشعب والمتدربين</h2>
+   <p class="sub">هنا تجهز من يدخل الاختبارات: <b>${AR(rkN)}</b> متدرب في <b>${AR(secs.length)}</b> شعب (من المنصة ${AR(rkP)}، ومن خارجها ${AR(rkN-rkP)}). شعب الاختبارات مستقلة عن شعب المنصة.</p>
+   <div class="exCols"><div class="exCol"><button class="exRoot rkRoot ${RKOPEN?'on':''}">👥 الشعب والمتدربين</button></div>
+   ${RKOPEN?`<div class="exCol">${rkM.map(([k,t])=>`<button class="exPk rkPm ${RKM===k?'on':''}" data-m="${k}">${t}</button>`).join('')}</div>`:''}
+   ${RKM?`<div class="exCol">${rkA.map(([k,t])=>`<button class="exPk rkPa ${RKA===k?'on':''}" data-a="${k}">${t}</button>`).join('')}</div>`:''}
+   ${RKM==='add'&&RKA==='stu'?`<div class="exCol">${rkL.stu.map(([k,t])=>`<button class="exPk rkPk ${RK===k?'on':''}" data-k="${k}">${t}</button>`).join('')}</div>`:''}
+   ${RK==='snew'?`<div class="exCol"><button class="exPk rkPs ${RKS==='p'?'on':''}" data-s="p">🏫 شعبة من المنصة</button><button class="exPk rkPs ${RKS==='o'?'on':''}" data-s="o">🌐 شعبة من خارج المنصة</button></div>`:''}
+   ${RK==='so'?`<div class="exCol"><button class="exPk rkPs ${RKS==='xls'?'on':''}" data-s="xls">📄 من ملف Excel</button><button class="exPk rkPs ${RKS==='add'?'on':''}" data-s="add">➕ متدرب واحد</button></div>`:''}
+   <div class="exOne">
+    <div class="rkP" ${RKOPEN&&RK==='sp'?'':'hidden'}><h3>🏫 متدرب من المنصة</h3>
+     <p class="sub" style="margin-top:0">ابحث بالرقم أو الاسم وحدد المتدرب، فيضاف إلى شعبته في الاختبارات بنفس اسم شعبته في المنصة، ويدخل بكلمة مرور المنصة.</p>
+     <div class="rkF"><label>بحث<input type="search" id="rkQ" placeholder="الرقم التدريبي أو الاسم"></label></div>
+     <label class="rkAll"><input type="checkbox" class="rkSA" data-t="rkSC"> تحديد الكل (الظاهرين)</label><div class="rkList">${((DATA&&DATA.students)||[]).map(x=>{const inEx=st.some(y=>y.id===x.id),sn2=(pSecs.find(z=>z.id===x.sectionId)||{}).name||'';return `<label class="rkR" data-q="${esc((x.id+' '+x.name).toLowerCase())}"><input type="checkbox" class="rkSC" value="${esc(x.id)}" data-n="${esc(x.name)}" data-s="${esc(sn2)}"><span class="num">${esc(x.id)}</span><b>${esc(x.name)}</b><small>${esc(sn2)}${inEx?' · موجود في الاختبارات':''}</small></label>`}).join('')||'<p class="empty">لا يوجد متدربون في المنصة.</p>'}</div>
+     <div class="row" style="gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn" id="rkSAdd">➕ إضافة المحددين</button><button class="btn ghost" id="exFromP">⬇ إضافة جميع متدربي المنصة</button></div></div>
+    <div class="rkP" ${RKOPEN&&RK==='so'&&RKS==='xls'?'':'hidden'}><h3>📄 متدربون من خارج المنصة: ملف Excel</h3>
+     <ol class="rkSteps"><li>نزّل النموذج: <button class="btn ghost sm" id="exTpl">⬇ نموذج Excel</button></li><li>عبئه بثلاثة أعمدة: الرقم التدريبي، الاسم، الشعبة.</li><li>اختر الملف: <label class="btn ghost sm" style="cursor:pointer">📂 اختيار الملف<input type="file" id="exFile" accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv" hidden></label></li><li>اضغط «رفع» الذي يظهر تحت. المتدرب من خارج المنصة يختار كلمة مروره في أول دخول.</li></ol>
+     <div id="exImp"></div></div>
+    <div class="rkP" ${RKOPEN&&RK==='so'&&RKS==='add'?'':'hidden'}><h3>➕ متدرب واحد من خارج المنصة</h3>
+     <div class="rkF"><label>الرقم التدريبي<input type="text" id="exAid" inputmode="numeric"></label><label>الاسم<input type="text" id="exAnm"></label><label>الشعبة<select id="exAsec">${secs.map(s=>`<option value="${esc(s.name)}">${esc(s.name)}</option>`).join('')}<option value="__new">شعبة جديدة…</option></select></label></div>
+     <button class="btn" id="exAdd">➕ إضافة المتدرب</button><p class="sub">إذا كان الرقم موجودا تحدّث بياناته. متدرب المنصة يدخل بكلمة مرور المنصة، ومن خارجها يختار كلمة مروره في أول دخول.</p></div>
+    <div class="rkP" ${RKOPEN&&RK==='snew'&&RKS==='p'?'':'hidden'}><h3>🏫 شعبة من المنصة</h3>
+     <p class="sub" style="margin-top:0">اختر شعبة أو أكثر من شعب المنصة، فتضاف إلى الاختبارات بنفس الاسم ومعها جميع متدربيها، ويدخلون بكلمة مرور المنصة.</p>
+     ${pSecs.length?`<label class="rkAll"><input type="checkbox" class="rkPSA" ${pSecs.length&&RKP.length===pSecs.length?'checked':''}> تحديد كل الشعب</label><div class="rkChk">${pSecs.map(x=>`<label class="rkC ${RKP.includes(x.id)?'on':''}"><input type="checkbox" class="rkPC" value="${esc(x.id)}" ${RKP.includes(x.id)?'checked':''}><b>${esc(x.name)}</b><small>${AR(x.n)} متدرب${x.inEx?' · موجودة في الاختبارات (تحدّث)':''}</small></label>`).join('')}</div>
+     <button class="btn" id="rkPAdd" ${RKP.length?'':'disabled'}>➕ إضافة ${RKP.length?AR(RKP.length)+' شعبة ومتدربيها':'الشعبة ومتدربيها'}</button>`:'<p class="empty">لا توجد شعب في المنصة.</p>'}</div>
+    <div class="rkP" ${RKOPEN&&RK==='snew'&&RKS==='o'?'':'hidden'}><h3>🌐 شعبة من خارج المنصة</h3>
+     <ol class="rkSteps"><li>اكتب اسم الشعبة أو رقمها ثم اضغط «إضافة الشعبة»:<div class="rkF" style="margin:6px 0"><label><input type="text" id="exNs" placeholder="مثال: 42840"></label><button class="btn" id="exAddS" style="align-self:flex-end">➕ إضافة الشعبة</button></div></li>
+     <li>أضف متدربيها: <button class="btn ghost sm rkGo" data-s="xls">📄 من ملف Excel</button> أو <button class="btn ghost sm rkGo" data-s="add">➕ متدرب واحد</button></li>
+     <li>المتدرب من خارج المنصة يختار كلمة مروره في أول دخول للاختبار.</li></ol></div>
+    <div class="rkP" ${RKOPEN&&RK==='secs'?'':'hidden'}><h3>${RKM==='del'?'🗑 حذف شعبة':'✏ تعديل اسم شعبة'}</h3>
+     ${secs.length?`<div class="tableWrap"><table class="rkT"><thead><tr><th>الشعبة</th><th>عدد المتدربين</th><th></th></tr></thead><tbody>${secs.map(s=>`<tr class="exSec" data-id="${esc(s.id)}" style="cursor:default"><td><b>${esc(s.name)}</b></td><td class="num">${AR(st.filter(x=>x.sectionId===s.id).length)}</td><td style="white-space:nowrap">${RKM==='del'?'<button class="btn danger sm exSd">🗑 حذف</button>':'<button class="btn ghost sm exSr">✏ تعديل الاسم</button>'}</td></tr>`).join('')}</tbody></table></div>`:'<p class="empty">لا توجد شعب اختبارات بعد. استورد متدربي المنصة أو ملف Excel فتنشأ الشعب تلقائيا.</p>'}
+     ${RKM==='del'?'<p class="sub">لا تحذف شعبة فيها متدربون: انقلهم أولا من «✏ تعديل ← 👨‍🎓 متدرب»، أو احذفهم من «🗑 حذف ← 👨‍🎓 متدرب».</p>':''}</div>
+    <div class="rkP" ${RKOPEN&&RK==='stl'?'':'hidden'}><h3>${RKM==='del'?'🗑 حذف متدرب':'✏ تعديل متدرب'}</h3>
+     <p class="sub" style="margin-top:0">${RKM==='del'?'ابحث وحدد متدربا أو أكثر ثم اضغط «حذف المحددين». الحذف من كشف الاختبارات فقط، ولا يحذف من المنصة.':'ابحث عن المتدرب ثم عدّل اسمه أو انقله لشعبة أخرى أو أعد تعيين كلمة مروره.'}</p>
+     <div class="rkF"><label>بحث<input type="search" class="rkQ2" placeholder="الرقم التدريبي أو الاسم"></label></div>
+     ${RKM==='del'?'<label class="rkAll"><input type="checkbox" class="rkSA" data-t="rkDC"> تحديد الكل (الظاهرين)</label>':''}<div class="rkList">${st.map(x=>`<div class="rkR rkE" data-id="${esc(x.id)}" data-q="${esc((x.id+' '+x.name).toLowerCase())}">${RKM==='del'?`<input type="checkbox" class="rkDC" value="${esc(x.id)}">`:''}<span class="num">${esc(x.id)}</span><b>${esc(x.name)}</b><small>${x.platform?'المنصة':'خارجي'}</small>${RKM==='del'?`<small>${esc(sn(x.sectionId))}</small>`:`<select class="rkMv">${secOpts(x.sectionId,false)}</select><button class="btn ghost sm rkEn">✏ الاسم</button><button class="btn ghost sm rkPw">🔑 كلمة المرور</button>`}</div>`).join('')||'<p class="empty">لا يوجد متدربون في الكشف.</p>'}</div>
+     ${RKM==='del'?'<button class="btn danger" id="rkDel" style="margin-top:10px">🗑 حذف المحددين</button>':''}</div>
+   </div></div></div>
+  <div class="card"><h2>⚙️ إعدادات الاختبارات الفصلية والنهائية</h2><p class="sub">أي اختبار تفتحه يظهر مباشرة لجميع متدربي كشف الاختبارات، ويختفي عند إغلاقه. يدخل المتدرب من تبويب «الاختبارات» في صفحة الدخول، ولكل متدرب محاولة واحدة.</p>
+  <div class="exCols">${pickHtml}<div class="exOne">${AX.filter(e=>e.id===EXSEL).map(e=>`<div class="exT ${e.open?'on':''}" data-e="${e.id}"><div class="exTh"><b>${esc(e.t)}</b><span class="tag">${AR(e.max)} درجة</span></div>
    <p class="sub">${e.soon?'⏳ سيضاف لاحقا':e.n?`عدد الأسئلة ${AR(e.n)} · ${esc(e.cover)}`+(e.ready===false?' · <b style="color:var(--bad)">بانتظار اكتمال بنك الأسئلة</b>':''):'لم تحدد أسئلته بعد'}</p>
    ${e.trial?`<div class="exSt">🧪 3 أسئلة نظرية ومسألة حسابية (5 درجات، 20 دقيقة) لجميع الشعب، ولا يدخل في الدرجات. لتجربتك أنت: ادخل بالرقم <b>1000</b>. ${(()=>{const v=EXR.rows.filter(x=>x.examId==='ET'&&x.submittedAt&&x.studentId!=='1000').map(x=>x.score/(x.max||e.max)*e.max);return v.length?`متوسط المتدربين: <b>${AR(Math.round(v.reduce((a,x)=>a+x,0)/v.length*100)/100)}</b> من ${AR(e.max)} · `:''})()}${(EXR.rows.find(x=>x.examId==='ET'&&x.studentId==='1000')||{}).submittedAt?`درجتك: <b>${AR((EXR.rows.find(x=>x.examId==='ET'&&x.studentId==='1000')).score)}</b> من ${AR((EXR.rows.find(x=>x.examId==='ET'&&x.studentId==='1000')).max||e.max)} `:''}<button class="btn ghost sm exTrR">إعادة تجربتك وكلمة المرور (1000)</button></div>`:''}
-   <div class="exSt">${e.trial?(e.open?'🟢 مفتوح لجميع الشعب':'⚪ مغلق'):e.open&&!e.soon?(()=>{const W=e.win||{},n=Date.now(),L=secs.length,c=secs.filter(x=>{const w=W[x.id];return !w||(n>=new Date(w.from)&&n<=new Date(w.to))}).length;return c>=L?'🟢 مفتوح لجميع الشعب':'🟢 مفتوح لـ '+AR(c)+' من '+AR(L)+' شعب'})():'⚪ مغلق'} · سلّم ${AR(nOf(e.id,x=>x.submittedAt))} · يحل الآن ${AR(nOf(e.id,x=>!x.submittedAt))}</div>
+   ${EXSET.length>1&&e.n&&!e.soon&&e.ready!==false?`<div class="exBulk"><b>الشعب المحددة (${AR(EXSET.length)})</b><button class="btn sm exBO">🔓 فتح للمحددة</button><button class="btn danger sm exBC">🔒 إغلاق للمحددة</button></div>`:''}
    ${e.n&&!e.soon?secRows(e):''}
-   <div class="row"><label class="exMin">المدة العامة <input type="number" min="5" max="180" value="${e.min}" ${e.n&&!e.soon?'':'disabled'}> دقيقة</label>
-   <button class="btn ${e.open?'danger':''} exTg" ${e.n&&e.ready!==false?'':'disabled'}>${e.open?'إغلاق لجميع الشعب':'فتح لجميع الشعب'}</button></div></div>`).join('')}</div></div>
-  ${trialHtml}
-  <div class="card"><h2>👥 شعب الاختبارات وكشف المتدربين</h2><p class="sub">شعب خاصة بالاختبارات، مستقلة عن شعب المنصة. متدرب المنصة يدخل الاختبار بكلمة مرور المنصة، ومتدرب من خارج المنصة يختار كلمة مروره في أول دخول.</p>
-   <div class="row" style="flex-wrap:wrap;gap:6px"><button class="btn" id="exFromP">⬇ استيراد متدربي المنصة</button><label class="btn ghost" style="cursor:pointer">📄 استيراد Excel<input type="file" id="exFile" accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv" hidden></label><button class="btn ghost" id="exTpl">⬇ نموذج Excel</button></div>
-   <div class="row exAddF" style="margin-top:10px;flex-wrap:wrap;gap:6px"><b style="width:100%">➕ إضافة متدرب (من المنصة أو من خارجها)</b><input type="text" id="exAid" inputmode="numeric" placeholder="الرقم التدريبي" style="flex:1;min-width:120px"><input type="text" id="exAnm" placeholder="الاسم" style="flex:2;min-width:150px"><select id="exAsec">${secs.map(s=>`<option value="${esc(s.name)}">${esc(s.name)}</option>`).join('')}<option value="__new">شعبة جديدة…</option></select><button class="btn sm" id="exAdd">إضافة</button></div>
-   <div id="exImp"></div>
-   <div class="row" style="margin-top:10px;flex-wrap:wrap;gap:6px"><input type="text" id="exNs" placeholder="اسم شعبة اختبار جديدة" style="flex:1;min-width:160px"><button class="btn sm" id="exAddS">إضافة شعبة</button></div>
-   <div class="exSecs">${secs.length?secs.map(s=>`<span class="exSec" data-id="${esc(s.id)}"><b>${esc(s.name)}</b> <small>${AR(st.filter(x=>x.sectionId===s.id).length)} متدرب</small> <button class="btn ghost sm exSr">تعديل</button> <button class="btn danger sm exSd">حذف</button></span>`).join(''):'<p class="empty">لا توجد شعب اختبارات بعد. استورد متدربي المنصة أو ملف Excel فتنشأ الشعب تلقائيا.</p>'}</div></div>
-  <div class="card"><h2>🎓 سجل درجات الاختبارات الفصلية والنهائية والمجموع الكلي (100 درجة)</h2>${exStats()}<div class="row" style="flex-wrap:wrap;gap:6px;margin-bottom:8px"></div><div class="row" style="flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:6px;font-size:14px"><b>درجة كل وحدة (4) = </b>${[[1,'الأمثلة والتمارين التفاعلية'],[0,'اختبر نفسك'],[2,'التجارب العملية التفاعلية']].map(([i,t])=>`<label style="display:flex;gap:4px;align-items:center">${t}<input class="exWkW" data-i="${i}" type="number" min="0" max="4" step="0.25" value="${WKW[i]}" style="width:62px"></label>`).join('')}<span id="exWkSum" class="${WKW.reduce((a,x)=>a+(+x||0),0)===WK_UNIT?'good':'bad'}">المجموع ${WKW.reduce((a,x)=>a+(+x||0),0)} من 4</span></div><p class="sub" style="margin:0 0 8px">لمتدربي المنصة: الأعمال الفصلية (20) = 4 درجات لكل وحدة × 5 وحدات، وهي تراكمية.</p>
+   <details class="exAll"><summary>⚙ إعدادات الاختبار لجميع الشعب</summary><div class="row"><label class="exMin">المدة العامة <input type="number" min="5" max="180" value="${e.min}" ${e.n&&!e.soon?'':'disabled'}> دقيقة</label>
+   <button class="btn ${e.open?'danger':''} exTg" ${e.n&&e.ready!==false?'':'disabled'}>${e.open?'إغلاق لجميع الشعب':'فتح لجميع الشعب'}</button></div></details></div>`).join('')}</div></div></div>
+  <div class="card"><h2>🎓 سجل نتائج الاختبارات الفصلية والنهائية</h2><div class="exCols"><div class="exCol"><button class="exRoot gRoot ${GOPEN?'on':''}">🏫 الشعبة</button></div>
+   ${GOPEN?`<div class="exCol"><button class="exPk gPa ${gAll?'on':''}">☑ الكل</button>${secs.map(x=>`<button class="exPk gPs ${GSET.includes(x.id)?'on':''}" data-s="${esc(x.id)}">${GSET.includes(x.id)?'✓ ':''}${esc(x.name)}</button>`).join('')}</div>`:''}
+   ${GSET.length?`<div class="exCol"><button class="exPk gPr ${GREC==='ALL'?'on':''}" data-r="ALL">☑ الكل</button>${r.exams.map(e=>`<button class="exPk gPr ${e.id===GREC?'on':''}" data-r="${e.id}">${esc(e.t.replace(/^الاختبار /,''))}</button>`).join('')}<button class="exPk gPr ${GREC==='SUM'?'on':''}" data-r="SUM">المجموع الكلي (100)</button>${TE?`<button class="exPk gPr ${GREC===TE.id?'on':''}" data-r="${TE.id}">🧪 التجريبي</button>`:''}</div>`:''}</div><div class="exIn" ${TE&&GREC===TE.id?'':'hidden'}>${trialHtml}</div><div class="exIn" ${GREC&&!(TE&&GREC===TE.id)?'':'hidden'}><div class="card"><h2>🎓 ${one?'درجات '+esc(rx[0].t):'سجل درجات الاختبارات الفصلية والنهائية والمجموع الكلي (100 درجة)'}</h2>${exStats()}<div class="row" style="flex-wrap:wrap;gap:6px;margin-bottom:8px"></div><p class="sub" style="margin:0 0 8px;${one?'display:none':''}">الأعمال الفصلية (20): الدرجة فقط، وتفاصيلها حسب الوحدة وتوزيعها في تبويب «📊 درجات الأعمال الفصلية».</p>
   <div class="row"><select id="exSec">${secOpts(sel,true)}</select><button class="btn ghost sm" id="exX">⬇ تصدير Excel</button><button class="btn ghost sm" id="exPp">📄 أوراق المتدربين</button><button class="btn ghost sm" id="exR">↻ تحديث</button></div>
-  ${list.length?`<div class="tableWrap"><table><thead><tr><th>الرقم</th><th>الاسم</th>${r.exams.map(e=>`<th>${esc(e.t.replace('الاختبار ','').replace('الفصلي ',''))}<br><small>(${AR(e.max)})</small></th>`+(held(e)?`<th>مدة حل ${esc(e.t.replace('الاختبار ','').replace('الفصلي ',''))}<br><small>(دقيقة)</small></th>`:'')).join('')}<th>الأعمال الفصلية<br><small>(20)</small></th><th>المجموع<br><small>(100)</small></th><th>نتيجة المقرر<br><small>(60% فأكثر، و${AR(finMin)} من ${AR(FIN?FIN.max:40)} في النهائي)</small></th><th>الشعبة</th><th>الدخول</th><th></th></tr></thead><tbody>
-  ${list.map(s=>`<tr style="cursor:default" data-id="${esc(s.id)}"><td class="num">${esc(s.id)}</td><td>${esc(s.name)}</td>${r.exams.map(e=>cell(s,e)+(held(e)?dcell(s,e):'')).join('')}<td class="num">${s.platform?`<b>${AR(s.work)}</b><br><small class="exRaw" title="درجة كل وحدة من 4">${s.aw?s.aw.units.map(x=>'و'+(x.u+1)+': '+Math.round(x.m*10)/10).join(' · '):''}</small>`:`<b>${AR(s.work)}</b><br><small class="exRaw">ترصد لاحقا</small>`}</td><td class="num"><b>${total(s)}</b></td><td>${(f=>f.c?`<span class="tag ${f.c==='bad'?'warn':''}" style="font-weight:700;color:${f.c==='bad'?'var(--bad)':'var(--good)'}">${f.t}</span>`:f.t)(finStat(s))}</td>
+  ${list.length?`<div class="tableWrap"><table><thead><tr><th>الرقم</th><th>الاسم</th>${rx.map(e=>`<th>${esc(e.t.replace('الاختبار ','').replace('الفصلي ',''))}<br><small>(${AR(e.max)})</small></th>`+(held(e)&&GREC!=='SUM'?`<th>مدة حل ${esc(e.t.replace('الاختبار ','').replace('الفصلي ',''))}<br><small>(دقيقة)</small></th>`:'')).join('')}${one?'':`<th>الأعمال الفصلية<br><small>(20)</small></th><th>المجموع<br><small>(100)</small></th><th>نتيجة المقرر<br><small>(60% فأكثر، و${AR(finMin)} من ${AR(FIN?FIN.max:40)} في النهائي)</small></th>`}<th>الشعبة</th><th>الدخول</th><th></th></tr></thead><tbody>
+  ${list.map(s=>`<tr style="cursor:default" data-id="${esc(s.id)}"><td class="num">${esc(s.id)}</td><td>${esc(s.name)}</td>${rx.map(e=>cell(s,e)+(held(e)&&GREC!=='SUM'?dcell(s,e):'')).join('')}${one?'':`<td class="num">${s.platform?`<b>${AR(s.work)}</b>`:`<b>${AR(s.work)}</b><br><small class="exRaw">ترصد لاحقا</small>`}</td><td class="num"><b>${total(s)}</b></td><td>${(f=>f.c?`<span class="tag ${f.c==='bad'?'warn':''}" style="font-weight:700;color:${f.c==='bad'?'var(--bad)':'var(--good)'}">${f.t}</span>`:f.t)(finStat(s))}</td>`}
    <td><select class="exMv">${secOpts(s.sectionId,false)}</select></td><td>${s.platform?'<span class="tag">المنصة</span>':'<span class="tag">خارجي</span>'} ${s.hasPw?'':'<span class="tag warn">لم يضبط كلمة المرور</span>'}</td>
-   <td style="white-space:nowrap"><button class="btn ghost sm exPw">إعادة كلمة المرور</button> <button class="btn danger sm exDel">حذف</button></td></tr>`).join('')}
-  </tbody></table></div><p class="sub" style="margin-top:8px">الدرجات مرصودة بجبر الكسر إلى الأعلى (17.5 ← 18)، والدرجة الأصلية بين قوسين تحتها. اضغط على درجة متدرب أو «يحل الآن» لإعادة فتح الاختبار له (تحذف محاولته).</p>`:'<p class="empty">لا يوجد متدربون في كشف الاختبارات بعد.</p>'}</div>`;
+   <td style="white-space:nowrap"><button class="btn ghost sm exRB" data-s="${esc(s.id)}">🔄 إعادة الاختبار</button> <button class="btn ghost sm exPw">إعادة كلمة المرور</button> <button class="btn danger sm exDel">حذف</button></td></tr>`).join('')}
+  </tbody></table></div><p class="sub" style="margin-top:8px">الدرجات مرصودة بجبر الكسر إلى الأعلى (17.5 ← 18)، والدرجة الأصلية بين قوسين تحتها. زر «🔄 إعادة الاختبار» في آخر الصف يحذف محاولة المتدرب ليعيد الاختبار، ويظهر قبل التنفيذ مربع فيه «إعادة الاختبار» و«إلغاء».</p>`:'<p class="empty">لا يوجد متدربون في كشف الاختبارات بعد.</p>'}</div></div></div>
+  `;
   const run=async(o,msg)=>{const x=await api(Object.assign({a:'texroster',token:TOKEN},o));if(x.ok){if(msg)toast(msg);await drawExams()}else toast(x.error==='section_not_empty'?'انقل متدربي الشعبة أو احذفهم أولا.':x.error==='not_in_exam'?'غير موجود.':errText(x.error));return x};
+  {const rb=m.querySelector('.exRoot:not(.gRoot):not(.rkRoot)');if(rb)rb.onclick=()=>{EXOPEN=!EXOPEN;exDraw()}}
+  const exSetSec=()=>{};
+  m.querySelectorAll('.exCols').forEach(c=>{if(c.scrollWidth>c.clientWidth+4){const l=[...c.children].filter(x=>x.offsetWidth&&(x.children.length||x.textContent.trim())).pop();if(l)c.scrollLeft=l.offsetLeft<0?l.offsetLeft:-(c.scrollWidth-c.clientWidth)}});
+  {const rr=m.querySelector('.rkRoot');if(rr)rr.onclick=()=>{RKOPEN=!RKOPEN;exDraw()}}
+  m.querySelectorAll('.rkPm').forEach(b=>b.onclick=()=>{RKM=RKM===b.dataset.m?'':b.dataset.m;RKA='';RK='';exDraw()});
+  m.querySelectorAll('.rkPa').forEach(b=>b.onclick=()=>{RKA=RKA===b.dataset.a?'':b.dataset.a;RK='';exDraw()});
+  {const q=m.querySelector('.rkQ2');if(q)q.oninput=()=>{const v=q.value.trim().toLowerCase();m.querySelectorAll('.rkE').forEach(r=>r.hidden=!!v&&!r.dataset.q.includes(v))}}
+  m.querySelectorAll('.rkE').forEach(r=>{const id=r.dataset.id,x=st.find(y=>y.id===id);if(!x)return;
+    const mv=r.querySelector('.rkMv');if(mv)mv.onchange=()=>run({op:'move',id,sectionId:mv.value},'تم نقل المتدرب');
+    const en=r.querySelector('.rkEn');if(en)en.onclick=()=>{const n=(prompt('الاسم الجديد:',x.name)||'').trim();if(n&&n!==x.name)run({op:'import',rows:[{id,name:n,section:sn(x.sectionId)}]},'تم تعديل الاسم')};
+    const pw=r.querySelector('.rkPw');if(pw)pw.onclick=()=>{if(confirm(`إعادة تعيين كلمة مرور ${x.name}؟ يختار كلمة مرور جديدة في دخوله القادم${x.platform?' (وتتغير كلمة مروره في المنصة أيضا)':''}.`))run({op:'resetpw',id},'تمت إعادة التعيين')};
+    const dc=r.querySelector('.rkDC');if(dc)dc.onchange=()=>r.classList.toggle('on',dc.checked)});
+  {const rd=m.querySelector('#rkDel');if(rd)rd.onclick=async()=>{const ids=[...m.querySelectorAll('.rkDC:checked')].map(c=>c.value);if(!ids.length)return toast('حدد متدربا أو أكثر');
+    if(!confirm('حذف '+AR(ids.length)+' متدرب من كشف الاختبارات؟ لا يحذفون من المنصة.'))return;rd.disabled=true;
+    for(const id of ids){const x=await api({a:'texroster',token:TOKEN,op:'delete',id});if(!x.ok){toast(errText(x.error));break}}toast('تم الحذف');drawExams()}}
+  m.querySelectorAll('.rkPk').forEach(b=>b.onclick=()=>{RK=RK===b.dataset.k?'':b.dataset.k;exDraw()});
+  m.querySelectorAll('.rkPs').forEach(b=>b.onclick=()=>{RKS=RKS===b.dataset.s?'':b.dataset.s;exDraw()});
+  m.querySelectorAll('.rkGo').forEach(b=>b.onclick=()=>{RKM='add';RKA='stu';RK='so';RKS=b.dataset.s;exDraw()});
+  {const q=m.querySelector('#rkQ');if(q)q.oninput=()=>{const v=q.value.trim().toLowerCase();m.querySelectorAll('.rkR').forEach(r=>r.hidden=!!v&&!r.dataset.q.includes(v))}}
+  m.querySelectorAll('.rkSC').forEach(c=>c.onchange=()=>c.closest('.rkR').classList.toggle('on',c.checked));
+  {const sa=m.querySelector('#rkSAdd');if(sa)sa.onclick=()=>{const rows=[...m.querySelectorAll('.rkSC:checked')].map(c=>({id:c.value,name:c.dataset.n,section:c.dataset.s}));if(!rows.length)return toast('حدد متدربا أو أكثر');if(!confirm('إضافة '+AR(rows.length)+' متدرب من المنصة إلى الاختبارات؟'))return;run({op:'import',rows},'تمت إضافة المتدربين')}}
+  {const a=m.querySelector('.rkPSA');if(a)a.onchange=()=>{RKP=a.checked?pSecs.map(x=>x.id):[];exDraw()}}
+  m.querySelectorAll('.rkSA').forEach(a=>a.onchange=()=>{const box=a.closest('.rkP');box.querySelectorAll('.'+a.dataset.t).forEach(c=>{const r=c.closest('.rkR');if(r&&r.hidden)return;c.checked=a.checked;if(r)r.classList.toggle('on',a.checked)})});
+  m.querySelectorAll('.rkPC').forEach(c=>c.onchange=()=>{RKP=c.checked?RKP.concat(c.value):RKP.filter(z=>z!==c.value);exDraw()});
+  {const pa=m.querySelector('#rkPAdd');if(pa)pa.onclick=()=>{const nm=pSecs.filter(x=>RKP.includes(x.id)).map(x=>x.name).join('، ');if(!confirm('إضافة الشعب ('+nm+') ومتدربيها إلى الاختبارات؟'))return;const ids=RKP.slice();RKP=[];run({op:'fromplatform',sectionIds:ids},'تمت إضافة الشعبة ومتدربيها')}}const gSetSec=()=>{const v=GSET.join(',')||'all';EXSEC=EXTS=v;ls.set('p101-exsec',v);ls.set('p101-extrs',v)};
+  {const gr=m.querySelector('.gRoot');if(gr)gr.onclick=()=>{GOPEN=!GOPEN;exDraw()}}
+  m.querySelectorAll('.gPs').forEach(b=>b.onclick=()=>{const id=b.dataset.s;GSET=GSET.includes(id)?GSET.filter(z=>z!==id):GSET.concat(id);gSetSec();exDraw()});
+  {const ga=m.querySelector('.gPa');if(ga)ga.onclick=()=>{GSET=gAll?[]:secs.map(x=>x.id);gSetSec();exDraw()}}
+  m.querySelectorAll('.gPr').forEach(b=>b.onclick=()=>{GREC=GREC===b.dataset.r?'':b.dataset.r;exDraw()});
+  m.querySelectorAll('.exPs').forEach(b=>b.onclick=()=>{const id=b.dataset.s;EXSET=EXSET.includes(id)?EXSET.filter(z=>z!==id):EXSET.concat(id);exSetSec();exDraw()});
+  {const pa=m.querySelector('.exPa');if(pa)pa.onclick=()=>{EXSET=allOn?[]:SL.map(x=>x.id);exSetSec();exDraw()}}
+  m.querySelectorAll('.exPe').forEach(b=>b.onclick=()=>{EXSEL=EXSEL===b.dataset.e?'':b.dataset.e;exDraw()});
   m.querySelectorAll('.exT').forEach(c=>{const id=c.dataset.e,e=AX.find(x=>x.id===id);
     const tr=c.querySelector('.exTrR');if(tr)tr.onclick=async()=>{if(!confirm('إعادة الاختبار التجريبي وكلمة مرور الرقم 1000؟ ستدخل بنموذج جديد، وتختار كلمة مرور جديدة (اترك كلمة المرور فارغة عند الدخول).'))return;const x=await api({a:'texams',token:TOKEN,op:'reset',id,studentId:'1000'});toast(x.ok?'تمت الإعادة: ادخل بالرقم 1000 وكلمة مرور فارغة، ثم اختر كلمة جديدة':errText(x.error));drawExams()};
     c.querySelector('.exTg').onclick=async()=>{if(!confirm(e.open?`إغلاق «${e.t}» لجميع الشعب؟ يختفي عن جميع المتدربين، ومن بدأ الحل لا يستطيع إكماله. (لإغلاق شعبة واحدة استخدم «إغلاق الشعبة» في صفها، ويصحح من يحل الآن تلقائيا)`:(e.trial?`فتح «${e.t}» لجميع الشعب الآن؟ لا يدخل في الدرجات.`:`فتح «${e.t}» لجميع الشعب الآن؟`)))return;
       const x=await api({a:'texams',token:TOKEN,op:'set',id,open:!e.open});if(x.ok){toast(e.open?'تم إغلاق الاختبار':e.trial?'تم فتح الاختبار التجريبي لجميع الشعب':'تم فتح الاختبار لجميع الشعب');drawExams()}else toast(errText(x.error))};
+    const bc=c.querySelector('.exBC');if(bc)bc.onclick=async()=>{const W=e.win||{},now=Date.now(),ids=EXSET.filter(z=>{const w=W[z];return e.open&&(!w||(now>=+new Date(w.from)&&now<=+new Date(w.to)))});
+      if(!ids.length)return toast('الشعب المحددة مغلقة أصلا');if(!confirm(`إغلاق «${e.t}» لـ ${AR(ids.length)} شعب الآن؟ من يحل الآن تنتهي محاولته وتصحح تلقائيا. بقية الشعب لا تتأثر.`))return;bc.disabled=true;
+      const t=new Date(),f=new Date(t.getTime()-60000);for(const z of ids){const x=await api({a:'texams',token:TOKEN,op:'set',id,win:{sectionId:z,from:f.toISOString(),to:t.toISOString()}});if(!x.ok){toast(errText(x.error));break}}
+      toast('تم إغلاق الاختبار للشعب المحددة');drawExams()};
+    const bo=c.querySelector('.exBO');if(bo)bo.onclick=async()=>{if(!confirm(`فتح «${e.t}» لـ ${AR(EXSET.length)} شعب الآن؟ (تلغى مواعيدها، ومن اختبر لا يعيد)${e.open?'':' الشعب غير المحددة تبقى مغلقة.'}`))return;bo.disabled=true;
+      if(!e.open){const o=await api({a:'texams',token:TOKEN,op:'set',id,open:true});if(!o.ok){bo.disabled=false;return toast(errText(o.error))}
+        const t=new Date(),f=new Date(t.getTime()-60000),W=e.win||{},others=SL.map(z=>z.id).filter(z=>!EXSET.includes(z)&&!W[z]);
+        for(const z of others){await api({a:'texams',token:TOKEN,op:'set',id,win:{sectionId:z,from:f.toISOString(),to:t.toISOString()}})}}
+      const W=e.win||{};for(const z of EXSET){if(e.open&&!W[z])continue;const x=await api({a:'texams',token:TOKEN,op:'set',id,win:{sectionId:z}});if(!x.ok){toast(errText(x.error));break}}
+      toast('تم فتح الاختبار للشعب المحددة');drawExams()};
     c.querySelectorAll('.exNC').forEach(nc=>nc.onclick=async()=>{if(!confirm('إنشاء رمز دخول جديد لهذه الشعبة؟ الرمز القديم لن يعمل لمن لم يبدأ بعد.'))return;const x=await api({a:'texams',token:TOKEN,op:'set',id,newcode:true,sectionId:nc.dataset.sec});if(x.ok){toast('تم إنشاء رمز جديد للشعبة');drawExams()}else toast(errText(x.error))});
     c.querySelectorAll('.exSR').forEach(row=>{const sid=row.dataset.sec,nm=row.querySelector('.exSRn b').textContent,wr=row.querySelector('.exWR');
       row.querySelector('.exSW').onclick=()=>{wr.hidden=!wr.hidden};
@@ -847,7 +978,7 @@ function exDraw(){
         so.disabled=true;
         /* الاختبار مغلق للجميع: يفتح، وتبقى بقية الشعب مغلقة (موعد منته)، ثم تفتح هذه الشعبة وحدها */
         if(!e.open){const o=await api({a:'texams',token:TOKEN,op:'set',id,open:true});if(!o.ok){so.disabled=false;return toast(errText(o.error))}
-          const t=new Date(),f=new Date(t.getTime()-60000),W=e.win||{},others=[...c.querySelectorAll('.exSR')].map(z=>z.dataset.sec).filter(z=>z!==sid&&!W[z]);
+          const t=new Date(),f=new Date(t.getTime()-60000),W=e.win||{},others=SL.map(z=>z.id).filter(z=>z!==sid&&!W[z]);
           for(const z of others){await api({a:'texams',token:TOKEN,op:'set',id,win:{sectionId:z,from:f.toISOString(),to:t.toISOString()}})}}
         const x=await api({a:'texams',token:TOKEN,op:'set',id,win:{sectionId:sid}});if(x.ok){toast('تم فتح الاختبار لهذه الشعبة');drawExams()}else{so.disabled=false;toast(errText(x.error))}}});
     c.querySelectorAll('.exSR .exWR').forEach(wr=>{const sid=wr.closest('.exSR').dataset.sec,f=wr.querySelector('.exWF'),to=wr.querySelector('.exWT');
@@ -871,23 +1002,30 @@ function exDraw(){
     run({op:'import',rows:[{id,name,section:sec}]},st.some(x=>x.id===id)?'تم تحديث بيانات المتدرب':'تمت إضافة المتدرب')};
   $('#exAddS').onclick=()=>{const n=$('#exNs').value.trim();if(!n)return toast('اكتب اسم الشعبة');run({op:'secadd',name:n},'تمت إضافة الشعبة')};
   m.querySelectorAll('.exSec').forEach(c=>{const id=c.dataset.id;
-    c.querySelector('.exSr').onclick=()=>{const n=prompt('الاسم الجديد للشعبة:',sn(id));if(n)run({op:'secren',id,name:n},'تم التعديل')};
-    c.querySelector('.exSd').onclick=()=>{if(confirm('حذف شعبة «'+sn(id)+'»؟'))run({op:'secdel',id},'تم الحذف')}});
+    {const z=c.querySelector('.exSr');if(z)z.onclick=()=>{const n=prompt('الاسم الجديد للشعبة:',sn(id));if(n)run({op:'secren',id,name:n},'تم التعديل')};}
+    {const z=c.querySelector('.exSd');if(z)z.onclick=()=>{if(confirm('حذف شعبة «'+sn(id)+'»؟'))run({op:'secdel',id},'تم الحذف')}}});
   $('#exSec').onchange=e=>{EXSEC=e.target.value;ls.set('p101-exsec',EXSEC);exDraw()};
   $('#exR').onclick=()=>drawExams();
   if(TE){$('#exTrSec').onchange=e=>{EXTS=e.target.value;ls.set('p101-extrs',EXTS);exDraw()};$('#exTrR').onclick=()=>drawExams();
     $('#exTrX').onclick=()=>saveBook([['الاختبار التجريبي',[['الرقم التدريبي','الاسم','الشعبة','الدرجة ('+TE.max+')','الحالة'],...tList.map(o=>[o.s.id,o.s.name,sn(o.s.sectionId),tSt(o.x)?'':tSc(o.x),tSt(o.x)||'سلّم'])],[16,28,18,14,12]]],'درجات-الاختبار-التجريبي.xlsx')}
     document.querySelectorAll('.exWkW').forEach(x=>x.onchange=()=>{const v=Math.max(0,Math.min(WK_UNIT,+x.value||0));WKW[+x.dataset.i]=v;const t=Math.round(WKW.reduce((a,y)=>a+(+y||0),0)*100)/100;if(t!==WK_UNIT){const e=$('#exWkSum');e.textContent='المجموع '+t+' من 4 — يجب أن يكون 4';e.className='bad';return}ls.set('p101-wkw4b',WKW);exDraw()});
-  m.querySelectorAll('tbody tr[data-id]').forEach(tr=>{const id=tr.dataset.id,s=st.find(x=>x.id===id);
+  m.querySelectorAll('tbody tr[data-id]:not(.exSec)').forEach(tr=>{const id=tr.dataset.id,s=st.find(x=>x.id===id);
     tr.querySelector('.exMv').onchange=e=>run({op:'move',id,sectionId:e.target.value},'تم نقل المتدرب');
     tr.querySelector('.exPw').onclick=()=>{if(confirm(`إعادة تعيين كلمة مرور ${s.name}؟ يختار كلمة مرور جديدة في دخوله القادم${s.platform?' (وتتغير كلمة مروره في المنصة أيضا)':''}.`))run({op:'resetpw',id},'تمت إعادة التعيين')};
     tr.querySelector('.exDel').onclick=()=>{if(confirm(`حذف ${s.name} من كشف الاختبارات؟ لا يحذف من المنصة.`))run({op:'delete',id},'تم الحذف')}});
   m.querySelectorAll('.exFree').forEach(b=>b.onclick=async ev=>{ev.stopPropagation();const s=st.find(x=>x.id===b.dataset.s),e=r.exams.find(x=>x.id===b.dataset.e);
     if(!confirm(`السماح للمتدرب ${s.name} بإكمال «${e.t}» من جهاز آخر؟ تبقى إجاباته ووقته كما هي.`))return;
     const x=await api({a:'texams',token:TOKEN,op:'freedev',id:e.id,studentId:s.id});if(x.ok){toast('يمكنه الآن الإكمال من جهاز آخر');drawExams()}else toast(errText(x.error))});
-  m.querySelectorAll('.exc').forEach(td=>td.onclick=async()=>{const s=st.find(x=>x.id===td.dataset.s),e=r.exams.find(x=>x.id===td.dataset.e);
-    if(!confirm(`إعادة فتح «${e.t}» للمتدرب ${s.name}؟ تحذف محاولته ودرجته، ويبدأ من جديد بأسئلة جديدة.`))return;
-    const x=await api({a:'texams',token:TOKEN,op:'reset',id:e.id,studentId:s.id});if(x.ok){toast('تمت إعادة فتح الاختبار للمتدرب');drawExams()}else toast(errText(x.error))});
+  m.querySelectorAll('.exRB').forEach(b=>b.onclick=ev=>{ev.stopPropagation();const s=st.find(x=>x.id===b.dataset.s);
+    const opts=rx.map(e=>({e,x:(by[s.id]||{})[e.id]})).filter(o=>o.x),st2=o=>o.x.submittedAt?AR(o.x.score)+' من '+AR(o.e.max):'يحل الآن';
+    const d=document.createElement('div');d.className='exRD';
+    d.innerHTML=`<div role="dialog" aria-label="إعادة الاختبار"><h3>🔄 إعادة الاختبار</h3><p>المتدرب: <b>${esc(s.name)}</b> (${esc(s.id)})</p>
+     ${!opts.length?'<p>لا توجد له محاولة في '+(one?'هذا الاختبار':'أي اختبار')+'، فلا شيء يعاد.</p>':opts.length===1?`<p>الاختبار: <b>${esc(opts[0].e.t)}</b><br>الحالة الآن: <b>${st2(opts[0])}</b></p><input type="hidden" name="exRE" value="${opts[0].e.id}">`:`<p style="margin-bottom:4px">اختر الاختبار:</p>${opts.map((o,k)=>`<label class="exRO"><input type="radio" name="exRE" value="${o.e.id}" ${k===0?'checked':''}> <b>${esc(o.e.t)}</b> <small>(${st2(o)})</small></label>`).join('')}`}
+     ${opts.length?'<p class="exRDw">تُحذف محاولته ودرجته في هذا الاختبار نهائيا، ويبدأ من جديد بأسئلة جديدة.</p>':''}
+     <div class="row" style="gap:8px">${opts.length?'<button class="btn danger" data-k="ok">🔄 إعادة الاختبار</button>':''}<button class="btn ghost" data-k="no">${opts.length?'إلغاء':'إغلاق'}</button></div></div>`;
+    document.body.appendChild(d);const close=()=>d.remove();d.onclick=e2=>{if(e2.target===d)close()};d.querySelector('[data-k=no]').onclick=close;d.querySelector('[data-k=no]').focus();
+    const ok=d.querySelector('[data-k=ok]');if(ok)ok.onclick=async()=>{const v=(d.querySelector('input[name=exRE]:checked')||d.querySelector('input[name=exRE]')).value;ok.disabled=true;
+      const y=await api({a:'texams',token:TOKEN,op:'reset',id:v,studentId:s.id});close();if(y.ok){toast('تمت إعادة الاختبار للمتدرب');drawExams()}else toast(errText(y.error))}});
   $('#exPp').onclick=()=>exPapers(r,st,sn);
   $('#exX').onclick=()=>saveBook([['درجات الاختبارات',[['الرقم التدريبي','الاسم','الشعبة',...r.exams.map(e=>e.t+' ('+e.max+')'),'الأعمال الفصلية (20)','المجموع','من','نتيجة المقرر',...r.exams.map(e=>e.t+' قبل الجبر'),...r.exams.filter(held).map(e=>e.t+' مدة الحل (دقيقة)')],
     ...list.map(s=>[s.id,s.name,sn(s.sectionId),...r.exams.map(e=>{const x=(by[s.id]||{})[e.id];return x&&x.submittedAt?x.score:held(e)&&!x?0:''}),s.work==null?'':s.work,Math.round(sumOf(s)*100)/100,outOf(s),finStat(s).t==='—'?'':finStat(s).t,...r.exams.map(e=>{const x=(by[s.id]||{})[e.id];return x&&x.submittedAt?x.raw:''}),...r.exams.filter(held).map(e=>{const m=durM((by[s.id]||{})[e.id]);return m==null?'':m})])],[14,26,18,16,16,16,14,12,8,26,18,18,18,16,16,16]]],'درجات-الاختبارات'+(sel==='all'?'':'-'+sn(sel))+'.xlsx');
@@ -900,7 +1038,7 @@ function drawSections(){
   </tbody></table></div>`:'<div class="card empty">لا توجد شعب بعد. أضف شعبة، أو استورد ملف Excel فيه عمود «الشعبة» فتُنشأ الشعب تلقائيًا.</div>'}`;
   $('#addS').onclick=async()=>{const n=$('#ns').value.trim();if(!n)return toast(ERR.name_required);const r=await api({a:'tsection',token:TOKEN,op:'add',name:n});if(r.ok){toast('تمت إضافة الشعبة');load()}else toast(errText(r.error))};
   m.querySelectorAll('tbody tr').forEach(tr=>{const id=tr.dataset.id;
-    tr.onclick=e=>{if(e.target.closest('button'))return;secFilter=id;ls.set('p101-tsec',id);tab='students';boot()};
+    tr.onclick=e=>{if(e.target.closest('button'))return;secFilter=id;ls.set('p101-tsec',id);WOPEN=true;WSET=[id];WREC='all';tab='students';boot()};
     tr.querySelector('.ren').onclick=async()=>{const n=prompt('الاسم الجديد للشعبة:',secName(id));if(!n)return;const r=await api({a:'tsection',token:TOKEN,op:'rename',id,name:n});if(r.ok){toast('تم التعديل');load()}else toast(errText(r.error))};
     tr.querySelector('.del').onclick=async()=>{if(!confirm('حذف شعبة «'+secName(id)+'»؟'))return;const r=await api({a:'tsection',token:TOKEN,op:'delete',id});if(r.ok){toast('تم الحذف');load()}else toast(errText(r.error))}});
 }
