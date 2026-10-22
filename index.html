@@ -573,6 +573,10 @@ body.examMode .aiFab,body.examMode #aiLink,body.examSec .aiFab,body.examSec #aiL
 body.examOnly .app{grid-template-columns:minmax(0,1fr)}body.examOnly .app>main,body.examOnly .app>.main{grid-column:1/-1}
 body.examMode #instBar{display:none!important}
 body.examMode .view{padding-bottom:calc(24px + env(safe-area-inset-bottom))}
+/* (تجربة للحساب 1000 فقط: body.calcNew) شكل موحد للآلة: مسطح وقصير في الأمثلة والتجارب واختبر نفسك، ويخفى رأس الدرس أثناء فتحها في الشاشات القصيرة */
+body.calcNew .view .calc{margin:6px 0 0;box-shadow:none}body.calcNew .view .calc{padding:6px 6px 8px;margin-top:6px}body.calcNew .view .calc .chead{display:none}body.calcNew .view .calc .cscr{padding:3px 8px 4px;margin-bottom:6px}body.calcNew .view .calc .cexp{font-size:16px}body.calcNew .view .calc .cres{font-size:18px;min-height:1.2em}body.calcNew .view .calc .cind{min-height:10px}body.calcNew .view .calc .cnav{gap:4px;margin-bottom:4px}body.calcNew .view .calc .cnav .ck{min-height:26px;padding:2px 0;font-size:13px}body.calcNew .view .calc .cfn{gap:4px;margin-bottom:6px}body.calcNew .view .calc .cfn .ck{min-height:32px;padding:2px 0;font-size:12.5px}body.calcNew .view .calc .ck small{font-size:8.5px;min-height:9px;margin-bottom:0}body.calcNew .view .calc .cnum{gap:4px}body.calcNew .view .calc .cnum .ck{min-height:36px;font-size:17px;padding:2px 0}body.calcNew .view .calc .cnum .ck.ce{font-size:19px}body.calcNew .view .calc .cnum .ck.cd,body.calcNew .view .calc .cnum .ck.cf{font-size:13px}body.calcNew .view .calc .cuse{margin-top:6px;font-size:14px;padding:8px}body.calcNew .view .calc{border-radius:16px}body.calcNew .view .calc .cscr{padding:5px 8px 6px}body.calcNew .view .calc .cnav .ck{min-height:30px}body.calcNew .view .calc .cfn .ck{min-height:36px}body.calcNew .view .calc .cnum .ck{min-height:42px}body.calcNew .view .calc .cuse{padding:10px}
+@media (max-height:900px){body.calcNew:not(.examMode):has(.view .calc:not([hidden])) .lessonHead{display:none}}
+.calcLaw{display:none}body.calcNew .view .calc .calcLaw{display:block;background:var(--accent-soft);color:var(--ink);border:2px solid var(--accent);border-radius:12px;padding:6px 10px;margin:0 0 8px;font-size:15px;line-height:1.8;text-align:right}body.calcNew .view .calc .calcLaw .eq{font-size:15px}
 </style>
 </head>
 <body>
@@ -1651,7 +1655,7 @@ function makeCalc(onUse){
     [[2,'pl'],[3,'pr'],[4,'pu'],[5,'pd']].forEach(([i,c])=>{bs[i].classList.add(c);pd.appendChild(bs[i])});
     const ctr=document.createElement('span');ctr.className='pc';pd.appendChild(ctr);nv.insertBefore(pd,bs[1])}mk(P.querySelector('.cfn'),F);mk(P.querySelector('.cnum'),N);
   const btn=document.createElement('button');btn.type='button';btn.className='calcbtn';btn.innerHTML='🧮<span>الآلة الحاسبة</span>';btn.setAttribute('aria-expanded','false');
-  const toggle=o=>{if(o&&P.hidden){mode=0;ind()}/* تفتح دائما على الدرجات */P.hidden=!o;btn.setAttribute('aria-expanded',o);btn.classList.toggle('on',o);if(o)P.scrollIntoView({block:'nearest',behavior:'smooth'})};
+  const toggle=o=>{if(o&&P.hidden){mode=0;ind()}/* تفتح دائما على الدرجات */P.hidden=!o;btn.setAttribute('aria-expanded',o);btn.classList.toggle('on',o);const cN=document.body.classList.contains('calcNew')&&typeof exCalcFit==='function'&&P.closest('.view');if(o){if(cN){exCalcFit(P);setTimeout(()=>exCalcFit(P),350)}else P.scrollIntoView({block:'nearest',behavior:'smooth'})}else if(cN)setTimeout(()=>{try{btn.scrollIntoView({block:'nearest'})}catch(e){}},60)};
   btn.onclick=()=>toggle(P.hidden);P.querySelector('.cx').onclick=()=>toggle(false);
   use.onclick=()=>{if(last==null)return;if(onUse(fill(last),T.join(''))!==false)toggle(false)};
   show();ind();return {btn,panel:P,close:()=>{toggle(false);btn.hidden=true}}}
@@ -1784,6 +1788,12 @@ function problemCard(p,title,onFinish){
   const CAL=makeCalc(v=>{const f=ansRow.querySelector('.final');if(f.disabled)return;f.value=v;f.classList.add('filled');setTimeout(()=>f.classList.remove('filled'),900)});
   ansRow.insertBefore(CAL.btn,ansRow.querySelector('button.btn'));
   s4.querySelector('.pbody').append(ansRow,CAL.panel);
+  /* صندوق القانون والتعويض فوق الآلة (مثل الاختبار والتجارب) حتى لا يحتاج المتدرب الصعود للأعلى */
+  try{const sub=p.b&&p.b[1]?p.b[1]:String(p.s||'').replace(/\[([^\]]+)\]/g,(m,x)=>fmt(parseNum(x))).replace(/\s+/g,' ').trim();const iso2=p.b&&p.b.length>2?p.b[p.b.length-1]:'';
+   const E=x=>'<span class="eq" dir="ltr">'+kfr(rad(esc(divs(x))))+'</span>';const lb=document.createElement('div');lb.className='calcLaw';lb.setAttribute('dir','rtl');
+   lb.innerHTML='<div><b>القانون:</b> '+E(p.l[0])+'</div>'+(sub?'<div><b>التعويض:</b> '+E(sub)+'</div>':'')+(iso2?'<div><b>ثم:</b> '+E(iso2)+'</div>':'');
+   CAL.panel.insertBefore(lb,CAL.panel.querySelector('.cscr'))}catch(e){}
+
   let t5=0;
   const fin=ansRow.querySelector('.final'),bF=ansRow.querySelector('button.btn');
   const finish=(ok)=>{fin.disabled=true;bF.hidden=true;CAL.close();s4.classList.add(ok?'ok':'shown');s4.querySelector('.pstat').textContent=ok?'✓':'تم التصحيح';
@@ -2311,5 +2321,6 @@ function fix(root){if(!root)return;if(root.nodeType===3){root=root.parentNode;if
 const start=()=>{fix(document.body);new MutationObserver(ms=>{ms.forEach(m=>{if(m.type==='characterData')fix(m.target);else m.addedNodes.forEach(x=>fix(x))})}).observe(document.body,{childList:true,subtree:true,characterData:true})};
 if(document.body)start();else document.addEventListener('DOMContentLoaded',start)})();
 </script>
+<script>/* الشكل الموحد للآلة الحاسبة (معتمد 22 أكتوبر) لكل المتدربين */(function(){const f=()=>{document.body&&document.body.classList.add('calcNew')};document.addEventListener('DOMContentLoaded',f);f()})();</script>
 </body>
 </html>

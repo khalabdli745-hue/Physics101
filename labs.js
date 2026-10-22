@@ -248,7 +248,7 @@ function calcInit(root){if(typeof makeCalc!=='function')return;const hs=[...root
    const law=L[0]||'—',giv=L.length>1?L.slice(1).join('  '):'أكمل الخطوات السابقة، ثم عوض بأرقامها';
    calcSheet(law,giv,n=>{b.setAttribute('aria-expanded','false');put(String(+(+n).toPrecision(8)))},{});
    /* مثل الاختبار: الآلة داخل خطوة الحساب لا فوق الصفحة، والقانون والتعويض في صندوق فوقها */
-   const sh=document.querySelector('.exSheet');if(sh){document.body.classList.remove('exSheetOn');sh.classList.add('exInline','labSheet');h.appendChild(sh);b.setAttribute('aria-expanded','true');
+   const sh=document.querySelector('.exSheet');if(sh){document.body.classList.remove('exSheetOn');sh.classList.add('exInline','labSheet');h.appendChild(sh);if(typeof exCalcFit==='function'&&document.body.classList.contains('calcNew')){exCalcFit(sh);setTimeout(()=>exCalcFit(sh),350)}b.setAttribute('aria-expanded','true');
      const c=sh.querySelector('.cuse');if(c)c.textContent='✓ ضع النتيجة في خانة الحساب';
      setTimeout(()=>{try{sh.scrollIntoView({block:'nearest',behavior:'smooth'})}catch(e){}},60)}});
    h.appendChild(b)}
@@ -6114,17 +6114,17 @@ let q=new Set(),raf=0;const flush=()=>{raf=0;const a=[...q];q.clear();a.forEach(
 const add=s=>{if(s&&s.closest&&s.closest('.lab')){q.add(s);if(!raf)raf=requestAnimationFrame(flush)}};
 const scan=n=>{if(!n||n.nodeType!==1)return;if(n.tagName==='svg')add(n);else{const o=n.closest&&n.closest('svg');if(o)add(o);n.querySelectorAll&&n.querySelectorAll('svg').forEach(add)}};
 function start(){const st=document.createElement('style');st.textContent=`@media(max-width:640px){.card.lab{padding-left:10px!important;padding-right:10px!important}.lab .ctl{padding-left:7px!important;padding-right:7px!important}.lab .stage{margin-left:-3px;margin-right:-3px}.lab details.wsDet .wsx{padding:6px!important}}
-.lab .calc{background:linear-gradient(160deg,#465163 0%,#262e3b 45%,#151a22 100%)!important;border:1px solid #0b0f14;box-shadow:0 10px 24px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.14),inset 0 -2px 0 rgba(0,0,0,.4)!important}
-.lab .calc .cscr{background:linear-gradient(180deg,#D6E3C9 0%,#C3D3B2 55%,#A9BC95 100%)!important;border:4px solid #0c1015;box-shadow:inset 0 3px 6px rgba(0,0,0,.35),0 1px 0 rgba(255,255,255,.12)!important;position:relative}
-.lab .calc .cscr:after{content:'';position:absolute;inset:0 40% 55% 0;border-radius:4px 0 30px 0;background:linear-gradient(135deg,rgba(255,255,255,.28),rgba(255,255,255,0));pointer-events:none}
-.lab .calc .ck{background:linear-gradient(180deg,#566276 0%,#3A4556 55%,#2E3746 100%)!important;box-shadow:0 3px 0 #10151c,0 4px 6px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.22)!important;border-radius:9px}
-.lab .calc .ck.cn,.lab .calc .ck.cm{background:linear-gradient(180deg,#3c4758,#252d3a)!important}
-.lab .calc .ck.csh{background:linear-gradient(180deg,#FFD978,#E9A92E)!important;box-shadow:0 3px 0 #8a5a07,inset 0 1px 0 rgba(255,255,255,.5)!important}
-.lab .calc .cnum .ck{background:linear-gradient(180deg,#FFFFFF 0%,#E9EDF2 50%,#D3DAE3 100%)!important;box-shadow:0 3px 0 #8E99A8,0 4px 6px rgba(0,0,0,.3),inset 0 1px 0 #fff!important}
-.lab .calc .cnum .ck.co,.lab .calc .cnum .ck.cf{background:linear-gradient(180deg,#E3E8EF,#BCC5D2)!important}
-.lab .calc .cnum .ck.cd{background:linear-gradient(180deg,#F07B77,#C9403B)!important;box-shadow:0 3px 0 #7d1f1b,inset 0 1px 0 rgba(255,255,255,.35)!important}
-.lab .calc .cnum .ck.ce{background:linear-gradient(180deg,#FFB459,#F7931E 55%,#D97706)!important;box-shadow:0 3px 0 #8a4706,inset 0 1px 0 rgba(255,255,255,.4)!important}
-.lab .calc .ck:active{transform:translateY(2px);box-shadow:0 1px 0 #10151c!important}`;document.head.appendChild(st);
+body:not(.calcNew) .lab .calc{background:linear-gradient(160deg,#465163 0%,#262e3b 45%,#151a22 100%)!important;border:1px solid #0b0f14;box-shadow:0 10px 24px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.14),inset 0 -2px 0 rgba(0,0,0,.4)!important}
+body:not(.calcNew) .lab .calc .cscr{background:linear-gradient(180deg,#D6E3C9 0%,#C3D3B2 55%,#A9BC95 100%)!important;border:4px solid #0c1015;box-shadow:inset 0 3px 6px rgba(0,0,0,.35),0 1px 0 rgba(255,255,255,.12)!important;position:relative}
+body:not(.calcNew) .lab .calc .cscr:after{content:'';position:absolute;inset:0 40% 55% 0;border-radius:4px 0 30px 0;background:linear-gradient(135deg,rgba(255,255,255,.28),rgba(255,255,255,0));pointer-events:none}
+body:not(.calcNew) .lab .calc .ck{background:linear-gradient(180deg,#566276 0%,#3A4556 55%,#2E3746 100%)!important;box-shadow:0 3px 0 #10151c,0 4px 6px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.22)!important;border-radius:9px}
+body:not(.calcNew) .lab .calc .ck.cn,body:not(.calcNew) .lab .calc .ck.cm{background:linear-gradient(180deg,#3c4758,#252d3a)!important}
+body:not(.calcNew) .lab .calc .ck.csh{background:linear-gradient(180deg,#FFD978,#E9A92E)!important;box-shadow:0 3px 0 #8a5a07,inset 0 1px 0 rgba(255,255,255,.5)!important}
+body:not(.calcNew) .lab .calc .cnum .ck{background:linear-gradient(180deg,#FFFFFF 0%,#E9EDF2 50%,#D3DAE3 100%)!important;box-shadow:0 3px 0 #8E99A8,0 4px 6px rgba(0,0,0,.3),inset 0 1px 0 #fff!important}
+body:not(.calcNew) .lab .calc .cnum .ck.co,body:not(.calcNew) .lab .calc .cnum .ck.cf{background:linear-gradient(180deg,#E3E8EF,#BCC5D2)!important}
+body:not(.calcNew) .lab .calc .cnum .ck.cd{background:linear-gradient(180deg,#F07B77,#C9403B)!important;box-shadow:0 3px 0 #7d1f1b,inset 0 1px 0 rgba(255,255,255,.35)!important}
+body:not(.calcNew) .lab .calc .cnum .ck.ce{background:linear-gradient(180deg,#FFB459,#F7931E 55%,#D97706)!important;box-shadow:0 3px 0 #8a4706,inset 0 1px 0 rgba(255,255,255,.4)!important}
+body:not(.calcNew) .lab .calc .ck:active{transform:translateY(2px);box-shadow:0 1px 0 #10151c!important}`;document.head.appendChild(st);
 new MutationObserver(ms=>ms.forEach(m=>{if(m.type==='attributes'){scan(m.target);return}scan(m.target);m.addedNodes.forEach(scan)})).observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['fill']});
   document.addEventListener('toggle',e=>{const t=e.target;if(t&&t.querySelectorAll)setTimeout(()=>t.querySelectorAll('svg').forEach(add),30)},true);
   window.addEventListener('resize',()=>document.querySelectorAll('.lab svg').forEach(add));document.querySelectorAll('.lab svg').forEach(add)}
