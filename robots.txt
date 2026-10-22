@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /teacher.html
+Disallow: /setup.html
+
+Sitemap: https://physics101.onrender.com/sitemap.xml
