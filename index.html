@@ -555,6 +555,9 @@ body.examMode .aiFab,body.examMode #aiLink,body.examSec .aiFab,body.examSec #aiL
 @media (min-width:700px){.exSheet.exInline{max-width:460px;margin-inline:auto}.exSheet.exInline .calc .cscr{padding:3px 8px 4px;margin-bottom:5px}.exSheet.exInline .calc .cexp{font-size:15px}.exSheet.exInline .calc .cnav .ck{min-height:22px}.exSheet.exInline .calc .cfn .ck{min-height:28px}.exSheet.exInline .calc .cnum .ck{min-height:32px;font-size:16px}.exSheet.exInline .calc .cuse{padding:7px;margin-top:5px}}
 @media (min-width:700px) and (max-height:820px){.exSheet.exInline .calc .cscr{min-height:0}.exSheet.exInline .calc .cind{min-height:8px}.exSheet.exInline .calc .cnav{margin-bottom:4px}.exSheet.exInline .calc .cnav>*{height:40px!important;min-height:0!important}.exSheet.exInline .calc .cnav .cpad{transform:scale(.7);transform-origin:center}.exSheet.exInline .calc .cscr{max-height:54px;overflow:hidden}.exSheet.exInline .calc .cuse{padding:5px}.exSheet.exInline .calc .cfn .ck{min-height:25px}.exSheet.exInline .calc .cnum .ck{min-height:28px}}
 .exRules li.exBold{font-size:1.05em}
+/* دخول الاختبارات فقط: القائمة الجانبية مخفية، فتأخذ صفحة الاختبار عرض الشاشة كله بدل العمود الضيق */
+body.examOnly .app{grid-template-columns:minmax(0,1fr)}body.examOnly .app>main,body.examOnly .app>.main{grid-column:1/-1}
+body.examMode #instBar{display:none!important}
 body.examMode .view{padding-bottom:calc(24px + env(safe-area-inset-bottom))}
 </style>
 </head>
