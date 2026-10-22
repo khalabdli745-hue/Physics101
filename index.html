@@ -555,6 +555,7 @@ body.examMode .aiFab,body.examMode #aiLink,body.examSec .aiFab,body.examSec #aiL
 @media (min-width:700px){.exSheet.exInline{max-width:460px;margin-inline:auto}.exSheet.exInline .calc .cscr{padding:3px 8px 4px;margin-bottom:5px}.exSheet.exInline .calc .cexp{font-size:15px}.exSheet.exInline .calc .cnav .ck{min-height:22px}.exSheet.exInline .calc .cfn .ck{min-height:28px}.exSheet.exInline .calc .cnum .ck{min-height:32px;font-size:16px}.exSheet.exInline .calc .cuse{padding:7px;margin-top:5px}}
 @media (min-width:700px) and (max-height:820px){.exSheet.exInline .calc .cscr{min-height:0}.exSheet.exInline .calc .cind{min-height:8px}.exSheet.exInline .calc .cnav{margin-bottom:4px}.exSheet.exInline .calc .cnav>*{height:40px!important;min-height:0!important}.exSheet.exInline .calc .cnav .cpad{transform:scale(.7);transform-origin:center}.exSheet.exInline .calc .cscr{max-height:54px;overflow:hidden}.exSheet.exInline .calc .cuse{padding:5px}.exSheet.exInline .calc .cfn .ck{min-height:25px}.exSheet.exInline .calc .cnum .ck{min-height:28px}}
 .exRules li.exBold{font-size:1.05em}
+body.examMode .view{padding-bottom:calc(24px + env(safe-area-inset-bottom))}
 </style>
 </head>
 <body>
@@ -2001,6 +2002,15 @@ function exExprCheck(expr,allow){const e=String(expr||'');if(/[AMR]/.test(e))ret
   const e2=e.replace(/10\^\(?(-?)(\d+)/g,(m,sg,d)=>[1,2,3,6,9,12].includes(+d)||allow.includes(+d)?'10^':m).replace(/(E|X)(-?)(\d+)/g,(m,k,sg,d)=>[1,2,3,6,9,12].includes(+d)||allow.includes(+d)?k:m);
   const L=e2.match(/\d*\.?\d+/g)||[];const bad=L.map(Number).find(v=>!allow.some(a=>Math.abs(a-v)<=1e-9*Math.max(1,Math.abs(a))));
   return bad==null?'':`الرقم ${bad} ليس من معطيات المسألة أو القانون. عوض بأرقام المسألة كما هي، واستخدم دوال الآلة (sin وcos و√) بدل أرقام محسوبة خارجها.`}
+/* الآلة الحاسبة في الاختبار تظهر كاملة على كل الأجهزة (الآيباد واللابتوب والكمبيوتر والجوال):
+   تقاس المساحة الظاهرة فعلا (visualViewport، لأن أشرطة Safari تأخذ جزءا من الشاشة)، وتصغر الآلة إذا لم تتسع، ثم تمرر الصفحة حتى يظهر زر «سجل النتيجة» */
+function exCalcFit(sh){try{if(!sh.isConnected)return;const v=sh.closest('.view');if(!v)return;
+  sh.style.zoom='';const vv=window.visualViewport,visBot=vv?vv.offsetTop+vv.height:innerHeight,vr=v.getBoundingClientRect(),top=Math.max(vr.top,0),
+  bot=Math.min(vr.bottom,visBot)-12,avail=bot-top-8,h=sh.getBoundingClientRect().height;
+  if(h>avail&&avail>200){const z=Math.max(.72,avail/h);sh.style.zoom=z}
+  const r=sh.getBoundingClientRect();let d=0;if(r.bottom>bot)d=r.bottom-bot;if(r.top-d<top)d=r.top-top;if(d)v.scrollTop+=d}catch(e){}}
+/* عند تدوير الآيباد أو تغير مساحة الشاشة يعاد ضبط الآلة المفتوحة */
+(window.visualViewport||window).addEventListener('resize',()=>{clearTimeout(window.__exFitT);window.__exFitT=setTimeout(()=>{const sh=document.querySelector('.exSheet.exInline');if(sh)exCalcFit(sh)},200)});
 function calcSheet(law,giv,onRes,opt){opt=opt||{};document.querySelectorAll('.exSheet').forEach(x=>x.remove());document.body.classList.remove('exSheetOn');
   const sh=document.createElement('div');sh.className='exSheet'+(opt.host?' exInline':'');
   sh.innerHTML='<div class="exSH"><div class="exSHt"><div class="exWl"></div><div class="exWg"></div><div class="exSHm" hidden></div></div><button type="button" class="exSHx" aria-label="إغلاق">✕</button></div>';
@@ -2014,7 +2024,7 @@ function calcSheet(law,giv,onRes,opt){opt=opt||{};document.querySelectorAll('.ex
     if(opt.host){const w=exExprCheck(expr,allow);if(w){m.hidden=false;m.textContent=w;return false}}
     close();onRes(n)});
   C.panel.hidden=false;C.panel.querySelector('.cx').style.display='none';sh.appendChild(C.panel);
-  if(opt.host){opt.host.appendChild(sh);setTimeout(()=>{try{/* اللابتوب والشاشات القصيرة: تظهر الآلة كاملة إذا اتسعت لها الشاشة */const v=sh.closest('.view'),vh=v?v.clientHeight:innerHeight;sh.scrollIntoView({block:sh.offsetHeight<=vh-20?'end':'start',behavior:'smooth'})}catch(e){}},60)}else{document.body.appendChild(sh);document.body.classList.add('exSheetOn')}
+  if(opt.host){opt.host.appendChild(sh);exCalcFit(sh);setTimeout(()=>exCalcFit(sh),350)}else{document.body.appendChild(sh);document.body.classList.add('exSheetOn')}
   sh.querySelector('.exSHx').onclick=close}
 function examAsk(msg,yes,no,html){return new Promise(res=>{const w=document.createElement('div');w.className='exModal';
   w.innerHTML=`<div class="exMBox" role="dialog"><p></p><div class="exMBtns"><button type="button" class="btn exY"></button>${no?'<button type="button" class="exMNo"></button>':''}</div></div>`;
