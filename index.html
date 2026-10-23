@@ -619,6 +619,7 @@ body.calcNew .view .calc{margin:6px 0 0;box-shadow:none}body.calcNew .view .calc
 .pwMeter{height:7px;border-radius:9px;background:#dbe3ec;overflow:hidden;margin:-4px 0 0}.pwMeter i{display:block;height:100%;width:0;transition:width .2s}
 .pwRules{list-style:none;margin:0;padding:8px 12px;border-radius:12px;background:#f1f5f9;display:grid;gap:1px;font-size:13.5px;color:#64748b;text-align:right}.pwRules li:before{content:"○ "}.pwRules li.y{color:#15803d;font-weight:700}.pwRules li.y:before{content:"✓ "}
 .pwWarn{margin:0;font-size:12.5px;color:#a16207;background:#fffbeb;border-radius:10px;padding:6px 10px;text-align:right}
+.loginWrap[hidden]{display:none!important}
 .lgBack{position:absolute;top:calc(max(env(safe-area-inset-top),14px) + 10px);right:16px;z-index:3;border:0;background:rgba(255,255,255,.88);border-radius:12px;padding:7px 13px;font:inherit;font-weight:800;font-size:14px;color:#0d4fa8;box-shadow:0 2px 8px rgba(13,79,168,.15)}
 .loginBox{position:relative}.loginBox>*{position:relative}.loginBox>.lgBack{position:absolute;width:auto}.loginBox .credit{font-size:18px!important;color:#334155!important;font-weight:700;padding-top:10px!important}.loginBox .credit b{font-size:27px!important;color:#0d4fa8!important;font-weight:800!important;margin-top:6px!important}.loginBox>.lgBack{position:absolute;width:auto}.loginBox .credit{font-size:18px!important;color:#334155!important;font-weight:700;padding-top:10px!important}.loginBox .credit b{font-size:27px!important;color:#0d4fa8!important;font-weight:800!important;margin-top:6px!important}.lgPg{display:grid;gap:12px}.lgPg[hidden],.lgAbout[hidden]{display:none!important}
 .lgQ{text-align:center;color:var(--muted);font-size:15px;font-weight:700;margin:10px 0 -2px}
@@ -2327,8 +2328,8 @@ function showLogin(){
       if(r.ok&&r.token)return ok(r);
       msg(errMsg(r),1)}).catch(fail)};
 }
-if(API&&!AUTH&&TAUTH){const u=$('userChip');u.hidden=false;u.textContent='👨‍🏫 لوحة المدرب';u.onclick=()=>location.href='teacher.html';buildNav();updateProgress();render()}
-else if(API&&!AUTH){showLogin()}
+/* صفحة الدخول تظهر لكل من لم يسجل دخوله كمتدرب، حتى لو كان المدرب داخلا في لوحته */
+if(API&&!AUTH){showLogin()}
 else{
   if(API&&AUTH){
     if(AUTH.exam){document.body.classList.add('examOnly');pos.t='exam'}else if(pos.t==='exam')pos.t='sum';
