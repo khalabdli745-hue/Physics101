@@ -229,7 +229,7 @@ function boot(){
   if(!API){root.innerHTML=`<div class="auth"><div class="card" style="max-width:420px"><h2>لم يتم ربط المنصة بعد</h2><p class="sub">لاستخدام لوحة المدرب، اربط المنصة بجدول Google مرة واحدة من صفحة الإعداد.</p><a class="btn" href="setup.html">افتح صفحة الإعداد</a></div></div>`;return}
   if(!TOKEN)return authScreen();
   root.innerHTML=`<header><b>لوحة المدرب</b><span class="tag" id="sheetLink"></span><div class="sp">
-    <button class="btn ghost sm" id="reload">↻ تحديث</button><a class="btn ghost sm" href="index.html">المنصة</a><button class="btn ghost sm" id="logout">خروج</button></div></header>
+    <button class="btn ghost sm" id="reload">↻ تحديث</button><a class="btn ghost sm" href="index.html">المنصة</a><a class="btn ghost sm" href="teacher-guide.html">📘 الدليل</a><button class="btn ghost sm" id="logout">خروج</button></div></header>
   <nav class="tabs" role="tablist">${[['sections','الشعب'],['students','📊 درجات الأعمال الفصلية'],['exams','📝 الاختبارات الفصلية والنهائية'],['bank','🗂 بنك الأسئلة'],['stats','الإحصائيات'],['reports','التقارير'],['ratings','تقييم المتدربين للمنصة'],['dur','⏱ مدة شرح الدروس'],['ai','المساعد الذكي والصوت'],['import','استيراد Excel'],['export','تصدير Excel'],['demo','حسابي التجريبي'],['settings','الإعدادات']].map(([k,n])=>`<button role="tab" data-t="${k}" aria-selected="${tab===k}">${n}</button>`).join('')}</nav>
   <main id="main"><p class="empty"><span class="spin"></span> جارٍ تحميل البيانات…</p></main>`;
   document.documentElement.style.setProperty('--hh',$('header').offsetHeight+'px');
