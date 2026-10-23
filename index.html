@@ -674,7 +674,7 @@ body.calcNew .view .calc{margin:6px 0 0;box-shadow:none}body.calcNew .view .calc
     <button type="button" class="lgBack" id="lgBack" hidden>→ رجوع</button>
     <div class="lgPg" id="lgP0" style="margin-top:14px"><div class="lgTls"><button type="button" class="lgTl" data-r="G-t"><i><svg viewBox="0 0 24 24"><circle cx="7" cy="8" r="3.5"/><path d="M1 20c0-4 3-6 6-6s6 2 6 6z"/><path d="M11 3h12v12H13v-2h8V5h-8z"/><path d="M14 9l2 2 4-4" fill="none" stroke="currentColor" stroke-width="2"/></svg></i>مدرب</button><button type="button" class="lgTl" data-r="G-s"><i><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="4.5"/><path d="M3 21c0-5 4-8 9-8s9 3 9 8z"/></svg></i>متدرب</button></div></div>
     <div class="lgPg" id="lgPs" hidden><p class="lgQ">متدرب</p><div class="lgTls"><button type="button" class="lgTl" data-r="s"><i><svg viewBox="0 0 24 24"><path d="M2 5c3-1.5 6-1.5 9 .5v15c-3-2-6-2-9-.5zM22 5c-3-1.5-6-1.5-9 .5v15c3-2 6-2 9-.5z"/></svg></i>المنصة</button><button type="button" class="lgTl" data-r="e"><i><svg viewBox="0 0 24 24"><path d="M8 2h8v3H8z"/><path d="M5 4h2v3h10V4h2v18H5z" fill-opacity=".85"/><path d="M8 12l2 2 4-4M8 17h8" fill="none" stroke="#1565c8" stroke-width="1.8"/></svg></i>الاختبارات</button></div><a class="lgGd" href="guide.html#s"><svg viewBox="0 0 24 24"><path d="M4 3h13a2 2 0 0 1 2 2v16H6a2 2 0 0 1-2-2z"/><path d="M8 7h7M8 11h7" stroke="#eaf3fd" stroke-width="1.8"/></svg>دليل المتدرب</a></div>
-    <div class="lgPg" id="lgPt" hidden><p class="lgQ">مدرب</p><div class="lgTls lgTls3"><button type="button" class="lgTl" data-r="t"><i><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M6 13v-3M10 13V7M14 13v-4M18 13V6" stroke="#1565c8" stroke-width="2"/><path d="M8 21h8v-2H8z"/></svg></i>لوحة المدرب</button><button type="button" class="lgTl" data-r="d"><i><svg viewBox="0 0 24 24"><path d="M12 5C6 5 2 12 2 12s4 7 10 7 10-7 10-7-4-7-10-7z"/><circle cx="12" cy="12" r="3.5" fill="#1565c8"/></svg></i>معاينة المدرب</button><button type="button" class="lgTl" data-r="te"><i><svg viewBox="0 0 24 24"><path d="M8 2h8v3H8z"/><path d="M5 4h2v3h10V4h2v18H5z" fill-opacity=".85"/><path d="M8 12l2 2 4-4M8 17h8" fill="none" stroke="#1565c8" stroke-width="1.8"/></svg></i>الاختبارات</button></div><a class="lgGd" href="guide.html#t"><svg viewBox="0 0 24 24"><path d="M4 3h13a2 2 0 0 1 2 2v16H6a2 2 0 0 1-2-2z"/><path d="M8 7h7M8 11h7" stroke="#eaf3fd" stroke-width="1.8"/></svg>دليل المدرب</a></div>
+    <div class="lgPg" id="lgPt" hidden><p class="lgQ">مدرب</p><div class="lgTls"><button type="button" class="lgTl" data-r="t"><i><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M6 13v-3M10 13V7M14 13v-4M18 13V6" stroke="#1565c8" stroke-width="2"/><path d="M8 21h8v-2H8z"/></svg></i>لوحة المدرب</button><button type="button" class="lgTl" data-r="te"><i><svg viewBox="0 0 24 24"><path d="M8 2h8v3H8z"/><path d="M5 4h2v3h10V4h2v18H5z" fill-opacity=".85"/><path d="M8 12l2 2 4-4M8 17h8" fill="none" stroke="#1565c8" stroke-width="1.8"/></svg></i>الاختبارات</button></div><a class="lgGd" href="guide.html#t"><svg viewBox="0 0 24 24"><path d="M4 3h13a2 2 0 0 1 2 2v16H6a2 2 0 0 1-2-2z"/><path d="M8 7h7M8 11h7" stroke="#eaf3fd" stroke-width="1.8"/></svg>دليل المدرب</a></div>
     <div class="lgPg" id="lgPf" hidden>
     <div class="lgHd" id="lgHd"><i></i><span></span></div>
     <p class="lgSub" id="lgSub">سجّل دخولك برقمك التدريبي</p>
@@ -2300,7 +2300,7 @@ function showLogin(){
   ['lgNew1','lgNewU'].forEach(x=>$(x).addEventListener('input',pwOk));
   const isT=()=>role==='t'||mode==='d'||mode==='te';
   const errMsg=r=>r.error==='locked'?'🔒 الحساب مقفل مؤقتا بسبب محاولات خاطئة. حاول بعد '+(r.min||5)+((r.min||5)<=10?' دقائق،':' دقيقة،')+' أو اطلب من المدرب «فك القفل».':r.error==='wrong_password'&&r.left?'كلمة المرور غير صحيحة. بقي لك '+(r.left===1?'محاولة واحدة':'محاولتان')+' قبل قفل الحساب مؤقتا.':(ERR[r.error]||'تعذّر الدخول، حاول مرة أخرى.');
-  const tErr=r=>r.error==='not_setup'?'لم يُنشأ حساب المدرب بعد. افتح لوحة المدرب لإنشائه.':r.error==='wrong_user'?'اسم المستخدم أو كلمة المرور غير صحيحة.':errMsg(r);
+  const tErr=r=>r.error==='not_setup'?'لم يُنشأ حساب المدرب بعد. افتح لوحة المدرب لإنشائه.':(r.error==='wrong_user'||r.error==='wrong_password')?'اسم المستخدم أو كلمة المرور غير صحيحة.'+(r.left?' بقي لك '+(r.left===1?'محاولة واحدة':'محاولتان')+' قبل قفل الحساب مؤقتا.':''):errMsg(r);
   const toStep2=(k,r)=>{kind=k;step=2;$('lgStep1').hidden=true;$('lgStep2').hidden=false;$('lgCodeL').hidden=k!=='first';$('lgNewUL').hidden=!(k==='change'&&r.weakUser);
     $('lgNew1').value='';$('lgNew2').value='';$('lgCode').value='';$('lgNewU').value='';pwOk();
     $('lgSub').textContent=k==='first'?'أهلًا '+r.name+'، هذا أول دخول لك. اكتب رمز التسجيل الذي أعطاك إياه المدرب، ثم اختر كلمة مرور قوية.':'كلمة مرورك الحالية لا تحقق شروط الأمان الجديدة. اختر كلمة مرور قوية لتكمل الدخول.';
@@ -2328,8 +2328,9 @@ function showLogin(){
       if(r.ok&&r.token)return ok(r);
       msg(errMsg(r),1)}).catch(fail)};
 }
-/* صفحة الدخول تظهر لكل من لم يسجل دخوله كمتدرب، حتى لو كان المدرب داخلا في لوحته */
-if(API&&!AUTH){showLogin()}
+/* المدرب الداخل في لوحته يرى المنصة مباشرة (زر «المنصة» في اللوحة)، وزر «👨‍🏫 لوحة المدرب» يرجعه إليها */
+if(API&&!AUTH&&TAUTH){$('loginWrap').hidden=true;const u=$('userChip');u.hidden=false;u.textContent='👨‍🏫 لوحة المدرب';u.onclick=()=>location.href='teacher.html';buildNav();updateProgress();render()}
+else if(API&&!AUTH){showLogin()}
 else{
   if(API&&AUTH){
     if(AUTH.exam){document.body.classList.add('examOnly');pos.t='exam'}else if(pos.t==='exam')pos.t='sum';
