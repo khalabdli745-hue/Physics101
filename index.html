@@ -652,6 +652,9 @@ body.calcNew .view .calc{margin:6px 0 0;box-shadow:none}body.calcNew .view .calc
 /* صفحتا «مدرب» و«متدرب»: المحتوى أنزل قليلا من السابق، والأيقونة في مكانها */
 .loginBox:is([data-pg="s"],[data-pg="t"]) h1.tJ{margin-top:18px!important}.loginBox:is([data-pg="s"],[data-pg="t"]) .lgPg{margin-top:30px!important}.loginBox:is([data-pg="s"],[data-pg="t"]) .credit{margin-top:30px!important}
 }
+
+/* أعلى الصفحة يمتد مع لون شريط الحالة في الآيفون بلا حد ظاهر */
+@media (max-width:600px){.loginBox:after{content:"";position:absolute;top:0;left:0;right:0;height:170px;pointer-events:none;background:linear-gradient(180deg,#73a5f3 0,#73a5f3 24px,rgba(115,165,243,.75) 70px,rgba(115,165,243,0) 170px)}}
 </style>
 </head>
 <body>
