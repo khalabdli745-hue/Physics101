@@ -631,6 +631,7 @@ body.calcNew .view .calc{margin:6px 0 0;box-shadow:none}body.calcNew .view .calc
 .lgTl svg{width:34px;height:34px;fill:currentColor}.lgTls3 .lgTl svg{width:28px;height:28px}
 .lgGd{display:flex;align-items:center;justify-content:center;gap:10px;background:#eaf3fd;border-radius:16px;padding:14px;font-weight:800;font-size:17px;color:#0d4fa8;text-decoration:none;margin-top:2px}.lgGd svg{width:24px;height:24px;fill:currentColor}
 .lgHd{display:flex;align-items:center;justify-content:center;gap:10px;margin:10px 0 0;font-weight:800;font-size:22px;color:#0d4fa8}.lgHd i{display:grid;place-items:center;width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#1e7be0,#0d4fa8);color:#fff}.lgHd svg{width:26px;height:26px;fill:currentColor}
+@media (any-pointer:coarse){.lgBack,.loginBox>.lgBack{display:none!important}}
 </style>
 </head>
 <body>
@@ -2281,8 +2282,9 @@ function showLogin(){
     d:{sub:'معاينة المنصة كما يراها المتدرب',lab:'اسم المستخدم',im:'text',hint:'باسم المستخدم وكلمة المرور الخاصة بلوحة المدرب.',val:''},
     te:{sub:'تجربة الاختبار التجريبي كما يراه المتدرب',lab:'اسم المستخدم',im:'text',hint:'باسم المستخدم وكلمة المرور الخاصة بلوحة المدرب، ولا تدخل درجتك في النتائج.',val:''}};
   const LGI={"s": "<svg viewBox=\"0 0 24 24\"><path d=\"M2 5c3-1.5 6-1.5 9 .5v15c-3-2-6-2-9-.5zM22 5c-3-1.5-6-1.5-9 .5v15c3-2 6-2 9-.5z\"/></svg>", "e": "<svg viewBox=\"0 0 24 24\"><path d=\"M8 2h8v3H8z\"/><path d=\"M5 4h2v3h10V4h2v18H5z\" fill-opacity=\".85\"/><path d=\"M8 12l2 2 4-4M8 17h8\" fill=\"none\" stroke=\"#1565c8\" stroke-width=\"1.8\"/></svg>", "t": "<svg viewBox=\"0 0 24 24\"><rect x=\"2\" y=\"3\" width=\"20\" height=\"14\" rx=\"2\"/><path d=\"M6 13v-3M10 13V7M14 13v-4M18 13V6\" stroke=\"#1565c8\" stroke-width=\"2\"/><path d=\"M8 21h8v-2H8z\"/></svg>", "d": "<svg viewBox=\"0 0 24 24\"><path d=\"M12 5C6 5 2 12 2 12s4 7 10 7 10-7 10-7-4-7-10-7z\"/><circle cx=\"12\" cy=\"12\" r=\"3.5\" fill=\"#1565c8\"/></svg>", "te": "<svg viewBox=\"0 0 24 24\"><path d=\"M8 2h8v3H8z\"/><path d=\"M5 4h2v3h10V4h2v18H5z\" fill-opacity=\".85\"/><path d=\"M8 12l2 2 4-4M8 17h8\" fill=\"none\" stroke=\"#1565c8\" stroke-width=\"1.8\"/></svg>"},LGT={s:"المنصة",e:"الاختبارات",t:"لوحة المدرب",d:"معاينة المدرب",te:"الاختبارات"};
-  let pg='0',grp='s';const show=p=>{pg=p;['0','s','t','f'].forEach(x=>$('lgP'+x).hidden=x!==p);$('lgBack').hidden=p==='0';$('lgAbout').hidden=p!=='0';scrollTo(0,0);$('loginWrap').scrollTop=0};
-  $('lgBack').onclick=()=>show(pg==='f'?grp:'0');
+  let pg='0',grp='s',hD=0;const show=(p,pop)=>{const up=(pg==='0'&&p!=='0')||(pg!=='f'&&p==='f');if(!pop&&up){try{history.pushState({lg:p},'');hD++}catch(e){}}pg=p;['0','s','t','f'].forEach(x=>$('lgP'+x).hidden=x!==p);$('lgBack').hidden=p==='0';$('lgAbout').hidden=p!=='0';scrollTo(0,0);$('loginWrap').scrollTop=0};
+  $('lgBack').onclick=()=>{if(hD>0)history.back();else show(pg==='f'?grp:'0',true)};
+  window.addEventListener('popstate',()=>{if($('loginWrap').hidden||hD<=0)return;hD--;show(pg==='f'?grp:'0',true)});
   const setRole=k=>{const r=k==='te'?'e':k;mode=k;grp=(k==='t'||k==='d'||k==='te')?'t':'s';role=r;step=1;kind='';$('lgStep1').hidden=false;$('lgStep2').hidden=true;$('lgBtn').textContent='دخول';$('lgBtn').disabled=false;
     $('lgHd').firstElementChild.innerHTML=LGI[k];$('lgHd').lastElementChild.textContent=LGT[k];
     const R=ROLES[k];$('lgSub').textContent=R.sub;$('lgIdLab').textContent=R.lab;$('lgId').inputMode=R.im;$('lgId').value=R.val;$('lgPw').value='';$('lgHint').innerHTML=R.hint;$('lgMsg').textContent='';
@@ -2336,7 +2338,7 @@ else{
   if(API&&AUTH){
     if(AUTH.exam){document.body.classList.add('examOnly');pos.t='exam'}else if(pos.t==='exam')pos.t='sum';
     const u=$('userChip');u.hidden=false;u.textContent=(AUTH.exam?'📝 ':AUTH.demo?'👁 ':'👤 ')+(AUTH.demo&&!AUTH.exam?'معاينة المدرب':(AUTH.name||AUTH.id).split(' ')[0])+(AUTH.exam?' · خروج':'');u.title='خروج';
-    u.onclick=()=>{if(AUTH.demo){if(confirm('الخروج من الحساب التجريبي والعودة إلى لوحة المدرب؟')){try{localStorage.removeItem('p101-auth')}catch(e){}location.href='teacher.html'}return}
+    u.onclick=()=>{if(AUTH.demo){if(confirm('الخروج من الحساب التجريبي والعودة إلى لوحة المدرب؟')){try{localStorage.removeItem('p101-auth')}catch(e){}location.replace('teacher.html')}return}
       if(confirm('تسجيل الخروج من حساب '+(AUTH.name||AUTH.id)+'؟'))SYNC.logout()};
     if(!AUTH.exam)SYNC.post({a:'me',token:AUTH.token}).then(r=>{
       if(r.error==='auth')return SYNC.logout(true);
@@ -2418,5 +2420,6 @@ const start=()=>{fix(document.body);new MutationObserver(ms=>{ms.forEach(m=>{if(
 if(document.body)start();else document.addEventListener('DOMContentLoaded',start)})();
 </script>
 <script>/* الشكل الموحد للآلة الحاسبة (معتمد 22 أكتوبر) لكل المتدربين */(function(){const f=()=>{document.body&&document.body.classList.add('calcNew')};document.addEventListener('DOMContentLoaded',f);f()})();</script>
+<script>window.addEventListener('pageshow',e=>{if(e.persisted)location.reload()});</script>
 </body>
 </html>
