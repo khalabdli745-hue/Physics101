@@ -633,6 +633,25 @@ body.calcNew .view .calc{margin:6px 0 0;box-shadow:none}body.calcNew .view .calc
 .lgGd{display:flex;align-items:center;justify-content:center;gap:10px;background:#eaf3fd;border-radius:16px;padding:14px;font-weight:800;font-size:17px;color:#0d4fa8;text-decoration:none;margin-top:2px}.lgGd svg{width:24px;height:24px;fill:currentColor}
 .lgHd{display:flex;align-items:center;justify-content:center;gap:10px;margin:10px 0 0;font-weight:800;font-size:22px;color:#0d4fa8}.lgHd i{display:grid;place-items:center;width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#1e7be0,#0d4fa8);color:#fff}.lgHd svg{width:26px;height:26px;fill:currentColor}
 @media (any-pointer:coarse){.lgBack,.loginBox>.lgBack{display:none!important}}
+
+/* صفحة الدخول في الجوال: الخلفية الزرقاء ممتدة تحت شريط الحالة، والأيقونة بعيدة عن النوتش، والسطر الأخير فوق شريط البحث */
+@media (max-width:600px){.loginWrap{background:#60a5fa!important}.loginWrap>.loginBox{background:#fff!important;padding-bottom:calc(env(safe-area-inset-bottom) + 104px)!important}}
+.loginBox .credit{margin:16px auto 0!important;padding:14px 18px 16px!important;width:calc(100% - 8px);max-width:360px;box-sizing:border-box;border-radius:18px;background:linear-gradient(180deg,#f5f9ff,#e7f0fd);border:1px solid #cfe0f7;box-shadow:0 10px 24px -16px rgba(13,79,168,.5);text-align:center}
+.loginBox .credit .crL{display:flex;align-items:center;gap:10px;font-size:14.5px;font-weight:700;color:#64748b;letter-spacing:.2px}
+.loginBox .credit .crL:before,.loginBox .credit .crL:after{content:"";flex:1;height:1.5px;border-radius:2px;background:linear-gradient(90deg,transparent,#93c5fd)}
+.loginBox .credit .crL:after{background:linear-gradient(90deg,#93c5fd,transparent)}
+.loginBox .credit b{font-size:24px!important;margin-top:8px!important;color:#0d4fa8!important;line-height:1.5}
+
+/* الجوال: الصفحة الأولى وصفحة الدخول (حتى «اقرأ المزيد» واسم المدرب) فوق شريط البحث في الآيفون دون تمرير، والأيقونة في مكانها */
+@media (max-width:600px){
+.loginBox:is([data-pg="0"],[data-pg="f"]) h1.tJ{font-size:24px!important;margin-top:2px!important;line-height:1.35}.loginBox:is([data-pg="0"],[data-pg="f"]) .tJ2{font-size:17px!important;margin-top:2px!important}
+.loginBox[data-pg="0"] .lgTl{padding-top:12px!important;padding-bottom:12px!important}.loginBox[data-pg="0"] .lgTl i{width:56px!important;height:56px!important}
+.loginBox:is([data-pg="0"],[data-pg="f"]) .credit{margin-top:6px!important;padding:8px 14px 9px!important}.loginBox:is([data-pg="0"],[data-pg="f"]) .credit .crL{font-size:13px}.loginBox:is([data-pg="0"],[data-pg="f"]) .credit b{font-size:21px!important;margin-top:3px!important;line-height:1.35}
+.lgAbout{padding-top:8px!important;margin-top:0!important}.lgAbout h2{margin-bottom:2px!important}.lgAbout p{font-size:13px!important;line-height:1.7!important}.lgMore summary{margin-top:2px!important}
+#lgMsg:empty{display:none}.lgF input{height:50px}.lgBtn{height:52px!important}.lgHint{line-height:1.6!important}
+/* صفحتا «مدرب» و«متدرب»: المحتوى أنزل قليلا من السابق، والأيقونة في مكانها */
+.loginBox:is([data-pg="s"],[data-pg="t"]) h1.tJ{margin-top:18px!important}.loginBox:is([data-pg="s"],[data-pg="t"]) .lgPg{margin-top:30px!important}.loginBox:is([data-pg="s"],[data-pg="t"]) .credit{margin-top:30px!important}
+}
 </style>
 </head>
 <body>
@@ -698,7 +717,7 @@ body.calcNew .view .calc{margin:6px 0 0;box-shadow:none}body.calcNew .view .calc
     <p class="lgMsg" id="lgMsg" aria-live="polite"></p>
     <button class="btn lgBtn" id="lgBtn" type="submit">دخول</button>
     </div>
-    <div class="credit">إعداد وتطوير المدرب<b>أ / خليل بن موسى المالكي</b></div>
+    <div class="credit"><span class="crL">إعداد وتطوير المدرب</span><b>أ / خليل بن موسى المالكي</b></div>
     <section class="lgAbout" id="lgAbout" aria-labelledby="lgAboutT"><h2 id="lgAboutT">عن المنصة</h2><p>منصة الفيزياء العامة 101 التدريبية هي منصة تدريبية تفاعلية مدعومة بالذكاء الاصطناعي لمتدربي الكليات التقنية، يرافقك فيها مدرب ذكي يشرح لك الدروس، ثم تنتقل إلى المعمل لتجري التجارب العملية بنفسك، وتثبّت فهمك بأمثلة وتمارين تفاعلية، لتقيس تقدمك في اختبارات تتابع نتائجك خطوة بخطوة.</p><details class="lgMore"><summary>اقرأ المزيد ▾</summary><p>تخيل أن لديك مدربا خاصا يشرح لك دروس الفيزياء خطوة بخطوة، ويتفاعل معك ويجيب عن أسئلتك، ثم يأخذ بيدك إلى المعمل الفيزيائي الافتراضي لتجري التجارب العملية الفيزيائية بنفسك. هذه هي منصة الفيزياء العامة 101 التدريبية لمتدربي الكليات التقنية. يشرح فيها المدرب الذكي التفاعلي دروسا علمية بالصوت على السبورة، ويرافق المساعد الذكي المتدرب في حل الأمثلة والتمارين. ولكل درس علمي تجربة عملية تفاعلية، يمسك فيها المتدرب أدوات القياس بنفسه، فيقيس ويسجل ويحسب ويتحقق من القانون كأنه في معمل حقيقي. ومحتواها العلمي مطابق للحقيبة التدريبية المعتمدة، ومستند إلى مراجع علمية متخصصة، وبعد كل درس تنتظر المتدرب أمثلة وتمارين تفاعلية تقيّمه فورا، وتتابع تقدمه درسا بعد درس.</p></details></section>
   </form>
 </div>
@@ -2287,7 +2306,7 @@ function showLogin(){
     d:{sub:'معاينة المنصة كما يراها المتدرب',lab:'اسم المستخدم',im:'text',hint:'باسم المستخدم وكلمة المرور الخاصة بلوحة المدرب.',val:''},
     te:{sub:'تجربة الاختبار التجريبي كما يراه المتدرب',lab:'اسم المستخدم',im:'text',hint:'باسم المستخدم وكلمة المرور الخاصة بلوحة المدرب، ولا تدخل درجتك في النتائج.',val:''}};
   const LGI={"s": "<svg viewBox=\"0 0 24 24\"><path d=\"M2 5c3-1.5 6-1.5 9 .5v15c-3-2-6-2-9-.5zM22 5c-3-1.5-6-1.5-9 .5v15c3-2 6-2 9-.5z\"/></svg>", "e": "<svg viewBox=\"0 0 24 24\"><path d=\"M8 2h8v3H8z\"/><path d=\"M5 4h2v3h10V4h2v18H5z\" fill-opacity=\".85\"/><path d=\"M8 12l2 2 4-4M8 17h8\" fill=\"none\" stroke=\"#1565c8\" stroke-width=\"1.8\"/></svg>", "t": "<svg viewBox=\"0 0 24 24\"><rect x=\"2\" y=\"3\" width=\"20\" height=\"14\" rx=\"2\"/><path d=\"M6 13v-3M10 13V7M14 13v-4M18 13V6\" stroke=\"#1565c8\" stroke-width=\"2\"/><path d=\"M8 21h8v-2H8z\"/></svg>", "d": "<svg viewBox=\"0 0 24 24\"><path d=\"M12 5C6 5 2 12 2 12s4 7 10 7 10-7 10-7-4-7-10-7z\"/><circle cx=\"12\" cy=\"12\" r=\"3.5\" fill=\"#1565c8\"/></svg>", "te": "<svg viewBox=\"0 0 24 24\"><path d=\"M8 2h8v3H8z\"/><path d=\"M5 4h2v3h10V4h2v18H5z\" fill-opacity=\".85\"/><path d=\"M8 12l2 2 4-4M8 17h8\" fill=\"none\" stroke=\"#1565c8\" stroke-width=\"1.8\"/></svg>"},LGT={s:"المنصة",e:"الاختبارات",t:"لوحة المدرب",d:"معاينة المدرب",te:"الاختبارات"};
-  let pg='0',grp='s',hD=0;const show=(p,pop)=>{const up=(pg==='0'&&p!=='0')||(pg!=='f'&&p==='f');if(!pop&&up){try{history.pushState({lg:p},'');hD++}catch(e){}}pg=p;['0','s','t','f'].forEach(x=>$('lgP'+x).hidden=x!==p);$('lgBack').hidden=p==='0';$('lgAbout').hidden=p!=='0';scrollTo(0,0);$('loginWrap').scrollTop=0};
+  let pg='0',grp='s',hD=0;const show=(p,pop)=>{const up=(pg==='0'&&p!=='0')||(pg!=='f'&&p==='f');if(!pop&&up){try{history.pushState({lg:p},'');hD++}catch(e){}}pg=p;$('loginForm').dataset.pg=p;['0','s','t','f'].forEach(x=>$('lgP'+x).hidden=x!==p);$('lgBack').hidden=p==='0';$('lgAbout').hidden=p!=='0';scrollTo(0,0);$('loginWrap').scrollTop=0};
   $('lgBack').onclick=()=>{if(hD>0)history.back();else show(pg==='f'?grp:'0',true)};
   window.addEventListener('popstate',()=>{if($('loginWrap').hidden||hD<=0)return;hD--;show(pg==='f'?grp:'0',true)});
   const setRole=k=>{const r=k==='te'?'e':k;mode=k;grp=(k==='t'||k==='d'||k==='te')?'t':'s';role=r;step=1;kind='';$('lgStep1').hidden=false;$('lgStep2').hidden=true;$('lgBtn').textContent='دخول';$('lgBtn').disabled=false;
