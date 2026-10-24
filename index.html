@@ -18,6 +18,7 @@
 <meta name="twitter:title" content="منصة الفيزياء العامة 101 التدريبية">
 <meta name="twitter:description" content="منصة الفيزياء العامة 101 التدريبية لمتدربي الكليات التقنية: مدرب ذكي تفاعلي يشرح الدروس العلمية بالصوت، ومساعد ذكي في حل الأمثلة والتمارين، و23 تجربة عملية تفاعلية في معمل فيزيائي افتراضي.">
 <meta name="twitter:image" content="https://physics101.onrender.com/icon-512.png">
+<script>/* جلسة المدرب تنتهي بعد ساعة بلا استخدام */(function(){try{var K='p101-tlast',n=Date.now(),l=+localStorage.getItem(K)||0;if(localStorage.getItem('p101-tauth')&&l&&n-l>36e5)localStorage.removeItem('p101-tauth');localStorage.setItem(K,n)}catch(e){}})();</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebSite", "name": "منصة الفيزياء العامة 101 التدريبية", "alternateName": "فيزياء 101", "url": "https://physics101.onrender.com/", "description": "منصة الفيزياء العامة 101 التدريبية لمتدربي الكليات التقنية: مدرب ذكي تفاعلي يشرح الدروس العلمية بالصوت، ومساعد ذكي في حل الأمثلة والتمارين، و23 تجربة عملية تفاعلية في معمل فيزيائي افتراضي.", "inLanguage": "ar", "author": {"@id": "#trainer"}}, {"@type": "Course", "name": "الفيزياء العامة 101", "url": "https://physics101.onrender.com/", "description": "تخيل أن لديك مدربا خاصا يشرح لك دروس الفيزياء خطوة بخطوة، ويتفاعل معك ويجيب عن أسئلتك، ثم يأخذ بيدك إلى المعمل الفيزيائي الافتراضي لتجري التجارب العملية الفيزيائية بنفسك. هذه هي منصة الفيزياء العامة 101 التدريبية لمتدربي الكليات التقنية. يشرح فيها المدرب الذكي التفاعلي دروسا علمية بالصوت على السبورة، ويرافق المساعد الذكي المتدرب في حل الأمثلة والتمارين. ولكل درس علمي تجربة عملية تفاعلية، يمسك فيها المتدرب أدوات القياس بنفسه، فيقيس ويسجل ويحسب ويتحقق من القانون كأنه في معمل حقيقي. ومحتواها العلمي مطابق للحقيبة التدريبية المعتمدة، ومستند إلى مراجع علمية متخصصة، وبعد كل درس تنتظر المتدرب أمثلة وتمارين تفاعلية تقيّمه فورا، وتتابع تقدمه درسا بعد درس.", "inLanguage": "ar", "educationalLevel": "الكليات التقنية", "provider": {"@id": "#trainer"}, "hasCourseInstance": {"@type": "CourseInstance", "courseMode": "online", "instructor": {"@id": "#trainer"}}, "teaches": ["القياس والوحدات", "المتجهات", "الحركة وقوانين نيوتن", "الشغل والطاقة", "الحرارة", "الكهرباء الساكنة والمكثفات", "التيار الكهربائي والمقاومة"]}, {"@type": "Person", "@id": "#trainer", "name": "خليل بن موسى المالكي", "honorificPrefix": "أ", "jobTitle": "مدرب"}]}</script>
 <meta name="theme-color" content="#60a5fa">
 <link rel="manifest" href="manifest.json">
@@ -2218,13 +2219,17 @@ function examPaper(i){
     draw();i.appendChild(d)});
   cnt();
   const f=card('إنهاء الاختبار');f.insertAdjacentHTML('beforeend','<p class="sub">إذا لم تضغط الزر يرسل الاختبار تلقائيا بإجاباتك المحفوظة عند انتهاء الوقت.</p>');const sb=document.createElement('button');sb.className='btn exSubmit';sb.textContent='إنهاء الاختبار وإرساله';const msg=document.createElement('p');msg.className='rmsg';f.append(sb,msg);i.appendChild(f);
+  /* خروج تلقائي للمتدرب بعد تسليم الاختبار، حتى لا يبقى حسابه مفتوحا في جهاز القاعة */
+  const exOut=()=>{if(!AUTH||AUTH.demo||document.getElementById('exOut'))return;let n=20;const b=document.createElement('div');b.id='exOut';b.style.cssText='position:fixed;left:12px;right:12px;bottom:12px;z-index:9999;background:#0f172a;color:#fff;border-radius:14px;padding:12px 14px;display:flex;gap:10px;align-items:center;justify-content:space-between;font-weight:800;box-shadow:0 6px 20px rgba(0,0,0,.3)';
+    b.innerHTML='<span>🔒 حفاظا على حسابك يسجل خروجك تلقائيا بعد <b>20</b> ثانية</span><button type="button" style="font:inherit;font-weight:900;border:0;border-radius:10px;padding:8px 12px;background:#F7931E;color:#fff">خروج الآن</button>';document.body.appendChild(b);
+    const out=()=>{clearInterval(tm);SYNC.logout()};b.querySelector('button').onclick=out;const tm=setInterval(()=>{n--;const x=b.querySelector('b');if(x)x.textContent=n;if(n<=0)out()},1000)};
   const submit=async auto=>{const left=X.qs.length-X.ans.filter(isDone).length;
     if(!auto&&!(await examAsk(left?`لم تكمل ${AR(left)} من الأسئلة. هل تنهي الاختبار وترسله الآن؟ لا يمكنك تعديله بعد الإرسال.`:'هل تنهي الاختبار وترسله الآن؟ لا يمكنك تعديله بعد الإرسال.','إنهاء وإرسال','رجوع')))return;
     clearInterval(EXAM.timer);sb.disabled=true;msg.className='rmsg';msg.textContent='جار التسليم…';
     const go=n=>SYNC.post({a:'examsubmit',token:AUTH.token,id:X.id,answers:X.ans,dev:exDev()}).then(r=>{if(r.error==='other_device'){sb.disabled=false;msg.className='rmsg bad';msg.textContent=EX_OTHER;return}if(!r.ok)throw 0;
         EXAM.cur=null;document.body.classList.remove('examMode');{const d=document.getElementById('exDoneBar');if(d)d.remove()}document.querySelectorAll('.exSheet').forEach(x=>x.remove());document.body.classList.remove('exSheetOn');(EXAM.list||[]).forEach(e=>{if(e.id===X.id){e.status='done';e.score=r.score}});
-        if(pos.t!=='exam'){examBar();return}const v=$('view');const w=wrap(v);const c=card('✓ تم تسليم الاختبار',`${esc(X.t)}`);c.insertAdjacentHTML('beforeend',`<div class="exScore">وصلت إجاباتك إلى المدرب.</div>`);
-        const bk=document.createElement('button');bk.className='btn';bk.textContent='العودة إلى الاختبارات';bk.onclick=()=>render();c.appendChild(bk);w.appendChild(c);examBar()})
+        if(pos.t!=='exam'){examBar();exOut();return}const v=$('view');const w=wrap(v);const c=card('✓ تم تسليم الاختبار',`${esc(X.t)}`);c.insertAdjacentHTML('beforeend',`<div class="exScore">وصلت إجاباتك إلى المدرب.</div>`);
+        const bk=document.createElement('button');bk.className='btn';bk.textContent='العودة إلى الاختبارات';bk.onclick=()=>render();c.appendChild(bk);w.appendChild(c);examBar();exOut()})
       .catch(()=>{if(n<4)return setTimeout(()=>go(n+1),2500);sb.disabled=false;msg.className='rmsg bad';msg.textContent='تعذر التسليم. تحقق من الإنترنت ثم اضغط «تسليم الاختبار» مرة أخرى؛ إجاباتك محفوظة.'});
     go(0)};
   sb.onclick=()=>submit(false);
@@ -2308,7 +2313,7 @@ function showLogin(){
     $('lgNew1').value='';$('lgNew2').value='';$('lgCode').value='';$('lgNewU').value='';pwOk();
     $('lgSub').textContent=k==='first'?'أهلًا '+r.name+'، هذا أول دخول لك. اكتب رمز التسجيل الذي أعطاك إياه المدرب، ثم اختر كلمة مرور قوية.':'كلمة مرورك الحالية لا تحقق شروط الأمان الجديدة. اختر كلمة مرور قوية لتكمل الدخول.';
     $('lgBtn').textContent=k==='first'?'حفظ كلمة المرور والدخول':'حفظ والدخول';msg('');(k==='first'?$('lgCode'):$('lgNew1')).focus()};
-  const afterT=token=>{if(role==='t'){localStorage.setItem('p101-tauth',JSON.stringify(token));location.href='teacher.html';return Promise.resolve()}
+  const afterT=token=>{if(role==='t'){localStorage.setItem('p101-tauth',JSON.stringify(token));location.replace('teacher.html');return Promise.resolve()}
     return SYNC.post({a:mode==='d'?'tdemo':'texme',token}).then(x=>{$('lgBtn').disabled=false;if(!x.ok||!x.token)return msg(x.error==='not_found'?'افتح الاختبار التجريبي من لوحة المدرب أولا.':'تعذّر الدخول.',1);lastId=mode==='d'?'demo':String(x.id||'');ok(x)})};
   const dg=v=>v.replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).trim();
   $('loginForm').onsubmit=e=>{e.preventDefault();const b=$('lgBtn');
@@ -2332,7 +2337,7 @@ function showLogin(){
       msg(errMsg(r),1)}).catch(fail)};
 }
 /* المدرب الداخل في لوحته يرى المنصة مباشرة (زر «المنصة» في اللوحة)، وزر «👨‍🏫 لوحة المدرب» يرجعه إليها */
-if(API&&!AUTH&&TAUTH){$('loginWrap').hidden=true;const u=$('userChip');u.hidden=false;u.textContent='👨‍🏫 لوحة المدرب';u.onclick=()=>location.href='teacher.html';buildNav();updateProgress();render()}
+if(API&&!AUTH&&TAUTH){$('loginWrap').hidden=true;const u=$('userChip');u.hidden=false;u.textContent='👨‍🏫 لوحة المدرب';u.onclick=()=>location.replace('teacher.html');buildNav();updateProgress();render()}
 else if(API&&!AUTH){showLogin()}
 else{
   if(API&&AUTH){
@@ -2421,5 +2426,6 @@ if(document.body)start();else document.addEventListener('DOMContentLoaded',start
 </script>
 <script>/* الشكل الموحد للآلة الحاسبة (معتمد 22 أكتوبر) لكل المتدربين */(function(){const f=()=>{document.body&&document.body.classList.add('calcNew')};document.addEventListener('DOMContentLoaded',f);f()})();</script>
 <script>window.addEventListener('pageshow',e=>{if(e.persisted)location.reload()});</script>
+<script>(function(){var K='p101-tlast',t=0;function mark(){var n=Date.now();if(n-t>30000){t=n;try{localStorage.setItem(K,n)}catch(e){}}}['click','keydown','touchstart','scroll'].forEach(function(e){addEventListener(e,mark,{passive:true,capture:true})});setInterval(function(){try{var l=+localStorage.getItem(K)||0;if(localStorage.getItem('p101-tauth')&&l&&Date.now()-l>36e5){localStorage.removeItem('p101-tauth');location.reload()}}catch(e){}},60000)})();</script>
 </body>
 </html>

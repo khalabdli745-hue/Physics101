@@ -188,6 +188,7 @@ details.res .when{color:var(--muted);font-size:12.5px;margin-inline-start:auto}
 </head>
 <body>
 <div id="root"></div>
+<script>/* جلسة المدرب تنتهي بعد ساعة بلا استخدام */(function(){try{var K='p101-tlast',n=Date.now(),l=+localStorage.getItem(K)||0;if(localStorage.getItem('p101-tauth')&&l&&n-l>36e5)localStorage.removeItem('p101-tauth');localStorage.setItem(K,n)}catch(e){}})();</script>
 <script src="config.js"></script>
 <script src="data.js"></script>
 <script src="excel.js"></script>
@@ -229,7 +230,7 @@ function boot(){
   if(!API){root.innerHTML=`<div class="auth"><div class="card" style="max-width:420px"><h2>لم يتم ربط المنصة بعد</h2><p class="sub">لاستخدام لوحة المدرب، اربط المنصة بجدول Google مرة واحدة من صفحة الإعداد.</p><a class="btn" href="setup.html">افتح صفحة الإعداد</a></div></div>`;return}
   if(!TOKEN)return authScreen();
   root.innerHTML=`<header><b>لوحة المدرب</b><span class="tag" id="sheetLink"></span><div class="sp">
-    <button class="btn ghost sm" id="reload">↻ تحديث</button><a class="btn ghost sm" href="index.html">المنصة</a><a class="btn ghost sm" href="teacher-guide.html">📘 الدليل</a><button class="btn ghost sm" id="logout">خروج</button></div></header>
+    <button class="btn ghost sm" id="reload">↻ تحديث</button><a class="btn ghost sm" href="index.html" onclick="event.preventDefault();location.replace('index.html')">المنصة</a><a class="btn ghost sm" href="teacher-guide.html">📘 الدليل</a><button class="btn ghost sm" id="logout">خروج</button></div></header>
   <nav class="tabs" role="tablist">${[['sections','الشعب'],['students','📊 درجات الأعمال الفصلية'],['exams','📝 الاختبارات الفصلية والنهائية'],['bank','🗂 بنك الأسئلة'],['stats','الإحصائيات'],['reports','التقارير'],['ratings','تقييم المتدربين للمنصة'],['dur','⏱ مدة شرح الدروس'],['ai','المساعد الذكي والصوت'],['import','استيراد Excel'],['export','تصدير Excel'],['demo','حسابي التجريبي'],['settings','الإعدادات']].map(([k,n])=>`<button role="tab" data-t="${k}" aria-selected="${tab===k}">${n}</button>`).join('')}</nav>
   <main id="main"><p class="empty"><span class="spin"></span> جارٍ تحميل البيانات…</p></main>`;
   document.documentElement.style.setProperty('--hh',$('header').offsetHeight+'px');
@@ -1157,7 +1158,7 @@ function drawDemo(){
   $('#dsp').onclick=async()=>{const pw=$('#dpw').value;if(!(pw.length>=12&&/[A-Z]/.test(pw)&&/[a-z]/.test(pw)&&/[0-9]/.test(pw)&&/[^A-Za-z0-9\s]/.test(pw)&&!/\s/.test(pw)&&!pw.toLowerCase().includes('demo'))){$('#dpm').className='msg bad';$('#dpm').textContent=ERR.weak_password;return}
     const r=await api({a:'tdemo',token:TOKEN,op:'setpw',pw});$('#dpm').className='msg '+(r.ok?'good':'bad');$('#dpm').textContent=r.ok?'✓ تم الحفظ. ادخل الآن من شاشة المتدربين: اسم المستخدم demo وكلمة المرور التي اخترتها.':errText(r.error);if(r.ok){$('#dpw').value='';toast('تم حفظ كلمة مرور الحساب التجريبي');setTimeout(load,1500)}};
   $('#go').onclick=async()=>{$('#dm').innerHTML='<span class="spin"></span>';const r=await api({a:'tdemo',token:TOKEN});if(!r.ok){$('#dm').textContent=errText(r.error);return}
-    localStorage.setItem('p101-auth',JSON.stringify({id:r.id,token:r.token,name:r.name,section:r.section,demo:true}));location.href='index.html'};
+    localStorage.setItem('p101-auth',JSON.stringify({id:r.id,token:r.token,name:r.name,section:r.section,demo:true}));location.replace('index.html')};
   if(s){$('#see').onclick=()=>openStudent('DEMO');
     $('#rs').onclick=async()=>{if(!confirm('مسح كل نتائج حسابك التجريبي؟'))return;const r=await api({a:'tdemo',token:TOKEN,op:'reset'});toast(r.ok?'تم المسح':errText(r.error));
       try{Object.keys(localStorage).filter(k=>/-DEMO$/.test(k)).forEach(k=>localStorage.removeItem(k))}catch(e){}load()}}
@@ -1174,5 +1175,6 @@ function drawSettings(){
 boot();
 </script>
 <script>window.addEventListener('pageshow',e=>{if(e.persisted)location.reload()});</script>
+<script>(function(){var K='p101-tlast',t=0;function mark(){var n=Date.now();if(n-t>30000){t=n;try{localStorage.setItem(K,n)}catch(e){}}}['click','keydown','touchstart','scroll'].forEach(function(e){addEventListener(e,mark,{passive:true,capture:true})});setInterval(function(){try{var l=+localStorage.getItem(K)||0;if(localStorage.getItem('p101-tauth')&&l&&Date.now()-l>36e5){localStorage.removeItem('p101-tauth');location.reload()}}catch(e){}},60000)})();</script>
 </body>
 </html>
