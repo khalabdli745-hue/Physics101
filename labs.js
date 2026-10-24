@@ -361,7 +361,7 @@ function measureLab(box){
     $('rD1').textContent=okD?E(D.toFixed(2)+' mm'):'—';$('rD2').textContent=okD?E((D/1000).toFixed(5)+' m'):'—';
     const V=Math.PI*D*D*L/4;$('rV1').textContent=okV?E((V/1000).toFixed(2)+' cm³'):'—';$('rV2').textContent=okV?E(sci(V*1e-9)+' m³'):'—';
     $('rNote').textContent=okL&&okD&&okV?'الاستنتاج: أداة الميكرومتر أدق، فدقتها '+E('0.01 mm')+' مقابل '+E('0.1 mm')+' لأداة القدمة ذات الورنية، لذلك تستخدم لقياس القطر الصغير. والحجم كمية مشتقة تحسب من كميتين أساسيتين مقيستين.':'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
-  const LC=()=>L/10,DC=()=>D/10,VC=()=>Math.PI*DC()*DC()*LC()/4;
+  const LC=()=>L/10,DC=()=>D/10,VC=()=>Math.PI*DC()*DC()*LC()/4;box.__ans={vIn:()=>L.toFixed(1),mIn:()=>D.toFixed(2)};
   function vol(){results();
     $('sbL').textContent=okL?['L(cm) = L(mm) / 10',E(`L = ${L.toFixed(1)} / 10`)].join('\n'):'L(cm) = L(mm) / 10';
     $('sbD').textContent=okD?['D(cm) = D(mm) / 10',E(`D = ${D.toFixed(2)} / 10`)].join('\n'):'D(cm) = D(mm) / 10';
@@ -494,7 +494,7 @@ function speedLab2(box){
     for(let i=0;i<30;i++){const a=i/30*2*Math.PI-Math.PI/2,five=i%5===0,one=true,r1=five?R-22:R-13;const hl=sHint&&done&&i===Math.round(T)%30;g+=`<line x1="${200+r1*Math.cos(a)}" y1="${C+r1*Math.sin(a)}" x2="${200+(R-1)*Math.cos(a)}" y2="${C+(R-1)*Math.sin(a)}" stroke="${hl?'#DC2626':'#1F2937'}" stroke-width="${hl?2.6:five?2.2:one?1.5:1}"/>`;if(five)g+=`<text x="${200+(R-38)*Math.cos(a)}" y="${C+(R-38)*Math.sin(a)+6}" font-size="17" font-weight="800" text-anchor="middle" fill="#1F2937">${i}</text>`}
     const a=t/30*2*Math.PI-Math.PI/2;g+=`<line x1="200" y1="${C}" x2="${200+(R-6)*Math.cos(a)}" y2="${C+(R-6)*Math.sin(a)}" stroke="#F7931E" stroke-width="3.5" stroke-linecap="round"/><circle cx="200" cy="${C}" r="7" fill="#F7931E"/><rect x="185" y="${C+22}" width="30" height="20" rx="5" fill="#F7931E"/><text x="200" y="${C+37}" font-size="14" font-weight="800" text-anchor="middle" fill="#fff">s</text>`;
     $('sW').innerHTML=g}
-  const vc=()=>d/T,vm=()=>d/T/100,vk=()=>d/T/100*3.6;
+  const vc=()=>d/T,vm=()=>d/T/100,vk=()=>d/T/100*3.6;box.__ans={tIn:()=>d.toFixed(1),sIn:()=>String(T)};
   function sub(){$('vS1').textContent=okD&&okT?['v = d / t',E(`v = ${d.toFixed(1)} / ${T}`)].join('\n'):'v = d / t';
     $('vS2').textContent=ok1?['v(m/s) = v(cm/s) / 100',E(`v = ${vc().toFixed(1)} / 100`)].join('\n'):'v(m/s) = v(cm/s) / 100';
     $('vS3').textContent=ok2?['v(km/h) = v(m/s) × 3.6',E(`v = ${vm().toFixed(3)} × 3.6`)].join('\n'):'v(km/h) = v(m/s) × 3.6'}
@@ -587,19 +587,19 @@ const ftTag=(hy,lab,c)=>`<g transform="translate(0,${hy})"><rect x="238" y="40" 
 const ftScr=(txt)=>hxZoom([[90,220,txt]],'شاشة الميزان الرقمي (مكبرة)');
 function ftWatch(host,id,frames){let n=frames.length;
   host.innerHTML=`<details class="wsDet"><summary></summary><div class="ftw" style="border:2px solid var(--line);border-radius:14px;padding:10px;margin:8px 0"><h4 style="margin:2px 0 6px">🎬 شاهد: تركيب الأجهزة وطريقة القياس</h4>
-   <div class="stage"><svg id="${id}D" viewBox="-30 -30 460 460"></svg><svg id="${id}Z" viewBox="0 0 400 112" style="display:none"></svg></div><svg id="${id}K" viewBox="0 0 400 100" style="display:block;width:100%;height:auto"></svg>
+   <div class="ftSt"><div class="stage"><svg id="${id}D" viewBox="-30 -30 460 460"></svg><svg id="${id}Z" viewBox="0 0 400 112" style="display:none"></svg></div><svg id="${id}K" viewBox="0 0 400 100" style="display:block;width:100%;height:auto"></svg></div>
    <div class="ftpb" style="display:flex;gap:4px;margin:6px 0"></div>
    <div id="${id}C" style="min-height:3.4em;border-radius:10px;padding:8px 12px;margin:8px 0 6px;background:rgba(247,147,30,.10);border-right:4px solid #F7931E;line-height:1.8;font-size:14.5px">اضغط «▶ شاهد» لترى خطوات التجربة كاملة، خطوة خطوة.</div>
-   <div class="btns" style="display:flex;gap:6px;flex-wrap:wrap"><button type="button" class="go" id="${id}P">▶ شاهد</button><button type="button" class="rs" id="${id}B">→ السابق</button><button type="button" class="rs" id="${id}N">التالي ←</button></div></div></details>`;
+   <div class="btns" style="display:flex;gap:6px;flex-wrap:wrap"><i id="${id}Play" hidden></i><button type="button" class="go" id="${id}P">▶ شاهد</button><button type="button" class="rs" id="${id}B">→ السابق</button><button type="button" class="rs" id="${id}N">التالي ←</button></div></div></details>`;
   const q=s=>host.querySelector('#'+id+s);let k=-1,tm=null;
   const kn=sl=>sl.map(([lab,v,mx,u],i)=>{const y=i*46+8,x=370-340*v/mx;return `<text x="370" y="${y+12}" font-size="13" font-weight="800" text-anchor="end" fill="var(--ink)">${lab}</text><text x="30" y="${y+12}" font-size="13" font-weight="800" fill="#2563EB" direction="ltr">${v}${u}</text><rect x="30" y="${y+22}" width="340" height="7" rx="4" fill="#CBD5E1"/><rect x="${x}" y="${y+22}" width="${370-x}" height="7" rx="4" fill="#FDBA74"/><circle cx="${x}" cy="${y+25.5}" r="11" fill="#F7931E" stroke="#fff" stroke-width="3"/>`}).join('');
-  let at=null;const go=i=>{k=i;const f=frames[i],K=q('K');q('D').setAttribute('viewBox',f.vb||'-30 -30 460 460');clearInterval(at);if(f.seq){let j=0;q('D').innerHTML=f.seq[0];at=setInterval(()=>{j++;if(j<f.seq.length)q('D').innerHTML=f.seq[j];else{clearInterval(at);q('D').innerHTML=f.svg}},140)}else q('D').innerHTML=f.svg;{const Z=q('Z');if(f.z){Z.style.display='';Z.innerHTML=f.z}else{Z.style.display='none';Z.innerHTML=''}}
+  let at=null;const go=i=>{k=i;const f=frames[i],K=q('K');{const D=q('D'),vb=f.vb||'-30 -30 460 460';if(D.getAttribute('data-vb0')!==vb)D.setAttribute('viewBox',vb)}clearInterval(at);if(f.seq){let j=0;q('D').innerHTML=f.seq[0];at=setInterval(()=>{j++;if(j<f.seq.length)q('D').innerHTML=f.seq[j];else{clearInterval(at);q('D').innerHTML=f.svg}},140)}else q('D').innerHTML=f.svg;{const Z=q('Z');if(f.z){Z.style.display='';Z.innerHTML=f.z}else{Z.style.display='none';Z.innerHTML=''}}
     if(f.sl&&f.sl.length){K.style.display='';K.setAttribute('viewBox',`0 0 400 ${f.sl.length*46+8}`);K.innerHTML=kn(f.sl)}else{K.style.display='none';K.innerHTML=''}
     q('C').innerHTML=f.cap;q('C').querySelectorAll('[dir=ltr]').forEach(x=>{x.style.unicodeBidi='isolate';x.style.whiteSpace='nowrap'});host.querySelectorAll('.ftpb i').forEach((x,j)=>x.style.background=j<=i?'#F7931E':'var(--line)');q('B').disabled=i<=0;labFin(q('N'),i>=n-1)};
   q('P').onclick=()=>{clearInterval(tm);go(0);tm=setInterval(()=>{if(k>=n-1){clearInterval(tm);return}go(k+1)},3800)};
   q('N').onclick=()=>{clearInterval(tm);go(Math.min(n-1,k+1))};q('B').onclick=()=>{clearInterval(tm);go(Math.max(0,k-1))};q('B').disabled=true;
   const set=fr=>{frames=fr;n=fr.length;host.querySelector('summary').textContent=`🎬 شاهد خطوات التركيب وطريقة القياس (${n} خطوات)`;host.querySelector('.ftpb').innerHTML='<i style="flex:1;height:5px;border-radius:3px;background:var(--line)"></i>'.repeat(n);if(k>=0)go(Math.min(k,n-1))};
-  set(frames);return {set}}
+  set(frames);host.id='wW';host.querySelector('.ftw').classList.add('wsc');host.__w={get S(){return frames.map(f=>[f.cap])},html:true,stage:host.querySelector('.ftSt'),reset:()=>{clearInterval(tm);clearInterval(at);go(0);k=-1;host.querySelectorAll('.ftpb i').forEach(x=>x.style.background='var(--line)');const D=q('D');if(D.getBoundingClientRect().width>=140)(async()=>{D.style.visibility='hidden';const keep=D.innerHTML;for(const f of frames){D.innerHTML=f.svg;await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))}if(k<0)D.innerHTML=keep;D.style.visibility=''})()},go:i=>{clearInterval(tm);go(i)},stop:()=>clearInterval(tm),cap:q('C'),pb:host.querySelector('.ftpb')};return {set}}
 function forceLab(box){
   box.innerHTML=`<style>${FT_CSS}</style><style>.amProg{display:flex;flex-wrap:wrap;gap:4px;margin:8px 0 10px}.amProg span{font-size:12.5px;font-weight:800;border-radius:20px;padding:3px 9px;background:var(--line);color:var(--muted)}.amProg span.d{background:#16A34A;color:#fff}.amProg i{font-style:normal;color:var(--muted);align-self:center}.amLog{border:2px solid #F7931E;border-radius:14px;padding:8px 10px;margin:8px 0;background:rgba(247,147,30,.06)}.amLog h5{margin:0 0 6px;font-size:15px}.amLog table{width:100%;border-collapse:collapse;font-size:13.5px}.amLog td{border:1px solid var(--line);padding:5px 6px;text-align:center}.amLog td:first-child{font-weight:800;text-align:right}.lab .cV{color:#DC2626!important}.lab .cT{color:#16A34A!important}.lab .cQ{color:#7C3AED!important}</style>
   <div class="intro"><small class="labKind">🧪 تجربة عملية تفاعلية</small><h3>1. اسم التجربة</h3><p class="labName">إيجاد محصلة متجهين باستخدام طاولة القوى</p></div>
@@ -649,7 +649,7 @@ function forceLab(box){
     <div class="row"><label for="m3R">الكتلة الثالثة m₃</label><output id="m3O"></output><input id="m3R" type="range" min="0" max="600" step="5" value="0"></div>
     <div class="row"><label for="t3R">زاوية البكرة الثالثة θ₃</label><output id="t3O"></output><input id="t3R" type="range" min="0" max="359" step="1" value="0"></div>
     <p class="slh">👆 اسحب المؤشر الأول لزيادة الكتلة m₃.<br>ثم اسحب المؤشر الثاني لتدوير البكرة الثالثة إلى الجهة المقابلة للخيطين حتى تستقر الحلقة في المركز، واضغط «تحقق».</p>
-    <div class="ans"><label>عند استقرار الحلقة في المركز اضغط تحقق</label><button type="button" class="go" id="eCk">تحقق</button><button type="button" class="rs" id="eHn">تلميح</button></div><div class="fb2" id="eFb"></div>
+    <div class="ans"><label>عند استقرار الحلقة في المركز اضغط تحقق</label><input id="eIn" type="hidden"><button type="button" class="go" id="eCk">تحقق</button><button type="button" class="rs" id="eHn">تلميح</button></div><div class="fb2" id="eFb"></div>
   </div>
     <div class="ctl"><h3>5.4 الحسابات</h3><div id="logB"></div><p class="slh">الحسابات تأخذ أرقامها من سجل القراءات أعلاه، بنفس ألوانها: <b class="cV">الكتلة</b> و<b class="cT">الزاوية</b> و<b class="cQ">القوة المحسوبة</b>.</p>
     <p class="slh">ℹ️ <b>المعطيات:</b> تسارع الجاذبية <b dir="ltr">g = 9.8 m/s²</b></p>
@@ -675,7 +675,7 @@ function forceLab(box){
     <div class="stage" id="rStage" hidden><svg id="rS" viewBox="0 0 400 428"></svg></div>
     <p class="rn" id="rNote">تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.</p></div>`;
   const $=id=>box.querySelector('#'+id),G=9.8,D2R=Math.PI/180;
-  const CARD=ftCard(box,'الميزان وطاولة القوى');box.querySelector('#wT1').appendChild(CARD);const _q=box.querySelector.bind(box);
+  const CARD=ftCard(box,'الميزان وطاولة القوى');box.querySelector('#wT1').appendChild(CARD);const ftPlace=(bx,card,ph)=>{const f=id=>box.querySelector('#'+id)||document.getElementById(id),t=f({b:'wT1',a:'wT2',e:'wT3'}[ph]);if(card.parentNode!==t)t.appendChild(card);const bS=f('bS'),aS=f('aS'),eS=f('eS');bS.setAttribute('opacity',ph==='b'?1:.4);aS.setAttribute('opacity',ph==='b'?.4:1);aS.style.display=ph==='e'?'none':'';eS.style.display=ph==='e'?'':'none';['b','a','e'].forEach(p=>{const x=f(p+'St');x.style.display=p===ph?'':'none'})};const _q=box.querySelector.bind(box);
   const num=labNum;
   const fb=(id,ok,msg)=>{$(id).textContent=msg;$(id).className='fb2 '+(ok?'ok':'no')};
   const fx=(x,n)=>String(+x.toFixed(n));
@@ -683,7 +683,7 @@ function forceLab(box){
   const F1=()=>m1/1000*G,F2=()=>m2/1000*G,TH=()=>t2-t1;
   const RR=()=>Math.sqrt(F1()**2+F2()**2+2*F1()*F2()*Math.cos(TH()*D2R));
   const AL=()=>Math.atan2(F2()*Math.sin(TH()*D2R),F1()+F2()*Math.cos(TH()*D2R))/D2R;
-  const TR=()=>t1+AL(),TE=()=>(TR()+180)%360,MR=()=>RR()/G*1000;
+  const TR=()=>t1+AL(),TE=()=>(TR()+180)%360,MR=()=>RR()/G*1000;box.__ans={m1In:()=>m1.toFixed(1),m2In:()=>m2.toFixed(1),t1In:()=>String(t1),t2In:()=>String(t2),m3:()=>Math.round(MR()/5)*5,t3:()=>Math.round(TE())%360};
   const adiff=(a,b)=>{let d=Math.abs(a-b)%360;return d>180?360-d:d};
   const ringF=(m3,t3)=>{const nx=F1()*Math.cos(t1*D2R)+F2()*Math.cos(t2*D2R)+m3/1000*G*Math.cos(t3*D2R),ny=F1()*Math.sin(t1*D2R)+F2()*Math.sin(t2*D2R)+m3/1000*G*Math.sin(t3*D2R),n=Math.hypot(nx,ny);
     const bal=Math.abs(m3-MR())<=6&&adiff(t3,TE())<=2,s=bal?0:Math.min(30,Math.max(6,n/Math.max(F1(),F2())*40));return [n?nx/n*s:0,n?-ny/n*s:0]};
@@ -732,11 +732,11 @@ function forceLab(box){
     $('sbF2').innerHTML=ok.m2?['F₂ = m₂·g',E(`m₂ = ${cl('cV',m2.toFixed(1))} g = ${cl('cV',m2/1000)} kg`),E(`F₂ = ${cl('cV',m2/1000)} × 9.8`)].join('\n'):'F₂ = m₂·g';
     $('sbTH').innerHTML=ok.t1&&ok.t2?['θ = θ₂ − θ₁',E(`θ = ${cl('cT',t2+'°')} − ${cl('cT',t1+'°')}`)].join('\n'):'θ = θ₂ − θ₁';
     $('sb4').innerHTML=ok.cF1&&ok.cF2&&ok.cTH?['R = √( F₁² + F₂² + 2·F₁·F₂·cos θ )',E(`R = √( ${f1}² + ${f2}² + 2 × ${f1} × ${f2} × cos ${cl('cT',TH()+'°')} )`)].join('\n'):'R = √( F₁² + F₂² + 2·F₁·F₂·cos θ )'}
-  function logs(){const c=(k,x)=>`<b class="${k}" dir="ltr">${x}</b>`,row=(n,v)=>`<tr><td>${n}</td><td>${v}</td></tr>`;
+  function logs(){const lb=$('logB'),nw=lb?[...lb.querySelectorAll('tr.nw')].map(r=>r.dataset.k):[],K=['m1In','m2In','t1In','t2In','eIn'];let ri=0;const c=(k,x)=>`<b class="${k}" dir="ltr">${x}</b>`,row=(n,v)=>{const k=K[ri++];return `<tr data-k="${k}"${nw.includes(k.replace(/2$/,''))?' class="nw"':''}><td>${n}</td><td>${v}</td></tr>`};
     const h='<table>'+row('<span class="cV">m₁</span> كتلة الحامل الأول',ok.m1?c('cV',m1.toFixed(1)+' g'):'—')+row('<span class="cV">m₂</span> كتلة الحامل الثاني',ok.m2?c('cV',m2.toFixed(1)+' g'):'—')
       +row('<span class="cT">θ₁</span> زاوية الخيط الأول',ok.t1?c('cT',t1+'°'):'—')+row('<span class="cT">θ₂</span> زاوية الخيط الثاني',ok.t2?c('cT',t2+'°'):'—')
       +row('قوة الاتزان <span class="cV">m₃</span> و <span class="cT">θ₃</span>',ok.e?c('cV',ok.e.m+' g')+' ، '+c('cT',ok.e.t+'°'):'—')+'</table>';
-    $('logA').innerHTML=h;$('logB').innerHTML='<div class="amLog"><h5>📋 سجل القراءات</h5>'+h+'</div>'}
+    $('logA').innerHTML=h;$('logB').innerHTML='<div class="amLog"><h5>📋 سجل القراءات</h5>'+h.replace('<table>','<table class="lxLog">')+'</div>';if(nw.length)setTimeout(()=>$('logB').querySelectorAll('tr.nw').forEach(r=>r.className='ok'),1400)}
   function progS(){const L=[[ok.m1&&ok.m2,'الكتلتان'],[ok.t1&&ok.t2,'الزاويتان'],[!!ok.e,'الاتزان'],[ok.cF1&&ok.cF2,'F₁ و F₂'],[!!ok.cTH,'θ'],[!!ok.c4,'R']];
     $('prog').innerHTML=L.map(([d,t])=>`<span class="${d?'d':''}">${d?'✓ ':''}${t}</span>`).join('<i>←</i>')}
 
@@ -837,7 +837,7 @@ function vecLab(box){
     <div class="row"><label for="yR">الكتلة mᵧ على البكرة 270°</label><output id="yO"></output><input id="yR" type="range" min="0" max="500" step="5" value="0"></div>
     <p class="slh">👆 اسحب المؤشر الأول لزيادة الكتلة mₓ على المحور السيني.<br>ثم اسحب المؤشر الثاني لزيادة الكتلة mᵧ على المحور الصادي حتى تستقر الحلقة في المركز، واضغط «تحقق».</p>
     <p class="slh" style="border-style:solid;background:rgba(247,147,30,.10)"><b>ملاحظة:</b> الكتلتان mₓ و mᵧ تشدان الحلقة <b>عكس</b> مركبتي القوة حتى تتزن، فتكون قوتهما مساوية للمركبتين في المقدار ومعاكسة لهما في الاتجاه.</p>
-    <div class="ans"><label>عند استقرار الحلقة في المركز اضغط تحقق</label><button type="button" class="go" id="eCk">تحقق</button><button type="button" class="rs" id="eHn">تلميح</button></div><div class="fb2" id="eFb"></div>
+    <div class="ans"><label>عند استقرار الحلقة في المركز اضغط تحقق</label><input id="eIn" type="hidden"><button type="button" class="go" id="eCk">تحقق</button><button type="button" class="rs" id="eHn">تلميح</button></div><div class="fb2" id="eFb"></div>
   </div>
     <div class="ctl"><h3>5.4 الحسابات</h3><div id="logB"></div><p class="slh">الحسابات تأخذ أرقامها من سجل القراءات أعلاه، بنفس ألوانها: <b class="cV">الكتلة</b> و<b class="cT">الزاوية</b> و<b class="cQ">القوة المحسوبة</b>.</p>
     <p class="slh">ℹ️ <b>المعطيات:</b> تسارع الجاذبية <b dir="ltr">g = 9.8 m/s²</b></p>
@@ -860,12 +860,12 @@ function vecLab(box){
     <div class="stage" id="rStage" hidden><svg id="rS" viewBox="0 0 400 355"></svg></div>
     <p class="rn" id="rNote">تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.</p></div>`;
   const $=id=>box.querySelector('#'+id),G=9.8,D2R=Math.PI/180;
-  const CARD=ftCard(box,'الميزان وطاولة القوى');box.querySelector('#wT1').appendChild(CARD);const _q=box.querySelector.bind(box);
+  const CARD=ftCard(box,'الميزان وطاولة القوى');box.querySelector('#wT1').appendChild(CARD);const ftPlace=(bx,card,ph)=>{const f=id=>box.querySelector('#'+id)||document.getElementById(id),t=f({b:'wT1',a:'wT2',e:'wT3'}[ph]);if(card.parentNode!==t)t.appendChild(card);const bS=f('bS'),aS=f('aS'),eS=f('eS');bS.setAttribute('opacity',ph==='b'?1:.4);aS.setAttribute('opacity',ph==='b'?.4:1);aS.style.display=ph==='e'?'none':'';eS.style.display=ph==='e'?'':'none';['b','a','e'].forEach(p=>{const x=f(p+'St');x.style.display=p===ph?'':'none'})};const _q=box.querySelector.bind(box);
   const num=labNum;
   const fb=(id,ok,msg)=>{$(id).textContent=msg;$(id).className='fb2 '+(ok?'ok':'no')};
   const fx=(x,n)=>String(+x.toFixed(n));
   let m,th,ok={},hT=false;
-  const F=()=>m/1000*G,FX=()=>F()*Math.cos(th*D2R),FY=()=>F()*Math.sin(th*D2R),MX=()=>m*Math.cos(th*D2R),MY=()=>m*Math.sin(th*D2R);
+  const F=()=>m/1000*G,FX=()=>F()*Math.cos(th*D2R),FY=()=>F()*Math.sin(th*D2R),MX=()=>m*Math.cos(th*D2R),MY=()=>m*Math.sin(th*D2R);box.__ans={mIn:()=>m.toFixed(1),tIn:()=>String(th),mx:()=>Math.round(MX()/5)*5,my:()=>Math.round(MY()/5)*5};
   const ringV=(mx,my)=>{const bal=Math.abs(mx-MX())<=5&&Math.abs(my-MY())<=5,nx=(m*Math.cos(th*D2R)-mx),ny=(m*Math.sin(th*D2R)-my),n=Math.hypot(nx,ny),sz=bal?0:Math.min(30,Math.max(6,n/m*60));return [n?nx/n*sz:0,n?-ny/n*sz:0]};
   const VW=ftWatch($('vW'),'vw',[]);
   function wFrames(){const X=Math.round(MX()/5)*5,Y=Math.round(MY()/5)*5,st=(mx,my)=>{const s=[{a:th,c:'#DC2626',lab:'m'}];if(mx>0)s.push({a:180,c:'#2563EB',lab:'mₓ'});if(my>0)s.push({a:270,c:'#16A34A',lab:'mᵧ'});return s};
@@ -902,10 +902,10 @@ function vecLab(box){
     $('sbF').innerHTML=ok.m?['F = m·g',E(`m = ${cl('cV',m)} g = ${cl('cV',m/1000)} kg`),E(`F = ${cl('cV',m/1000)} × 9.8`)].join('\n'):'F = m·g';
     $('sb1').innerHTML=ok.cF&&ok.t?['Fx = F·cos θ',E(`Fx = ${f} × cos ${t}`)].join('\n'):'Fx = F·cos θ';
     $('sb2').innerHTML=ok.cF&&ok.t?['Fy = F·sin θ',E(`Fy = ${f} × sin ${t}`)].join('\n'):'Fy = F·sin θ'}
-  function logs(){const c=(k,x)=>`<b class="${k}" dir="ltr">${x}</b>`,row=(n,x)=>`<tr><td>${n}</td><td>${x}</td></tr>`;
+  function logs(){const lb=$('logB'),nw=lb?[...lb.querySelectorAll('tr.nw')].map(r=>r.dataset.k):[],K=['mIn','tIn','eIn','eIn2'];let ri=0;const c=(k,x)=>`<b class="${k}" dir="ltr">${x}</b>`,row=(n,x)=>{const k=K[ri++];return `<tr data-k="${k}"${nw.includes(k.replace(/2$/,''))?' class="nw"':''}><td>${n}</td><td>${x}</td></tr>`};
     const h='<table>'+row('<span class="cV">m</span> كتلة الحامل',ok.m?c('cV',m.toFixed(1)+' g'):'—')+row('<span class="cT">θ</span> زاوية القوة',ok.t?c('cT',th+'°'):'—')
       +row('<span class="cV">mₓ</span> كتلة المركبة السينية',ok.e?c('cV',ok.e.x+' g'):'—')+row('<span class="cV">mᵧ</span> كتلة المركبة الصادية',ok.e?c('cV',ok.e.y+' g'):'—')+'</table>';
-    $('logA').innerHTML=h;$('logB').innerHTML='<div class="amLog"><h5>📋 سجل القراءات</h5>'+h+'</div>'}
+    $('logA').innerHTML=h;$('logB').innerHTML='<div class="amLog"><h5>📋 سجل القراءات</h5>'+h.replace('<table>','<table class="lxLog">')+'</div>';if(nw.length)setTimeout(()=>$('logB').querySelectorAll('tr.nw').forEach(r=>r.className='ok'),1400)}
   function progS(){const L=[[!!ok.m,'الكتلة'],[!!ok.t,'الزاوية'],[!!ok.e,'المركبتان تجريبيا'],[!!ok.cF,'F'],[!!ok.c1,'Fx'],[!!ok.c2,'Fy']];
     $('prog').innerHTML=L.map(([d,t])=>`<span class="${d?'d':''}">${d?'✓ ':''}${t}</span>`).join('<i>←</i>')}
   function rDraw(){const st=$('rStage');if(!(ok.c1&&ok.c2)){st.hidden=true;return}st.hidden=false;
@@ -1222,7 +1222,7 @@ function dotLab(box){
   const fb=(id,ok,msg)=>{$(id).textContent=msg;$(id).className='fb2 '+(ok?'ok':'no')};
   const fx=(x,n)=>String(+x.toFixed(n));
   let A,B,aA,aB,th,ok={},hT=false;
-  const MA=()=>Math.hypot(A[0],A[1]),MB=()=>Math.hypot(B[0],B[1]),DC=()=>A[0]*B[0]+A[1]*B[1],DT=()=>MA()*MB()*Math.cos(th*D2R);
+  box.__ans={A:()=>A,B:()=>B,tIn:()=>String(th)};const MA=()=>Math.hypot(A[0],A[1]),MB=()=>Math.hypot(B[0],B[1]),DC=()=>A[0]*B[0]+A[1]*B[1],DT=()=>MA()*MB()*Math.cos(th*D2R);
   function newObj(){do{A=[3+Math.floor(Math.random()*6),1+Math.floor(Math.random()*4)];B=[1+Math.floor(Math.random()*4),3+Math.floor(Math.random()*6)];
       aA=Math.atan2(A[1],A[0])/D2R;aB=Math.atan2(B[1],B[0])/D2R;th=Math.round(aB-aA)}while(th<20||th>85);
     ok={};hT=false;['p1','p2','p3'].forEach(k=>$(k).value=0);['ax','ay','bx','by','tIn','c1','c2'].forEach(k=>$(k).value='');['aFb','bFb','tFb','c1f','c2f'].forEach(k=>{$(k).textContent='';$(k).className='fb2'});
@@ -1520,7 +1520,7 @@ function airLab(box){
   const r1=x=>Math.round(x*10)/10,r4=x=>Math.round(x*1e4)/1e4,fx=(x,n)=>String(+x.toFixed(n));
   let XI,XF,a1,T1,T2,ok={},hG={};
   const DX=()=>(XF-XI)/100,TT=n=>n===1?T1:T2,VF=n=>+(2*DX()/TT(n)).toFixed(3),AC=n=>VF(n)/TT(n);
-  const trOK=n=>ok['t'+n]&&ok['v'+n];
+  const trOK=n=>ok['t'+n]&&ok['v'+n];box.__ans={t1:()=>TT(1).toFixed(4),v1:()=>VF(1).toFixed(3),t2:()=>TT(2).toFixed(4),v2:()=>VF(2).toFixed(3)};
   function newObj(){XI=r1(20+Math.random()*10);XF=r1(XI+55+Math.random()*30);a1=(15+Math.floor(Math.random()*16))/100;
     T1=r4(Math.sqrt(2*DX()/a1));T2=r4(Math.sqrt(2*DX()/(2*a1)));ok={};hG={};
     [1,2].forEach(n=>{$('gR'+n).value=0;['tIn','vIn','ca'].forEach(i=>$(i+n).value='');['tFb'+n,'vFb'+n,'ca'+n+'f'].forEach(fb0)});
@@ -1720,7 +1720,7 @@ function ffLab(box){
   const fb0=id=>{$(id).textContent='';$(id).className='fb2'};
   const r1=x=>Math.round(x*10)/10,r4=x=>Math.round(x*1e4)/1e4,fx=(x,n)=>String(+x.toFixed(n)),G=9.8;
   let H={},T={},ok={},hG={},hH={};
-  const HC=n=>0.5*G*T[n]*T[n];
+  const HC=n=>0.5*G*T[n]*T[n];box.__ans={t:()=>T[1].toFixed(4),h:()=>H[1].toFixed(1)};
   function newObj(){H[1]=r1(60+Math.random()*90);T[1]=r4(Math.sqrt(2*H[1]/100/G));ok={};hG={};hH={};
     [1].forEach(n=>{$('gR'+n).value=0;$('pR'+n).value=0;['tIn'+n,'ch'+n,'hIn'+n].forEach(k=>$(k).value='');['tFb'+n,'ch'+n+'f','hFb'+n].forEach(fb0);gDraw(n);pDraw(n)});sub();results()}
   const sOf=n=>+$('gR'+n).value/100*H[n]/100,landed=n=>+$('gR'+n).value>=100;
@@ -1938,7 +1938,7 @@ function awLab(box){
   const fb0=id=>{$(id).textContent='';$(id).className='fb2'};
   const r1=x=>Math.round(x*10)/10,r4=x=>Math.round(x*1e4)/1e4,fx=(x,n)=>String(+x.toFixed(n)),G=9.8;
   let M1,M2,H,T,ok={},hG=false;
-  const AT=()=>(M1-M2)*G/(M1+M2),DX=()=>H/100,VF=()=>+(2*DX()/T).toFixed(3),AM=()=>VF()/T,FF=()=>(M1-M2)/1000*G;
+  const AT=()=>(M1-M2)*G/(M1+M2),DX=()=>H/100,VF=()=>+(2*DX()/T).toFixed(3),AM=()=>VF()/T,FF=()=>(M1-M2)/1000*G;box.__ans={m1:()=>String(M1),m2:()=>String(M2),t:()=>T.toFixed(4),v:()=>VF().toFixed(3)};
   function newObj(){M2=150+10*Math.floor(Math.random()*6);M1=M2+20+10*Math.floor(Math.random()*4);H=r1(80+Math.random()*60);T=r4(Math.sqrt(2*DX()/AT()));ok={};hG=false;
     $('gR').value=0;['mIn1','mIn2','tIn','vIn','ca','cF','cN'].forEach(k=>$(k).value='');['mFb1','mFb2','tFb','vFb','caf','cFf','cNf'].forEach(fb0);
     $('bl1').innerHTML=awBal(M1,'m₁');$('bl2').innerHTML=awBal(M2,'m₂');gDraw();sub();results()}
@@ -1997,7 +1997,7 @@ function pbScene(x0,o,W,extra){/* صندوق خشبي يسحب بميزان نا
   if(o.pull){const ax=sx+sw*.70,ay=sy+sh+8;g+=`<line x1="${F(ax)}" y1="${F(ay)}" x2="${F(ax+34)}" y2="${F(ay)}" stroke="#F7931E" stroke-width="3"/><path d="M${F(ax+42)},${F(ay)} l-10,-6 v12 Z" fill="#F7931E"/>`}
   if(o.v){const a=x0+12,b=x0+bw-10,y=by-12;g+=`<line x1="${F(a)}" y1="${F(y)}" x2="${F(b-8)}" y2="${F(y)}" stroke="#2563EB" stroke-width="2.4"/><path d="M${F(b)},${F(y)} l-9,-5 v10 Z" fill="#2563EB"/><text x="${F((a+b)/2)}" y="${F(y-8)}" font-size="12" font-weight="800" text-anchor="middle" fill="#2563EB">سرعة ثابتة</text>`}
   return {g,TY,H:TY+20}}
-function frScene(s,o){o=o||{};if(o.lab)return frSceneOld(s,o);const r=pbScene(20+s,o,400);return `<svg viewBox="0 0 400 ${r.H}" aria-label="سحب صندوق خشبي بميزان نابضي">${r.g}</svg>`}
+function frScene(s,o){o=o||{};if(o.lab)return frSceneOld(s,o);const r=pbScene(20+s,o,400),rx=20+s+104*.97+212*.71,ry=112-104*158/236*.97+104*158/236*.62-212*202/748*146/202+212*202/748*.74;return `<svg viewBox="0 0 400 ${r.H}" aria-label="سحب صندوق خشبي بميزان نابضي">${r.g}<circle class="frRing" cx="${rx.toFixed(1)}" cy="${ry.toFixed(1)}" r="5" fill="none" stroke="none"/></svg>`}
 function wkScene(s,o){o=o||{};if(o.lab)return wkSceneOld(s,o);const K=1.3,XS=34,W=470,TY=112,F=v=>(+v).toFixed(1);
   let t=`<rect x="${XS-2}" y="${TY+1}" width="${F(K*120+4)}" height="11" fill="#FACC15" stroke="#A16207" stroke-width=".8"/>`;
   for(let c=0;c<=120;c+=5){const x=XS+c*K;t+=`<line x1="${F(x)}" y1="${TY+1}" x2="${F(x)}" y2="${TY+(c%10?4:6.5)}" stroke="#1F2937" stroke-width="${c%10?.6:1}"/>`+(c%20===0?`<text x="${F(x)}" y="${TY+11}" font-size="7.6" font-weight="800" text-anchor="middle" fill="#1F2937">${c}</text>`:'')}
@@ -2145,7 +2145,7 @@ function frLab(box){
   const fx=(x,n)=>String(+x.toFixed(n)),G=9.8;
   let M,ok={},hF=false;
   const KG=()=>M/1000,NN=()=>KG()*G,FK=()=>MU*NN(),FS=()=>Math.round(FK()*10)/10;
-  const moving=()=>+$('gR').value>=20;
+  const moving=()=>+$('gR').value>=20;box.__ans={mIn:()=>String(M),fIn:()=>FS().toFixed(1)};
   function newObj(){M=300+10*Math.floor(Math.random()*41);ok={};hF=false;$('gR').value=0;
     ['mIn','cN','cF','fIn'].forEach(k=>$(k).value='');['mFb','cNf','cFf','fFb'].forEach(fb0);
     $('bl').innerHTML=awBal(M,'m','box');gDraw();sub();results()}
@@ -2284,7 +2284,7 @@ function wkLab2(box){
   const fb0=id=>{$(id).textContent='';$(id).className='fb2'};
   const fx=(x,n)=>String(+x.toFixed(n)),r1=x=>Math.round(x*10)/10,K=1.3;
   let F,X,ok={},hF=false,hX=false;
-  const XM=()=>X/100,WW=()=>F*XM();
+  const XM=()=>X/100,WW=()=>F*XM();box.__ans={fIn:()=>F.toFixed(1),xIn:()=>X.toFixed(1)};
   const moving=()=>+$('gR').value>=20,done=()=>+$('gR').value>=100;
   function newObj(){F=r1(1+Math.random()*2);X=r1(40+Math.random()*60);ok={};hF=false;hX=false;['gR','pR'].forEach(k=>$(k).value=0);
     ['fIn','xIn','cW'].forEach(k=>$(k).value='');['fFb','xFb','cWf'].forEach(fb0);gDraw();pDraw();sub();results()}
@@ -2499,7 +2499,7 @@ function peLab(box){
   const fx=(x,n)=>String(+x.toFixed(n)),r1=x=>Math.round(x*10)/10,G=9.8;
   let M,H={},ok={},hX={};
   const KG=()=>M/1000,HM=k=>H[k]/100,PE=k=>KG()*G*HM(k);
-  const done=k=>+$('gR'+k).value>=100;
+  const done=k=>+$('gR'+k).value>=100;box.__ans={mIn:()=>String(M),hIn1:()=>(H[1]/100).toFixed(3),hIn2:()=>(H[2]/100).toFixed(3),h1:()=>H[1],h2:()=>H[2]};
   function newObj(){M=100+10*Math.floor(Math.random()*41);H[1]=r1(20+Math.random()*25);H[2]=r1(H[1]+20+Math.random()*25);ok={};hX={};
     [1,2].forEach(k=>{['gR','pR'].forEach(i=>$(i+k).value=0);['hIn','cP'].forEach(i=>$(i+k).value='');['hFb','cPf'].forEach(i=>fb0(i+k))});
     $('mIn').value='';fb0('mFb');$('bl').innerHTML=awBal(M,'m','cyl');draw(1);draw(2);sub();results()}
@@ -2686,7 +2686,7 @@ function ceLab(box){
   const fx=(x,n)=>String(+x.toFixed(n)),r1=x=>Math.round(x*10)/10,G=9.8;
   let M,H,V,ok={},hX=false;
   const KG=()=>M/1000,HM=()=>H/100,PE=()=>KG()*G*HM(),KE=()=>0.5*KG()*V*V;
-  const fallen=()=>+$('gR').value>=60;
+  const fallen=()=>+$('gR').value>=60;box.__ans={mIn:()=>String(M),hIn:()=>H.toFixed(1),vIn:()=>V.toFixed(2),h:()=>H};
   function newObj(){M=100+10*Math.floor(Math.random()*41);H=r1(30+Math.random()*50);V=Math.round(Math.sqrt(2*G*HM())*0.99*100)/100;ok={};hX=false;
     ['gR','pR'].forEach(k=>$(k).value=0);['mIn','hIn','vIn','cP','cK'].forEach(k=>$(k).value='');['mFb','hFb','vFb','cPf','cKf'].forEach(fb0);
     $('bl').innerHTML=awBal(M,'m','mag');pDraw();gDraw();sub();results()}
@@ -2898,7 +2898,7 @@ function eqLab(box){
   const fb0=id=>{$(id).textContent='';$(id).className='fb2'};
   const r1=x=>Math.round(x*10)/10,fx=(x,n)=>String(+x.toFixed(n));
   const TT=14,CH=78,HX=110,CX=228,ZIN=TT+20,ZUP=TT+CH+26,TAU=8,TS=[10,30,60];
-  let M1,M2,T1,T2,TFM,ok={};
+  let M1,M2,T1,T2,TFM,ok={};box.__ans={m1In:()=>String(M1),m2In:()=>String(M2),aIn:()=>T2.toFixed(1),bIn:()=>T1.toFixed(1),k1:()=>Tt(10).toFixed(1),k2:()=>Tt(30).toFixed(1),k3:()=>Tt(60).toFixed(1)};
   const TFC=()=>(M1*T1+M2*T2)/(M1+M2),Tt=t=>r1(TFM+(T2-TFM)*Math.exp(-t/TAU));
   const path=(v,x0,x1)=>v<=30?{px:x0,tz:ZIN+v/30*(ZUP-ZIN)}:v<=70?{px:x0+(x1-x0)*(v-30)/40,tz:ZUP}:{px:x1,tz:ZUP-(v-70)/30*(ZUP-ZIN)};
   const zoom=(lines,cap)=>`<defs><linearGradient id="zBmp" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FBBF24"/><stop offset=".5" stop-color="#F59E0B"/><stop offset="1" stop-color="#B45309"/></linearGradient><linearGradient id="zFace" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#374151"/><stop offset="1" stop-color="#0B0F19"/></linearGradient><linearGradient id="zLcd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#CFDBB9"/><stop offset="1" stop-color="#9AAE84"/></linearGradient></defs><rect x="20" y="4" width="360" height="86" rx="16" fill="url(#zBmp)" stroke="#78350F" stroke-width="1.5"/><rect x="28" y="10" width="344" height="74" rx="11" fill="url(#zFace)"/><rect x="30" y="11" width="340" height="10" rx="5" fill="#fff" opacity=".1"/>`+lines+`<text x="200" y="106" font-size="12" font-weight="700" text-anchor="middle" fill="var(--muted)">${cap}</text>`;
@@ -3227,7 +3227,7 @@ function tsLab(box){
     <div class="tw"><table class="rt"><thead><tr><th>القياس</th><th>°C</th><th>K</th><th>°F</th></tr></thead>
     <tbody><tr><td>خليط الماء والجليد</td><td id="r1">—</td><td id="r2">—</td><td id="r3">—</td></tr><tr><td>الماء المغلي</td><td id="r4">—</td><td id="r5">—</td><td id="r6">—</td></tr></tbody></table></div>
     <p class="rn" id="rNote">تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.</p></div>`;
-  const {$,num,fb,fb0,r1,fx}=hxKit(box);let C1,C2,ok={};
+  const {$,num,fb,fb0,r1,fx}=hxKit(box);let C1,C2,ok={};box.__ans={aIn:()=>C1.toFixed(1),bIn:()=>C2.toFixed(1)};
   const KK=c=>c+273,FF=c=>1.8*c+32;
   function newObj(){C1=r1(Math.random()*0.4);C2=r1(98.5+Math.random()*1.3);ok={};['aR','bR'].forEach(k=>$(k).value=0);['aIn','bIn','cK1','cK2','cF1','cF2'].forEach(k=>$(k).value='');['aInFb','bInFb','cK1f','cK2f','cF1f','cF2f'].forEach(fb0);aDraw();bDraw();sub();results()}
   const cups=()=>[{x:HX,wc:BW[0],sc:BW[1],lv:1,boil:true,steam:true},{x:CX,wc:IW[0],sc:IW[1],lv:0.85,ice:4}];
@@ -3411,7 +3411,7 @@ function lhLab(box){
     <tbody><tr><td>كتلة الماء الدافئ m_w</td><td id="r1">—</td></tr><tr><td>كتلة الجليد m_ice</td><td id="r2">—</td></tr><tr><td>Ti</td><td id="r3">—</td></tr><tr><td>Tf</td><td id="r4">—</td></tr>
     <tr><td>Q₁</td><td id="r5">—</td></tr><tr><td>Q₂</td><td id="r6">—</td></tr><tr><td>الحرارة الكامنة H</td><td id="r7">—</td></tr></tbody></table></div>
     <p class="rn" id="rNote">تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.</p></div>`;
-  const {$,num,fb,fb0,r1,fx}=hxKit(box);let MW,MI,T1,TF,ok={};
+  const {$,num,fb,fb0,r1,fx}=hxKit(box);let MW,MI,T1,TF,ok={};box.__ans={wIn:()=>String(MW),iIn:()=>String(MI),aIn:()=>T1.toFixed(1),fIn:()=>TF.toFixed(1)};
   const KW=()=>MW/1000,KI=()=>MI/1000,Q1=()=>KW()*c*(T1-TF),Q2=()=>KI()*c*TF,HH=()=>(Q1()-Q2())/KI();
   function newObj(){MW=200+10*Math.floor(Math.random()*11);MI=30+2*Math.floor(Math.random()*11);T1=r1(40+Math.random()*10);const he=HR*(0.97+Math.random()*0.05);TF=r1((KW()*c*T1-KI()*he)/(c*(KW()+KI())));ok={};
     ['aR','dR'].forEach(k=>$(k).value=0);['wIn','iIn','aIn','fIn','c1','c2','cH'].forEach(k=>$(k).value='');['wInFb','iInFb','aInFb','fInFb','c1f','c2f','cHf'].forEach(fb0);$('b1').innerHTML=hxBal(MW,'m_w','warm');$('b2').innerHTML=hxBal(MI,'m_ice','ice');aDraw();dDraw();sub();results()}
@@ -3694,7 +3694,7 @@ function clLab(box){
   <div class="btns" style="margin-bottom:12px"><button type="button" class="rs" id="nw">🔄 شحنة جديدة</button></div>
   <div class="ctl"><h3>5.1 القياس</h3>
     <div class="amProg" id="prog"></div>
-    <details class="wsDet"><summary>🎬 شاهد خطوات التركيب وطريقة القياس (5 خطوات)</summary><div class="wsx"><h4 style="margin:2px 0 6px">🎬 شاهد: تركيب الأجهزة وطريقة القياس</h4><div class="stage" id="wsS"></div><div class="pb">${'<i></i>'.repeat(5)}</div><div class="cap" id="wsCap">اضغط «▶ شاهد» لترى طريقة القياس كاملة، خطوة خطوة.</div><div class="row"><button class="pri" id="wsPlay">▶ شاهد</button><button id="wsPrev">→ السابق</button><button id="wsNext">التالي ←</button></div></div></details>
+    <details class="wsDet"><summary>🎬 شاهد خطوات التركيب وطريقة القياس (5 خطوات)</summary><div class="wsx wsc" id="wW"><h4 style="margin:2px 0 6px">🎬 شاهد: تركيب الأجهزة وطريقة القياس</h4><div class="stage" id="wsS"></div><div class="pb">${'<i></i>'.repeat(5)}</div><div class="cap" id="wsCap">اضغط «▶ شاهد» لترى طريقة القياس كاملة، خطوة خطوة.</div><div class="row"><button class="pri" id="wsPlay">▶ شاهد</button><button id="wsPrev">→ السابق</button><button id="wsNext">التالي ←</button></div></div></details>
     <h4 class="sbh">أ) قراءة الميزان عند ثلاث مسافات</h4>
     <p class="slh">👆 اسحب المؤشر البرتقالي لإنزال الكرة العلوية. أوقفها عند <bdi dir="ltr">r = 8.0</bdi> ثم <bdi dir="ltr">6.0</bdi> ثم <bdi dir="ltr">4.0 cm</bdi> في تكبير المسطرة، واقرأ المسافة وقراءة الميزان وسجلهما في كل مرة.</p>
     <div class="stage"><div id="sS"></div><svg id="sM" viewBox="0 0 400 120"></svg><svg id="sZ" viewBox="0 0 400 112"></svg><div class="hud"><span id="sSt"></span></div></div>
@@ -3783,7 +3783,7 @@ function clLab(box){
     [6,'<b>الخطوة 4:</b> أنزلها إلى <b dir="ltr">r = 6.0 cm</b>: زادت قراءة الميزان. اقرأها وسجلها.'],
     [4,'<b>الخطوة 5:</b> أنزلها إلى <b dir="ltr">r = 4.0 cm</b>: المسافة <b>نصف</b> قيمتها عند 8 cm، فصارت القراءة تقريبا <b>أربعة أضعاف</b>. فالقوة تتناسب عكسيا مع مربع المسافة، ثم نرسم F مع 1/r².']];
   let wk=-1,wt=null;const wGo=n=>{wk=n;const [r,t]=WS[n],m=MR(r).toFixed(3);$('wsS').innerHTML=clScene({r,m,mode:'mm'})+`<svg viewBox="0 0 400 120">${mmZ(r)}</svg><svg viewBox="0 0 400 112">${zoom(scr(90,220,m+' g'),'‏شاشة الميزان الرقمي (مكبرة)‏')}</svg>`;$('wsCap').innerHTML=t;$('wsCap').querySelectorAll('[dir=ltr]').forEach(x=>{x.style.unicodeBidi='isolate';x.style.whiteSpace='nowrap'});box.querySelectorAll('.wsx .pb i').forEach((x,j)=>x.classList.toggle('d',j<=n));$('wsPrev').disabled=n<=0;labFin($('wsNext'),n>=WS.length-1)};
-  $('wsPlay').onclick=()=>{clearInterval(wt);wGo(0);wt=setInterval(()=>{if(wk>=WS.length-1){clearInterval(wt);return}wGo(wk+1)},3800)};
+  box.__ans={dIn:i=>RS_[i].toFixed(1),mIn:i=>M(i).toFixed(3)};{const WH=$('wW');WH.__w={S:WS.map(x=>[x[1]]),html:true,stage:$('wsS'),reset:()=>{clearInterval(wt);const c=$('wsCap').innerHTML;wGo(0);$('wsCap').innerHTML=c;wk=-1},go:n=>wGo(n),stop:()=>clearInterval(wt),cap:$('wsCap'),pb:WH.querySelector('.wsc .pb')}};$('wsPlay').onclick=()=>{clearInterval(wt);wGo(0);wt=setInterval(()=>{if(wk>=WS.length-1){clearInterval(wt);return}wGo(wk+1)},3800)};
   $('wsNext').onclick=()=>{clearInterval(wt);wGo(Math.min(WS.length-1,wk+1))};$('wsPrev').onclick=()=>{clearInterval(wt);wGo(Math.max(0,wk-1))};$('wsPrev').disabled=true;
   $('nw').onclick=newObj;calcInit(box);newObj()}
 
@@ -3879,7 +3879,7 @@ function efLab(box){
   <div class="btns" style="margin-bottom:12px"><button type="button" class="rs" id="nw">🔄 شحنة جديدة</button></div>
   <div class="ctl"><h3>5.1 القياس</h3>
     <div class="amProg" id="prog"></div>
-    <details class="wsDet"><summary>🎬 شاهد خطوات التركيب وطريقة القياس (5 خطوات)</summary><div class="wsx"><h4 style="margin:2px 0 6px">🎬 شاهد: تركيب الأجهزة وطريقة القياس</h4><div class="stage" id="wsS"></div><div class="pb">${'<i></i>'.repeat(5)}</div><div class="cap" id="wsCap">اضغط «▶ شاهد» لترى طريقة القياس كاملة، خطوة خطوة.</div><div class="row"><button class="pri" id="wsPlay">▶ شاهد</button><button id="wsPrev">→ السابق</button><button id="wsNext">التالي ←</button></div></div></details>
+    <details class="wsDet"><summary>🎬 شاهد خطوات التركيب وطريقة القياس (5 خطوات)</summary><div class="wsx wsc" id="wW"><h4 style="margin:2px 0 6px">🎬 شاهد: تركيب الأجهزة وطريقة القياس</h4><div class="stage" id="wsS"></div><div class="pb">${'<i></i>'.repeat(5)}</div><div class="cap" id="wsCap">اضغط «▶ شاهد» لترى طريقة القياس كاملة، خطوة خطوة.</div><div class="row"><button class="pri" id="wsPlay">▶ شاهد</button><button id="wsPrev">→ السابق</button><button id="wsNext">التالي ←</button></div></div></details>
     <h4 class="sbh">أ) قراءة شدة المجال عند ثلاث مسافات</h4>
     <p class="slh">👆 اسحب المؤشر البرتقالي لتقريب مقياس المجال من الكرة. أوقفه عند <bdi dir="ltr">r = 20.0</bdi> ثم <bdi dir="ltr">15.0</bdi> ثم <bdi dir="ltr">10.0 cm</bdi> في تكبير المسار، واقرأ المسافة وشدة المجال وسجلهما في كل مرة.</p>
     <div class="stage"><div id="sS"></div><svg id="sM" viewBox="0 0 400 120"></svg><svg id="sZ" viewBox="0 0 400 112"></svg><div class="hud"><span id="sSt"></span></div></div>
@@ -3966,7 +3966,7 @@ function efLab(box){
     [15,'<b>الخطوة 4:</b> قرب المقياس إلى <b dir="ltr">r = 15.0 cm</b>: زادت شدة المجال. اقرأها وسجلها.'],
     [10,'<b>الخطوة 5:</b> قربه إلى <b dir="ltr">r = 10.0 cm</b>: المسافة <b>نصف</b> قيمتها عند 20 cm، فصارت شدة المجال تقريبا <b>أربعة أضعاف</b>. فالمجال يتناسب عكسيا مع مربع المسافة، ثم نرسم E مع 1/r².']];
   let wk=-1,wt=null;const wGo=n=>{wk=n;const [r,t]=WS[n],e=String(EV(r));$('wsS').innerHTML=efScene({r,e})+`<svg viewBox="0 0 400 120">${mmZ(r)}</svg><svg viewBox="0 0 400 112">${zoom(scr(80,240,e+' N/C'),'‏شاشة مقياس شدة المجال الكهربائي (مكبرة)‏')}</svg>`;$('wsCap').innerHTML=t;$('wsCap').querySelectorAll('[dir=ltr]').forEach(x=>{x.style.unicodeBidi='isolate';x.style.whiteSpace='nowrap'});box.querySelectorAll('.wsx .pb i').forEach((x,j)=>x.classList.toggle('d',j<=n));$('wsPrev').disabled=n<=0;labFin($('wsNext'),n>=WS.length-1)};
-  $('wsPlay').onclick=()=>{clearInterval(wt);wGo(0);wt=setInterval(()=>{if(wk>=WS.length-1){clearInterval(wt);return}wGo(wk+1)},3800)};
+  box.__ans={dIn:i=>RS_[i].toFixed(1),mIn:i=>String(Ei(i))};{const WH=$('wW');WH.__w={S:WS.map(x=>[x[1]]),html:true,stage:$('wsS'),reset:()=>{clearInterval(wt);const c=$('wsCap').innerHTML;wGo(0);$('wsCap').innerHTML=c;wk=-1},go:n=>wGo(n),stop:()=>clearInterval(wt),cap:$('wsCap'),pb:WH.querySelector('.wsc .pb')}};$('wsPlay').onclick=()=>{clearInterval(wt);wGo(0);wt=setInterval(()=>{if(wk>=WS.length-1){clearInterval(wt);return}wGo(wk+1)},3800)};
   $('wsNext').onclick=()=>{clearInterval(wt);wGo(Math.min(WS.length-1,wk+1))};$('wsPrev').onclick=()=>{clearInterval(wt);wGo(Math.max(0,wk-1))};$('wsPrev').disabled=true;
   $('nw').onclick=newObj;calcInit(box);newObj()}
 
@@ -4113,6 +4113,7 @@ function mount(host,opts){opts=opts||{};const WH=opts.watchHost||host;
   let k=-1,timer=null;
   function reset(){k=-1;put('ps',null);disp('ps','','0.00',false);setMode('ps','')}
   function go(n){if(n<k)reset();while(k<n){k++;STEPS[k][1]()}W('psCap').innerHTML=STEPS[k][0];WH.querySelectorAll('.wsc .pb i').forEach((x,i)=>x.classList.toggle('d',i<=k));W('psPrev').disabled=k<=0;labFin(W('psNext'),k>=STEPS.length-1)}
+  WH.__w={S:STEPS,reset,go,stop:()=>clearInterval(timer),cap:W('psCap'),pb:WH.querySelector('.wsc .pb')};
   W('psPlay').onclick=()=>{clearInterval(timer);reset();go(0);timer=setInterval(()=>{if(k>=STEPS.length-1){clearInterval(timer);return}go(k+1)},3800)};
   W('psNext').onclick=()=>{clearInterval(timer);go(Math.min(STEPS.length-1,k+1))};
   W('psPrev').onclick=()=>{clearInterval(timer);go(Math.max(0,k-1))};W('psPrev').disabled=true;
@@ -4212,7 +4213,7 @@ function pdLab(box){
     <tr><td>شدة المجال E₁ و E₃</td><td>V / d</td><td id="pr3">—</td></tr><tr><td>فرق الجهد ΔV</td><td>محسوب</td><td id="pr4">—</td></tr><tr><td>شدة المجال E</td><td>ΔV / d</td><td id="pr5">—</td></tr></tbody></table></div>
     <p class="rn" id="pNote">تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.</p></div>`;
   const {$,num,fb,fb0,fx}=hxKit(box);const VSS=[6,8,10,12];
-  let V0,NZ,ok,cfg,rec,fit;
+  let V0,NZ,ok,cfg,rec,fit;box.__ans={dIn:()=>st.d.toFixed(1),vIn:()=>Vd(st.d).toFixed(2)};
   const good={mode:'v20',port:'v'},setOk=()=>['mode','port'].every(k=>cfg[k]===good[k]);
   const Vd=d=>Math.round(V0*d/D0*(NZ[d]||1)*100)/100,Vs=i=>Vd(SL[i].d);
   const E1=()=>Vs(0)/0.02,E3=()=>Vs(2)/0.06,DV=()=>Math.round((Vs(2)-Vs(0))*100)/100,EE=()=>DV()/0.04;
@@ -4280,7 +4281,7 @@ function pdLab(box){
     const okd=Math.abs(d-SL[i].d)<0.05,okv=Math.abs(v-Vs(i))<0.006;
     if(okd&&okv){rec.add(i);$('dIn').value='';$('vIn').value='';
       fb(f,true,'✓ سجلت القراءة: '+E(`d = ${SL[i].d}.0 cm ، ${SL[i].n} = ${fx(Vs(i),2)} V`)+(i===2&&[0,1].every(j=>rec.has(j))?'\nاكتملت قراءات الخط الأوسط: الجهد يزيد بانتظام مع المسافة.':'')+(i>2&&rec.has(3)&&rec.has(4)?'\nالجهد نفسه فوق الخط وتحته وعليه: هذا خط تساوي جهد.':''));
-      if([0,1,2].every(j=>rec.has(j))&&card.parentNode!==$('wTb')){$('wTb').appendChild(card);W.reset()}}
+      if([0,1,2].every(j=>rec.has(j))&&card.parentNode!==$('wTb')&&!card.closest('#dmS')){$('wTb').appendChild(card);W.reset()}}
     else fb(f,false,(okd?'':'✗ قراءة المسطرة غير صحيحة: اقرأ الرقم الكبير قبل المؤشر البرتقالي، ثم عد أقسام المليمتر.\n')+(okv?'':'✗ قراءة الجهد غير صحيحة: اكتب الرقم الظاهر على شاشة الملتيميتر كما هو.'));draw();sub();results()};
   $('gB').onclick=()=>{if(![0,1,2].every(i=>rec.has(i)))return fb('gFb',false,'سجل قراءات الخط الأوسط الثلاث أولا.');fit=true;fb('gFb',true,'✓ النقاط على خط مستقيم يمر بنقطة الأصل: الجهد يتناسب طرديا مع المسافة، وميل الخط ΔV / Δd هو شدة المجال E.');draw();results()};
   const chk=(id,need,needMsg,val,tol,okMsg,badMsg)=>{const f='c'+id+'f';if(!need())return fb(f,false,needMsg);const v=num($('c'+id).value);if(isNaN(v))return fb(f,false,'اكتب الناتج بالأرقام.');
@@ -4383,7 +4384,7 @@ function capLab(box){
   <div class="btns" style="margin-bottom:12px"><button type="button" class="rs" id="nw">🔄 قراءات جديدة</button></div>
   <div class="ctl"><h3>5.1 القياس</h3>
     <div class="amProg" id="prog"></div>
-    <details class="wsDet"><summary>🎬 شاهد خطوات التركيب وطريقة القياس (5 خطوات)</summary><div class="wsx"><h4 style="margin:2px 0 6px">🎬 شاهد: تركيب الأجهزة وطريقة القياس</h4><div class="stage" id="wsS"></div><div class="pb">${'<i></i>'.repeat(5)}</div><div class="cap" id="wsCap">اضغط «▶ شاهد» لترى طريقة القياس كاملة، خطوة خطوة.</div><div class="row"><button class="pri" id="wsPlay">▶ شاهد</button><button id="wsPrev">→ السابق</button><button id="wsNext">التالي ←</button></div></div></details>
+    <details class="wsDet"><summary>🎬 شاهد خطوات التركيب وطريقة القياس (5 خطوات)</summary><div class="wsx wsc" id="wW"><h4 style="margin:2px 0 6px">🎬 شاهد: تركيب الأجهزة وطريقة القياس</h4><div class="stage" id="wsS"></div><div class="pb">${'<i></i>'.repeat(5)}</div><div class="cap" id="wsCap">اضغط «▶ شاهد» لترى طريقة القياس كاملة، خطوة خطوة.</div><div class="row"><button class="pri" id="wsPlay">▶ شاهد</button><button id="wsPrev">→ السابق</button><button id="wsNext">التالي ←</button></div></div></details>
     <h4 class="sbh">أ) قياس السعة عند ثلاث مسافات</h4>
     <p class="slh">👆 اسحب المؤشر البرتقالي لتقريب اللوح المتحرك من اللوح الثابت. أوقفه عند <bdi dir="ltr">d = 6.0</bdi> ثم <bdi dir="ltr">4.0</bdi> ثم <bdi dir="ltr">2.0 mm</bdi> في تكبير المسار، واقرأ المسافة والسعة وسجلهما في كل مرة.</p>
     <div class="stage"><div id="kS"></div><svg id="kM" viewBox="0 0 400 120"></svg><svg id="kZ" viewBox="0 0 400 112"></svg><div class="hud"><span id="kSt"></span></div></div>
@@ -4478,7 +4479,7 @@ function capLab(box){
     [4,'<b>الخطوة 4:</b> قرب اللوح إلى <b dir="ltr">d = 4.0 mm</b>: زادت السعة. اقرأها وسجلها.'],
     [2,'<b>الخطوة 5:</b> قرب اللوح إلى <b dir="ltr">d = 2.0 mm</b>: السعة تقريبا <b>ثلاثة أضعاف</b> قيمتها عند <span dir="ltr">6 mm</span>، لأن المسافة ثلثها. فالسعة تتناسب عكسيا مع المسافة، ثم نرسم C مع 1/d.']];
   let wk=-1,wt=null;const wGo=n=>{wk=n;const [d,t]=WS[n],cv=CV(d).toFixed(1);$('wsS').innerHTML=capScene({d,s:0,c:cv}).replace(/<svg viewBox="[^"]*"/,'<svg viewBox="-175 40 760 '+(capScene({d,s:0,c:cv}).match(/viewBox="[^ ]+ [^ ]+ [^ ]+ ([^"]+)"/)[1])+'"')+`<svg viewBox="0 0 400 120">${mmZ(d)}</svg><svg viewBox="0 0 400 112">${zoom(scr(80,240,cv+' pF'),'‏شاشة جهاز قياس السعة الرقمي (مكبرة)‏')}</svg>`;$('wsCap').innerHTML=t;$('wsCap').querySelectorAll('[dir=ltr]').forEach(x=>{x.style.unicodeBidi='isolate';x.style.whiteSpace='nowrap'});box.querySelectorAll('.wsx .pb i').forEach((x,j)=>x.classList.toggle('d',j<=n));$('wsPrev').disabled=n<=0;labFin($('wsNext'),n>=WS.length-1)};
-  $('wsPlay').onclick=()=>{clearInterval(wt);wGo(0);wt=setInterval(()=>{if(wk>=WS.length-1){clearInterval(wt);return}wGo(wk+1)},3600)};
+  box.__ans={dIn:i=>DX[i].toFixed(1),cIn:i=>CM(i).toFixed(1)};{const WH=$('wW');WH.__w={S:WS.map(x=>[x[1]]),html:true,stage:$('wsS'),reset:()=>{clearInterval(wt);const c=$('wsCap').innerHTML;wGo(0);$('wsCap').innerHTML=c;wk=-1},go:n=>wGo(n),stop:()=>clearInterval(wt),cap:$('wsCap'),pb:WH.querySelector('.wsc .pb')}};$('wsPlay').onclick=()=>{clearInterval(wt);wGo(0);wt=setInterval(()=>{if(wk>=WS.length-1){clearInterval(wt);return}wGo(wk+1)},3600)};
   $('wsNext').onclick=()=>{clearInterval(wt);wGo(Math.min(WS.length-1,wk+1))};$('wsPrev').onclick=()=>{clearInterval(wt);wGo(Math.max(0,wk-1))};$('wsPrev').disabled=true;
   $('nw').onclick=newObj;calcInit(box);newObj()}
 
@@ -4672,6 +4673,7 @@ function mount(host,opts){opts=opts||{};const WH=opts.watchHost||host;
   let k=-1,timer=null;
   function reset(){k=-1;W('csLeads').innerHTML='';disp('cs','','0.00',false);bars('cs',null);setMode('cs','')}
   function go(n){if(n<k)reset();while(k<n){k++;STEPS[k][1]()}W('csCap').innerHTML=STEPS[k][0];WH.querySelectorAll('.wsc .pb i').forEach((x,i)=>x.classList.toggle('d',i<=k));W('csPrev').disabled=k<=0;labFin(W('csNext'),k>=STEPS.length-1)}
+  WH.__w={S:STEPS,reset,go,stop:()=>clearInterval(timer),cap:W('csCap'),pb:WH.querySelector('.wsc .pb')};
   W('csPlay').onclick=()=>{clearInterval(timer);reset();go(0);timer=setInterval(()=>{if(k>=STEPS.length-1){clearInterval(timer);return}go(k+1)},3800)};
   W('csNext').onclick=()=>{clearInterval(timer);go(Math.min(STEPS.length-1,k+1))};
   W('csPrev').onclick=()=>{clearInterval(timer);go(Math.max(0,k-1))};W('csPrev').disabled=true;
@@ -4774,14 +4776,14 @@ function parLab(box){
     <tr><td>السعة المكافئة C</td><td>من القياس</td><td id="r4">—</td></tr><tr><td>السعة المكافئة C</td><td>من القانون</td><td id="r5">—</td></tr></tbody></table></div>
     <p class="rn" id="rNote">تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.</p></div>`;
   const {$,num,fb,fb0,fx}=hxKit(box);const POOL=[1,2.2,3.3,4.7,6.8,10],VSS=[6,9,12];
-  let CV,VS,Vm,ok,cfg,rec;
+  let CV,VS,Vm,ok,cfg,rec;box.__ans={vIn:()=>Vm.toFixed(2)};
   const good={mode:'v20',port:'v'},setOk=()=>['mode','port'].every(k=>cfg[k]===good[k]);
   const Q=i=>CV[i]*Vm,QT=()=>Q(0)+Q(1)+Q(2),Csum=()=>CV[0]+CV[1]+CV[2],Cm=()=>QT()/Vm;
   const MSG={mode:{a200m:'✗ هذا تدريج التيار (A⎓)، والمطلوب تدريج الجهد (V⎓). لا يمر تيار في المكثفات بعد شحنها.',a2:'✗ هذا تدريج التيار (A⎓)، والمطلوب تدريج الجهد (V⎓). لا يمر تيار في المكثفات بعد شحنها.',a10:'✗ هذا تدريج التيار (A⎓)، والمطلوب تدريج الجهد (V⎓). لا يمر تيار في المكثفات بعد شحنها.',
       v2:'✗ مدى 2 V أصغر من الجهد المتوقع (حتى 12 V)، فتظهر على الشاشة إشارة تجاوز المدى. اختر المدى الأصغر الذي يزيد على القيمة المتوقعة.',v200:'✗ مدى 200 V أكبر من اللازم فتقل دقة القراءة. اختر المدى الأصغر الذي يزيد على القيمة المتوقعة (20 V).'},port:{a:'✗ المنفذ A للتيار. الجهد يقاس من المنفذ V.'}};
   let st={volt:-1,vNeg:false};
   const W=WIRE_CAP($('wTv'),{watchHost:$('wW'),onChange:x=>{st=x;draw()}}),card=document.createElement('div'),sc=$('wTv').querySelector('.wsc');card.append(sc);
-  card.insertAdjacentHTML('beforeend','<div class="amLog"><h5>📋 سجل القراءات</h5><div id="logA"></div></div>');$('wTv').appendChild(card);
+  card.insertAdjacentHTML('beforeend','<div class="amLog"><h5>📋 سجل القراءات</h5><div id="logA"></div></div>');$('wTv').appendChild(card);card.insertBefore($('vZ').parentNode,card.lastElementChild);
   function draw(){const p=+$('nR').value/100,on=p>0,ready=setOk();
     const rd=ready&&on&&st.volt>=0?(st.vNeg?'-':'')+(Vm*p).toFixed(2):'0.00',mx=Math.max(...CV);
     W.show({on,ps:(VS*p).toFixed(1)+' V',d:rd,q:CV.map(c=>c/mx*p)});
@@ -4913,7 +4915,7 @@ const LREFK={'3-6':[[47,''],[48,''],[49,'']],'3-5':[[40,'قياس سعة مكث�
  '1-2':[[7,'إفلات كرة من السكون وقياس زمن سقوطها، واستخدام العلاقة <span dir="ltr" style="white-space:nowrap">y = ½·g·t²</span> بين الإزاحة الرأسية والزمن.'],[8,'جهاز السقوط الحر ووسادة الاستقبال يشغلان المؤقت ويوقفانه تلقائيا، وحساب ارتفاع السقوط من العلاقة <span dir="ltr" style="white-space:nowrap">h = ½·g·t²</span>.']],
  '1-1':[[6,'الطريقة الأساسية: انطلاق العربة من السكون بين بوابتين ضوئيتين على مسار هوائي مائل، وحساب التسارع <span dir="ltr" style="white-space:nowrap">a = (Vf − Vi) / Δt</span>، ومقارنته عند تغيير الميل.'],[5,'علاقة الإزاحة بالزمن <span dir="ltr" style="white-space:nowrap">Δx = ½·a·Δt²</span> لعربة تبدأ من السكون، ومنها استنتجت السرعة النهائية <span dir="ltr" style="white-space:nowrap">Vf = 2Δx / Δt</span>.']]};
 function refBox(k){const ix=LREFK[k];if(!ix)return '';
-  return `<div class="intro lrefs"><h3>7. مراجع التجربة</h3><p class="rlead">بنيت هذه التجربة على تجارب منشورة في أدلة معامل الفيزياء بجامعات ومصادر تعليمية موثوقة، مع تكييفها لمحتوى الحقيبة التدريبية.</p><ol class="rl">${ix.map(([i,c],n)=>`<li><span class="en">[${n+1}] ${LREF[i][0]} <a href="${LREF[i][1]}" target="_blank" rel="noopener">${LREF[i][1]}</a></span></li>`).join('')}</ol></div>`}
+  return `<div class="intro lrefs"><h3>${(window.LAB8||[]).includes(k)?8:7}. مراجع التجربة</h3><p class="rlead">بنيت هذه التجربة على تجارب منشورة في أدلة معامل الفيزياء بجامعات ومصادر تعليمية موثوقة، مع تكييفها لمحتوى الحقيبة التدريبية.</p><ol class="rl">${ix.map(([i,c],n)=>`<li><span class="en">[${n+1}] ${LREF[i][0]} <a href="${LREF[i][1]}" target="_blank" rel="noopener">${LREF[i][1]}</a></span></li>`).join('')}</ol></div>`}
 
 function spImg(dd,o){/* مسار العربة بصورة الجهاز: الشريط المتري يمتد من خط البداية، والعربة تتحرك عليه */
   o=o||{};const K=3.4,X0=238,F=v=>(+v).toFixed(1),te=o.tape==null?0:o.tape;
@@ -5175,6 +5177,7 @@ function mount(host,opts){opts=opts||{};
   let k=-1,timer=null;
   function reset(){k=-1;W('msLeads').innerHTML='';const j=W('msJump');j.style.transition='none';j.style.transform='';W('msJl').setAttribute('opacity','0');wires('ms',false);ps('ms',false);flow('ms',false);setMode('ms','');D.textContent='0.00';D.classList.remove('glow')}
   function go(n){if(n<k)reset();while(k<n){k++;STEPS[k][1]()}W('msCap').innerHTML=STEPS[k][0];WH.querySelectorAll('.wsc .pb i').forEach((x,i)=>x.classList.toggle('d',i<=k));W('msPrev').disabled=k<=0;labFin(W('msNext'),k>=STEPS.length-1)}
+  WH.__w={S:STEPS,reset,go,stop:()=>clearInterval(timer),cap:W('msCap'),pb:WH.querySelector('.wsc .pb')};
   W('msPlay').onclick=()=>{clearInterval(timer);reset();go(0);timer=setInterval(()=>{if(k>=STEPS.length-1){clearInterval(timer);return}go(k+1)},3400)};
   W('msNext').onclick=()=>{clearInterval(timer);go(Math.min(STEPS.length-1,k+1))};
   W('msPrev').onclick=()=>{clearInterval(timer);go(Math.max(0,k-1))};W('msPrev').disabled=true;
@@ -5227,30 +5230,17 @@ function amLab(box){
   box.innerHTML=`<style>.amQ{flex-wrap:wrap;gap:6px}.amQ label{width:100%}.amQ .go.sel{outline:3px solid #F7931E;outline-offset:1px}.amSet{border:1px dashed var(--line);border-radius:12px;padding:10px;margin:8px 0}.amWhy{border:2px dashed #F7931E;background:rgba(247,147,30,.08);border-radius:12px;padding:8px 12px;margin:8px 0;line-height:1.85;font-size:14px}.amWhy ol{margin:4px 18px 0 0;padding:0}.amTwo{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}.amTwo>div{border:2px solid;border-radius:12px;padding:8px 10px;display:flex;flex-direction:column;gap:4px;line-height:1.8;font-size:14px}.amFlow{margin:4px 18px 0 0;padding:0;line-height:1.9}.amFlow li{margin:2px 0}.pathN{color:#EA580C;border-right:4px solid #EA580C;padding-right:8px}.amRef{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}.amRef .vcap{font-size:12.5px;line-height:1.7}.amProg{display:flex;flex-wrap:wrap;gap:4px;margin:8px 0 10px}.amProg span{font-size:12.5px;font-weight:800;border-radius:20px;padding:3px 9px;background:var(--line);color:var(--muted)}.amProg span.d{background:#16A34A;color:#fff}.amProg i{font-style:normal;color:var(--muted);align-self:center}.amLog{border:2px solid #F7931E;border-radius:14px;padding:8px 10px;margin:8px 0;background:rgba(247,147,30,.06)}.amLog h5{margin:0 0 6px;font-size:15px}.amLog table{width:100%;border-collapse:collapse;font-size:13.5px}.amLog td{border:1px solid var(--line);padding:5px 6px;text-align:center}.amLog td:first-child{font-weight:800;text-align:right}.lab .cV{color:#DC2626!important}.lab .cI{color:#2563EB!important}.lab .cT{color:#16A34A!important}.lab .cQ{color:#7C3AED!important}.lab .law b.cV,.lab .law b.cI,.lab .law b.cT,.lab .law b.cQ{-webkit-text-fill-color:currentColor}</style>
   <div class="intro"><small class="labKind">🧪 تجربة عملية تفاعلية</small><h3>1. اسم التجربة</h3><p class="labName">قياس التيار الكهربائي والجهد بجهاز الملتيميتر الرقمي</p></div>
   <div class="tags"><span class="tag">الجهد V: <i>جهاز الملتيميتر (وضع DC V)</i> · V</span><span class="tag">شدة التيار I: <i>جهاز الملتيميتر (وضع DC A)</i> · A</span><span class="tag">الزمن t: <i>أداة ساعة الإيقاف</i> · s</span><span class="tag dv">الشحنة q وعدد الإلكترونات n: <i>كميتان محسوبتان</i></span></div>
-  <div class="intro goals"><h3>2. أهداف التجربة</h3><ol class="gl">
+  <div class="intro goals"><h3>2. الهدف من التجربة</h3><p class="aim" style="line-height:1.9;margin:4px 0 8px">الهدف من التجربة قياس الجهد بين طرفي مقاومة وشدة التيار المار فيها بجهاز الملتيميتر الرقمي، ثم حساب الشحنة المارة وعدد الإلكترونات من شدة التيار وزمن مروره.</p><ol class="gl">
     <li>التعرف على جهاز الملتيميتر الرقمي: مفتاح الوضع والمدى، والمنافذ <span dir="ltr">A</span> للتيار و<span dir="ltr">V</span> للجهد و<span dir="ltr">COM</span> المشترك.</li>
     <li>قياس الجهد بوضع مجسي الملتيميتر على طرفي المقاومة (على التوازي).</li>
     <li>قياس التيار بفتح الدائرة ووضع جهاز الملتيميتر في الفجوة (على التوالي).</li>
     <li>ملاحظة أثر عكس أقطاب المصدر على إشارة القراءة.</li>
     <li>حساب الشحنة المارة وعدد الإلكترونات من شدة التيار وزمن مروره بأداة ساعة الإيقاف.</li></ol></div>
-  <div class="intro amIdea"><h3>💡 فكرة التجربة وطريقة العمل</h3>
-    <p><b>الفكرة:</b> مقاومة موصولة بمصدر جهد مستمر، فيمر فيها تيار. نقيس بجهاز واحد هو الملتيميتر الرقمي كميتين: <b style="color:#DC2626">الجهد بين طرفي المقاومة</b> و<b style="color:#2563EB">شدة التيار المار فيها</b>. ولكل كمية طريقة توصيل:</p>
+  <div class="intro amIdea"><h3>3. النظرية الفيزيائية</h3>
+    <p>مقاومة موصولة بمصدر جهد مستمر، فيمر فيها تيار. نقيس بجهاز واحد هو الملتيميتر الرقمي كميتين: <b style="color:#DC2626">الجهد بين طرفي المقاومة</b> و<b style="color:#2563EB">شدة التيار المار فيها</b>. ولكل كمية طريقة توصيل:</p>
     <div class="amTwo"><div style="border-color:#DC2626"><b style="color:#DC2626">الجهد V</b><span>الجهاز على تدريج <span dir="ltr">V⎓</span> والمنفذ <span dir="ltr">V</span>، ويوضع المجسان على طرفي المقاومة والدائرة مغلقة: <b>على التوازي</b>.</span></div>
     <div style="border-color:#2563EB"><b style="color:#2563EB">التيار I</b><span>الجهاز على تدريج <span dir="ltr">A⎓</span> والمنفذ <span dir="ltr">A</span>، وتفتح الدائرة ويوضع الجهاز في الفجوة ليمر فيه التيار: <b>على التوالي</b>.</span></div></div>
-    <p><b>طريقة العمل:</b></p>
-    <ol class="amFlow"><li><b>ضبط جهد المصدر</b>.</li><li><b>قياس الجهد:</b> ضبط الجهاز للجهد، ثم وضع المجسين على طرفي المقاومة وقراءة الشاشة.</li><li><b>قياس التيار:</b> ضبط الجهاز للتيار، ثم رفع وصلة التوصيل ووضع المجسين في الفجوة وقراءة الشاشة.</li><li><b>عكس أقطاب المصدر</b> وملاحظة إشارة القراءة.</li><li><b>قياس الزمن</b> بساعة الإيقاف.</li><li><b>الحسابات:</b> الشحنة المارة <span dir="ltr">q = I × t</span>، وعدد الإلكترونات <span dir="ltr">n = q / e</span>.</li></ol></div>
-  <div class="intro"><h3>3. الأدوات والأجهزة المستخدمة</h3>
-    <div class="tool"><div class="stage dv">${DVF.dm}</div><div class="vcap">مقاومة في لوحة التوصيل موصولة بمصدر الجهد المستمر، وجهاز الملتيميتر الرقمي بمجسيه: منظر ثلاثي الأبعاد</div></div>
-    <div class="tool"><p><b>مصدر الجهد المستمر <span dir="ltr">(DC Power Supply)</span>:</b> يعطي جهدا ثابت الاتجاه يضبط بمقبض الضبط، وطرفه الموجب أحمر والسالب أسود.</p>
-    <p><b>المقاومة:</b> مثبتة بساقيها في لوحة التوصيل، وليس لها قطبية، فيمكن توصيلها في أي اتجاه. لكن طرفها المتصل بالخط الموجب جهده أعلى، وعليه في الرسم علامة <span dir="ltr" style="color:#DC2626;font-weight:800">+</span>، والطرف الآخر علامة <span dir="ltr" style="font-weight:800">−</span>.</p>
-    <p class="slh">⚠️ <b>قاعدة الأقطاب في القياس:</b> المجس الأحمر على الطرف الأعلى جهدا (جهة الموجب)، والمجس الأسود على الطرف الأقل جهدا (جهة السالب)، فتظهر القراءة موجبة. ولو عكسا تظهر القراءة سالبة، ولا يتلف الجهاز.</p>
-    <p><b>جهاز الملتيميتر الرقمي <span dir="ltr">(Digital Multimeter)</span>:</b> يجمع الأميتر والفولتميتر في جهاز واحد. يدار مفتاح الوضع إلى تدريج الجهد المستمر <span dir="ltr">V⎓</span> (باللون الأحمر) أو تدريج التيار المستمر <span dir="ltr">A⎓</span> (باللون الأزرق)، ويختار منه المدى الأصغر الذي يزيد على القيمة المتوقعة. وله منفذ للجهد <span dir="ltr">V</span>، ومنفذ للتيار <span dir="ltr">A</span>، ومنفذ مشترك <span dir="ltr">COM</span> يوصل به المجس الأسود دائما.</p>
-    <div class="amRef"><div><div class="stage">${dmmFace({mode:'v20',port:'v'})}</div><div class="vcap"><b style="color:#DC2626">ضبط الجهاز لقياس الجهد:</b> المفتاح على تدريج <span dir="ltr">V⎓</span> مدى <span dir="ltr">20 V</span>، والمجس الأحمر في المنفذ <span dir="ltr">V</span> والأسود في <span dir="ltr">COM</span>، ويوصل المجسان على طرفي المقاومة (على التوازي).</div></div>
-    <div><div class="stage">${dmmFace({mode:'a2',port:'a'})}</div><div class="vcap"><b style="color:#2563EB">ضبط الجهاز لقياس التيار:</b> المفتاح على تدريج <span dir="ltr">A⎓</span> مدى <span dir="ltr">2 A</span>، والمجس الأحمر في المنفذ <span dir="ltr">A</span> والأسود في <span dir="ltr">COM</span>، وتفتح الدائرة ويوضع المجسان في الفجوة (على التوالي).</div></div></div>
-    <p><b>لوحة التوصيل <span dir="ltr">(Breadboard)</span> ووصلة التوصيل <span dir="ltr">(Jumper)</span>:</b> لوحة تثبت فيها العناصر دون لحام، وفي خطها الموجب فجوة تصلها وصلة توصيل قصيرة، ترفع عند قياس التيار ليوضع الجهاز مكانها.</p><div class="stage dv">${DVF.jmp}</div><div class="vcap">وصلة التوصيل: توضع على الفجوة في الخط الموجب فتكمل الدائرة، وترفع عند قياس التيار</div>
-    <p><b>أداة ساعة الإيقاف:</b> تقيس زمن مرور التيار بالثانية <span dir="ltr">s</span>. يبدأ العد بالضغط على زر التشغيل، ويتوقف بالضغط عليه مرة أخرى، ويرجع إلى الصفر بزر التصفير. ونقرأ الزمن من الشاشة الرقمية.</p><div class="stage dv">${DVF.sw2}</div></div></div>
-  <h3 class="secH">4. القوانين المستخدمة</h3>
-  <div class="ctl">
+    <h4 class="sbh">القوانين</h4>
     <div class="law ftl"><div class="ln lw"><b>شدة التيار: معدل مرور الشحنة عبر مقطع الموصل</b><span>I = q / t</span></div>
       <div class="ln lw"><b>الشحنة المارة</b><span>q = I × t</span></div>
       <div class="ln lw"><b>عدد الإلكترونات</b><span>n = q / e</span></div>
@@ -5259,13 +5249,27 @@ function amLab(box){
       <li><span class="chip" dir="ltr">q</span> الشحنة المارة، ووحدتها الكولوم <span dir="ltr">C</span></li>
       <li><span class="chip" dir="ltr">t</span> الزمن، ووحدته الثانية <span dir="ltr">s</span></li>
       <li><span class="chip" dir="ltr">n</span> عدد الإلكترونات، وليس له وحدة</li>
-      <li><span class="chip" dir="ltr">e</span> شحنة الإلكترون <span dir="ltr">e = 1.6 × 10⁻¹⁹ C</span> (قيمة ثابتة)</li></ul></div></div></div>
-  <h3 class="secH">5. تنفيذ التجربة</h3>
+      <li><span class="chip" dir="ltr">e</span> شحنة الإلكترون <span dir="ltr">e = 1.6 × 10⁻¹⁹ C</span> (قيمة ثابتة)</li></ul></div></div>
+    </div>
+  <div class="intro"><h3>4. الأدوات والأجهزة المستخدمة</h3>
+    <div class="tool"><div class="stage dv">${DVF.dm}</div><div class="vcap">مقاومة في لوحة التوصيل موصولة بمصدر الجهد المستمر، وجهاز الملتيميتر الرقمي بمجسيه</div></div>
+    <div class="tool"><p><b>مصدر الجهد المستمر <span dir="ltr">(DC Power Supply)</span>:</b> يعطي جهدا ثابت الاتجاه يضبط بمقبض الضبط، وطرفه الموجب أحمر والسالب أسود.</p>
+    <p><b>المقاومة:</b> مثبتة بساقيها في لوحة التوصيل، وليس لها قطبية، فيمكن توصيلها في أي اتجاه. لكن طرفها المتصل بالخط الموجب جهده أعلى، وعليه في الرسم علامة <span dir="ltr" style="color:#DC2626;font-weight:800">+</span>، والطرف الآخر علامة <span dir="ltr" style="font-weight:800">−</span>.</p>
+    <p class="slh">⚠️ <b>قاعدة الأقطاب في القياس:</b> المجس الأحمر على الطرف الأعلى جهدا (جهة الموجب)، والمجس الأسود على الطرف الأقل جهدا (جهة السالب)، فتظهر القراءة موجبة. ولو عكسا تظهر القراءة سالبة، ولا يتلف الجهاز.</p>
+    <p><b>جهاز الملتيميتر الرقمي <span dir="ltr">(Digital Multimeter)</span>:</b> يجمع الأميتر والفولتميتر في جهاز واحد. يدار مفتاح الوضع إلى تدريج الجهد المستمر <span dir="ltr">V⎓</span> (باللون الأحمر) أو تدريج التيار المستمر <span dir="ltr">A⎓</span> (باللون الأزرق)، ويختار منه المدى الأصغر الذي يزيد على القيمة المتوقعة. وله منفذ للجهد <span dir="ltr">V</span>، ومنفذ للتيار <span dir="ltr">A</span>، ومنفذ مشترك <span dir="ltr">COM</span> يوصل به المجس الأسود دائما.</p>
+    <div class="amRef"><div><div class="stage">${dmmFace({mode:'v20',port:'v'})}</div><div class="vcap"><b style="color:#DC2626">ضبط الجهاز لقياس الجهد:</b> المفتاح على تدريج <span dir="ltr">V⎓</span> مدى <span dir="ltr">20 V</span>، والمجس الأحمر في المنفذ <span dir="ltr">V</span> والأسود في <span dir="ltr">COM</span>، ويوصل المجسان على طرفي المقاومة (على التوازي).</div></div>
+    <div><div class="stage">${dmmFace({mode:'a2',port:'a'})}</div><div class="vcap"><b style="color:#2563EB">ضبط الجهاز لقياس التيار:</b> المفتاح على تدريج <span dir="ltr">A⎓</span> مدى <span dir="ltr">2 A</span>، والمجس الأحمر في المنفذ <span dir="ltr">A</span> والأسود في <span dir="ltr">COM</span>، وتفتح الدائرة ويوضع المجسان في الفجوة (على التوالي).</div></div></div>
+    <p><b>لوحة التوصيل <span dir="ltr">(Breadboard)</span> ووصلة التوصيل <span dir="ltr">(Jumper)</span>:</b> لوحة تثبت فيها العناصر دون لحام، وفي خطها الموجب فجوة تصلها وصلة توصيل قصيرة، ترفع عند قياس التيار ليوضع الجهاز مكانها.</p><div class="stage dv">${DVF.jmp}</div><div class="vcap">وصلة التوصيل: توضع على الفجوة في الخط الموجب فتكمل الدائرة، وترفع عند قياس التيار</div>
+    <p><b>أداة ساعة الإيقاف:</b> تقيس زمن مرور التيار بالثانية <span dir="ltr">s</span>. يبدأ العد بالضغط على زر التشغيل، ويتوقف بالضغط عليه مرة أخرى، ويرجع إلى الصفر بزر التصفير. ونقرأ الزمن من الشاشة الرقمية.</p><div class="stage dv">${DVF.sw2}</div></div></div>
+  <h3 class="secH">5. خطوات وتنفيذ التجربة</h3>
+  <div class="intro amIdea"><p><b>طريقة العمل:</b></p>
+    <ol class="amFlow"><li><b>ضبط جهد المصدر</b>.</li><li><b>قياس الجهد:</b> ضبط الجهاز للجهد، ثم وضع المجسين على طرفي المقاومة وقراءة الشاشة.</li><li><b>قياس التيار:</b> ضبط الجهاز للتيار، ثم رفع وصلة التوصيل ووضع المجسين في الفجوة وقراءة الشاشة.</li><li><b>عكس أقطاب المصدر</b> وملاحظة إشارة القراءة.</li><li><b>قياس الزمن</b> بساعة الإيقاف.</li><li><b>الحسابات:</b> الشحنة المارة <span dir="ltr">q = I × t</span>، وعدد الإلكترونات <span dir="ltr">n = q / e</span>.</li></ol></div>
   <div class="startBand">▶️ لنبدأ التجربة</div>
   <div class="btns" style="margin-bottom:12px"><button type="button" class="rs" id="nw">🔄 قراءات جديدة</button></div>
-  <div class="ctl"><h3>5.1 القياس</h3>
+  <div class="ctl"><h3>5.1 شاهد التجربة</h3>
+    <details class="wsDet" open><summary>🎬 شاهد خطوات التركيب وطريقة القياس (9 خطوات)</summary><div id="wW"></div></details></div>
+  <div class="ctl lx52"><h3>5.2 خطوات وتنفيذ التجربة</h3><div class="ctl lxM">
     <div class="amProg" id="prog"></div>
-    <details class="wsDet"><summary>🎬 شاهد خطوات التركيب وطريقة القياس (9 خطوات)</summary><div id="wW"></div></details>
     <h4 class="sbh">أ) ضبط جهد المصدر</h4>
     <div class="stage"><svg id="sZ" viewBox="0 0 400 112"></svg><div class="hud"><span id="sSt"></span></div></div>
     ${hxRow('sR','مقبض ضبط الجهد')}
@@ -5293,21 +5297,23 @@ function amLab(box){
     ${hxRow('tR','تشغيل ساعة الإيقاف')}
     <p class="slh">👆 اسحب المؤشر البرتقالي لتشغيل ساعة الإيقاف حتى تتوقف تلقائيا، ثم اقرأ الزمن.</p>
     ${hxAns('tIn','قراءتك للزمن t','s')}
-  </div>
-  <div class="ctl"><h3>5.2 الحسابات</h3>
-    <div id="logB"></div>
-    <p class="slh">الحسابات تأخذ أرقامها من سجل القراءات أعلاه، بنفس ألوانها.</p>
+  </div></div>
+  <div class="ctl"><h3>5.3 نتائج القياس</h3>
+    <div id="logB"></div></div>
+  <h3 class="secH">6. الحسابات</h3>
+  <div class="ctl">
+    <p class="slh">الحسابات تأخذ أرقامها من نتائج القياس، بنفس ألوانها.</p>
     <h4 class="sbh">أ) حساب الشحنة المارة</h4>
     ${hxCalcStep('Q','q = I × t','احسب الشحنة q','C')}
     <h4 class="sbh">ب) حساب عدد الإلكترونات</h4>
     ${hxCalcStep('N','n = q / e','احسب عدد الإلكترونات n','مثل 3.75×10^20')}
   </div>
-  <div class="ctl res"><h3>6. نتائج التجربة</h3>
+  <div class="ctl res"><h3>7. الاستنتاج والنتائج</h3>
     <div class="tw"><table class="rt"><thead><tr><th>الكمية</th><th>الجهاز</th><th>القيمة</th></tr></thead>
     <tbody><tr><td>الجهد V</td><td>الملتيميتر (وضع DC V)</td><td id="r1">—</td></tr><tr><td>شدة التيار I</td><td>الملتيميتر (وضع DC A)</td><td id="r2">—</td></tr>
     <tr><td>عكس الأقطاب</td><td>الملتيميتر</td><td id="r3">—</td></tr><tr><td>الزمن t</td><td>ساعة الإيقاف</td><td id="r4">—</td></tr><tr><td>الشحنة المارة q</td><td>محسوبة</td><td id="r5">—</td></tr><tr><td>عدد الإلكترونات n</td><td>محسوب</td><td id="r6">—</td></tr></tbody></table></div>
     <p class="rn" id="rNote">تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.</p></div>`;
-  const {$,num,fb,fb0,fx}=hxKit(box);let V,I,T,ok={},rev=false,cfg={v:{},a:{}};
+  const {$,num,fb,fb0,fx}=hxKit(box);let V,I,T,ok={},rev=false,cfg={v:{},a:{}};box.__ans={vIn:()=>V.toFixed(2),iIn:()=>I.toFixed(3),tIn:()=>String(T)};
   const Q=()=>I*T,N=()=>Q()/1.6e-19,sci=(x,n)=>{const e=Math.floor(Math.log10(x)),m=x/10**e;return `${m.toFixed(n)} × 10${String(e).replace(/./g,c=>'⁰¹²³⁴⁵⁶⁷⁸⁹'['0123456789'.indexOf(c)]||c)}`};
   const good={v:{mode:'v20',port:'v'},a:{mode:'a2',port:'a'}},setOk=m=>['mode','port'].every(k=>cfg[m][k]===good[m][k]);
   let st={ph:'v',ok:false,neg:false};
@@ -5349,7 +5355,7 @@ function amLab(box){
     cfg[m][k]=v;const bad=['mode','port'].map(kk=>cfg[m][kk]&&cfg[m][kk]!==good[m][kk]?MSG[m][kk][cfg[m][kk]]:null).filter(Boolean);
     if(bad.length)fb(m+'Fb',false,bad.join('\n'));else if(setOk(m))fb(m+'Fb',true,m==='a'?'✓ إعداد صحيح: وضع DC A بمدى 2 A، والمجس الأحمر في المنفذ A والأسود في COM. ضع المجسين في الدائرة أدناه.':'✓ إعداد صحيح: وضع DC V بمدى 20 V، والمجس الأحمر في المنفذ V والأسود في COM. ضع المجسين في الدائرة أدناه.');else fb0(m+'Fb');
     if(m==='v'&&st.ph==='v')W.mode(setOk('v')?'v':'');
-    if(m==='a'&&setOk('a')&&st.ph!=='a'){$('wTa').appendChild(card);W.phase('a');st={ph:'a',ok:false,neg:false}}
+    if(m==='a'&&setOk('a')&&st.ph!=='a'){if(!card.closest('#dmS'))$('wTa').appendChild(card);W.phase('a');st={ph:'a',ok:false,neg:false}}
     faces();draw()}
   function faces(){['v','a'].forEach(m=>{$(m+'F').innerHTML=dmmFace(cfg[m])})}
   box.querySelectorAll('.dmmBox').forEach(d=>d.addEventListener('click',e=>{const g=e.target.closest('[data-k]');if(!g)return;pick(d.dataset.m,g.dataset.k,g.dataset.v)}));
@@ -5360,7 +5366,7 @@ function amLab(box){
     if(Math.abs(v-I)<0.0006){ok.i=true;setTimeout(draw,0);fb('iInFb',true,'✓ قراءة صحيحة:\n'+E(`I = ${fx(I,3)} A`))}else fb('iInFb',false,'✗ اكتب الرقم الظاهر على شاشة جهاز الملتيميتر بوحدة A.');sub();results()};
   $('rvB').onclick=()=>{if(!ok.i)return fb('rvFb',false,'قس التيار أولا.');rev=!rev;draw();
     if(rev)fb('rvFb',false,'⚠️ بدل سلكا المصدر، فانعكس اتجاه التيار في الدائرة، وظهرت القراءة بإشارة سالبة. فإشارة القراءة تدل على اتجاه التيار، ولا يتلف الجهاز. اضغط الزر مرة أخرى لإعادة الأقطاب.');
-    else{ok.rv=true;fb('rvFb',true,'✓ أعيدت الأقطاب، فعادت القراءة موجبة. انتقل إلى قياس الزمن (الخطوة هـ).');$('wTt').appendChild(card)}$('rvB').textContent=rev?'↩️ أعد الأقطاب إلى وضعها الصحيح':'🔁 اعكس أقطاب المصدر';results()};
+    else{ok.rv=true;fb('rvFb',true,'✓ أعيدت الأقطاب، فعادت القراءة موجبة. انتقل إلى قياس الزمن (الخطوة هـ).');if(!card.closest('#dmS'))$('wTt').appendChild(card)}$('rvB').textContent=rev?'↩️ أعد الأقطاب إلى وضعها الصحيح':'🔁 اعكس أقطاب المصدر';results()};
   $('tR').oninput=()=>{if(!ok.i||rev||!st.ok)$('tR').value=0;tDraw()};
   $('tInCk').onclick=()=>{if(!ok.rv)return fb('tInFb',false,'أكمل قياس التيار وعكس الأقطاب أولا.');if(+$('tR').value<100)return fb('tInFb',false,'شغّل ساعة الإيقاف حتى تتوقف تلقائيا أولا.');const v=num($('tIn').value);if(isNaN(v))return fb('tInFb',false,'اكتب الزمن بالثانية.');
     if(Math.abs(v-T)<0.5){ok.t=true;fb('tInFb',true,'✓ قراءة صحيحة:\n'+E(`t = ${T} s`))}else fb('tInFb',false,'✗ اكتب الرقم الظاهر على شاشة ساعة الإيقاف.');sub();results()};
@@ -5374,7 +5380,7 @@ function amLab(box){
  ['University of Mississippi, Department of Physics and Astronomy. (n.d.). <i>Circuit Fundamentals: PHYS 222 Laboratory Manual</i>. Oxford, MS.','https://www.phy.olemiss.edu/lab/LabPDFs/222/LabManual/13_CircuitFund_222/TAP_CircuitFund_222.pdf'],
  ['University of Utah, Department of Electrical and Computer Engineering. (n.d.). <i>ECE 2210 Lab 1: Measuring Circuit Values</i>. Salt Lake City, UT.','https://my.ece.utah.edu/~ece2210/Lab%201%20Measuring%20Circuit%20Values.pdf']);
  LREFK['4-1']=[[n,''],[n+1,''],[n+2,'']]}
-window.LABS['4-1']={t:'قياس التيار الكهربائي والجهد بجهاز الملتيميتر الرقمي',run:amLab};
+window.LAB8=(window.LAB8||[]).concat(['4-1']);window.LABS['4-1']={t:'قياس التيار الكهربائي والجهد بجهاز الملتيميتر الرقمي',run:amLab};
 
 
 /* ===== 4-5 المقاومة وقانون أوم: التحقق من قانون أوم ===== */
@@ -5602,9 +5608,7 @@ const lead=(j,p)=>{const d=route(j,p),blk=j[1]==='b';
 function mount(host,opts){opts=opts||{};
   const WH=opts.watchHost||host;WH.insertAdjacentHTML('beforeend',`<style>${CSS}</style>
   <div class="wsc"><h4 style="margin:2px 0 6px">🎬 شاهد: تركيب الأجهزة وطريقة القياس</h4>
-   <div class="w3d"><img id="ws3d" src="ohm3d-f1.jpg" width="900" height="600" alt="الأجهزة ثلاثية الأبعاد: مصدر جهد مستمر ولوحة توصيل ومقاومة وجهازا ملتيميتر" onerror="var c=this.closest('.wsc');c.querySelector('.w3s').hidden=false;c.querySelector('.w3d').hidden=true;c.querySelector('.w3t').hidden=true"></div>
-   <div class="w3t"><button type="button" id="ws3c" class="on">مشهد مقرب</button><button type="button" id="ws3f">الأجهزة كاملة</button></div>
-   <div class="w3s" hidden>${svg()}</div><div class="pb">${'<i></i>'.repeat(8)}</div><div class="cap" id="wsCap">اضغط «▶ شاهد» لترى خطوات توصيل الأجهزة وطريقة القراءة خطوة خطوة.</div>
+   <div class="w3s">${svg()}</div><div class="pb">${'<i></i>'.repeat(8)}</div><div class="cap" id="wsCap">اضغط «▶ شاهد» لترى خطوات توصيل الأجهزة وطريقة القراءة خطوة خطوة.</div>
    <div class="row"><button class="pri" id="wsPlay">▶ شاهد</button><button id="wsPrev">→ السابق</button><button id="wsNext">التالي ←</button></div></div>`);
   host.insertAdjacentHTML('beforeend',`
   <div class="wsc"><h4 style="margin:2px 0 6px">🔌 طبق بنفسك: وصّل المجسات</h4>
@@ -5634,13 +5638,14 @@ function mount(host,opts){opts=opts||{};
   function reset(){k=-1;W('wsLeads').innerHTML='';W('wsJump').style.transition='none';W('wsJump').style.transform='';W('wsJump').style.opacity='1';W('wsJl').setAttribute('opacity','0');power('ws',false);W('wsAd').classList.remove('glow');W('wsVd').classList.remove('glow')}
   /* صور ثلاثية الأبعاد لكل خطوة: مشهد مقرب على الجزء المقصود، أو الأجهزة كاملة */
   const W3=['f1','c2','c3','c4','c5','c6','c7','c8'];let w3full=false;
-  function w3(n){const i=W('ws3d');if(!i)return;const b=n<0?'f1':(w3full?'f'+(n+1):W3[n]);i.src='ohm3d-'+b+'.jpg';W('ws3c').classList.toggle('on',!w3full);W('ws3f').classList.toggle('on',w3full)}
+  function w3(){}
   function go(n){if(n<k){reset()}while(k<n){k++;STEPS[k][1]()}w3(k);W('wsCap').innerHTML=STEPS[k][0];WH.querySelectorAll('.wsc .pb i').forEach((x,i)=>x.classList.toggle('d',i<=k));W('wsPrev').disabled=k<=0;labFin(W('wsNext'),k>=STEPS.length-1)}
+  WH.__w={S:STEPS,reset,go,stop:()=>clearInterval(timer),cap:W('wsCap'),pb:WH.querySelector('.wsc .pb')};
   W('wsPlay').onclick=()=>{clearInterval(timer);reset();go(0);timer=setInterval(()=>{if(k>=STEPS.length-1){clearInterval(timer);return}go(k+1)},3200)};
   W('wsNext').onclick=()=>{clearInterval(timer);go(Math.min(STEPS.length-1,k+1))};
   W('wsPrev').onclick=()=>{clearInterval(timer);go(Math.max(0,k-1))};
   W('wsPrev').disabled=true;
-  W('ws3c').onclick=()=>{w3full=false;w3(k)};W('ws3f').onclick=()=>{w3full=true;w3(k)};
+  
   /* ===== ب) التطبيق ===== */
   let sel=null,jump=true;const con={};
   const msg=(t,c)=>{const m=W('wtMsg');m.hidden=false;m.className='msg '+c;m.innerHTML=t};
@@ -5675,33 +5680,17 @@ function ohmLab(box){
   box.innerHTML=`<style>.amSet{border:1px dashed var(--line);border-radius:12px;padding:10px;margin:8px 0}.amTwo{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}.amTwo>div{border:2px solid;border-radius:12px;padding:8px 10px;display:flex;flex-direction:column;gap:4px;line-height:1.8;font-size:14px}.amFlow{margin:4px 18px 0 0;padding:0;line-height:1.9}.amFlow li{margin:2px 0}.pathN{color:#EA580C;border-right:4px solid #EA580C;padding-right:8px}.amRef{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}.amRef .vcap{font-size:12.5px;line-height:1.7}.ohT td,.ohT th{text-align:center}.ohT tr.cur td{background:rgba(247,147,30,.15)}.amProg{display:flex;flex-wrap:wrap;gap:4px;margin:8px 0 10px}.amProg span{font-size:12.5px;font-weight:800;border-radius:20px;padding:3px 9px;background:var(--line);color:var(--muted)}.amProg span.d{background:#16A34A;color:#fff}.amProg i{font-style:normal;color:var(--muted);align-self:center}.amLog{border:2px solid #F7931E;border-radius:14px;padding:8px 10px;margin:8px 0;background:rgba(247,147,30,.06)}.amLog h5{margin:0 0 6px;font-size:15px}.lab .cV{color:#DC2626!important}.lab .cI{color:#2563EB!important}.lab .cQ{color:#7C3AED!important}.rt.ohRes td,.rt.ohRes th{white-space:normal!important;min-width:0!important}.tw:has(.ohRes){overflow-x:visible}.rt.ohRes{min-width:0!important;width:100%}</style>
   <div class="intro"><small class="labKind">🧪 تجربة عملية تفاعلية</small><h3>1. اسم التجربة</h3><p class="labName">التحقق من قانون أوم</p></div>
   <div class="tags"><span class="tag">الجهد V: <i>جهاز الملتيميتر 2 (فولتميتر)</i> · V</span><span class="tag">شدة التيار I: <i>جهاز الملتيميتر 1 (أميتر)</i> · A</span><span class="tag dv">المقاومة R: <i>من ميل الخط</i> · Ω</span></div>
-  <div class="intro goals"><h3>2. أهداف التجربة</h3><ol class="gl">
+  <div class="intro goals"><h3>2. الهدف من التجربة</h3><p class="aim" style="line-height:1.9;margin:4px 0 8px">الهدف من التجربة إثبات أن التيار المار في مقاومة ثابتة يتناسب طرديا مع الجهد بين طرفيها (قانون أوم)، وإيجاد قيمة المقاومة من ميل خط الجهد مع التيار.</p><ol class="gl">
     <li>توصيل جهاز الملتيميتر الرقمي أميترا على التوالي مع المقاومة، وجهاز ملتيميتر ثان فولتميترا على التوازي معها.</li>
     <li>تغيير جهد مصدر الجهد المستمر وتسجيل ثلاث قراءات للجهد والتيار.</li>
     <li>رسم العلاقة بين الجهد والتيار، واستنتاج أنها خط مستقيم يمر بنقطة الأصل.</li>
     <li>حساب المقاومة من ميل الخط المستقيم.</li></ol></div>
-  <div class="intro amIdea"><h3>💡 فكرة التجربة وطريقة العمل</h3>
-    <p><b>الفكرة:</b> ينص قانون أوم على أن التيار المار في موصل يتناسب طرديا مع الجهد بين طرفيه عند ثبوت درجة الحرارة: <span dir="ltr">V = I × R</span>. فإذا رفعنا الجهد على مقاومة ثابتة وقسنا التيار في كل مرة، ورسمنا الجهد مع التيار، ظهر <b>خط مستقيم يمر بنقطة الأصل، ميله يساوي المقاومة R</b>.</p>
+  <div class="intro amIdea"><h3>3. النظرية الفيزيائية</h3>
+    <p>ينص قانون أوم على أن التيار المار في موصل يتناسب طرديا مع الجهد بين طرفيه عند ثبوت درجة الحرارة: <span dir="ltr">V = I × R</span>. فإذا رفعنا الجهد على مقاومة ثابتة وقسنا التيار في كل مرة، ورسمنا الجهد مع التيار، ظهر <b>خط مستقيم يمر بنقطة الأصل، ميله يساوي المقاومة R</b>.</p>
     <div class="amTwo"><div style="border-color:#2563EB"><b style="color:#2563EB">الأميتر (الجهاز 1)</b><span>على تدريج <span dir="ltr">A⎓</span> والمنفذ <span dir="ltr">A</span>، ويوصل <b>على التوالي</b> فيمر فيه تيار المقاومة كله.</span></div>
     <div style="border-color:#DC2626"><b style="color:#DC2626">الفولتميتر (الجهاز 2)</b><span>على تدريج <span dir="ltr">V⎓</span> والمنفذ <span dir="ltr">V</span>، ويوصل <b>على التوازي</b> بوضع مجسيه على طرفي المقاومة.</span></div></div>
     <div class="stage">${ohSchem()}</div>
-    <p><b>طريقة العمل:</b></p>
-    <ol class="amFlow"><li><b>إعداد الجهازين:</b> الأول للتيار والثاني للجهد.</li><li><b>توصيل المجسات:</b> نرفع وصلة التوصيل عن الفجوة ونضع الأميتر مكانها (على التوالي)، والفولتميتر على طرفي المقاومة (على التوازي).</li><li><b>رفع جهد المصدر</b> ثلاث مرات: <span dir="ltr">2, 4, 6 V</span>، وتسجيل قراءتي الجهازين في كل مرة.</li><li><b>رسم الجهد مع التيار</b> وملاحظة شكل الخط.</li><li><b>حساب المقاومة</b> من الميل <span dir="ltr">R = ΔV / ΔI</span>.</li></ol></div>
-  <div class="intro"><h3>3. الأدوات والأجهزة المستخدمة</h3>
-    <div class="tool"><div class="stage dv">${DVF.ohm}</div><div class="vcap">مقاومة في لوحة التوصيل موصولة بمصدر الجهد المستمر، والأميتر على التوالي، والفولتميتر على التوازي: منظر ثلاثي الأبعاد</div></div>
-    <div class="tool"><p><b>مصدر الجهد المستمر <span dir="ltr">(DC Power Supply)</span>:</b> يعطي جهدا ثابت الاتجاه يضبط بمقبض الضبط، وطرفه الموجب أحمر والسالب أسود.</p>
-    <p><b>جهازا الملتيميتر الرقمي <span dir="ltr">(Digital Multimeter)</span>:</b> الأول أميتر للتيار، والثاني فولتميتر للجهد، لنقرأهما معا عند كل قيمة للجهد.</p>
-    <div class="amRef"><div><div class="stage">${I3('ohm3d-am.jpg','الجهاز 1 أميتر على تدريج التيار',dmmFace({mode:'a2',port:'a'}))}</div><div class="vcap"><b style="color:#2563EB">الجهاز 1 (أميتر):</b> تدريج <span dir="ltr">A⎓</span> مدى <span dir="ltr">2 A</span>، والمجس الأحمر في المنفذ <span dir="ltr">A</span>.</div></div>
-    <div><div class="stage">${I3('ohm3d-vm.jpg','الجهاز 2 فولتميتر على تدريج الجهد',dmmFace({mode:'v20',port:'v'}))}</div><div class="vcap"><b style="color:#DC2626">الجهاز 2 (فولتميتر):</b> تدريج <span dir="ltr">V⎓</span> مدى <span dir="ltr">20 V</span>، والمجس الأحمر في المنفذ <span dir="ltr">V</span>.</div></div></div>
-    <p><b>المقاومة:</b> عنصر يقاوم مرور التيار، ونريد إيجاد قيمتها من قراءات الجهد والتيار.</p>
-    <p><b>لوحة التوصيل <span dir="ltr">(Breadboard)</span> ووصلة التوصيل <span dir="ltr">(Jumper)</span>:</b> لوحة تثبت فيها العناصر دون لحام، وفي خطها الموجب فجوة تصلها وصلة توصيل قصيرة، ترفع عند القياس ليوضع الأميتر مكانها.</p><div class="stage"><img class="i3d" src="ohm3d-jp.jpg" alt="وصلة التوصيل البرتقالية في ثقبي طرفي الفجوة على لوحة التوصيل" loading="lazy" onerror="this.nextElementSibling.hidden=false;this.remove()"><div hidden><svg viewBox="0 0 400 170" class="labSvg" role="img" aria-label="وصلة التوصيل">
-  <path d="M120,120 L120,60 Q120,40 140,40 L260,40 Q280,40 280,60 L280,120" fill="none" stroke="#7C2D12" stroke-width="16" stroke-linecap="round"/><path d="M120,120 L120,60 Q120,40 140,40 L260,40 Q280,40 280,60 L280,120" fill="none" stroke="#F7931E" stroke-width="11" stroke-linecap="round"/>
-  <rect x="115" y="118" width="10" height="34" rx="3" fill="#CBD5E1" stroke="#475569"/><rect x="275" y="118" width="10" height="34" rx="3" fill="#CBD5E1" stroke="#475569"/>
-  <line x1="200" y1="40" x2="200" y2="14" stroke="var(--muted,#64748B)"/><text x="200" y="12" font-size="13" font-weight="700" text-anchor="middle" fill="var(--ink,#0F172A)">سلك معزول</text>
-  <line x1="285" y1="140" x2="320" y2="140" stroke="var(--muted,#64748B)"/><text x="324" y="145" font-size="13" font-weight="700" text-anchor="start" fill="var(--ink,#0F172A)">طرف معدني</text>
-  <line x1="115" y1="140" x2="80" y2="140" stroke="var(--muted,#64748B)"/><text x="76" y="145" font-size="13" font-weight="700" text-anchor="end" fill="var(--ink,#0F172A)">طرف معدني</text></svg></div></div><div class="vcap">وصلة التوصيل: توضع على الفجوة في الخط الموجب فتكمل الدائرة، وترفع عند قياس التيار</div></div></div>
-  <h3 class="secH">4. القوانين المستخدمة</h3>
-  <div class="ctl">
+    <h4 class="sbh">القوانين</h4>
     <div class="law ftl"><div class="ln lw"><b>قانون أوم</b><span>V = I × R</span></div>
       <div class="ln lw"><b>المقاومة</b><span>R = V / I</span></div>
       <div class="ln lw"><b>المقاومة من ميل خط الجهد مع التيار</b><span>R = ΔV / ΔI</span></div>
@@ -5709,13 +5698,25 @@ function ohmLab(box){
       <li><span class="chip" dir="ltr">V</span> الجهد بين طرفي المقاومة، ووحدته الفولت <span dir="ltr">V</span></li>
       <li><span class="chip" dir="ltr">I</span> شدة التيار المار في المقاومة، ووحدتها الأمبير <span dir="ltr">A</span></li>
       <li><span class="chip" dir="ltr">R</span> المقاومة، ووحدتها الأوم <span dir="ltr">Ω = V/A</span></li>
-      <li><span class="chip" dir="ltr">ΔV</span> و<span class="chip" dir="ltr">ΔI</span> الفرق بين قراءتين للجهد، والفرق بين قراءتي التيار المقابلتين</li></ul></div></div></div>
-  <h3 class="secH">5. تنفيذ التجربة</h3>
+      <li><span class="chip" dir="ltr">ΔV</span> و<span class="chip" dir="ltr">ΔI</span> الفرق بين قراءتين للجهد، والفرق بين قراءتي التيار المقابلتين</li></ul></div></div>
+    </div>
+  <div class="intro"><h3>4. الأدوات والأجهزة المستخدمة</h3>
+    <div class="tool"><div class="stage dv">${DVF.ohm}</div><div class="vcap">مقاومة في لوحة التوصيل موصولة بمصدر الجهد المستمر، والأميتر على التوالي، والفولتميتر على التوازي</div></div>
+    <div class="tool"><p><b>مصدر الجهد المستمر <span dir="ltr">(DC Power Supply)</span>:</b> يعطي جهدا ثابت الاتجاه يضبط بمقبض الضبط، وطرفه الموجب أحمر والسالب أسود.</p>
+    <p><b>جهازا الملتيميتر الرقمي <span dir="ltr">(Digital Multimeter)</span>:</b> الأول أميتر للتيار، والثاني فولتميتر للجهد، لنقرأهما معا عند كل قيمة للجهد.</p>
+    <div class="amRef"><div><div class="stage">${dmmFace({mode:'a2',port:'a'})}</div><div class="vcap"><b style="color:#2563EB">الجهاز 1 (أميتر):</b> تدريج <span dir="ltr">A⎓</span> مدى <span dir="ltr">2 A</span>، والمجس الأحمر في المنفذ <span dir="ltr">A</span>.</div></div>
+    <div><div class="stage">${dmmFace({mode:'v20',port:'v'})}</div><div class="vcap"><b style="color:#DC2626">الجهاز 2 (فولتميتر):</b> تدريج <span dir="ltr">V⎓</span> مدى <span dir="ltr">20 V</span>، والمجس الأحمر في المنفذ <span dir="ltr">V</span>.</div></div></div>
+    <p><b>المقاومة:</b> عنصر يقاوم مرور التيار، ونريد إيجاد قيمتها من قراءات الجهد والتيار.</p>
+    <p><b>لوحة التوصيل <span dir="ltr">(Breadboard)</span> ووصلة التوصيل <span dir="ltr">(Jumper)</span>:</b> لوحة تثبت فيها العناصر دون لحام، وفي خطها الموجب فجوة تصلها وصلة توصيل قصيرة، ترفع عند القياس ليوضع الأميتر مكانها.</p><div class="stage dv">${DVF.jmp}</div><div class="vcap">وصلة التوصيل: توضع على الفجوة في الخط الموجب فتكمل الدائرة، وترفع عند قياس التيار</div></div></div>
+  <h3 class="secH">5. خطوات وتنفيذ التجربة</h3>
+  <div class="intro amIdea"><p><b>طريقة العمل:</b></p>
+    <ol class="amFlow"><li><b>إعداد الجهازين:</b> الأول للتيار والثاني للجهد.</li><li><b>توصيل المجسات:</b> نرفع وصلة التوصيل عن الفجوة ونضع الأميتر مكانها (على التوالي)، والفولتميتر على طرفي المقاومة (على التوازي).</li><li><b>رفع جهد المصدر</b> ثلاث مرات: <span dir="ltr">2, 4, 6 V</span>، وتسجيل قراءتي الجهازين في كل مرة.</li><li><b>رسم الجهد مع التيار</b> وملاحظة شكل الخط.</li><li><b>حساب المقاومة</b> من الميل <span dir="ltr">R = ΔV / ΔI</span>.</li></ol></div>
   <div class="startBand">▶️ لنبدأ التجربة</div>
   <div class="btns" style="margin-bottom:12px"><button type="button" class="rs" id="nw">🔄 مقاومة جديدة</button></div>
-  <div class="ctl"><h3>5.1 القياس</h3>
+  <div class="ctl"><h3>5.1 شاهد التجربة</h3>
+    <details class="wsDet" open><summary>🎬 شاهد خطوات التركيب وطريقة القياس (8 خطوات)</summary><div id="wW"></div></details></div>
+  <div class="ctl"><h3>5.2 خطوات وتنفيذ التجربة</h3>
     <div class="amProg" id="prog"></div>
-    <details class="wsDet"><summary>🎬 شاهد خطوات التركيب وطريقة القياس (8 خطوات)</summary><div id="wW"></div></details>
     <h4 class="sbh">أ) إعداد الجهازين</h4>
     <p class="slh"><b style="color:#2563EB">الجهاز 1: أميتر لقياس التيار</b></p>
     ${setup('a','التيار المتوقع أقل من 1 A.')}
@@ -5731,19 +5732,22 @@ function ohmLab(box){
     <p class="slh">👆 اسحب المؤشر البرتقالي لرفع جهد المصدر خطوة خطوة: 2 ثم 4 ثم 6 V، وسجل القراءتين عند كل خطوة.</p>
     <div class="ans"><label>قراءة الفولتميتر V</label><input id="mV" inputmode="decimal" dir="ltr" placeholder="V"></div>
     <div class="ans"><label>قراءة الأميتر I</label><input id="mI" inputmode="decimal" dir="ltr" placeholder="A"><button type="button" class="go" id="mCk">سجل القراءة</button></div><div class="fb2" id="mFb"></div>
-    <h4 class="sbh">د) رسم العلاقة بين الجهد والتيار</h4>
+    
+  </div>
+  <div class="ctl"><h3>5.3 نتائج القياس</h3>
+    <div id="logB"></div></div>
+  <h3 class="secH">6. الحسابات</h3>
+  <div class="ctl">
+    <p class="slh">الحسابات تأخذ أرقامها من نتائج القياس، بنفس ألوانها.</p>
+    <h4 class="sbh">أ) رسم العلاقة بين الجهد والتيار</h4>
     <p class="slh">تظهر كل قراءة نقطة على الرسم. بعد تسجيل القراءات الثلاث اضغط الزر لرسم الخط المستقيم.</p>
     <div class="stage" id="gS"></div>
     <div class="btns"><button type="button" class="go" id="gB" style="width:100%;font-size:17px;padding:11px">📈 ارسم الخط المستقيم</button></div><div class="fb2" id="gFb"></div>
-  </div>
-  <div class="ctl"><h3>5.2 الحسابات</h3>
-    <div id="logB"></div>
-    <p class="slh">الحسابات تأخذ أرقامها من سجل القراءات أعلاه، بنفس ألوانها.</p>
-    <h4 class="sbh">حساب المقاومة من ميل الخط</h4>
+    <h4 class="sbh">ب) حساب المقاومة من ميل الخط</h4>
     <p class="slh">استخدم النقطتين الأولى والثالثة: <span dir="ltr">ΔV = V₃ − V₁</span> و<span dir="ltr">ΔI = I₃ − I₁</span>.</p>
     ${hxCalcStep('R','R = ΔV / ΔI','احسب المقاومة R','Ω')}
   </div>
-  <div class="ctl res"><h3>6. نتائج التجربة</h3>
+  <div class="ctl res"><h3>7. الاستنتاج والنتائج</h3>
     <div class="tw"><table class="rt ohRes"><thead><tr><th>الكمية</th><th>الطريقة</th><th>القيمة</th></tr></thead>
     <tbody><tr><td>قراءات الجهد والتيار</td><td>الفولتميتر والأميتر</td><td id="r1">—</td></tr><tr><td>شكل العلاقة</td><td>الرسم البياني</td><td id="r2">—</td></tr>
     <tr><td>المقاومة R</td><td>ميل الخط</td><td id="r3">—</td></tr></tbody></table></div>
@@ -5801,7 +5805,7 @@ function ohmLab(box){
  ['University of North Carolina at Greensboro, Department of Physics and Astronomy. (n.d.). <i>Ohm\'s Law: DC Circuits</i>. Greensboro, NC.','https://physics.uncg.edu/phylabs-2/ohmdc/ohmdc.pdf'],
  ['Imam Mohammad Ibn Saud Islamic University, College of Science. (n.d.). <i>PHY 119 Laboratory: Ohm\'s Law</i>. Riyadh, Saudi Arabia.','https://members.imamu.edu.sa/staff/smalgessair/en/fileslibrary/Documents/PHY119_Ohm%20law.pdf']);
  LREFK['4-5']=[[n,''],[n+1,''],[n+2,'']]}
-window.LABS['4-5']={t:'التحقق من قانون أوم',run:ohmLab};
+window.LAB8=(window.LAB8||[]).concat(['4-5']);window.LABS['4-5']={t:'التحقق من قانون أوم',run:ohmLab};
 
 
 /* ===== 4-8 توصيل المقاومات على التوالي والتوازي: حساب المقاومة المكافئة لمقاومات موصلة على التوالي ===== */
@@ -6009,6 +6013,7 @@ function mount(host,opts){opts=opts||{};const WH=opts.watchHost||host;
   let k=-1,timer=null;
   function reset(){k=-1;W('ssLeads').innerHTML='';[0,1,2].forEach(i=>{const g=W('ssJ'+i);g.style.transition='none';g.style.transform=''});disp('ss','','0.00',false);flow('ss',false);setMode('ss','')}
   function go(n){if(n<k)reset();while(k<n){k++;STEPS[k][1]()}W('ssCap').innerHTML=STEPS[k][0];WH.querySelectorAll('.wsc .pb i').forEach((x,i)=>x.classList.toggle('d',i<=k));W('ssPrev').disabled=k<=0;labFin(W('ssNext'),k>=STEPS.length-1)}
+  WH.__w={S:STEPS,reset,go,stop:()=>clearInterval(timer),cap:W('ssCap'),pb:WH.querySelector('.wsc .pb')};
   W('ssPlay').onclick=()=>{clearInterval(timer);reset();go(0);timer=setInterval(()=>{if(k>=STEPS.length-1){clearInterval(timer);return}go(k+1)},3600)};
   W('ssNext').onclick=()=>{clearInterval(timer);go(Math.min(STEPS.length-1,k+1))};
   W('ssPrev').onclick=()=>{clearInterval(timer);go(Math.max(0,k-1))};W('ssPrev').disabled=true;
@@ -6065,20 +6070,28 @@ function serLab(box){
   box.innerHTML=`<style>.amSet{border:1px dashed var(--line);border-radius:12px;padding:10px;margin:8px 0}.amWhy{border:2px dashed #F7931E;background:rgba(247,147,30,.08);border-radius:12px;padding:8px 12px;margin:8px 0;line-height:1.85;font-size:14px}.amWhy ol{margin:4px 18px 0 0;padding:0}.amTwo{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}.amTwo>div{border:2px solid;border-radius:12px;padding:8px 10px;display:flex;flex-direction:column;gap:4px;line-height:1.8;font-size:14px}.amFlow{margin:4px 18px 0 0;padding:0;line-height:1.9}.amFlow li{margin:2px 0}.pathN{color:#EA580C;border-right:4px solid #EA580C;padding-right:8px}.amRef{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}.amRef .vcap{font-size:12.5px;line-height:1.7}.ohT td,.ohT th{text-align:center}.ohT tr.cur td{background:rgba(247,147,30,.15)}.srSel{flex-wrap:wrap;gap:6px}.srSel label{width:100%}.srSel .go.sel{outline:3px solid #F7931E;outline-offset:1px}.amProg{display:flex;flex-wrap:wrap;gap:4px;margin:8px 0 10px}.amProg span{font-size:12.5px;font-weight:800;border-radius:20px;padding:3px 9px;background:var(--line);color:var(--muted)}.amProg span.d{background:#16A34A;color:#fff}.amProg i{font-style:normal;color:var(--muted);align-self:center}.amLog{border:2px solid #F7931E;border-radius:14px;padding:8px 10px;margin:8px 0;background:rgba(247,147,30,.06)}.amLog h5{margin:0 0 6px;font-size:15px}.amLog table{width:100%;border-collapse:collapse;font-size:13.5px}.amLog td{border:1px solid var(--line);padding:5px 6px;text-align:center}.amLog td:first-child{font-weight:800;text-align:right}.lab .cV{color:#DC2626!important}.lab .cI{color:#2563EB!important}.lab .cQ{color:#7C3AED!important}</style>
   <div class="intro"><small class="labKind">🧪 تجربة عملية تفاعلية</small><h3>1. اسم التجربة</h3><p class="labName">حساب المقاومة المكافئة لمقاومات موصلة على التوالي</p></div>
   <div class="tags"><span class="tag">التيار I: <i>جهاز الملتيميتر (وضع DC A)</i> · A</span><span class="tag">الجهد V: <i>جهاز الملتيميتر (وضع DC V)</i> · V</span><span class="tag dv">المقاومة المكافئة R: <i>محسوبة</i> · Ω</span></div>
-  <div class="intro goals"><h3>2. أهداف التجربة</h3><ol class="gl">
+  <div class="intro goals"><h3>2. الهدف من التجربة</h3><p class="aim" style="line-height:1.9;margin:4px 0 8px">الهدف من التجربة إثبات أن التيار واحد في المقاومات الموصلة على التوالي، وأن الجهد الكلي يساوي مجموع الجهود عليها، وأن المقاومة المكافئة تساوي مجموع المقاومات.</p><ol class="gl">
     <li>توصيل ثلاث مقاومات على التوالي على الخط الأحمر في مسار واحد، وقبل كل مقاومة وصلة توصيل.</li>
     <li>قياس التيار قبل كل مقاومة بوضع جهاز الملتيميتر (أميترا) مكان وصلتها، وملاحظة أنه التيار نفسه.</li>
     <li>قياس الجهد على كل مقاومة وعلى المقاومات الثلاث معا بالجهاز نفسه (فولتميترا).</li>
     <li>التحقق من أن الجهد الكلي يساوي مجموع الجهود: <span dir="ltr">V = V₁ + V₂ + V₃</span>.</li>
     <li>حساب المقاومة المكافئة من القياس، ومقارنتها بمجموع المقاومات المكتوبة عليها.</li></ol></div>
-  <div class="intro amIdea"><h3>💡 فكرة التجربة وطريقة العمل</h3>
-    <p><b>الفكرة:</b> في التوصيل على التوالي توصل المقاومات واحدة بعد الأخرى في <b>مسار واحد</b>، فيمر فيها <b>التيار نفسه</b>، ويتوزع جهد المصدر عليها، فيكون <b>الجهد الكلي مجموع جهودها</b>، و<b>المقاومة المكافئة مجموع المقاومات</b>: <span dir="ltr">R = R₁ + R₂ + R₃</span>.</p>
+  <div class="intro amIdea"><h3>3. النظرية الفيزيائية</h3>
+    <p>في التوصيل على التوالي توصل المقاومات واحدة بعد الأخرى في <b>مسار واحد</b>، فيمر فيها <b>التيار نفسه</b>، ويتوزع جهد المصدر عليها، فيكون <b>الجهد الكلي مجموع جهودها</b>، و<b>المقاومة المكافئة مجموع المقاومات</b>: <span dir="ltr">R = R₁ + R₂ + R₃</span>.</p>
     <div class="amTwo"><div style="border-color:#2563EB"><b style="color:#2563EB">الملتيميتر أميترا (أولا)</b><span>مكان وصلة التوصيل قبل كل مقاومة <b>على التوالي</b>، فيمر فيه التيار الداخل إلى هذه المقاومة.</span></div>
     <div style="border-color:#DC2626"><b style="color:#DC2626">الملتيميتر فولتميترا (ثانيا)</b><span>مجساه على طرفي كل مقاومة <b>على التوازي</b>، ثم على طرفي السلسلة كلها.</span></div></div>
     <div class="stage">${srSchem()}</div>
-    <p><b>طريقة العمل:</b></p>
-    <ol class="amFlow"><li><b>ضبط جهد المصدر</b> والوصلات الثلاث في أماكنها، فتعمل الدائرة.</li><li><b>إعداد الجهاز للتيار</b> على تدريج <span dir="ltr">A⎓</span>.</li><li><b>قياس التيار قبل كل مقاومة:</b> نرفع وصلتها ونضع الأميتر مكانها ونقرأ. ونكرر ذلك قبل <span dir="ltr">R₁</span> ثم <span dir="ltr">R₂</span> ثم <span dir="ltr">R₃</span>.</li><li><b>إعداد الجهاز للجهد</b> على تدريج <span dir="ltr">V⎓</span>، ثم <b>قياس الجهد</b> على <span dir="ltr">R₁</span> ثم <span dir="ltr">R₂</span> ثم <span dir="ltr">R₃</span>، ثم على السلسلة كلها.</li><li><b>الحسابات:</b> التحقق من <span dir="ltr">V = V₁ + V₂ + V₃</span>، والمقاومة المكافئة <span dir="ltr">R = V / I</span>، ومقارنتها بـ <span dir="ltr">R₁ + R₂ + R₃</span>.</li></ol></div>
-  <div class="intro"><h3>3. الأدوات والأجهزة المستخدمة</h3>
+    <h4 class="sbh">القوانين</h4>
+    <div class="law ftl"><div class="ln lw"><b>الجهد الكلي يتوزع على المقاومات</b><span>V = V₁ + V₂ + V₃</span></div>
+      <div class="ln lw"><b>المقاومة المكافئة من القياس</b><span>R = V / I</span></div>
+      <div class="ln lw"><b>المقاومة المكافئة لمقاومات على التوالي</b><span>R = R₁ + R₂ + R₃</span></div>
+      <div class="sym"><b>حيث:</b><ul>
+      <li><span class="chip" dir="ltr">V</span> الجهد الكلي على المقاومات الثلاث، ووحدته الفولت <span dir="ltr">V</span></li>
+      <li><span class="chip" dir="ltr">V₁, V₂, V₃</span> الجهد على كل مقاومة، ووحدته الفولت <span dir="ltr">V</span></li>
+      <li><span class="chip" dir="ltr">I</span> التيار المار في المقاومات، وهو واحد فيها كلها، ووحدته الأمبير <span dir="ltr">A</span></li>
+      <li><span class="chip" dir="ltr">R</span> المقاومة المكافئة، و<span class="chip" dir="ltr">R₁, R₂, R₃</span> المقاومات، ووحدتها الأوم <span dir="ltr">Ω</span></li></ul></div></div>
+    </div>
+  <div class="intro"><h3>4. الأدوات والأجهزة المستخدمة</h3>
     <div class="tool"><div class="stage dv">${DVF.srl}</div><div class="vcap">ثلاث مقاومات على التوالي في لوحة التوصيل، ووصلة التوصيل في مكانها، والأسهم تبين مسار التيار: منظر ثلاثي الأبعاد</div>
     <p><b>ترتيب الأجهزة:</b> سلكا المصدر موصولان بخطي التوصيل: الأحمر بالخط الموجب <span dir="ltr" style="color:#DC2626;font-weight:800">+</span> والأسود بالخط السالب <span dir="ltr" style="color:#2563EB;font-weight:800">−</span>. المقاومات الثلاث <b>على الخط الأحمر نفسه</b> ومتباعدة. والخط الأحمر <b>مقطوع بفجوات</b>: تحت كل مقاومة فجوة تعبرها المقاومة بساقيها، فيمر التيار فيها لا في الخط. و<b>قبل كل مقاومة فجوة عليها وصلة توصيل <span dir="ltr">(Jumper)</span></b>: <span dir="ltr">J₁</span> قبل <span dir="ltr">R₁</span>، و<span dir="ltr">J₂</span> قبل <span dir="ltr">R₂</span>، و<span dir="ltr">J₃</span> قبل <span dir="ltr">R₃</span>. و<b>سلك أزرق</b> يصل آخر الخط الأحمر بالخط السالب. فللتيار مسار واحد فقط.</p>
 </div>
@@ -6090,22 +6103,15 @@ function serLab(box){
     <p><b>لوحة التوصيل <span dir="ltr">(Breadboard)</span>:</b> لوحة تثبت فيها العناصر دون لحام. خطا التوصيل الموجب والسالب يمتدان بطول اللوحة، ويمكن قطع الخط بفجوات بين الثقوب، فيصير قطعا غير موصولة تصلها المقاومات ووصلات التوصيل.</p>
     <p><b>وصلة التوصيل <span dir="ltr">(Jumper)</span>:</b> سلك قصير معزول، طرفاه معدنيان مكشوفان يغرسان في ثقبي لوحة التوصيل. توضع قبل كل مقاومة فتكمل الدائرة، وترفع عند قياس التيار ليوضع الأميتر مكانها.</p><div class="stage dv">${DVF.jmp}</div>
     <p><b>سلك العودة (السلك الأزرق):</b> سلك توصيل معزول أطول من وصلة التوصيل، طرفاه معدنيان. يغرس طرفه الأول في آخر الخط الأحمر بعد <span dir="ltr">R₃</span>، وطرفه الثاني في الخط السالب الأزرق. فيعود التيار عبره بعد مروره في المقاومات الثلاث إلى سالب المصدر، ولو رفع تنفتح الدائرة. وهو ليس دائرة قصر، لأن بينه وبين الموجب المقاومات الثلاث.</p><div class="stage dv">${DVF.ret}</div></div></div>
-  <h3 class="secH">4. القوانين المستخدمة</h3>
-  <div class="ctl">
-    <div class="law ftl"><div class="ln lw"><b>الجهد الكلي يتوزع على المقاومات</b><span>V = V₁ + V₂ + V₃</span></div>
-      <div class="ln lw"><b>المقاومة المكافئة من القياس</b><span>R = V / I</span></div>
-      <div class="ln lw"><b>المقاومة المكافئة لمقاومات على التوالي</b><span>R = R₁ + R₂ + R₃</span></div>
-      <div class="sym"><b>حيث:</b><ul>
-      <li><span class="chip" dir="ltr">V</span> الجهد الكلي على المقاومات الثلاث، ووحدته الفولت <span dir="ltr">V</span></li>
-      <li><span class="chip" dir="ltr">V₁, V₂, V₃</span> الجهد على كل مقاومة، ووحدته الفولت <span dir="ltr">V</span></li>
-      <li><span class="chip" dir="ltr">I</span> التيار المار في المقاومات، وهو واحد فيها كلها، ووحدته الأمبير <span dir="ltr">A</span></li>
-      <li><span class="chip" dir="ltr">R</span> المقاومة المكافئة، و<span class="chip" dir="ltr">R₁, R₂, R₃</span> المقاومات، ووحدتها الأوم <span dir="ltr">Ω</span></li></ul></div></div></div>
-  <h3 class="secH">5. تنفيذ التجربة</h3>
+  <h3 class="secH">5. خطوات وتنفيذ التجربة</h3>
+  <div class="intro amIdea"><p><b>طريقة العمل:</b></p>
+    <ol class="amFlow"><li><b>ضبط جهد المصدر</b> والوصلات الثلاث في أماكنها، فتعمل الدائرة.</li><li><b>إعداد الجهاز للتيار</b> على تدريج <span dir="ltr">A⎓</span>.</li><li><b>قياس التيار قبل كل مقاومة:</b> نرفع وصلتها ونضع الأميتر مكانها ونقرأ. ونكرر ذلك قبل <span dir="ltr">R₁</span> ثم <span dir="ltr">R₂</span> ثم <span dir="ltr">R₃</span>.</li><li><b>إعداد الجهاز للجهد</b> على تدريج <span dir="ltr">V⎓</span>، ثم <b>قياس الجهد</b> على <span dir="ltr">R₁</span> ثم <span dir="ltr">R₂</span> ثم <span dir="ltr">R₃</span>، ثم على السلسلة كلها.</li><li><b>الحسابات:</b> التحقق من <span dir="ltr">V = V₁ + V₂ + V₃</span>، والمقاومة المكافئة <span dir="ltr">R = V / I</span>، ومقارنتها بـ <span dir="ltr">R₁ + R₂ + R₃</span>.</li></ol></div>
   <div class="startBand">▶️ لنبدأ التجربة</div>
   <div class="btns" style="margin-bottom:12px"><button type="button" class="rs" id="nw">🔄 مقاومات جديدة</button></div>
-  <div class="ctl"><h3>5.1 القياس</h3>
+  <div class="ctl"><h3>5.1 شاهد التجربة</h3>
+    <details class="wsDet" open><summary>🎬 شاهد خطوات التركيب وطريقة القياس (9 خطوات)</summary><div id="wW"></div></details></div>
+  <div class="ctl"><h3>5.2 خطوات وتنفيذ التجربة</h3>
     <div class="amProg" id="prog"></div>
-    <details class="wsDet"><summary>🎬 شاهد خطوات التركيب وطريقة القياس (9 خطوات)</summary><div id="wW"></div></details>
     <h4 class="sbh">أ) ضبط جهد المصدر</h4>
     <div class="stage"><svg id="sZ" viewBox="0 0 400 112"></svg></div>
     ${hxRow('nR','مقبض ضبط الجهد')}
@@ -6123,18 +6129,21 @@ function serLab(box){
     <div class="stage"><svg id="vZ" viewBox="0 0 400 112"></svg></div>
     ${hxAns('vIn','قراءة الفولتميتر','V')}
   </div>
-  <div class="ctl"><h3>5.2 الحسابات</h3>
-    <div id="logB"></div>
-    <p class="slh">الحسابات تأخذ أرقامها من سجل القراءات أعلاه، بنفس ألوانها.</p>
-    <h4 class="sbh">أ) مجموع الجهود على المقاومات</h4>
-    ${hxCalcStep('S','V₁ + V₂ + V₃','احسب مجموع الجهود','V')}
+  <div class="ctl"><h3>5.3 نتائج القياس</h3>
+    <div id="logB"></div></div>
+  <h3 class="secH">6. الحسابات</h3>
+  <div class="ctl">
+    <div class="amProg" id="prog2"></div>
+    <p class="slh">الحسابات تأخذ أرقامها من نتائج القياس، بنفس ألوانها.</p>
+    <h4 class="sbh">أ) الجهد الكلي</h4>
+    ${hxCalcStep('S','V₁ + V₂ + V₃','احسب الجهد الكلي','V')}
     <h4 class="sbh">ب) المقاومة المكافئة من القياس</h4>
     ${hxCalcStep('A','R = V / I','احسب المقاومة المكافئة R','Ω')}
     <h4 class="sbh">ج) المقاومة المكافئة من قانون التوالي</h4>
     <p class="slh" id="rVals"></p>
     ${hxCalcStep('B','R = R₁ + R₂ + R₃','احسب R من القانون','Ω')}
   </div>
-  <div class="ctl res"><h3>6. نتائج التجربة</h3>
+  <div class="ctl res"><h3>7. الاستنتاج والنتائج</h3>
     <div class="tw"><table class="rt"><thead><tr><th>الكمية</th><th>الطريقة</th><th>القيمة</th></tr></thead>
     <tbody><tr><td>التيار قبل R₁ وR₂ وR₃</td><td>الأميتر مكان الوصلات</td><td id="r1">—</td></tr><tr><td>الجهد على المقاومات</td><td>الفولتميتر</td><td id="r2">—</td></tr><tr><td>الجهد الكلي V</td><td>الفولتميتر</td><td id="r3">—</td></tr>
     <tr><td>مجموع الجهود</td><td>محسوب</td><td id="r4">—</td></tr><tr><td>المقاومة المكافئة R</td><td>من القياس</td><td id="r5">—</td></tr><tr><td>المقاومة المكافئة R</td><td>من القانون</td><td id="r6">—</td></tr></tbody></table></div>
@@ -6164,8 +6173,9 @@ function serLab(box){
     const h='<table>'+[0,1,2].map(i=>row(`<span class="cI">I</span> قبل R${'₁₂₃'[i]} (J${'₁₂₃'[i]})`,recI.has(i)?c('cI',fx(I,3)+' A'):'—')).join('')
       +[0,1,2,3].map(i=>row(`<span class="cV">${VL[i]}</span> على ${VN[i]}`,rec.has(i)?c('cV',fx(Vk[i],2)+' V'):'—')).join('')+'</table>';
     $('logA').innerHTML=h;$('logB').innerHTML='<div class="amLog"><h5>📋 سجل القراءات</h5>'+h+'</div>'}
-  function progS(){const L=[[+$('nR').value>=100,'ضبط المصدر'],[recI.size===3,'التيار 3/3'],[rec.size===4,'الجهد 4/4'],[!!ok.cS,'مجموع الجهود'],[!!ok.cA,'R من القياس'],[!!ok.cB,'R من القانون']];
-    $('prog').innerHTML=L.map(([d,t])=>`<span class="${d?'d':''}">${d?'✓ ':''}${t}</span>`).join('<i>←</i>')}
+  function progS(){const f=L=>L.map(([d,t])=>`<span class="${d?'d':''}">${d?'✓ ':''}${t}</span>`).join('<i>←</i>');
+    $('prog').innerHTML=f([[+$('nR').value>=100,'ضبط المصدر'],[recI.size===3,'التيار '+recI.size+'/3'],[rec.size===4,'الجهد '+rec.size+'/4']]);
+    $('prog2').innerHTML=f([[!!ok.cS,'الجهد الكلي'],[!!ok.cA,'R من القياس'],[!!ok.cB,'R من القانون']])}
   function newObj(){const pool=RS.slice();Rv=[];for(let k=0;k<3;k++)Rv.push(pool.splice(Math.floor(Math.random()*pool.length),1)[0]);RR=Rv.map(ohBands);
     Vt=VS*(0.985+Math.random()*0.01);const Ie=Vt/Rsum();I=Math.round(Ie*1000)/1000;Vk=Rv.map(r=>Math.round(Ie*r*100)/100);Vk.push(Math.round(Vt*100)/100);
     ok={};cfg={v:{},a:{}};rec=new Set();recI=new Set();$('nR').value=0;['iIn','vIn','cS','cA','cB'].forEach(k=>$(k).value='');['vFb','aFb','iInFb','vInFb','obFb','cSf','cAf','cBf'].forEach(fb0);
@@ -6208,7 +6218,7 @@ function serLab(box){
  ['Texas Christian University, Department of Physics and Astronomy. (2013). <i>Laboratory 1: Ohm\'s Law and Resistors in Series and Parallel</i>. Fort Worth, TX.','https://personal.tcu.edu/ystrzhemechn/Classes/2013/Summer/Labs/lab1.pdf'],
  ['Texas A&amp;M University, Department of Physics and Astronomy. (n.d.). <i>Electricity and Magnetism Laboratory Manual: Lab 1</i>. College Station, TX.','https://www.webassign.net/question_assets/tamucolphyseml1/lab_1/manual.pdf']);
  LREFK['4-8']=[[n,''],[n+1,''],[n+2,'']]}
-window.LABS['4-8']={t:'حساب المقاومة المكافئة لمقاومات موصلة على التوالي',run:serLab};
+window.LAB8=(window.LAB8||[]).concat(['4-8']);window.LABS['4-8']={t:'حساب المقاومة المكافئة لمقاومات موصلة على التوالي',run:serLab};
 
 /* workLab محفوظة لدرس الشغل لاحقا */
 /* إصلاح اتجاه الأقواس: عزل الأقواس ذات المحتوى اللاتيني داخل النص العربي، وضبط نصوص الرسوم العربية التي فيها أقواس */
@@ -6262,9 +6272,10 @@ function autoWatch(body){if(!body||body.querySelector('details.wsDet'))return;
     S.forEach((x,i)=>x.sl.forEach((r,j)=>{r.value=keep[i][j];fire(r)}));
     D.querySelector('summary').textContent=`🎬 شاهد خطوات التركيب وطريقة القياس (${F.length} خطوات)`;host.querySelector('.pb').innerHTML='<i></i>'.repeat(F.length)}
   const go=i=>{k=i;q('awS').innerHTML=F[i].h;q('awCap').innerHTML=F[i].c;host.querySelectorAll('.pb i').forEach((x,j)=>x.classList.toggle('d',j<=i));q('awPrev').disabled=i<=0;labFin(q('awNext'),i>=F.length-1)};
+  host.id='wW';host.querySelector('.wsx').classList.add('wsc');host.__w={get S(){return F.map(f=>[f.c])},html:true,stage:q('awS'),reset:()=>{clearInterval(tm);k=-1;q('awS').innerHTML=''},go,stop:()=>clearInterval(tm),cap:q('awCap'),pb:host.querySelector('.pb')};
   q('awPlay').onclick=()=>{clearInterval(tm);go(0);tm=setInterval(()=>{if(k>=F.length-1){clearInterval(tm);return}go(k+1)},3800)};
   q('awNext').onclick=()=>{clearInterval(tm);go(Math.min(F.length-1,k+1))};q('awPrev').onclick=()=>{clearInterval(tm);go(Math.max(0,k-1))};q('awPrev').disabled=true;
-  D.addEventListener('toggle',()=>{if(D.open){build();k=-1;q('awS').innerHTML='';q('awCap').innerHTML='اضغط «▶ شاهد» لترى خطوات التجربة كاملة، خطوة خطوة.';host.querySelectorAll('.pb i').forEach(x=>x.classList.remove('d'));labFin(q('awNext'),false)}});
+  D.addEventListener('toggle',()=>{if(D.open){build();k=-1;q('awS').innerHTML='';q('awCap').innerHTML='اضغط «▶ تشغيل» لترى خطوات التركيب وطريقة القياس: يظهر شرح كل خطوة أولا، ثم ينفذها المشهد.';host.querySelectorAll('.pb i').forEach(x=>x.classList.remove('d'));labFin(q('awNext'),false)}});
   build()}
 window.renderLabCard=function(host,u,l){const L=window.LABS[u+'-'+l];if(!L)return false;css();
   const arr=Array.isArray(L)?L:[L],one=x=>{const c=document.createElement('div');c.className='card lab';c.innerHTML='<div class="labBody"></div>';x.run(c.querySelector('.labBody'));try{autoWatch(c.querySelector('.labBody'))}catch(e){}c.querySelector('.labBody').insertAdjacentHTML('beforeend',refBox(x.k||u+'-'+l));labTrack(c,u+'-'+l,x.t);labDarkWires(c);return c};
@@ -6332,3 +6343,785 @@ window.labPolish={skin,fit,run};
 })();
 
 (function(){if(document.getElementById('lxFix'))return;const s=document.createElement('style');s.id='lxFix';s.textContent='.stage svg:empty{display:none}';document.head.appendChild(s)})();
+
+/* ===== الآلية المعتمدة 24 أكتوبر: البطاقات وملء الشاشة وشاهد باليد ونفذ ===== */
+(function(){if(!window.renderLabCard||window.__lxMech)return;window.__lxMech=1;
+const WCFG={},DIR={};
+const CSS=`.dmP{border:2px solid #F7931E;border-radius:14px;padding:10px;margin:10px 0;background:rgba(247,147,30,.05)}
+.dmP h4{margin:2px 0 8px;font-size:16px}.dmCap{border-radius:10px;padding:10px 12px;margin:8px 0;background:rgba(247,147,30,.12);border-right:4px solid #F7931E;line-height:1.9;font-size:15px;min-height:3.6em}
+.dmBar{display:flex;gap:4px;margin:6px 0}.dmBar i{flex:1;height:6px;border-radius:3px;background:var(--line)}.dmBar i.d{background:#F7931E}
+.dmBtns{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.dmBtns button{font:inherit;font-weight:800;border-radius:10px;padding:9px 14px;border:1px solid var(--line);background:var(--panel);color:var(--ink);cursor:pointer}
+.dmBtns .pri{background:#F7931E;border-color:#F7931E;color:#fff}.dmBtns button:disabled{opacity:.45}
+.dmHide{display:none!important}.dmRecB{display:block;width:100%;margin:8px 0;padding:12px;border:0;border-radius:12px;background:#16A34A;color:#fff;font:inherit;font-size:17px;font-weight:900;cursor:pointer;box-shadow:0 4px 12px rgba(22,163,74,.3)}.dmRecB[hidden]{display:none}@keyframes dmBl{0%,100%{opacity:1}50%{opacity:.35}}#dmBig,.dmBigS{position:absolute;inset:0;margin:auto;width:150px;height:60px;border:2px solid rgba(255,255,255,.85);border-radius:30px;background:rgba(247,147,30,.55);color:#fff;font:inherit;font-size:19px;font-weight:900;text-shadow:0 1px 3px rgba(0,0,0,.35);box-shadow:0 4px 14px rgba(0,0,0,.15);backdrop-filter:blur(2px);cursor:pointer;z-index:5}#dmBig[hidden],.dmBigS[hidden]{display:none}#wW button.dmBigS,#dmBig{background:rgba(247,147,30,.55)!important;color:#fff!important;border:2px solid rgba(255,255,255,.85)!important;width:150px!important;height:60px!important;border-radius:30px!important;padding:0!important}.tl .wPlay{font:inherit;font-size:14px;font-weight:900;border:0;border-radius:999px;padding:7px 12px;background:#F7931E;color:#fff;cursor:pointer;white-space:nowrap}.tl{display:flex;align-items:center;gap:8px;margin:8px 0}.tl input[type=range]{flex:1;accent-color:#F7931E;height:28px}.tl #dmPlay{font:inherit;font-size:14px;font-weight:900;border:0;border-radius:999px;padding:7px 12px;background:#F7931E;color:#fff;cursor:pointer;white-space:nowrap}.tl span{font-size:13px;font-weight:800;white-space:nowrap;color:var(--muted)}.dmView .wsc>h4{display:none}.dmLive{font-size:12.5px;font-weight:800;color:#15803D}.dmOld{font-size:12.5px;font-weight:800;color:#B45309}.dmP #stJs,.dmP #stBtns,.dmP #stP,.dmP #dmS .wsc>h4{display:none!important}`;
+const ck=e=>e&&e.dispatchEvent(new MouseEvent('click',{bubbles:true}));
+const sleep=t=>new Promise(r=>setTimeout(r,t));
+const HW=52,HH=70,GX=.18,GY=.033;
+function handEl(svg){let h=svg.querySelector('image.hand');if(!h){svg.style.overflow='visible';h=document.createElementNS('http://www.w3.org/2000/svg','image');h.setAttribute('class','hand');h.setAttribute('href','dv/95-hand-point.webp');h.setAttribute('width',HW);h.setAttribute('height',HH);h.setAttribute('x',380);h.setAttribute('y',330);h.style.opacity=0;h.style.pointerEvents='none';h.style.transition='opacity .35s';svg.appendChild(h)}else svg.appendChild(h);return h}
+async function handTo(svg,tx,ty,dur,go){const h=handEl(svg);h.style.opacity=1;const x0=+h.getAttribute('x'),y0=+h.getAttribute('y'),x1=tx-GX*HW,y1=ty-GY*HH;let t=0;dur=dur||900;
+  while(t<dur){await sleep(16);if(!go||go())t+=16;const e=Math.min(1,t/dur),q=e<.5?2*e*e:1-Math.pow(-2*e+2,2)/2;h.setAttribute('x',x0+(x1-x0)*q);h.setAttribute('y',y0+(y1-y0)*q)}}
+async function handAway(svg,go){const h=svg.querySelector('image.hand');if(!h)return;await handTo(svg,380+GX*HW,330+GY*HH,700,go);h.style.opacity=0}
+function hhEl(box){let h=box.querySelector(':scope>img.handH');if(!h){h=document.createElement('img');h.className='handH';h.alt='';h.src='dv/95-hand-point.webp';h.style.cssText='position:absolute;width:'+HW+'px;height:'+HH+'px;opacity:0;pointer-events:none;transition:opacity .35s;z-index:4;filter:drop-shadow(0 2px 3px rgba(0,0,0,.25))';h.style.left=box.clientWidth+'px';h.style.top=box.clientHeight+'px';box.appendChild(h)}return h}
+async function hhTo(box,px,py,dur,go){const h=hhEl(box);h.style.opacity=1;const x0=parseFloat(h.style.left),y0=parseFloat(h.style.top),x1=px-GX*HW,y1=py-GY*HH;let t=0;dur=dur||900;
+  while(t<dur){await sleep(16);if(!go||go())t+=16;const e=Math.min(1,t/dur),q=e<.5?2*e*e:1-Math.pow(-2*e+2,2)/2;h.style.left=(x0+(x1-x0)*q)+'px';h.style.top=(y0+(y1-y0)*q)+'px'}}
+async function hhAway(box,go){const h=box.querySelector(':scope>img.handH');if(!h)return;await hhTo(box,box.clientWidth-10+GX*HW,box.clientHeight+GY*HH,700,go);h.style.opacity=0}
+function hhXY(box,spec,scope){scope=scope||box;if(Array.isArray(spec))return [spec[0]*box.clientWidth,spec[1]*box.clientHeight];let el=typeof spec==='string'?scope.querySelector(spec):(spec&&spec.nodeType?spec:null);
+  if(!el){const c=[...scope.querySelectorAll('svg *')].filter(e=>{if(e.closest('defs,marker'))return false;const a=((e.getAttribute('fill')||'')+(e.getAttribute('stroke')||'')).toLowerCase();if(!/#f7931e|#ea580c/.test(a))return false;const r=e.getBoundingClientRect();return r.width>2&&r.height>2&&r.width<120});el=c[c.length-1]}
+  const b=box.getBoundingClientRect();if(!el)return [b.width/2,b.height/2];const r=el.getBoundingClientRect();return [r.left+r.width/2-b.left,r.top+r.height/2-b.top]}
+const ptXY=(svg,n)=>{const c=svg.querySelector('.pt[data-p="'+n+'"] circle');return [+c.getAttribute('cx'),+c.getAttribute('cy')]};
+const jXY=(svg,g)=>{const e=svg.querySelector('[id$="J'+g+'"]');const b=e.getBBox();return [b.x+b.width/2,b.y+b.height*0.3]};
+function watchTL(){const host=document.getElementById('wW');if(!host||!host.__w||host.querySelector('.tl'))return;const w=host.__w,S=w.S,n=S.length,cap=w.cap,pb=w.pb;
+  if(!document.getElementById('dmCss')){const st=document.createElement('style');st.id='dmCss';st.textContent=CSS;document.head.appendChild(st)}const wsc=pb.closest('.wsc'),H=!!w.html,svg=H?w.stage:wsc.querySelector('svg');svg.querySelectorAll('text[id]').forEach(t=>{if(/(Ad|Vd|D|PS)$/.test(t.id)&&!t.dataset.fs){const f=+t.getAttribute('font-size')||0;if(f){t.dataset.fs=1;t.setAttribute('font-size',(f*1.2).toFixed(1));t.setAttribute('font-weight','900');t.setAttribute('fill','#000');t.setAttribute('font-family','Consolas,monospace')}}});const row=wsc.querySelector('[id$=Play]').parentElement;row.style.setProperty('display','none','important');
+  const wrap=document.createElement('div');wrap.style.position='relative';wrap.className='wWrap';svg.before(wrap);wrap.appendChild(svg);
+  wrap.insertAdjacentHTML('beforeend','<button type="button" class="wBig dmBigS">▶ تشغيل</button>');
+  pb.insertAdjacentHTML('afterend',`<div class="tl"><button class="pri wPlay" type="button">▶ تشغيل</button><span class="wT"></span><input type="range" min="0" max="${n}" step="1" value="0"></div>`);
+  cap.insertAdjacentHTML('afterend','<div class="dmBtns"><button class="pri wNext" type="button">التالي ←</button><button class="wPrev" type="button">→ السابق</button></div>');
+  const Q=c=>wsc.querySelector(c),big=Q('.wBig'),pl=Q('.wPlay'),rg=Q('.tl input'),T=Q('.wT');
+  let k=-1,play=false,manual=false,busy=false,ptm=null;
+  const psleep=async t=>{while(t>0){await sleep(100);if(play||manual)t-=100}};
+  const ui=()=>{T.innerHTML='الخطوة <b>'+(k+1)+'</b> من '+n;rg.value=k+1;pl.textContent=play?'⏸ إيقاف':'▶ تشغيل';big.hidden=play;big.textContent=k<0?'▶ تشغيل':k>=n-1?'↺ من البداية':'▶ متابعة';Q('.wPrev').disabled=busy||k<=0;Q('.wNext').disabled=busy||k>=n-1;
+    pb.querySelectorAll('i').forEach((x,j)=>x.classList.toggle('d',j<=k))};
+  const step=async i=>{busy=true;manual=!play;ui();if(i===0)w.reset();cap.innerHTML=S[i][0]+'<div class="dmWait" style="font-size:12.5px;font-weight:800;color:var(--muted);margin-top:4px">📖 اقرأ الخطوة…</div>';
+    await psleep(Math.min(9000,2500+cap.textContent.length*55));const wt=cap.querySelector('.dmWait');if(wt)wt.textContent='🎬 تنفيذ الخطوة…';
+    await psleep(400);const CF=WCFG[window.__mlKey]||{},PL=(CF.PL||[])[i]||[];
+    const XY=([t,v])=>(CF.XY||{})[t]?CF.XY[t]:t==='j'?jXY(svg,v):t==='xy'?v:ptXY(svg,v),GO=()=>play||manual;
+    if(H){w.go(i);k=i;await new Promise(r=>requestAnimationFrame(r));await sleep(60);const P2=CF.PL?((CF.PL[i])||[]):(i?[null]:[]);for(let j=0;j<P2.length;j++){if(j)await psleep(700);const [x,y]=hhXY(wrap,P2[j],svg);await hhTo(wrap,x,y,1000,GO)}await psleep(P2.length?1100:1600);if(P2.length)await hhAway(wrap,GO);busy=false;ui();if(play)await psleep(4500);return}
+    if(PL.length){const [x,y]=XY(PL[0]);await handTo(svg,x,y,1000,GO)}w.go(i);k=i;
+    for(let j=1;j<PL.length;j++){await psleep(700);const [x,y]=XY(PL[j]);await handTo(svg,x,y,900,GO)}
+    await psleep(PL.length?900:1600);if(PL.length)await handAway(svg,GO);busy=false;ui();if(play)await psleep(4500)};
+  let running=false;const loop=async()=>{if(running)return;running=true;while(play&&k<n-1){await step(k+1)}running=false;if(k>=n-1){play=false;ui()}};
+  const toggle=()=>{if(k>=n-1&&!play){k=-1;w.reset();cap.innerHTML='';}play=!play;manual=false;ui();if(play)loop()};
+  pl.onclick=toggle;big.onclick=()=>{if(!play)toggle()};
+  Q('.wNext').onclick=()=>{if(busy||k>=n-1)return;play=false;step(k+1)};
+  Q('.wPrev').onclick=()=>{if(busy||k<=0)return;play=false;k--;w.go(k);ui()};
+  rg.oninput=()=>{if(busy)return;play=false;const v=+rg.value-1;if(v<0){k=-1;w.reset();cap.innerHTML='اضغط «▶ تشغيل» لترى الخطوات.';ui();return}k=v;w.go(v);ui()};
+  w.stop();w.reset();cap.innerHTML='اضغط «▶ تشغيل» لترى خطوات التركيب وطريقة القياس: يظهر شرح كل خطوة أولا، ثم ينفذها المشهد.';ui()}
+
+/* البنود الثمانية المعتمدة لكل تجربة (تعمل بعد العرض، وتتخطى التجارب المرتبة مسبقا) */
+const LXD={};
+const LET=['أ','ب','ج','د','هـ','و','ز','ح','ط','ي'];
+function restructure(){const box=document.querySelector('.card.lab .labBody');if(!box||box.dataset.rs)return;box.dataset.rs='1';
+  const D=LXD[window.__mlKey]||{};const kids=()=>[...box.children];
+  if([...box.querySelectorAll('.ctl>h3')].some(h=>/^5\.1 شاهد التجربة/.test(h.textContent.trim())))return;
+  /* 2. الهدف */
+  const g=box.querySelector(':scope>.intro.goals');
+  if(g){const h=g.querySelector('h3');h.textContent='2. الهدف من التجربة';if(D.aim&&!g.querySelector('.aim'))h.insertAdjacentHTML('afterend','<p class="aim" style="line-height:1.9;margin:4px 0 8px">'+D.aim+'</p>')}
+  /* 3. النظرية */
+  let th=box.querySelector(':scope>.intro.amIdea'),flow=null;
+  if(th){th.querySelector('h3').textContent='3. النظرية الفيزيائية';th.querySelectorAll('p>b').forEach(b=>{if(/^الفكرة:?$/.test(b.textContent.trim()))b.remove()});
+    const pw=[...th.querySelectorAll(':scope>p')].find(p=>/^طريقة العمل/.test(p.textContent.trim()));
+    if(pw){const ol=pw.nextElementSibling;flow=document.createElement('div');flow.className='intro amIdea lxFlow';flow.appendChild(pw);if(ol&&ol.tagName==='OL')flow.appendChild(ol)}
+    if(D.theory&&!th.querySelector('.lxTh'))th.querySelector('h3').insertAdjacentHTML('afterend','<div class="lxTh">'+D.theory+'</div>')}
+  else{th=document.createElement('div');th.className='intro amIdea';th.innerHTML='<h3>3. النظرية الفيزيائية</h3><div class="lxTh">'+(D.theory||'')+'</div>'}
+  if(g)g.after(th);else(box.querySelector(':scope>.tags')||box.firstElementChild).after(th);
+  /* القوانين داخل النظرية */
+  const lh=kids().find(e=>e.matches('h3.secH')&&/القوانين المستخدمة/.test(e.textContent));
+  if(lh){const lc=lh.nextElementSibling;th.insertAdjacentHTML('beforeend','<h4 class="sbh">القوانين</h4>');if(lc&&lc.classList.contains('ctl')){[...lc.childNodes].forEach(n=>th.appendChild(n));lc.remove()}lh.remove()}
+  /* 4. الأدوات */
+  const tl=[...box.querySelectorAll(':scope>.intro>h3')].find(h=>/الأدوات والأجهزة/.test(h.textContent));if(tl)tl.textContent='4. الأدوات والأجهزة المستخدمة';
+  /* 5. خطوات وتنفيذ التجربة */
+  const eh=kids().find(e=>e.matches('h3.secH')&&/تنفيذ التجربة/.test(e.textContent));if(!eh)return;
+  eh.textContent='5. خطوات وتنفيذ التجربة';
+  if(!flow&&D.flow){flow=document.createElement('div');flow.className='intro amIdea lxFlow';flow.innerHTML='<p><b>طريقة العمل:</b></p><ol class="amFlow">'+D.flow.map(x=>'<li>'+x+'</li>').join('')+'</ol>'}
+  if(flow)eh.after(flow);
+  const res=kids().find(e=>e.matches('.ctl.res'));
+  const ctls=kids().filter(e=>e.matches('.ctl')&&!e.classList.contains('res')&&(eh.compareDocumentPosition(e)&4)&&(!res||(e.compareDocumentPosition(res)&4)));
+  const isCalc=c=>{const h=c.querySelector(':scope>h3');return h&&/الحسابات|المقارنة/.test(h.textContent)};
+  const meas=ctls.filter(c=>!isCalc(c)),calc=ctls.filter(isCalc);if(!meas.length)return;
+  /* 5.1 شاهد */
+  const c1=document.createElement('div');c1.className='ctl lx51';c1.innerHTML='<h3>5.1 شاهد التجربة</h3>';meas[0].before(c1);
+  const det=box.querySelector('details.wsDet');if(det){const node=det.parentElement&&det.parentElement.id==='wW'?det.parentElement:det;c1.appendChild(node);det.open=true}
+  /* 5.2 خطوات وتنفيذ التجربة */
+  const c2=document.createElement('div');c2.className='ctl lx52';c2.innerHTML='<h3>5.2 خطوات وتنفيذ التجربة</h3>';c1.after(c2);
+  const CS=[];
+  meas.forEach(c=>{c.classList.add('lxM');const h=c.querySelector(':scope>h3');const tt=h?h.textContent.replace(/^\s*\d+(\.\d+)?\s*/,'').trim():'';
+    if(h){const h4=document.createElement('h4');h4.className='sbh lxMh';h4.textContent=tt;h.replaceWith(h4)}
+    c.querySelectorAll('.cstep').forEach(s=>{const p=s.previousElementSibling,hh=p&&p.matches('h4.sbh')?p:null;CS.push({h:hh,s,t:meas.length>1?tt:''})});
+    c2.appendChild(c)});
+  /* 5.3 نتائج القياس */
+  const c3=document.createElement('div');c3.className='ctl lx53';c3.innerHTML='<h3>5.3 نتائج القياس</h3>';c2.after(c3);
+  let lb=box.querySelector('#logB');if(lb)c3.appendChild(lb);else c3.insertAdjacentHTML('beforeend','<div id="logB"><div class="amLog"><h5>📋 سجل القراءات</h5><table class="lxLog"><tbody></tbody></table><p class="slh lxLog0">تظهر القراءات هنا بعد تسجيلها في خطوات التنفيذ.</p></div></div>');
+  /* 6. الحسابات */
+  const h6=document.createElement('h3');h6.className='secH';h6.textContent='6. الحسابات';
+  const c6=document.createElement('div');c6.className='ctl lx6';c6.innerHTML='<p class="slh">الحسابات تأخذ أرقامها من نتائج القياس.</p>';
+  c3.after(h6);h6.after(c6);let li=0;
+  const letter=h=>{if(!h)return;h.textContent=h.textContent.replace(/^\s*[^\s)]{1,3}\)\s*/,'');h.textContent=LET[li++]+') '+h.textContent};
+  CS.forEach(x=>{if(x.h){if(x.t)x.h.textContent=x.h.textContent.replace(/^\s*[^\s)]{1,3}\)\s*/,'')+' ('+x.t+')';letter(x.h);c6.appendChild(x.h)}c6.appendChild(x.s)});
+  calc.forEach(c=>{const h=c.querySelector(':scope>h3');if(h){const h4=document.createElement('h4');h4.className='sbh';h4.textContent=h.textContent.replace(/^\s*\d+(\.\d+)?\s*/,'').trim();if(!/^الحسابات$/.test(h4.textContent)){letter(h4);c6.appendChild(h4)}h.remove()}
+    [...c.childNodes].forEach(n=>{if(n.nodeType===1&&n.matches('h4.sbh'))letter(n);c6.appendChild(n)});c.remove()});
+  if(!c6.querySelector('.cstep,.ans,.labCalc'))c6.insertAdjacentHTML('beforeend','<p class="slh">لا توجد حسابات إضافية في هذه التجربة.</p>');
+  /* 7. الاستنتاج والنتائج */
+  if(res){const h=res.querySelector(':scope>h3');if(h)h.textContent='7. الاستنتاج والنتائج'}
+  const rf=[...box.querySelectorAll('.lrefs>h3')][0];if(rf)rf.textContent=rf.textContent.replace(/^\s*\d+\./,'8.')}
+
+/* «شاهد» و«نفذ» العامان للتجارب: نفس الخطوات المفصلة.
+   شاهد: المشهد يعرض كل خطوة بشرحها ثم ينفذها باليد، بلا تسجيل.
+   نفذ: المشهد ينفذ الخطوة، والمتدرب يقرأ ويضغط «سجل القراءة». */
+const DXCSS=`.dxW{position:relative;min-height:120px;border-radius:12px}.dxW .stage{margin:0}.dxW .stage .hud{display:block}.lxM.dmHide,.lxWold{display:none!important}
+.lxLog{width:100%;border-collapse:collapse;font-size:13.5px}.lxLog td{border:1px solid var(--line);padding:5px 6px;text-align:center}.lxLog td:first-child{font-weight:800;text-align:right}.lxLog tr.nw td{background:#F7931E;color:#fff;font-weight:900;animation:dmBl .45s 3}.lxLog tr.ok td:last-child{color:#15803D;font-weight:900}
+[data-did="dmS"] p,[data-did="dmS"] .row,[data-did="dmS"] .chk,[data-did="dmS"] .msg{display:none!important}.dxEmpty{display:grid;place-items:center;min-height:140px;color:var(--muted);font-weight:800;font-size:14px;text-align:center;padding:10px}`;
+const DXHOME=new Map();let DXI=[];
+function dxTake(st,into){if(!st||st.parentElement===into)return;if(!DXHOME.has(st)){const ph=document.createComment('dx');st.before(ph);DXHOME.set(st,ph)}into.appendChild(st)}
+function dxRelease(st){const ph=DXHOME.get(st);if(st&&ph){ph.replaceWith(st);DXHOME.delete(st)}}
+function DX(cfg){return function(){
+  const box=document.querySelector('.card.lab .labBody');if(!box)return;
+  const c52=box.querySelector('.ctl.lx52');if(!c52)return;const c51=box.querySelector('.ctl.lx51');
+  if(!document.getElementById('dmCssO')){const st=document.createElement('style');st.id='dmCssO';st.textContent=CSS+'#dmS p,#dmS .row,#dmS .chk,#dmS .msg,#dmS .wsc>h4{display:none!important}';document.head.appendChild(st)}
+  if(!document.getElementById('dxCss')){const st=document.createElement('style');st.id='dxCss';st.textContent=DXCSS;document.head.appendChild(st)}
+  DXI=DXI.filter(x=>x.P.isConnected);DXHOME.forEach((ph,st)=>{if(!ph.isConnected)DXHOME.delete(st)});
+  [...c52.querySelectorAll(':scope>.lxM')].forEach(m=>m.classList.add('dmHide'));
+  const mk=(mode,host)=>{const W=mode==='watch';
+    const P=document.createElement('div');P.className='dmP dx'+(W?'Wt':'Ex');
+    P.innerHTML=`<h4>${W?'🎬 شاهد التجربة خطوة خطوة':'⚡ تنفيذ التجربة'}</h4><div data-did="dmSW" class="dxW"><div data-did="dmS"></div><button data-did="dmBig" type="button" aria-label="تشغيل">▶ تشغيل</button></div><div data-did="dmV" class="dmView dmHide"></div><div class="dmBar" data-did="dmBar"></div><div class="tl"><button class="pri wPlay" data-did="dmPlay" type="button">▶ تشغيل</button><span data-did="dmTlT"></span><input type="range" data-did="dmTl" min="0" max="0" step="1" value="0"></div><div class="dmCap" data-did="dmCap"></div>${W?'':'<button type="button" data-did="dmRec" class="dmRecB" hidden>✓ سجل القراءة</button>'}<div class="dmBtns"><button data-did="dmNext" class="pri">التالي ←</button><button data-did="dmPrev">→ السابق</button>${W?'':'<button data-did="dmRe">↺ من البداية بقيم جديدة</button>'}</div>`;
+    host(P);return run(mode,P)};
+  function run(mode,P){const W=mode==='watch';
+    let play=false,manual=false;const psleep=async t=>{while(t>0){await sleep(100);if(play||manual)t-=100}};
+    const E=id=>P.querySelector('[data-did="'+id+'"]');
+    const q=id=>/^dm/.test(id)&&E(id)?E(id):(box.querySelector('#'+id)||document.getElementById(id));
+    const I={P,mode,reset:null,pause:null,k:()=>k};
+    const act=()=>{DXI.forEach(o=>{if(o!==I){o.pause();o.P.querySelectorAll('[data-did]').forEach(e=>e.removeAttribute('id'))}});P.querySelectorAll('[data-did]').forEach(e=>e.id=e.dataset.did);
+      DXI.forEach(o=>{if(o!==I&&o.k()>=0)o.reset(true)})};
+    const SW=E('dmSW'),GO=()=>play||manual;
+    const ST=cfg.steps;let cur=null;
+    const stageOf=s=>{if(!s||!s.st)return null;const e=typeof s.st==='function'?s.st():q(s.st);return e?(e.closest('.stage')||e):null};
+    function show(s){const st=stageOf(s);if(!st)return;if(cur&&cur!==st&&cur.parentElement===E('dmS'))dxRelease(cur);cur=st;dxTake(st,E('dmS'));E('dmS').querySelector('.dxEmpty')?.remove()}
+    function restore(){if(cur&&cur.parentElement===E('dmS'))dxRelease(cur);cur=null}
+    const fire=r=>{r.dispatchEvent(new Event('input',{bubbles:true}));r.dispatchEvent(new Event('change',{bubbles:true}))};
+    const hudT=()=>{const h=cur&&cur.querySelector('.hud');return h?h.textContent.trim():''};
+    const hitOf=(r,t)=>{if(typeof t==='number')return t;if(t==='max')return +(r.max||100);const v0=r.value,mn=+(r.min||0),mx=+(r.max||100),sp=+(r.step||1)||1;let hit=null;
+      for(let v=mn;v<=mx+1e-9;v+=sp){r.value=v;fire(r);if((typeof t==='function'?t():/^✓/.test(hudT()))){hit=v;break}}r.value=v0;fire(r);return hit==null?mx:hit};
+    const frame=async()=>{await new Promise(z=>requestAnimationFrame(z));await sleep(60)};
+    async function slide(id,t,hand,dur){const r=q(id);if(!r)return;const to=hitOf(r,t),from=+r.value,sp=+(r.step||1)||1;dur=dur||Math.min(4500,1400+Math.abs(to-from)/(+(r.max||100)-+(r.min||0)||1)*3000);
+      await frame();const [x,y]=hhXY(SW,hand,E('dmS'));await hhTo(SW,x,y,1000,GO);let t0=0;
+      const follow=()=>{if(!(hand&&Array.isArray(hand))){const [hx,hy]=hhXY(SW,hand,E('dmS'));const h=hhEl(SW);h.style.left=(hx-GX*HW)+'px';h.style.top=(hy-GY*HH)+'px'}};
+      while(t0<dur){await sleep(40);follow();if(GO())t0+=40;const e=Math.min(1,t0/dur);r.value=Math.round((from+(to-from)*e)/sp)*sp;fire(r)}
+      await frame();r.value=to;fire(r);await frame();follow();await psleep(500)}
+    async function click(id,hand){const b=typeof id==='string'?q(id):id;await sleep(60);const [x,y]=hhXY(SW,hand||b,E('dmS'));await hhTo(SW,x,y,1000,GO);await psleep(300);ck(b);await psleep(700)}
+    const H={slide,click,psleep,q,box,watch:W,away:()=>hhAway(SW,GO),hand:async(spec)=>{await frame();const [x,y]=hhXY(SW,spec,E('dmS'));await hhTo(SW,x,y,1000,GO)}};
+    const fbOf=r=>[r.fb,r.in+'Fb',r.in.replace(/In$/,'')+'Fb',r.ck.replace(/Ck$/,'Fb'),r.ck.replace(/k$/,'f')].map(x=>x&&q(x)).find(Boolean);
+    const okFb=r=>{const f=fbOf(r);return !!f&&/^✓/.test(f.textContent.trim())};
+    const LG=()=>box.querySelector('.lxLog tbody');
+    function logRow(r,v){const t=LG();if(!t)return;const z=box.querySelector('.lxLog0');if(z)z.remove();let tr=t.querySelector('tr[data-k="'+r.in+'"]');if(!tr){tr=document.createElement('tr');tr.dataset.k=r.in;t.appendChild(tr)}
+      tr.innerHTML='<td>'+r.name+'</td><td dir="ltr">'+v+(r.unit?' '+r.unit:'')+'</td>';tr.className='nw';setTimeout(()=>{tr.className='ok'},1500)}
+    let k=-1,busy=false,view=-1;const SN=[];E('dmBar').innerHTML='<i></i>'.repeat(ST.length);
+    const snapEl=el=>{if(!el)return '';const c=el.cloneNode(true);c.querySelectorAll('img.handH').forEach(e=>e.remove());const sfx='v'+(++window.__dmN||(window.__dmN=1))+'_';c.querySelectorAll('[id]').forEach(e=>{if(e.closest('defs'))e.id=sfx+e.id;else e.removeAttribute('id')});return c.innerHTML.replace(/url\(#([^)]+)\)/g,(m,x)=>'url(#'+(c.querySelector('[id="'+sfx+x+'"]')?sfx+x:x)+')')};
+    const snap=()=>{SN[k]=snapEl(E('dmS'))};const live=()=>view<0||view===k;
+    const ok=s=>W||!s.rec||okFb(s.rec);
+    const capOf=i=>W?ST[i].c.replace(/ثم اضغط «سجل القراءة»/g,'وتسجل في «نفذ التجربة»').replace(/اضغط «سجل القراءة»/g,'سجلها في «نفذ التجربة»'):ST[i].c;
+    const INTRO=W?'اضغط «▶ تشغيل» لترى خطوات التجربة كاملة: يظهر شرح كل خطوة أولا، ثم ينفذها المشهد باليد.':(cfg.intro||'اضغط «▶ تشغيل» ليبدأ المشهد خطوة خطوة، أو «التالي» لتتقدم بنفسك. المشهد يجري الخطوات، وأنت تقرأ القراءة وتسجلها.');
+    const ui=(cap=true)=>{const i=live()?k:view;if(cap)E('dmCap').innerHTML=i<0?INTRO:capOf(i)+(live()?'':'<br><span class="dmOld">⏪ تعرض خطوة سابقة. اضغط «التالي» أو حرك الشريط للعودة.</span>');
+      [...E('dmBar').children].forEach((x,j)=>x.classList.toggle('d',j<=i));
+      E('dmS').classList.toggle('dmHide',!live());const V=E('dmV');V.classList.toggle('dmHide',live());if(!live())V.innerHTML=SN[view]||'';
+      const tl=E('dmTl');tl.max=Math.max(0,k+1);tl.value=i+1;E('dmTlT').innerHTML='الخطوة <b>'+(i+1)+'</b> من '+ST.length;
+      const s=ST[k],wait=live()&&s&&!ok(s);const nb=E('dmNext');nb.disabled=busy||wait||(live()&&k>=ST.length-1);
+      nb.textContent=busy?'⏳ جار عرض الخطوة':wait?(play?'⏳ يستمر بعد تسجيل القراءة':'⏳ سجل القراءة أولا'):(live()&&k>=ST.length-1)?(W?'✓ انتهت المشاهدة':'✓ انتهت القياسات'):'التالي ←';E('dmPrev').disabled=busy||i<=0};
+    const goView=i=>{view=(i>=k)?-1:i;ui()};
+    E('dmNext').onclick=async()=>{if(busy)return;if(!live()){goView(view+1);return}if(k<0)act();busy=true;manual=!play;k++;const s=ST[k];show(s);ui();
+      const L=E('dmCap').textContent.length;E('dmCap').insertAdjacentHTML('beforeend','<div class="dmWait" style="font-size:12.5px;font-weight:800;color:var(--muted);margin-top:4px">📖 اقرأ الخطوة…</div>');
+      await psleep(Math.min(9000,2500+L*55));const w=E('dmCap').querySelector('.dmWait');if(w)w.textContent='🎬 تنفيذ الخطوة…';
+      try{if(s.f)await s.f(H);else if(s.sl)for(const [id,t,hd] of s.sl)await slide(id,t==null?'hit':t,hd)}catch(e){console.error(e)}
+      await hhAway(SW,GO);
+      if(s.rec&&!W){const r=s.rec;if(w)w.textContent='👇 '+(r.say||'اقرأ القراءة، ثم اضغط «سجل القراءة»');const rb=E('dmRec');rb.hidden=false;E('dmNext').textContent='👇 اضغط «سجل القراءة»';
+        await new Promise(res=>rb.onclick=res);rb.hidden=true;const v=String(r.val(H));logRow(r,v);await sleep(900);
+        const inp=q(r.in);inp.value=v;inp.dispatchEvent(new Event('input',{bubbles:true}));ck(q(r.ck));await sleep(300);if(w)w.textContent=okFb(r)?'✓ سجلت القراءة':'⚠️ تعذر التسجيل، أعد الخطوة';await sleep(800)}
+      else if(s.rec&&W){if(w)w.textContent='👀 القراءة على الشاشة، ويسجلها المتدرب في «نفذ التجربة»';await psleep(2600)}
+      snap();if(w)w.remove();if(play&&(W||!s.rec))await psleep(W?3500:4500);busy=false;ui();
+      if(W&&k>=ST.length-1){play=false;E('dmPlay').textContent='▶ تشغيل';big();setTimeout(()=>labReset(),400)}};
+    let ptm=null;const big=()=>{E('dmBig').hidden=play;E('dmBig').textContent=k<0?'▶ تشغيل':(W&&k>=ST.length-1)?'↺ شاهد من البداية':'▶ متابعة'};
+    const tick=()=>{clearTimeout(ptm);if(!play)return;ptm=setTimeout(async()=>{if(!play||busy)return tick();if(!live()){goView(view+1);return tick()}
+      const s=ST[k];if(s&&!ok(s))return tick();if(k>=ST.length-1){play=false;E('dmPlay').textContent='▶ تشغيل';big();if(!W)E('dmBig').hidden=true;return}
+      await E('dmNext').onclick();tick()},k<0?1000:600)};
+    function labReset(){restore();const nw=box.querySelector('#nw');if(nw)ck(nw);DXI.forEach(o=>{if(o!==I&&o.mode!=='watch')o.reset(false)})}
+    I.pause=()=>{if(play){play=false;E('dmPlay').textContent='▶ تشغيل';clearTimeout(ptm);big()}};
+    I.reset=(lab,keepEmpty)=>{I.pause();restore();if(lab){const nw=box.querySelector('#nw');if(nw)ck(nw)}if(!W){const t=LG();if(t)t.innerHTML=''}k=-1;view=-1;SN.length=0;E('dmS').innerHTML='';if(!W&&cfg.first!==false&&!keepEmpty)show(ST[0]);else E('dmS').innerHTML='<div class="dxEmpty">'+(W?'🎬 اضغط «▶ تشغيل» لمشاهدة خطوات التجربة':'⚡ اضغط «▶ تشغيل» لتبدأ التنفيذ')+'</div>';ui();big()};
+    E('dmPlay').onclick=()=>{if(W&&k>=ST.length-1&&!play){I.reset(true)}play=!play;manual=false;E('dmPlay').textContent=play?'⏸ إيقاف':'▶ تشغيل';big();if(play){if(k<0)act();tick()}else clearTimeout(ptm)};E('dmBig').onclick=()=>{if(!play)E('dmPlay').onclick()};
+    E('dmPrev').onclick=()=>{I.pause();const i=live()?k:view;if(i>0)goView(i-1)};
+    E('dmTl').oninput=()=>{const v=+E('dmTl').value-1;if(v<0)return;goView(Math.min(v,k))};
+    if(E('dmRe'))E('dmRe').onclick=()=>{if(busy)return;act();I.reset(true);setTimeout(()=>{if(!W&&cfg.first!==false){show(ST[0]);ui()}},120)};
+    ui();big();DXI.push(I);return I}
+  let wI=null;
+  if(c51&&cfg.watch!==false){[...c51.children].forEach(e=>{if(e.tagName!=='H3')e.classList.add('lxWold')});wI=mk('watch',P=>c51.querySelector('h3').after(P))}
+  const xI=mk('exec',P=>c52.querySelector('h3').after(P));
+  if(wI)wI.reset(false);
+  xI.P.querySelectorAll('[data-did]').forEach(e=>e.id=e.dataset.did);if(wI)wI.P.querySelectorAll('[data-did]').forEach(e=>e.removeAttribute('id'));
+  if(cfg.first!==false){const s=cfg.steps[0];const st=s&&(typeof s.st==='function'?s.st():(box.querySelector('#'+s.st)));if(st)dxTake(st.closest('.stage')||st,xI.P.querySelector('[data-did="dmS"]'))}}}
+
+try{
+LXD['0-1']={aim:'الهدف من التجربة قياس طول أسطوانة معدنية بأداة القدمة ذات الورنية وقطرها بأداة الميكرومتر، ثم تحويل القياسين إلى وحدات النظام الدولي وحساب حجم الأسطوانة بوصفه كمية مشتقة.',
+ theory:'<p>القياس مقارنة كمية مجهولة بكمية معلومة من نوعها تسمى وحدة القياس. وتختلف أدوات القياس في دقتها: فأداة القدمة ذات الورنية تقرأ حتى <span dir="ltr">0.1 mm</span>، إذ يضاف رقم خط الورنية المنطبق على خط التدريج الرئيسي مضروبا في <span dir="ltr">0.1 mm</span> إلى قراءة التدريج الرئيسي. أما أداة الميكرومتر فتقرأ حتى <span dir="ltr">0.01 mm</span>، إذ يضاف رقم قسم التدريج الدائري المنطبق على الخط الأفقي مضروبا في <span dir="ltr">0.01 mm</span> إلى قراءة التدريج الخطي.</p><p>الطول والقطر كميتان أساسيتان تقاسان مباشرة، أما الحجم فكمية مشتقة تحسب منهما بالقانون <span dir="ltr">V = π D² L / 4</span>.</p>',
+ flow:['<b>تجهيز الأدوات:</b> وضع الأسطوانة المعدنية بين فكي أداة القدمة ذات الورنية.','<b>قياس الطول L</b> بتحريك الفك المتحرك حتى يلامس طرف الأسطوانة، ثم القراءة من التدريج الرئيسي وتدريج الورنية.','<b>قياس القطر D</b> بتدوير أسطوانة أداة الميكرومتر حتى يلامس العمود الأسطوانة، ثم القراءة من التدريج الخطي والتدريج الدائري.','<b>الحسابات:</b> تحويل L و D إلى <span dir="ltr">cm</span>، ثم حساب الحجم <span dir="ltr">V = π D² L / 4</span>.']};
+(()=>{const mk=(rid,sid,fn)=>H=>{const r=H.q(rid);const put=()=>{const sv=H.q(sid);if(!sv)return;let c=sv.querySelector('circle.hk');const [x,y]=fn(sv);if(!c){sv.insertAdjacentHTML('beforeend','<circle class="hk" r="2" fill="none" stroke="none"/>');c=sv.querySelector('circle.hk')}c.setAttribute('cx',x);c.setAttribute('cy',y)};if(!r.__hk){r.__hk=1;r.addEventListener('input',put)}put()};
+const IM=(sv,n)=>{const i=sv.querySelector('image[href*="'+n+'"]');return [+i.getAttribute('x'),+i.getAttribute('y'),+i.getAttribute('width'),+i.getAttribute('height')]};
+const calK=mk('vR','vTop',sv=>{const [x,y,w,h]=IM(sv,'83-caliper-slider');return [x+w*355/900,y+h*185/324]});
+const micK=mk('mR','mTop',sv=>{const [x,y,w,h]=IM(sv,'85-mic-thimble');return [x+w*300/350,y+h*.5]});
+DIR['0-1']=DX({steps:[
+ {st:'vTop',c:'<b>الخطوة 1: تجهيز أداة القدمة ذات الورنية.</b> توضع الأسطوانة المعدنية ملاصقة <b>للفك الثابت</b>، والفك المتحرك مفتوح بعيدا عنها، فيوجد فراغ بين الفك والأسطوانة.',f:async H=>{await H.hand('image[href*="88-cal-cyl"]');await H.psleep(900)}},
+ {st:'vTop',c:'<b>الخطوة 2: إغلاق الفك المتحرك.</b> تدفع اليد <b>الفك المتحرك</b> بهدوء نحو الأسطوانة حتى يلامس طرفها دون ضغط، فيصبح البعد بين الفكين مساويا لطول الأسطوانة.',f:async H=>{calK(H);await H.slide('vR',+H.box.__ans.vIn(),'#vTop circle.hk')}},
+ {st:'vTop',c:'<b>الخطوة 3: قراءة أداة القدمة ذات الورنية.</b> من التكبير: اقرأ آخر ملليمتر في <b>التدريج الرئيسي</b> قبل صفر الورنية، ثم ابحث عن خط <b>الورنية</b> المنطبق تماما على خط من التدريج الرئيسي، واضرب رقمه في <b dir="ltr">0.1 mm</b> وأضفه.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>',rec:{in:'vIn',ck:'vCk',name:'الطول L',unit:'mm',val:H=>H.box.__ans.vIn()}},
+ {st:'mTop',c:'<b>الخطوة 4: تجهيز أداة الميكرومتر.</b> توضع الأسطوانة بين <b>السندان</b> الثابت و<b>العمود</b> المتحرك، والعمود ما زال بعيدا عنها.',f:async H=>{await H.hand('image[href*="87-mic-cyl"]');await H.psleep(900)}},
+ {st:'mTop',c:'<b>الخطوة 5: تدوير الأسطوانة الدوارة.</b> تدير اليد <b>الأسطوانة الدوارة</b> لأداة الميكرومتر فيتقدم العمود نحو الأسطوانة حتى يلامسها، ثم يتوقف التدوير حتى لا تضغط الأداة على الجسم.',f:async H=>{micK(H);await H.slide('mR',+H.box.__ans.mIn(),'#mTop circle.hk')}},
+ {st:'mTop',c:'<b>الخطوة 6: قراءة أداة الميكرومتر.</b> من التكبير: اقرأ آخر خط ظاهر في <b>التدريج الخطي</b> (ملليمتر كامل أو نصف ملليمتر)، ثم أضف رقم قسم <b>التدريج الدائري</b> المنطبق على الخط الأفقي مضروبا في <b dir="ltr">0.01 mm</b>.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>',rec:{in:'mIn',ck:'mCk',name:'القطر D',unit:'mm',val:H=>H.box.__ans.mIn()}},
+ {st:'mTop',c:'✅ <b>اكتملت القراءات.</b> افتح بطاقة <b>الحسابات</b>: حول الطول والقطر من <b dir="ltr">mm</b> إلى <b dir="ltr">cm</b>، ثم احسب الحجم <b dir="ltr">V = π D² L / 4</b>.',f:async H=>{await H.psleep(600)}}]})})();
+WCFG['0-1']={PL:[[],['circle[stroke="#16A34A"]'],['image[href*="85-mic-thimble"]']]};
+
+}catch(e){console.error("cfg cfg_0-1.js",e)}
+try{
+LXD['0-2']={aim:'الهدف من التجربة قياس سرعة عربة تتحرك على مسار مستقيم، من قياس المسافة بأداة الشريط المتري والزمن بأداة ساعة الإيقاف، ثم تحويل السرعة من cm/s إلى m/s ثم إلى km/h.',
+ theory:'<p>السرعة كمية مشتقة تساوي المسافة المقطوعة مقسومة على الزمن المستغرق <span dir="ltr">v = d / t</span>. فإذا قيست المسافة بالسنتيمتر والزمن بالثانية كانت السرعة بوحدة <span dir="ltr">cm/s</span>.</p><p>ويغير تحويل الوحدات العدد ولا يغير الكمية: فلأن <span dir="ltr">1 m = 100 cm</span> تقسم السرعة على 100 لتصبح بوحدة <span dir="ltr">m/s</span>، ولأن الساعة <span dir="ltr">3600 s</span> والكيلومتر ألف متر تضرب السرعة بوحدة <span dir="ltr">m/s</span> في <span dir="ltr">3.6</span> لتصبح بوحدة <span dir="ltr">km/h</span>.</p>',
+ flow:['<b>تجهيز المسار:</b> تحديد خط البداية وخط النهاية على المسار، ووضع العربة عند خط البداية.','<b>قياس المسافة d</b> بأداة الشريط المتري: سحب الشريط من خط البداية حتى يصل الخطاف إلى خط النهاية.','<b>قياس الزمن t</b> بأداة ساعة الإيقاف: تشغيلها لحظة انطلاق العربة وإيقافها لحظة وصولها إلى خط النهاية.','<b>الحسابات:</b> السرعة <span dir="ltr">v = d / t</span> بوحدة <span dir="ltr">cm/s</span>، ثم التحويل إلى <span dir="ltr">m/s</span> و <span dir="ltr">km/h</span>.']};
+(()=>{const dot=(H,sel,x,y)=>{const sv=H.q('dmS').querySelector(sel);sv.querySelectorAll('circle.hk').forEach(c=>c.remove());sv.insertAdjacentHTML('beforeend','<circle class="hk" r="2" fill="none" stroke="none" cx="'+x+'" cy="'+y+'"/>');return sv.querySelector('circle.hk')};
+const hook=H=>{const sv=H.q('tTop').querySelector('svg'),i=sv.querySelector('image[href*="91-track-hook"]');return dot(H,'#tTop svg',i?+i.getAttribute('x')+23:238,i?+i.getAttribute('y')+41:89)};
+const btn=H=>dot(H,'#sW',200,-40);
+DIR['0-2']=DX({steps:[
+ {st:'tTop',c:'<b>الخطوة 1: تجهيز المسار وأداة الشريط المتري.</b> على المسار خط <b>البداية</b> الأخضر وخط <b>النهاية</b> الأحمر. وعلبة أداة الشريط المتري عند خط البداية، وصفر الشريط عند هذا الخط.',f:async H=>{await H.hand(dot(H,'#tTop svg',238,100));await H.psleep(900)}},
+ {st:'tTop',c:'<b>الخطوة 2: سحب الشريط.</b> تمسك اليد <b>خطاف</b> أداة الشريط المتري وتسحبه على طول المسار حتى تصل حافة الخطاف تماما إلى <b>خط النهاية</b>.',f:async H=>{const r=H.q('tR');if(+r.value<0.1){r.value=0.1;r.dispatchEvent(new Event('input',{bubbles:true}))}await H.hand(hook(H));const f=()=>hook(H);r.addEventListener('input',f);await H.slide('tR','hit','#tTop circle.hk');r.removeEventListener('input',f)}},
+ {st:'tTop',c:'<b>الخطوة 3: قراءة أداة الشريط المتري.</b> من التكبير: الأرقام الكبيرة بالسنتيمتر، وبين كل رقمين 10 أقسام صغيرة كل قسم <b dir="ltr">0.1 cm</b>. اقرأ آخر رقم قبل حافة الخطاف، ثم أضف عدد الأقسام الصغيرة حتى الحافة.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>',rec:{in:'tIn',ck:'tCk',name:'المسافة d',unit:'cm',val:H=>H.box.__ans.tIn()}},
+ {st:'sTop',c:'<b>الخطوة 4: تجهيز أداة ساعة الإيقاف.</b> العربة عند خط البداية، وعقرب أداة ساعة الإيقاف على الصفر. تضغط زر التشغيل لحظة انطلاق العربة.',f:async H=>{await H.hand(btn(H));await H.psleep(900)}},
+ {st:'sTop',c:'<b>الخطوة 5: حركة العربة وقياس الزمن.</b> تتحرك العربة على المسار من خط البداية حتى خط النهاية، وعقرب أداة ساعة الإيقاف يدور، ثم يضغط زر الإيقاف لحظة وصول العربة إلى خط النهاية.',f:async H=>{await H.hand(btn(H));await H.psleep(700);await H.slide('sR','hit','image[href*="90-track-cart"]');await H.hand(btn(H));await H.psleep(700)}},
+ {st:'sTop',c:'<b>الخطوة 6: قراءة أداة ساعة الإيقاف.</b> الأرقام على القرص بالثانية وبين كل رقمين <b dir="ltr">5 s</b>، وكل قسم صغير <b dir="ltr">1 s</b>. اقرأ آخر رقم مر به العقرب، ثم أضف عدد الأقسام حتى العقرب.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>',rec:{in:'sIn',ck:'sCk',name:'الزمن t',unit:'s',val:H=>H.box.__ans.sIn()}},
+ {st:'sTop',c:'✅ <b>اكتملت القراءات.</b> افتح بطاقة <b>الحسابات</b>: احسب السرعة <b dir="ltr">v = d / t</b> بوحدة <b dir="ltr">cm/s</b>، ثم حولها إلى <b dir="ltr">m/s</b> ثم إلى <b dir="ltr">km/h</b>.',f:async H=>{await H.psleep(600)}}]})})();
+WCFG['0-2']={PL:[[],['image[href*="91-track-hook"]'],['image[href*="90-track-cart"]','image[href*="06-stopwatch"]']]};
+
+}catch(e){console.error("cfg cfg_0-2.js",e)}
+try{
+LXD['0-4']={aim:'الهدف من التجربة إيجاد محصلة قوتين تؤثران في حلقة جهاز طاولة القوى، بقياس الكتلتين بجهاز الميزان الرقمي وزاويتيهما من تدريج القرص، ثم مقارنة المحصلة المحسوبة بقوة الاتزان التي نجدها تجريبيا.',
+ theory:'<p>القوة كمية متجهة لها مقدار واتجاه. في جهاز طاولة القوى تشد كل كتلة معلقة الحلقة بقوة تساوي وزنها <span dir="ltr">F = m g</span> في اتجاه خيطها، ويقاس اتجاه الخيط بزاوية من تدريج القرص. ومحصلة قوتين بينهما زاوية <span dir="ltr">θ</span> مقدارها <span dir="ltr">R = √( F₁² + F₂² + 2 F₁ F₂ cos θ )</span>.</p><p>وعندما نضيف قوة ثالثة تجعل الحلقة تستقر في المركز تكون القوى الثلاث متزنة، فتكون القوة الثالثة (قوة الاتزان) مساوية للمحصلة في المقدار ومعاكسة لها في الاتجاه، أي أن زاويتها تزيد على زاوية المحصلة بمقدار <span dir="ltr">180°</span>.</p>',
+ flow:['<b>قياس الكتلتين:</b> إنزال الحامل <b dir="ltr">m₁</b> ثم الحامل <b dir="ltr">m₂</b> على كفة جهاز الميزان الرقمي وقراءة كتلة كل منهما بالجرام.','<b>قياس الزاويتين:</b> تعليق الحاملين على بكرتي جهاز طاولة القوى، وتحريك عدسة التكبير إلى كل خيط وقراءة <b dir="ltr">θ₁</b> و <b dir="ltr">θ₂</b>.','<b>إيجاد قوة الاتزان:</b> زيادة الكتلة الثالثة <b dir="ltr">m₃</b> وتدوير بكرتها حتى تستقر الحلقة في المركز.','<b>الحسابات:</b> <span dir="ltr">F = m g</span> لكل قوة، ثم <span dir="ltr">θ = θ₂ − θ₁</span>، ثم مقدار المحصلة بقانون جيب التمام.']};
+WCFG['0-4']={PL:[['#fwD g path'],['#fwD g path','#fwD g path'],['#fwD g path'],['#fwD g path','#fwD g path'],['#fwD circle[fill="rgba(247,147,30,.18)"]'],['#fwD circle[fill="rgba(247,147,30,.18)"]'],['#fwD circle[stroke="#F7931E"][r="13"]'],['#fwK circle'],['#fwK circle:last-of-type'],['#fwK circle:last-of-type'],['#fwD circle[stroke="#F7931E"][r="13"]']]};
+DIR['0-4']=DX({steps:[
+ {st:'bS',c:'<b>الخطوة 1: تجهيز الأجهزة.</b> في الأعلى <b>جهاز الميزان الرقمي</b> وشاشته تقرأ <b dir="ltr">0.0 g</b>، وفوق كفته حامل الكتل معلقا. وفي الأسفل قرص <b>جهاز طاولة القوى</b> المدرج من <b dir="ltr">0°</b> إلى <b dir="ltr">360°</b>، وفي وسطه الحلقة البرتقالية حول المسمار المركزي.',f:async H=>{await H.hand('#bS image');await H.psleep(900)}},
+ {st:'bS',c:'<b>الخطوة 2: اختيار الحامل الأول m₁.</b> تمسك اليد خطاف <b>الحامل m₁</b> مع أثقاله، وهو معلق فوق كفة الميزان، والشاشة ما زالت <b dir="ltr">0.0 g</b>.',f:async H=>{await H.click(H.box.querySelector('.hsel button[data-h="1"]'),'#bS g path')}},
+ {st:'bS',c:'<b>الخطوة 3: إنزال الحامل m₁ على الكفة.</b> تنزل اليد الحامل ببطء من الأعلى حتى يستقر تماما على كفة الميزان الرقمي، فتظهر كتلته على الشاشة.',sl:[['bR','max','#bS g path']]},
+ {st:'bS',c:'<b>الخطوة 4: قراءة الكتلة m₁.</b> اقرأ الرقم الظاهر على شاشة جهاز الميزان الرقمي: الكتلة بالجرام <b dir="ltr">g</b> بدقة <b dir="ltr">0.1 g</b>.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>',rec:{in:'m1In',ck:'m1Ck',name:'الكتلة m₁',unit:'g',val:H=>H.box.__ans.m1In()}},
+ {st:'bS',c:'<b>الخطوة 5: اختيار الحامل الثاني m₂.</b> يرفع الحامل m₁ عن الكفة، وتمسك اليد خطاف <b>الحامل m₂</b> المعلق فوق الكفة، فتعود الشاشة إلى <b dir="ltr">0.0 g</b>.',f:async H=>{await H.click(H.box.querySelector('.hsel button[data-h="2"]'),'#bS g path')}},
+ {st:'bS',c:'<b>الخطوة 6: إنزال الحامل m₂ على الكفة.</b> تنزل اليد الحامل m₂ ببطء حتى يستقر على كفة الميزان، فتظهر كتلته على الشاشة.',sl:[['bR','max','#bS g path']]},
+ {st:'bS',c:'<b>الخطوة 7: قراءة الكتلة m₂.</b> اقرأ كتلة الحامل الثاني من شاشة جهاز الميزان الرقمي بالجرام <b dir="ltr">g</b>.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>',rec:{in:'m2In',ck:'m2Ck',name:'الكتلة m₂',unit:'g',val:H=>H.box.__ans.m2In()}},
+ {st:'aS',c:'<b>الخطوة 8: تعليق الحاملين على طاولة القوى.</b> علق الحامل <b style="color:#2563EB">m₁</b> بخيط أزرق والحامل <b style="color:#16A34A">m₂</b> بخيط أخضر على بكرتين على حافة القرص، والخيطان مربوطان بالحلقة في المركز. والدائرة البرتقالية على حافة القرص هي <b>عدسة التكبير</b>.',f:async H=>{await H.hand('#aS circle[fill="rgba(247,147,30,.18)"]');await H.psleep(900)}},
+ {st:'aS',c:'<b>الخطوة 9: تحريك العدسة إلى خيط m₁.</b> تحرك اليد عدسة التكبير على تدريج القرص من <b dir="ltr">0°</b> حتى تتوقف تماما عند <b style="color:#2563EB">الخيط الأزرق</b> للحامل m₁.',f:async H=>{await H.slide('a1R',+H.box.__ans.t1In(),'#aS circle[fill="rgba(247,147,30,.18)"]')}},
+ {st:'aZ',c:'<b>الخطوة 10: قراءة الزاوية θ₁.</b> في تكبير التدريج: الأرقام كل <b dir="ltr">5°</b> وكل قسم صغير <b dir="ltr">1°</b>. اقرأ التدريج الذي يقع تحت <b style="color:#2563EB">السهم الأزرق</b> للخيط.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>',rec:{in:'t1In',ck:'t1Ck',name:'الزاوية θ₁',unit:'°',val:H=>H.box.__ans.t1In()}},
+ {st:'aS',c:'<b>الخطوة 11: تحريك العدسة إلى خيط m₂.</b> تحرك اليد عدسة التكبير على تدريج القرص حتى تتوقف عند <b style="color:#16A34A">الخيط الأخضر</b> للحامل m₂.',f:async H=>{await H.slide('a2R',+H.box.__ans.t2In(),'#aS circle[fill="rgba(247,147,30,.18)"]')}},
+ {st:'aZ',c:'<b>الخطوة 12: قراءة الزاوية θ₂.</b> اقرأ من تكبير التدريج الزاوية التي يقع عندها <b style="color:#16A34A">السهم الأخضر</b>: آخر رقم قبل السهم ثم عدد الأقسام الصغيرة حتى السهم.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>',rec:{in:'t2In',ck:'t2Ck',name:'الزاوية θ₂',unit:'°',val:H=>H.box.__ans.t2In()}},
+ {st:'eS',c:'<b>الخطوة 13: انحراف الحلقة.</b> القوتان <b dir="ltr">F₁</b> و <b dir="ltr">F₂</b> تشدان الحلقة معا، فتنحرف عن المسمار المركزي في اتجاه <b>المحصلة</b>. لإعادتها إلى المركز نضيف قوة ثالثة هي <b>قوة الاتزان</b>.',f:async H=>{await H.hand('#eS circle[stroke="#F7931E"][r="13"]');await H.psleep(900)}},
+ {st:'eS',c:'<b>الخطوة 14: زيادة الكتلة الثالثة m₃.</b> تضع اليد أثقالا على الحامل الثالث <b style="color:#F7931E">m₃</b> وتزيدها تدريجيا حتى تقارب كتلة قوة الاتزان، والبكرة الثالثة ما زالت عند <b dir="ltr">0°</b> فلم تستقر الحلقة بعد.',f:async H=>{const r=H.q('m3R');r.value=5;r.dispatchEvent(new Event('input',{bubbles:true}));await H.slide('m3R',H.box.__ans.m3(),'#eS rect[fill="#F7931E"]')}},
+ {st:'eS',c:'<b>الخطوة 15: تدوير البكرة الثالثة.</b> تدور اليد البكرة الثالثة ببطء على حافة القرص نحو الجهة <b>المقابلة</b> لانحراف الحلقة، فتقترب الحلقة من المركز حتى تستقر حول المسمار تماما.',f:async H=>{await H.slide('t3R',H.box.__ans.t3(),'#eS rect[fill="#F7931E"]')}},
+ {st:'eS',c:'<b>الخطوة 16: تسجيل قوة الاتزان.</b> استقرت الحلقة في المركز: القوى الثلاث متزنة. اقرأ الكتلة <b dir="ltr">m₃</b> وزاوية خيطها <b dir="ltr">θ₃</b> من تدريج القرص.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>',rec:{in:'eIn',ck:'eCk',fb:'eFb',name:'قوة الاتزان m₃ ، θ₃',unit:'',val:H=>H.box.__ans.m3()+' g ، '+H.box.__ans.t3()+'°'}},
+ {st:'eS',c:'✅ <b>اكتملت القراءات.</b> افتح بطاقة <b>الحسابات</b>: حول الكتلتين إلى الكيلوجرام واحسب <b dir="ltr">F₁ = m₁ g</b> و <b dir="ltr">F₂ = m₂ g</b>، ثم <b dir="ltr">θ = θ₂ − θ₁</b>، ثم مقدار المحصلة <b dir="ltr">R</b> بقانون جيب التمام، وقارنه بقوة الاتزان.',f:async H=>{await H.psleep(600)}}]});
+
+}catch(e){console.error("cfg cfg_0-4.js",e)}
+try{
+LXD['0-5']={aim:'الهدف من التجربة تحليل قوة إلى مركبتيها السينية والصادية، بقياس الكتلة بجهاز الميزان الرقمي وزاوية القوة من تدريج جهاز طاولة القوى، ثم موازنتها تجريبيا بكتلتين على المحورين ومقارنة النتيجتين.',
+ theory:'<p>أي قوة <span dir="ltr">F</span> تصنع زاوية <span dir="ltr">θ</span> مع المحور السيني يمكن تحليلها إلى مركبتين متعامدتين: مركبة سينية <span dir="ltr">Fx = F cos θ</span> ومركبة صادية <span dir="ltr">Fy = F sin θ</span>، والمركبتان معا تكافئان القوة الأصلية. وفي جهاز طاولة القوى تكون القوة هي وزن الكتلة المعلقة <span dir="ltr">F = m g</span> في اتجاه خيطها.</p><p>وللتحقق تجريبيا نعلق كتلة <span dir="ltr">mₓ</span> على البكرة <span dir="ltr">180°</span> وكتلة <span dir="ltr">mᵧ</span> على البكرة <span dir="ltr">270°</span>، فعندما تستقر الحلقة في المركز تكون قوتاهما مساويتين للمركبتين في المقدار ومعاكستين لهما في الاتجاه.</p>',
+ flow:['<b>قياس الكتلة:</b> إنزال حامل الكتل <b dir="ltr">m</b> على كفة جهاز الميزان الرقمي وقراءة كتلته بالجرام.','<b>قياس الزاوية:</b> تعليق الحامل على بكرة جهاز طاولة القوى، وتحريك عدسة التكبير إلى الخيط وقراءة الزاوية <b dir="ltr">θ</b>.','<b>إيجاد المركبتين تجريبيا:</b> زيادة الكتلة <b dir="ltr">mₓ</b> على البكرة <span dir="ltr">180°</span> ثم الكتلة <b dir="ltr">mᵧ</b> على البكرة <span dir="ltr">270°</span> حتى تستقر الحلقة في المركز.','<b>الحسابات:</b> <span dir="ltr">F = m g</span>، ثم <span dir="ltr">Fx = F cos θ</span> و <span dir="ltr">Fy = F sin θ</span>، ومقارنتهما بالقيم التجريبية.']};
+WCFG['0-5']={PL:[['#vwD g path'],['#vwD g path','#vwD g path'],['#vwD circle[fill="rgba(247,147,30,.18)"]'],['#vwD circle[stroke="#F7931E"][r="13"]'],['#vwK circle'],['#vwK circle:last-of-type'],['#vwK circle:last-of-type']]};
+DIR['0-5']=DX({steps:[
+ {st:'bS',c:'<b>الخطوة 1: تجهيز الأجهزة.</b> في الأعلى <b>جهاز الميزان الرقمي</b> وشاشته تقرأ <b dir="ltr">0.0 g</b>، وفوق كفته <b>حامل الكتل m</b> معلقا مع أثقاله. وفي الأسفل قرص <b>جهاز طاولة القوى</b> المدرج بالدرجات، وفي وسطه الحلقة البرتقالية حول المسمار المركزي.',f:async H=>{await H.hand('#bS g path');await H.psleep(900)}},
+ {st:'bS',c:'<b>الخطوة 2: إنزال الحامل على الكفة.</b> تمسك اليد خطاف حامل الكتل وتنزله ببطء من الأعلى حتى يستقر تماما على كفة الميزان الرقمي، فتظهر كتلته على الشاشة.',sl:[['bR','max','#bS g path']]},
+ {st:'bS',c:'<b>الخطوة 3: قراءة الكتلة m.</b> اقرأ الرقم الظاهر على شاشة جهاز الميزان الرقمي: الكتلة بالجرام <b dir="ltr">g</b> بدقة <b dir="ltr">0.1 g</b>.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>',rec:{in:'mIn',ck:'mCk',name:'الكتلة m',unit:'g',val:H=>H.box.__ans.mIn()}},
+ {st:'aS',c:'<b>الخطوة 4: تعليق الحامل على طاولة القوى.</b> علق الحامل بخيط <b style="color:#DC2626">أحمر</b> على بكرة على حافة القرص، والخيط مربوط بالحلقة في المركز، فهو يمثل اتجاه القوة <b dir="ltr">F</b>. والدائرة البرتقالية على حافة القرص هي <b>عدسة التكبير</b>.',f:async H=>{await H.hand('#aS circle[fill="rgba(247,147,30,.18)"]');await H.psleep(900)}},
+ {st:'aS',c:'<b>الخطوة 5: تحريك العدسة إلى خيط القوة.</b> تحرك اليد عدسة التكبير على تدريج القرص من <b dir="ltr">0°</b> عكس اتجاه عقارب الساعة حتى تتوقف تماما عند <b style="color:#DC2626">الخيط الأحمر</b>.',f:async H=>{await H.slide('aR',+H.box.__ans.tIn(),'#aS circle[fill="rgba(247,147,30,.18)"]')}},
+ {st:'aZ',c:'<b>الخطوة 6: قراءة زاوية القوة θ.</b> في تكبير التدريج: الأرقام كل <b dir="ltr">5°</b> وكل قسم صغير <b dir="ltr">1°</b>. اقرأ آخر رقم قبل <b style="color:#DC2626">السهم الأحمر</b>، ثم عد الأقسام الصغيرة حتى السهم.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>',rec:{in:'tIn',ck:'tCk',name:'زاوية القوة θ',unit:'°',val:H=>H.box.__ans.tIn()}},
+ {st:'eS',c:'<b>الخطوة 7: انحراف الحلقة.</b> القوة <b dir="ltr">F</b> وحدها تشد الحلقة فتنحرف عن المسمار المركزي في اتجاه الخيط الأحمر. لإعادتها إلى المركز نعلق كتلتين على المحورين تمثلان المركبتين.',f:async H=>{await H.hand('#eS circle[stroke="#F7931E"][r="13"]');await H.psleep(900)}},
+ {st:'eS',c:'<b>الخطوة 8: زيادة الكتلة mₓ على البكرة 180°.</b> تضع اليد أثقالا على الحامل <b style="color:#2563EB">mₓ</b> المعلق على البكرة <b dir="ltr">180°</b> وتزيدها تدريجيا حتى يزول الانحراف <b>الأفقي</b> للحلقة، فتصير فوق المسمار المركزي تماما.',f:async H=>{const r=H.q('xR');r.value=5;r.dispatchEvent(new Event('input',{bubbles:true}));await H.slide('xR',H.box.__ans.mx(),'#eS rect[fill="#2563EB"]')}},
+ {st:'eS',c:'<b>الخطوة 9: زيادة الكتلة mᵧ على البكرة 270°.</b> تضع اليد أثقالا على الحامل <b style="color:#16A34A">mᵧ</b> المعلق على البكرة <b dir="ltr">270°</b> وتزيدها تدريجيا، فتنزل الحلقة نحو المركز حتى تستقر حول المسمار تماما.',f:async H=>{const r=H.q('yR');r.value=5;r.dispatchEvent(new Event('input',{bubbles:true}));await H.slide('yR',H.box.__ans.my(),'#eS rect[fill="#16A34A"]')}},
+ {st:'eS',c:'<b>الخطوة 10: تسجيل الكتلتين.</b> استقرت الحلقة في المركز: الكتلتان توازنان القوة. اقرأ الكتلة <b dir="ltr">mₓ</b> على البكرة <span dir="ltr">180°</span> والكتلة <b dir="ltr">mᵧ</b> على البكرة <span dir="ltr">270°</span>.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>',rec:{in:'eIn',ck:'eCk',fb:'eFb',name:'الكتلتان mₓ ، mᵧ',unit:'g',val:H=>H.box.__ans.mx()+' g ، '+H.box.__ans.my()}},
+ {st:'eS',c:'✅ <b>اكتملت القراءات.</b> افتح بطاقة <b>الحسابات</b>: حول الكتلة إلى الكيلوجرام واحسب <b dir="ltr">F = m g</b>، ثم المركبتين <b dir="ltr">Fx = F cos θ</b> و <b dir="ltr">Fy = F sin θ</b>، وقارنهما بوزني الكتلتين <b dir="ltr">mₓ</b> و <b dir="ltr">mᵧ</b>.',f:async H=>{await H.psleep(600)}}]});
+
+}catch(e){console.error("cfg cfg_0-5.js",e)}
+try{
+LXD['0-6']={aim:'الهدف من التجربة حساب الضرب القياسي لمتجهين بطريقتين: من مركباتهما المقروءة على أداة لوحة الإحداثيات، ومن مقداريهما والزاوية بينهما المقيسة بأداة المنقلة، والمقارنة بين النتيجتين.',
+ theory:'<p>يكتب المتجه في المستوى بدلالة متجهي الوحدة <span dir="ltr">i</span> و <span dir="ltr">j</span> على المحورين: <span dir="ltr">A = Ax i + Ay j</span>، حيث <span dir="ltr">Ax</span> و <span dir="ltr">Ay</span> مسقطا المتجه على المحورين. والضرب القياسي لمتجهين كمية قياسية تحسب من المركبات <span dir="ltr">A · B = Ax Bx + Ay By</span>، لأن <span dir="ltr">i · i = j · j = 1</span> و <span dir="ltr">i · j = 0</span>.</p><p>ويحسب الضرب القياسي نفسه بالإحداثيات القطبية من مقداري المتجهين والزاوية بينهما <span dir="ltr">A · B = A B cos θ</span>، فتعطي الطريقتان الناتج نفسه تقريبا.</p>',
+ flow:['<b>قراءة مركبتي المتجه A:</b> إسقاط رأس المتجه على المحورين على أداة لوحة الإحداثيات، وعد المربعات حتى نقطتي الإسقاط.','<b>قراءة مركبتي المتجه B</b> بالطريقة نفسها.','<b>قياس الزاوية θ</b> بين المتجهين بأداة المنقلة، وصفرها على المتجه A.','<b>الحسابات:</b> <span dir="ltr">A · B = Ax Bx + Ay By</span>، ثم <span dir="ltr">A · B = A B cos θ</span>، والمقارنة بين الناتجين.']};
+(()=>{const vr=(n,P)=>({in:n+'x',ck:n.toLowerCase()==='a'?'aCk':'bCk',fb:n.toLowerCase()==='a'?'aFb':'bFb',name:'المتجه <span dir="ltr">'+n.toUpperCase()+'⃗</span>',unit:'',
+  val(H){const p=H.box.__ans[P]();H.q(n+'y').value=String(p[1]);this.unit='i + '+p[1]+' j  cm';return String(p[0])}});
+DIR['0-6']=DX({steps:[
+ {st:'s1',c:'<b>الخطوة 1: أداة لوحة الإحداثيات.</b> على اللوحة محوران متعامدان، وكل مربع ضلعه <b dir="ltr">1 cm</b>. والمتجه <b dir="ltr">A⃗</b> يبدأ من نقطة الأصل، وسنقرأ مركبتيه بإسقاط رأسه على المحورين.',f:async H=>{await H.hand('#s1 circle[r="5"]');await H.psleep(900)}},
+ {st:'s1',c:'<b>الخطوة 2: إسقاط المتجه A⃗ على المحورين.</b> تنزل اليد من <b>رأس المتجه</b> خطا عموديا على المحور السيني، وخطا عموديا على المحور الصادي، فتظهر نقطتا الإسقاط على المحورين.',sl:[['p1','max','#s1 circle[r="4"]']]},
+ {st:'s1',c:'<b>الخطوة 3: قراءة مركبتي المتجه A⃗.</b> عد المربعات من نقطة الأصل حتى نقطة الإسقاط على المحور السيني فتحصل على <b dir="ltr">Ax</b>، ثم على المحور الصادي فتحصل على <b dir="ltr">Ay</b>، واكتب المتجه <b dir="ltr">A⃗ = Ax i + Ay j</b>.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>',rec:vr('a','A')},
+ {st:'s2',c:'<b>الخطوة 4: المتجه B⃗ على اللوحة.</b> المتجه <b dir="ltr">B⃗</b> يبدأ أيضا من نقطة الأصل، وسنقرأ مركبتيه بالطريقة نفسها.',f:async H=>{await H.hand('#s2 circle[r="4"]~circle[r="4"]');await H.psleep(900)}},
+ {st:'s2',c:'<b>الخطوة 5: إسقاط المتجه B⃗ على المحورين.</b> تنزل اليد من <b>رأس المتجه B⃗</b> خطا عموديا على كل محور، فتظهر نقطتا الإسقاط.',sl:[['p2','max','#s2 circle[r="4"]~circle[r="4"]']]},
+ {st:'s2',c:'<b>الخطوة 6: قراءة مركبتي المتجه B⃗.</b> عد المربعات من نقطة الأصل حتى نقطتي الإسقاط فتحصل على <b dir="ltr">Bx</b> و <b dir="ltr">By</b>، واكتب المتجه <b dir="ltr">B⃗ = Bx i + By j</b>.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>',rec:vr('b','B')},
+ {st:'s3',c:'<b>الخطوة 7: وضع أداة المنقلة.</b> مركز أداة المنقلة على نقطة الأصل، وخط صفرها منطبق على المتجه <b dir="ltr">A⃗</b>، فتقاس الزاوية من <b dir="ltr">A⃗</b> نحو <b dir="ltr">B⃗</b>.',f:async H=>{await H.hand('#s3 circle[r="2.6"]');await H.psleep(900)}},
+ {st:'s3',c:'<b>الخطوة 8: تحريك عدسة التكبير.</b> تحرك اليد <b>العدسة</b> على تدريج أداة المنقلة من الصفر حتى تتوقف عند المتجه <b dir="ltr">B⃗</b> الأزرق.',sl:[['p3','hit','#s3 circle[stroke="#F7931E"]']]},
+ {st:'s3',c:'<b>الخطوة 9: قراءة أداة المنقلة.</b> من التكبير: الأرقام كل <b dir="ltr">5°</b>، وكل قسم صغير <b dir="ltr">1°</b>. اقرأ آخر رقم قبل السهم الأزرق، ثم أضف عدد الأقسام حتى السهم.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>',rec:{in:'tIn',ck:'tCk',name:'الزاوية θ',unit:'°',val:H=>H.box.__ans.tIn()}},
+ {st:'s3',c:'✅ <b>اكتملت القراءات.</b> افتح بطاقة <b>الحسابات</b>: احسب <b dir="ltr">A⃗ · B⃗ = Ax Bx + Ay By</b>، ثم احسب المقدارين <b dir="ltr">A</b> و <b dir="ltr">B</b> و <b dir="ltr">A⃗ · B⃗ = A B cos θ</b>، وقارن بين الناتجين.',f:async H=>{await H.psleep(600)}}]})})();
+WCFG['0-6']={PL:[[],['circle[r="4"]'],['circle[r="4"]~circle[r="4"]'],['circle[stroke="#F7931E"]']]};
+
+}catch(e){console.error("cfg cfg_0-6.js",e)}
+try{
+LXD['1-1']={aim:'الهدف من التجربة إيجاد تسارع عربة تنطلق من السكون على جهاز المسار الهوائي المائل من قياس زمن حركتها وسرعتها النهائية، ومعرفة أثر زيادة ميل المسار على السرعة النهائية والتسارع.',
+ theory:'<p>التسارع هو المعدل الزمني لتغير السرعة <span dir="ltr">a = (Vf − Vi) / Δt</span>، ووحدته <span dir="ltr">m/s²</span>. وفي جهاز المسار الهوائي يدفع الهواء من ثقوب المسار فتطفو العربة على وسادة هوائية ويكاد الاحتكاك ينعدم، فإذا رفع أحد طرفي المسار تنزلق العربة تحت تأثير مركبة وزنها الموازية للمسار بتسارع ثابت.</p><p>تنطلق العربة من السكون <span dir="ltr">(Vi = 0)</span> عند البوابة الأولى فيبدأ جهاز المؤقت الرقمي العد من <span dir="ltr">ti = 0</span>، ويتوقف عند البوابة الثانية فيعرض الزمن النهائي <span dir="ltr">tf</span> والسرعة النهائية <span dir="ltr">Vf</span>. وكلما زاد ميل المسار بزيادة قطع الرفع زادت المركبة الموازية للوزن، فيزيد التسارع وتزيد السرعة النهائية.</p>',
+ flow:['<b>تجهيز الأجهزة:</b> وضع قطعة رفع واحدة تحت طرف جهاز المسار الهوائي، وتشغيل جهاز مضخة الهواء، وتثبيت البوابتين الضوئيتين وتوصيلهما بجهاز المؤقت الرقمي.','<b>المحاولة الأولى:</b> ترك العربة تنطلق من السكون عند البوابة الأولى، وقراءة الزمن النهائي <span dir="ltr">tf</span> والسرعة النهائية <span dir="ltr">Vf</span> من جهاز المؤقت الرقمي.','<b>المحاولة الثانية:</b> إضافة قطعة رفع ثانية، وإعادة العربة إلى البوابة الأولى، وتصفير المؤقت، ثم تكرار القياس.','<b>الحسابات:</b> التسارع <span dir="ltr">a = (Vf − Vi) / Δt</span> في كل محاولة، ثم المقارنة بين التسارعين.']};
+DIR['1-1']=DX({steps:[
+ {st:'gS1',c:'<b>الخطوة 1: تجهيز المحاولة الأولى.</b> جهاز المسار الهوائي مائل فوق <b>قطعة رفع واحدة</b> تحت طرفه الأيسر، وجهاز مضخة الهواء يدفع الهواء في المسار فتطفو العربة ولا تحتك به. العربة ساكنة عند <b>البوابة الأولى</b> <b dir="ltr">(Vi = 0)</b>، والبوابتان موصولتان بجهاز المؤقت الرقمي.',f:async H=>{await H.hand('#gS1 polygon[fill*="f59e0b" i]');await H.psleep(900);await H.hand('#gS1 image[href*="air-blower"]');await H.psleep(900)}},
+ {st:'gS1',c:'<b>الخطوة 2: انطلاق العربة.</b> تترك اليد العربة فتنطلق من السكون وتنزلق على المسار المائل. عند مرورها بالبوابة الأولى يبدأ جهاز المؤقت الرقمي العد من <b dir="ltr">ti = 0</b>، وعند وصولها إلى <b>البوابة الثانية</b> يتوقف العد.',sl:[['gR1','hit','#gS1 polygon[fill*="sc3C"]']]},
+ {st:'gS1',c:'<b>الخطوة 3: قراءة الزمن النهائي.</b> اقرأ الزمن النهائي <b dir="ltr">tf</b> من شاشة جهاز المؤقت الرقمي بأربعة أرقام عشرية، والزمن الابتدائي <b dir="ltr">ti = 0</b>، فيكون <b dir="ltr">Δt = tf</b>.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>',f:async H=>{await H.hand('#gS1 text[font-family]~text[font-family]');await H.psleep(900)},rec:{in:'tIn1',ck:'tCk1',fb:'tFb1',name:'الزمن النهائي tf (المحاولة الأولى)',unit:'s',val:H=>H.box.__ans.t1()}},
+ {st:'gS1',c:'<b>الخطوة 4: قراءة السرعة النهائية.</b> اقرأ السرعة النهائية <b dir="ltr">Vf</b> للعربة عند البوابة الثانية من السطر الثالث على شاشة جهاز المؤقت الرقمي بثلاثة أرقام عشرية.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>',f:async H=>{await H.hand('#gS1 text[font-family]~text[font-family]~text[font-family]');await H.psleep(900)},rec:{in:'vIn1',ck:'vCk1',fb:'vFb1',name:'السرعة النهائية Vf (المحاولة الأولى)',unit:'m/s',val:H=>H.box.__ans.v1()}},
+ {st:'gS2',c:'<b>الخطوة 5: تجهيز المحاولة الثانية.</b> تضاف <b>قطعة رفع ثانية</b> تحت طرف المسار فيزيد ميله، وتعاد العربة إلى البوابة الأولى ساكنة <b dir="ltr">(Vi = 0)</b>، ويصفر جهاز المؤقت الرقمي.',f:async H=>{await H.hand('#gS2 polygon[fill*="f59e0b" i]');await H.psleep(1200)}},
+ {st:'gS2',c:'<b>الخطوة 6: انطلاق العربة على الميل الأكبر.</b> تترك اليد العربة فتنطلق من السكون، ويبدأ المؤقت العد عند البوابة الأولى من <b dir="ltr">ti = 0</b>، ويتوقف عند وصولها إلى البوابة الثانية. لاحظ أنها تصل أسرع من المحاولة الأولى.',sl:[['gR2','hit','#gS2 polygon[fill*="sc3C"]']]},
+ {st:'gS2',c:'<b>الخطوة 7: قراءة الزمن النهائي.</b> اقرأ الزمن النهائي <b dir="ltr">tf</b> في المحاولة الثانية من شاشة جهاز المؤقت الرقمي بأربعة أرقام عشرية، و <b dir="ltr">Δt = tf − 0</b>.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>',f:async H=>{await H.hand('#gS2 text[font-family]~text[font-family]');await H.psleep(900)},rec:{in:'tIn2',ck:'tCk2',fb:'tFb2',name:'الزمن النهائي tf (المحاولة الثانية)',unit:'s',val:H=>H.box.__ans.t2()}},
+ {st:'gS2',c:'<b>الخطوة 8: قراءة السرعة النهائية.</b> اقرأ السرعة النهائية <b dir="ltr">Vf</b> في المحاولة الثانية من شاشة جهاز المؤقت الرقمي بثلاثة أرقام عشرية، وقارنها بسرعة المحاولة الأولى.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>',f:async H=>{await H.hand('#gS2 text[font-family]~text[font-family]~text[font-family]');await H.psleep(900)},rec:{in:'vIn2',ck:'vCk2',fb:'vFb2',name:'السرعة النهائية Vf (المحاولة الثانية)',unit:'m/s',val:H=>H.box.__ans.v2()}},
+ {st:'gS2',c:'✅ <b>اكتملت القراءات.</b> افتح بطاقة <b>الحسابات</b>: احسب التسارع <b dir="ltr">a = (Vf − Vi) / Δt</b> في كل محاولة مع <b dir="ltr">Vi = 0</b>، ثم قارن بين التسارعين.',f:async H=>{await H.psleep(600)}}]});
+WCFG['1-1']={PL:[['polygon[fill*="sc3C"]'],['polygon[fill*="sc3C"]','text[font-family]~text[font-family]','text[font-family]~text[font-family]~text[font-family]'],['polygon[fill*="f59e0b" i]','polygon[fill*="sc3C"]','text[font-family]~text[font-family]','text[font-family]~text[font-family]~text[font-family]']]};
+
+}catch(e){console.error("cfg cfg_1-1.js",e)}
+try{
+LXD['1-2']={aim:'الهدف من التجربة حساب ارتفاع سقوط كرة فولاذية من قياس زمن سقوطها الحر باستخدام معادلة الحركة الثانية، ثم التحقق منه بقياس الارتفاع بأداة الشريط المتري.',
+ theory:'<p>السقوط الحر حركة بتسارع ثابت هو تسارع الجاذبية <span dir="ltr">g = 9.8 m/s²</span>، لذلك تنطبق عليه معادلة الحركة الثانية <span dir="ltr">x = Vi·t + ½·a·t²</span> بعد وضع الإزاحة الرأسية <span dir="ltr">h</span> مكان <span dir="ltr">x</span> و <span dir="ltr">g</span> مكان <span dir="ltr">a</span>.</p><p>وعندما تفلت الكرة من السكون <span dir="ltr">(Vi = 0)</span> تصبح المعادلة <span dir="ltr">h = ½·g·Δt²</span>، فيكفي قياس زمن السقوط بجهاز المؤقت الرقمي لحساب الارتفاع، ثم يقارن الارتفاع المحسوب بالارتفاع المقاس بأداة الشريط المتري.</p>',
+ flow:['<b>تجهيز الأجهزة:</b> تثبيت الكرة في جهاز السقوط الحر فوق وسادة الاستقبال، وتوصيلهما بجهاز المؤقت الرقمي وتصفيره.','<b>قياس زمن السقوط:</b> إفلات الكرة من السكون، وقراءة الزمن النهائي <span dir="ltr">tf</span> عند ارتطامها بالوسادة.','<b>قياس الارتفاع:</b> قياس المسافة من سطح وسادة الاستقبال إلى مستوى الإفلات بأداة الشريط المتري.','<b>الحسابات:</b> الارتفاع <span dir="ltr">h = ½·g·Δt²</span>، ثم مقارنته بالارتفاع المقاس.']};
+DIR['1-2']=DX({steps:[
+ {st:'gS1',c:'<b>الخطوة 1: تجهيز الأجهزة.</b> الكرة الفولاذية ممسوكة ساكنة <b dir="ltr">(Vi = 0)</b> في <b>جهاز السقوط الحر</b> أعلى الحامل، وتحتها <b>وسادة الاستقبال</b>، والجهازان موصولان بجهاز المؤقت الرقمي، وشاشته مصفرة.',f:async H=>{await H.hand('#gS1 image[href*="steel-ball"]');await H.psleep(900);await H.hand('#tmS1');await H.psleep(700)}},
+ {st:'gS1',c:'<b>الخطوة 2: إفلات الكرة.</b> تضغط اليد ماسك جهاز السقوط الحر فتفلت الكرة وتسقط من السكون، ويبدأ جهاز المؤقت الرقمي العد من <b dir="ltr">ti = 0</b>، وعند ارتطامها بوسادة الاستقبال يتوقف العد.',f:async H=>{const S=H.q('dmSW'),[x,y]=hhXY(S,'#gS1 image[href*="steel-ball"]',H.q('dmS'));await H.slide('gR1','max',[x/S.clientWidth,y/S.clientHeight])}},
+ {st:'gS1',c:'<b>الخطوة 3: قراءة زمن السقوط.</b> اقرأ الزمن النهائي <b dir="ltr">tf</b> من الشاشة المكبرة لجهاز المؤقت الرقمي بأربعة أرقام عشرية، والزمن الابتدائي <b dir="ltr">ti = 0</b>، فيكون زمن السقوط <b dir="ltr">Δt = tf</b>.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>',f:async H=>{await H.hand('#tmS1 text:nth-of-type(2)');await H.psleep(900)},rec:{in:'tIn1',ck:'tCk1',fb:'tFb1',name:'الزمن النهائي tf',unit:'s',val:H=>H.box.__ans.t()}},
+ {st:'pS1',c:'<b>الخطوة 4: قياس ارتفاع السقوط.</b> صفر أداة الشريط المتري على سطح وسادة الاستقبال. يتحرك مؤشر القياس على الشريط من الصفر إلى أعلى حتى يصل إلى <b>مستوى الإفلات</b> (أسفل الكرة قبل إفلاتها).',f:async H=>{await H.slide('pR1',+H.box.__ans.h(),'#pS1 path[fill*="f7931e" i]')}},
+ {st:'pS1',c:'<b>الخطوة 5: قراءة الشريط المتري.</b> اقرأ الارتفاع <b dir="ltr">h</b> من تكبير أداة الشريط المتري: الأرقام الكبيرة بالسنتيمتر، وكل قسم صغير <b dir="ltr">0.1 cm</b>.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>',f:async H=>{await H.hand('#pZ1 path[fill*="f7931e" i]');await H.psleep(900)},rec:{in:'hIn1',ck:'hCk1',fb:'hFb1',name:'الارتفاع المقاس h',unit:'cm',val:H=>H.box.__ans.h()}},
+ {st:'pS1',c:'✅ <b>اكتملت القراءات.</b> افتح بطاقة <b>الحسابات</b>: احسب الارتفاع <b dir="ltr">h = ½·g·Δt²</b> من زمن السقوط، ثم قارنه بالارتفاع المقاس بعد تحويله إلى المتر.',f:async H=>{await H.psleep(600)}}]});
+WCFG['1-2']={PL:[['image[href*="steel-ball"]'],['image[href*="steel-ball"]','svg[viewBox$=" 126"] text:nth-of-type(2)'],['image[href*="steel-ball"]~path[fill*="f7931e" i]','svg[viewBox="0 0 400 110"] path[fill*="f7931e" i]']]};
+
+}catch(e){console.error("cfg cfg_1-2.js",e)}
+try{
+LXD['1-3']={aim:'الهدف من التجربة التحقق من قانون نيوتن الثاني بمقارنة تسارع كتلتي جهاز آتوود المقاس من الزمن والسرعة النهائية بالتسارع المحسوب من القوة المحصلة والكتلة الكلية.',
+ theory:'<p>ينص قانون نيوتن الثاني على أن تسارع الجسم يتناسب طرديا مع القوة المحصلة المؤثرة فيه وعكسيا مع كتلته <span dir="ltr">F = m·a</span>. وفي جهاز آتوود كتلتان مربوطتان بخيط يمر فوق بكرة خفيفة، فتتحركان معا بنفس التسارع: الأثقل <span dir="ltr">m₁</span> تنزل والأخف <span dir="ltr">m₂</span> تصعد.</p><p>القوة المحصلة هي الفرق بين الوزنين <span dir="ltr">F = (m₁ − m₂)·g</span>، والكتلة المتحركة هي مجموع الكتلتين <span dir="ltr">m = m₁ + m₂</span>، فيكون التسارع من القانون <span dir="ltr">a = F / (m₁ + m₂)</span>. ويقاس التسارع عمليا من السرعة النهائية والزمن <span dir="ltr">a = (Vf − Vi) / Δt</span>، فإذا تساوى التسارعان تقريبا تحقق القانون.</p>',
+ flow:['<b>قياس الكتلتين:</b> وزن الكتلة الأثقل <span dir="ltr">m₁</span> والأخف <span dir="ltr">m₂</span> بجهاز الميزان الرقمي.','<b>تجهيز جهاز آتوود:</b> تعليق الكتلتين على طرفي الخيط فوق البكرة، و <span dir="ltr">m₁</span> في الأعلى فوق البوابة الضوئية ووسادة الاستقبال، وتصفير جهاز المؤقت الرقمي.','<b>القياس:</b> إفلات الكتلتين من السكون، وقراءة الزمن النهائي <span dir="ltr">tf</span> والسرعة النهائية <span dir="ltr">Vf</span> عند ارتطام <span dir="ltr">m₁</span> بالوسادة.','<b>الحسابات:</b> التسارع المقاس <span dir="ltr">a = (Vf − Vi) / Δt</span>، والقوة المحصلة <span dir="ltr">F = (m₁ − m₂)·g</span>، والتسارع من القانون <span dir="ltr">a = F / (m₁ + m₂)</span>، ثم المقارنة.']};
+DIR['1-3']=DX({steps:[
+ {st:'bl1',c:'<b>الخطوة 1: قياس الكتلة الأثقل.</b> توضع الكتلة الأثقل <b dir="ltr">m₁</b> على كفة جهاز الميزان الرقمي، وتنتظر حتى يثبت الرقم على الشاشة. الكتلة بالجرام <b dir="ltr">g</b>.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>',f:async H=>{await H.hand('#bl1 image[href*="blue-cube"]');await H.psleep(900);await H.hand('#bl1 text[font-family]');await H.psleep(700)},rec:{in:'mIn1',ck:'mCk1',fb:'mFb1',name:'كتلة الأثقل m₁',unit:'g',val:H=>H.box.__ans.m1()}},
+ {st:'bl2',c:'<b>الخطوة 2: قياس الكتلة الأخف.</b> ترفع الكتلة الأثقل، وتوضع الكتلة الأخف <b dir="ltr">m₂</b> على كفة جهاز الميزان الرقمي، ثم تقرأ كتلتها بالجرام من الشاشة.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>',f:async H=>{await H.hand('#bl2 image[href*="blue-cube"]');await H.psleep(900);await H.hand('#bl2 text[font-family]');await H.psleep(700)},rec:{in:'mIn2',ck:'mCk2',fb:'mFb2',name:'كتلة الأخف m₂',unit:'g',val:H=>H.box.__ans.m2()}},
+ {st:'gS',c:'<b>الخطوة 3: تجهيز جهاز آتوود.</b> تعلق الكتلتان على طرفي الخيط فوق البكرة: الأثقل <b dir="ltr">m₁</b> في الأعلى فوق البوابة الضوئية ووسادة الاستقبال، والأخف <b dir="ltr">m₂</b> في الأسفل. تمسك اليد <b dir="ltr">m₁</b> ساكنة <b dir="ltr">(Vi = 0)</b>، وشاشة جهاز المؤقت الرقمي مصفرة.',f:async H=>{await H.hand('#gS image[href*="blue-cube"]~image[href*="blue-cube"]');await H.psleep(1200)}},
+ {st:'gS',c:'<b>الخطوة 4: إفلات الكتلتين.</b> تترك اليد الكتلة الأثقل فتنزل <b dir="ltr">m₁</b> وتصعد <b dir="ltr">m₂</b> بنفس التسارع، ويبدأ جهاز المؤقت الرقمي العد من <b dir="ltr">ti = 0</b>. وعند مرور <b dir="ltr">m₁</b> بالبوابة الضوئية وارتطامها بوسادة الاستقبال يتوقف العد.',sl:[['gR','max','#gS image[href*="blue-cube"]~image[href*="blue-cube"]']]},
+ {st:'gS',c:'<b>الخطوة 5: قراءة الزمن النهائي.</b> اقرأ الزمن النهائي <b dir="ltr">tf</b> من الشاشة المكبرة لجهاز المؤقت الرقمي بأربعة أرقام عشرية، والزمن الابتدائي <b dir="ltr">ti = 0</b>.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>',f:async H=>{await H.hand('#tmS text:nth-of-type(2)');await H.psleep(900)},rec:{in:'tIn',ck:'tCk',fb:'tFb',name:'الزمن النهائي tf',unit:'s',val:H=>H.box.__ans.t()}},
+ {st:'gS',c:'<b>الخطوة 6: قراءة السرعة النهائية.</b> اقرأ السرعة النهائية <b dir="ltr">Vf</b> للكتلة الأثقل التي قاستها البوابة الضوئية، من السطر الثالث على شاشة جهاز المؤقت الرقمي بثلاثة أرقام عشرية.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>',f:async H=>{await H.hand('#tmS text:nth-of-type(3)');await H.psleep(900)},rec:{in:'vIn',ck:'vCk',fb:'vFb',name:'السرعة النهائية Vf',unit:'m/s',val:H=>H.box.__ans.v()}},
+ {st:'gS',c:'✅ <b>اكتملت القراءات.</b> افتح بطاقة <b>الحسابات</b>: احسب التسارع المقاس <b dir="ltr">a = (Vf − Vi) / Δt</b>، ثم القوة المحصلة <b dir="ltr">F = (m₁ − m₂)·g</b> بعد تحويل الكتلتين إلى <b dir="ltr">kg</b>، ثم التسارع من القانون <b dir="ltr">a = F / (m₁ + m₂)</b>، وقارن بينهما.',f:async H=>{await H.psleep(600)}}]});
+WCFG['1-3']={PL:[['image[href*="blue-cube"]~image[href*="blue-cube"]'],['image[href*="blue-cube"]~image[href*="blue-cube"]','svg[viewBox$=" 152"] text:nth-of-type(2)','svg[viewBox$=" 152"] text:nth-of-type(3)']]};
+
+}catch(e){console.error("cfg cfg_1-3.js",e)}
+try{
+LXD['1-5']={aim:'الهدف من التجربة حساب قوة الاحتكاك الحركي بين صندوق خشبي وسطح خشبي أفقي من القانون <span dir="ltr">fk = μk·N</span>، والتحقق منها بقراءة جهاز الميزان النابضي أثناء سحب الصندوق بسرعة ثابتة.',
+ theory:'<p>عندما ينزلق جسم على سطح تنشأ بين السطحين المتلامسين قوة تعاكس اتجاه الحركة تسمى <b>قوة الاحتكاك الحركي</b>، ومقدارها يتناسب طرديا مع القوة العمودية <span dir="ltr">fk = μk·N</span>، حيث <span dir="ltr">μk</span> معامل الاحتكاك الحركي ويعتمد على نوع السطحين. وعلى سطح أفقي تساوي القوة العمودية وزن الجسم <span dir="ltr">N = m·g</span>.</p><p>وعندما يسحب الصندوق بقوة أفقية فيتحرك <b>بسرعة ثابتة</b> يكون تسارعه صفرا، فتكون القوة المحصلة عليه صفرا حسب قانون نيوتن الثاني، وتتساوى قوة السحب مع قوة الاحتكاك <span dir="ltr">F = fk</span>، فتعطي قراءة الميزان النابضي قوة الاحتكاك مباشرة.</p>',
+ flow:['<b>قياس كتلة الصندوق m</b> بجهاز الميزان الرقمي بالجرام.','<b>حساب القوة العمودية</b> <span dir="ltr">N = m·g</span> بعد تحويل الكتلة إلى الكيلوجرام.','<b>حساب قوة الاحتكاك الحركي</b> <span dir="ltr">fk = μk·N</span> حيث <span dir="ltr">μk = 0.3</span>.','<b>سحب الصندوق بسرعة ثابتة</b> بجهاز الميزان النابضي، وقراءة قوة السحب <span dir="ltr">F</span>.','<b>المقارنة</b> بين قوة الاحتكاك المحسوبة وقوة السحب المقاسة.']};
+DIR['1-5']=DX({steps:[
+ {st:'bl',c:'<b>الخطوة 1: وضع الصندوق على جهاز الميزان الرقمي.</b> يوضع الصندوق الخشبي في وسط كفة الميزان الرقمي بعد تصفيره، وينتظر حتى تثبت الأرقام على الشاشة. الكتلة تظهر بالجرام بدقة <b dir="ltr">1 g</b>.',f:async H=>{await H.hand('#bl image[href*="75-wood"]');await H.psleep(900);await H.hand('#bl text[font-family]');await H.psleep(900)}},
+ {st:'bl',c:'<b>الخطوة 2: قراءة كتلة الصندوق.</b> اقرأ الرقم الظاهر على شاشة الميزان الرقمي، وهو كتلة الصندوق <b dir="ltr">m</b> بالجرام.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>',rec:{in:'mIn',ck:'mCk',name:'كتلة الصندوق m',unit:'g',val:H=>H.box.__ans.mIn()}},
+ {st:'gS',c:'<b>الخطوة 3: تجهيز السحب.</b> ينقل الصندوق إلى السطح الخشبي الأفقي، ويربط خطافه بخيط أفقي إلى خطاف <b>الميزان النابضي</b>. تمسك اليد حلقة السحب، والصندوق ساكن، فيقرأ الميزان صفرا.',f:async H=>{await H.hand('#gS .frRing');await H.psleep(1000)}},
+ {st:'gS',c:'<b>الخطوة 4: سحب الصندوق بسرعة ثابتة.</b> تسحب اليد حلقة الميزان النابضي سحبا أفقيا هادئا، فيتمدد النابض حتى يبدأ الصندوق بالحركة، ثم يستمر السحب حتى يتحرك الصندوق <b>بسرعة ثابتة</b> ويستقر مؤشر الميزان.',sl:[['gR','max','#gS .frRing']]},
+ {st:'gS',c:'<b>الخطوة 5: قراءة الميزان النابضي.</b> اقرأ قوة السحب <b dir="ltr">F</b> من التدريج المكبر تحت المشهد: الأرقام بالنيوتن، وبين كل رقمين 5 أقسام صغيرة كل قسم <b dir="ltr">0.1 N</b>، والقراءة عند المؤشر البرتقالي.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>',rec:{in:'fIn',ck:'fCk',name:'قوة السحب F',unit:'N',val:H=>H.box.__ans.fIn()}},
+ {st:'gS',c:'✅ <b>اكتملت القراءات.</b> افتح بطاقة <b>الحسابات</b>: حول الكتلة إلى الكيلوجرام، ثم احسب القوة العمودية <b dir="ltr">N = m·g</b>، ثم قوة الاحتكاك <b dir="ltr">fk = μk·N</b>، وقارنها بقوة السحب <b dir="ltr">F</b>.',f:async H=>{await H.psleep(600)}}]});
+WCFG['1-5']={PL:[[],['.frRing']]};
+
+}catch(e){console.error("cfg cfg_1-5.js",e)}
+try{
+LXD['1-7']={aim:'الهدف من التجربة حساب الشغل الذي تبذله قوة سحب أفقية على صندوق خشبي يتحرك بسرعة ثابتة، من قياس قوة السحب بالميزان النابضي والإزاحة بالشريط المتري.',
+ theory:'<p>الشغل كمية قياسية تساوي حاصل ضرب القوة في الإزاحة في جيب تمام الزاوية بينهما <span dir="ltr">W = F·x·cos θ</span>. وعندما تسحب قوة أفقية ثابتة صندوقا على سطح أفقي تكون القوة في اتجاه الإزاحة، فالزاوية بينهما صفر <span dir="ltr">(cos 0 = 1)</span>، ويكون الشغل <span dir="ltr">W = F·x</span>، ووحدته الجول <span dir="ltr">J = N·m</span>.</p>',
+ flow:['<b>تجهيز الأدوات:</b> ربط الصندوق بالميزان النابضي، وتثبيت الشريط المتري وصفره عند الموضع الابتدائي.','<b>قياس قوة السحب F</b> بالميزان النابضي أثناء سحب الصندوق بسرعة ثابتة.','<b>قياس الإزاحة x</b> بالشريط المتري من الموضع الابتدائي إلى النهائي.','<b>الحسابات:</b> الشغل <span dir="ltr">W = F·x</span>.']};
+DIR['1-7']=DX({steps:[
+ {st:'gS',c:'<b>الخطوة 1: تجهيز الأدوات.</b> الصندوق الخشبي على السطح الأفقي، مربوط بخيط أفقي إلى خطاف <b>الميزان النابضي</b>. والشريط المتري على حافة السطح، وصفره عند الموضع الابتدائي للصندوق <b dir="ltr">xi = 0</b>.',f:async H=>{await H.hand(null);await H.psleep(900)}},
+ {st:'gS',c:'<b>الخطوة 2: سحب الصندوق.</b> تمسك اليد حلقة الميزان النابضي وتسحبها سحبا أفقيا هادئا، فيتحرك الصندوق <b>بسرعة ثابتة</b> حتى نهاية السحب، ويستقر مؤشر الميزان على قوة السحب.',sl:[['gR','max']]},
+ {st:'gS',c:'<b>الخطوة 3: قراءة الميزان النابضي.</b> اقرأ قوة السحب <b dir="ltr">F</b> من التدريج المكبر تحت الميزان: الأرقام بالنيوتن، وكل قسم صغير <b dir="ltr">0.1 N</b>.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>',rec:{in:'fIn',ck:'fCk',name:'قوة السحب F',unit:'N',val:H=>H.box.__ans.fIn()}},
+ {st:'pS',c:'<b>الخطوة 4: قياس الموضع النهائي.</b> يتحرك مؤشر القياس على الشريط المتري من الصفر حتى <b>يلامس الحافة الخلفية للصندوق</b> في موضعه النهائي.',f:async H=>{await H.slide('pR',+H.box.__ans.xIn())}},
+ {st:'pS',c:'<b>الخطوة 5: قراءة الشريط المتري.</b> اقرأ الموضع النهائي <b dir="ltr">xf</b> من التكبير: الأرقام بالسنتيمتر، وكل قسم صغير <b dir="ltr">0.1 cm</b>. والإزاحة <b dir="ltr">x = xf − 0</b>.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>',rec:{in:'xIn',ck:'xCk',name:'الموضع النهائي xf',unit:'cm',val:H=>H.box.__ans.xIn()}},
+ {st:'pS',c:'✅ <b>اكتملت القراءات.</b> افتح بطاقة <b>الحسابات</b>: حول الإزاحة إلى المتر، ثم احسب الشغل <b dir="ltr">W = F·x</b>.',f:async H=>{await H.psleep(600)}}]});
+
+}catch(e){console.error("cfg cfg_1-7.js",e)}
+try{
+LXD['1-8']={aim:'الهدف من التجربة إيجاد طاقة الوضع لجسم معلق عند ارتفاعين مختلفين من القانون <span dir="ltr">PE = m·g·h</span>، من قياس كتلته بجهاز الميزان الرقمي وارتفاعه بأداة الشريط المتري، وبيان أثر زيادة الارتفاع على طاقة الوضع.',
+ theory:'<p>طاقة الوضع الجاذبية هي الطاقة المختزنة في الجسم بسبب موضعه فوق مستوى إسناد، وتساوي الشغل المبذول لرفعه بسرعة ثابتة ضد وزنه: <span dir="ltr">PE = W·h = m·g·h</span>، ووحدتها الجول <span dir="ltr">J</span>. وفي هذه التجربة مستوى الإسناد سطح الطاولة <span dir="ltr">(h = 0)</span>.</p><p>ولأن الكتلة وتسارع الجاذبية ثابتان للجسم نفسه، فإن طاقة الوضع تتناسب طرديا مع الارتفاع: إذا رفع الجسم إلى ارتفاع أعلى زادت طاقة وضعه بالنسبة نفسها.</p>',
+ flow:['<b>قياس كتلة الجسم (الثقل) m</b> بجهاز الميزان الرقمي بالجرام.','<b>المحاولة الأولى:</b> رفع ذراع الحامل المعملي إلى ارتفاع منخفض، وقياس ارتفاع أسفل الجسم <span dir="ltr">h₁</span> بأداة الشريط المتري.','<b>المحاولة الثانية:</b> رفع الجسم إلى ارتفاع أعلى، وقياس الارتفاع <span dir="ltr">h₂</span>.','<b>الحسابات:</b> طاقة الوضع <span dir="ltr">PE = m·g·h</span> عند كل ارتفاع، ثم المقارنة بينهما.']};
+DIR['1-8']=DX({steps:[
+ {st:'bl',c:'<b>الخطوة 1: وضع الجسم (الثقل) على جهاز الميزان الرقمي.</b> يوضع الثقل الأسطواني ذو الخطاف في وسط كفة الميزان الرقمي بعد تصفيره، وتثبت الأرقام على الشاشة بالجرام بدقة <b dir="ltr">1 g</b>. ونستخدم الجسم نفسه في المحاولتين.',f:async H=>{await H.hand('#bl image[href*="26-cylinder"]');await H.psleep(900);await H.hand('#bl text[font-family]');await H.psleep(900)}},
+ {st:'bl',c:'<b>الخطوة 2: قراءة كتلة الجسم (الثقل).</b> اقرأ الرقم الظاهر على شاشة الميزان الرقمي، وهو الكتلة <b dir="ltr">m</b> بالجرام.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>',rec:{in:'mIn',ck:'mCk',name:'كتلة الجسم m',unit:'g',val:H=>H.box.__ans.mIn()}},
+ {st:'gS1',c:'<b>الخطوة 3: المحاولة الأولى، رفع الجسم (الثقل).</b> يعلق الجسم في خطاف ذراع الحامل المعملي وهو على سطح الطاولة، ثم ترفع اليد الذراع بالماسك على القضيب الرأسي إلى <b>ارتفاع منخفض</b>، ويثبت الماسك فيبقى الجسم ساكنا.',sl:[['gR1','max','#gS1 image[href*="26-cylinder"]']]},
+ {st:'gS1',c:'<b>الخطوة 4: قياس الارتفاع الأول.</b> يتحرك مؤشر القياس على أداة الشريط المتري من صفرها عند سطح الطاولة إلى أعلى حتى <b>يلامس السطح السفلي للجسم (الثقل)</b>، فتظهر دائرة خضراء عند التلامس.',f:async H=>{await H.slide('pR1',H.box.__ans.h1(),'#gS1 path[fill="#F7931E"]')}},
+ {st:'gS1',c:'<b>الخطوة 5: قراءة الارتفاع الأول.</b> اقرأ الارتفاع <b dir="ltr">h₁</b> من تكبير الشريط المتري: الأرقام بالسنتيمتر وكل قسم صغير <b dir="ltr">0.1 cm</b>، ثم اقسم القراءة على <b dir="ltr">100</b> لتصبح بوحدة <b dir="ltr">m</b>.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>',rec:{in:'hIn1',ck:'hCk1',fb:'hFb1',name:'الارتفاع الأول h₁',unit:'m',val:H=>H.box.__ans.hIn1()}},
+ {st:'gS2',c:'<b>الخطوة 6: المحاولة الثانية، رفع الجسم (الثقل) أعلى.</b> يعاد الجسم نفسه إلى سطح الطاولة، ثم ترفع اليد ذراع الحامل المعملي إلى <b>ارتفاع أعلى</b> من المحاولة الأولى، ويثبت الماسك.',sl:[['gR2','max','#gS2 image[href*="26-cylinder"]']]},
+ {st:'gS2',c:'<b>الخطوة 7: قياس الارتفاع الثاني.</b> يتحرك مؤشر القياس على أداة الشريط المتري من الصفر عند سطح الطاولة حتى <b>يلامس السطح السفلي للجسم (الثقل)</b> في موضعه الجديد.',f:async H=>{await H.slide('pR2',H.box.__ans.h2(),'#gS2 path[fill="#F7931E"]')}},
+ {st:'gS2',c:'<b>الخطوة 8: قراءة الارتفاع الثاني.</b> اقرأ الارتفاع <b dir="ltr">h₂</b> من تكبير الشريط المتري بالسنتيمتر، ثم اقسمه على <b dir="ltr">100</b> ليصبح بوحدة <b dir="ltr">m</b>.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>',rec:{in:'hIn2',ck:'hCk2',fb:'hFb2',name:'الارتفاع الثاني h₂',unit:'m',val:H=>H.box.__ans.hIn2()}},
+ {st:'gS2',c:'✅ <b>اكتملت القراءات.</b> افتح بطاقة <b>الحسابات</b>: حول الكتلة إلى الكيلوجرام، ثم احسب طاقة الوضع <b dir="ltr">PE = m·g·h</b> عند الارتفاع الأول ثم الثاني، وقارن بينهما.',f:async H=>{await H.psleep(600)}}]});
+WCFG['1-8']={PL:[[],['image[href*="26-cylinder"]','path[fill="#F7931E"]'],['image[href*="26-cylinder"]','path[fill="#F7931E"]']]};
+
+}catch(e){console.error("cfg cfg_1-8.js",e)}
+try{
+LXD['1-9']={aim:'الهدف من التجربة التحقق من حفظ الطاقة الميكانيكية لجسم يسقط سقوطا حرا، بمقارنة طاقة وضعه عند الإفلات <span dir="ltr">PE = m·g·h</span> بطاقة حركته عند جهاز البوابة الضوئية <span dir="ltr">KE = ½·m·v²</span>.',
+ theory:'<p>الطاقة الميكانيكية لجسم هي مجموع طاقة وضعه وطاقة حركته <span dir="ltr">ME = PE + KE</span>. وعندما لا تؤثر على الجسم إلا قوة الجاذبية (بإهمال مقاومة الهواء) تبقى طاقته الميكانيكية ثابتة: ما يفقده من طاقة الوضع أثناء السقوط يكتسبه طاقة حركة.</p><p>في هذه التجربة يفلت الجسم من السكون <span dir="ltr">(KE = 0)</span> على ارتفاع <span dir="ltr">h</span> فوق شعاع البوابة الضوئية، ويعد الشعاع مستوى الإسناد <span dir="ltr">(PE = 0)</span>، فإذا كانت الطاقة محفوظة فإن <span dir="ltr">m·g·h = ½·m·v²</span>.</p>',
+ flow:['<b>قياس كتلة الجسم (الثقل) m</b> بجهاز الميزان الرقمي بالجرام.','<b>قياس الارتفاع h</b> من شعاع جهاز البوابة الضوئية إلى أسفل الجسم بأداة المسطرة المترية.','<b>فصل تيار المغناطيس الكهربائي</b> ليسقط الجسم من السكون، وقراءة سرعته <span dir="ltr">v</span> من عداد البوابة الضوئية.','<b>الحسابات:</b> طاقة الوضع <span dir="ltr">PE = m·g·h</span> وطاقة الحركة <span dir="ltr">KE = ½·m·v²</span>، ثم المقارنة بينهما.']};
+DIR['1-9']=DX({steps:[
+ {st:'bl',c:'<b>الخطوة 1: وضع الجسم (الثقل) على جهاز الميزان الرقمي.</b> يوضع الجسم ذو القرص الحديدي في وسط كفة الميزان الرقمي بعد تصفيره، وتثبت الأرقام على الشاشة بالجرام بدقة <b dir="ltr">1 g</b>.',f:async H=>{await H.hand('#bl image[href*="27-mass"]');await H.psleep(900);await H.hand('#bl text[font-family]');await H.psleep(900)}},
+ {st:'bl',c:'<b>الخطوة 2: قراءة كتلة الجسم (الثقل).</b> اقرأ الرقم الظاهر على شاشة الميزان الرقمي، وهو الكتلة <b dir="ltr">m</b> بالجرام.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>',rec:{in:'mIn',ck:'mCk',name:'كتلة الجسم m',unit:'g',val:H=>H.box.__ans.mIn()}},
+ {st:'pS',c:'<b>الخطوة 3: تعليق الجسم وقياس ارتفاعه.</b> يلتصق القرص الحديدي أعلى الجسم بالمغناطيس الكهربائي في طرف ذراع الحامل، وصفر المسطرة المترية عند شعاع البوابة الضوئية. يتحرك المؤشر البرتقالي على المسطرة من الصفر إلى أعلى حتى <b>يلامس السطح السفلي للجسم (الثقل)</b>.',f:async H=>{await H.slide('pR',H.box.__ans.h(),'#pS path[fill="#F7931E"]')}},
+ {st:'pS',c:'<b>الخطوة 4: قراءة الارتفاع.</b> اقرأ الارتفاع <b dir="ltr">h</b> من تكبير المسطرة المترية: الأرقام الكبيرة بالسنتيمتر، وبين كل رقمين 10 أقسام صغيرة كل قسم <b dir="ltr">0.1 cm</b>.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>',rec:{in:'hIn',ck:'hCk',name:'الارتفاع h',unit:'cm',val:H=>H.box.__ans.hIn()}},
+ {st:'gS',c:'<b>الخطوة 5: إفلات الجسم (الثقل).</b> تضغط اليد <b>مفتاح التيار</b> فيفصل تيار المغناطيس الكهربائي، فيسقط الجسم من السكون <b dir="ltr">(Vi = 0)</b> دون دفع، ويعبر شعاع البوابة الضوئية، ثم يستقر على وسادة الاستقبال.',sl:[['gR','max','#gS rect[width="34"][height="12"]']]},
+ {st:'gS',c:'<b>الخطوة 6: قراءة السرعة.</b> اقرأ سرعة الجسم <b dir="ltr">v</b> لحظة عبوره شعاع البوابة الضوئية من الشاشة المكبرة لعداد البوابة، بوحدة <b dir="ltr">m/s</b>.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>',rec:{in:'vIn',ck:'vCk',name:'السرعة v',unit:'m/s',val:H=>H.box.__ans.vIn()}},
+ {st:'gS',c:'✅ <b>اكتملت القراءات.</b> افتح بطاقة <b>الحسابات</b>: حول الكتلة إلى الكيلوجرام والارتفاع إلى المتر، ثم احسب طاقة الوضع <b dir="ltr">PE = m·g·h</b> وطاقة الحركة <b dir="ltr">KE = ½·m·v²</b>، وقارن بينهما.',f:async H=>{await H.psleep(600)}}]});
+WCFG['1-9']={PL:[[],['path[fill="#F7931E"]'],['rect[width="34"][height="12"]']]};
+
+}catch(e){console.error("cfg cfg_1-9.js",e)}
+try{
+LXD['2-2']={aim:'الهدف من التجربة قياس درجة انصهار الجليد ودرجة غليان الماء بأداة الميزان الحراري الرقمي، ثم تحويل القراءتين من المقياس السلسيوسي إلى مقياس كلفن والمقياس الفهرنهايتي ومقارنتهما بالقيم المعيارية.',
+ theory:'<p>درجة الحرارة مقياس لمتوسط الطاقة الحركية لجزيئات المادة. والمقياس السلسيوسي مبني على نقطتين ثابتتين: نقطة انصهار الجليد <span dir="ltr">0 °C</span> ونقطة غليان الماء <span dir="ltr">100 °C</span> عند الضغط الجوي المعياري، وتبقى درجة حرارة خليط الماء والجليد ثابتة ما دام فيه جليد، وتبقى درجة حرارة الماء المغلي ثابتة ما دام يغلي.</p><p>ومقياس كلفن مقياس مطلق يبدأ من الصفر المطلق، والقسم فيه يساوي القسم السلسيوسي، فيحول بالقانون <span dir="ltr">K = C + 273</span>. وفي المقياس الفهرنهايتي ينصهر الجليد عند <span dir="ltr">32 °F</span> ويغلي الماء عند <span dir="ltr">212 °F</span>، فيحول بالقانون <span dir="ltr">F = 1.8·C + 32</span>.</p>',
+ flow:['<b>تجهيز الأدوات:</b> كوب فيه خليط من الماء والجليد، وكوب فيه ماء يغلي، ومجس أداة الميزان الحراري الرقمي متصل بشاشته.','<b>قياس <span dir="ltr">C₁</span>:</b> إنزال المجس في خليط الماء والجليد وقراءة درجة الحرارة بعد ثباتها.','<b>قياس <span dir="ltr">C₂</span>:</b> نقل المجس إلى الماء المغلي وقراءة درجة الحرارة بعد ثباتها.','<b>الحسابات:</b> التحويل إلى مقياس كلفن <span dir="ltr">K = C + 273</span> وإلى المقياس الفهرنهايتي <span dir="ltr">F = 1.8·C + 32</span>.']};
+(()=>{const SL=(id,hand)=>async H=>{const SW=H.q('dmSW'),S=H.q('dmS'),r=H.q(id),fire=()=>{r.dispatchEvent(new Event('input',{bubbles:true}));r.dispatchEvent(new Event('change',{bubbles:true}))};const from=+r.value,to=+r.max,sp=+(r.step||1)||1,dur=Math.min(4500,1400+Math.abs(to-from)/((+r.max-+r.min)||1)*3000);await H.hand(hand);const h=hhEl(SW),t0=performance.now();let e=0;while(e<1){await sleep(30);e=Math.min(1,(performance.now()-t0)/dur);r.value=Math.round((from+(to-from)*e)/sp)*sp;fire();await new Promise(z=>requestAnimationFrame(z));await sleep(25);const [hx,hy]=hhXY(SW,hand,S);h.style.left=(hx-GX*HW)+'px';h.style.top=(hy-GY*HH)+'px'}r.value=to;fire();await H.psleep(500)};const P='image[href*="29-temperature-probe"]';
+DIR['2-2']=DX({steps:[
+ {st:'aS',c:'<b>الخطوة 1: تجهيز الأدوات.</b> على الطاولة كوب فيه <b>ماء يغلي</b>، وكوب فيه <b>خليط من الماء والجليد</b>. ومجس <b>أداة الميزان الحراري الرقمي</b> معلق فوق الخليط ومتصل بسلك بشاشته، والشاشة لا تعرض قراءة بعد.',f:async H=>{await H.hand(P);await H.psleep(900)}},
+ {st:'aS',c:'<b>الخطوة 2: إنزال المجس في خليط الماء والجليد.</b> تمسك اليد المجس وتنزله رأسيا حتى يغمر طرفه المعدني في الخليط بين قطع الجليد، فتستقر القراءة على درجة انصهار الجليد.',f:SL('aR',P)},
+ {st:'aS',c:'<b>الخطوة 3: قراءة درجة حرارة الخليط.</b> اقرأ درجة الحرارة <b dir="ltr">C₁</b> من الشاشة المكبرة تحت المشهد، برقم عشري واحد بوحدة <b dir="ltr">°C</b>.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>',rec:{in:'aIn',ck:'aInCk',name:'درجة حرارة خليط الماء والجليد C₁',unit:'°C',val:H=>H.box.__ans.aIn()}},
+ {st:'bS',c:'<b>الخطوة 4: نقل المجس إلى الماء المغلي.</b> ترفع اليد المجس من الخليط، وتنقله في الهواء فوق الكوب الآخر، ثم تنزله في <b>الماء المغلي</b> وتنتظر حتى تثبت القراءة على الشاشة.',f:SL('bR',P)},
+ {st:'bS',c:'<b>الخطوة 5: قراءة درجة حرارة الماء المغلي.</b> اقرأ درجة الحرارة <b dir="ltr">C₂</b> من الشاشة المكبرة برقم عشري واحد. لاحظ أنها أقل قليلا من <b dir="ltr">100 °C</b> لأن الضغط الجوي في المعمل أقل من المعياري.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>',rec:{in:'bIn',ck:'bInCk',name:'درجة حرارة الماء المغلي C₂',unit:'°C',val:H=>H.box.__ans.bIn()}},
+ {st:'bS',c:'✅ <b>اكتملت القراءات.</b> افتح بطاقة <b>الحسابات</b>: حول القراءتين إلى مقياس كلفن <b dir="ltr">K = C + 273</b>، ثم إلى المقياس الفهرنهايتي <b dir="ltr">F = 1.8·C + 32</b>.',f:async H=>{await H.psleep(600)}}]})})();
+/* الموضع الأول يحسب قبل أن يستقر قص المشهد، والثاني بعد 700 ms فيثبت على الجزء الصحيح */
+(()=>{const P='image[href*="29-temperature-probe"]';WCFG['2-2']={PL:[[P,P],[P,P],[P,P]]}})();
+
+}catch(e){console.error("cfg cfg_2-2.js",e)}
+try{
+LXD['2-4']={aim:'الهدف من التجربة حساب الحرارة الكامنة لانصهار الجليد من قياس كتلتي الماء الدافئ والجليد بجهاز الميزان الرقمي، وقياس درجتي الحرارة الابتدائية والنهائية بأداة الميزان الحراري الرقمي قبل إضافة الجليد وبعد انصهاره كاملا.',
+ theory:'<p>الحرارة الكامنة للانصهار <span dir="ltr">H</span> هي كمية الحرارة اللازمة لصهر وحدة الكتل من المادة الصلبة عند درجة انصهارها دون تغير درجة حرارتها، فالحرارة اللازمة لصهر كتلة <span dir="ltr">m</span> هي <span dir="ltr">Q = m·H</span>، ووحدة <span dir="ltr">H</span> هي <span dir="ltr">J/kg</span>.</p><p>وعند إضافة جليد عند <span dir="ltr">0 °C</span> إلى ماء دافئ في مسعر حراري معزول يفقد الماء الدافئ حرارة <span dir="ltr">Q₁ = m_w·c·(Ti − Tf)</span>، يستخدم جزء منها لصهر الجليد <span dir="ltr">m_ice·H</span>، والباقي يرفع درجة حرارة ماء الجليد المنصهر من الصفر إلى <span dir="ltr">Tf</span> وهو <span dir="ltr">Q₂ = m_ice·c·Tf</span>، فتكون <span dir="ltr">H = (Q₁ − Q₂) / m_ice</span>.</p>',
+ flow:['<b>قياس الكتلتين:</b> قراءة كتلة الماء الدافئ <span dir="ltr">m_w</span> وكتلة الجليد <span dir="ltr">m_ice</span> من جهاز الميزان الرقمي المصفر لكتلة الكوب.','<b>قياس <span dir="ltr">Ti</span>:</b> إنزال مجس أداة الميزان الحراري الرقمي في الماء الدافئ داخل المسعر الحراري وقراءة درجة حرارته.','<b>قياس <span dir="ltr">Tf</span>:</b> إضافة الجليد إلى الماء الدافئ وتحريكه حتى ينصهر كاملا، ثم قراءة درجة الحرارة النهائية بعد ثباتها.','<b>الحسابات:</b> <span dir="ltr">Q₁</span> و <span dir="ltr">Q₂</span> ثم <span dir="ltr">H = (Q₁ − Q₂) / m_ice</span> ومقارنتها بالقيمة المرجعية.']};
+(()=>{const SL=(id,hand)=>async H=>{const SW=H.q('dmSW'),S=H.q('dmS'),r=H.q(id),fire=()=>{r.dispatchEvent(new Event('input',{bubbles:true}));r.dispatchEvent(new Event('change',{bubbles:true}))};const from=+r.value,to=+r.max,sp=+(r.step||1)||1,dur=Math.min(4500,1400+Math.abs(to-from)/((+r.max-+r.min)||1)*3000);await H.hand(hand);const h=hhEl(SW),t0=performance.now();let e=0;while(e<1){await sleep(30);e=Math.min(1,(performance.now()-t0)/dur);r.value=Math.round((from+(to-from)*e)/sp)*sp;fire();await new Promise(z=>requestAnimationFrame(z));await sleep(25);const [hx,hy]=hhXY(SW,hand,S);h.style.left=(hx-GX*HW)+'px';h.style.top=(hy-GY*HH)+'px'}r.value=to;fire();await H.psleep(500)};const P='image[href*="29-temperature-probe"]',D='text[font-size="22"]',G='image[href*="beaker"]';
+DIR['2-4']=DX({steps:[
+ {st:'b1',c:'<b>الخطوة 1: قياس كتلة الماء الدافئ.</b> الكوب الذي فيه الماء الدافئ موضوع على كفة <b>جهاز الميزان الرقمي</b>، والميزان مصفر لكتلة الكوب الفارغ، فالشاشة تعرض كتلة الماء وحده <b dir="ltr">m_w</b> بالجرام.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>',f:async H=>{await H.hand(D);await H.psleep(1200)},rec:{in:'wIn',ck:'wInCk',name:'كتلة الماء الدافئ m_w',unit:'g',val:H=>H.box.__ans.wIn()}},
+ {st:'b2',c:'<b>الخطوة 2: قياس كتلة الجليد.</b> كوب قطع الجليد على كفة جهاز الميزان الرقمي المصفر لكتلة الكوب، والشاشة تعرض كتلة الجليد وحده <b dir="ltr">m_ice</b> بالجرام.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>',f:async H=>{await H.hand(D);await H.psleep(1200)},rec:{in:'iIn',ck:'iInCk',name:'كتلة الجليد m_ice',unit:'g',val:H=>H.box.__ans.iIn()}},
+ {st:'aS',c:'<b>الخطوة 3: إنزال المجس في الماء الدافئ.</b> الماء الدافئ صب في <b>المسعر الحراري</b>. تمسك اليد مجس <b>أداة الميزان الحراري الرقمي</b> وتنزله من فتحة الغطاء حتى يغمر طرفه في الماء، فتظهر درجة حرارته على الشاشة.',f:SL('aR',P)},
+ {st:'aS',c:'<b>الخطوة 4: قراءة درجة الحرارة الابتدائية.</b> اقرأ درجة حرارة الماء الدافئ <b dir="ltr">Ti</b> من الشاشة المكبرة، برقم عشري واحد بوحدة <b dir="ltr">°C</b>.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>',rec:{in:'aIn',ck:'aInCk',name:'درجة حرارة الماء الدافئ Ti',unit:'°C',val:H=>H.box.__ans.aIn()}},
+ {st:'dS',c:'<b>الخطوة 5: إضافة الجليد والتحريك.</b> تمسك اليد كوب الجليد وتفرغ قطع الجليد في الماء الدافئ داخل المسعر الحراري، ثم يحرك الخليط حتى <b>ينصهر الجليد كاملا</b>. لاحظ انخفاض درجة الحرارة على الشاشة حتى تثبت.',f:SL('dR',G)},
+ {st:'dS',c:'<b>الخطوة 6: قراءة درجة الحرارة النهائية.</b> بعد انصهار الجليد كاملا وثبات القراءة، اقرأ درجة الحرارة النهائية <b dir="ltr">Tf</b> من الشاشة المكبرة برقم عشري واحد.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>',rec:{in:'fIn',ck:'fInCk',name:'درجة الحرارة النهائية Tf',unit:'°C',val:H=>H.box.__ans.fIn()}},
+ {st:'dS',c:'✅ <b>اكتملت القراءات.</b> افتح بطاقة <b>الحسابات</b>: حول الكتلتين إلى الكيلوجرام، ثم احسب <b dir="ltr">Q₁ = m_w·c·(Ti − Tf)</b> و <b dir="ltr">Q₂ = m_ice·c·Tf</b>، ثم <b dir="ltr">H = (Q₁ − Q₂) / m_ice</b>.',f:async H=>{await H.psleep(600)}}]});
+WCFG['2-4']={PL:[[P,P],[P,P],[G,G,'image[href*="74-calorimeter"]']]}})();
+
+}catch(e){console.error("cfg cfg_2-4.js",e)}
+try{
+LXD['2-5']={aim:'الهدف من التجربة التحقق من الاتزان الحراري بخلط ماء ساخن بماء بارد في المسعر الحراري، وقياس درجة حرارة الخليط مع الزمن حتى تثبت، ثم مقارنة درجة حرارة الاتزان المقاسة بالمحسوبة من القانون.',
+ theory:'<p>عند تلامس جسمين مختلفين في درجة الحرارة تنتقل الحرارة من الجسم الساخن إلى الجسم البارد حتى تتساوى درجتا حرارتهما، وهذه الحالة هي <b>الاتزان الحراري</b>. وفي مسعر حراري معزول تكون الحرارة التي يفقدها الماء الساخن مساوية للحرارة التي يكتسبها الماء البارد <span dir="ltr">Q₁ + Q₂ = 0</span>، حيث <span dir="ltr">Q = m·c·ΔT</span>.</p><p>ولأن المادة واحدة (ماء) تختصر الحرارة النوعية، فتكون درجة حرارة الاتزان <span dir="ltr">T_final = (m₁·T₁ + m₂·T₂) / (m₁ + m₂)</span>، وهي دائما بين درجتي الحرارة الابتدائيتين، وأقرب إلى درجة حرارة الكتلة الأكبر.</p>',
+ flow:['<b>قياس الكتلتين:</b> كتلة الماء الساخن <span dir="ltr">m₁</span> وكتلة الماء البارد <span dir="ltr">m₂</span> بجهاز الميزان الرقمي المصفر لكتلة الوعاء.','<b>قياس درجتي الحرارة الابتدائيتين:</b> <span dir="ltr">T₂</span> للماء البارد في المسعر الحراري، ثم <span dir="ltr">T₁</span> للماء الساخن في الوعاء الزجاجي، بمجس أداة الميزان الحراري الرقمي.','<b>الخلط:</b> إعادة المجس إلى المسعر الحراري، وسكب الماء الساخن كاملا فيه، وتشغيل أداة ساعة الإيقاف من <span dir="ltr">t = 0 s</span>.','<b>قراءة درجة حرارة الخليط</b> عند <span dir="ltr">t = 10 s</span> و <span dir="ltr">30 s</span> و <span dir="ltr">60 s</span>، والأخيرة هي درجة حرارة الاتزان.','<b>الحسابات:</b> <span dir="ltr">T_final</span> من القانون ومقارنتها بالمقاسة.']};
+(()=>{const SL=(id,hand)=>async H=>{const SW=H.q('dmSW'),S=H.q('dmS'),r=H.q(id),fire=()=>{r.dispatchEvent(new Event('input',{bubbles:true}));r.dispatchEvent(new Event('change',{bubbles:true}))};const from=+r.value,to=+r.max,sp=+(r.step||1)||1,dur=Math.min(4500,1400+Math.abs(to-from)/((+r.max-+r.min)||1)*3000);await H.hand(hand);const h=hhEl(SW),t0=performance.now();let e=0;while(e<1){await sleep(30);e=Math.min(1,(performance.now()-t0)/dur);r.value=Math.round((from+(to-from)*e)/sp)*sp;fire();await new Promise(z=>requestAnimationFrame(z));await sleep(25);const [hx,hy]=hhXY(SW,hand,S);h.style.left=(hx-GX*HW)+'px';h.style.top=(hy-GY*HH)+'px'}r.value=to;fire();await H.psleep(500)};const P='image[href*="29-temperature-probe"]',D='text[font-size="22"]',G='image[href*="31-glass-beaker"]',W='image[href*="06-stopwatch"]';
+const rd=(n,id,c)=>({st:'dS'+n,c,f:SL('tR'+n,W),rec:{in:id,ck:id+'Ck',name:'درجة حرارة الخليط عند t = '+[10,30,60][n]+' s',unit:'°C',val:H=>H.box.__ans[id]()}});
+DIR['2-5']=DX({steps:[
+ {st:'b1',c:'<b>الخطوة 1: قياس كتلة الماء الساخن.</b> الوعاء الزجاجي الذي فيه الماء الساخن على كفة <b>جهاز الميزان الرقمي</b> المصفر لكتلة الوعاء الفارغ، فالشاشة تعرض كتلة الماء الساخن وحده <b dir="ltr">m₁</b> بالجرام.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>',f:async H=>{await H.hand(D);await H.psleep(1200)},rec:{in:'m1In',ck:'m1Ck',name:'كتلة الماء الساخن m₁',unit:'g',val:H=>H.box.__ans.m1In()}},
+ {st:'b2',c:'<b>الخطوة 2: قياس كتلة الماء البارد.</b> <b>المسعر الحراري</b> الذي فيه الماء البارد على كفة جهاز الميزان الرقمي المصفر لكتلة المسعر الفارغ، والشاشة تعرض كتلة الماء البارد <b dir="ltr">m₂</b> بالجرام.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>',f:async H=>{await H.hand(D);await H.psleep(1200)},rec:{in:'m2In',ck:'m2Ck',name:'كتلة الماء البارد m₂',unit:'g',val:H=>H.box.__ans.m2In()}},
+ {st:'aS',c:'<b>الخطوة 3: إنزال المجس في الماء البارد.</b> تمسك اليد مجس <b>أداة الميزان الحراري الرقمي</b> وتنزله من فتحة غطاء المسعر الحراري حتى يغمر طرفه في الماء البارد، ثم تقرأ درجة حرارته بعد ثباتها.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>',f:SL('aR',P),rec:{in:'aIn',ck:'aCk',name:'درجة حرارة الماء البارد T₂',unit:'°C',val:H=>H.box.__ans.aIn()}},
+ {st:'bS',c:'<b>الخطوة 4: نقل المجس إلى الماء الساخن.</b> ترفع اليد المجس من المسعر الحراري، وتنقله إلى <b>الوعاء الزجاجي</b> وتنزله في الماء الساخن، وتنتظر حتى تثبت القراءة، ثم اقرأ <b dir="ltr">T₁</b>.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>',f:SL('bR',P),rec:{in:'bIn',ck:'bCk',name:'درجة حرارة الماء الساخن T₁',unit:'°C',val:H=>H.box.__ans.bIn()}},
+ {st:'cS',c:'<b>الخطوة 5: إعادة المجس إلى المسعر الحراري.</b> تنقل اليد المجس من الماء الساخن وتعيده إلى الماء البارد داخل المسعر الحراري، ليقيس درجة حرارة الخليط بعد السكب.',f:SL('cR',P)},
+ {st:'cS',c:'<b>الخطوة 6: سكب الماء الساخن.</b> ترفع اليد غطاء المسعر الحراري وتسكب الماء الساخن من الوعاء الزجاجي <b>كاملا</b> في الماء البارد، وعند انتهاء السكب تبدأ أداة ساعة الإيقاف من <b dir="ltr">t = 0 s</b>.',f:SL('pR',G)},
+ rd(0,'k1','<b>الخطوة 7: درجة حرارة الخليط عند 10 s.</b> تشغل اليد أداة <b>ساعة الإيقاف</b> فتتقدم من <b dir="ltr">t = 0 s</b> حتى <b dir="ltr">t = 10 s</b>، والخليط يحرك وترتفع درجة حرارته. اقرأ درجة الحرارة من الشاشة المكبرة.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>'),
+ rd(1,'k2','<b>الخطوة 8: درجة حرارة الخليط عند 30 s.</b> تستمر أداة ساعة الإيقاف من <b dir="ltr">t = 10 s</b> حتى <b dir="ltr">t = 30 s</b>، ويقترب الخليط من الاتزان. اقرأ درجة الحرارة.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>'),
+ rd(2,'k3','<b>الخطوة 9: درجة حرارة الاتزان عند 60 s.</b> تستمر أداة ساعة الإيقاف حتى <b dir="ltr">t = 60 s</b>، فتثبت القراءة عند <b>درجة حرارة الاتزان</b> <b dir="ltr">T_final</b>. اقرأها من الشاشة المكبرة.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>'),
+ {st:'dS2',c:'✅ <b>اكتملت القراءات.</b> افتح بطاقة <b>الحسابات</b>: احسب درجة حرارة الاتزان من القانون <b dir="ltr">T_final = (m₁·T₁ + m₂·T₂) / (m₁ + m₂)</b>، ثم قارنها بالقيمة المقاسة.',f:async H=>{await H.psleep(600)}}]});
+WCFG['2-5']={PL:[[P,P],[P,P],[P,P],[P,P,G],[W,W],[W,W],[W,W]]}})();
+
+}catch(e){console.error("cfg cfg_2-5.js",e)}
+try{
+LXD['3-1']={aim:'الهدف من التجربة التحقق من قانون كولوم بقياس قوة التنافر بين كرتين مشحونتين بشحنتين متساويتين عند ثلاث مسافات بجهاز الميزان الرقمي وأداة المسطرة المليمترية، ثم حساب شحنة كل كرة.'};
+{const ARM='image[href*="38-sphere"]+text+text',
+  flash=i=>setTimeout(()=>{const r=document.querySelectorAll('.card.lab #logB tr')[2-i];if(!r)return;const c=r.lastElementChild;c.style.cssText='background:#F7931E;color:#fff;font-weight:900;animation:dmBl .45s 3';setTimeout(()=>{c.style.cssText='color:#15803D;font-weight:900'},1800)},1150),
+  rd=(i,r,n)=>({st:'sS',c:`<b>الخطوة ${n}: القراءة عند <span dir="ltr">r${'₁₂₃'[i]} = ${r}.0 cm</span>.</b> اقرأ المسافة من تكبير المسطرة: الخط البرتقالي على الرقم <b dir="ltr">${r}</b> تماما، فالمسافة <b dir="ltr">${r}.0 cm</b>. ثم اقرأ شاشة الميزان الرقمي كما هي بثلاثة أرقام عشرية: هي الكتلة الإضافية <b dir="ltr">m${'₁₂₃'[i]}</b> الناتجة عن قوة التنافر.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>`,
+    f:async H=>{await H.hand('#sM');await H.psleep(1300);await H.hand('#sZ');await H.psleep(1300)},
+    rec:{in:'mIn',ck:'recB',fb:'recFb',name:`قراءة الميزان m${'₁₂₃'[i]} عند r${'₁₂₃'[i]} = ${r}.0 cm`,unit:'g',val:H=>{H.q('dIn').value=H.box.__ans.dIn(i);flash(i);return H.box.__ans.mIn(i)}}});
+WCFG['3-1']={PL:[[ARM],[ARM],[ARM,'svg:nth-of-type(2)','svg:nth-of-type(3)'],[ARM,'svg:nth-of-type(3)'],[ARM,'svg:nth-of-type(3)']]};
+DIR['3-1']=DX({steps:[
+ {st:'sS',c:'<b>الخطوة 1: تجهيز الأجهزة.</b> الكرة السفلية المشحونة مثبتة بساق عازلة على كفة <b>جهاز الميزان الرقمي</b> الذي صفر وهي عليه، والكرة العلوية المشحونة بالشحنة نفسها معلقة فوقها في <b>أداة الحامل بساق عازلة</b>، و<b>أداة المسطرة المليمترية</b> صفرها عند مركز الكرة السفلية. المسافة الآن <b dir="ltr">r = 12.0 cm</b> وقراءة الميزان صغيرة.',f:async H=>{await H.hand(ARM);await H.psleep(1200)}},
+ {st:'sS',c:'<b>الخطوة 2: إنزال الكرة العلوية إلى <span dir="ltr">r = 8.0 cm</span>.</b> تمسك اليد الكرة العلوية من ذراعها وتنزلها ببطء مع ماسك الحامل، فتزداد قوة التنافر وتدفع الكرة السفلية إلى أسفل فتزداد قراءة الميزان، حتى يقع الخط البرتقالي في تكبير المسطرة على الرقم <b dir="ltr">8</b>.',sl:[['sR',40,ARM]]},
+ rd(2,8,3),
+ {st:'sS',c:'<b>الخطوة 4: إنزال الكرة العلوية إلى <span dir="ltr">r = 6.0 cm</span>.</b> تنزل اليد الكرة العلوية مرة أخرى حتى يقع الخط البرتقالي في تكبير المسطرة على الرقم <b dir="ltr">6</b>. لاحظ أن قراءة الميزان زادت لأن المسافة قلت.',sl:[['sR',60,ARM]]},
+ rd(1,6,5),
+ {st:'sS',c:'<b>الخطوة 6: إنزال الكرة العلوية إلى <span dir="ltr">r = 4.0 cm</span>.</b> تنزل اليد الكرة العلوية بحذر حتى الرقم <b dir="ltr">4</b>، دون أن تلمس الكرة السفلية حتى لا تنتقل الشحنة بينهما. المسافة الآن نصف قيمتها عند <b dir="ltr">8 cm</b>.',sl:[['sR',80,ARM]]},
+ rd(0,4,7),
+ {st:'clC',c:'<b>الخطوة 8: رسم القوة مع مقلوب مربع المسافة.</b> ظهرت نقاط القراءات الثلاث على الرسم البياني للقوة <b dir="ltr">F = m·g</b> مع <b dir="ltr">1/r²</b>. يضغط زر «ارسم الخط المستقيم»، فيمر الخط بالنقاط الثلاث وبنقطة الأصل: القوة الكهربائية تتناسب عكسيا مع مربع المسافة.',f:async H=>{await H.hand([.5,.45]);await H.psleep(500);ck(H.q('gB'));await H.psleep(1800)}},
+ {st:'clC',c:'✅ <b>اكتملت القراءات.</b> افتح بطاقة <b>الحسابات</b>: احسب النسبة <b dir="ltr">F₁ / F₃ = m₁ / m₃</b> وقارنها بـ <b dir="ltr">(r₃ / r₁)² = 4</b>، ثم احسب شحنة كل كرة <b dir="ltr">q = r₁·√(m₁·g / k)</b> بوحدة <b dir="ltr">nC</b>.',f:async H=>{await H.psleep(600)}}]});
+}
+
+}catch(e){console.error("cfg cfg_3-1.js",e)}
+try{
+LXD['3-3']={aim:'الهدف من التجربة دراسة تغير شدة المجال الكهربائي حول كرة مشحونة مع المسافة منها بجهاز مقياس شدة المجال الكهربائي على مسار مدرج، والتحقق من أنها تتناسب عكسيا مع مربع المسافة، ثم حساب شحنة الكرة.'};
+{const MET='image[href*="41-field-meter"]',
+  flash=i=>setTimeout(()=>{const r=document.querySelectorAll('.card.lab #logB tr')[2-i];if(!r)return;const c=r.lastElementChild;c.style.cssText='background:#F7931E;color:#fff;font-weight:900;animation:dmBl .45s 3';setTimeout(()=>{c.style.cssText='color:#15803D;font-weight:900'},1800)},1150),
+  rd=(i,r,n)=>({st:'sS',c:`<b>الخطوة ${n}: القراءة عند <span dir="ltr">r${'₁₂₃'[i]} = ${r}.0 cm</span>.</b> اقرأ المسافة من تكبير المسار المدرج: الخط البرتقالي على الرقم <b dir="ltr">${r}</b> تماما، فالمسافة بين مركز الكرة وطرف المجس <b dir="ltr">${r}.0 cm</b>. ثم اقرأ شدة المجال <b dir="ltr">E${'₁₂₃'[i]}</b> من شاشة جهاز مقياس المجال كما هي بوحدة <b dir="ltr">N/C</b>.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>`,
+    f:async H=>{await H.hand('#sM');await H.psleep(1300);await H.hand('#sZ');await H.psleep(1300)},
+    rec:{in:'mIn',ck:'recB',fb:'recFb',name:`شدة المجال E${'₁₂₃'[i]} عند r${'₁₂₃'[i]} = ${r}.0 cm`,unit:'N/C',val:H=>{H.q('dIn').value=H.box.__ans.dIn(i);flash(i);return H.box.__ans.mIn(i)}}});
+WCFG['3-3']={PL:[[MET],[MET],[MET,'svg:nth-of-type(2)','svg:nth-of-type(3)'],[MET,'svg:nth-of-type(3)'],[MET,'svg:nth-of-type(3)']]};
+DIR['3-3']=DX({steps:[
+ {st:'sS',c:'<b>الخطوة 1: تجهيز الأجهزة.</b> الكرة المعدنية شحنت بالتوصيل من <b>جهاز مصدر الجهد العالي</b>، وهي على <b>أداة الحامل بساق عازلة</b> فتعمل عمل شحنة نقطية. و<b>جهاز مقياس شدة المجال الكهربائي</b> على حامل ينزلق على <b>أداة المسار المدرج</b> الذي صفره تحت مركز الكرة. المسافة الآن <b dir="ltr">r = 22.0 cm</b> والمجال ضعيف.',f:async H=>{await H.hand(MET);await H.psleep(1200)}},
+ {st:'sS',c:'<b>الخطوة 2: تقريب المقياس إلى <span dir="ltr">r = 20.0 cm</span>.</b> تمسك اليد جهاز مقياس المجال وتحركه على المسار المدرج نحو الكرة ببطء، حتى يقع الخط البرتقالي في تكبير المسار على الرقم <b dir="ltr">20</b>. لاحظ زيادة قراءة الشاشة كلما اقترب المجس.',sl:[['sR',10,MET]]},
+ rd(2,20,3),
+ {st:'sS',c:'<b>الخطوة 4: تقريب المقياس إلى <span dir="ltr">r = 15.0 cm</span>.</b> تحرك اليد المقياس على المسار نحو الكرة حتى يقع الخط البرتقالي في تكبير المسار على الرقم <b dir="ltr">15</b>، فتزداد شدة المجال.',sl:[['sR',35,MET]]},
+ rd(1,15,5),
+ {st:'sS',c:'<b>الخطوة 6: تقريب المقياس إلى <span dir="ltr">r = 10.0 cm</span>.</b> تحرك اليد المقياس بحذر حتى الرقم <b dir="ltr">10</b>، دون أن يلمس المجس الكرة حتى لا تنتقل الشحنة إليه. المسافة الآن نصف قيمتها عند <b dir="ltr">20 cm</b>.',sl:[['sR',60,MET]]},
+ rd(0,10,7),
+ {st:'efC',c:'<b>الخطوة 8: رسم شدة المجال مع مقلوب مربع المسافة.</b> ظهرت نقاط القراءات الثلاث على الرسم البياني لشدة المجال <b dir="ltr">E</b> مع <b dir="ltr">1/r²</b>. يضغط زر «ارسم الخط المستقيم»، فيمر الخط بالنقاط الثلاث وبنقطة الأصل: شدة المجال تتناسب عكسيا مع مربع المسافة.',f:async H=>{await H.hand([.5,.45]);await H.psleep(500);ck(H.q('gB'));await H.psleep(1800)}},
+ {st:'efC',c:'✅ <b>اكتملت القراءات.</b> افتح بطاقة <b>الحسابات</b>: احسب النسبة <b dir="ltr">E₁ / E₃</b> وقارنها بـ <b dir="ltr">(r₃ / r₁)² = 4</b>، ثم احسب شحنة الكرة <b dir="ltr">q = E₁·r₁² / k</b> بوحدة <b dir="ltr">nC</b>.',f:async H=>{await H.psleep(600)}}]});
+}
+
+}catch(e){console.error("cfg cfg_3-3.js",e)}
+try{
+/* 3-4 قياس فرق الجهد في مجال كهربائي منتظم (pdLab) */
+const agCss=()=>{if(document.getElementById('agGcss'))return;const st=document.createElement('style');st.id='agGcss';st.textContent='.agGx #dmS .amLog,.agGx #dmV .amLog,.agGx #dmS .pdAns,.agGx #dmV .pdAns,.agGx #dmS .btns,.agGx #dmV .btns,.agGx #dmS .fb2,.agGx #dmV .fb2,.agGx #dmV p,.agGx #dmV .row,.agGx #dmV .msg,.agGx #dmV .wsc>h4{display:none!important}';document.head.appendChild(st)};
+const agAt=(svg,x,y)=>{const p=svg.createSVGPoint();p.x=x;p.y=y;const q=p.matrixTransform(svg.getScreenCTM()),S=document.getElementById('dmSW'),b=S.getBoundingClientRect();return [(q.x-b.left)/S.clientWidth,(q.y-b.top)/S.clientHeight]};
+const agFlash=(H,i)=>setTimeout(()=>{const tr=H.box.querySelectorAll('#logB tr')[i];if(!tr)return;const td=[...tr.querySelectorAll('td')];td.forEach(c=>c.style.cssText='background:#F7931E;color:#fff;font-weight:900;animation:dmBl .45s 3');setTimeout(()=>td.forEach(c=>c.style.cssText=''),1800)},1250);
+LXD['3-4']={aim:'الهدف من التجربة قياس الجهد عند نقاط مختلفة بين قطبين متوازيين على ورقة موصلة بجهاز الملتيميتر الرقمي، وحساب شدة المجال الكهربائي المنتظم من العلاقة <span dir="ltr">E = ΔV / d</span>، وتحديد خط تساوي الجهد.'};
+{const CARD=()=>{const l=document.getElementById('ptLead');return l&&l.closest('.wsc').parentElement};
+ const SV=H=>H.q('dmS').querySelector('svg');
+ const pt=(H,k)=>H.q('dmS').querySelector('.pt[data-p="'+k+'"] circle:last-child');
+ const P=[['2-1','V₁','d₁ = 2 cm','على الخط الأوسط'],['4-1','V₂','d₂ = 4 cm','على الخط الأوسط'],['6-1','V₃','d₃ = 6 cm','على الخط الأوسط'],['4-0','V₄','4 cm','فوق الخط الأوسط'],['4-2','V₅','4 cm','تحت الخط الأوسط']];
+ const TXT=[
+  'يلمس المجس الأحمر الخط الأوسط عند أول نقطة، بعدها عن القطب السالب <b dir="ltr">d₁ = 2 cm</b>. يظهر بعد النقطة على أداة المسطرة المليمترية (المؤشر البرتقالي في التكبير)، وجهدها على شاشة جهاز الملتيميتر.',
+  'ينتقل المجس الأحمر على الخط الأوسط إلى النقطة <b dir="ltr">d₂ = 4 cm</b>، أبعد عن القطب السالب، فيزيد الجهد.',
+  'ينتقل المجس الأحمر إلى النقطة <b dir="ltr">d₃ = 6 cm</b> على الخط الأوسط. لاحظ أن الجهد يزيد بالمقدار نفسه كلما زادت المسافة <b dir="ltr">2 cm</b>.',
+  'يبدأ قياس خط تساوي الجهد: ينتقل المجس الأحمر إلى نقطة <b>فوق الخط الأوسط</b> على البعد نفسه <b dir="ltr">d = 4 cm</b> من القطب السالب، أي على خط مواز للقطبين.',
+  'ينتقل المجس الأحمر إلى نقطة <b>تحت الخط الأوسط</b> على البعد نفسه <b dir="ltr">d = 4 cm</b>. قارن قراءتها بقراءتي النقطتين السابقتين على هذا الخط.'];
+ const run=DX({steps:[
+  {st:CARD,c:'<b>الخطوة 1: ضبط جهد المصدر.</b> تدير اليد مقبض جهاز مصدر الجهد المستمر حتى يتوقف عند الجهد المضبوط، فيمر تيار صغير في الورقة الموصلة، وينشأ بين القطبين المتوازيين <b>مجال كهربائي منتظم</b> خطوطه من القطب الموجب إلى القطب السالب.',f:async H=>{await H.slide('nR','max',agAt(SV(H),211,12))}},
+  {st:'vF',c:'<b>الخطوة 2: إعداد جهاز الملتيميتر فولتميترا.</b> الجهد المتوقع حتى <b dir="ltr">12 V</b>، فيدار مفتاح الوضع إلى تدريج <b style="color:#DC2626" dir="ltr">V⎓</b> مدى <b dir="ltr">20 V</b>، ثم يوضع المجس الأحمر في المنفذ <b dir="ltr">V</b>. والمجس الأسود في المنفذ <b dir="ltr">COM</b> ومثبت على القطب السالب، فجهده صفر.',f:async H=>{await H.click(H.q('vF').querySelector('[data-k="mode"][data-v="v20"]'));await H.psleep(500);await H.click(H.q('vF').querySelector('[data-k="port"][data-v="v"]'))}},
+  ...P.map(([k,n,d,w],i)=>({st:CARD,c:`<b>الخطوة ${3+i}: الجهد ${n} ${w}.</b> ${TXT[i]}<br>👀 <b>اقرأ المسافة d من المسطرة والجهد ${n} من الشاشة، ثم اضغط «سجل القراءة».</b>`,
+    f:async H=>{await H.click(pt(H,k))},rec:{in:'vIn',ck:'recB',fb:'recFb',name:`الجهد ${n} (${d})`,unit:'V',val:H=>{H.q('dIn').value=H.box.__ans.dIn();agFlash(H,i);return H.box.__ans.vIn()}}})),
+  {st:'gS',c:'<b>الخطوة 8: رسم العلاقة بين الجهد والمسافة.</b> تظهر نقاط الخط الأوسط الثلاث على الرسم البياني، ثم يرسم الخط المستقيم الذي يمر بها وبنقطة الأصل: الجهد يتناسب طرديا مع المسافة، وميل الخط <b dir="ltr">ΔV / Δd</b> هو شدة المجال <b dir="ltr">E</b>.',f:async H=>{await H.click(H.q('gB'),'#gS');await H.psleep(1200)}},
+  {st:'gS',c:'✅ <b>اكتملت القراءات.</b> افتح بطاقة <b>الحسابات</b>: حول المسافة إلى المتر، ثم احسب <b dir="ltr">E₁ = V₁ / d₁</b> و <b dir="ltr">E₃ = V₃ / d₃</b>، وفرق الجهد <b dir="ltr">ΔV = V₃ − V₁</b>، ثم <b dir="ltr">E = ΔV / (d₃ − d₁)</b>.',f:async H=>{await H.psleep(600)}}]});
+ DIR['3-4']=function(){const b=document.querySelector('.card.lab .labBody');if(b)b.classList.add('agGx');agCss();run()}}
+WCFG['3-4']={PL:[[],[['k']],[['m']],[['p','2-1']],[['p','4-1']],[['p','6-1']],[['p','4-0']]],XY:{k:[211,12],m:[244,286]}};
+
+}catch(e){console.error("cfg cfg_3-4.js",e)}
+try{
+LXD['3-5']={aim:'الهدف من التجربة دراسة العلاقة بين سعة المكثف متوازي اللوحين والمسافة بين لوحيه، بقياس السعة بجهاز قياس السعة الرقمي عند ثلاث مسافات تقرأ من أداة المسار المدرج، ثم إيجاد سماحية الفراغ.'};
+{const PTR='svg path[fill="#F7931E"],svg path[fill="url(#lrpf7931e)"]',
+  flash=i=>setTimeout(()=>{const r=document.querySelectorAll('.card.lab #logB tr')[2-i];if(!r)return;const c=r.lastElementChild;c.style.cssText='background:#F7931E;color:#fff;font-weight:900;animation:dmBl .45s 3';setTimeout(()=>{c.style.cssText='color:#15803D;font-weight:900'},1800)},1150),
+  rd=(i,d,n)=>({st:'kS',c:`<b>الخطوة ${n}: القراءة عند <span dir="ltr">d${'₁₂₃'[i]} = ${d}.0 mm</span>.</b> اقرأ المسافة بين اللوحين من تكبير المسار المدرج: الخط البرتقالي على الرقم <b dir="ltr">${d}</b> تماما، فالمسافة <b dir="ltr">${d}.0 mm</b>. ثم اقرأ السعة <b dir="ltr">C${'₁₂₃'[i]}</b> من شاشة جهاز قياس السعة الرقمي كما هي بوحدة <b dir="ltr">pF</b> ورقم عشري واحد.<br>👀 <b>اقرأ القراءة، ثم اضغط «سجل القراءة».</b>`,
+    f:async H=>{await H.hand('#kM');await H.psleep(1300);await H.hand('#kZ');await H.psleep(1300)},
+    rec:{in:'cIn',ck:'recB',fb:'recFb',name:`السعة C${'₁₂₃'[i]} عند d${'₁₂₃'[i]} = ${d}.0 mm`,unit:'pF',val:H=>{H.q('dIn').value=H.box.__ans.dIn(i);flash(i);return H.box.__ans.cIn(i)}}});
+WCFG['3-5']={PL:[[PTR],[PTR],[PTR,'svg:nth-of-type(2)','svg:nth-of-type(3)'],[PTR,'svg:nth-of-type(3)'],[PTR,'svg:nth-of-type(3)']]};
+DIR['3-5']=DX({steps:[
+ {st:'kS',c:'<b>الخطوة 1: تجهيز الأجهزة.</b> لوحا المكثف متوازي اللوحين من الألومنيوم، كل لوح على <b>أداة الحامل بساق عازلة</b>، والحاملان على <b>أداة المسار المدرج</b> بالمليمتر وصفره عند اللوح الثابت. وطرفا <b>جهاز قياس السعة الرقمي</b> موصولان باللوحين، والمؤشر البرتقالي تحت اللوح المتحرك. المسافة الآن <b dir="ltr">d = 10.0 mm</b> والسعة صغيرة.',f:async H=>{await H.hand(PTR);await H.psleep(1200)}},
+ {st:'kS',c:'<b>الخطوة 2: تقريب اللوح المتحرك إلى <span dir="ltr">d = 6.0 mm</span>.</b> تمسك اليد حامل اللوح المتحرك عند مؤشره البرتقالي وتدفعه على المسار نحو اللوح الثابت ببطء، حتى يقع الخط البرتقالي في تكبير المسار على الرقم <b dir="ltr">6</b>. لاحظ زيادة السعة على شاشة الجهاز كلما قلت المسافة.',sl:[['kR',44,PTR]]},
+ rd(2,6,3),
+ {st:'kS',c:'<b>الخطوة 4: تقريب اللوح المتحرك إلى <span dir="ltr">d = 4.0 mm</span>.</b> تدفع اليد حامل اللوح المتحرك حتى يقع الخط البرتقالي في تكبير المسار على الرقم <b dir="ltr">4</b>، فتزداد السعة.',sl:[['kR',67,PTR]]},
+ rd(1,4,5),
+ {st:'kS',c:'<b>الخطوة 6: تقريب اللوح المتحرك إلى <span dir="ltr">d = 2.0 mm</span>.</b> تدفع اليد الحامل بحذر حتى الرقم <b dir="ltr">2</b>، دون أن يتلامس اللوحان فيصيرا موصلا واحدا. المسافة الآن ثلث قيمتها عند <b dir="ltr">6 mm</b>.',sl:[['kR',89,PTR]]},
+ rd(0,2,7),
+ {st:'kC',c:'<b>الخطوة 8: رسم السعة مع مقلوب المسافة.</b> ظهرت نقاط القراءات الثلاث على الرسم البياني للسعة <b dir="ltr">C</b> مع <b dir="ltr">1/d</b>. يضغط زر «ارسم الخط المستقيم»، فيمر الخط بالنقاط الثلاث وبنقطة الأصل وميله <b dir="ltr">ε₀·A</b>: السعة تتناسب عكسيا مع المسافة بين اللوحين.',f:async H=>{await H.hand([.5,.45]);await H.psleep(500);ck(H.q('gB'));await H.psleep(1800)}},
+ {st:'kC',c:'✅ <b>اكتملت القراءات.</b> افتح بطاقة <b>الحسابات</b>: احسب السعة من القانون <b dir="ltr">C = ε₀·A / d</b> عند كل مسافة (حول المسافة إلى المتر) وقارنها بقراءة الجهاز، ثم احسب <b dir="ltr">ε₀ = C₂·d₂ / A</b>.',f:async H=>{await H.psleep(600)}}]});
+}
+
+}catch(e){console.error("cfg cfg_3-5.js",e)}
+try{
+/* 3-6 السعة المكافئة لمكثفات على التوازي (parLab) */
+const agCss=()=>{if(document.getElementById('agGcss'))return;const st=document.createElement('style');st.id='agGcss';st.textContent='.agGx #dmS .amLog,.agGx #dmV .amLog,.agGx #dmS .pdAns,.agGx #dmV .pdAns,.agGx #dmS .btns,.agGx #dmV .btns,.agGx #dmS .fb2,.agGx #dmV .fb2,.agGx #dmV p,.agGx #dmV .row,.agGx #dmV .msg,.agGx #dmV .wsc>h4{display:none!important}';document.head.appendChild(st)};
+const agAt=(svg,x,y)=>{const p=svg.createSVGPoint();p.x=x;p.y=y;const q=p.matrixTransform(svg.getScreenCTM()),S=document.getElementById('dmSW'),b=S.getBoundingClientRect();return [(q.x-b.left)/S.clientWidth,(q.y-b.top)/S.clientHeight]};
+const agFlash=(H,i)=>setTimeout(()=>{const tr=H.box.querySelectorAll('#logB tr')[i];if(!tr)return;const td=[...tr.querySelectorAll('td')];td.forEach(c=>c.style.cssText='background:#F7931E;color:#fff;font-weight:900;animation:dmBl .45s 3');setTimeout(()=>td.forEach(c=>c.style.cssText=''),1800)},1250);
+LXD['3-6']={aim:'الهدف من التجربة قياس الجهد على كل مكثف من ثلاثة مكثفات موصلة على التوازي بجهاز الملتيميتر الرقمي، ثم حساب شحنة كل مكثف والشحنة الكلية والسعة المكافئة، ومقارنتها بمجموع السعات <span dir="ltr">C = C₁ + C₂ + C₃</span>.'};
+{const CARD=()=>{const l=document.getElementById('ctLeads');return l&&l.closest('.wsc').parentElement};
+ const SV=H=>H.q('dmS').querySelector('svg');
+ const probe=async(H,j,n)=>{ck(H.q('dmS').querySelector('#ctBtns button[data-j="'+j+'"]'));await H.click(H.q('dmS').querySelector('.pt[data-p="'+n+'"] circle:last-child'))};
+ const N='₁₂₃';
+ const TXT=[
+  'يوضع المجس <b style="color:#DC2626">الأحمر</b> على الساق الخلفية للمكثف <b dir="ltr">C₁</b> (المغروسة في الخط الموجب)، ثم المجس <b>الأسود</b> على ساقه الأمامية (في الخط السالب)، فيصير جهاز الملتيميتر على طرفي المكثف <b>على التوازي</b>. وتظهر القراءة مكبرة أسفل المشهد.',
+  'ينقل المجسان إلى طرفي المكثف <b dir="ltr">C₂</b>: الأحمر على ساقه الخلفية والأسود على ساقه الأمامية. قارن القراءة بقراءة <b dir="ltr">C₁</b> مع أن سعته مختلفة.',
+  'ينقل المجسان إلى طرفي المكثف <b dir="ltr">C₃</b>، أكبر المكثفات سعة. لاحظ أن الجهد واحد على المكثفات الثلاثة لأن طرفي كل مكثف على الخطين نفسيهما.'];
+ const run=DX({steps:[
+  {st:CARD,c:'<b>الخطوة 1: ضبط جهد المصدر.</b> تدير اليد مقبض جهاز مصدر الجهد المستمر حتى يتوقف عند الجهد المضبوط. تتحرك الشحنات لحظة التشغيل فتشحن المكثفات الثلاثة، ثم يتوقف التيار عندما يصير جهد كل مكثف مساويا جهد المصدر، ويأخذ المكثف الأكبر سعة <b>شحنة أكبر</b>.',f:async H=>{await H.slide('nR','max',agAt(SV(H),5,210.5))}},
+  {st:'vF',c:'<b>الخطوة 2: إعداد جهاز الملتيميتر فولتميترا.</b> الجهد المتوقع حتى <b dir="ltr">12 V</b>، فيدار مفتاح الوضع إلى تدريج <b style="color:#DC2626" dir="ltr">V⎓</b> مدى <b dir="ltr">20 V</b>، ثم يوضع المجس الأحمر في المنفذ <b dir="ltr">V</b>، والمجس الأسود في المنفذ <b dir="ltr">COM</b>. لا نقيس التيار هنا لأنه يتوقف بعد شحن المكثفات.',f:async H=>{await H.click(H.q('vF').querySelector('[data-k="mode"][data-v="v20"]'));await H.psleep(500);await H.click(H.q('vF').querySelector('[data-k="port"][data-v="v"]'))}},
+  ...[0,1,2].map(i=>({st:CARD,c:`<b>الخطوة ${3+i}: الجهد على المكثف C${N[i]}.</b> ${TXT[i]}<br>👀 <b>اقرأ الجهد V${N[i]} من الشاشة، ثم اضغط «سجل القراءة».</b>`,
+    f:async H=>{await probe(H,'r',i);await H.psleep(300);await probe(H,'b',i+3)},rec:{in:'vIn',ck:'vInCk',name:`الجهد V${N[i]} على C${N[i]}`,unit:'V',val:H=>{agFlash(H,i);return H.box.__ans.vIn()}}})),
+  {st:CARD,c:'✅ <b>اكتملت القراءات.</b> افتح بطاقة <b>الحسابات</b>: احسب شحنة كل مكثف <b dir="ltr">q = C·V</b> بعد تحويل السعة إلى الفاراد، ثم الشحنة الكلية <b dir="ltr">q = q₁ + q₂ + q₃</b>، والسعة المكافئة <b dir="ltr">C = q / V</b>، وقارنها بمجموع السعات <b dir="ltr">C₁ + C₂ + C₃</b>.',f:async H=>{await H.psleep(600)}}]});
+ DIR['3-6']=function(){const b=document.querySelector('.card.lab .labBody');if(b)b.classList.add('agGx');agCss();run()}}
+WCFG['3-6']={PL:[[],[['k']],[['m']],[['p',0],['p',3]],[['p',1],['p',4]],[['p',2],['p',5]],[]],XY:{k:[5,210.5],m:[437,335]}};
+
+}catch(e){console.error("cfg cfg_3-6.js",e)}
+try{
+/* 4-1 قياس التيار والجهد بجهاز الملتيميتر الرقمي (amLab) — بطاقة 5.2 بصيغة DX عبر lab_4-1.py */
+const agCss=()=>{if(document.getElementById('agGcss'))return;const st=document.createElement('style');st.id='agGcss';st.textContent='.agGx #dmS .amLog,.agGx #dmV .amLog,.agGx #dmS .pdAns,.agGx #dmV .pdAns,.agGx #dmS .btns,.agGx #dmV .btns,.agGx #dmS .fb2,.agGx #dmV .fb2,.agGx #dmV p,.agGx #dmV .row,.agGx #dmV .msg,.agGx #dmV .wsc>h4{display:none!important}';document.head.appendChild(st)};
+const agAt=(svg,x,y)=>{const p=svg.createSVGPoint();p.x=x;p.y=y;const q=p.matrixTransform(svg.getScreenCTM()),S=document.getElementById('dmSW'),b=S.getBoundingClientRect();return [(q.x-b.left)/S.clientWidth,(q.y-b.top)/S.clientHeight]};
+const agFlash=(H,i,d)=>setTimeout(()=>{const tr=H.box.querySelectorAll('#logB tr')[i];if(!tr)return;const td=[...tr.querySelectorAll('td')];td.forEach(c=>c.style.cssText='background:#F7931E;color:#fff;font-weight:900;animation:dmBl .45s 3');setTimeout(()=>td.forEach(c=>c.style.cssText=''),1800)},d||1250);
+{const CARD=()=>{const l=document.getElementById('mtLeads');return l&&l.closest('.wsc').parentElement};
+ const SV=H=>H.q('dmS').querySelector('svg');
+ const probe=async(H,j,n)=>{ck(H.q('dmS').querySelector('#mtBtns button[data-j="'+j+'"]'));await H.click(H.q('dmS').querySelector('.pt[data-p="'+n+'"] circle:last-child'))};
+ const meter=async(H,m,mode,port)=>{await H.click(H.q(m+'F').querySelector('[data-k="mode"][data-v="'+mode+'"]'));await H.psleep(500);await H.click(H.q(m+'F').querySelector('[data-k="port"][data-v="'+port+'"]'))};
+ const run=DX({steps:[
+  {st:CARD,c:'<b>الخطوة 1: ضبط جهد المصدر.</b> تدير اليد مقبض جهاز مصدر الجهد المستمر حتى يتوقف عند الجهد المضبوط، فيخرج التيار من القطب الموجب، ويمر في وصلة التوصيل ثم المقاومة، ويعود إلى القطب السالب.',f:async H=>{await H.slide('sR','max',agAt(SV(H),107,195))}},
+  {st:'vF',c:'<b>الخطوة 2: إعداد جهاز الملتيميتر لقياس الجهد.</b> الجهد المتوقع أقل من <b dir="ltr">10 V</b>، فيدار مفتاح الوضع إلى تدريج <b style="color:#DC2626" dir="ltr">V⎓</b> مدى <b dir="ltr">20 V</b> (المدى الأصغر الذي يزيد على القيمة المتوقعة)، ثم يوضع المجس الأحمر في المنفذ <b dir="ltr">V</b>، والمجس الأسود في <b dir="ltr">COM</b>.',f:async H=>{await meter(H,'v','v20','v')}},
+  {st:CARD,c:'<b>الخطوة 3: المجس الأحمر على ساق المقاومة الموجبة.</b> يوضع المجس <b style="color:#DC2626">الأحمر</b> على ساق المقاومة المتصلة بجهة القطب الموجب، وهي الطرف الأعلى جهدا. والدائرة تبقى مغلقة عند قياس الجهد.',f:async H=>{await probe(H,'r','R1')}},
+  {st:CARD,c:'<b>الخطوة 4: المجس الأسود على ساقها السالبة، وقراءة الجهد.</b> يوضع المجس <b>الأسود</b> على الساق الأخرى للمقاومة، فيصير الجهاز على طرفي المقاومة <b>على التوازي</b>، وتظهر على شاشته قيمة الجهد <b dir="ltr">V</b> موجبة.<br>👀 <b>اقرأ الجهد من شاشة الجهاز، ثم اضغط «سجل القراءة».</b>',
+   f:async H=>{await probe(H,'b','R2')},rec:{in:'vIn',ck:'vInCk',name:'الجهد V',unit:'V',val:H=>{agFlash(H,0);return H.box.__ans.vIn()}}},
+  {st:'aF',c:'<b>الخطوة 5: إعداد الجهاز لقياس التيار.</b> التيار المتوقع أقل من <b dir="ltr">1 A</b>، فيدار مفتاح الوضع إلى تدريج <b style="color:#2563EB" dir="ltr">A⎓</b> مدى <b dir="ltr">2 A</b>، وينقل المجس الأحمر إلى المنفذ <b dir="ltr">A</b>، ويبقى الأسود في <b dir="ltr">COM</b>. فترفع المجسات عن المقاومة.',f:async H=>{await meter(H,'a','a2','a')}},
+  {st:CARD,c:'<b>الخطوة 6: رفع وصلة التوصيل.</b> ترفع اليد وصلة التوصيل البرتقالية عن الفجوة في الخط الموجب، فتنفتح الدائرة. لو بقيت الوصلة لمر التيار فيها وترك الجهاز، فيقرأ صفرا.',
+   f:async H=>{const s=SV(H);await H.hand(agAt(s,212,30));await H.psleep(300);ck(H.q('mtJ'));await H.hand(agAt(s,212,12));await H.psleep(500)}},
+  {st:CARD,c:'<b>الخطوة 7: المجس الأحمر قبل الفجوة.</b> يوضع المجس <b style="color:#DC2626">الأحمر</b> في النقطة <b>قبل الفجوة</b>، وهي جهة القطب الموجب التي يدخل منها التيار إلى الجهاز.',f:async H=>{await probe(H,'r','A')}},
+  {st:CARD,c:'<b>الخطوة 8: المجس الأسود بعد الفجوة، وقراءة التيار.</b> يوضع المجس <b>الأسود</b> في النقطة <b>بعد الفجوة</b>، فيصير الجهاز مكان الوصلة <b>على التوالي</b> ويمر فيه التيار كله، وتظهر شدة التيار <b dir="ltr">I</b> على الشاشة.<br>👀 <b>اقرأ شدة التيار من شاشة الجهاز، ثم اضغط «سجل القراءة».</b>',
+   f:async H=>{await probe(H,'b','B')},rec:{in:'iIn',ck:'iInCk',name:'شدة التيار I',unit:'A',val:H=>{agFlash(H,1);return H.box.__ans.iIn()}}},
+  {st:CARD,c:'<b>الخطوة 9: عكس أقطاب المصدر.</b> تبدل اليد سلكي المصدر عند طرفيه دون تغيير شيء في الجهاز، فينعكس اتجاه التيار في الدائرة، ويدخل الجهاز من منفذ <b dir="ltr">COM</b>. لاحظ ظهور الإشارة <b>«−»</b> قبل القراءة: القيمة نفسها، والإشارة تدل على الاتجاه، ولا يتلف الجهاز.',
+   f:async H=>{await H.hand(agAt(SV(H),70,222));await H.psleep(300);ck(H.q('rvB'));await H.psleep(2500)}},
+  {st:CARD,c:'<b>الخطوة 10: إعادة الأقطاب.</b> يعاد سلكا المصدر إلى وضعهما الصحيح: الأحمر إلى الطرف الموجب والأسود إلى الطرف السالب، فتعود القراءة موجبة، ويسجل في نتائج القياس أن القراءة كانت سالبة ثم عادت موجبة.',
+   f:async H=>{await H.hand(agAt(SV(H),70,222));await H.psleep(300);ck(H.q('rvB'));agFlash(H,2,200);await H.psleep(1800)}},
+  {st:'tS',c:'<b>الخطوة 11: قياس زمن مرور التيار.</b> التيار نفسه ما زال يمر في الجهاز. تضغط اليد زر التشغيل في أداة ساعة الإيقاف فيبدأ العد، ثم تتوقف تلقائيا، ويظهر الزمن بالثانية على شاشتها الرقمية.<br>👀 <b>اقرأ الزمن t من شاشة ساعة الإيقاف، ثم اضغط «سجل القراءة».</b>',
+   f:async H=>{await H.slide('tR','max',agAt(H.q('tS').querySelector('svg'),200,34))},rec:{in:'tIn',ck:'tInCk',name:'الزمن t',unit:'s',val:H=>{agFlash(H,3);return H.box.__ans.tIn()}}},
+  {st:'tS',c:'✅ <b>اكتملت القراءات.</b> افتح بطاقة <b>الحسابات</b>: احسب الشحنة المارة <b dir="ltr">q = I × t</b>، ثم عدد الإلكترونات <b dir="ltr">n = q / e</b> حيث <b dir="ltr">e = 1.6 × 10⁻¹⁹ C</b>.',f:async H=>{await H.psleep(600)}}]});
+ DIR['4-1']=function(){const b=document.querySelector('.card.lab .labBody');if(b)b.classList.add('agGx');agCss();run()}}
+WCFG['4-1']={PL:[[['k']],[['m']],[['p','R1'],['p','R2']],[['d']],[['k'],['m']],[['jp']],[['p','A'],['p','B']],[['k']],[['w']]],XY:{k:[107,195],m:[271,201],jp:[212,30],d:[276,159],w:[70,222]}};
+
+}catch(e){console.error("cfg cfg_4-1.js",e)}
+try{
+WCFG['4-5']={PL:[[['m'],['m2']],[['j',0]],[['p','A']],[['p','B']],[['p','R1']],[['p','R2']],[['k']],[]],XY:{k:[92,203],m:[216,204],m2:[338,204],j:[212,27]}};
+DIR['4-5']=function(){let play=false,manual=false;const psleep=async t=>{while(t>0){await sleep(100);if(play||manual)t-=100}};const nR=document.getElementById('nR');if(!nR)return;const ctl=nR.closest('.ctl');const q=id=>document.getElementById(id);
+  if(!document.getElementById('dmCssO')){const st=document.createElement('style');st.id='dmCssO';st.textContent=CSS+'#dmS p,#dmS .row,#dmS .chk,#dmS .msg,#dmS .wsc>h4{display:none!important}';document.head.appendChild(st)}
+  const P=document.createElement('div');P.className='dmP';P.innerHTML=`<h4>⚡ تنفيذ التجربة</h4><div id="dmSW" style="position:relative"><div id="dmS"></div><button id="dmBig" type="button" aria-label="تشغيل">▶ تشغيل</button></div><div id="dmV" class="dmView dmHide"></div><div class="dmBar" id="dmBar"></div><div class="tl"><button class="pri" id="dmPlay" type="button">▶ تشغيل</button><span id="dmTlT"></span><input type="range" id="dmTl" min="0" max="0" step="1" value="0"></div><div class="dmCap" id="dmCap"></div><div id="dmLog"></div><div id="dmA"></div><div class="dmBtns"><button id="dmNext" class="pri">التالي ←</button><button id="dmPrev">→ السابق</button><button id="dmRe">↺ من البداية بمقاومة جديدة</button></div>`;
+  q('prog').after(P);
+  [...ctl.children].forEach(e=>{if(e!==P&&e.tagName!=='H3'&&e.id!=='prog')e.classList.add('dmHide')});
+  const LOG=q('oTb').closest('.amLog');
+  function place(){const S=q('dmS');const c=q('wT');if(c&&c.parentElement!==S){c.classList.remove('dmHide');S.appendChild(c)}if(LOG.parentElement!==q('dmLog')){LOG.classList.remove('dmHide');q('dmLog').appendChild(LOG)}
+    const A=q('dmA');const z=q('nZ').closest('.stage');if(z.parentElement!==A){z.classList.remove('dmHide');A.appendChild(z)}
+    let rb=q('dmRec');if(!rb){A.insertAdjacentHTML('beforeend','<button type="button" id="dmRec" class="dmRecB" hidden>✓ سجل القراءة</button>')}}
+  const CARD=()=>q('dmS');
+  const pt=n=>CARD().querySelector('.pt[data-p="'+n+'"]'),pb=j=>CARD().querySelector('button[data-j="'+j+'"]');
+  const SV=()=>CARD().querySelector('svg'),GO=()=>play||manual;
+  const probe=async(j,n)=>{const [x,y]=ptXY(SV(),n);await handTo(SV(),x,y,1100,GO);ck(pb(j));ck(pt(n));await psleep(1300);await handAway(SV(),GO)};
+  const jump=async()=>{await handTo(SV(),212,27,1000,GO);ck(q('wtJ'));const h=SV().querySelector('image.hand');const y0=+h.getAttribute('y');let t=0;while(t<700){await sleep(16);if(GO())t+=16;h.setAttribute('y',y0-14*Math.min(1,t/700))}await psleep(400);await handAway(SV(),GO)};
+  const meter=async(m,mode,port,x)=>{await handTo(SV(),x,204,1100,GO);ck(document.querySelector('#'+m+'F [data-k="mode"][data-v="'+mode+'"]'));await psleep(1200);ck(document.querySelector('#'+m+'F [data-k="port"][data-v="'+port+'"]'));await psleep(1000);await handAway(SV(),GO)};
+  const knob=async v=>{await handTo(SV(),92,203,1100,GO);await psleep(500);nR.value=v;nR.dispatchEvent(new Event('input',{bubbles:true}));await psleep(900);await handAway(SV(),GO)};
+  const ok=id=>/^✓ سجلت/.test(q(id).textContent);
+  const ST=[
+   {c:'<b>الخطوة 1: إعداد الجهاز 1 أميترا.</b> المفتاح على تدريج <b style="color:#2563EB">A⎓</b> مدى <b>2 A</b>، والمجس الأحمر في المنفذ <b>A</b>، والأسود في <b>COM</b>.',f:async()=>{await meter('a','a2','a',216)}},
+   {c:'<b>الخطوة 2: إعداد الجهاز 2 فولتميترا.</b> المفتاح على تدريج <b style="color:#DC2626">V⎓</b> مدى <b>20 V</b>، والمجس الأحمر في المنفذ <b>V</b>، والأسود في <b>COM</b>.',f:async()=>{await meter('v','v20','v',338)}},
+   {c:'<b>الخطوة 3: رفع وصلة التوصيل</b> البرتقالية عن الفجوة، فتنفتح الدائرة حتى يوضع الأميتر مكانها.',f:async()=>{await jump()}},
+   {c:'<b>الخطوة 4:</b> المجس <b style="color:#DC2626">الأحمر للأميتر</b> في النقطة <b>قبل الفجوة</b> (جهة القطب الموجب).',f:async()=>{await probe('ar','A')}},
+   {c:'<b>الخطوة 5:</b> المجس <b>الأسود للأميتر</b> في النقطة <b>بعد الفجوة</b>. صار الأميتر مكان الوصلة <b>على التوالي</b>، فيمر فيه تيار المقاومة كله.',f:async()=>{await probe('ab','B')}},
+   {c:'<b>الخطوة 6:</b> المجس <b style="color:#DC2626">الأحمر للفولتميتر</b> على <b>طرف المقاومة الموجب</b>.',f:async()=>{await probe('vr','R1')}},
+   {c:'<b>الخطوة 7:</b> المجس <b>الأسود للفولتميتر</b> على <b>طرفها السالب</b>. صار الفولتميتر على طرفي المقاومة <b>على التوازي</b>.',f:async()=>{await probe('vb','R2')}},
+   ...[2,4,6].map((v,i)=>({c:`<b>الخطوة ${8+i}: رفع جهد المصدر إلى ${v} V.</b> يتحرك التيار من القطب الموجب في الأميتر ثم المقاومة ويعود إلى القطب السالب، وتظهر القراءتان على الجهازين.<br>👀 <b>اقرأ الشاشتين، ثم اضغط «سجل القراءة».</b>`,need:'mFb',f:async()=>{await knob(i+1)}})),
+   {c:'✅ <b>اكتملت القراءات الثلاث.</b> افتح بطاقة <b>الحسابات</b>: ارسم الخط المستقيم، ثم احسب المقاومة من ميله.',f:async()=>{}}];
+  let k=-1,busy=false,view=-1;const SN=[];q('dmBar').innerHTML='<i></i>'.repeat(ST.length);
+  const snapEl=el=>{if(!el)return '';const c=el.cloneNode(true);c.querySelectorAll('p,.row,.chk,.msg,.wsc>h4').forEach(e=>e.remove());const sfx='v'+(++window.__dmN||(window.__dmN=1))+'_';c.querySelectorAll('[id]').forEach(e=>{if(e.closest('defs'))e.id=sfx+e.id;else e.removeAttribute('id')});return c.innerHTML.replace(/url\(#([^)]+)\)/g,(m,x)=>'url(#'+(c.querySelector('[id="'+sfx+x+'"]')?sfx+x:x)+')')};
+  const snap=()=>{SN[k]={s:snapEl(q('dmS')),z:'<div class="stage">'+snapEl(q('nZ').closest('.stage'))+'</div>'}};
+  const live=()=>view<0||view===k;
+  const ui=(cap=true)=>{const i=live()?k:view;if(cap)q('dmCap').innerHTML=i<0?'اضغط «▶ تشغيل» ليبدأ المشهد خطوة خطوة، أو «التالي» لتتقدم بنفسك. المشهد يجري الإعداد والتوصيل، وأنت تقرأ القراءات من الشاشتين وتسجلها.':ST[i].c+(live()?'':'<br><span class="dmOld">⏪ تعرض خطوة سابقة. اضغط «التالي» أو حرك الشريط للعودة.</span>');
+    [...q('dmBar').children].forEach((x,j)=>x.classList.toggle('d',j<=i));
+    q('dmS').classList.toggle('dmHide',!live());q('dmA').classList.toggle('dmHide',!live()||k<0);const V=q('dmV');V.classList.toggle('dmHide',live());if(!live()){V.innerHTML=SN[view].s+SN[view].z}
+    const tl=q('dmTl');tl.max=Math.max(0,k+1);tl.value=i+1;q('dmTlT').innerHTML='الخطوة <b>'+(i+1)+'</b> من '+ST.length;
+    const s=ST[k],wait=live()&&s&&s.need&&!ok(s.need);const nb=q('dmNext');nb.disabled=busy||wait||(live()&&k>=ST.length-1);
+    nb.textContent=busy?'⏳ جار عرض الخطوة':wait?(play?'⏳ يستمر بعد تسجيل القراءة':'⏳ سجل القراءة أولا'):(live()&&k>=ST.length-1)?'✓ انتهت القياسات':'التالي ←';q('dmPrev').disabled=busy||i<=0};
+  const goView=i=>{view=(i>=k)?-1:i;ui()};
+  q('dmNext').onclick=async()=>{if(busy)return;if(!live()){goView(view+1);return}busy=true;manual=!play;k++;const s=ST[k];if(s.need){q(s.need).textContent='';q(s.need).className='fb2'}ui();q('dmA').style.visibility='hidden';
+    const L=q('dmCap').textContent.length;q('dmCap').insertAdjacentHTML('beforeend','<div class="dmWait" style="font-size:12.5px;font-weight:800;color:var(--muted);margin-top:4px">📖 اقرأ الخطوة…</div>');
+    await psleep(Math.min(9000,2500+L*55));const w=q('dmCap').querySelector('.dmWait');if(w)w.textContent='🎬 تنفيذ الخطوة…';
+    await s.f();await psleep(150);if(s.need){const idx=k-7;
+      const zt=[...q('nZ').querySelectorAll('text')].map(t=>t.textContent).join(' ');const a=(zt.match(/(-?\d+\.\d+)\s*A/)||[0,'0'])[1],v=(zt.match(/(-?\d+\.\d+)\s*V/)||[0,'0'])[1];
+      if(w)w.textContent='👇 اقرأ الشاشتين، ثم اضغط «سجل القراءة»';
+      const rb=q('dmRec');rb.hidden=false;q('dmA').style.visibility='';q('dmNext').textContent='👇 اضغط «سجل القراءة»';await new Promise(res=>rb.onclick=res);rb.hidden=true;
+      const row=()=>q('oTb').querySelectorAll('tr')[idx];row().style.background='rgba(22,163,74,.22)';await sleep(700);
+      {const c=row().children;c[2].innerHTML='<b>'+v+'</b>';c[3].innerHTML='<b>'+a+'</b>';[c[2],c[3]].forEach(x=>x.style.cssText='background:#F7931E;color:#fff;font-weight:900;animation:dmBl .45s 3')}await sleep(1400);
+      q('mV').value=v;q('mI').value=a;ck(q('mCk'));await sleep(150);{const r=row();r.style.background='rgba(22,163,74,.22)'}
+      if(w)w.textContent='✓ سجلت القراءة';await sleep(900)}
+    snap();if(w)w.remove();q('dmA').style.visibility='';if(play&&!(s.need))await psleep(4500);busy=false;ui()};
+  let ptm=null;const big=()=>{q('dmBig').hidden=play;q('dmBig').textContent=k<0?'▶ تشغيل':'▶ متابعة'};
+  const tick=()=>{clearTimeout(ptm);if(!play)return;ptm=setTimeout(async()=>{if(!play||busy)return tick();
+    if(!live()){goView(view+1);return tick()}
+    const s=ST[k];if(s&&s.need&&!ok(s.need))return tick();
+    if(k>=ST.length-1){play=false;q('dmPlay').textContent='▶ تشغيل';big();q('dmBig').hidden=true;return}
+    await q('dmNext').onclick();tick()},k<0?1000:600)};
+  q('dmPlay').onclick=()=>{play=!play;manual=false;q('dmPlay').textContent=play?'⏸ إيقاف':'▶ تشغيل';big();if(play)tick();else clearTimeout(ptm)};q('dmBig').onclick=()=>{if(!play)q('dmPlay').onclick()};
+  q('dmPrev').onclick=()=>{if(play){play=false;q('dmPlay').textContent='▶ تشغيل';clearTimeout(ptm);big()}const i=live()?k:view;if(i>0)goView(i-1)};
+  q('dmTl').oninput=()=>{const v=+q('dmTl').value-1;if(v<0)return;goView(Math.min(v,k))};
+  q('dmRe').onclick=()=>{ck(q('wtReset'));ck(q('nw'));setTimeout(()=>{k=-1;view=-1;SN.length=0;place();ui()},100)};
+  place();ui();big()};
+
+}catch(e){console.error("cfg cfg_4-5.js",e)}
+try{
+WCFG['4-8']={PL:[[['k'],['m']],[['j',0]],[['p',0],['p',1]],[['j',0],['j',1],['p',2],['p',3]],[['j',1],['j',2],['p',4],['p',5]],[['j',2],['m'],['p',1],['p',2]],[['p',3],['p',4]],[['p',5],['p',6]],[['p',1],['p',6]]],XY:{k:[102,205],m:[276,207]}};
+DIR['4-8']=function(){let play=false,manual=false;const psleep=async t=>{while(t>0){await sleep(100);if(play||manual)t-=100}};const nR=document.getElementById('nR');if(!nR)return;const ctl=nR.closest('.ctl');const q=id=>document.getElementById(id);
+  if(!document.getElementById('dmCssO')){const st=document.createElement('style');st.id='dmCssO';st.textContent=CSS;document.head.appendChild(st)}
+  const P=document.createElement('div');P.className='dmP';P.innerHTML=`<h4>⚡ تنفيذ التجربة</h4><div id="dmSW" style="position:relative"><div id="dmS"></div><button id="dmBig" type="button" aria-label="تشغيل">▶ تشغيل</button></div><div id="dmV" class="dmView dmHide"></div><div class="dmBar" id="dmBar"></div><div class="tl"><button class="pri" id="dmPlay" type="button">▶ تشغيل</button><span id="dmTlT"></span><input type="range" id="dmTl" min="0" max="0" step="1" value="0"></div><div class="dmCap" id="dmCap"></div><div id="dmLog"></div><div id="dmA"></div><div class="dmBtns"><button id="dmNext" class="pri">التالي ←</button><button id="dmPrev">→ السابق</button><button id="dmRe">↺ من البداية بمقاومات جديدة</button></div>`;
+  q('prog').after(P);
+  [...ctl.children].forEach(e=>{if(e!==P&&e.tagName!=='H3'&&e.id!=='prog')e.classList.add('dmHide')});
+  const card=()=>q('wTi').firstElementChild||q('wTv').firstElementChild;
+  const stageOf=id=>q(id).closest('.stage');
+  const ansOf=id=>[q(id).closest('.ans'),q(id+'Fb')];
+  function place(ph){const c=card()||document.querySelector('.dmP .wsc')?.parentElement;const S=q('dmS');if(c&&c.parentElement!==S)S.appendChild(c);const lg=S.querySelector('.amLog');if(lg)q('dmLog').appendChild(lg);
+    const A=q('dmA');[...A.children].forEach(e=>e.classList.add('dmHide'));const z=stageOf(ph==='a'?'nZ':'vZ');z.classList.remove('dmHide');A.appendChild(z);
+    ansOf(ph==='a'?'iIn':'vIn').forEach(e=>{e.classList.add('dmHide');A.appendChild(e)});let rb=q('dmRec');if(!rb){A.insertAdjacentHTML('beforeend','<button type="button" id="dmRec" class="dmRecB" hidden>✓ سجل القراءة</button>');rb=q('dmRec')}else A.appendChild(rb);rb.classList.remove('dmHide');}
+  const CARD=()=>q('dmS');
+  const pt=n=>CARD().querySelector('.pt[data-p="'+n+'"]'),pb=j=>CARD().querySelector('#stBtns button[data-j="'+j+'"]'),jb=i=>CARD().querySelector('#stJs button[data-jg="'+i+'"]');
+  const SV=()=>CARD().querySelector('svg'),GO=()=>play||manual;const probe=async(r,b)=>{let [x,y]=ptXY(SV(),r);await handTo(SV(),x,y,1100,GO);ck(pb('r'));ck(pt(r));await psleep(1300);[x,y]=ptXY(SV(),b);await handTo(SV(),x,y,1000,GO);ck(pb('b'));ck(pt(b));await psleep(1100);await handAway(SV(),GO)};const jtog=async g=>{const [x,y]=jXY(SV(),g);await handTo(SV(),x,y,1000,GO);ck(jb(g));const h=SV().querySelector('image.hand');const y0=+h.getAttribute('y');let t=0;while(t<700){await sleep(16);if(GO())t+=16;h.setAttribute('y',y0+(up[g]?14:-14)*Math.min(1,t/700))}up[g]=!up[g];await psleep(400);await handAway(SV(),GO)};const up=[false,false,false];
+  const meter=async(m,mode,port)=>{const sv=SV();await handTo(sv,276,207,1100,GO);ck(document.querySelector('#'+m+'F [data-k="mode"][data-v="'+mode+'"]'));await psleep(1200);ck(document.querySelector('#'+m+'F [data-k="port"][data-v="'+port+'"]'));await psleep(1000);await handAway(sv,GO)};
+  const ok=id=>/^✓ قراءة صحيحة/.test(q(id).textContent);
+  const J='₁₂₃';
+  const ST=[
+   {c:'<b>الخطوة 1: ضبط المصدر.</b> يرتفع جهد المصدر إلى <b>9 V</b>، والوصلات الثلاث في أماكنها، فيمر التيار في <b>R₁ ثم R₂ ثم R₃</b> ويعود في سلك العودة.',f:async()=>{await handTo(SV(),102,205,1100,GO);for(let v=0;v<=100;v+=2){nR.value=v;nR.dispatchEvent(new Event('input',{bubbles:true}));await psleep(60)}await psleep(500);await handAway(SV(),GO)}},
+   {c:'<b>الخطوة 2: إعداد الجهاز لقياس التيار.</b> المفتاح على تدريج <b style="color:#2563EB">A⎓</b> مدى <b>2 A</b>، والمجس الأحمر في المنفذ <b>A</b>، والأسود في <b>COM</b>.',f:async()=>{await meter('a','a2','a');place('a')}},
+   ...[0,1,2].map(g=>({c:`<b>الخطوة ${3+g}: التيار قبل R${J[g]}.</b> ${g?'أعيدت الوصلة J'+J[g-1]+'، و':''}رفعت الوصلة <b>J${J[g]}</b> ووضع الأميتر مكانها على التوالي: الأحمر قبل الفجوة والأسود بعدها.<br>👀 <b>اقرأ التيار من شاشة الجهاز، ثم اضغط «سجل القراءة».</b>`,need:'iInFb',f:async()=>{if(g){await jtog(g-1)}await jtog(g);await probe(2*g,2*g+1);place('a')}})),
+   {c:'<b>الخطوة 6: إعداد الجهاز لقياس الجهد.</b> أعيدت الوصلة J₃، وحول المفتاح إلى تدريج <b style="color:#DC2626">V⎓</b> مدى <b>20 V</b>، والمجس الأحمر إلى المنفذ <b>V</b>.',f:async()=>{await jtog(2);await meter('v','v20','v');place('v')}},
+   ...[[1,2,'R₁'],[3,4,'R₂'],[5,6,'R₃'],[1,6,'المقاومات الثلاث معا']].map(([a,b,n],i)=>({c:`<b>الخطوة ${7+i}: الجهد على ${n}.</b> المجسان على ${i<3?'طرفي '+n:'طرفي '+n+' (قبل R₁ وبعد R₃)'} على التوازي، والأحمر على الطرف الأقرب إلى موجب المصدر.<br>👀 <b>اقرأ الجهد من شاشة الجهاز، ثم اضغط «سجل القراءة».</b>`,need:'vInFb',f:async()=>{await probe(a,b);place('v')}})),
+   {c:'✅ <b>اكتملت القياسات.</b> انتقل إلى <b>5.2 الحسابات</b>: القراءات في سجل القراءات.',f:async()=>{}}];
+  let k=-1,busy=false,view=-1;const SN=[];q('dmBar').innerHTML='<i></i>'.repeat(ST.length);
+  const snapEl=el=>{if(!el)return '';const c=el.cloneNode(true);c.querySelectorAll('#stJs,#stBtns,#stP').forEach(e=>e.remove());const sfx='v'+(++window.__dmN||(window.__dmN=1))+'_';c.querySelectorAll('[id]').forEach(e=>{if(e.closest('defs'))e.id=sfx+e.id;else e.removeAttribute('id')});return c.innerHTML.replace(/url\(#([^)]+)\)/g,(m,x)=>'url(#'+(c.querySelector('[id="'+sfx+x+'"]')?sfx+x:x)+')')};
+  const snap=()=>{const z=[...q('dmA').querySelectorAll('.stage')].find(e=>!e.classList.contains('dmHide'));SN[k]={s:snapEl(q('dmS')),z:z?'<div class="stage">'+snapEl(z)+'</div>':''}};
+  const live=()=>view<0||view===k;
+  const ui=(cap=true)=>{const i=live()?k:view;if(cap)q('dmCap').innerHTML=i<0?'اضغط «▶ تشغيل» ليبدأ المشهد خطوة خطوة، أو «التالي» لتتقدم بنفسك. المشهد يجري التوصيل والضبط، وأنت تقرأ القراءة من الشاشة وتسجلها.':ST[i].c+(live()?'':'<br><span class="dmOld">⏪ تعرض خطوة سابقة. اضغط «التالي» أو حرك الشريط للعودة.</span>');
+    [...q('dmBar').children].forEach((x,j)=>x.classList.toggle('d',j<=i));
+    q('dmS').classList.toggle('dmHide',!live());q('dmA').classList.toggle('dmHide',!live());const V=q('dmV');V.classList.toggle('dmHide',live());if(!live()){V.innerHTML=SN[view].s+SN[view].z}
+    const tl=q('dmTl');tl.max=Math.max(0,k+1);tl.value=i+1;q('dmTlT').innerHTML='الخطوة <b>'+(i+1)+'</b> من '+ST.length;
+    const s=ST[k],wait=live()&&s&&s.need&&!ok(s.need);const nb=q('dmNext');nb.disabled=busy||wait||(live()&&k>=ST.length-1);
+    nb.textContent=busy?'⏳ جار عرض الخطوة':wait?(play?'⏳ يستمر بعد تسجيل القراءة':'⏳ سجل القراءة أولا'):(live()&&k>=ST.length-1)?'✓ انتهت القياسات':'التالي ←';q('dmPrev').disabled=busy||i<=0};
+  const goView=i=>{view=(i>=k)?-1:i;ui()};
+  const typeCap=async()=>{const el=q('dmCap'),W=document.createTreeWalker(el,NodeFilter.SHOW_TEXT),T=[];let n;while(n=W.nextNode())T.push([n,n.textContent]);T.forEach(([x])=>x.textContent='');let c=0;
+    for(const [x,t] of T){for(let i=0;i<t.length;i++){x.textContent=t.slice(0,i+1);c++;if(c%2===0)await psleep(28)}}return c};
+  q('dmNext').onclick=async()=>{if(busy)return;if(!live()){goView(view+1);return}busy=true;manual=!play;k++;const s=ST[k];if(s.need){q(s.need).textContent='';q(s.need).className='fb2'}ui();q('dmA').style.visibility='hidden';
+    const L=q('dmCap').textContent.length;q('dmCap').insertAdjacentHTML('beforeend','<div class="dmWait" style="font-size:12.5px;font-weight:800;color:var(--muted);margin-top:4px">📖 اقرأ الخطوة…</div>');
+    await psleep(Math.min(9000,2500+L*55));const w=q('dmCap').querySelector('.dmWait');if(w)w.textContent='🎬 تنفيذ الخطوة…';
+    await s.f();await psleep(150);if(s.need){const ph=s.need==='iInFb'?'iIn':'vIn',unit=ph==='iIn'?' A':' V',idx=ph==='iIn'?k-2:3+(k-6);
+      const zt=[...q(ph==='iIn'?'nZ':'vZ').querySelectorAll('text')].map(t=>t.textContent).join(' ');const val=(zt.match(/-?\d+\.\d+/)||['0'])[0];
+      const wt0=q('dmCap').querySelector('.dmWait');if(wt0)wt0.textContent='👇 اقرأ القراءة من الشاشة، ثم اضغط «سجل»';
+      const rb=q('dmRec');rb.hidden=false;q('dmA').style.visibility='';q('dmNext').textContent='👇 اضغط «سجل القراءة»';await new Promise(res=>rb.onclick=res);rb.hidden=true;
+      const row=()=>q('logA').querySelectorAll('tr')[idx];row().style.background='rgba(22,163,74,.22)';await sleep(700);
+      const cell=row().lastElementChild;cell.textContent=val+unit;cell.style.cssText='background:#F7931E;color:#fff;font-weight:900;animation:dmBl .45s 3';await sleep(1400);
+      q(ph).value=val;ck(q(ph+'Ck'));await sleep(120);{const r=row();r.style.background='rgba(22,163,74,.22)';const c=r.lastElementChild;c.style.cssText='color:#15803D;font-weight:900';c.textContent='✓ '+c.textContent}
+      if(wt0)wt0.textContent='✓ سجلت القراءة';await sleep(900)}
+    snap();if(w)w.remove();q('dmA').style.visibility='';if(play&&!(s.need))await psleep(4500);busy=false;ui()};
+  let ptm=null;const big=()=>{q('dmBig').hidden=play||busy&&play;q('dmBig').textContent=k<0?'▶ تشغيل':'▶ متابعة'};
+  const tick=()=>{clearTimeout(ptm);if(!play)return;ptm=setTimeout(async()=>{if(!play||busy)return tick();
+    if(!live()){goView(view+1);return tick()}
+    const s=ST[k];if(s&&s.need&&!ok(s.need))return tick();
+    if(k>=ST.length-1){play=false;q('dmPlay').textContent='▶ تشغيل';big();q('dmBig').hidden=true;return}
+    await q('dmNext').onclick();tick()},k<0?1000:600)};
+  q('dmPlay').onclick=()=>{play=!play;manual=false;q('dmPlay').textContent=play?'⏸ إيقاف':'▶ تشغيل';big();if(play)tick();else clearTimeout(ptm)};q('dmBig').onclick=()=>{if(!play)q('dmPlay').onclick()};
+  q('dmPrev').onclick=()=>{if(play){play=false;q('dmPlay').textContent='▶ تشغيل';clearTimeout(ptm);big()}const i=live()?k:view;if(i>0)goView(i-1)};
+  q('dmTl').oninput=()=>{const v=+q('dmTl').value-1;if(v<0)return;goView(Math.min(v,k))};
+  ['iInCk','vInCk'].forEach(id=>q(id).addEventListener('click',()=>setTimeout(()=>{if(busy)return;if(k>=0)snap();ui()},80)));
+  q('dmRe').onclick=()=>{up.fill(false);ck(q('nw'));setTimeout(()=>{k=-1;view=-1;SN.length=0;place('a');[...q('dmA').children].forEach(e=>e.classList.add('dmHide'));ui()},100)};
+  place('a');[...q('dmA').children].forEach(e=>e.classList.add('dmHide'));ui();big()};
+
+}catch(e){console.error("cfg cfg_4-8.js",e)}
+
+function accordion(){const box=document.querySelector('.labName')?.closest('.intro')?.parentElement;if(!box||box.querySelector('.accC'))return;
+  if(!document.getElementById('accCss')){const st=document.createElement('style');st.id='accCss';st.textContent=`.accC{position:relative;border:1.5px solid var(--line);border-radius:12px;margin:0 0 14px;background:var(--panel)}.accC+.accC::before{content:'';position:absolute;right:27px;top:-16px;width:3px;height:16px;background:#F7931E;border-radius:2px}
+  .accH{width:100%;display:flex;align-items:center;gap:8px;padding:9px 12px;font:inherit;font-size:15.5px;font-weight:900;border-radius:12px;background:none;border:0;color:var(--ink);cursor:pointer;text-align:right}
+  .accH .an{flex:none;width:30px;height:30px;border-radius:7px;background:#F7931E;color:#fff;display:grid;place-items:center;font-size:15px;font-weight:900}.accH .ai{font-size:17px}.accC.done .an{background:#16A34A}.accC.fixed .accH{cursor:default}.accC.fixed .accB{display:block;padding:2px 12px 12px}.accC.fixed .labName{margin:0 0 8px}.accH .ar{margin-right:auto;flex:none;width:28px;height:28px;border-radius:7px;border:1.5px solid #F7931E;background:rgba(247,147,30,.10);color:#C2410C;display:grid;place-items:center;font-size:22px;font-weight:900;line-height:1}.accH .ar::after{content:'+'}.accC.open .ar::after{content:'−'}.accC.open{border-color:#F7931E}.accC.open:not(.fixed)>.accH{position:sticky;top:0;z-index:20;background:var(--panel);box-shadow:0 2px 8px rgba(0,0,0,.08)}.accCl{display:block;width:100%;margin-top:8px;padding:10px;border:1.5px solid var(--line);border-radius:12px;background:var(--panel);color:var(--ink);font:inherit;font-size:15px;font-weight:800;cursor:pointer}.accC.open .accH{color:#C2410C;background:rgba(247,147,30,.08)}
+  .accB{display:none;padding:4px 10px 12px}.accC.open .accB{display:block}.accNx{display:block;width:100%;margin-top:12px;padding:12px;border:0;border-radius:12px;background:#F7931E;color:#fff;font:inherit;font-size:16px;font-weight:900;cursor:pointer}
+  .accLog{margin:4px 0 10px}`;document.head.appendChild(st)}
+  const strip=t=>t.replace(/^\s*\d+(\.\d+)?\.?\s*/,'').trim();
+  const ICON=t=>/الهدف/.test(t)?'🎯':/النظرية/.test(t)?'📘':/الأدوات/.test(t)?'🧰':/خطوات/.test(t)?'▶️':/الحسابات/.test(t)?'🧮':/الاستنتاج/.test(t)?'✅':/مراجع/.test(t)?'📚':'•';
+  const kids=[...box.children];const G=[];let cur=null;
+  kids.forEach(e=>{if(e.tagName==='STYLE')return;const h=e.matches('h3.secH')?e:e.querySelector(':scope>h3');const t0=h?h.textContent.trim():'',num=(t0.match(/^(\d+)\./)||[])[1],t=strip(t0);
+    const start=e.matches('h3.secH')||(h&&/^(الهدف|النظرية|الأدوات|الاستنتاج|مراجع)/.test(t));
+    if(/^اسم التجربة/.test(t)||e.classList.contains('tags')&&!cur)return;
+    if(start){cur={t,num,els:[e],h};G.push(cur)}else if(cur)cur.els.push(e)});
+  const COLL=t=>true;
+  G.forEach((g,i)=>{const col=COLL(g.t);const c=document.createElement('div');c.className='accC'+(col?'':' open fixed');c.innerHTML=`<${col?'button type="button"':'div'} class="accH"><span class="an">${g.num||''}</span><span class="ai">${ICON(g.t)}</span><span class="at">${g.t}</span>${col?'<span class="ar"></span>':''}</${col?'button':'div'}><div class="accB"></div>`;
+    g.els[0].before(c);const B=c.querySelector('.accB');g.els.forEach(e=>B.appendChild(e));
+    if(g.els[0].matches('h3.secH'))g.els[0].remove();else g.h.style.display='none';g.c=c;
+    const keep=false;g.keep=keep;
+    if(col&&!keep)c.querySelector('.accH').onclick=()=>{const o=c.classList.contains('open');const stp=x=>{const dp=x.querySelector('#dmPlay');if(dp&&/إيقاف/.test(dp.textContent))dp.click();const wp=x.querySelector('.wPlay');if(wp&&/إيقاف/.test(wp.textContent))wp.click()};G.forEach(x=>{if(!x.keep&&x.c!==c&&x.c.classList.contains('open')){stp(x.c);x.c.classList.remove('open')}});if(o)stp(c);c.classList.toggle('open',!o);if(!o)setTimeout(()=>c.scrollIntoView({block:'start',behavior:'smooth'}),30)};
+    if(col&&keep)c.querySelector('.accH').onclick=()=>{if(c.classList.contains('open'))return;c.classList.add('open','fixed');const h=c.querySelector('.accH');const d=document.createElement('div');d.className='accH';d.innerHTML=h.innerHTML;d.querySelector('.ar')?.remove();h.replaceWith(d);setTimeout(()=>c.scrollIntoView({block:'start',behavior:'smooth'}),30)}});
+  const calc=G.find(g=>/الحسابات/.test(g.t));const lb=document.getElementById('logB');
+  if(calc&&lb){const m=document.createElement('div');m.className='accLog';calc.c.querySelector('.accB').prepend(m);const sync=()=>{m.innerHTML=lb.innerHTML.replace(/ id="[^"]*"/g,'')};sync();new MutationObserver(sync).observe(lb,{childList:true,subtree:true,characterData:true})}
+  box.querySelectorAll('.slh').forEach(p=>{if(/\(5\.3\)/.test(p.textContent))p.textContent=p.textContent.replace(' (5.3)','')});
+  const n=box.querySelector('.labName')?.closest('.intro')?.querySelector('h3');
+  {const ni=box.querySelector('.labName').closest('.intro'),tg=box.querySelector(':scope>.tags');const c=document.createElement('div');c.className='accC open fixed';
+    c.innerHTML='<div class="accH"><span class="ai">🧪</span><span class="at">اسم التجربة</span></div><div class="accB"></div>';ni.after(c);const B=c.querySelector('.accB');
+    const nm=ni.querySelector('.labName');B.appendChild(nm);if(tg)B.appendChild(tg);ni.style.display='none'}
+  setTimeout(()=>{const f=box.querySelector('.accC.fixed');const sc=f.closest('.view');if(sc)sc.scrollTop=0;scrollTo(0,0)},60)}
+
+const FSCSS=`body.labFS header.top,body.labFS .lessonHead{display:none!important}.fsBar{position:sticky;top:0;z-index:50;display:none;align-items:center;gap:8px;padding:8px 10px;background:var(--panel);border-bottom:2px solid #2563EB;font-weight:900}body.labFS .fsBar{display:flex}.fsBar button{font:inherit;font-weight:900;border:1.5px solid var(--line);background:var(--panel);color:var(--ink);border-radius:10px;padding:7px 12px;cursor:pointer}.fsBar span{font-size:14px;color:var(--muted)}.lab .labBody:not(.accReady){visibility:hidden}`;
+function direct(){const f=DIR[window.__mlKey];if(f)f()}
+function mount(key){window.__mlKey=key;
+  if(!document.getElementById('fsCss')){const st=document.createElement('style');st.id='fsCss';st.textContent=FSCSS;document.head.appendChild(st)}
+  try{document.querySelectorAll('.card.lab details').forEach(d=>{if(!d.classList.contains('wsDet'))d.open=true});try{restructure()}catch(e){console.error(e)}watchTL();direct();accordion()}catch(e){console.error(e)}
+  finally{document.querySelectorAll('.card.lab .labBody').forEach(b=>b.classList.add('accReady'));
+    const v=document.getElementById('view');
+    if(v&&!document.querySelector('.fsBar')){v.insertAdjacentHTML('beforebegin','<div class="fsBar"><button type="button" id="fsBack">→ رجوع للدرس</button><span>🧪 تجربة عملية تفاعلية</span></div>');
+      document.getElementById('fsBack').onclick=()=>{document.body.classList.remove('labFS');scrollTo(0,0)}}
+    document.body.classList.add('labFS');if(v)v.scrollTop=0;scrollTo(0,0)}}
+const RL=window.renderLabCard;
+window.renderLabCard=function(host,u,l){const r=RL.apply(this,arguments);if(r){const L=window.LABS[u+'-'+l];setTimeout(()=>mount((L&&L.k)||u+'-'+l),0)};return r};
+/* الخروج من التجربة: أي عرض بلا تجربة يعيد أشرطة المنصة */
+try{new MutationObserver(()=>{if(document.body.classList.contains('labFS')&&!document.querySelector('#view .card.lab'))document.body.classList.remove('labFS')}).observe(document.body,{childList:true,subtree:true})}catch(e){}
+
+})();
