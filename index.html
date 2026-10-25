@@ -797,7 +797,7 @@ const sk=k=>AUTH&&API&&PERSONAL.includes(k)?k+'-'+AUTH.id:k;
 const store={get(k,d){try{const v=localStorage.getItem(sk(k));return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(sk(k),JSON.stringify(v))}catch(e){}}};
 let done=new Set(store.get('p101-done',[]));
 let best=store.get('p101-best',{});
-let pos=store.get('p101-pos',{u:0,l:0,p:0,t:'sum'});
+let pos=store.get('p101-pos',{u:0,l:0,p:0,t:'sum'});if(pos&&pos.t==='lab')pos.t='sum';
 if(!UNITS[pos.u]||!UNITS[pos.u].l[pos.l])pos={u:0,l:0,p:0,t:'sum'};
 while(UNITS[pos.u].l[pos.l].hide&&UNITS[pos.u].l[pos.l+1]){pos.l++;pos.p=0}
 if(!UNITS[pos.u].l[pos.l].p[pos.p])pos.p=0;
@@ -1439,7 +1439,7 @@ function openBoard(dry){dry=dry===true;
       /* المدرب الذكي التفاعلي: شكر عند الصواب، وتلميح ثم تصحيح مع السبب عند الخطأ */
       const LEAD={r:'لا بأس، ',s:'جيد، لكن ',g:'انتبه هنا، ',i:'محاولة جيدة، لكن ',m:'جيد، لكن '};
       const HINT={r:'تذكر الفكرة الأساسية في الدرس السابق.',s:'انظر إلى موقع الرمز في القانون وما يمثله.',g:'اقرأ آخر السؤال، ففيه ما نريد إيجاده.',i:q.t===3?'انقل الكميات إلى الطرف الآخر بالعملية العكسية.':'انظر: هل الكمية في البسط أم في المقام؟',m:'ابحث عن الخيار الذي لا يحتوي على أي خطأ.'};
-      const nm=()=>{try{return String((typeof AUTH!=='undefined'&&AUTH&&AUTH.name)||'').trim().split(/\s+/)[0]||''}catch(e){return ''}};
+      const nm=()=>{try{return window.coachName?coachName():''}catch(e){return ''}};
       const fb=(c,x)=>{f.className='bQf '+c;f.innerHTML=x;void f.offsetWidth;f.classList.add('pop');ct.dataset.fb=(+ct.dataset.fb||0)+1;/* في التنقل اليدوي ينطق المدرب الشكر والتلميح والتصحيح أيضا */if(!auto){try{TTS.stop()}catch(e){}say(f.textContent,runId)}};
       const tail=q.say?' '+inl(q.say):'',mark=(b,t)=>{const L=b.querySelector('.bL');if(L)L.textContent=t};
       bs.forEach(b=>b.onclick=()=>{if(O.dataset.done)return;const j=+b.dataset.j;
@@ -2373,7 +2373,9 @@ function renderRefs(v){
   s.insertAdjacentHTML('beforeend',`<div class="md"><ul><li><a href="https://phet.colorado.edu/ar/" target="_blank" rel="noopener">PhET — محاكاة فيزيائية تفاعلية بالعربية</a> (جامعة كولورادو)</li><li><a href="https://claude.ai/artifact/9BRKRrSsZcDSEQSbLHPzec" target="_blank" rel="noopener">المساعد الذكي للمقرر</a> — يجيب عن أسئلتك ويشرح أي صفحة (يحتاج حساب Claude مجاني)</li></ul></div>`);
   i.appendChild(s);
 }
-function go(u,l,p,t){pos={u,l,p,t:t||pos.t};if(GT(pos.t))pos.t='sum';buildNav();render()}
+function go(u,l,p,t){const nw=u!==pos.u||l!==pos.l;pos={u,l,p,t:t||(nw&&pos.t==='lab'?'sum':pos.t)};if(GT(pos.t))pos.t='sum';buildNav();render()}
+/* زر «رجوع للدرس» في التجربة يعيد إلى الصفحة الرئيسية للدرس */
+document.addEventListener('click',e=>{if(e.target&&e.target.closest&&e.target.closest('#fsBack'))setTimeout(()=>{try{document.body.classList.remove('labFS');go(pos.u,pos.l,undefined,'sum')}catch(_){}},0)});
 function setTab(t){pos.t=t;render()}
 document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>setTab(b.dataset.t));
 $('nextBtn').onclick=()=>{const l=lesson();
