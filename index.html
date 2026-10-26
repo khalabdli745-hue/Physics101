@@ -779,6 +779,7 @@ document.querySelectorAll('.lgEye').forEach(b=>b.onclick=()=>{const i=b.parentNo
 <script src="more.js"></script>
 <script src="labs.js"></script>
 <script src="coach.js"></script>
+<script src="kcards.js"></script>
 <script>
 const UNITS=window.UNITS,STUDY=window.STUDY,EXTRA=window.EXTRA||{},FIGS=window.FIGS||{};
 window.PAGES=window.PAGES||{};
@@ -1384,6 +1385,7 @@ function openBoard(dry){dry=dry===true;
       pack(st).forEach((ch,c)=>out.push({type:'c',title:'تمرين '+AR(j+1)+(p.src?' · '+p.src:'')+(c?' (تابع)':''),steps:ch,s4:true}));return}
     out.push({type:'c',title:'تمرين '+AR(j+1)+(K2==='0-6'?((String(p.src||'').match(/صفحة [0-9٠-٩]+/)||[''])[0].replace(/^(.+)$/,' ($1)')):(p.src?' · '+p.src:'')),steps:[{md:'**السؤال:** '+p.q},{md:'**المعطيات:** '+p.g.map(g=>'`'+g+'`').join('، ')},{md:'**المطلوب:** '+p.r[0]},{md:'**القانون المستخدم:** '+(p.laws||[p.l[0]]).map(x=>'`'+x+'`').join(' و ')},...(lawHaith(p.l[0])?[{md:lawHaith(p.l[0])}]:[]),...(p.b?[{md:'**الحل:**'}].concat(p.b.map((y,i)=>({md:'`'+y+(i===p.b.length-1?' = '+ans:'')+'`'}))):[{md:'**الحل:** `'+val+' = '+ans+'`'}]),{md:'**النتيجة:** `'+(p.rs?p.rs+' = ':'')+ans+'`'}].concat(p.n?[{md:'**ملاحظة:** '+p.n}]:[])})});
   const sm=(window.SUMM||{})[key(pos.u,pos.l)];
+  if(window.KC&&KC.has(K2)){try{const _o=KC.apply(out,K2);out.length=0;_o.forEach(x=>out.push(x))}catch(e){}}
   if(sm)out.push({type:'c',title:'ملخص الدرس',steps:sm.split('\n').filter(x=>x.trim()).map(x=>({md:x.trim()}))});
 /* أسئلة المدرب الذكي التفاعلي (coach.js): ربط في البداية، رمز القانون ووحدته، المطلوب في التمرين، استنتاج، ملخص في النهاية */
   if(!dry&&window.COACHQ&&COACHQ[K2]){try{const CQ=COACHQ[K2];
@@ -1429,7 +1431,7 @@ function openBoard(dry){dry=dry===true;
       h=`<div class="bQ cq${q.o.some(o=>String(o).length>60)?' long':''}"><div class="bQh">${LB[q.ct]||'🙋 سؤال للمتدرب'}</div><div class="bQcard"><p class="bQq">${inl(q.q)}</p></div><div class="bOpts">${q.o.map((o,j)=>`<button type="button" data-j="${j}"><b class="bL">${LT[j]||j+1}</b><span>${inl(o)}</span></button>`).join('')}</div><div class="bQf" aria-live="polite"></div></div>`}
       else h=`<div class="bQ"><div class="bQh">🙋 سؤال للمتدرب</div><p class="bQq">${inl(q.q)}</p><div class="bOpts">${q.o.map((o,j)=>`<button type="button" data-j="${j}">${inl(o)}</button>`).join('')}</div><div class="bQf" aria-live="polite"></div></div>`}
     else{h=(sl.title?`<h2 class="bH">${inl(sl.title)}</h2>`:'')+sl.steps.map((x,j)=>`<div class="bStep${j<step?' in':''}">${x.html?x.html:x.h!==undefined?'<h3>'+inl(x.h)+'</h3>':md(x.md)}</div>`).join('')}
-    ct.innerHTML=h;
+    ct.innerHTML=h;if(sl.type==='q'&&sl.q&&sl.q.ct&&window.KC&&KC.decorQ){try{KC.decorQ(ct,K2,sl.q.ct)}catch(e){}}
     /* شريحة العنوان: محاور الدرس كلها تظهر في الشاشة دون تمرير (تصغير تدريجي وعمودان عند الحاجة) */
     if(sl.type==='t'){const T=ct.querySelector('.bTitle'),H=T&&T.querySelector('h1'),O=T&&T.querySelector('ol');
       const fit=()=>{if(!T||!O)return;const L=[()=>{T.style.paddingTop='1vh';H.style.fontSize='24px';H.style.margin='.2em 0 .3em'},()=>{O.style.fontSize='16px'},()=>{/* عمودان مستقلان: كل بند كامل في عموده، وكل عمود يرتب بنوده دون فراغات */const li=[...O.children],h=Math.ceil(li.length/2);let nI=0;li.forEach((x,i)=>{if(!x.classList.contains('tIntro'))x.insertAdjacentHTML('afterbegin','<b style="font-weight:400">'+AR(++nI)+'. </b>');x.style.margin='0 0 3px'});const c1=document.createElement('div'),c2=document.createElement('div');li.slice(0,h).forEach(x=>c1.appendChild(x));li.slice(h).forEach(x=>c2.appendChild(x));O.append(c1,c2);O.style.display='flex';O.style.alignItems='flex-start';O.style.gap='22px';O.style.width='100%';O.style.listStyle='none';O.style.paddingInlineStart='0';c1.style.flex=c2.style.flex='1 1 0'},()=>{O.style.fontSize='14.5px';H.style.fontSize='21px'},()=>{O.style.fontSize='13px';O.style.lineHeight='1.5'},()=>{H.style.fontSize='18px';O.style.fontSize='12px'},()=>{const sm=T.querySelector('small'),bo=T.querySelector('.bOut');if(sm)sm.style.fontSize='11px';if(bo)bo.style.margin='.2em 0 0';O.style.fontSize='11.5px';O.style.lineHeight='1.35';H.style.fontSize='16px'}];
@@ -1899,6 +1901,7 @@ function problemCard(p,title,onFinish){
   c.innerHTML=`<h2>${title}</h2>`;
   {const tk=(typeof AUTH!=='undefined'&&AUTH&&AUTH.token)||TAUTH;if(API&&tk)c.appendChild(hintBtn(c,p))}
   c.insertAdjacentHTML('beforeend',`<p class="pq">${String(p.q).split('\n').map(inl).join('<br>')}</p>`);
+  try{const fg=window.KC&&KC.probFig(key(pos.u,pos.l),p);if(fg){c.appendChild(fg);c._kfig=fg}}catch(e){}
   let firstTry=0;const steps=[];
   const mkStep=(n,label)=>{const s=document.createElement('div');s.className='pstep';s.innerHTML=`<div class="phead"><span class="pnum">${AR(n)}</span><b>${label}</b><span class="pstat"></span></div><div class="pbody"></div><div class="pfb" aria-live="polite"></div>`;s.hidden=true;c.appendChild(s);steps.push(s);return s};
   const done=(s,ok,auto)=>{s.classList.add(ok?'ok':'shown');s.querySelector('.pstat').textContent=ok?'✓':'تم التصحيح';if(ok&&!auto)firstTry++};
@@ -1995,7 +1998,7 @@ function problemCard(p,title,onFinish){
   const fin=ansRow.querySelector('.final'),bF=ansRow.querySelector('button.btn');
   const finish=(ok)=>{fin.disabled=true;bF.hidden=true;CAL.close();s4.classList.add(ok?'ok':'shown');s4.querySelector('.pstat').textContent=ok?'✓':'تم التصحيح';
     const sol=document.createElement('div');sol.className='ans';sol.innerHTML='الحل:'+(p.b?p.b.map((y,i)=>'<div class="eqblock">'+kfr(rad(esc(divs(y+(i===p.b.length-1?' = '+fmt(p.a[0])+(p.a[1]?' '+p.a[1]:''):'')))))+'</div>').join(''):'<div class="eqblock">'+kfr(rad(esc(divs(p.s.replace(/\[([^\]]+)\]/g,(m,x)=>fmt(parseNum(x)))))))+' = '+esc(fmt(p.a[0]))+(p.a[1]?' '+esc(p.a[1]):'')+'</div>')+(p.n?'<br><span class="nt">'+inl(p.n)+'</span>':'');
-    c.appendChild(sol);c.classList.add('finished');onFinish&&onFinish(Math.min(firstTry,5),{q:p.q.slice(0,100),answer:fin.value,correct:ok,expected:p.a[0]})};
+    c.appendChild(sol);c.classList.add('finished');if(c._kfig&&window.KC)KC.probDone(c._kfig);onFinish&&onFinish(Math.min(firstTry,5),{q:p.q.slice(0,100),answer:fin.value,correct:ok,expected:p.a[0]})};
   bF.onclick=()=>{const v=parseNum(fin.value);
     if(near(v,p.a[0],0.02)){if(t5===0)firstTry+=2;fb(s4,'إجابة صحيحة! أحسنت.','good');finish(true);return}
     t5++;

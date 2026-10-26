@@ -248,7 +248,8 @@ function calcInit(root){if(typeof makeCalc!=='function')return;const hs=[...root
    const old=h.querySelector('.exSheet');if(old){old.remove();b.setAttribute('aria-expanded','false');return}
    const sp=P.querySelector('.law .lw span');const L=(sp?sp.textContent:'').split('\n').map(x=>x.trim()).filter(Boolean);
    const law=L[0]||'—',giv=L.length>1?L.slice(1).join('  '):'أكمل الخطوات السابقة، ثم عوض بأرقامها';
-   calcSheet(law,giv,n=>{b.setAttribute('aria-expanded','false');put(String(+(+n).toPrecision(8)))},{});
+   const bq=t=>/[\u0600-\u06FF]/.test(t)||/`/.test(t)?t:'`'+t+'`';
+   calcSheet(bq(law),L.length>1?L.slice(1).map(bq).join('  '):giv,n=>{b.setAttribute('aria-expanded','false');put(String(+(+n).toPrecision(8)))},{});
    /* مثل الاختبار: الآلة داخل خطوة الحساب لا فوق الصفحة، والقانون والتعويض في صندوق فوقها */
    const sh=document.querySelector('.exSheet');if(sh){document.body.classList.remove('exSheetOn');sh.classList.add('exInline','labSheet');h.appendChild(sh);if(typeof exCalcFit==='function'&&document.body.classList.contains('calcNew')){exCalcFit(sh);setTimeout(()=>exCalcFit(sh),350)}b.setAttribute('aria-expanded','true');
      const c=sh.querySelector('.cuse');if(c)c.textContent='✓ ضع النتيجة في خانة الحساب';
