@@ -288,7 +288,7 @@ function probDone(el){if(!el)return;el.classList.add('kOn');const c=el.querySele
 function heat(){const W=640,H=260,FY=190;let b=stage(W,H,FY);
   const cube=(x,c1,c2,c3,t)=>`<g><polygon points="${x},110 ${x+110},110 ${x+140},88 ${x+30},88" fill="${c1}"/><polygon points="${x+110},110 ${x+140},88 ${x+140},168 ${x+110},190" fill="${c3}"/><rect x="${x}" y="110" width="110" height="80" fill="${c2}"/><text x="${x+55}" y="158" text-anchor="middle" font-size="17" font-weight="900" fill="#fff">${t}</text></g>`;
   b+=cube(150,'#fca5a5','#dc2626','#991b1b','ساخن')+cube(262,'#93c5fd','#2563eb','#1e3a8a','بارد');
-  b+=arrow(215,375,70,'F',.1,10)+`<text x="300" y="52" text-anchor="middle" font-size="14" font-weight="800" fill="#b45309">الحرارة تنتقل من الساخن إلى البارد</text>`;
+  b+=arrow(215,375,70,'F',.1,10)+`<text x="300" y="52" text-anchor="middle" font-size="14" font-weight="800" fill="#b45309">الحرارة تنتقل من الجسم الساخن إلى البارد</text>`;
   return svg(W,H,b,'kAuto')}
 function lawFig(){return `<div class="kLawBox"><div class="kLawF"><bdi dir="ltr">F = k · q₁ · q₂ / r²</bdi></div><div class="kLawT"><span>F القوة (N)</span><span>k ثابت كولوم</span><span>q₁ و q₂ الشحنتان (C)</span><span>r المسافة (m)</span></div></div>`}
 function solveFig(){return `<div class="kLawBox"><div class="kLawF kStep1"><bdi dir="ltr">F = k · q₁ · q₂ / r²</bdi></div><div class="kLawA">↓ نضرب في r² ونقسم على k·q₂</div><div class="kLawF kStep2"><bdi dir="ltr">q₁ = ?</bdi></div></div>`}
@@ -301,7 +301,7 @@ const CSS=`
 .kQ,.kG,.kR,.kSt,.kUR,.kPt,.kLawBox,.kLawT span,.kG>div{color:#1e293b}.kQ b,.kSt b,.kPt b,.kR b{color:inherit}
 .kLesson .kLs{margin:0 0 26px;padding-bottom:18px;border-bottom:1px dashed #c9daf0}.kLesson .kLs:last-child{border-bottom:0}.kLesson .kLst{margin:10px 0}.kLesson .kLs>h3{margin:4px 0 10px}
 .kc{--kA:#0B7A70;font-size:inherit;min-width:0;max-width:100%;box-sizing:border-box;overflow-wrap:anywhere}
-@media (max-width:759px){.kc .kM{white-space:normal!important;display:inline-block;direction:ltr;text-align:left;max-width:100%;vertical-align:middle}.kG>div{max-width:100%}.board .bContent:has(.kc){font-size:16.5px}}
+@media (max-width:999px){.kc .kM{white-space:normal!important;display:inline-block;direction:ltr;text-align:left;max-width:100%;vertical-align:middle}.kG>div{max-width:100%}.board .bContent:has(.kc){font-size:16.5px}}
 .kc .kM{font-family:"Noto Sans",system-ui,sans-serif;font-weight:700;white-space:nowrap;unicode-bidi:isolate}
 .kTag{display:inline-block;font-size:.72em;font-weight:900;color:#fff;background:var(--kA);border-radius:8px;padding:1px 10px;margin-bottom:4px}
 .kQ{background:linear-gradient(180deg,#f3fbfa,#e9f6f4);border:1.5px solid #b7e1db;border-radius:14px;padding:10px 14px;font-weight:700;line-height:1.85;box-shadow:0 6px 16px rgba(11,122,112,.08)}
@@ -340,14 +340,14 @@ const CSS=`
 .kOn .kThree .kTot .kAr,.bContent:has(.bStep.in .kTotOn) .kThree .kTot .kAr{animation:kcGrow .9s cubic-bezier(.2,.9,.3,1.2) .2s forwards!important}
 .kOn .kThree .kTot .kPl,.bContent:has(.bStep.in .kTotOn) .kThree .kTot .kPl{animation:kcFade .5s ease .5s forwards!important}
 .kProb{margin:8px 0 12px}
-.board .bContent:has(.kc){font-size:18px}
+.board .bContent:has(.kc){font-size:clamp(16.5px,min(2.5vw,2.6vh),25px)}
 .board .bContent:has(.kc) .bStep.in{margin:0 0 10px}
-@media (min-width:760px){.board .bContent:has(.kFig):not(:has(.bQ)){display:grid;grid-template-columns:1fr 1.08fr;column-gap:18px;align-items:start}
+@media (min-width:1000px){.board .bContent:has(.kFig):not(:has(.bQ)){display:grid;grid-template-columns:1fr 1.08fr;column-gap:18px;align-items:start}
  .board .bContent:has(.kFig):not(:has(.bQ))>.bH{grid-column:1/-1}.board .bContent:has(.kFig):not(:has(.bQ))>.bStep{grid-column:1}
  .board .bContent:has(.kFig):not(:has(.bQ))>.bStep:has(.kFig){grid-column:2;grid-row:2/span 40;position:sticky;top:4px}
  .board .bContent:has(.kFig):not(:has(.bQ))>.bStep:has(.kFig)~.bStep:has(.kFig){grid-row:auto;position:static}
  .board .bContent:has(.bStep:has(.kFig)~.bStep:has(.kFig)){display:block!important}.board .bContent:has(.bStep:has(.kFig)~.bStep:has(.kFig))>.bStep:has(.kFig){position:static!important}}
-@media (max-width:759px){.board .bContent:has(.kFig)>.bStep.in:has(.kFig):not(:has(.kAuto)){position:sticky;top:0;z-index:3;background:#fdfdfb;padding-bottom:6px}}
+@media (max-width:999px){.board .bContent:has(.kFig)>.bStep.in:has(.kFig):not(:has(.kAuto)){position:sticky;top:0;z-index:3;background:#fdfdfb;padding-bottom:6px}}
 /* أسئلة المدرب الذكي بنفس طريقة العرض */
 .bQ.kQz{max-width:860px}
 .bQ.kQz .bQcard{background:linear-gradient(180deg,#f3fbfa,#e9f6f4);border-color:#b7e1db;font-weight:700}
