@@ -3711,7 +3711,7 @@ function clLab(box){
   </div>
   <div class="ctl"><h3>5.2 الحسابات</h3>
     <div id="logB"></div>
-    <p class="slh">ℹ️ <b>المعطيات:</b> <b class="cQ" dir="ltr">g = 9.8 m/s²</b> ، <b class="cQ" dir="ltr">k = 9 × 10⁹ N·m²/C²</b></p>
+    <p class="slh">ℹ️ <b>المعطيات:</b><br><b class="cQ" dir="ltr">g = 9.8 m/s²</b><br><b class="cQ" dir="ltr">k = 9 × 10⁹ N·m²/C²</b></p>
     <p class="slh">الحسابات تأخذ أرقامها من سجل القراءات بنفس ألوانها: <b class="cV">قراءة الميزان</b> و<b class="cT">المسافة بالمتر</b> و<b class="cQ">المعطيات</b>.</p>
     <h4 class="sbh">أ) النسبة F₁ / F₃ ومقارنتها بـ (r₃ / r₁)²</h4>
     <p class="slh">ℹ️ حيث <bdi dir="ltr">F = m·g</bdi>، فتختصر <bdi dir="ltr">g</bdi> في النسبة.</p>
@@ -6452,6 +6452,7 @@ function restructure(){const box=document.querySelector('.card.lab .labBody');if
   CS.forEach(x=>{if(x.h){if(x.t)x.h.textContent=x.h.textContent.replace(/^\s*[^\s)]{1,3}\)\s*/,'')+' ('+x.t+')';letter(x.h);c6.appendChild(x.h)}c6.appendChild(x.s)});
   calc.forEach(c=>{const h=c.querySelector(':scope>h3');if(h){const h4=document.createElement('h4');h4.className='sbh';h4.textContent=h.textContent.replace(/^\s*\d+(\.\d+)?\s*/,'').trim();if(!/^الحسابات$/.test(h4.textContent)){letter(h4);c6.appendChild(h4)}h.remove()}
     [...c.childNodes].forEach(n=>{if(n.nodeType===1&&n.matches('h4.sbh'))letter(n);c6.appendChild(n)});c.remove()});
+  {const ps=[...c6.querySelectorAll('p.slh')].filter(p=>/الحسابات تأخذ أرقامها/.test(p.textContent));if(ps.length>1)ps[0].remove()}
   if(!c6.querySelector('.cstep,.ans,.labCalc'))c6.insertAdjacentHTML('beforeend','<p class="slh">لا توجد حسابات إضافية في هذه التجربة.</p>');
   /* 7. الاستنتاج والنتائج */
   if(res){const h=res.querySelector(':scope>h3');if(h)h.textContent='7. الاستنتاج والنتائج'}
