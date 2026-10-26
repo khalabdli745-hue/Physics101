@@ -1307,7 +1307,8 @@ function nextLessonBtn(i){
 function nextLesson(){let u=pos.u,l=pos.l;do{if(l<UNITS[u].l.length-1)l++;else if(u<UNITS.length-1){u++;l=0}else return null}while(HID(u,l));return[u,l]}
 /* ---------- شرح الدرس: سبورة ذكية يشرح عليها المدرب الذكي خطوة بخطوة ---------- */
 const BOARD_PUBLIC=true;
-function openBoard(dry){dry=dry===true;
+function KC_ORD(k){return window.KC&&KC.has(k)?['سابعًا','ثامنًا','تاسعًا','عاشرًا']:[]}
+function openBoard(dry){const dryS=dry==='slides';dry=dry===true||dryS;
   const s=study(),l=lesson();if(!s||!l)return;
   const K='p101-board-'+key(pos.u,pos.l);
   /* الأقسام */
@@ -1386,6 +1387,7 @@ function openBoard(dry){dry=dry===true;
     out.push({type:'c',title:'تمرين '+AR(j+1)+(K2==='0-6'?((String(p.src||'').match(/صفحة [0-9٠-٩]+/)||[''])[0].replace(/^(.+)$/,' ($1)')):(p.src?' · '+p.src:'')),steps:[{md:'**السؤال:** '+p.q},{md:'**المعطيات:** '+p.g.map(g=>'`'+g+'`').join('، ')},{md:'**المطلوب:** '+p.r[0]},{md:'**القانون المستخدم:** '+(p.laws||[p.l[0]]).map(x=>'`'+x+'`').join(' و ')},...(lawHaith(p.l[0])?[{md:lawHaith(p.l[0])}]:[]),...(p.b?[{md:'**الحل:**'}].concat(p.b.map((y,i)=>({md:'`'+y+(i===p.b.length-1?' = '+ans:'')+'`'}))):[{md:'**الحل:** `'+val+' = '+ans+'`'}]),{md:'**النتيجة:** `'+(p.rs?p.rs+' = ':'')+ans+'`'}].concat(p.n?[{md:'**ملاحظة:** '+p.n}]:[])})});
   const sm=(window.SUMM||{})[key(pos.u,pos.l)];
   if(window.KC&&KC.has(K2)){try{const _o=KC.apply(out,K2);out.length=0;_o.forEach(x=>out.push(x))}catch(e){}}
+  if(dryS)return out;
   if(sm)out.push({type:'c',title:'ملخص الدرس',steps:sm.split('\n').filter(x=>x.trim()).map(x=>({md:x.trim()}))});
 /* أسئلة المدرب الذكي التفاعلي (coach.js): ربط في البداية، رمز القانون ووحدته، المطلوب في التمرين، استنتاج، ملخص في النهاية */
   if(!dry&&window.COACHQ&&COACHQ[K2]){try{const CQ=COACHQ[K2];
@@ -1501,7 +1503,7 @@ function openBoard(dry){dry=dry===true;
     while(id===runId&&TTS.busy())await wait(120);B.classList.remove('talking');await wait(150)};
   /* أسلوب المدرب: عبارات انتقال وشرح متنوعة كأنه معلم حقيقي يخاطب المتدرب */
   const pick=(arr,k)=>arr[Math.abs(k|0)%arr.length];
-  const ORDW=['أولًا','ثانيًا','ثالثًا','رابعًا','خامسًا','سادسًا'];
+  const ORDW=['أولًا','ثانيًا','ثالثًا','رابعًا','خامسًا','سادسًا'].concat(KC_ORD(K2));
   const LBL={'الموقف':['تخيّل معي هذا الموقف:','لنتأمل هذا الموقف:'],'التفسير':['والتفسير ببساطة:','فما الذي يحدث هنا؟','لاحظ ما يحدث:'],'القانون':['وهنا يظهر','وهذا بالضبط ما يقوله'],
     'المعطيات':['لنكتب أولًا ما أُعطي لنا في السؤال:','نبدأ بالمعطيات:'],'المطلوب':['والمطلوب منا:','وما الذي نبحث عنه؟'],'القانون المستخدم':['نختار القانون المناسب:','نستخدم القانون:'],'السؤال':['اقرأ معي السؤال:','لدينا هذا السؤال:'],'الإجابة':['إذن الإجابة النهائية:','وهكذا تكون الإجابة:'],'الحل':['والآن نعوّض ونحسب:','نحل خطوة بخطوة:'],'النتيجة':['إذن النتيجة:','وبهذا نصل إلى النتيجة:'],
     'ملاحظة':['انتبه لهذه الملاحظة:'],'تنبيه':['انتبه جيدًا:'],'تذكّر':['تذكّر دائمًا:']};
@@ -1522,7 +1524,7 @@ function openBoard(dry){dry=dry===true;
     if(sl.type==='t')return 'مرحبًا بك'+((!dry&&window.coachName&&coachName())?' يا '+coachName():'')+'. '+(VO==='z'?'أنا مدربتك الذكية':'أنا مدربك الذكي')+'، وسأشرح لك اليوم '+((window.COACHINTRO||[]).includes(K2)?'مقدمة الوحدة '+['الأولى','الثانية','الثالثة','الرابعة','الخامسة'][+K2.split('-')[0]]+' وأهدافها، ثم درس: ':'درس: ')+l.t+'. '+(TOP?'سنتعلم في هذا الدرس: '+topSay()+'. ركّز معي، وهيا نبدأ.':heads.length?'سنتعلم في هذا الدرس: '+heads.join('، ')+'. ركّز معي، وهيا نبدأ.':'ركّز معي، وهيا نبدأ.');
     if(sl.type==='e'){const n=!dry&&window.coachName&&coachName(),lab=!!(window.LABS&&LABS[K2]);return 'شكرًا لمتابعتك'+(n?' يا '+n:'')+'. انتهينا من شرح الدرس، والآن حل الأمثلة والتمارين التفاعلية، ثم اختبر نفسك'+(lab?'، وبعدها انتقل إلى التجربة العملية لترى ما تعلمته يتحقق أمامك.':'.')}
     if(sl.type==='q')return sl.q.ct?sl.q.lead+' '+sl.q.q+' اختر الإجابة الصحيحة.':'والآن سؤال لك: '+sl.q.q;
-    if(step===0){if(!sl.title)return '';if(/\(تابع\)$/.test(sl.title))return sl.s4?'':'نكمل معًا.';
+    if(step===0){if(!sl.title)return '';if(sl.sayT)return sl.sayT;if(/\(تابع\)$/.test(sl.title))return sl.s4?'':'نكمل معًا.';
       if(sl.title==='ملخص الدرس')return 'والآن، لنستعرض سويا خلاصة ما تعلمناه في هذا الدرس.';
       if(sl.s4&&/^تمرين/.test(sl.title))return 'والآن '+sl.title+'.';
       if(/^تمرين/.test(sl.title))return pick(['والآن لنحل معًا ','هيا نطبق ما تعلمناه في '],cur)+sl.title+'.';
@@ -1670,14 +1672,15 @@ function renderSum(v){
   const c=card('الدرس','');
   c.appendChild(TTS.controls(()=>s.s.replace(/^\[\[(fig|img):[^\n]*\]\]$/gm,''),{compact:true,label:'🔊 استمع للدرس'}));
   const body=document.createElement('div');body.className='md';body.innerHTML=md(s.s);c.appendChild(body);
-  {const ch=[];let cur=null;for(const ln of s.s.split('\n')){if(/^#{1,4}\s/.test(ln)){cur=[ln];ch.push(cur)}else if(cur)cur.push(ln)}
+  let kL=false;if(window.KC&&KC.has(key(pos.u,pos.l))){try{const so=openBoard('slides');if(so&&so.length){const sg=[];so.filter(z=>z.type==='c'&&z.title!=='ملخص الدرس'&&!(x.ap&&z.title==='تطبيقات من الحياة')).forEach(z=>{const t=String(z.title||''),bt=t.replace(/\s*\(تابع\)\s*$/,'');const L=sg[sg.length-1];if(L&&/\(تابع\)\s*$/.test(t)&&L.title===bt)L.steps=L.steps.concat(z.steps);else sg.push({title:bt,steps:z.steps.slice()})});body.innerHTML=sg.map(z=>'<div class="kLs">'+(z.title?'<h3>'+inl(z.title)+'</h3>':'')+z.steps.map(x=>'<div class="kLst">'+(x.html?x.html:x.h!==undefined?'<h4>'+inl(x.h)+'</h4>':md(x.md))+'</div>').join('')+'</div>').join('');body.classList.add('kOn','kLesson');kL=true}}catch(e){}}
+  if(!kL){const ch=[];let cur=null;for(const ln of s.s.split('\n')){if(/^#{1,4}\s/.test(ln)){cur=[ln];ch.push(cur)}else if(cur)cur.push(ln)}
    body.querySelectorAll('h3').forEach((h,i)=>{const c2=ch[i];if(!c2)return;const txt=c2.filter(l=>!/^\[\[(fig|img):/.test(l)).join('\n');if(txt.split('\n').filter(l=>l.trim()).length<2)return;
      const w=TTS.controls(()=>txt,{compact:true,label:'🔊',aria:'استمع لهذا الجزء'});w.classList.add('secListen');h.appendChild(w)})}
   if(art)body.querySelectorAll('h3').forEach((h,n)=>{const e=document.createElement('span');e.className='hIcon';e.setAttribute('aria-hidden','true');e.textContent=art[n%3];h.prepend(e)});
-  if(x.fig&&FIGS[x.fig])c.insertAdjacentHTML('beforeend',FIGS[x.fig]);
-  ((window.FIGMAP||{})[key(pos.u,pos.l)]||[]).forEach(f=>{if(FIGS[f]&&f!==x.fig)c.insertAdjacentHTML('beforeend',FIGS[f])});
+  if(!kL&&x.fig&&FIGS[x.fig])c.insertAdjacentHTML('beforeend',FIGS[x.fig]);
+  if(!kL)((window.FIGMAP||{})[key(pos.u,pos.l)]||[]).forEach(f=>{if(FIGS[f]&&f!==x.fig)c.insertAdjacentHTML('beforeend',FIGS[f])});
   i.appendChild(c);
-  ((window.TABLES||{})[key(pos.u,pos.l)]||[]).forEach(t=>{const tc=card('📋 '+t.t);const w=document.createElement('div');w.className='ltWrap';
+  if(!kL)((window.TABLES||{})[key(pos.u,pos.l)]||[]).forEach(t=>{const tc=card('📋 '+t.t);const w=document.createElement('div');w.className='ltWrap';
     w.innerHTML=`<table class="lt"><thead><tr>${t.h.map(h=>`<th>${inl(h)}</th>`).join('')}</tr></thead><tbody>${t.r.map(r=>`<tr>${r.map(c=>`<td>${cellHTML(c)}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
     tc.appendChild(w);if(t.n){const n=document.createElement('p');n.className='note';n.innerHTML=inl(t.n);tc.appendChild(n)}i.appendChild(tc)});
   if(x.ap){const a=card('تطبيقات من الحياة');a.appendChild(TTS.controls(()=>'تطبيقات من الحياة.\n'+x.ap,{compact:true,label:'🔊 استمع للتطبيقات'}));const b=document.createElement('div');b.className='md';b.innerHTML=md(x.ap);a.appendChild(b);i.appendChild(a)}
