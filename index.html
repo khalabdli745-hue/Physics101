@@ -996,6 +996,7 @@ const TTS=(()=>{
   function spokenEn(t){
     const P=[];const ph=w=>{P.push(w);return ' \u0001'+(P.length-1)+'\u0002 '};
     t=String(t).replace(/K·E/g,'KE');
+    t=t.replace(/\b([A-Z][a-z]+)'?s?\s+[Ll]aws?\b/g,m=>ph(m.replace(/'s\b/,'s').replace(/\bLaw/,'law')));
     t=t.replace(/\b([A-Za-z])\((km\/h|m\/s|cm|mm|km|kg|min|°C|°F|m|g|h|s|K|J|N)\)/g,(m,x,u)=>x+ph(' in '+{'km/h':'kilometers per hour','m/s':'meters per second','cm':'centimeters','mm':'millimeters','km':'kilometers','m':'meters','kg':'kilograms','g':'grams','h':'hours','min':'minutes','s':'seconds','°C':'degrees Celsius','°F':'degrees Fahrenheit','K':'kelvin','J':'joules','N':'newtons'}[u]+' ')).replace(/ₙ/g,' n').replace(/_eq\b/g,()=>ph(' equivalent'));
     t=t.replace(/^\s*J\s*=\s*N\s*[·.]\s*m\s*$/,()=>ph('joule equals newton meter'));
     t=t.replace(/[\uE101-\uE10D]/g,c=>' '+ph(EN_ONE['msJWVACFKLhgN'[c.charCodeAt(0)-0xE101]])+' ').replace(/Ｎ/g,()=>ph('newton')).replace(/(\d\s*)Pa\b/g,(m,d)=>d+ph('pascals')).replace(/\bPa\b/g,()=>ph('pascal'));
@@ -1354,7 +1355,7 @@ function openBoard(dry){const dryS=dry==='slides';dry=dry===true||dryS;
   /* مواضيع الدرس المعتمدة من فهرس الحقيبة التدريبية (إن وجدت) */
   const TOP=(window.COACHTOP||{})[K2]||null;
   const andJ=a=>a.map((x,i)=>(i?'و':'')+x).join(' ');/* الفرعية بلا فواصل فتنطق جملة واحدة بإعراب صحيح (مجرورة بعد «على») */
-  const topSay=()=>TOP.map((g,i)=>{const sub=g[2]||(g[1].length?andJ(g[1]):'');const prev=i?TOP[i-1]:null;const sep=!i?'':(prev[0]==='مقدمة الوحدة وأهدافها'?'، و':(g[1].length||prev[1].length)?'. ثم ':'، و');return sep+g[0]+(sub?' وَنَتَعَرَّفُ فِيهِ عَلَى '+sub:'')}).join('');
+  const topSay=()=>TOP.map((g,i)=>{const sub=g[2]||(g[1].length?andJ(g[1]):'');const prev=i?TOP[i-1]:null;const sep=!i?'':(prev[0]==='مقدمة الوحدة وأهدافها'?'، و':(g[1].length||prev[1].length)?'. ثم ':'، و');return sep+g[0]+(g[3]?'، '+g[3]+(sub?'،':''):'')+(sub?' ونتعرف فيه على '+sub:'')}).join('');
   /* الرسومات التوضيحية */
   const figs=[...new Set([x.fig,...((window.FIGMAP||{})[K2]||[])].filter(f=>f&&FIGS[f]))];
   figs.forEach((f,j)=>out.push({type:'c',title:'رسم توضيحي'+(figs.length>1?' '+AR(j+1):''),steps:[{html:FIGS[f],say:'انظر معي إلى هذا الرسم التوضيحي على السبورة، وتأمل تفاصيله جيدًا.'}]}));
@@ -1435,7 +1436,7 @@ function openBoard(dry){const dryS=dry==='slides';dry=dry===true||dryS;
     if(sl.type==='q')return 'سؤال للمتدرب. '+sl.q.q+' '+sl.q.o.map((o,j)=>'الخيار '+(j+1)+': '+o).join('. ');
     return (sl.title?sl.title+'.\n':'')+sl.steps.slice(0,step).map(x=>x.h||x.md||x.say||'').join('\n').replace(/^\[\[(fig|img):[^\n]*\]\]$/gm,'')};
   const render=()=>{const sl=out[cur];let h='';
-    if(sl.type==='t')h=`<div class="bTitle"><small>الوحدة ${ORD[pos.u]} · ${esc(UNITS[pos.u].t)}</small><h1>${(window.COACHINTRO||[]).includes(K2)?'مقدمة الوحدة وأهدافها، و':''}${esc(l.t)}</h1>${TOP?'<p class="bOut">مواضيع الدرس</p><ol class="bTpc">'+TOP.map(g=>'<li><b>'+inl(g[0])+'</b>'+(g[1].length?'<ul class="bSub">'+g[1].map(x=>'<li>'+inl(x)+'</li>').join('')+'</ul>':'')+'</li>').join('')+'</ol>':heads.length?'<p class="bOut">مواضيع الدرس</p><ol>'+heads.map(x=>'<li>'+inl(x)+'</li>').join('')+'</ol>':''}</div>`;
+    if(sl.type==='t')h=`<div class="bTitle"><small>الوحدة ${ORD[pos.u]} · ${esc(UNITS[pos.u].t)}</small><h1>${(window.COACHINTRO||[]).includes(K2)?'مقدمة الوحدة وأهدافها و':''}${esc(l.t)}</h1>${TOP?'<ol class="bTpc">'+TOP.map(g=>'<li><b>'+inl(g[0])+'</b>'+(g[3]?' <bdi class="bEnT" dir="ltr" style="font-weight:600;color:#64748b;margin-inline-start:6px">'+esc(g[3])+'</bdi>':'')+(g[1].length?'<ul class="bSub">'+g[1].map(x=>'<li>'+inl(x)+'</li>').join('')+'</ul>':'')+'</li>').join('')+'</ol>':heads.length?'<p class="bOut">مواضيع الدرس</p><ol>'+heads.map(x=>'<li>'+inl(x)+'</li>').join('')+'</ol>':''}</div>`;
     else if(sl.type==='e')h=`<div class="bTitle"><h1>✓ انتهى شرح الدرس</h1><p>${window.coachName&&coachName()?'شكرا لمتابعتك يا '+esc(coachName())+'. ':''}انتقل الآن إلى الأمثلة والتمارين التفاعلية، ثم اختبر نفسك${window.LABS&&LABS[K2]?'، ثم التجربة العملية':''}.</p></div>`;
     else if(sl.type==='q'){const q=sl.q;if(q.ct){const LB={r:'🔁 سؤال من الدرس السابق',s:'📐 سؤال عن القانون',g:'📝 سؤال عن التمرين',i:'💡 سؤال استنتاج',m:'🧾 سؤال الملخص'},LT='أبجد';
       h=`<div class="bQ cq${q.o.some(o=>String(o).length>60)?' long':''}"><div class="bQh">${LB[q.ct]||'🙋 سؤال للمتدرب'}</div><div class="bQcard"><p class="bQq">${inl(q.q)}</p></div><div class="bOpts">${q.o.map((o,j)=>`<button type="button" data-j="${j}"><b class="bL">${LT[j]||j+1}</b><span>${inl(o)}</span></button>`).join('')}</div><div class="bQf" aria-live="polite"></div></div>`}
@@ -1529,7 +1530,7 @@ function openBoard(dry){const dryS=dry==='slides';dry=dry===true||dryS;
     return pre+b};
   const narr=()=>narrAt(cur,step);
   const narrAt=(cur,step)=>{const sl=out[cur];
-    if(sl.type==='t')return 'مرحبًا بك'+((!dry&&window.coachName&&coachName())?' يا '+coachName():'')+'. '+(VO==='z'?'أنا مدربتك الذكية':'أنا مدربك الذكي')+'، وسأشرح لك اليوم '+((window.COACHINTRO||[]).includes(K2)?'مقدمة الوحدة '+['الأولى','الثانية','الثالثة','الرابعة','الخامسة'][+K2.split('-')[0]]+' وأهدافها، ثم درس: ':'درس: ')+l.t+'. '+(TOP?'سنتعلم في هذا الدرس: '+topSay()+'. ركّز معي، وهيا نبدأ.':heads.length?'سنتعلم في هذا الدرس: '+heads.join('، ')+'. ركّز معي، وهيا نبدأ.':'ركّز معي، وهيا نبدأ.');
+    if(sl.type==='t')return 'مرحبًا بك'+((!dry&&window.coachName&&coachName())?' يا '+coachName():'')+'. '+(VO==='z'?'أنا مدربتك الذكية':'أنا مدربك الذكي')+'، وسأشرح لك اليوم '+((window.COACHINTRO||[]).includes(K2)?'مقدمة الوحدة '+['الأولى','الثانية','الثالثة','الرابعة','الخامسة'][+K2.split('-')[0]]+' وأهدافها ثم درس: ':'درس: ')+l.t+'. '+(TOP?'ومواضيع الدرس كالتالي: '+topSay()+'. ركّز معي، وهيا نبدأ.':heads.length?'سنتعلم في هذا الدرس: '+heads.join('، ')+'. ركّز معي، وهيا نبدأ.':'ركّز معي، وهيا نبدأ.');
     if(sl.type==='e'){const n=!dry&&window.coachName&&coachName(),lab=!!(window.LABS&&LABS[K2]);return 'شكرًا لمتابعتك'+(n?' يا '+n:'')+'. انتهينا من شرح الدرس، والآن حل الأمثلة والتمارين التفاعلية، ثم اختبر نفسك'+(lab?'، وبعدها انتقل إلى التجربة العملية لترى ما تعلمته يتحقق أمامك.':'.')}
     if(sl.type==='q')return sl.q.ct?sl.q.lead+' '+sl.q.q+' اختر الإجابة الصحيحة.':'والآن سؤال لك: '+sl.q.q;
     if(step===0){if(!sl.title)return '';if(sl.sayT)return sl.sayT;if(/\(تابع\)$/.test(sl.title))return sl.s4?'':'نكمل معًا.';
