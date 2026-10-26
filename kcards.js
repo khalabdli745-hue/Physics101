@@ -170,6 +170,14 @@ const imf=(src,cap,ref)=>({html:`<div class="kc kFig"><img data-kimg="${src}" al
 const pt=(t)=>({html:`<div class="kc kPt">${t}</div>`});
 function S(o,say){o.say=say;return o}
 const CARDS={'3-1':{
+  /* إضافة: أهداف الوحدة (طلب المدرب 14:31) */
+  goals:{title:'أهداف الوحدة',sayT:'والآن، لنتعرف على أهداف الوحدة.',steps:()=>[
+    S({html:`<div class="kc kPt kKeep">في نهاية هذه الوحدة يكون المتدرب قادرا على أن:</div>`},'في نهاية هذه الوحدة، يكون المتدرب قادرا على أن:'),
+    S({html:`<div class="kc kPt kKeep"><b>1.</b> يعرف الشحنة الكهربائية وأنواعها وطرق شحن الأجسام.</div>`},'يعرف الشحنة الكهربائية وأنواعها وطرق شحن الأجسام.'),
+    S({html:`<div class="kc kPt kKeep"><b>2.</b> يطبق قانون كولوم لحساب القوة بين شحنتين.</div>`},'يطبق قانون كولوم لحساب القوة بين شحنتين.'),
+    S({html:`<div class="kc kPt kKeep"><b>3.</b> يحسب شدة المجال الكهربائي ويرسم خطوطه.</div>`},'يحسب شدة المجال الكهربائي ويرسم خطوطه.'),
+    S({html:`<div class="kc kPt kKeep"><b>4.</b> يحسب الجهد الكهربائي وفرق الجهد.</div>`},'يحسب الجهد الكهربائي وفرق الجهد.'),
+    S({html:`<div class="kc kPt kKeep"><b>5.</b> يتعرف على المكثفات ويحسب سعتها، ويقارن بين توصيلها على التوالي وعلى التوازي، ويجد الطاقة المختزنة فيها.</div>`},'يتعرف على المكثفات ويحسب سعتها، ويقارن بين توصيلها على التوالي وعلى التوازي، ويجد الطاقة المختزنة فيها.')]},
   /* إضافة: أمثلة من الحياة */
   life:{title:'الكهرباء الساكنة من حولنا',steps:()=>[
     S(imf('LIFE','من الحياة: شرارة مقبض الباب، والمشي على السجاد','المرجع: الحقيبة التدريبية، صفحة 85'),'هل شعرت يوما بشرارة صغيرة عندما لمست مقبض الباب؟ أو بعد المشي على السجاد؟ هذه هي الكهرباء الساكنة.'),
@@ -267,7 +275,7 @@ function sayOf(h){const d=document.createElement('div');d.innerHTML=h;d.querySel
 function card(k,id,o){const c=CARDS[k][id];return {type:'c',title:(o&&o.title)||c.title,sayT:(o&&o.sayT)||c.sayT,steps:c.steps(o&&o.lead).map((x,i)=>{if(x.html&&/class="kc k(Q|GR|St|Res|Pt)\b/.test(x.html)&&!/kLaw|kFig|kKeep|<svg/.test(x.html)){const L=i===0&&o&&o.lead?o.lead:'';x.say=L+sayOf(x.html)}if(x.say)x.say=vk(x.say);return x}),kc:1}}
 function apply(out,K2){if(!CARDS[K2])return out;defs();
   const T=sl=>String(sl.title||''),base=t=>t.replace(/\s*\(تابع\)\s*$/,'');
-  const R=[[/^مقدمة الوحدة وأهدافها$/,sl=>{sl.steps=sl.steps.map(x=>x&&x.h==='تعريف الكهرباء الساكنة'?{html:'<h3>تعريف الكهرباء الساكنة</h3>',say:'ونبدأ بتعريف الكهرباء الساكنة.'}:x);return [sl,card(K2,'life')]}],[/^وحدات مهمة$/,()=>card(K2,'units')],[/^الشحنة الكهربائية$/,()=>[card(K2,'charge'),card(K2,'particles')]],[/^قانون كولوم$/,()=>[card(K2,'history'),card(K2,'law'),card(K2,'grav')]],
+  const R=[[/^مقدمة الوحدة وأهدافها$/,sl=>{sl.steps=sl.steps.map(x=>x&&x.h==='تعريف الكهرباء الساكنة'?{html:'<h3>تعريف الكهرباء الساكنة</h3>',say:'ونبدأ بتعريف الكهرباء الساكنة.'}:x);const c=card(K2,'life');c.steps[0].html='<h3>الكهرباء الساكنة من حولنا</h3>'+c.steps[0].html;sl.steps=sl.steps.concat(c.steps);return [sl,card(K2,'goals')]}],[/^وحدات مهمة$/,()=>card(K2,'units')],[/^الشحنة الكهربائية$/,()=>[card(K2,'charge'),card(K2,'particles')]],[/^قانون كولوم$/,()=>[card(K2,'history'),card(K2,'law'),card(K2,'grav')]],
     [/^مثال ١:.*صفحة 92/,()=>[card(K2,'ex91'),card(K2,'ex1',{title:'مثال ٢ · صفحة 92',sayT:'والآن المثال الثاني، من صفحة 92.'})]],[/^مثال على ثلاث شحنات/,()=>null],[/^أمثلة الحقيبة التدريبية محلولة$/,()=>null],[/^مثال ٢:.*صفحة 93/,()=>card(K2,'ex2',{title:'مثال ٣ · صفحة 93',sayT:'حتى تتضح الصورة، تأمل معي المثال الثالث، من صفحة 93.'})],
     [/^تمرين 1 · مثال [٢٣]/,()=>null],
     [/^تمرين 2 · ورقة العمل/,()=>card(K2,'tr2')],[/^رسم توضيحي 1$/,()=>null]];
