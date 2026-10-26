@@ -783,23 +783,23 @@ body.calcNew .view .calc{margin:6px 0 0;box-shadow:none}body.calcNew .view .calc
 </div>
 <script>(function(){const lab=document.getElementById('lgIdLab'),inp=document.getElementById('lgId');if(lab&&inp){const sync=()=>inp.placeholder=lab.textContent.trim();sync();new MutationObserver(sync).observe(lab,{childList:true,characterData:true,subtree:true})}
 document.querySelectorAll('.lgEye').forEach(b=>b.onclick=()=>{const i=b.parentNode.querySelector('input');const sh=i.type==='password';i.type=sh?'text':'password';b.classList.toggle('on',sh);b.setAttribute('aria-label',sh?'إخفاء كلمة المرور':'إظهار كلمة المرور')})})()</script>
-<script src="config.js?v=10261334"></script>
-<script src="voc.js?v=10261334" defer></script>
-<script src="tashkeel.js?v=10261334" defer></script>
-<script src="data.js?v=10261334"></script>
-<script src="study.js?v=10261334"></script>
-<script src="quiz2.js?v=10261334"></script>
-<script src="extras.js?v=10261334"></script>
-<script src="figs.js?v=10261334"></script>
-<script src="figs2.js?v=10261334"></script>
-<script src="problems.js?v=10261334"></script>
-<script src="theory.js?v=10261334"></script>
-<script src="gens.js?v=10261334"></script>
-<script src="art.js?v=10261334"></script>
-<script src="more.js?v=10261334"></script>
-<script src="labs.js?v=10261334"></script>
-<script src="coach.js?v=10261334"></script>
-<script src="kcards.js?v=10261334"></script>
+<script src="config.js?v=10261349"></script>
+<script src="voc.js?v=10261349" defer></script>
+<script src="tashkeel.js?v=10261349" defer></script>
+<script src="data.js?v=10261349"></script>
+<script src="study.js?v=10261349"></script>
+<script src="quiz2.js?v=10261349"></script>
+<script src="extras.js?v=10261349"></script>
+<script src="figs.js?v=10261349"></script>
+<script src="figs2.js?v=10261349"></script>
+<script src="problems.js?v=10261349"></script>
+<script src="theory.js?v=10261349"></script>
+<script src="gens.js?v=10261349"></script>
+<script src="art.js?v=10261349"></script>
+<script src="more.js?v=10261349"></script>
+<script src="labs.js?v=10261349"></script>
+<script src="coach.js?v=10261349"></script>
+<script src="kcards.js?v=10261349"></script>
 <script>
 const UNITS=window.UNITS,STUDY=window.STUDY,EXTRA=window.EXTRA||{},FIGS=window.FIGS||{};
 window.PAGES=window.PAGES||{};
@@ -1425,16 +1425,16 @@ function openBoard(dry){const dryS=dry==='slides';dry=dry===true||dryS;
     const nt=t=>String(t||'').replace(/[`\s]/g,''),tt=sl=>sl.title||'',cont=sl=>/\(تابع\)/.test(tt(sl));
     const trs=[],exs=[];out.forEach((sl,i)=>{if(cont(sl))return;if(/^تمرين/.test(tt(sl)))trs.push(i);if(/^(مثال محلول|تمرين)/.test(tt(sl)))exs.push(i)});
     const smI=out.findIndex(sl=>tt(sl)==='ملخص الدرس'),end=smI>=0?smI:out.length,ins=[];
-    if(CQ.r)ins.push([1,mk('r',CQ.r,pos.u===0&&pos.l===0?'قبل أن نبدأ درسنا اليوم، لنختبر سويا معلوماتك السابقة:':'قبل أن نبدأ درسنا اليوم، لنتذكر سويا، فكرة مهمة، من الدرس السابق.')]);
+    if(CQ.r)ins.push([1,mk('r',CQ.r,pos.u===0&&pos.l===0?'قبل أن نبدأ درسنا اليوم، دعنا نختبر معلوماتك السابقة.':'قبل أن نبدأ درسنا اليوم، دعنا نتذكر فكرة مهمة، من الدرس السابق.')]);
     if(CQ.s){const L=nt(CQ.s.law);let at=out.findIndex((sl,i)=>i>0&&sl.type==='c'&&nt((sl.steps||[]).map(x=>(x.md||'')+(x.h||'')).join('')).includes(L));
-      if(at>=0){while(at+1<out.length&&cont(out[at+1]))at++;at++}else at=exs.length?exs[0]:end;ins.push([at,mk('s',CQ.s,'لنتأمل هذا القانون سويا:')])}
+      if(at>=0){while(at+1<out.length&&cont(out[at+1]))at++;at++}else at=exs.length?exs[0]:end;ins.push([at,mk('s',CQ.s,'دعنا نتأمل هذا القانون.')])}
     /* سؤال واحد في الأمثلة والتمارين قبل التمرين الأول، ونوعه حسب الدرس (CQ.x): req المطلوب، law القانون المستخدم، inf الاستنتاج */
     const P=((window.PROBS||{})[K2]||[]).filter(p=>!p.kind&&!dupQ(p.q)),X=CQ.x||'req',p=P[0],pq=p?String(p.q).replace(/\s*[؟?.]\s*$/,''):'',gv=p?(p.g||[]).map(g=>'`'+g+'`').join('، و'):'';
     const exAt=trs.length?trs[0]:exs.length?exs[0]:end;
-    if(X==='inf'&&CQ.i)ins.push([exAt,mk('i',CQ.i,'والآن لنستنتج سويا:')]);
-    else if(X==='law'&&p&&p.l&&p.l.length>1&&trs.length)ins.push([trs[0],mk('g',{q:pq+'. ما القانون المناسب لحل هذا التمرين؟',o:p.l,a:0,h:'ابحث عن القانون الذي يربط المطلوب بالمعطيات.',w:'هذا القانون يحسب '+(p.r?p.r[0]:'المطلوب')+' من المعطيات: '+gv},'قبل أن نحل هذا التمرين، لنحدد سويا القانون المناسب:')]);
-    else if(p&&p.r&&p.r.length>1&&trs.length)ins.push([trs[0],mk('g',{q:pq+'. ما المطلوب في هذا التمرين؟',o:p.r,a:0,w:'المطلوب في السؤال هو إيجاد '+p.r[0]+' من المعطيات: '+gv},'قبل أن نحل هذا التمرين، لنحدد سويا المطلوب:')]);
-    if(CQ.m)ins.push([end,mk('m',CQ.m,'قبل أن ننهي درسنا اليوم، لنلخص سويا ما تعلمناه:')]);
+    if(X==='inf'&&CQ.i)ins.push([exAt,mk('i',CQ.i,'والآن، دعنا نستنتج.')]);
+    else if(X==='law'&&p&&p.l&&p.l.length>1&&trs.length)ins.push([trs[0],mk('g',{q:pq+'. ما القانون المناسب لحل هذا التمرين؟',o:p.l,a:0,h:'ابحث عن القانون الذي يربط المطلوب بالمعطيات.',w:'هذا القانون يحسب '+(p.r?p.r[0]:'المطلوب')+' من المعطيات: '+gv},'قبل أن نحل هذا التمرين، دعنا نحدد القانون المناسب.')]);
+    else if(p&&p.r&&p.r.length>1&&trs.length)ins.push([trs[0],mk('g',{q:pq+'. ما المطلوب في هذا التمرين؟',o:p.r,a:0,w:'المطلوب في السؤال هو إيجاد '+p.r[0]+' من المعطيات: '+gv},'قبل أن نحل هذا التمرين، دعنا نحدد المطلوب.')]);
+    if(CQ.m)ins.push([end,mk('m',CQ.m,'قبل أن ننهي درسنا اليوم، دعنا نلخص ما تعلمناه في الدرس.')]);
     ins.sort((a,b)=>a[0]-b[0]).forEach(([at,sl],j)=>out.splice(at+j,0,sl))}catch(e){console.warn('coach',e)}}
   out.push({type:'e'});
   let cur=0,step=0,VO='h';try{VO=localStorage.getItem('p101-bvo')==='z'?'z':'h'}catch(e){}
@@ -1554,7 +1554,7 @@ function openBoard(dry){const dryS=dry==='slides';dry=dry===true||dryS;
     if(sl.type==='e'){const n=!dry&&window.coachName&&coachName(),lab=!!(window.LABS&&LABS[K2]);return 'شكرًا لمتابعتك'+(n?' يا '+n:'')+'. انتهينا من شرح الدرس، والآن حل الأمثلة والتمارين التفاعلية، ثم اختبر نفسك'+(lab?'، وبعدها انتقل إلى التجربة العملية لترى ما تعلمته يتحقق أمامك.':'.')}
     if(sl.type==='q')return sl.q.ct?sl.q.lead+' '+sl.q.q+' اختر الإجابة الصحيحة.':'والآن سؤال لك: '+sl.q.q;
     if(step===0){if(!sl.title)return '';if(sl.sayT)return sl.sayT;if(/\(تابع\)$/.test(sl.title))return sl.s4?'':'نكمل معًا.';
-      if(sl.title==='ملخص الدرس')return 'والآن، لنستعرض سويا خلاصة ما تعلمناه في هذا الدرس.';
+      if(sl.title==='ملخص الدرس')return 'والآن، لنستعرض خلاصة ما تعلمناه في هذا الدرس.';
       if(sl.s4&&/^تمرين/.test(sl.title))return 'والآن '+sl.title+'.';
       if(/^تمرين/.test(sl.title))return pick(['والآن لنحل معًا ','هيا نطبق ما تعلمناه في '],cur)+sl.title+'.';
       if(sl.title==='مثال محلول')return sl.s4?'والآن مثال محلول.':'لنحل معًا هذا المثال خطوة بخطوة.';
