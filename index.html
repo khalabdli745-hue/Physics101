@@ -1078,7 +1078,7 @@ const TTS=(()=>{
       const bin=atob(x.audio),u8=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u8[i]=bin.charCodeAt(i);
       const url=URL.createObjectURL(new Blob([u8],{type:'audio/mpeg'}));MEM.set(k,url);
       if(MEM.size>60){const f=MEM.keys().next().value;URL.revokeObjectURL(MEM.get(f));MEM.delete(f)}return url})}
-  function playUrl(url,g){return new Promise((res,rej)=>{if(g!==GEN)return res();AUD.onended=()=>res();AUD.onerror=()=>rej({error:'audio'});AUD.src=url;const p=AUD.play();if(p&&p.catch)p.catch(rej)})}
+  function playUrl(url,g){return new Promise((res,rej)=>{if(g!==GEN)return res();AUD.onended=()=>setTimeout(res,300);AUD.onerror=()=>rej({error:'audio'});AUD.src=url;const p=AUD.play();if(p&&p.catch)p.catch(rej)})}
   async function playAz(text,b,raw){const g=GEN;
     if(!AUD){AUD=new Audio();AUD.preload='auto'}
     AUD.src=SILENT;try{const p=AUD.play();if(p&&p.catch)p.catch(()=>{})}catch(e){}
