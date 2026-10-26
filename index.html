@@ -306,16 +306,25 @@ li.sym{margin-inline-start:1.6em;font-size:.92em;list-style:none}.md ul li.sym::
 .bTitle{padding-top:0!important;padding-bottom:3vh}
 .bEnT{white-space:nowrap}.board .bTitle ol.bTpc>li{margin-bottom:6px}.board .bTitle ol.bTpc>li>b{font-weight:700}.board .bTitle ul.bSub{list-style:disc;margin:3px 0 0;padding-inline-start:1.3em;font-size:.86em;font-weight:400;opacity:.85}.board .bTitle ul.bSub li{margin:1px 0}.board .bTitle ol.bTpc>li.tIntro{list-style:disc;font-size:.86em;opacity:.85;margin-bottom:8px}
 .board .bQ{padding-top:2vh}
+@media (max-height:519px) and (orientation:landscape){.board .bTop{min-height:0!important;height:auto!important;padding:3px 10px!important;font-size:13px!important}.board .bTop .bX{padding:0 6px!important;height:26px!important;font-size:18px!important;line-height:1!important}.board .bTop b{font-size:13.5px!important}.board .bTop .bNum{font-size:12px!important}
+ .board .bSlide .bQ .bQq{font-size:1.05em!important}.board .bSlide .bQ .bOpts button,.board .bSlide .bQ:has(.kQf) .bOpts button{font-size:.92em!important;padding:6px 10px!important;line-height:1.35!important}.board .bSlide .bQ .kQf .kFig svg{max-height:34vh!important}.board .bQh{font-size:13px!important;padding:2px 10px!important;margin-bottom:6px!important}.board .bQcard{padding:8px 12px!important}.board .bQ{padding-top:0!important}
+ .board .bProg{margin:2px 0!important;height:14px!important}
+ .board .bTeach{min-height:0!important;margin:2px 0!important;align-items:center}.board .bTeach .bAv{display:none!important}
+ .board .bTeach .bSay{max-height:44px!important;overflow:auto!important;font-size:13px!important;line-height:1.5!important;padding:4px 10px!important}.board .bTeach .bSay>b{display:none!important}
+ .board .bTeach .bAskBtn{font-size:12px!important;padding:4px 8px!important}
+ .board .bBar{padding:3px 6px!important}.board .bBar button{min-height:0!important;height:32px!important;padding:0 10px!important;font-size:13px!important}
+ .board .bStage{padding-top:4px!important}.board .bPage{padding:10px 14px 16px!important}}
+@media (max-width:599px),(max-height:519px){.board .bContent .kFig svg,.board .bContent figure svg{max-height:var(--kfh,60vh);width:auto!important;max-width:100%!important;margin:0 auto;display:block}.board .bQ .kQf .kFig svg{max-height:min(30vh,var(--kfh,30vh))!important}.board .bQ .kQf{margin:6px 0 8px!important}.board .bOpts{gap:8px!important;margin:10px 0 6px!important}.board .bOpts button{padding:9px 12px!important;line-height:1.45!important}}
 .board .bQq{font-size:clamp(20px,min(2.8vw,3vh),30px)!important}
 .board .bOpts button{font-size:clamp(17px,min(2.2vw,2.5vh),24px)!important}
 .board .bQ .kQf .kFig svg{max-height:40vh;width:auto!important;margin:0 auto}
 .board .bPage:has(.bQ){display:flex;flex-direction:column;justify-content:safe center}
-@media (orientation:landscape) and (min-width:900px){.board .bQ:has(.kQf){display:grid;grid-template-columns:1fr 1.05fr;column-gap:18px;align-items:center}
+@media (orientation:landscape) and (min-width:700px){.board .bQ:has(.kQf){display:grid;grid-template-columns:1fr 1.05fr;column-gap:18px;align-items:center}
  .board .bQ:has(.kQf)>.bQh,.board .bQ:has(.kQf)>.bQcard,.board .bQ:has(.kQf)>.bQf{grid-column:1/-1}.board .bQ:has(.kQf)>.bQh{justify-self:start}
  .board .bQ:has(.kQf)>.kQf{grid-column:2;grid-row:3;margin:10px 0}.board .bQ:has(.kQf)>.bOpts{grid-column:1;grid-row:3;grid-template-columns:1fr!important}
  .board .bQ:has(.kQf) .kQf .kFig svg{max-height:52vh}
  .board .bQ:has(.kQf) .bOpts{gap:8px}.board .bQ:has(.kQf) .bOpts button{padding:8px 12px;line-height:1.4;font-size:clamp(16px,min(1.9vw,2.4vh),22px)!important}}
-@media (max-width:599px){.board .bQq{font-size:19px!important}.board .bOpts button{font-size:16.5px!important}}.board .bQh{display:inline-block;background:#fff4d6;color:#8a5a00;font-weight:700;padding:4px 12px;border-radius:20px;margin-bottom:10px}
+@media (max-width:599px){.board .bQq{font-size:1.08em!important}.board .bOpts button{font-size:.95em!important}}.board .bQh{display:inline-block;background:#fff4d6;color:#8a5a00;font-weight:700;padding:4px 12px;border-radius:20px;margin-bottom:10px}
 .board .bQq{font-size:21px;font-weight:600}
 .board .bOpts{display:grid;gap:10px;margin:14px 0}
 .board .bOpts button{font:500 18px inherit;font-family:inherit;text-align:start;padding:12px 14px;border-radius:12px;border:2px solid #dde2ea;background:#f7f8fa;color:#1f2937;cursor:pointer}
@@ -781,23 +790,24 @@ body.calcNew .view .calc{margin:6px 0 0;box-shadow:none}body.calcNew .view .calc
 </div>
 <script>(function(){const lab=document.getElementById('lgIdLab'),inp=document.getElementById('lgId');if(lab&&inp){const sync=()=>inp.placeholder=lab.textContent.trim();sync();new MutationObserver(sync).observe(lab,{childList:true,characterData:true,subtree:true})}
 document.querySelectorAll('.lgEye').forEach(b=>b.onclick=()=>{const i=b.parentNode.querySelector('input');const sh=i.type==='password';i.type=sh?'text':'password';b.classList.toggle('on',sh);b.setAttribute('aria-label',sh?'إخفاء كلمة المرور':'إظهار كلمة المرور')})})()</script>
-<script src="config.js?v=10261256"></script>
-<script src="voc.js?v=10261256" defer></script>
-<script src="tashkeel.js?v=10261256" defer></script>
-<script src="data.js?v=10261256"></script>
-<script src="study.js?v=10261256"></script>
-<script src="quiz2.js?v=10261256"></script>
-<script src="extras.js?v=10261256"></script>
-<script src="figs.js?v=10261256"></script>
-<script src="figs2.js?v=10261256"></script>
-<script src="problems.js?v=10261256"></script>
-<script src="theory.js?v=10261256"></script>
-<script src="gens.js?v=10261256"></script>
-<script src="art.js?v=10261256"></script>
-<script src="more.js?v=10261256"></script>
-<script src="labs.js?v=10261256"></script>
-<script src="coach.js?v=10261256"></script>
-<script src="kcards.js?v=10261256"></script>
+<script>window.bFit=function(){try{const sl=document.querySelector('.board .bSlide'),ct=document.querySelector('.board .bContent');if(!sl||!ct)return;ct.style.fontSize='';ct.style.removeProperty('--kfh');if(innerWidth>=600&&innerHeight>=520)return;let fs=parseFloat(getComputedStyle(ct).fontSize),n=0;while(sl.scrollHeight>sl.clientHeight+2&&n<14){if(fs-1>=14){fs-=1;ct.style.fontSize=fs+'px'}ct.style.setProperty('--kfh',Math.max(20,56-n*3)+'vh');n++}}catch(e){}};addEventListener('resize',()=>{clearTimeout(window.__bft);window.__bft=setTimeout(window.bFit,150)});</script>
+<script src="config.js?v=10261319"></script>
+<script src="voc.js?v=10261319" defer></script>
+<script src="tashkeel.js?v=10261319" defer></script>
+<script src="data.js?v=10261319"></script>
+<script src="study.js?v=10261319"></script>
+<script src="quiz2.js?v=10261319"></script>
+<script src="extras.js?v=10261319"></script>
+<script src="figs.js?v=10261319"></script>
+<script src="figs2.js?v=10261319"></script>
+<script src="problems.js?v=10261319"></script>
+<script src="theory.js?v=10261319"></script>
+<script src="gens.js?v=10261319"></script>
+<script src="art.js?v=10261319"></script>
+<script src="more.js?v=10261319"></script>
+<script src="labs.js?v=10261319"></script>
+<script src="coach.js?v=10261319"></script>
+<script src="kcards.js?v=10261319"></script>
 <script>
 const UNITS=window.UNITS,STUDY=window.STUDY,EXTRA=window.EXTRA||{},FIGS=window.FIGS||{};
 window.PAGES=window.PAGES||{};
@@ -1460,10 +1470,10 @@ function openBoard(dry){const dryS=dry==='slides';dry=dry===true||dryS;
       h=`<div class="bQ cq${q.o.some(o=>String(o).length>60)?' long':''}"><div class="bQh">${LB[q.ct]||'🙋 سؤال للمتدرب'}</div><div class="bQcard"><p class="bQq">${inl(q.q)}</p></div><div class="bOpts">${q.o.map((o,j)=>`<button type="button" data-j="${j}"><b class="bL">${LT[j]||j+1}</b><span>${inl(o)}</span></button>`).join('')}</div><div class="bQf" aria-live="polite"></div></div>`}
       else h=`<div class="bQ"><div class="bQh">🙋 سؤال للمتدرب</div><p class="bQq">${inl(q.q)}</p><div class="bOpts">${q.o.map((o,j)=>`<button type="button" data-j="${j}">${inl(o)}</button>`).join('')}</div><div class="bQf" aria-live="polite"></div></div>`}
     else{h=(sl.title?`<h2 class="bH">${inl(sl.title)}</h2>`:'')+sl.steps.map((x,j)=>`<div class="bStep${j<step?' in':''}">${x.html?x.html:x.h!==undefined?'<h3>'+inl(x.h)+'</h3>':md(x.md)}</div>`).join('')}
-    ct.innerHTML=h;if(sl.type==='q'&&sl.q&&sl.q.ct&&window.KC&&KC.decorQ){try{KC.decorQ(ct,K2,sl.q.ct)}catch(e){}}
+    ct.innerHTML=h;if(sl.type==='q'&&sl.q&&sl.q.ct&&window.KC&&KC.decorQ){try{KC.decorQ(ct,K2,sl.q.ct)}catch(e){}}setTimeout(window.bFit||(()=>{}),40);setTimeout(window.bFit||(()=>{}),400);
     /* شريحة العنوان: محاور الدرس كلها تظهر في الشاشة دون تمرير (تصغير تدريجي وعمودان عند الحاجة) */
     if(sl.type==='t'){const T=ct.querySelector('.bTitle'),H=T&&T.querySelector('h1'),O=T&&T.querySelector('ol');
-      const fit=()=>{if(!T||!O)return;const L=[()=>{T.style.paddingTop='1vh';H.style.fontSize='24px';H.style.margin='.2em 0 .3em'},()=>{O.style.fontSize='16px'},()=>{/* عمودان مستقلان: كل بند كامل في عموده، وكل عمود يرتب بنوده دون فراغات */const li=[...O.children],h=Math.ceil(li.length/2);let nI=0;li.forEach((x,i)=>{if(!x.classList.contains('tIntro'))x.insertAdjacentHTML('afterbegin','<b style="font-weight:400">'+AR(++nI)+'. </b>');x.style.margin='0 0 3px'});const c1=document.createElement('div'),c2=document.createElement('div');li.slice(0,h).forEach(x=>c1.appendChild(x));li.slice(h).forEach(x=>c2.appendChild(x));O.append(c1,c2);O.style.display='flex';O.style.alignItems='flex-start';O.style.gap='22px';O.style.width='100%';O.style.listStyle='none';O.style.paddingInlineStart='0';c1.style.flex=c2.style.flex='1 1 0'},()=>{O.style.fontSize='14.5px';H.style.fontSize='21px'},()=>{O.style.fontSize='13px';O.style.lineHeight='1.5'},()=>{H.style.fontSize='18px';O.style.fontSize='12px'},()=>{const sm=T.querySelector('small'),bo=T.querySelector('.bOut');if(sm)sm.style.fontSize='11px';if(bo)bo.style.margin='.2em 0 0';O.style.fontSize='11.5px';O.style.lineHeight='1.35';H.style.fontSize='16px'}];
+      const fit=()=>{if(!T||!O)return;const SC=f=>()=>{[H,O,T.querySelector('small')].forEach(e=>{if(!e)return;if(!e.dataset.fs)e.dataset.fs=parseFloat(getComputedStyle(e).fontSize);e.style.setProperty('font-size',Math.max(e===O?13:15,e.dataset.fs*f)+'px','important')});H.style.margin='.2em 0 .3em';T.style.paddingBottom='0'};const L=[.92,.85,.78,.72,.66,.6].map(SC).concat([()=>{/* عمودان مستقلان: كل بند كامل في عموده، وكل عمود يرتب بنوده دون فراغات */const li=[...O.children],h=Math.ceil(li.length/2);let nI=0;li.forEach((x,i)=>{if(!x.classList.contains('tIntro'))x.insertAdjacentHTML('afterbegin','<b style="font-weight:400">'+AR(++nI)+'. </b>');x.style.margin='0 0 3px'});const c1=document.createElement('div'),c2=document.createElement('div');li.slice(0,h).forEach(x=>c1.appendChild(x));li.slice(h).forEach(x=>c2.appendChild(x));O.append(c1,c2);O.style.display='flex';O.style.alignItems='flex-start';O.style.gap='22px';O.style.width='100%';O.style.listStyle='none';O.style.paddingInlineStart='0';c1.style.flex=c2.style.flex='1 1 0'}]);
         for(let i=0;i<L.length&&slideEl.scrollHeight>slideEl.clientHeight+2;i++)L[i]()};
       requestAnimationFrame(()=>requestAnimationFrame(fit))}
     if(sl.type==='q'){const q=sl.q,f=ct.querySelector('.bQf'),O=ct.querySelector('.bOpts'),bs=[...O.querySelectorAll('button')];let tries=0;
