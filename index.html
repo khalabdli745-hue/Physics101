@@ -682,7 +682,7 @@ body.calcNew .view .calc{margin:6px 0 0;box-shadow:none}body.calcNew .view .calc
 .lgBack{position:absolute;top:calc(max(env(safe-area-inset-top),14px) + 10px);right:16px;z-index:3;border:0;background:rgba(255,255,255,.88);border-radius:12px;padding:7px 13px;font:inherit;font-weight:800;font-size:14px;color:#0d4fa8;box-shadow:0 2px 8px rgba(13,79,168,.15)}
 .loginBox{position:relative}.loginBox>*{position:relative}.loginBox>.lgBack{position:absolute;width:auto}.loginBox .credit{font-size:18px!important;color:#334155!important;font-weight:700;padding-top:10px!important}.loginBox .credit b{font-size:27px!important;color:#0d4fa8!important;font-weight:800!important;margin-top:6px!important}.loginBox>.lgBack{position:absolute;width:auto}.loginBox .credit{font-size:18px!important;color:#334155!important;font-weight:700;padding-top:10px!important}.loginBox .credit b{font-size:27px!important;color:#0d4fa8!important;font-weight:800!important;margin-top:6px!important}.lgPg{display:grid;gap:12px}.lgPg[hidden],.lgAbout[hidden]{display:none!important}
 .lgQ{text-align:center;color:var(--muted);font-size:15px;font-weight:700;margin:10px 0 -2px}
-.lgTls{display:grid;grid-template-columns:1fr 1fr;gap:12px}.lgTls3{grid-template-columns:1fr 1fr 1fr;gap:9px}
+.lgTls{display:grid;grid-template-columns:1fr 1fr;gap:12px}.lgTls>.lgTl[data-r=g]:last-child:nth-child(odd){grid-column:1/-1;justify-self:center;width:calc(50% - 6px)}.lgTls3{grid-template-columns:1fr 1fr 1fr;gap:9px}
 .lgTl{font:inherit;border:2px solid var(--line);border-radius:20px;padding:20px 6px 16px;font-weight:800;font-size:18px;background:var(--panel);color:var(--ink);box-shadow:0 6px 16px -8px rgba(13,79,168,.3);cursor:pointer}
 .lgTls3 .lgTl{font-size:15px;padding:16px 4px 14px}.lgTl:active{transform:scale(.97);border-color:#1d6fd6}
 .lgTl i{display:grid;place-items:center;width:62px;height:62px;margin:0 auto 10px;border-radius:18px;background:linear-gradient(135deg,#1e7be0,#0d4fa8);color:#fff}.lgTls3 .lgTl i{width:52px;height:52px}
@@ -756,7 +756,7 @@ body.calcNew .view .calc{margin:6px 0 0;box-shadow:none}body.calcNew .view .calc
     <button type="button" class="lgBack" id="lgBack" hidden>→ رجوع</button>
     <div class="lgPg" id="lgP0" style="margin-top:14px"><div class="lgTls"><button type="button" class="lgTl" data-r="G-t"><i><svg viewBox="0 0 24 24"><circle cx="7" cy="8" r="3.5"/><path d="M1 20c0-4 3-6 6-6s6 2 6 6z"/><path d="M11 3h12v12H13v-2h8V5h-8z"/><path d="M14 9l2 2 4-4" fill="none" stroke="currentColor" stroke-width="2"/></svg></i>مدرب</button><button type="button" class="lgTl" data-r="G-s"><i><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="4.5"/><path d="M3 21c0-5 4-8 9-8s9 3 9 8z"/></svg></i>متدرب</button></div></div>
     <div class="lgPg" id="lgPs" hidden style="margin-top:14px"><div class="lgTls"><button type="button" class="lgTl" data-r="s"><i><svg viewBox="0 0 24 24"><path d="M2 5c3-1.5 6-1.5 9 .5v15c-3-2-6-2-9-.5zM22 5c-3-1.5-6-1.5-9 .5v15c3-2 6-2 9-.5z"/></svg></i>المنصة</button><button type="button" class="lgTl" data-r="e"><i><svg viewBox="0 0 24 24"><path d="M8 2h8v3H8z"/><path d="M5 4h2v3h10V4h2v18H5z" fill-opacity=".85"/><path d="M8 12l2 2 4-4M8 17h8" fill="none" stroke="#1565c8" stroke-width="1.8"/></svg></i>الاختبارات</button></div><a class="lgGd" href="guide.html#s"><svg viewBox="0 0 24 24"><path d="M4 3h13a2 2 0 0 1 2 2v16H6a2 2 0 0 1-2-2z"/><path d="M8 7h7M8 11h7" stroke="#eaf3fd" stroke-width="1.8"/></svg>دليل المتدرب</a></div>
-    <div class="lgPg" id="lgPt" hidden style="margin-top:14px"><div class="lgTls"><button type="button" class="lgTl" data-r="t"><i><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M6 13v-3M10 13V7M14 13v-4M18 13V6" stroke="#1565c8" stroke-width="2"/><path d="M8 21h8v-2H8z"/></svg></i>لوحة المدرب</button><button type="button" class="lgTl" data-r="te"><i><svg viewBox="0 0 24 24"><path d="M8 2h8v3H8z"/><path d="M5 4h2v3h10V4h2v18H5z" fill-opacity=".85"/><path d="M8 12l2 2 4-4M8 17h8" fill="none" stroke="#1565c8" stroke-width="1.8"/></svg></i>الاختبارات</button></div></div>
+    <div class="lgPg" id="lgPt" hidden style="margin-top:14px"><div class="lgTls"><button type="button" class="lgTl" data-r="t"><i><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M6 13v-3M10 13V7M14 13v-4M18 13V6" stroke="#1565c8" stroke-width="2"/><path d="M8 21h8v-2H8z"/></svg></i>لوحة المدرب</button><button type="button" class="lgTl" data-r="te"><i><svg viewBox="0 0 24 24"><path d="M8 2h8v3H8z"/><path d="M5 4h2v3h10V4h2v18H5z" fill-opacity=".85"/><path d="M8 12l2 2 4-4M8 17h8" fill="none" stroke="#1565c8" stroke-width="1.8"/></svg></i>الاختبارات</button><button type="button" class="lgTl" data-r="g"><i><svg viewBox="0 0 24 24"><path d="M12 5C6 5 2 12 2 12s4 7 10 7 10-7 10-7-4-7-10-7z"/><circle cx="12" cy="12" r="3.5" fill="#1565c8"/></svg></i>تجريبي</button></div></div>
     <div class="lgPg" id="lgPf" hidden>
     <div class="lgHd" id="lgHd"><i></i><span></span></div>
     <p class="lgSub" id="lgSub">سجّل دخولك برقمك التدريبي</p>
@@ -783,23 +783,23 @@ body.calcNew .view .calc{margin:6px 0 0;box-shadow:none}body.calcNew .view .calc
 </div>
 <script>(function(){const lab=document.getElementById('lgIdLab'),inp=document.getElementById('lgId');if(lab&&inp){const sync=()=>inp.placeholder=lab.textContent.trim();sync();new MutationObserver(sync).observe(lab,{childList:true,characterData:true,subtree:true})}
 document.querySelectorAll('.lgEye').forEach(b=>b.onclick=()=>{const i=b.parentNode.querySelector('input');const sh=i.type==='password';i.type=sh?'text':'password';b.classList.toggle('on',sh);b.setAttribute('aria-label',sh?'إخفاء كلمة المرور':'إظهار كلمة المرور')})})()</script>
-<script src="config.js?v=10261845"></script>
-<script src="voc.js?v=10261845" defer></script>
-<script src="tashkeel.js?v=10261845" defer></script>
-<script src="data.js?v=10261845"></script>
-<script src="study.js?v=10261845"></script>
-<script src="quiz2.js?v=10261845"></script>
-<script src="extras.js?v=10261845"></script>
-<script src="figs.js?v=10261845"></script>
-<script src="figs2.js?v=10261845"></script>
-<script src="problems.js?v=10261845"></script>
-<script src="theory.js?v=10261845"></script>
-<script src="gens.js?v=10261845"></script>
-<script src="art.js?v=10261845"></script>
-<script src="more.js?v=10261845"></script>
-<script src="labs.js?v=10261845"></script>
-<script src="coach.js?v=10261845"></script>
-<script src="kcards.js?v=10261845"></script>
+<script src="config.js?v=10261904"></script>
+<script src="voc.js?v=10261904" defer></script>
+<script src="tashkeel.js?v=10261904" defer></script>
+<script src="data.js?v=10261904"></script>
+<script src="study.js?v=10261904"></script>
+<script src="quiz2.js?v=10261904"></script>
+<script src="extras.js?v=10261904"></script>
+<script src="figs.js?v=10261904"></script>
+<script src="figs2.js?v=10261904"></script>
+<script src="problems.js?v=10261904"></script>
+<script src="theory.js?v=10261904"></script>
+<script src="gens.js?v=10261904"></script>
+<script src="art.js?v=10261904"></script>
+<script src="more.js?v=10261904"></script>
+<script src="labs.js?v=10261904"></script>
+<script src="coach.js?v=10261904"></script>
+<script src="kcards.js?v=10261904"></script>
 <script>
 const UNITS=window.UNITS,STUDY=window.STUDY,EXTRA=window.EXTRA||{},FIGS=window.FIGS||{};
 window.PAGES=window.PAGES||{};
@@ -2450,12 +2450,13 @@ function showLogin(){
     t:{sub:'دخول المدرب إلى لوحة المتابعة',lab:'اسم المستخدم',im:'text',hint:'أول مرة؟ أنشئ حساب المدرب من <a href="teacher.html">هنا</a>.',val:''},
     e:{sub:'دخول الاختبارات الفصلية',lab:'الرقم التدريبي',im:'numeric',hint:'إذا كنت مسجلا في المنصة فكلمة المرور نفسها. وفي أول دخول اترك كلمة المرور فارغة، وجهز رمز التسجيل من المدرب.',val:''},
     d:{sub:'معاينة المنصة كما يراها المتدرب',lab:'اسم المستخدم',im:'text',hint:'باسم المستخدم وكلمة المرور الخاصة بلوحة المدرب.',val:''},
+    g:{sub:'معاينة المنصة كما يراها المتدرب',lab:'اسم المستخدم',im:'text',hint:'ادخل ببيانات الحساب التجريبي التي أعطاك إياها المدرب.',val:'demo'},
     te:{sub:'تجربة الاختبار التجريبي كما يراه المتدرب',lab:'اسم المستخدم',im:'text',hint:'باسم المستخدم وكلمة المرور الخاصة بلوحة المدرب، ولا تدخل درجتك في النتائج.',val:''}};
-  const LGI={"s": "<svg viewBox=\"0 0 24 24\"><path d=\"M2 5c3-1.5 6-1.5 9 .5v15c-3-2-6-2-9-.5zM22 5c-3-1.5-6-1.5-9 .5v15c3-2 6-2 9-.5z\"/></svg>", "e": "<svg viewBox=\"0 0 24 24\"><path d=\"M8 2h8v3H8z\"/><path d=\"M5 4h2v3h10V4h2v18H5z\" fill-opacity=\".85\"/><path d=\"M8 12l2 2 4-4M8 17h8\" fill=\"none\" stroke=\"#1565c8\" stroke-width=\"1.8\"/></svg>", "t": "<svg viewBox=\"0 0 24 24\"><rect x=\"2\" y=\"3\" width=\"20\" height=\"14\" rx=\"2\"/><path d=\"M6 13v-3M10 13V7M14 13v-4M18 13V6\" stroke=\"#1565c8\" stroke-width=\"2\"/><path d=\"M8 21h8v-2H8z\"/></svg>", "d": "<svg viewBox=\"0 0 24 24\"><path d=\"M12 5C6 5 2 12 2 12s4 7 10 7 10-7 10-7-4-7-10-7z\"/><circle cx=\"12\" cy=\"12\" r=\"3.5\" fill=\"#1565c8\"/></svg>", "te": "<svg viewBox=\"0 0 24 24\"><path d=\"M8 2h8v3H8z\"/><path d=\"M5 4h2v3h10V4h2v18H5z\" fill-opacity=\".85\"/><path d=\"M8 12l2 2 4-4M8 17h8\" fill=\"none\" stroke=\"#1565c8\" stroke-width=\"1.8\"/></svg>"},LGT={s:"المنصة",e:"الاختبارات",t:"لوحة المدرب",d:"معاينة المدرب",te:"الاختبارات"};
+  const LGI={"s": "<svg viewBox=\"0 0 24 24\"><path d=\"M2 5c3-1.5 6-1.5 9 .5v15c-3-2-6-2-9-.5zM22 5c-3-1.5-6-1.5-9 .5v15c3-2 6-2 9-.5z\"/></svg>", "e": "<svg viewBox=\"0 0 24 24\"><path d=\"M8 2h8v3H8z\"/><path d=\"M5 4h2v3h10V4h2v18H5z\" fill-opacity=\".85\"/><path d=\"M8 12l2 2 4-4M8 17h8\" fill=\"none\" stroke=\"#1565c8\" stroke-width=\"1.8\"/></svg>", "t": "<svg viewBox=\"0 0 24 24\"><rect x=\"2\" y=\"3\" width=\"20\" height=\"14\" rx=\"2\"/><path d=\"M6 13v-3M10 13V7M14 13v-4M18 13V6\" stroke=\"#1565c8\" stroke-width=\"2\"/><path d=\"M8 21h8v-2H8z\"/></svg>", "d": "<svg viewBox=\"0 0 24 24\"><path d=\"M12 5C6 5 2 12 2 12s4 7 10 7 10-7 10-7-4-7-10-7z\"/><circle cx=\"12\" cy=\"12\" r=\"3.5\" fill=\"#1565c8\"/></svg>", "te": "<svg viewBox=\"0 0 24 24\"><path d=\"M8 2h8v3H8z\"/><path d=\"M5 4h2v3h10V4h2v18H5z\" fill-opacity=\".85\"/><path d=\"M8 12l2 2 4-4M8 17h8\" fill=\"none\" stroke=\"#1565c8\" stroke-width=\"1.8\"/></svg>"},LGT={s:"المنصة",e:"الاختبارات",t:"لوحة المدرب",d:"معاينة المدرب",te:"الاختبارات",g:"الحساب التجريبي"};LGI.g=LGI.d;
   let pg='0',grp='s',hD=0;const show=(p,pop)=>{const up=(pg==='0'&&p!=='0')||(pg!=='f'&&p==='f');if(!pop&&up){try{history.pushState({lg:p},'');hD++}catch(e){}}pg=p;$('loginForm').dataset.pg=p;['0','s','t','f'].forEach(x=>$('lgP'+x).hidden=x!==p);$('lgBack').hidden=p==='0';$('lgAbout').hidden=p!=='0';scrollTo(0,0);$('loginWrap').scrollTop=0};
   $('lgBack').onclick=()=>{if(hD>0)history.back();else show(pg==='f'?grp:'0',true)};
   window.addEventListener('popstate',()=>{if($('loginWrap').hidden||hD<=0)return;hD--;show(pg==='f'?grp:'0',true)});
-  const setRole=k=>{const r=k==='te'?'e':k;mode=k;grp=(k==='t'||k==='d'||k==='te')?'t':'s';role=r;step=1;kind='';$('lgStep1').hidden=false;$('lgStep2').hidden=true;$('lgBtn').textContent='دخول';$('lgBtn').disabled=false;
+  const setRole=k=>{const r=k==='te'?'e':k==='g'?'s':k;mode=k;grp=(k==='t'||k==='d'||k==='te'||k==='g')?'t':'s';role=r;step=1;kind='';$('lgStep1').hidden=false;$('lgStep2').hidden=true;$('lgBtn').textContent='دخول';$('lgBtn').disabled=false;
     $('lgHd').firstElementChild.innerHTML=LGI[k];$('lgHd').lastElementChild.textContent=LGT[k];
     const R=ROLES[k];$('lgSub').textContent=R.sub;$('lgIdLab').textContent=R.lab;$('lgId').inputMode=R.im;$('lgId').value=R.val;$('lgPw').value='';$('lgHint').innerHTML=R.hint;$('lgMsg').textContent='';
     show('f');setTimeout(()=>(R.val?$('lgPw'):$('lgId')).focus(),50)};
