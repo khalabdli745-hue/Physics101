@@ -940,7 +940,7 @@ const TTS=(()=>{
     t=String(t).replace(/`?J\s*=\s*N·m`?/g,'، والجول يساوي نيوتن ضرب متر');
     /* درس الضرب: AxBx تقرأ مركبتين، n̂ تقرأ «إن»، الأقواس المربعة كأقواس عادية، î·î تقرأ «آي ضرب آي»، والسالب قبل متجه */
     t=t.replace(/(cos|sin|tan)⁻¹\s*/g,' معكوس $1 ').replace(/\|\s*·\s*/g,'| × ').replace(/([AB])([xyz])(?=[AB][xyz])/g,'$1$2 ').replace(/n\u0302/g,'n').replace(/\[/g,'(').replace(/\]/g,')').replace(/\b(cos|sin|tan)(?=\d)/g,'$1 ').replace(/(î|ĵ|k\u0302)\s*·\s*(?=î|ĵ|k\u0302)/g,'$1 دُوتْ ').replace(/(î|ĵ|k\u0302)\s*×\s*(?=î|ĵ|k\u0302)/g,'$1 كْرُوسْ ').replace(/\b([AB])\s*·\s*(?=[AB]\b)/g,'$1 دُوتْ ').replace(/\b([AB])\s*×\s*(?=[AB]\b)/g,'$1 كْرُوسْ ').replace(/(=\s*)[−-]\s*(?=[A-Z])/g,'$1 سالب ');
-    t=markN(sepDot(t)).replace(/Ｎ/g,' نيوتن ').replace(/(\d\s*)Pa\b/g,'$1 باسكال ').replace(/\bPa\b/g,' باسكال ');
+    t=markN(sepDot(t)).replace(/[\uE101-\uE10D]/g,c=>' '+AFTER_NUM['msJWVACFKLhgN'[c.charCodeAt(0)-0xE101]]+' ').replace(/Ｎ/g,' نيوتن ').replace(/(\d\s*)Pa\b/g,'$1 باسكال ').replace(/\bPa\b/g,' باسكال ');
     t=t.replace(/^#+\s*/gm,'').replace(/\*\*/g,'').replace(/`/g,'').replace(/^[-•]\s*/gm,'').replace(/[✓✗⚠️]/g,'').replace(/[✦⚗🔊■]/g,'');
     t=t.replace(/([^.:؟!،\n])[ \t]*\n+/g,'$1.\n');
     t=t.replace(/\bV_?f\b/g,'السرعة النهائية').replace(/\bV_?i\b/g,'السرعة الابتدائية').replace(/v_f/g,'السرعة النهائية').replace(/v_i/g,'السرعة الابتدائية').replace(/v_d/g,'سرعة الانجراف').replace(/v̄/g,'السرعة المتوسطة').replace(/T_f/g,'درجة الحرارة النهائية')
@@ -982,14 +982,14 @@ const TTS=(()=>{
   const EN_WORD={KE:'kinetic energy',PE:'potential energy',ME:'mechanical energy',SI:'S I',DC:'D C',AC:'A C',LED:'L E D',GPS:'G P S',PhET:'fet',cos:'cosine',sin:'sine',tan:'tangent',max:'maximum',min:'minimum',total:'total',known:'known'};
   function enParens(t){let prev;do{prev=t;t=t.replace(/\(([^()]*)\)/g,(m,inner)=>/[+×÷*\/·]|\s[−-]\s/.test(inner)?' open bracket, '+inner+', close bracket, ':' '+inner+' ')}while(t!==prev);return t}
   /* N وحدةً (نيوتن) لا رمزًا للقوة العمودية */
-  function markN(t){t=t.replace(/((?:النيوتن|بالنيوتن|نيوتن)[\s:]*)`?\(?\s*N\s*\)?`?(?!\s*[A-Za-z0-9·\/=_²³])/g,'$1').replace(/\(\s*N\s*\)/g,'(Ｎ)').replace(/((?:وحدة|وحدته|وحدتها|بوحدة|الوحدة|النيوتن|بالنيوتن|نيوتن)[\s`:«»]*)N(?![A-Za-z0-9·\/=_])/g,'$1Ｎ').replace(/(^|[\s`])N(\s*=\s*kg)/g,'$1Ｎ$2');
+  function markN(t){t=t.replace(/((?:النيوتن|بالنيوتن|نيوتن)[\s:]*)`?\(?\s*N\s*\)?`?(?!\s*[A-Za-z0-9·\/=_²³])/g,'$1').replace(/\(\s*N\s*\)/g,'(Ｎ)').replace(/((?:وحدة|وحدته|وحدتها|بوحدة|الوحدة|النيوتن|بالنيوتن|نيوتن)[\s`:«»]*)N(?![A-Za-z0-9·\/=_])/g,'$1Ｎ').replace(/(^|[\s`])N(\s*=\s*kg)/g,'$1Ｎ$2').replace(/((?:^|[^ء-ي])[وفب]?(?:ال)?وحد(?:ة|ته|تها|تهما|اتها|اته)(?:\s+(?:قياس|قياسه|قياسها|قياسهما|القياس))?[\s`:«»]*)([msJWVACFKLhgN])(?![A-Za-z0-9·\/=_²³⁻¹̂])(?!\s*[=·×\/+−-])/g,(m,a,u)=>a+String.fromCharCode(0xE100+'msJWVACFKLhgN'.indexOf(u)+1));
     if(/^\s*`?N`?\s*$/.test(t))t=t.replace('N','Ｎ');return t}
   function spokenEn(t){
     const P=[];const ph=w=>{P.push(w);return ' \u0001'+(P.length-1)+'\u0002 '};
     t=String(t).replace(/K·E/g,'KE');
     t=t.replace(/\b([A-Za-z])\((km\/h|m\/s|cm|mm|km|kg|min|°C|°F|m|g|h|s|K|J|N)\)/g,(m,x,u)=>x+ph(' in '+{'km/h':'kilometers per hour','m/s':'meters per second','cm':'centimeters','mm':'millimeters','km':'kilometers','m':'meters','kg':'kilograms','g':'grams','h':'hours','min':'minutes','s':'seconds','°C':'degrees Celsius','°F':'degrees Fahrenheit','K':'kelvin','J':'joules','N':'newtons'}[u]+' ')).replace(/ₙ/g,' n').replace(/_eq\b/g,()=>ph(' equivalent'));
     t=t.replace(/^\s*J\s*=\s*N\s*[·.]\s*m\s*$/,()=>ph('joule equals newton meter'));
-    t=t.replace(/Ｎ/g,()=>ph('newton')).replace(/(\d\s*)Pa\b/g,(m,d)=>d+ph('pascals')).replace(/\bPa\b/g,()=>ph('pascal'));
+    t=t.replace(/[\uE101-\uE10D]/g,c=>' '+ph(EN_ONE['msJWVACFKLhgN'[c.charCodeAt(0)-0xE101]])+' ').replace(/Ｎ/g,()=>ph('newton')).replace(/(\d\s*)Pa\b/g,(m,d)=>d+ph('pascals')).replace(/\bPa\b/g,()=>ph('pascal'));
     t=t.replace(/n\u0302/g,'n').replace(/\[/g,'(').replace(/\]/g,')');
     t=t.replace(/\(\s*$/,'').replace(/^\s*\)/,'');
     t=t.replace(/\bv([fi])\b/g,'V$1').replace(/\b(cos|sin|tan)(?=\d|θ)/g,'$1 ').replace(/([AB])([xyz])(?=[AB][xyz])/g,'$1$2 ');
@@ -1039,7 +1039,7 @@ const TTS=(()=>{
     const segs=[];
     for(const k of toks){
       if(AR_CH.test(k)){segs.push({l:'ar',t:k});continue}
-      const isMath=/[\uFF2EA-Za-z\u00C0-\u024F\u0300-\u036FͰ-Ͽ=×÷√²³⁻⁰¹⁴⁵⁶⁷⁸⁹₀₁₂₃°%∝≈µΩ+·\/]|\d\s*[−-]|[−]/.test(k);
+      const isMath=/[\uFF2E\uE101-\uE10DA-Za-z\u00C0-\u024F\u0300-\u036FͰ-Ͽ=×÷√²³⁻⁰¹⁴⁵⁶⁷⁸⁹₀₁₂₃°%∝≈µΩ+·\/]|\d\s*[−-]|[−]/.test(k);
       if(!isMath){segs.push({l:'ar',t:k});continue}
       /* علامات الترقيم في الطرفين تبقى مع العربي */
       const m=k.match(/^([\s،.:؛؟!«»·\-—–]*)([\s\S]*?)([\s،.:؛؟!«»·\-—–]*)$/);
@@ -1517,7 +1517,7 @@ function openBoard(dry){dry=dry===true;
     return pre+b};
   const narr=()=>narrAt(cur,step);
   const narrAt=(cur,step)=>{const sl=out[cur];
-    if(sl.type==='t')return 'مرحبًا بك'+((!dry&&window.coachName&&coachName())?' يا '+coachName():'')+'. '+(VO==='z'?'أنا مدربتك الذكية':'أنا مدربك الذكي')+'، وسأشرح لك اليوم درس: '+((window.COACHINTRO||[]).includes(K2)?'مقدمة الوحدة وأهدافها، و':'')+l.t+'. '+(TOP?'سنتعلم في هذا الدرس: '+topSay()+'. ركّز معي، وهيا نبدأ.':heads.length?'سنتعلم في هذا الدرس: '+heads.join('، ')+'. ركّز معي، وهيا نبدأ.':'ركّز معي، وهيا نبدأ.');
+    if(sl.type==='t')return 'مرحبًا بك'+((!dry&&window.coachName&&coachName())?' يا '+coachName():'')+'. '+(VO==='z'?'أنا مدربتك الذكية':'أنا مدربك الذكي')+'، وسأشرح لك اليوم '+((window.COACHINTRO||[]).includes(K2)?'مقدمة الوحدة '+['الأولى','الثانية','الثالثة','الرابعة','الخامسة'][+K2.split('-')[0]]+' وأهدافها، ثم درس: ':'درس: ')+l.t+'. '+(TOP?'سنتعلم في هذا الدرس: '+topSay()+'. ركّز معي، وهيا نبدأ.':heads.length?'سنتعلم في هذا الدرس: '+heads.join('، ')+'. ركّز معي، وهيا نبدأ.':'ركّز معي، وهيا نبدأ.');
     if(sl.type==='e'){const n=!dry&&window.coachName&&coachName(),lab=!!(window.LABS&&LABS[K2]);return 'شكرًا لمتابعتك'+(n?' يا '+n:'')+'. انتهينا من شرح الدرس، والآن حل الأمثلة والتمارين التفاعلية، ثم اختبر نفسك'+(lab?'، وبعدها انتقل إلى التجربة العملية لترى ما تعلمته يتحقق أمامك.':'.')}
     if(sl.type==='q')return sl.q.ct?sl.q.lead+' '+sl.q.q+' اختر الإجابة الصحيحة.':'والآن سؤال لك: '+sl.q.q;
     if(step===0){if(!sl.title)return '';if(/\(تابع\)$/.test(sl.title))return sl.s4?'':'نكمل معًا.';
