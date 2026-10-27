@@ -6230,12 +6230,19 @@ function bidiNode(n){const p=n.parentNode;if(!p||!BIDI_AR.test(n.data))return;if
   if(d!==n.data)n.data=d}
 function bidiFix(root){const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let n;const a=[];while(n=w.nextNode())a.push(n);a.forEach(bidiNode)}
 function bidiWatch(root){bidiFix(root);if(typeof MutationObserver!=='function')return;new MutationObserver(ms=>{ms.forEach(m=>{if(m.type==='characterData')bidiNode(m.target);else m.addedNodes.forEach(x=>{if(x.nodeType===3)bidiNode(x);else if(x.nodeType===1)bidiFix(x)})})}).observe(root,{subtree:true,childList:true,characterData:true})}
+/* نتيجة المتدرب في التجربة: تظهر أسفل جدول النتائج وتتحدث مع كل خطوة صحيحة */
+function labScore(card,done,total){try{const tb=card.querySelector('table.rt');if(!tb)return;let b=card.querySelector('.labScore');
+  if(!b){b=document.createElement('div');b.className='labScore';(tb.closest('.ctl')||tb.parentElement).appendChild(b)}
+  const p=Math.round(done/total*100),m=p>=100?'ممتاز، أكملت التجربة كاملة.':p>=50?'جيد، أكمل الخطوات الباقية.':done?'استمر، وأكمل خطوات التنفيذ.':'ابدأ تنفيذ التجربة، وتظهر نتيجتك هنا مع كل خطوة صحيحة.';
+  b.className='labScore '+(p>=100?'full':p>=50?'mid':'low');
+  b.innerHTML='<b>🎯 نتيجتك في التجربة: <bdi>'+done+' من '+total+'</bdi> (<bdi>'+p+'%</bdi>)</b><span>'+m+'</span><i style="width:'+p+'%"></i>';
+  if(!document.getElementById('labScoreCss')){const st=document.createElement('style');st.id='labScoreCss';st.textContent='.labScore{position:relative;overflow:hidden;margin-top:10px;border:2px solid #F7931E;background:#fff7ef;border-radius:12px;padding:10px 12px 14px;color:#7c2d12}.labScore b{display:block;font-size:16px}.labScore span{display:block;font-size:14px;margin-top:2px}.labScore i{position:absolute;bottom:0;right:0;height:5px;background:#F7931E;transition:width .4s}.labScore.full{border-color:#16a34a;background:#ecfdf5;color:#14532d}.labScore.full i{background:#16a34a}@media (prefers-color-scheme:dark){:root:not([data-theme=light]) .labScore{background:#2a1a0e;color:#fed7aa}:root:not([data-theme=light]) .labScore.full{background:#052e16;color:#bbf7d0}}:root[data-theme=dark] .labScore{background:#2a1a0e;color:#fed7aa}:root[data-theme=dark] .labScore.full{background:#052e16;color:#bbf7d0}';document.head.appendChild(st)}}catch(e){}}
 /* تسجيل إنجاز التجربة للمدرب: نسبة خانات جدول النتائج التي امتلأت بعد نجاح خطواتها (تدخل في الأعمال الفصلية) */
-function labTrack(card,key,title){try{if(typeof SYNC==='undefined'||!SYNC.result)return;
+function labTrack(card,key,title){try{const canSync=typeof SYNC!=='undefined'&&!!SYNC.result;
   const cells=()=>[...card.querySelectorAll('table.rt td')];let base=null,best=0,t=0;
   const empty=c=>{const x=c.textContent.replace(/[⁦-⁩\s]/g,'');return x===''||x==='—'||x==='-'};
-  const check=()=>{const C=cells();if(!C.length)return;if(!base)base=C.filter(empty);if(!base.length)return;
-    const done=base.filter(c=>card.contains(c)&&!empty(c)).length;if(done>best){best=done;clearTimeout(t);t=setTimeout(()=>SYNC.result('lab',key,title,best,base.length),1500)}};
+  const check=()=>{const C=cells();if(!C.length)return;if(!base){base=C.filter(empty);if(base.length)labScore(card,0,base.length)}if(!base.length)return;
+    const done=base.filter(c=>card.contains(c)&&!empty(c)).length;if(done>best){best=done;labScore(card,best,base.length);if(canSync){clearTimeout(t);t=setTimeout(()=>SYNC.result('lab',key,title,best,base.length),1500)}}};
   setTimeout(check,300);new MutationObserver(()=>check()).observe(card,{childList:true,subtree:true,characterData:true})}catch(e){}}
 /* الوضع الليلي: الأسلاك والخطوط السوداء لا تظهر على الخلفية الداكنة، فيضاف خلفها إطار فاتح (نسخة أعرض) بالرسم نفسه */
 function labIsDark(){const t=document.documentElement.getAttribute('data-theme')||document.body.getAttribute('data-theme');if(t)return t==='dark';return !!(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)}
