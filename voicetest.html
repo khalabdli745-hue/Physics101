@@ -19,6 +19,7 @@ h1{font-size:21px;margin:0}
 .v{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:6px 10px;font:inherit;font-size:13.5px;font-weight:700;cursor:pointer}
 .v.on{border-color:var(--acc);box-shadow:0 0 0 2px var(--acc) inset}
 .v.t{border-color:var(--acc2)}
+.v.gm{border-color:#2563eb;border-style:dashed}
 .v small{font-weight:400;color:var(--mute)}
 .all{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
 .btn{background:var(--acc);color:#fff;border:0;border-radius:10px;padding:8px 14px;font:inherit;font-weight:800;cursor:pointer}
@@ -42,7 +43,7 @@ h1{font-size:21px;margin:0}
  <div class="card">
   <div style="font-weight:800;margin-bottom:6px">1) اختر الصوت</div>
   <div class="vs" id="vs"></div>
-  <div class="leg" style="margin-top:8px">حامد وزارية: الصوتان الحاليان في المنصة. ذات الإطار البنفسجي: أصوات Microsoft الحديثة متعددة اللغات، تُجرب بدون تشكيل.</div>
+  <div class="leg" style="margin-top:8px">حامد وزارية: الصوتان الحاليان في المنصة. ذات الإطار البنفسجي: أصوات Microsoft الحديثة متعددة اللغات. ذات الإطار الأزرق المتقطع: أصوات Gemini (تحتاج code.gs الإصدار 27). كلها تُجرب بدون تشكيل.</div>
   <div class="all"><button class="btn" id="pa">▶ المقطع كاملا بهذا الصوت</button><button class="btn g" id="st">⏹ إيقاف</button></div>
   <div class="msg" id="msg"></div>
  </div>
@@ -62,7 +63,18 @@ const V=[
  {id:'a0',name:'en-US-AndrewMultilingualNeural',lbl:'Andrew (رجل)',k:'حديث، بدون تشكيل',d:0,t:1},
  {id:'b0',name:'en-US-BrianMultilingualNeural',lbl:'Brian (رجل)',k:'حديث، بدون تشكيل',d:0,t:1},
  {id:'v0',name:'en-US-AvaMultilingualNeural',lbl:'Ava (امرأة)',k:'حديث، بدون تشكيل',d:0,t:1},
- {id:'e0',name:'en-US-EmmaMultilingualNeural',lbl:'Emma (امرأة)',k:'حديث، بدون تشكيل',d:0,t:1}
+ {id:'e0',name:'en-US-EmmaMultilingualNeural',lbl:'Emma (امرأة)',k:'حديث، بدون تشكيل',d:0,t:1},
+ {id:'g0',name:'Charon',lbl:'Gemini Charon (رجل)',k:'معلوماتي، بدون تشكيل',d:0,g:1},
+ {id:'g1',name:'Iapetus',lbl:'Gemini Iapetus (رجل)',k:'واضح، بدون تشكيل',d:0,g:1},
+ {id:'g2',name:'Rasalgethi',lbl:'Gemini Rasalgethi (رجل)',k:'معلوماتي، بدون تشكيل',d:0,g:1},
+ {id:'g3',name:'Sadaltager',lbl:'Gemini Sadaltager (رجل)',k:'واثق، بدون تشكيل',d:0,g:1},
+ {id:'g4',name:'Orus',lbl:'Gemini Orus (رجل)',k:'حازم، بدون تشكيل',d:0,g:1},
+ {id:'g5',name:'Kore',lbl:'Gemini Kore (امرأة)',k:'حازم، بدون تشكيل',d:0,g:1},
+ {id:'g6',name:'Erinome',lbl:'Gemini Erinome (امرأة)',k:'واضح، بدون تشكيل',d:0,g:1},
+ {id:'g7',name:'Sulafat',lbl:'Gemini Sulafat (امرأة)',k:'دافئ، بدون تشكيل',d:0,g:1},
+ {id:'g8',name:'Achernar',lbl:'Gemini Achernar (امرأة)',k:'ناعم، بدون تشكيل',d:0,g:1},
+ {id:'g9',name:'Vindemiatrix',lbl:'Gemini Vindemiatrix (امرأة)',k:'لطيف، بدون تشكيل',d:0,g:1},
+ {id:'g10',name:'Aoede',lbl:'Gemini Aoede (امرأة)',k:'خفيف، بدون تشكيل',d:0,g:1}
 ];
 const S=[
  ['شحنتان موجبتان بينهما مسافة r، فتتنافران بقوة F.','شُحْنَتَانِ مُوجَبَتَانِ بَيْنَهُمَا مَسَافَةُ r، فَتَتَنَافَرَانِ بِقُوَّةِ F.'],
@@ -78,16 +90,17 @@ let cur=V[0],AUD=new Audio(),stop=false;const MEM=new Map();
 const msg=document.getElementById('msg');
 function say(t,bad){msg.textContent=t;msg.className='msg'+(bad?' bad':'')}
 function segs(t){const out=[];t.split(/([A-Za-z0-9][A-Za-z0-9\/]*)/).forEach((p,i)=>{if(!p.trim())return;out.push({l:i%2?'en':'ar',t:p.trim()})});return out}
-const ERR={auth:'انتهت الجلسة أو لم تسجل الدخول. افتح المنصة وسجل الدخول، ثم ارجع لهذه الصفحة.',tts_quota:'انتهى رصيد الصوت الشهري.',tts_limit:'وصلت حد التجربة في هذه الساعة، جرب بعد قليل.',tts_off:'خدمة الصوت غير مفعلة في الخادم.',tts_key:'مفتاح الصوت في الخادم غير صحيح.',tts_busy:'الخدمة مشغولة، أعد المحاولة.'};
+const ERR={auth:'انتهت الجلسة أو لم تسجل الدخول. افتح المنصة وسجل الدخول، ثم ارجع لهذه الصفحة.',tts_quota:'انتهى رصيد الصوت الشهري.',tts_limit:'وصلت حد التجربة في هذه الساعة، جرب بعد قليل.',tts_off:'خدمة الصوت غير مفعلة في الخادم.',tts_key:'مفتاح الصوت في الخادم غير صحيح.',tts_busy:'الخدمة مشغولة، أعد المحاولة.',unknown_action:'صوت Gemini يحتاج نشر code.gs الإصدار 27 أولا.',gem_off:'مفتاح Gemini غير مضاف في الخادم.',gem_busy:'وصلت الحد المجاني لـ Gemini مؤقتا، جرب بعد دقيقة أو غدا.',gem_empty:'لم يرجع Gemini صوتا، أعد المحاولة.'};
 async function get(i){const t=S[i][cur.d],k=cur.name+'|'+t;if(MEM.has(k))return MEM.get(k);
- const r=await fetch(API,{method:'POST',body:JSON.stringify({a:'tts',token:tok,voice:cur.name,rate:0,segs:segs(t)}),redirect:'follow'}).then(x=>x.json());
+ const body=cur.g?{a:'gtts',token:tok,voice:cur.name,text:t,style:'Read aloud in clear Modern Standard Arabic, in a calm teacher tone'}:{a:'tts',token:tok,voice:cur.name,rate:0,segs:segs(t)};
+ const r=await fetch(API,{method:'POST',body:JSON.stringify(body),redirect:'follow'}).then(x=>x.json());
  if(!r||!r.ok)throw r||{};const bin=atob(r.audio),u8=new Uint8Array(bin.length);for(let j=0;j<bin.length;j++)u8[j]=bin.charCodeAt(j);
- const u=URL.createObjectURL(new Blob([u8],{type:'audio/mpeg'}));MEM.set(k,u);return u}
+ const u=URL.createObjectURL(new Blob([u8],{type:r.mime||'audio/mpeg'}));MEM.set(k,u);return u}
 function play(u){return new Promise((res,rej)=>{AUD.onended=()=>res();AUD.onerror=()=>rej({error:'audio'});AUD.src=u;const p=AUD.play();if(p&&p.catch)p.catch(rej)})}
 async function one(i){stop=false;try{say('جار تجهيز الجملة '+(i+1)+'…');const u=await get(i);say(cur.lbl+' · '+cur.k+' · الجملة '+(i+1));await play(u)}catch(e){say(ERR[e&&e.error]||('تعذر التشغيل: '+((e&&e.error)||'خطأ')),true)}}
 async function all(){stop=false;for(let i=0;i<S.length&&!stop;i++){try{say('الجملة '+(i+1)+' من '+S.length+' · '+cur.lbl+' · '+cur.k);const u=await get(i);if(stop)break;await play(u);await new Promise(r=>setTimeout(r,250))}catch(e){say(ERR[e&&e.error]||('تعذر التشغيل: '+((e&&e.error)||'خطأ')),true);return}}if(!stop)say('انتهى المقطع.')}
 const vs=document.getElementById('vs');
-V.forEach(v=>{const b=document.createElement('button');b.type='button';b.className='v'+(v.t?' t':'')+(v===cur?' on':'');b.innerHTML=v.lbl+' <small>'+v.k+'</small>';
+V.forEach(v=>{const b=document.createElement('button');b.type='button';b.className='v'+(v.t?' t':'')+(v.g?' gm':'')+(v===cur?' on':'');b.innerHTML=v.lbl+' <small>'+v.k+'</small>';
  b.onclick=()=>{cur=v;[...vs.children].forEach(x=>x.classList.remove('on'));b.classList.add('on');render()};vs.appendChild(b)});
 const list=document.getElementById('list');
 function render(){list.textContent='';S.forEach((s,i)=>{const d=document.createElement('div');d.className='card s';
