@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>تجربة الأصوات · فيزياء 101</title>
+<script src="config.js"></script>
+<style>
+:root{--bg:#f4f6fa;--card:#fff;--ink:#0f172a;--mute:#5b6478;--line:#e2e8f0;--acc:#0f766e;--acc2:#7c3aed;--bad:#b91c1c}
+@media (prefers-color-scheme:dark){:root{--bg:#0f172a;--card:#1e293b;--ink:#e2e8f0;--mute:#94a3b8;--line:#334155;--acc:#2dd4bf;--acc2:#a78bfa;--bad:#f87171}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans Arabic",Tahoma,"Segoe UI",sans-serif;line-height:1.7}
+.w{max-width:860px;margin:0 auto;padding:16px}
+h1{font-size:21px;margin:0}
+.sub{color:var(--mute);font-size:14px;margin:2px 0 12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:10px}
+.vs{display:flex;flex-wrap:wrap;gap:6px}
+.v{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:6px 10px;font:inherit;font-size:13.5px;font-weight:700;cursor:pointer}
+.v.on{border-color:var(--acc);box-shadow:0 0 0 2px var(--acc) inset}
+.v.t{border-color:var(--acc2)}
+.v small{font-weight:400;color:var(--mute)}
+.all{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.btn{background:var(--acc);color:#fff;border:0;border-radius:10px;padding:8px 14px;font:inherit;font-weight:800;cursor:pointer}
+.btn.g{background:var(--acc2)}
+.btn:disabled{opacity:.5}
+.s{display:flex;gap:10px;align-items:flex-start}
+.s .n{font-weight:800;color:var(--mute);min-width:1.5em}
+.s .tx{flex:1;min-width:0}
+.s .tx b{display:block;font-size:16px}
+.s .tx small{display:block;color:var(--mute);font-size:13px}
+.msg{font-size:13.5px;color:var(--mute);min-height:1.6em}
+.msg.bad{color:var(--bad)}
+.leg{font-size:13px;color:var(--mute)}
+</style>
+</head>
+<body>
+<div class="w">
+ <h1>تجربة أصوات مقطع قانون كولوم</h1>
+ <div class="sub">صفحة تجربة للمدرب فقط. اختر الصوت ثم استمع لكل جملة أو للمقطع كاملا. يُولد صوت كل جملة مرة واحدة ويُحفظ، فإعادة الاستماع لا تستهلك من الرصيد.</div>
+
+ <div class="card">
+  <div style="font-weight:800;margin-bottom:6px">1) اختر الصوت</div>
+  <div class="vs" id="vs"></div>
+  <div class="leg" style="margin-top:8px">حامد وزارية: الصوتان الحاليان في المنصة. ذات الإطار البنفسجي: أصوات Microsoft الحديثة متعددة اللغات، تُجرب بدون تشكيل.</div>
+  <div class="all"><button class="btn" id="pa">▶ المقطع كاملا بهذا الصوت</button><button class="btn g" id="st">⏹ إيقاف</button></div>
+  <div class="msg" id="msg"></div>
+ </div>
+
+ <div class="card"><div style="font-weight:800;margin-bottom:6px">2) الجمل</div><div id="list"></div></div>
+</div>
+
+<script>
+const API=(window.P101_API||'').trim();
+const tok=(()=>{try{const a=JSON.parse(localStorage.getItem('p101-auth')||'null');if(a&&a.token)return a.token}catch(e){}
+ try{const t=JSON.parse(localStorage.getItem('p101-tauth')||'null');if(t)return t.token||(typeof t==='string'?t:'')}catch(e){}return ''})();
+const V=[
+ {id:'h0',name:'ar-SA-HamedNeural',lbl:'حامد',k:'بدون تشكيل',d:0},
+ {id:'h1',name:'ar-SA-HamedNeural',lbl:'حامد',k:'مع التشكيل',d:1},
+ {id:'z0',name:'ar-SA-ZariyahNeural',lbl:'زارية',k:'بدون تشكيل',d:0},
+ {id:'z1',name:'ar-SA-ZariyahNeural',lbl:'زارية',k:'مع التشكيل',d:1},
+ {id:'a0',name:'en-US-AndrewMultilingualNeural',lbl:'Andrew (رجل)',k:'حديث، بدون تشكيل',d:0,t:1},
+ {id:'b0',name:'en-US-BrianMultilingualNeural',lbl:'Brian (رجل)',k:'حديث، بدون تشكيل',d:0,t:1},
+ {id:'v0',name:'en-US-AvaMultilingualNeural',lbl:'Ava (امرأة)',k:'حديث، بدون تشكيل',d:0,t:1},
+ {id:'e0',name:'en-US-EmmaMultilingualNeural',lbl:'Emma (امرأة)',k:'حديث، بدون تشكيل',d:0,t:1}
+];
+const S=[
+ ['شحنتان موجبتان بينهما مسافة r، فتتنافران بقوة F.','شُحْنَتَانِ مُوجَبَتَانِ بَيْنَهُمَا مَسَافَةُ r، فَتَتَنَافَرَانِ بِقُوَّةِ F.'],
+ ['نضاعف المسافة إلى 2r، فتقل القوة إلى الربع.','نُضَاعِفُ الْمَسَافَةَ إِلَى 2r، فَتَقِلُّ الْقُوَّةُ إِلَى الرُّبُعْ.'],
+ ['المسافة صارت الضعف، والقوة صارت الربع.','الْمَسَافَةُ صَارَتِ الضِّعْفَ، وَالْقُوَّةُ صَارَتِ الرُّبُعْ.'],
+ ['نجعل المسافة 3r، فتقل القوة إلى التسع.','نَجْعَلُ الْمَسَافَةَ 3r، فَتَقِلُّ الْقُوَّةُ إِلَى التُّسُعْ.'],
+ ['كلما زادت المسافة قلت القوة كثيرا، لأن المسافة مربعة.','كُلَّمَا زَادَتِ الْمَسَافَةُ قَلَّتِ الْقُوَّةُ كَثِيرًا، لِأَنَّ الْمَسَافَةَ مُرَبَّعَهْ.'],
+ ['نرجع إلى المسافة r.','نَرْجِعُ إِلَى الْمَسَافَةِ r.'],
+ ['نضاعف الشحنة الأولى، فتتضاعف القوة.','نُضَاعِفُ الشُّحْنَةَ الْأُولَى، فَتَتَضَاعَفُ الْقُوَّهْ.'],
+ ['إذن، القوة تتناسب طرديا مع حاصل ضرب الشحنتين، وعكسيا مع مربع المسافة.','إِذَنْ، الْقُوَّةُ تَتَنَاسَبُ طَرْدِيًّا مَعَ حَاصِلِ ضَرْبِ الشُّحْنَتَيْنِ، وَعَكْسِيًّا مَعَ مُرَبَّعِ الْمَسَافَهْ.']
+];
+let cur=V[0],AUD=new Audio(),stop=false;const MEM=new Map();
+const msg=document.getElementById('msg');
+function say(t,bad){msg.textContent=t;msg.className='msg'+(bad?' bad':'')}
+function segs(t){const out=[];t.split(/([A-Za-z0-9][A-Za-z0-9\/]*)/).forEach((p,i)=>{if(!p.trim())return;out.push({l:i%2?'en':'ar',t:p.trim()})});return out}
+const ERR={auth:'انتهت الجلسة أو لم تسجل الدخول. افتح المنصة وسجل الدخول، ثم ارجع لهذه الصفحة.',tts_quota:'انتهى رصيد الصوت الشهري.',tts_limit:'وصلت حد التجربة في هذه الساعة، جرب بعد قليل.',tts_off:'خدمة الصوت غير مفعلة في الخادم.',tts_key:'مفتاح الصوت في الخادم غير صحيح.',tts_busy:'الخدمة مشغولة، أعد المحاولة.'};
+async function get(i){const t=S[i][cur.d],k=cur.name+'|'+t;if(MEM.has(k))return MEM.get(k);
+ const r=await fetch(API,{method:'POST',body:JSON.stringify({a:'tts',token:tok,voice:cur.name,rate:0,segs:segs(t)}),redirect:'follow'}).then(x=>x.json());
+ if(!r||!r.ok)throw r||{};const bin=atob(r.audio),u8=new Uint8Array(bin.length);for(let j=0;j<bin.length;j++)u8[j]=bin.charCodeAt(j);
+ const u=URL.createObjectURL(new Blob([u8],{type:'audio/mpeg'}));MEM.set(k,u);return u}
+function play(u){return new Promise((res,rej)=>{AUD.onended=()=>res();AUD.onerror=()=>rej({error:'audio'});AUD.src=u;const p=AUD.play();if(p&&p.catch)p.catch(rej)})}
+async function one(i){stop=false;try{say('جار تجهيز الجملة '+(i+1)+'…');const u=await get(i);say(cur.lbl+' · '+cur.k+' · الجملة '+(i+1));await play(u)}catch(e){say(ERR[e&&e.error]||('تعذر التشغيل: '+((e&&e.error)||'خطأ')),true)}}
+async function all(){stop=false;for(let i=0;i<S.length&&!stop;i++){try{say('الجملة '+(i+1)+' من '+S.length+' · '+cur.lbl+' · '+cur.k);const u=await get(i);if(stop)break;await play(u);await new Promise(r=>setTimeout(r,250))}catch(e){say(ERR[e&&e.error]||('تعذر التشغيل: '+((e&&e.error)||'خطأ')),true);return}}if(!stop)say('انتهى المقطع.')}
+const vs=document.getElementById('vs');
+V.forEach(v=>{const b=document.createElement('button');b.type='button';b.className='v'+(v.t?' t':'')+(v===cur?' on':'');b.innerHTML=v.lbl+' <small>'+v.k+'</small>';
+ b.onclick=()=>{cur=v;[...vs.children].forEach(x=>x.classList.remove('on'));b.classList.add('on');render()};vs.appendChild(b)});
+const list=document.getElementById('list');
+function render(){list.textContent='';S.forEach((s,i)=>{const d=document.createElement('div');d.className='card s';
+ d.innerHTML='<span class="n">'+(i+1)+'</span><div class="tx"><b></b><small></small></div><button class="btn" type="button">▶</button>';
+ d.querySelector('b').textContent=s[0];d.querySelector('small').textContent=cur.d?'يُرسل مشكولا: '+s[1]:'يُرسل بدون تشكيل';
+ d.querySelector('button').onclick=()=>one(i);list.appendChild(d)})}
+document.getElementById('pa').onclick=all;
+document.getElementById('st').onclick=()=>{stop=true;try{AUD.pause()}catch(e){}say('توقف.')};
+render();
+if(!API)say('لم يُعثر على رابط الخادم (config.js).',true);else if(!tok)say(ERR.auth,true);
+</script>
+</body>
+</html>
