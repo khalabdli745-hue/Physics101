@@ -1051,6 +1051,22 @@ header.top .brand span{color:#DCE8F7}header.top .progress{color:#E6EEF9}
 /* الليلي B: بطاقات الوحدات المغلقة بلون الوحدة الفاتح كامل وكتابة غامقة، والمفتوحة بحد أبيض */
 :root[data-theme="dark"] .unit[data-u="0"],:root[data-theme="dark"] .unit[data-u="0"] .num{--c:#82AEFF!important}:root[data-theme="dark"] .unit[data-u="1"],:root[data-theme="dark"] .unit[data-u="1"] .num{--c:#B794F6!important}:root[data-theme="dark"] .unit[data-u="2"],:root[data-theme="dark"] .unit[data-u="2"] .num{--c:#F28B82!important}:root[data-theme="dark"] .unit[data-u="3"],:root[data-theme="dark"] .unit[data-u="3"] .num{--c:#5CC4C0!important}:root[data-theme="dark"] .unit[data-u="4"],:root[data-theme="dark"] .unit[data-u="4"] .num{--c:#E6A07E!important}:root[data-theme="dark"] .unit:not(.open)>button{background:linear-gradient(160deg,var(--c),color-mix(in srgb,var(--c) 80%,#000))!important;border-color:transparent!important}:root[data-theme="dark"] .unit:not(.open)>button,:root[data-theme="dark"] .unit:not(.open)>button *{color:#0D1422!important}:root[data-theme="dark"] .unit:not(.open) .num{background:#0D1422!important;color:var(--c)!important;border-color:#0D1422!important}:root[data-theme="dark"] .unit.open>button{box-shadow:0 0 0 2px #fff inset!important}:root[data-theme="dark"] .unit.open{box-shadow:0 0 0 2px #fff!important}@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .unit[data-u="0"],:root:not([data-theme="light"]) .unit[data-u="0"] .num{--c:#82AEFF!important}:root:not([data-theme="light"]) .unit[data-u="1"],:root:not([data-theme="light"]) .unit[data-u="1"] .num{--c:#B794F6!important}:root:not([data-theme="light"]) .unit[data-u="2"],:root:not([data-theme="light"]) .unit[data-u="2"] .num{--c:#F28B82!important}:root:not([data-theme="light"]) .unit[data-u="3"],:root:not([data-theme="light"]) .unit[data-u="3"] .num{--c:#5CC4C0!important}:root:not([data-theme="light"]) .unit[data-u="4"],:root:not([data-theme="light"]) .unit[data-u="4"] .num{--c:#E6A07E!important}:root:not([data-theme="light"]) .unit:not(.open)>button{background:linear-gradient(160deg,var(--c),color-mix(in srgb,var(--c) 80%,#000))!important;border-color:transparent!important}:root:not([data-theme="light"]) .unit:not(.open)>button,:root:not([data-theme="light"]) .unit:not(.open)>button *{color:#0D1422!important}:root:not([data-theme="light"]) .unit:not(.open) .num{background:#0D1422!important;color:var(--c)!important;border-color:#0D1422!important}:root:not([data-theme="light"]) .unit.open>button{box-shadow:0 0 0 2px #fff inset!important}:root:not([data-theme="light"]) .unit.open{box-shadow:0 0 0 2px #fff!important}}
 </style>
+<style>
+/* 84: الجوال: تبويبات الدرس أصغر، وزر «أنهيت الدرس/مكتمل» صغير في سطر الوحدة */
+@media (max-width:600px){
+.lessonHead .tabs{gap:6px!important;padding-bottom:2px!important}
+.lessonHead .tabs button{min-width:74px!important;width:74px!important;min-height:0!important;height:66px!important;padding:6px 4px!important;gap:3px!important;font-size:11px!important;line-height:1.25!important;border-radius:11px!important}
+.lessonHead .tabs button::before{width:26px!important;height:26px!important;background-size:18px 18px,auto!important;border-radius:8px!important}
+.lessonHead .hrow{display:block!important;position:relative}
+.lessonHead #doneBtn{position:absolute!important;top:10px;left:10px;margin:0!important;padding:4px 10px!important;font-size:12px!important;min-height:0!important;height:auto!important;border-radius:999px!important;z-index:2}
+.lessonHead h1#lessonTitle .lpre{margin-left:84px!important}
+.lessonHead .crumb{font-size:12px!important;padding:4px 10px!important;margin-bottom:6px!important}
+.lessonHead h1#lessonTitle{font-size:17px!important;line-height:1.45!important;padding:7px 11px!important;border-inline-start-width:4px!important}
+.lessonHead h1#lessonTitle .lpre{font-size:10.5px!important;padding:2px 8px!important;margin-bottom:4px!important}
+.lessonHead #doneBtn{top:7px!important;left:8px!important;font-size:11px!important;padding:3px 9px!important}
+}
+
+</style>
 <style>/* 75: خط Readex Pro */body,button,input,select,textarea,table,th,td{font-family:'Readex Pro',Tahoma,'Segoe UI',Arial,sans-serif}</style></head>
 <body>
 <div class="app" id="app">
@@ -1121,23 +1137,23 @@ header.top .brand span{color:#DCE8F7}header.top .progress{color:#E6EEF9}
 </div>
 <script>(function(){const lab=document.getElementById('lgIdLab'),inp=document.getElementById('lgId');if(lab&&inp){const sync=()=>inp.placeholder=lab.textContent.trim();sync();new MutationObserver(sync).observe(lab,{childList:true,characterData:true,subtree:true})}
 document.querySelectorAll('.lgEye').forEach(b=>b.onclick=()=>{const i=b.parentNode.querySelector('input');const sh=i.type==='password';i.type=sh?'text':'password';b.classList.toggle('on',sh);b.setAttribute('aria-label',sh?'إخفاء كلمة المرور':'إظهار كلمة المرور')})})()</script>
-<script src="config.js?v=10280124"></script>
-<script src="voc.js?v=10280124" defer></script>
-<script src="tashkeel.js?v=10280124" defer></script>
-<script src="data.js?v=10280124"></script>
-<script src="study.js?v=10280124"></script>
-<script src="quiz2.js?v=10280124"></script>
-<script src="extras.js?v=10280124"></script>
-<script src="figs.js?v=10280124"></script>
-<script src="figs2.js?v=10280124"></script>
-<script src="problems.js?v=10280124"></script>
-<script src="theory.js?v=10280124"></script>
-<script src="gens.js?v=10280124"></script>
-<script src="art.js?v=10280124"></script>
-<script src="more.js?v=10280124"></script>
-<script src="labs.js?v=10280124"></script>
-<script src="coach.js?v=10280124"></script>
-<script src="kcards.js?v=10280124"></script>
+<script src="config.js?v=10280304"></script>
+<script src="voc.js?v=10280304" defer></script>
+<script src="tashkeel.js?v=10280304" defer></script>
+<script src="data.js?v=10280304"></script>
+<script src="study.js?v=10280304"></script>
+<script src="quiz2.js?v=10280304"></script>
+<script src="extras.js?v=10280304"></script>
+<script src="figs.js?v=10280304"></script>
+<script src="figs2.js?v=10280304"></script>
+<script src="problems.js?v=10280304"></script>
+<script src="theory.js?v=10280304"></script>
+<script src="gens.js?v=10280304"></script>
+<script src="art.js?v=10280304"></script>
+<script src="more.js?v=10280304"></script>
+<script src="labs.js?v=10280304"></script>
+<script src="coach.js?v=10280304"></script>
+<script src="kcards.js?v=10280304"></script>
 <script>
 const UNITS=window.UNITS,STUDY=window.STUDY,EXTRA=window.EXTRA||{},FIGS=window.FIGS||{};
 window.PAGES=window.PAGES||{};
@@ -2952,7 +2968,7 @@ if(document.body)start();else document.addEventListener('DOMContentLoaded',start
 <script>/* الشكل الموحد للآلة الحاسبة (معتمد 22 أكتوبر) لكل المتدربين */(function(){const f=()=>{document.body&&document.body.classList.add('calcNew')};document.addEventListener('DOMContentLoaded',f);f()})();</script>
 <script>window.addEventListener('pageshow',e=>{if(e.persisted)location.reload()});</script>
 <script>(function(){var K='p101-tlast',t=0;function mark(){var n=Date.now();if(n-t>30000){t=n;try{localStorage.setItem(K,n)}catch(e){}}}['click','keydown','touchstart','scroll'].forEach(function(e){addEventListener(e,mark,{passive:true,capture:true})});setInterval(function(){try{var l=+localStorage.getItem(K)||0;if(localStorage.getItem('p101-tauth')&&l&&Date.now()-l>36e5){localStorage.removeItem('p101-tauth');location.reload()}}catch(e){}},60000)})();</script>
-<script src="emo.js?v=10280124"></script>
+<script src="emo.js?v=10280304"></script>
 <style>
 /* 69: بطاقة الدخول تتناسق مع كل الشاشات */
 .loginBox{zoom:var(--lgz,1)}
@@ -2983,6 +2999,185 @@ if(document.body)start();else document.addEventListener('DOMContentLoaded',start
  new MutationObserver(q).observe(document.documentElement,{subtree:true,childList:true,attributes:true,attributeFilter:['hidden','data-pg']});
  document.readyState!=='loading'?q():addEventListener('DOMContentLoaded',q);
 })();
+</script>
+<style>
+/* 85: السبورة ملء الشاشة في شاشات اللمس، وتخطيط أفقي بعمودين للشاشات القصيرة */
+@media (orientation:landscape) and (max-height:600px){
+.board{display:grid!important;grid-template-columns:minmax(0,1fr) 260px;column-gap:22px;grid-template-rows:auto minmax(0,1fr) auto auto;height:100dvh!important}
+.board>.bTop{grid-column:1/-1;grid-row:1;min-height:0!important;padding-top:4px!important;padding-bottom:4px!important}
+.board>.bStage{display:contents!important}
+.board .bSlide{grid-column:1;grid-row:2/4;min-height:0!important;height:auto!important;width:auto!important;margin:18px 18px 0 6px!important}
+.board .bProg{grid-column:1;grid-row:4;margin:0 8px 6px!important}
+.board .bTeach{grid-column:2;grid-row:2;display:flex!important;flex-direction:column!important;flex-wrap:nowrap!important;gap:6px!important;margin:6px 0 0 6px!important;overflow:hidden!important;min-height:0;padding:0!important;background:none!important}
+.board .bTeach .bAv{position:static!important;width:40px!important;height:40px!important;flex:none;align-self:flex-start;transform:none!important}
+.board .bTeach .bSay{position:static!important;flex:1 1 auto!important;min-height:0!important;max-height:none!important;width:auto!important;overflow:auto!important;font-size:13px!important}
+.board .bTeach .bSay span{max-height:none!important;overflow:visible!important}
+.board .bTeach .bAskBtn{position:static!important;flex:none!important;width:100%!important;height:36px!important;display:flex!important;align-items:center;justify-content:center;gap:6px}
+.board>.bBar{grid-column:2;grid-row:3/5;align-self:end;margin:0 0 6px 6px}
+.board>.bBar .bRow{flex-wrap:wrap!important;justify-content:center!important;gap:6px!important}
+.board>.bBar .bSep{display:none!important}
+.board>.bBar button{height:38px!important}
+.board>.bBar .bNext{flex:1 1 100%}
+.board .bAskP{grid-column:1/-1;grid-row:2/5}
+}
+
+/* حامل السبورة: مؤشر التقدم وزر ملء الشاشة ملتصقان أسفل السبورة بلون واضح */
+.board .bProgWrap{display:flex;align-items:center;gap:10px;box-sizing:border-box;margin:12px auto 0;padding:7px 12px;background:linear-gradient(180deg,#eef1f4,#c9d0d9);border:1px solid #8a93a0;border-top:0;border-radius:0 0 14px 14px;box-shadow:0 8px 16px -8px rgba(0,0,0,.6)}
+.board .bProgWrap>.bProg{flex:1 1 auto;min-width:0;max-width:none!important;width:auto!important;margin:0!important;padding:6px 0!important;height:auto!important;background:linear-gradient(#9aa3af,#9aa3af) center/100% 8px no-repeat!important;border-radius:8px}
+.board .bProgWrap>.bProg u{background:#3b4250!important;opacity:.35;height:8px!important;border-radius:8px}
+.board .bProgWrap>.bProg i{background:var(--accent,#1f7a7a)!important;height:8px!important;border-radius:8px}
+.board .bProgWrap>.bProg b{background:var(--accent,#1f7a7a)!important;border:3px solid #fff!important;box-shadow:0 1px 4px rgba(0,0,0,.4)!important}
+.board .bFsBtn{flex:none;display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 14px;border-radius:999px;border:2px solid #fff;background:var(--accent,#1f7a7a);color:#fff;font:700 13px 'Readex Pro',Tahoma,sans-serif;cursor:pointer;box-shadow:0 3px 8px rgba(0,0,0,.35);white-space:nowrap}
+.board .bFsBtn svg{width:16px;height:16px}
+.board .bBar .bFull{display:none!important}
+@media (orientation:landscape) and (max-height:600px){.board .bProgWrap{grid-column:1;grid-row:4;margin:12px auto 6px}.board .bSlide{margin-bottom:0!important}}
+</style>
+<script>
+/* السبورة تفتح ملء الشاشة تلقائيا في شاشات اللمس */
+(function(){var o=window.openBoard;if(typeof o!=='function')return;
+window.openBoard=function(){var r=o.apply(this,arguments);try{if(matchMedia('(pointer:coarse)').matches){setTimeout(function(){var b=document.querySelector('.board .bFull');var B=document.querySelector('.board');if(b&&B&&!B.classList.contains('full'))b.click()},60)}}catch(e){}return r};})();
+
+(function(){var o=window.openBoard;if(typeof o!=='function')return;
+var I1='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>';
+var I2='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>';
+window.openBoard=function(){var r=o.apply(this,arguments);setTimeout(function(){try{var B=document.querySelector('.board'),p=B&&B.querySelector('.bProg'),f=B&&B.querySelector('.bFull');if(!p||!f||B.querySelector('.bFsBtn'))return;
+var w=document.createElement('div');w.className='bProgWrap';p.parentNode.insertBefore(w,p);w.appendChild(p);
+var b=document.createElement('button');b.type='button';b.className='bFsBtn';w.appendChild(b);
+var sl=B.querySelector('.bSlide');var fit=function(){if(sl)w.style.width=Math.min(sl.getBoundingClientRect().width+24,(w.parentNode.getBoundingClientRect().width||innerWidth)-8)+'px'};fit();try{new ResizeObserver(fit).observe(sl)}catch(e){}addEventListener('resize',fit);
+B.querySelectorAll('.bAskBtn br').forEach(function(x){x.replaceWith(' ')});
+var upd=function(){var on=B.classList.contains('full');b.innerHTML=(on?I2:I1)+(on?'تصغير':'ملء الشاشة');b.title=on?'تصغير السبورة':'ملء الشاشة'};
+b.onclick=function(){f.click();setTimeout(upd,60)};upd();new MutationObserver(upd).observe(B,{attributes:true,attributeFilter:['class']})}catch(e){}},120);return r}})();
+</script>
+<style>
+/* 86: أزرار السبورة: السابق والتشغيل والتالي بحجم واحد جنب بعض وجنب الصوت، وإخفاء السرعة (ثابتة على عادي) */
+.board .bBar .bSp,.board .bBar .bSep{display:none!important}
+.board .bBar .bRow{display:flex!important;flex-wrap:nowrap!important;justify-content:center!important;align-items:center;gap:8px!important}
+.board .bBar .bVo{order:1}.board .bBar .bGw{order:2}.board .bBar .bPrev{order:3}.board .bBar .bAuto{order:4}.board .bBar .bNext{order:5}
+.board .bBar .bPrev,.board .bBar .bAuto,.board .bBar .bNext{flex:0 0 96px!important;width:96px!important;min-width:0!important;height:44px!important;padding:0 6px!important;border-radius:12px!important;font:700 14px 'Readex Pro',Tahoma,sans-serif!important;display:inline-flex!important;align-items:center;justify-content:center;gap:5px;white-space:nowrap}
+.board .bBar .bPrev{background:#fff!important;color:var(--accent,#1f7a7a)!important;border:2px solid var(--accent,#1f7a7a)!important;font-size:0!important}
+.board .bBar .bPrev::after{content:"→ السابق";font:700 14px 'Readex Pro',Tahoma,sans-serif}
+.board .bBar .bAuto{background:var(--accent,#1f7a7a)!important;color:#fff!important;border:2px solid var(--accent,#1f7a7a)!important}
+.board .bBar .bNext{background:linear-gradient(160deg,color-mix(in srgb,var(--accent,#1f7a7a) 70%,#000),color-mix(in srgb,var(--accent,#1f7a7a) 45%,#000))!important;color:#fff!important;border:2px solid transparent!important;font-size:0!important}
+.board .bBar .bNext::after{content:"التالي ←";font:700 14px 'Readex Pro',Tahoma,sans-serif}
+.board .bBar .bVo{height:44px!important}
+@media (max-width:420px){.board .bBar .bPrev,.board .bBar .bAuto,.board .bBar .bNext{flex-basis:80px!important;width:80px!important}.board .bBar .bPrev::after,.board .bBar .bNext::after,.board .bBar .bAuto{font-size:13px!important}}
+@media (orientation:landscape) and (max-height:600px){.board>.bBar .bRow{flex-wrap:wrap!important}.board>.bBar .bVo{flex:1 1 100%!important}.board .bBar .bPrev,.board .bBar .bAuto,.board .bBar .bNext{flex:1 1 0!important;width:auto!important;min-width:0!important;padding:0 2px!important}.board .bBar .bAuto{font-size:12.5px!important}.board .bBar .bPrev::after,.board .bBar .bNext::after{font-size:12.5px}.board>.bBar .bRow{gap:6px!important}}
+@media (orientation:landscape) and (max-height:600px){
+.board .bAskP{grid-column:2!important;grid-row:2!important;max-height:calc(100% - 8px)!important;height:auto!important;align-self:start;margin:6px 0 6px 6px!important;overflow:auto!important;min-height:0;display:flex;flex-direction:column;gap:8px;border-radius:14px;z-index:3}
+.board .bAskP[hidden]{display:none!important}
+.board.asking .bTeach{display:none!important}
+.board .bAskP .bAskChips{flex-wrap:wrap!important;overflow:visible!important;flex:none}.board .bAskP .bAskLog{flex:0 1 auto;min-height:0;overflow:auto}.board .bAskP .bAskLog:empty{display:none!important}.board .bAskP .bAskH{flex-wrap:nowrap;align-items:center;gap:8px}.board .bAskP .bAskH b{font-size:13px;display:flex;align-items:center;gap:6px;white-space:nowrap;min-width:0;flex:1 1 auto;overflow:hidden;text-overflow:ellipsis}.board .bAskP .bAskH b img{display:none!important}.board .bAskP .bAskH b{font-size:0!important}.board .bAskP .bAskH b::after{content:"المدرب الذكي";font-size:13.5px;font-weight:800}.board .bAskP .bAskH b::before{content:"";flex:none;width:36px;height:36px;border-radius:50%;background:#fff url("coach-face.jpg") center/cover;border:2px solid var(--accent,#1f7a7a);box-shadow:0 2px 6px rgba(0,0,0,.25)}.board .bAskP .bAskX{flex:none;white-space:nowrap;padding:5px 8px!important;font-size:12px!important}.board .bAskP:has(.bAskLog:not(:empty)) .bAskChips{display:none!important}.board .bAskP .bAskLog:not(:empty){flex:1 1 auto!important}.board .bAskP .bAskF{flex:none}
+}
+.board .bAskX{background:#F2B84B!important;color:#3A2A00!important;border:1px solid #3A2A00!important}
+
+/* عند السؤال: يختفي مربع المدرب ويظهر مربع السؤال بصورة المدرب، وعند الإغلاق يرجع */
+.board.asking .bTeach{display:none!important}
+.board .bAskP .bAskH b{display:flex;align-items:center;gap:8px;white-space:nowrap;min-width:0}
+.board .bAskP .bAskH b img{display:none!important}
+.board .bAskP .bAskH b{font-size:0!important}
+.board .bAskP .bAskH b::before{content:"";flex:none;width:40px;height:40px;border-radius:50%;background:#fff url("coach-face.jpg") center/cover;border:2px solid var(--accent,#1f7a7a);box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.board .bAskP .bAskH b::after{content:"المدرب الذكي";font-size:15px;font-weight:800}
+.board .bAskP:has(.bAskLog:not(:empty)) .bAskChips{display:none!important}
+/* شريط الأزرار بنفس شكل البطاقة البيضاء */
+.board>.bBar{background:transparent!important;border:0!important;box-shadow:none!important;padding:6px 8px 8px!important}
+.board>.bBar .bRow{background:#fff;border-radius:16px;padding:8px!important;box-shadow:0 6px 16px -6px rgba(0,0,0,.45);max-width:640px;margin:0 auto;box-sizing:border-box}
+</style>
+<script>
+(function(){var o=window.openBoard;if(typeof o!=='function')return;window.openBoard=function(){try{if(window.TTS&&TTS.setRate)TTS.setRate(0.95)}catch(e){}return o.apply(this,arguments)}})();
+</script>
+<style>
+/* 87: السؤال: بطاقة السؤال تظهر بدل بطاقة المدرب، وبعد الإرسال ترجع بطاقة المدرب بالجواب وزري «أكمل الشرح» و«اسأل مرة ثانية» */
+.board.asking .bTeach{display:flex!important}
+.board.asking:not(.qOpen) .bAskP{display:none!important}
+.board.qOpen .bTeach{display:none!important}
+.board .bAskP .bAskX{display:none!important}
+.board .bAskP .qClose{flex:none;width:34px;height:34px;border-radius:50%;border:1px solid #cbd5e1;background:#fff;color:#334155;font:700 18px/1 Tahoma,sans-serif;cursor:pointer;display:grid;place-items:center}
+.board .bTeach .qActs{display:none;gap:6px;flex-wrap:wrap}
+.board.asking:not(.qOpen) .bTeach .qActs{display:flex}
+.board.asking:not(.qOpen) .bTeach .bAskBtn{display:none!important}
+.board .bTeach .qActs button{height:36px;padding:0 12px;border-radius:12px;font:700 13px 'Readex Pro',Tahoma,sans-serif;cursor:pointer;white-space:nowrap;background:#F2B84B;color:#3A2A00;border:1px solid #3A2A00}
+.board .bTeach .qActs .qGo{background:var(--accent,#1f7a7a);color:#fff;border-color:var(--accent,#1f7a7a)}
+.board .bTeach .qActs button:disabled{opacity:.5}
+.board.asking:not(.qOpen) .bTeach{flex-wrap:wrap!important;align-items:flex-start!important}.board .bTeach .qActs{flex:1 1 100%;justify-content:center;order:9}.board .bTeach .bSay.qAns{flex:1 1 0!important;min-width:0!important;max-height:none!important;height:auto!important}.board .bTeach .bSay.qAns span{display:block;max-height:150px!important;overflow:auto!important;-webkit-line-clamp:unset!important}
+@media (orientation:landscape) and (max-height:600px){.board.asking:not(.qOpen) .bTeach{flex-wrap:nowrap!important}.board .bTeach .qActs{width:100%;flex:none!important;order:9}.board .bTeach .qActs button{flex:1 1 0;padding:0 6px}.board .bTeach .bSay.qAns{flex:1 1 auto!important;min-height:0!important;overflow:auto!important}.board .bTeach .bSay.qAns span{max-height:none!important}}
+@media (orientation:landscape) and (max-height:600px){
+.board.qOpen>.bBar{display:none!important}
+.board.qOpen .bAskP{display:flex!important;flex-direction:column!important;justify-content:flex-start!important}
+.board.qOpen .bAskP>*{flex:0 0 auto}
+.board.qOpen .bAskP>.bAskF{flex:1 1 auto!important;min-height:0}
+.board.qOpen .bAskP .bAskLog{display:none!important}
+.board.qOpen .bAskP .bAskChips{display:flex!important}
+.board.qOpen .bAskP{grid-row:2/5!important;align-self:stretch!important;height:auto!important;max-height:none!important;margin-bottom:8px!important}
+.board.qOpen .bAskP .bAskF{flex:1 1 auto!important;display:grid!important;grid-template-columns:auto 1fr;grid-template-rows:1fr auto;gap:6px;min-height:0}
+.board.qOpen .bAskP .bAskF textarea{grid-column:1/-1;grid-row:1;width:100%!important;box-sizing:border-box;min-height:80px!important;height:auto!important;max-height:none!important;align-self:stretch!important;margin:0!important;font-size:15px!important;line-height:1.6;resize:none}
+.board.qOpen .bAskP .bAskF .bSend{grid-row:2;grid-column:2;width:100%!important}
+.board.qOpen .bAskP .bAskF .bMic{grid-row:2;grid-column:1}
+}
+</style>
+<script>
+(function(){var o=window.openBoard;if(typeof o!=='function')return;
+window.openBoard=function(){var r=o.apply(this,arguments);setTimeout(function(){try{
+var B=document.querySelector('.board');if(!B||B._qf)return;B._qf=1;
+var aBtn=B.querySelector('.bAskBtn'),aP=B.querySelector('.bAskP'),aX=B.querySelector('.bAskX'),log=B.querySelector('.bAskLog'),T=B.querySelector('.bTeach'),say=B.querySelector('.bSay');if(!aBtn||!aP||!T||!say)return;
+var sp=say.querySelector('span'),nm=say.querySelector('b');
+var acts=document.createElement('div');acts.className='qActs';acts.innerHTML='<button type="button" class="qGo">▶ أكمل الشرح</button><button type="button" class="qAgain">✋ اسأل مرة ثانية</button>';T.appendChild(acts);
+var go=acts.querySelector('.qGo'),ag=acts.querySelector('.qAgain');
+var x=document.createElement('button');x.type='button';x.className='qClose';x.title='إغلاق';x.textContent='✕';(aP.querySelector('.bAskH')||aP).appendChild(x);
+var asked=false;
+aBtn.addEventListener('click',function(){asked=false;B.classList.add('qOpen')});
+ag.onclick=function(){B.classList.add('qOpen');var t=aP.querySelector('textarea');t&&t.focus()};
+go.onclick=function(){B.classList.remove('qOpen');say.classList.remove('qAns');aX&&aX.click()};
+x.onclick=function(){if(asked){B.classList.remove('qOpen')}else{B.classList.remove('qOpen');aX&&aX.click()}};
+var show=function(){var ms=log.querySelectorAll('.bAskM');if(!ms.length)return;var l=ms[ms.length-1];
+ if(l.classList.contains('me')){sp.textContent='…';go.disabled=ag.disabled=true;return}
+ if(l.classList.contains('bot')){var w=l.classList.contains('wait');sp.textContent=w?'لحظة، أفكر في سؤالك…':l.innerText.trim();go.disabled=ag.disabled=w}};
+new MutationObserver(function(m){var me=false;m.forEach(function(r){r.addedNodes.forEach(function(n){if(n.classList&&n.classList.contains('me'))me=true})});
+ if(me){asked=true;B.classList.remove('qOpen');say.classList.add('qAns');if(nm)nm.textContent='المدرب الذكي'}
+ if(say.classList.contains('qAns'))show()}).observe(log,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['class']});
+new MutationObserver(function(){if(!B.classList.contains('asking')){if(B.classList.contains('qOpen'))B.classList.remove('qOpen');if(say.classList.contains('qAns'))say.classList.remove('qAns')}}).observe(B,{attributes:true,attributeFilter:['class']});
+}catch(e){}},150);return r}})();
+</script>
+<style>
+.bPlayOv{position:absolute;z-index:2147483000;width:88px;height:88px;margin:-44px 0 0 -44px;border-radius:50%;border:0;background:rgba(20,24,36,.62);color:#fff;font-size:38px;line-height:88px;text-align:center;padding:0 0 0 6px;box-shadow:0 6px 22px rgba(0,0,0,.35);cursor:pointer;display:none;-webkit-tap-highlight-color:transparent;backdrop-filter:blur(2px)}
+.bPlayOv.on{display:block}
+.bPlayOv:active{transform:scale(.94)}
+@media (max-width:600px),(max-height:500px){.bPlayOv{width:72px;height:72px;margin:-36px 0 0 -36px;line-height:72px;font-size:30px}}
+</style>
+<script>
+(function(){
+var ov=document.createElement('button');ov.type='button';ov.className='bPlayOv';ov.setAttribute('aria-label','تشغيل الشرح');ov.textContent='▶';
+function B(){var b=document.querySelector('.board');if(!b||!b.offsetParent&&getComputedStyle(b).position!=='fixed')return null;return b}
+function A(b){return b&&b.querySelector('.bAuto')}
+function playing(b){var a=A(b);return !!(a&&/إيقاف/.test(a.textContent))}
+function sync(){var b=B(),s=b&&b.querySelector('.bSlide');
+ var show=!!(b&&s&&s.offsetWidth&&A(b)&&!playing(b)&&!b.classList.contains('asking')&&!b.classList.contains('qOpen'));
+ if(show){if(ov.parentNode!==b)b.appendChild(ov);if(getComputedStyle(b).position==='static')b.style.position='relative';var r=s.getBoundingClientRect(),q=b.getBoundingClientRect();ov.style.left=(r.left-q.left-b.clientLeft+r.width/2)+'px';ov.style.top=(r.top-q.top-b.clientTop+r.height/2)+'px'}
+ if(ov.classList.contains('on')!==show)ov.classList.toggle('on',show)}
+setInterval(sync,250);addEventListener('resize',sync);
+ov.addEventListener('click',function(e){e.stopPropagation();var a=A(B());if(a){a.click();setTimeout(sync,60)}});
+window.addEventListener('click',function(e){var s=e.target.closest&&e.target.closest('.board .bSlide');if(!s)return;
+ if(e.target.closest('button,a,summary,details,input,select,textarea,label,[onclick],[contenteditable]'))return;
+ var b=B();if(!b||b.classList.contains('asking')||b.classList.contains('qOpen'))return;
+ var sel=getSelection&&String(getSelection());if(sel)return;e.stopPropagation();var a=A(b);if(a){a.click();setTimeout(sync,60)}},true);
+})();
+</script>
+<style>
+/* 89: شريط التقديم داخل إطار السبورة في أسفلها، أحمر دائما، ودائرة وزر ملء الشاشة محددان بالأبيض */
+.board .bSlide{border-bottom-width:0!important;border-bottom-left-radius:0!important;border-bottom-right-radius:0!important;margin-bottom:0!important;clip-path:inset(-14px -14px 0 -14px)}
+.board .bProgWrap{width:var(--sw,auto)!important;margin:0 auto!important;padding:8px 12px 10px!important;background:#3b4250!important;border:0!important;border-top:1px solid rgba(255,255,255,.22)!important;border-radius:0 0 12px 12px!important;box-shadow:0 0 0 10px #d5dbe2,0 0 0 11px #8a93a0,0 0 0 12px #eef1f4,0 26px 40px -10px rgba(0,0,0,.55)!important;clip-path:inset(0 -14px -60px -14px);position:relative;z-index:1}
+.board .bProgWrap>.bProg{background:linear-gradient(rgba(255,255,255,.28),rgba(255,255,255,.28)) center/100% 8px no-repeat!important}
+.board .bProgWrap>.bProg i,.board .bProgWrap>.bProg u{top:2px!important}
+.board .bProgWrap>.bProg b{top:6px!important}
+.board .bProgWrap>.bProg u{background:#fff!important;opacity:.25}
+.board .bProgWrap>.bProg i{background:#D62828!important}
+.board .bProgWrap>.bProg b{background:#D62828!important;border:3px solid #fff!important;box-shadow:0 1px 4px rgba(0,0,0,.5)!important}
+.board .bFsBtn{background:#D62828!important;border:2px solid #fff!important;color:#fff!important}
+@media (orientation:landscape) and (max-height:600px){.board .bProgWrap{width:auto!important;margin:0 18px 18px 6px!important}}
+</style>
+<script>
+(function(){var o=window.openBoard;if(typeof o!=='function')return;
+window.openBoard=function(){var r=o.apply(this,arguments);setTimeout(function(){try{var B=document.querySelector('.board'),s=B&&B.querySelector('.bSlide'),w=B&&B.querySelector('.bProgWrap');if(!s||!w)return;
+var fit=function(){w.style.setProperty('--sw',s.offsetWidth+'px')};fit();try{new ResizeObserver(fit).observe(s)}catch(e){}addEventListener('resize',fit)}catch(e){}},200);return r}})();
 </script>
 </body>
 </html>
