@@ -1137,23 +1137,23 @@ header.top .brand span{color:#DCE8F7}header.top .progress{color:#E6EEF9}
 </div>
 <script>(function(){const lab=document.getElementById('lgIdLab'),inp=document.getElementById('lgId');if(lab&&inp){const sync=()=>inp.placeholder=lab.textContent.trim();sync();new MutationObserver(sync).observe(lab,{childList:true,characterData:true,subtree:true})}
 document.querySelectorAll('.lgEye').forEach(b=>b.onclick=()=>{const i=b.parentNode.querySelector('input');const sh=i.type==='password';i.type=sh?'text':'password';b.classList.toggle('on',sh);b.setAttribute('aria-label',sh?'إخفاء كلمة المرور':'إظهار كلمة المرور')})})()</script>
-<script src="config.js?v=10280657"></script>
-<script src="voc.js?v=10280657" defer></script>
-<script src="tashkeel.js?v=10280657" defer></script>
-<script src="data.js?v=10280657"></script>
-<script src="study.js?v=10280657"></script>
-<script src="quiz2.js?v=10280657"></script>
-<script src="extras.js?v=10280657"></script>
-<script src="figs.js?v=10280657"></script>
-<script src="figs2.js?v=10280657"></script>
-<script src="problems.js?v=10280657"></script>
-<script src="theory.js?v=10280657"></script>
-<script src="gens.js?v=10280657"></script>
-<script src="art.js?v=10280657"></script>
-<script src="more.js?v=10280657"></script>
-<script src="labs.js?v=10280657"></script>
-<script src="coach.js?v=10280657"></script>
-<script src="kcards.js?v=10280657"></script>
+<script src="config.js?v=10280847"></script>
+<script src="voc.js?v=10280847" defer></script>
+<script src="tashkeel.js?v=10280847" defer></script>
+<script src="data.js?v=10280847"></script>
+<script src="study.js?v=10280847"></script>
+<script src="quiz2.js?v=10280847"></script>
+<script src="extras.js?v=10280847"></script>
+<script src="figs.js?v=10280847"></script>
+<script src="figs2.js?v=10280847"></script>
+<script src="problems.js?v=10280847"></script>
+<script src="theory.js?v=10280847"></script>
+<script src="gens.js?v=10280847"></script>
+<script src="art.js?v=10280847"></script>
+<script src="more.js?v=10280847"></script>
+<script src="labs.js?v=10280847"></script>
+<script src="coach.js?v=10280847"></script>
+<script src="kcards.js?v=10280847"></script>
 <script>
 const UNITS=window.UNITS,STUDY=window.STUDY,EXTRA=window.EXTRA||{},FIGS=window.FIGS||{};
 window.PAGES=window.PAGES||{};
@@ -2968,7 +2968,7 @@ if(document.body)start();else document.addEventListener('DOMContentLoaded',start
 <script>/* الشكل الموحد للآلة الحاسبة (معتمد 22 أكتوبر) لكل المتدربين */(function(){const f=()=>{document.body&&document.body.classList.add('calcNew')};document.addEventListener('DOMContentLoaded',f);f()})();</script>
 <script>window.addEventListener('pageshow',e=>{if(e.persisted)location.reload()});</script>
 <script>(function(){var K='p101-tlast',t=0;function mark(){var n=Date.now();if(n-t>30000){t=n;try{localStorage.setItem(K,n)}catch(e){}}}['click','keydown','touchstart','scroll'].forEach(function(e){addEventListener(e,mark,{passive:true,capture:true})});setInterval(function(){try{var l=+localStorage.getItem(K)||0;if(localStorage.getItem('p101-tauth')&&l&&Date.now()-l>36e5){localStorage.removeItem('p101-tauth');location.reload()}}catch(e){}},60000)})();</script>
-<script src="emo.js?v=10280657"></script>
+<script src="emo.js?v=10280847"></script>
 <style>
 /* 69: بطاقة الدخول تتناسق مع كل الشاشات */
 .loginBox{zoom:var(--lgz,1)}
@@ -3244,7 +3244,7 @@ if(vo&&av){var cb=document.createElement('span');cb.className='qCoVo';av.appendC
  av.addEventListener('click',function(e){if(av.classList.contains('qAsst'))return;e.stopPropagation();var want=B.dataset.vo==='z'?'h':'z';for(var i=0;i<3&&B.dataset.vo!==want;i++)vo.click();cu()});
  cu();new MutationObserver(cu).observe(B,{attributes:true,attributeFilter:['data-vo']})}
 /* بطاقة المدرب بارتفاع بطاقة النص */
-var sy=B.querySelector('.bTeach .bSay');if(av&&sy){var mq=matchMedia('(orientation:landscape) and (max-height:600px)');var fit=function(){var mb=function(){var w=av.offsetWidth||48;av.style.setProperty('--mb',Math.max(20,Math.min(32,Math.round(w*.38)))+'px');av.style.setProperty('--sw',Math.max(14,Math.min(22,Math.round(w*.24)))+'px')};if(mq.matches){av.style.removeProperty('width');av.style.removeProperty('height');mb();return}var h=Math.min(sy.offsetHeight,innerWidth<700?64:84);if(h>20){av.style.setProperty('width',h+'px','important');av.style.setProperty('height',h+'px','important')}mb()};fit();try{new ResizeObserver(fit).observe(sy)}catch(e){}addEventListener('resize',fit)}
+var sy=B.querySelector('.bTeach .bSay');if(av&&sy){var mq=matchMedia('(orientation:landscape) and (max-height:600px)');var fit=function(){var mb=function(){var w=av.offsetWidth||48;av.style.setProperty('--mb',Math.max(20,Math.min(32,Math.round(w*.38)))+'px');av.style.setProperty('--sw',Math.max(14,Math.min(22,Math.round(w*.24)))+'px')};if(mq.matches){av.style.removeProperty('width');av.style.removeProperty('height');mb();return}var h=Math.min(sy.offsetHeight,innerWidth<700?72:84);if(h>20){av.style.setProperty('width',h+'px','important');av.style.setProperty('height',h+'px','important')}mb()};fit();try{new ResizeObserver(fit).observe(sy)}catch(e){}addEventListener('resize',fit)}
 /* «اسأل المساعد» بجانب «التالي»، وصورة المساعد وميكروفون صوته في بطاقة الإجابة */
 if(ask&&nx&&typeof TTS!=='undefined'){nx.parentNode.insertBefore(ask,nx.nextSibling);ask.textContent='اسأل المساعد الذكي';ask.title='اسأل المساعد الذكي';ask.setAttribute('aria-label','اسأل المساعد الذكي');
  var mk=document.createElement('span');mk.className='qAsMic';mk.setAttribute('role','button');mk.innerHTML='🎙';
@@ -3324,6 +3324,25 @@ var tab=function(){document.querySelectorAll('button[data-t="page"]').forEach(fu
 var scan=function(){document.querySelectorAll('.aiCard').forEach(dec);tab()};
 new MutationObserver(scan).observe(document.documentElement,{childList:true,subtree:true});scan();
 })();
+</script>
+<style>
+/* 95: إصلاحات بعد المراجعة: صورة المساعد بجانب «استمع» مربعة لا تتمدد، وتنبيه الصوت في سطر مستقل، ورأس الدرس يصغر عند النزول في الجوال */
+.listenAll .speak{flex-wrap:wrap!important}
+.listenAll .speak>button.lsAs{flex:0 0 48px!important;width:48px!important;min-width:48px!important;max-width:48px!important;padding:0!important}
+.listenAll .speak>button:not(.lsAs){flex:1 1 0!important;min-width:0!important}
+.listenAll .speak>.note{flex:1 1 100%!important;order:9!important}
+.listenAll .speak>.note:empty{display:none!important}
+@media not ((orientation:landscape) and (max-height:600px)){.board .bTeach .bSay{max-height:78px!important;height:auto!important;min-height:0!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch}.board .bTeach .bSay span{display:block}}
+@media (max-width:600px){
+.lessonHead .crumb,.lessonHead .hrow{transition:max-height .25s,opacity .2s,margin .25s,padding .25s;max-height:220px;overflow:hidden}
+.app.lhMin .lessonHead .crumb,.app.lhMin .lessonHead .hrow{max-height:0!important;opacity:0;margin:0!important;padding-top:0!important;padding-bottom:0!important;border:0!important}
+.app.lhMin .lessonHead{padding-top:6px!important;padding-bottom:6px!important}
+}
+</style>
+<script>
+(function(){var on=function(){var v=document.getElementById('view'),a=document.querySelector('.app');if(!v||!a||v._lh)return;v._lh=1;var t=0;
+ v.addEventListener('scroll',function(){if(t)return;t=requestAnimationFrame(function(){t=0;var m=matchMedia('(max-width:600px)').matches&&v.scrollTop>60;if(a.classList.contains('lhMin')!==m)a.classList.toggle('lhMin',m)})},{passive:true})};
+ if(document.readyState!=='loading')on();else document.addEventListener('DOMContentLoaded',on);setTimeout(on,800)})();
 </script>
 </body>
 </html>
