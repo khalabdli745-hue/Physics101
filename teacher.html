@@ -1495,6 +1495,16 @@ boot();
 .loginBox .lgTl[data-r="G-t"] i>*{display:none!important}
 .loginBox .lgTl[data-r="G-s"] i{background:#fff url("student-face.jpg") center/cover no-repeat!important}
 .loginBox .lgTl[data-r="G-s"] i>*{display:none!important}
+/* دخول لوحة المدرب: شعار أصغر حتى يظهر «إعداد وتطوير المدرب» بلا نزول في الجوال */
+@media (max-width:600px){
+.loginBox .lgLogo{width:72px!important;height:72px!important;border-radius:18px!important;margin-top:calc(max(env(safe-area-inset-top,0px),20px) + 16px)!important}
+.loginBox .lgApp{display:none!important}
+.loginBox .tJ{margin-top:6px!important}
+.loginBox .msg:empty{display:none!important}
+.loginBox #fg{padding:4px 8px!important;min-height:0!important}
+.loginBox .credit{margin-top:6px!important}
+.loginBox{row-gap:10px!important}
+}
 </style>
 
 </body>

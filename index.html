@@ -3532,6 +3532,17 @@ body.lfsOn{overflow:hidden!important}body.lfsOn .aiFab{display:none!important}
  .lessonHead .tabs button::before{width:22px!important;height:22px!important;min-width:22px!important;background-size:20px 20px!important;margin:0!important}
  .aiFab{padding:9px 12px!important;font-size:14px!important}.aiFab span{display:none!important}
 }
+/* صفحة المدرب في الدخول: البطاقات الثلاث في صف واحد حتى تظهر بطاقة «إعداد وتطوير المدرب» بلا نزول */
+#lgPt .lgTls{grid-template-columns:repeat(3,1fr)!important;gap:8px!important}
+#lgPt .lgTl{font-size:13.5px!important;padding:10px 2px!important;white-space:nowrap}
+#lgPt .lgTl i{width:46px!important;height:46px!important;margin-bottom:6px!important}
+#lgPt .lgTls>.lgTl:nth-child(3){grid-column:auto!important;width:auto!important;justify-self:stretch!important}
+#lgPt .lgTl{padding:8px 2px!important}#lgPt .lgTl i{width:42px!important;height:42px!important;margin-bottom:4px!important}
+#lgPt .lgGd{padding:10px!important;margin-top:8px!important}
+/* صفحات الدخول الداخلية: شعار أصغر ليظهر الاسم في الأسفل بلا نزول */
+.loginBox:not([data-pg="0"]) .lgLogo{width:84px!important;height:84px!important;border-radius:20px!important;margin-top:calc(max(env(safe-area-inset-top),44px) + 4px)!important}
+.loginBox:not([data-pg="0"]) .lgApp{display:none!important}
+.loginBox:not([data-pg="0"]) .tJ{margin-top:6px!important;margin-bottom:6px!important}
 </style>
 <script>
 (function(){
