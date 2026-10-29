@@ -1476,6 +1476,9 @@ boot();
   var W=innerWidth,H=innerHeight,z=1;
   if(!(W>H&&H<=560)&&W>=700){var cz=parseFloat(getComputedStyle(B).zoom)||1;var h=Math.max(B.offsetHeight,820),w=B.offsetWidth;
    z=Math.min(1.6,(H-44)/h,W*0.42/w);z=Math.max(0.82,Math.min(z,1.6));if(W<1000&&z>1.25)z=1.25}
+  else if(W<H){var R=document.documentElement.style;R.setProperty('--lgz','1');B.style.minHeight='';var bt=B.getBoundingClientRect().top,C=B.querySelector('.credit');
+   if(C&&C.getBoundingClientRect().height){var cs=getComputedStyle(B),wp=getComputedStyle(B.parentNode),need=C.getBoundingClientRect().bottom-bt+(parseFloat(cs.paddingBottom)||0)+8,av=H-bt-(parseFloat(wp.paddingBottom)||0);
+    if(need>av){z=Math.max(0.6,Math.floor(av/need*100)/100);B.style.minHeight=Math.floor(av/z)+'px'}}}
   z=Math.round(z*100)/100;if(document.documentElement.style.getPropertyValue('--lgz')!=String(z))document.documentElement.style.setProperty('--lgz',z)}
  var t;function q(){clearTimeout(t);t=setTimeout(fit,60)}
  addEventListener('resize',q);addEventListener('orientationchange',q);
@@ -1495,16 +1498,6 @@ boot();
 .loginBox .lgTl[data-r="G-t"] i>*{display:none!important}
 .loginBox .lgTl[data-r="G-s"] i{background:#fff url("student-face.jpg") center/cover no-repeat!important}
 .loginBox .lgTl[data-r="G-s"] i>*{display:none!important}
-/* دخول لوحة المدرب: شعار أصغر حتى يظهر «إعداد وتطوير المدرب» بلا نزول في الجوال */
-@media (max-width:600px){
-.loginBox .lgLogo{width:72px!important;height:72px!important;border-radius:18px!important;margin-top:calc(max(env(safe-area-inset-top,0px),20px) + 16px)!important}
-.loginBox .lgApp{display:none!important}
-.loginBox .tJ{margin-top:6px!important}
-.loginBox .msg:empty{display:none!important}
-.loginBox #fg{padding:4px 8px!important;min-height:0!important}
-.loginBox .credit{margin-top:6px!important}
-.loginBox{row-gap:10px!important}
-}
 </style>
 
 </body>
