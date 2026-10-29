@@ -792,6 +792,25 @@ async function drawRatings(){
       ['ملخص الاستبانة',[['العبارة','الرضا%','الموافقون%'],...items.map(x=>[x.t,x.p??'',x.agree??''])]]],'تقييم المتدربين للمنصة.xlsx')};
 }
 /* ---------- المساعد الذكي ---------- */
+
+/* صوت المدرب الذكي بجيميني: تفعيل للمتدربين واختيار صوتي الرجل والمرأة */
+const GVM=[['Iapetus','واضح'],['Rasalgethi','معلوماتي'],['Sadaltager','واثق'],['Algieba','ناعم'],['Schedar','متزن'],['Orus','حازم'],['Charon','معلوماتي']],GVF=[['Kore','حازم'],['Erinome','واضح'],['Sulafat','دافئ'],['Achernar','ناعم'],['Aoede','مرح'],['Leda','شبابي']];
+const GVTXT='مرحبا بك، أنا المدرب الذكي. سنشرح اليوم قانون كولوم خطوة بخطوة.';
+let GVAU=null;
+async function drawGV(){const box=$('#gvBox');if(!box)return;let x;try{x=await api({a:'tvoice',token:TOKEN})}catch(e){x={}}
+  if(!x||!x.ok){box.innerHTML='<p class="msg bad">هذه الميزة تحتاج تحديث كود الخادم (code.gs) إلى الإصدار 29 ونشره.</p>';return}
+  const c=x.cfg,opt=(L,v)=>L.map(([n,d])=>`<option value="${n}"${n===v?' selected':''}>${n} (${d})</option>`).join('');
+  box.innerHTML=`<p class="sub">الحالة: ${c.on&&x.gem?'<b style="color:var(--good)">✓ مفعّل للمتدربين</b>':'<b style="color:var(--bad)">غير مفعّل للمتدربين</b>'}${x.gem?'':' · يحتاج تفعيل Gemini في البند 2 أولا'}<br>صوت طبيعي من Google Gemini للمدرب الذكي على السبورة. يسمعه المتدرب في الدروس التي جهزتها بزر «🎙 تجهيز» على السبورة من حسابك، والدروس غير المجهزة تبقى تلقائيا بصوت حامد أو زارية.</p>
+   <div class="row gvRow"><label class="gvL">👨 صوت الرجل</label><select id="gvm">${opt(GVM,c.m)}</select><button class="btn ghost" id="gvpm">▶ استماع</button></div>
+   <div class="row gvRow"><label class="gvL">👩 صوت المرأة</label><select id="gvf">${opt(GVF,c.f)}</select><button class="btn ghost" id="gvpf">▶ استماع</button></div>
+   <div class="row"><button class="btn" id="gvsv">حفظ الصوتين</button>${c.on?'<button class="btn danger" id="gvoff">إيقاف للمتدربين</button>':'<button class="btn" id="gvon"'+(x.gem?'':' disabled')+'>تفعيل للمتدربين</button>'}</div>
+   <p class="sub" style="font-size:13px">لتجهيز درس: من تبويب «حسابي التجريبي» اضغط «▶ ادخل المنصة كمتدرب تجريبي»، ثم افتح الدرس و«ابدأ الشرح»، واضغط زر الصوت حتى يظهر «جيميني»، واختر الصوت نفسه، ثم اضغط «🎙 تجهيز». يأخذ الدرس نحو 40 دقيقة مرة واحدة، ويحفظ في Drive.</p><p class="msg" id="gvm2"></p>`;
+  const play=async(v,b)=>{try{if(GVAU){GVAU.pause();GVAU=null}}catch(e){}const t=b.textContent;b.disabled=true;b.innerHTML='<span class="spin"></span>';
+    try{const y=await api({a:'gtts',token:TOKEN,voice:v,text:GVTXT});if(!y.ok)throw y;const bin=atob(y.audio),u8=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u8[i]=bin.charCodeAt(i);GVAU=new Audio(URL.createObjectURL(new Blob([u8],{type:y.mime||'audio/wav'})));GVAU.play()}catch(e){toast(errText((e&&e.error)||'net'))}b.disabled=false;b.textContent=t};
+  $('#gvpm').onclick=e=>play($('#gvm').value,e.currentTarget);$('#gvpf').onclick=e=>play($('#gvf').value,e.currentTarget);
+  const save=async o=>{$('#gvm2').className='msg';$('#gvm2').innerHTML='<span class="spin"></span>';const y=await api({a:'tvoice',token:TOKEN,set:Object.assign({m:$('#gvm').value,f:$('#gvf').value},o||{})});
+    if(y.ok){try{localStorage.setItem('p101-gvoice',y.cfg.m)}catch(e){}toast('تم الحفظ');drawGV()}else{$('#gvm2').className='msg bad';$('#gvm2').textContent=errText(y.error)}};
+  $('#gvsv').onclick=()=>save();if($('#gvon'))$('#gvon').onclick=()=>save({on:true});if($('#gvoff'))$('#gvoff').onclick=()=>{if(confirm('إيقاف صوت جيميني للمتدربين؟ يعودون إلى صوت حامد وزارية.'))save({on:false})}}
 async function drawAI(){
   const m=$(tab==='settings'?'#aiSet':'#main');if(!m)return;m.innerHTML='<p class="empty"><span class="spin"></span></p>';
   let r,ti={};try{[r,ti]=await Promise.all([api({a:'tquestions',token:TOKEN,sectionId:secFilter==='all'?'':secFilter}),api({a:'ttsinfo',token:TOKEN}).catch(()=>({}))])}catch(e){m.innerHTML='<p class="empty">تعذّر الاتصال بالخادم.</p>';return}
@@ -809,7 +828,9 @@ async function drawAI(){
   <h3 class="aiH">2. الذكاء الاصطناعي Gemini (مجاني)</h3>
    <p class="sub">الحالة: ${r.gem?'<b style="color:var(--good)">✓ Gemini مفعّل</b>':'<b style="color:var(--bad)">Gemini غير مفعّل</b>'} · الاحتياطي Groq: ${r.groq||(r.ai&&!r.gem)?'<b style="color:var(--good)">✓ مفعّل</b>':'غير مفعّل'}<br>المحرك الأساسي <b>Google Gemini</b> المجاني (قوي في العربية الفصحى والفيزياء)، وإذا انشغل ينتقل تلقائيًا إلى Groq. الحد: 15 سؤالًا لكل متدرب كل 6 ساعات.</p>
    <ol class="sub" style="padding-inline-start:1.2em"><li>افتح <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> وسجّل دخولك بحساب Google.</li><li>اضغط <b>Create API key</b>، ثم انسخ المفتاح (يبدأ بـ <span dir="ltr">AIza</span>).</li><li>الصقه هنا واضغط «حفظ وتفعيل».</li><li>اختياري للاحتياط: مفتاح Groq من <a href="https://console.groq.com/keys" target="_blank" rel="noopener">console.groq.com/keys</a> (يبدأ بـ <span dir="ltr">gsk_</span>) بنفس الطريقة.</li></ol>
-   <div class="row"><input type="password" id="aik" placeholder="AIza… أو gsk_…" style="flex:1;min-width:200px;direction:ltr" autocomplete="off"><button class="btn" id="aisv">حفظ وتفعيل</button>${r.gem?'<button class="btn danger" id="aioff">إيقاف Gemini</button>':''}${r.groq?'<button class="btn danger" id="aioff2">إيقاف Groq</button>':''}</div><p class="msg" id="aim"></p></div></div><div class="aiQ">
+   <div class="row"><input type="password" id="aik" placeholder="AIza… أو gsk_…" style="flex:1;min-width:200px;direction:ltr" autocomplete="off"><button class="btn" id="aisv">حفظ وتفعيل</button>${r.gem?'<button class="btn danger" id="aioff">إيقاف Gemini</button>':''}${r.groq?'<button class="btn danger" id="aioff2">إيقاف Groq</button>':''}</div><p class="msg" id="aim"></p>
+  <h3 class="aiH">3. صوت المدرب الذكي بجيميني للمتدربين</h3>
+   <div id="gvBox"><p class="sub"><span class="spin"></span></p></div></div></div><div class="aiQ">
   <div class="row" style="margin-bottom:12px"><select id="aqs">${opts}</select><span class="sub" style="margin:0">${AR(r.questions.length)} سؤالًا (آخر 300)</span>${r.questions.length?'<button class="btn ghost sm" id="aexp">⬇ تصدير Excel</button>':''}</div>
   ${top.length?`<div class="card"><h2>أكثر الدروس سؤالًا</h2><div class="bars">${top.map(([k,v])=>`<div class="bar"><span class="lab" title="${esc(k)}">${esc(k)}</span><span class="trk"><span class="fil" style="width:${v/mx*100}%;display:block"></span></span><span class="val">${v}</span></div>`).join('')}</div></div>`:''}
   <div class="card"><h2>أسئلة المتدربين</h2>${r.questions.length?r.questions.map(q=>`<details class="res"><summary><b>${esc(nm[q.studentId]||q.studentId)}</b> <span class="tag">${esc(LT[q.lessonKey]||q.lessonTitle||'')}</span> ${esc(q.question.slice(0,90))}${q.question.length>90?'…':''}<span class="when">${fmtDate(q.time)}</span></summary><div class="det"><p style="white-space:pre-wrap;margin:6px 0"><b>السؤال:</b> ${esc(q.question)}</p><p style="white-space:pre-wrap;margin:6px 0;color:var(--muted)"><b>إجابة المساعد:</b> ${esc(q.answer)}</p></div></details>`).join(''):'<p class="empty">لم يسأل أحد بعد.</p>'}</div></div>`;
@@ -826,6 +847,7 @@ async function drawAI(){
     const x=await api({a:'tkey',token:TOKEN,key:k});$('#aim').className='msg '+(x.ok?'good':'bad');$('#aim').textContent=x.ok?(x.gem?'✓ تم تفعيل Gemini: المدرب الذكي التفاعلي والمساعد الذكي يعملان الآن لكل المتدربين.':'✓ تم تفعيل Groq الاحتياطي.'):errText(x.error);if(x.ok)setTimeout(drawAI,1200)};
   if(r.gem)$('#aioff').onclick=async()=>{if(!confirm('إيقاف Gemini؟'))return;const x=await api({a:'tkey',token:TOKEN,key:'',which:'gem'});toast(x.ok?'تم الإيقاف':errText(x.error));drawAI()};
   if(r.groq)$('#aioff2').onclick=async()=>{if(!confirm('إيقاف Groq؟'))return;const x=await api({a:'tkey',token:TOKEN,key:'',which:'groq'});toast(x.ok?'تم الإيقاف':errText(x.error));drawAI()};
+  drawGV();
   if(r.questions.length)$('#aexp').onclick=()=>saveBook([['أسئلة المساعد',[['التاريخ','الرقم','الاسم','الدرس','السؤال','إجابة المساعد'],...r.questions.map(q=>[xd(q.time),q.studentId,nm[q.studentId]||'',LT[q.lessonKey]||q.lessonTitle,q.question,q.answer])],[18,12,24,30,60,80]]],'أسئلة-المساعد.xlsx');
   {const rm=m.querySelector(tab==='settings'?'.aiQ':'.aiK');if(rm)rm.remove()}
 }
@@ -1558,5 +1580,5 @@ html:not(.lgWide) .loginWrap>.loginBox{padding-bottom:calc(env(safe-area-inset-b
 html.lgTall .loginWrap{display:block!important}
 html:not(.lgWide) .loginWrap>.loginBox>.lgPg:not([hidden]),html:not(.lgWide) .loginWrap>.loginBox>#asub{margin-top:calc(var(--sp,0px) + 14px)!important}
 </style>
-</body>
+<style>.gvRow{align-items:center;gap:8px;margin:6px 0}.gvL{min-width:96px;font-weight:700}#gvBox select{flex:1;min-width:150px}</style></body>
 </html>
