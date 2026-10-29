@@ -1471,19 +1471,32 @@ boot();
 }
 </style>
 <script>
+/* 86: كل عناصر الدخول تتناسب مع حجم الشاشة في كل الأجهزة والوضعيات */
 (function(){
- function fit(){var B=document.querySelector('.loginWrap:not([hidden]) .loginBox');if(!B)return;
-  var W=innerWidth,H=innerHeight,z=1;
-  if(!(W>H&&H<=560)&&W>=700){var cz=parseFloat(getComputedStyle(B).zoom)||1;var h=Math.max(B.offsetHeight,820),w=B.offsetWidth;
-   z=Math.min(1.6,(H-44)/h,W*0.42/w);z=Math.max(0.82,Math.min(z,1.6));if(W<1000&&z>1.25)z=1.25}
-  else if(W<H){var R=document.documentElement.style;R.setProperty('--lgz','1');B.style.minHeight='';var bt=B.getBoundingClientRect().top,C=B.querySelector('.credit');
-   if(C&&C.getBoundingClientRect().height){var cs=getComputedStyle(B),wp=getComputedStyle(B.parentNode),need=C.getBoundingClientRect().bottom-bt+(parseFloat(cs.paddingBottom)||0)+8,av=H-bt-(parseFloat(wp.paddingBottom)||0);
-    if(need>av){z=Math.max(0.6,Math.floor(av/need*100)/100);B.style.minHeight=Math.floor(av/z)+'px'}}}
-  z=Math.round(z*100)/100;if(document.documentElement.style.getPropertyValue('--lgz')!=String(z))document.documentElement.style.setProperty('--lgz',z)}
- var t;function q(){clearTimeout(t);t=setTimeout(fit,60)}
+ function kids(B){return [].filter.call(B.children,function(e){return e.getClientRects().length&&getComputedStyle(e).position!=='absolute'})}
+ var lastW=0;function fit(){var B=document.querySelector('.loginWrap:not([hidden]) .loginBox');var R=document.documentElement;if(!B)return;
+  var ae=document.activeElement;if(ae&&/^(INPUT|TEXTAREA)$/.test(ae.tagName)&&B.contains(ae)&&innerWidth===lastW&&R.style.getPropertyValue('--lgz'))return;lastW=innerWidth;
+  var W=innerWidth,H=innerHeight,wide=W>H,tall=!wide&&W>600;
+  var P=document.getElementById('lgSafe');if(!P){P=document.createElement('div');P.id='lgSafe';P.style.cssText='position:fixed;visibility:hidden;pointer-events:none;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)';document.body.appendChild(P)}
+  var ps=getComputedStyle(P);if(wide){W-=(parseFloat(ps.paddingLeft)||0)+(parseFloat(ps.paddingRight)||0);H-=(parseFloat(ps.paddingTop)||0)+(parseFloat(ps.paddingBottom)||0)}
+  R.classList.toggle('lgWide',wide);R.classList.toggle('lgTall',tall);B.style.setProperty('--sp','0px');
+  function apply(z){R.style.setProperty('--lgz',z);if(wide){B.style.setProperty('--lw',Math.floor(W/z)+'px');B.style.setProperty('--lh',Math.floor(H/z)+'px');B.style.minHeight=''}else B.style.minHeight=Math.floor(H/z)+'px'}
+  function tw(){var T=B.querySelector('.lgPg:not([hidden]) .lgTl');if(T)B.style.setProperty('--tw',T.offsetWidth+'px')}
+  function need(z){apply(z);tw();var K=kids(B);if(!K.length)return 0;var cs=getComputedStyle(B),pt=parseFloat(cs.paddingTop)||0,pb=parseFloat(cs.paddingBottom)||0,bt=B.getBoundingClientRect().top;
+   var top=wide?K[0].getBoundingClientRect().top:bt,bot=K[K.length-1].getBoundingClientRect().bottom;
+   var n=(bot-top)/z+pb+(wide?pt:0);return wide?Math.max(n,380):n}
+  var zb=wide?Math.min(H/560,W*0.58/520,1.9):Math.min(W/400,H/720,1.9);zb=Math.max(0.6,Math.floor(zb*100)/100);
+  function solve(){var z=zb,i,n;for(i=0;i<4;i++){n=need(z);if(!n||n*z<=H*(wide?0.96:0.985))break;z=Math.max(0.6,Math.min(z,Math.floor(H*(wide?0.95:0.98)/n*100)/100))}return z}
+  var z=solve();
+  var ck=W+'x'+H+(B.id||'');window._lgZ=window._lgZ||{};if(window._lgZ[ck]&&window._lgZ[ck]<z)z=window._lgZ[ck];else window._lgZ[ck]=z;
+  apply(z);tw();
+  if(!wide){n=need(z);var sl=H/z-n;if(sl>8)B.style.setProperty('--sp',Math.floor(sl*0.45)+'px')}
+ }
+ var t,busy=0;function q(){if(busy)return;clearTimeout(t);t=setTimeout(fit,60)}
  addEventListener('resize',q);addEventListener('orientationchange',q);
  new MutationObserver(q).observe(document.documentElement,{subtree:true,childList:true,attributes:true,attributeFilter:['hidden','data-pg']});
  document.readyState!=='loading'?q():addEventListener('DOMContentLoaded',q);
+ if(document.fonts&&document.fonts.ready)document.fonts.ready.then(q);
 })();
 </script>
 
@@ -1500,5 +1513,50 @@ boot();
 .loginBox .lgTl[data-r="G-s"] i>*{display:none!important}
 </style>
 
+<style>
+/* 86: اللابتوب والآيباد بنفس تصميم الجوال */
+html.lgTall .loginWrap{ padding: 0px !important; background: rgb(255, 255, 255) !important; }
+html.lgTall .loginWrap > .loginBox{ width: 100%; min-height: 100dvh; align-content: start; margin: 0px !important; max-width: none !important; border: 0px !important; border-radius: 0px !important; box-shadow: none !important; padding: 0 20px max(26px,env(safe-area-inset-bottom)) !important; }
+html.lgTall .loginBox::before{ height: 260px !important; }
+html.lgTall .lgLogo{ margin-top: calc(max(env(safe-area-inset-top),44px) + 22px) !important; }
+html.lgTall .loginWrap{ background: rgb(96, 165, 250) !important; }
+html.lgTall .loginWrap > .loginBox{ background: rgb(255, 255, 255) !important; padding-bottom: calc(env(safe-area-inset-bottom) + 104px) !important; }
+html.lgTall .loginBox:is([data-pg="0"], [data-pg="f"]) h1.tJ{ line-height: 1.35; font-size: 24px !important; margin-top: 2px !important; }
+html.lgTall .loginBox:is([data-pg="0"], [data-pg="f"]) .tJ2{ font-size: 17px !important; margin-top: 2px !important; }
+html.lgTall .loginBox[data-pg="0"] .lgTl{ padding-top: 12px !important; padding-bottom: 12px !important; }
+html.lgTall .loginBox[data-pg="0"] .lgTl i{ width: 56px !important; height: 56px !important; }
+html.lgTall .loginBox:is([data-pg="0"], [data-pg="f"]) .credit{ margin-top: 6px !important; padding: 8px 14px 9px !important; }
+html.lgTall .loginBox:is([data-pg="0"], [data-pg="f"]) .credit .crL{ font-size: 13px; }
+html.lgTall .loginBox:is([data-pg="0"], [data-pg="f"]) .credit b{ line-height: 1.35; font-size: 21px !important; margin-top: 3px !important; }
+html.lgTall #lgMsg:empty{ display: none; }
+html.lgTall .lgF input{ height: 50px; }
+html.lgTall .lgBtn{ height: 52px !important; }
+html.lgTall .loginBox:is([data-pg="s"], [data-pg="t"]) h1.tJ{ margin-top: 18px !important; }
+html.lgTall .loginBox:is([data-pg="s"], [data-pg="t"]) .lgPg{ margin-top: 30px !important; }
+html.lgTall .loginBox:is([data-pg="s"], [data-pg="t"]) .credit{ margin-top: 30px !important; }
+html.lgTall .loginBox::after{ content: ""; position: absolute; top: 0px; left: 0px; right: 0px; height: 170px; pointer-events: none; background: linear-gradient(rgb(115, 165, 243) 0px, rgb(115, 165, 243) 24px, rgba(115, 165, 243, 0.75) 70px, rgba(115, 165, 243, 0) 170px); }
+html.lgWide .loginWrap{padding:10px 14px!important}
+html.lgWide .loginWrap>.loginBox{position:relative!important;max-width:none!important;width:100%;min-height:0!important;padding:14px 18px 16px calc(var(--lw)*.42 + var(--lpx))!important;row-gap:8px!important;align-content:start}
+html.lgWide .loginBox>.lgLogo,html.lgWide .loginBox>.lgApp,html.lgWide .loginBox>h1{position:absolute!important;left:0;width:calc(var(--lw)*.42)!important;margin:0!important;text-align:center}
+html.lgWide .loginBox>.lgLogo{top:22px;left:calc(var(--lw)*.21 - 48px)!important;width:96px!important;height:96px!important}
+html.lgWide .loginBox>.lgApp{top:124px}
+html.lgWide .loginBox>h1{top:154px;padding:0 10px;font-size:21px!important}
+html.lgWide .loginBox::before,html.lgWide .loginBox::after{width:calc(var(--lw)*.42)!important;right:auto!important;left:0!important;height:100%!important}
+html.lgWide .loginBox>.lgBack{position:absolute!important;top:10px;left:10px!important;right:auto!important;margin:0!important}
+html.lgWide .loginBox .lgTl{padding-top:8px!important;padding-bottom:8px!important}
+html.lgWide .loginBox .lgTl i{width:44px!important;height:44px!important}
+html.lgWide .loginBox .credit{margin-top:4px!important}
+html.lgWide .loginBox .lgPg{margin-top:0!important}
+html.lgWide .loginWrap{display:block!important;padding:0!important;background:#fff!important}html.lgWide .loginWrap>.loginBox{--lpx:max(18px,calc((var(--lw)*.58 - 470px)/2));width:var(--lw)!important;min-height:var(--lh)!important;box-sizing:border-box;align-content:center!important;border:0!important;border-radius:0!important;box-shadow:none!important;padding-right:var(--lpx)!important}html.lgWide .loginWrap>.loginBox{--lgL:clamp(96px,calc(var(--lw)*.42*.3),136px)}html.lgWide .loginWrap>.loginBox>.lgLogo{width:var(--lgL)!important;height:var(--lgL)!important;border-radius:24%!important;left:calc(var(--lw)*.21 - var(--lgL)/2)!important;top:calc(50% - 60px - var(--lgL))!important}html.lgWide .loginWrap>.loginBox>.lgApp{top:calc(50% - 50px)!important;font-size:clamp(14px,calc(var(--lw)*.42*.04),17px)!important}html.lgWide .loginWrap>.loginBox>h1{top:calc(50% - 20px)!important;font-size:clamp(21px,calc(var(--lw)*.42*.062),28px)!important;padding:0 16px!important}
+.loginWrap .loginBox .lgTl>i{margin-top:5px!important}html.lgTall .loginWrap .loginBox:is([data-pg="s"],[data-pg="t"]) .lgTl>i{margin-top:0!important}
+@media (max-width:600px){.loginWrap .loginBox:is([data-pg="s"],[data-pg="t"]) .lgTl>i{margin-top:0!important}}
+html:not(.lgWide) .loginWrap .loginBox .lgTl>i{margin-bottom:14px!important}html:not(.lgWide) .loginWrap .loginBox:is([data-pg="s"],[data-pg="t"]) .lgTl>i{margin-bottom:17px!important}
+/* بطاقات مربعة */ .loginWrap .loginBox .lgTl{aspect-ratio:1/1!important;height:auto!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;padding:6px!important;line-height:1.25!important;font-size:max(14px,calc(var(--tw,140px)*.125))!important}.loginWrap .loginBox .lgTl>i,.loginWrap .loginBox:is([data-pg],[data-pg]) .lgTl>i{margin:0 0 calc(var(--tw,140px)*.08)!important;width:calc(var(--tw,140px)*.42)!important;height:calc(var(--tw,140px)*.42)!important;border-radius:22%!important}.loginWrap .loginBox .lgTl>i>*{width:100%!important;height:100%!important}.loginWrap .loginBox .lgTls{align-items:start!important;grid-template-columns:repeat(2,min(40%,124px))!important;justify-content:center!important;column-gap:min(7%,22px)!important;row-gap:calc(var(--tw,140px)*.17)!important}.loginWrap .loginBox .lgTls>.lgTl[data-r=g]:last-child:nth-child(odd){width:min(40%,124px)!important}
+.loginWrap .loginBox>.lgLogo{border-radius:24%!important}html:not(.lgWide) .loginWrap .loginBox>.lgLogo{width:140px!important;height:140px!important}html:not(.lgWide) .loginWrap .loginBox>.lgApp{font-size:16px!important;margin-top:8px!important}
+.loginWrap .loginBox .credit .crL{font-size:17px!important;font-weight:800!important}.loginWrap .loginBox .lgAbout p{font-size:14px!important;line-height:1.8!important;color:#475569!important}.loginWrap .loginBox .lgAbout h2{font-size:17px!important}.loginWrap .loginBox .lgMore summary{font-size:15px!important;font-weight:800!important}
+html:not(.lgWide) .loginWrap>.loginBox{padding-bottom:calc(env(safe-area-inset-bottom) + 28px)!important}html.lgWide .loginWrap{padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)!important}
+html.lgTall .loginWrap{display:block!important}
+html:not(.lgWide) .loginWrap>.loginBox>.lgPg:not([hidden]),html:not(.lgWide) .loginWrap>.loginBox>#asub{margin-top:calc(var(--sp,0px) + 14px)!important}
+</style>
 </body>
 </html>
