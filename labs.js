@@ -2826,7 +2826,7 @@ function eqLab(box){
       </svg><div class="vcap">يفقد الماء الساخن حرارة ويكتسبها الماء البارد حتى يصل الخليط إلى درجة حرارة واحدة</div></div>
       <div class="sym"><b>حيث:</b><ul>
       <li><span class="chip" dir="ltr">m₁</span> كتلة الماء الساخن، و <span class="chip" dir="ltr">m₂</span> كتلة الماء البارد، وتقاسان بالميزان الرقمي بوحدة <span dir="ltr">g</span></li>
-      <li><span class="chip" dir="ltr">c₁ = c₂</span> الحرارة النوعية للماء، وقيمتها <span dir="ltr">4186 J/kg·°C</span>، وتختصر من الطرفين</li>
+      <li><span class="chip" dir="ltr">c₁ = c₂</span> الحرارة النوعية للماء، وقيمتها <span dir="ltr">4186 J/(kg·°C)</span>، وتختصر من الطرفين</li>
       <li><span class="chip" dir="ltr">T₁</span> درجة حرارة الماء الساخن، و <span class="chip" dir="ltr">T₂</span> درجة حرارة الماء البارد، ووحدتهما <span dir="ltr">°C</span></li>
       <li><span class="chip" dir="ltr">T_final</span> درجة حرارة الخليط (درجة حرارة الاتزان)، ووحدتها <span dir="ltr">°C</span></li>
       <li><span class="chip" dir="ltr">Q₁ , Q₂</span> كمية الحرارة التي يفقدها الماء الساخن ويكتسبها الماء البارد، ووحدتها <span dir="ltr">J</span></li>
@@ -3280,7 +3280,7 @@ function shLab(box){
       <div class="ln lw"><b>كمية الحرارة اللازمة لتغيير درجة حرارة جسم</b><span>Q = m·c·ΔT</span></div>
       <div class="sym"><b>حيث:</b><ul>
       <li><span class="chip" dir="ltr">m</span> كتلة الماء، وتقاس بالميزان الرقمي، ووحدتها <span dir="ltr">kg</span></li>
-      <li><span class="chip" dir="ltr">c</span> الحرارة النوعية للماء، وقيمتها <span dir="ltr">4180 J/kg·°C</span>: كمية الحرارة اللازمة لرفع درجة حرارة <span dir="ltr">1 kg</span> من الماء درجة سلسيوس واحدة</li>
+      <li><span class="chip" dir="ltr">c</span> الحرارة النوعية للماء، وقيمتها <span dir="ltr">4180 J/(kg·°C)</span>: كمية الحرارة اللازمة لرفع درجة حرارة <span dir="ltr">1 kg</span> من الماء درجة سلسيوس واحدة</li>
       <li><span class="chip" dir="ltr">C</span> السعة الحرارية: كمية الحرارة اللازمة لرفع درجة حرارة الجسم كله درجة واحدة، ووحدتها <span dir="ltr">J/°C</span></li>
       <li><span class="chip" dir="ltr">Ti</span> درجة الحرارة الابتدائية للماء قبل التسخين، و <span class="chip" dir="ltr">Tf</span> درجة الحرارة النهائية بعده، و <span class="chip" dir="ltr">ΔT = Tf − Ti</span> التغير في درجة الحرارة (النهائية − الابتدائية)، ووحدتها <span dir="ltr">°C</span></li>
       <li><span class="chip" dir="ltr">Q</span> كمية الحرارة التي اكتسبها الماء، و <span class="chip" dir="ltr">E</span> الطاقة التي قاسها عداد الطاقة، ووحدتهما <span dir="ltr">J</span></li></ul></div>
@@ -3304,7 +3304,7 @@ function shLab(box){
     ${hxAns('tIn','قراءتك لدرجة الحرارة بعد التسخين Tf','°C')}
     ${hxAns('eIn','قراءتك لعداد الطاقة E','J')}
     <h4 class="sbh">د) حساب السعة الحرارية للماء</h4>
-    <p class="slh">ℹ️ <b>المعطيات:</b> الحرارة النوعية للماء <b dir="ltr">c = 4180 J/kg·°C</b></p>
+    <p class="slh">ℹ️ <b>المعطيات:</b> الحرارة النوعية للماء <b dir="ltr">c = 4180 J/(kg·°C)</b></p>
     ${hxCalcStep('C','C = m·c','احسب السعة الحرارية C بوحدة J/°C','J/°C')}
     <h4 class="sbh">هـ) حساب كمية الحرارة التي اكتسبها الماء</h4>
     ${hxCalcStep('Q','Q = m·c·ΔT','احسب كمية الحرارة Q بوحدة J','J')}
@@ -3371,7 +3371,7 @@ function lhLab(box){
       <div class="ln lw"><b>الحرارة الكامنة لانصهار الجليد</b><span>H = (Q₁ − Q₂) / m_ice</span></div>
       <div class="sym"><b>حيث:</b><ul>
       <li><span class="chip" dir="ltr">m_w</span> كتلة الماء الدافئ، و <span class="chip" dir="ltr">m_ice</span> كتلة الجليد، ووحدتهما <span dir="ltr">kg</span></li>
-      <li><span class="chip" dir="ltr">c</span> الحرارة النوعية للماء، وقيمتها <span dir="ltr">4180 J/kg·°C</span></li>
+      <li><span class="chip" dir="ltr">c</span> الحرارة النوعية للماء، وقيمتها <span dir="ltr">4180 J/(kg·°C)</span></li>
       <li><span class="chip" dir="ltr">Ti</span> درجة الحرارة الابتدائية للماء الدافئ، و <span class="chip" dir="ltr">Tf</span> درجة الحرارة النهائية بعد انصهار الجليد كاملا، ووحدتهما <span dir="ltr">°C</span></li>
       <li><span class="chip" dir="ltr">H</span> الحرارة الكامنة للانصهار: كمية الحرارة اللازمة لصهر <span dir="ltr">1 kg</span> من الجليد دون تغير درجة حرارته، ووحدتها <span dir="ltr">J/kg</span>، وقيمتها المرجعية <span dir="ltr">336000 J/kg</span></li>
       <li><span class="chip" dir="ltr">Q₁, Q₂, Q</span> كميات الحرارة، ووحدتها <span dir="ltr">J</span></li></ul></div>
@@ -3397,7 +3397,7 @@ function lhLab(box){
     <p class="slh">👆 اسحب المؤشر البرتقالي لإضافة الجليد إلى الماء الدافئ وتحريكه حتى ينصهر كاملا، ثم اقرأ درجة الحرارة النهائية.</p>
     ${hxAns('fIn','قراءتك لدرجة الحرارة النهائية Tf','°C')}
     <h4 class="sbh">هـ) حساب الحرارة التي فقدها الماء الدافئ</h4>
-    <p class="slh">ℹ️ <b>المعطيات:</b> الحرارة النوعية للماء <b dir="ltr">c = 4180 J/kg·°C</b></p>
+    <p class="slh">ℹ️ <b>المعطيات:</b> الحرارة النوعية للماء <b dir="ltr">c = 4180 J/(kg·°C)</b></p>
     ${hxCalcStep('1','Q₁ = m_w·c·(Ti − Tf)','احسب Q₁ بوحدة J','J')}
     <h4 class="sbh">و) حساب الحرارة التي اكتسبها ماء الجليد المنصهر</h4>
     ${hxCalcStep('2','Q₂ = m_ice·c·(Tf − 0)','احسب Q₂ بوحدة J','J')}
@@ -3665,7 +3665,7 @@ function clLab(box){
     <p><b>الحامل بساق عازلة:</b> حامل معدني بقاعدة وعمود وماسك متحرك، تعلق فيه الكرة العلوية بساق عازلة تمنع تسرب الشحنة منها، وبمثلها تثبت الكرة السفلية على الميزان.</p></div>
   <h3 class="secH">4. القوانين المستخدمة</h3>
   <div class="ctl">
-    <div class="law ftl"><div class="ln lw"><b>قانون كولوم: القوة بين شحنتين نقطيتين</b><span>F = k·q₁·q₂ / r²</span></div>
+    <div class="law ftl"><div class="ln lw"><b>قانون كولوم: القوة بين شحنتين نقطيتين</b><span>F = k·|q₁|·|q₂| / r²</span></div>
       <div class="ln lw"><b>الكرتان مشحونتان بشحنتين متساويتين <bdi dir="ltr">q₁ = q₂ = q</bdi></b><span>F = k·q² / r²</span></div>
       <div class="ln lw"><b>قوة التنافر تدفع الكرة السفلية إلى أسفل، فيقرأ الميزان كتلة إضافية m</b><span>F = m·g</span></div>
       <div class="ln lw"><b>عند ثبات الشحنة، النسبة بين قوتين عند مسافتين</b><span>F₁ / F₂ = (r₂ / r₁)²</span></div>
@@ -3857,7 +3857,7 @@ function efLab(box){
     <p><b>الحامل بساق عازلة:</b> يمسك الكرة بساق عازلة تمنع تسرب الشحنة منها.</p></div>
   <h3 class="secH">4. القوانين المستخدمة</h3>
   <div class="ctl">
-    <div class="law ftl"><div class="ln lw"><b>شدة المجال الكهربائي: القوة المؤثرة على شحنة اختبار موجبة</b><span>E = F / q</span></div>
+    <div class="law ftl"><div class="ln lw"><b>شدة المجال الكهربائي: القوة المؤثرة على وحدة الشحنات الموجبة (شحنة اختبار موجبة)</b><span>E = F / q</span></div>
       <div class="ln lw"><b>المجال الكهربائي الناشئ عن شحنة نقطية</b><span>E = k·q / r²</span></div>
       <div class="ln lw"><b>عند ثبات الشحنة، النسبة بين شدتي المجال عند ثلاث مسافات</b><span>E₁ / E₂ = (r₂ / r₁)²</span></div>
       <div class="ln lw"><b>ومن قانون المجال نحسب الشحنة</b><span>q = E·r² / k</span></div>

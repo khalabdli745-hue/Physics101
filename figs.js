@@ -66,7 +66,7 @@ heat3:svg('0 0 380 200',
 coulomb:svg('0 0 360 150',
  `<circle cx="110" cy="70" r="22" fill="var(--warnc)"/><circle cx="250" cy="70" r="22" fill="var(--fig2)"/>`+T(110,78,'+','class="lb ch" text-anchor="middle"')+T(250,78,'+','class="lb ch" text-anchor="middle"')+
  L(88,70,30,70,'var(--accent)','aa',3)+L(272,70,330,70,'var(--accent)','aa',3)+L(110,115,250,115,'var(--ink)','ah',1.5)+L(250,115,110,115,'var(--ink)','ah',1.5)+
- T(180,108,'r','class="lb sm" text-anchor="middle"')+T(40,58,'F','class="lb ac"')+T(312,58,'F','class="lb ac"')+T(110,40,'q₁','class="lb sm" text-anchor="middle"')+T(250,40,'q₂','class="lb sm" text-anchor="middle"')+T(180,142,'F = k·q₁·q₂ / r²','class="lb sm" text-anchor="middle"'),
+ T(180,108,'r','class="lb sm" text-anchor="middle"')+T(40,58,'F','class="lb ac"')+T(312,58,'F','class="lb ac"')+T(110,40,'q₁','class="lb sm" text-anchor="middle"')+T(250,40,'q₂','class="lb sm" text-anchor="middle"')+T(180,142,'F = k·|q₁|·|q₂| / r²','class="lb sm" text-anchor="middle"'),
  'قانون كولوم: شحنتان متشابهتان تتنافران بقوتين متساويتين متعاكستين'),
 field:svg('0 0 380 200',
  `<circle cx="100" cy="100" r="16" fill="var(--warnc)"/>`+T(100,107,'+','class="lb ch" text-anchor="middle"')+
