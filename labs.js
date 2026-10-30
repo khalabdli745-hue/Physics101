@@ -7143,7 +7143,7 @@ function mount(key){window.__mlKey=key;
     const v=document.getElementById('view');
     if(v&&!document.querySelector('.fsBar')){v.insertAdjacentHTML('beforebegin','<div class="fsBar"><button type="button" id="fsBack">→ رجوع للدرس</button><span>🧪 تجربة عملية تفاعلية</span></div>');
       document.getElementById('fsBack').onclick=()=>{document.body.classList.remove('labFS');scrollTo(0,0)}}
-    document.body.classList.add('labFS');if(v)v.scrollTop=0;scrollTo(0,0)}}
+    /* طلب المدرب 30 أكتوبر: التجربة تظهر على الجدار الأبيض تحت التبويبات، وملء الشاشة بزر ⛶ فقط */if(v)v.scrollTop=0}}
 const RL=window.renderLabCard;
 window.renderLabCard=function(host,u,l){const r=RL.apply(this,arguments);if(r){const L=window.LABS[u+'-'+l];setTimeout(()=>mount((L&&L.k)||u+'-'+l),0)};return r};
 /* الخروج من التجربة: أي عرض بلا تجربة يعيد أشرطة المنصة */
