@@ -6388,10 +6388,10 @@ function watchTL(){const host=document.getElementById('wW');if(!host||!host.__w|
   cap.insertAdjacentHTML('afterend','<div class="dmBtns"><button class="pri wNext" type="button">التالي ←</button><button class="wPrev" type="button">→ السابق</button></div>');
   const Q=c=>wsc.querySelector(c),big=Q('.wBig'),pl=Q('.wPlay'),rg=Q('.tl input'),T=Q('.wT');
   let k=-1,play=false,manual=false,busy=false,ptm=null;
-  const psleep=async t=>{while(t>0){await sleep(100);if(play||manual)t-=100}};
-  const ui=()=>{T.innerHTML='الخطوة <b>'+(k+1)+'</b> من '+n;rg.value=k+1;pl.textContent=play?'⏸ إيقاف':'▶ تشغيل';big.hidden=play;big.textContent=k<0?'▶ تشغيل':k>=n-1?'↺ من البداية':'▶ متابعة';Q('.wPrev').disabled=busy||k<=0;Q('.wNext').disabled=busy||k>=n-1;
+  const psleep=async t=>{while(t>0){await sleep(100);if(window.__dmSkip){t=0;break}if(play||manual)t-=100}};
+  const ui=()=>{T.innerHTML='الخطوة <b>'+(k+1)+'</b> من '+n;rg.value=k+1;pl.textContent=play?'⏸ إيقاف':'▶ تشغيل';big.hidden=play;big.textContent=k<0?'▶ تشغيل':k>=n-1?'↺ من البداية':'▶ متابعة';Q('.wPrev').disabled=busy||k<=0;Q('.wNext').disabled=!busy&&k>=n-1;
     pb.querySelectorAll('i').forEach((x,j)=>x.classList.toggle('d',j<=k))};
-  const step=async i=>{busy=true;manual=!play;ui();if(i===0)w.reset();cap.innerHTML=S[i][0]+'<div class="dmWait" style="font-size:12.5px;font-weight:800;color:var(--muted);margin-top:4px">📖 اقرأ الخطوة…</div>';
+  const step=async i=>{busy=true;window.__dmSkip=0;manual=!play;ui();if(i===0)w.reset();cap.innerHTML=S[i][0]+'<div class="dmWait" style="font-size:12.5px;font-weight:800;color:var(--muted);margin-top:4px">📖 اقرأ الخطوة…</div>';
     await psleep(Math.min(9000,2500+cap.textContent.length*55));const wt=cap.querySelector('.dmWait');if(wt)wt.textContent='🎬 تنفيذ الخطوة…';
     await psleep(400);const CF=WCFG[window.__mlKey]||{},PL=(CF.PL||[])[i]||[];
     const XY=([t,v])=>(CF.XY||{})[t]?CF.XY[t]:t==='j'?jXY(svg,v):t==='xy'?v:ptXY(svg,v),GO=()=>play||manual;
@@ -6402,7 +6402,7 @@ function watchTL(){const host=document.getElementById('wW');if(!host||!host.__w|
   let running=false;const loop=async()=>{if(running)return;running=true;while(play&&k<n-1){await step(k+1)}running=false;if(k>=n-1){play=false;ui()}};
   const toggle=()=>{if(k>=n-1&&!play){k=-1;w.reset();cap.innerHTML='';}play=!play;manual=false;ui();if(play)loop()};
   pl.onclick=toggle;big.onclick=()=>{if(!play)toggle()};
-  Q('.wNext').onclick=()=>{if(busy||k>=n-1)return;play=false;step(k+1)};
+  Q('.wNext').onclick=()=>{if(busy){window.__dmSkip=1;return}if(k>=n-1)return;play=false;step(k+1)};
   Q('.wPrev').onclick=()=>{if(busy||k<=0)return;play=false;k--;w.go(k);ui()};
   rg.oninput=()=>{if(busy)return;play=false;const v=+rg.value-1;if(v<0){k=-1;w.reset();cap.innerHTML='اضغط «▶ تشغيل» لترى الخطوات.';ui();return}k=v;w.go(v);ui()};
   w.stop();w.reset();cap.innerHTML='اضغط «▶ تشغيل» لترى خطوات التركيب وطريقة القياس: يظهر شرح كل خطوة أولا، ثم ينفذها المشهد.';ui()}
@@ -6486,7 +6486,7 @@ function DX(cfg){return function(){
     P.innerHTML=`<h4>${W?'🎬 شاهد التجربة خطوة خطوة':'⚡ تنفيذ التجربة'}</h4><div data-did="dmSW" class="dxW"><div data-did="dmS"></div><button data-did="dmBig" type="button" aria-label="تشغيل">▶ تشغيل</button></div><div data-did="dmV" class="dmView dmHide"></div><div class="dmBar" data-did="dmBar"></div><div class="tl"><button class="pri wPlay" data-did="dmPlay" type="button">▶ تشغيل</button><span data-did="dmTlT"></span><input type="range" data-did="dmTl" min="0" max="0" step="1" value="0"></div><div class="dmCap" data-did="dmCap"></div>${W?'':'<button type="button" data-did="dmRec" class="dmRecB" hidden>✓ سجل القراءة</button>'}<div class="dmBtns"><button data-did="dmNext" class="pri">التالي ←</button><button data-did="dmPrev">→ السابق</button>${W?'':'<button data-did="dmRe">↺ من البداية بقيم جديدة</button>'}</div>`;
     host(P);return run(mode,P)};
   function run(mode,P){const W=mode==='watch';
-    let play=false,manual=false;const psleep=async t=>{while(t>0){await sleep(100);if(play||manual)t-=100}};
+    let play=false,manual=false;const psleep=async t=>{while(t>0){await sleep(100);if(window.__dmSkip){t=0;break}if(play||manual)t-=100}};
     const E=id=>P.querySelector('[data-did="'+id+'"]');
     const q=id=>/^dm/.test(id)&&E(id)?E(id):(box.querySelector('#'+id)||document.getElementById(id));
     const I={P,mode,reset:null,pause:null,k:()=>k};
@@ -6536,10 +6536,10 @@ function DX(cfg){return function(){
       [...E('dmBar').children].forEach((x,j)=>x.classList.toggle('d',j<=i));
       E('dmS').classList.toggle('dmHide',!live());const V=E('dmV');V.classList.toggle('dmHide',live());if(!live())V.innerHTML=SN[view]||'';
       const tl=E('dmTl');tl.max=Math.max(0,k+1);tl.value=i+1;E('dmTlT').innerHTML='الخطوة <b>'+(i+1)+'</b> من '+ST.length;
-      const s=ST[k],wait=live()&&s&&!ok(s);const nb=E('dmNext');nb.disabled=busy||wait||(live()&&k>=ST.length-1);
-      nb.textContent=busy?'⏳ جار عرض الخطوة':wait?(play?'⏳ يستمر بعد تسجيل القراءة':'⏳ سجل القراءة أولا'):(live()&&k>=ST.length-1)?(W?'✓ انتهت المشاهدة':'✓ انتهت القياسات'):'التالي ←';E('dmPrev').disabled=busy||i<=0};
+      const s=ST[k],wait=live()&&s&&!ok(s);const nb=E('dmNext');nb.disabled=wait||(!busy&&live()&&k>=ST.length-1);
+      nb.textContent=busy&&live()?'التالي ←':wait?(play?'⏳ يستمر بعد تسجيل القراءة':'⏳ سجل القراءة أولا'):(live()&&k>=ST.length-1)?(W?'✓ انتهت المشاهدة':'✓ انتهت القياسات'):'التالي ←';E('dmPrev').disabled=i<=0};
     const goView=i=>{view=(i>=k)?-1:i;ui()};
-    E('dmNext').onclick=async()=>{if(busy)return;if(!live()){goView(view+1);return}if(k<0)act();busy=true;manual=!play;k++;const s=ST[k];show(s);ui();
+    E('dmNext').onclick=async()=>{if(!live()){goView(view+1);return}if(busy){window.__dmSkip=1;return}if(k<0)act();busy=true;window.__dmSkip=0;manual=!play;k++;const s=ST[k];show(s);ui();
       const L=E('dmCap').textContent.length;E('dmCap').insertAdjacentHTML('beforeend','<div class="dmWait" style="font-size:12.5px;font-weight:800;color:var(--muted);margin-top:4px">📖 اقرأ الخطوة…</div>');
       await psleep(Math.min(9000,2500+L*55));const w=E('dmCap').querySelector('.dmWait');if(w)w.textContent='🎬 تنفيذ الخطوة…';
       try{if(s.f)await s.f(H);else if(s.sl)for(const [id,t,hd] of s.sl)await slide(id,t==null?'hit':t,hd)}catch(e){console.error(e)}
@@ -6976,7 +6976,7 @@ WCFG['4-1']={PL:[[['k']],[['m']],[['p','R1'],['p','R2']],[['d']],[['k'],['m']],[
 }catch(e){console.error("cfg cfg_4-1.js",e)}
 try{
 WCFG['4-5']={PL:[[['m'],['m2']],[['j',0]],[['p','A']],[['p','B']],[['p','R1']],[['p','R2']],[['k']],[]],XY:{k:[92,203],m:[216,204],m2:[338,204],j:[212,27]}};
-DIR['4-5']=function(){let play=false,manual=false;const psleep=async t=>{while(t>0){await sleep(100);if(play||manual)t-=100}};const nR=document.getElementById('nR');if(!nR)return;const ctl=nR.closest('.ctl');const q=id=>document.getElementById(id);
+DIR['4-5']=function(){let play=false,manual=false;const psleep=async t=>{while(t>0){await sleep(100);if(window.__dmSkip){t=0;break}if(play||manual)t-=100}};const nR=document.getElementById('nR');if(!nR)return;const ctl=nR.closest('.ctl');const q=id=>document.getElementById(id);
   if(!document.getElementById('dmCssO')){const st=document.createElement('style');st.id='dmCssO';st.textContent=CSS+'#dmS p,#dmS .row,#dmS .chk,#dmS .msg,#dmS .wsc>h4{display:none!important}';document.head.appendChild(st)}
   const P=document.createElement('div');P.className='dmP';P.innerHTML=`<h4>⚡ تنفيذ التجربة</h4><div id="dmSW" style="position:relative"><div id="dmS"></div><button id="dmBig" type="button" aria-label="تشغيل">▶ تشغيل</button></div><div id="dmV" class="dmView dmHide"></div><div class="dmBar" id="dmBar"></div><div class="tl"><button class="pri" id="dmPlay" type="button">▶ تشغيل</button><span id="dmTlT"></span><input type="range" id="dmTl" min="0" max="0" step="1" value="0"></div><div class="dmCap" id="dmCap"></div><div id="dmLog"></div><div id="dmA"></div><div class="dmBtns"><button id="dmNext" class="pri">التالي ←</button><button id="dmPrev">→ السابق</button><button id="dmRe">↺ من البداية بمقاومة جديدة</button></div>`;
   q('prog').after(P);
@@ -7011,10 +7011,10 @@ DIR['4-5']=function(){let play=false,manual=false;const psleep=async t=>{while(t
     [...q('dmBar').children].forEach((x,j)=>x.classList.toggle('d',j<=i));
     q('dmS').classList.toggle('dmHide',!live());q('dmA').classList.toggle('dmHide',!live()||k<0);const V=q('dmV');V.classList.toggle('dmHide',live());if(!live()){V.innerHTML=SN[view].s+SN[view].z}
     const tl=q('dmTl');tl.max=Math.max(0,k+1);tl.value=i+1;q('dmTlT').innerHTML='الخطوة <b>'+(i+1)+'</b> من '+ST.length;
-    const s=ST[k],wait=live()&&s&&s.need&&!ok(s.need);const nb=q('dmNext');nb.disabled=busy||wait||(live()&&k>=ST.length-1);
-    nb.textContent=busy?'⏳ جار عرض الخطوة':wait?(play?'⏳ يستمر بعد تسجيل القراءة':'⏳ سجل القراءة أولا'):(live()&&k>=ST.length-1)?'✓ انتهت القياسات':'التالي ←';q('dmPrev').disabled=busy||i<=0};
+    const s=ST[k],wait=live()&&s&&s.need&&!ok(s.need);const nb=q('dmNext');nb.disabled=wait||(!busy&&live()&&k>=ST.length-1);
+    nb.textContent=busy&&live()?'التالي ←':wait?(play?'⏳ يستمر بعد تسجيل القراءة':'⏳ سجل القراءة أولا'):(live()&&k>=ST.length-1)?'✓ انتهت القياسات':'التالي ←';q('dmPrev').disabled=i<=0};
   const goView=i=>{view=(i>=k)?-1:i;ui()};
-  q('dmNext').onclick=async()=>{if(busy)return;if(!live()){goView(view+1);return}busy=true;manual=!play;k++;const s=ST[k];if(s.need){q(s.need).textContent='';q(s.need).className='fb2'}ui();q('dmA').style.visibility='hidden';
+  q('dmNext').onclick=async()=>{if(!live()){goView(view+1);return}if(busy){window.__dmSkip=1;return}busy=true;window.__dmSkip=0;manual=!play;k++;const s=ST[k];if(s.need){q(s.need).textContent='';q(s.need).className='fb2'}ui();q('dmA').style.visibility='hidden';
     const L=q('dmCap').textContent.length;q('dmCap').insertAdjacentHTML('beforeend','<div class="dmWait" style="font-size:12.5px;font-weight:800;color:var(--muted);margin-top:4px">📖 اقرأ الخطوة…</div>');
     await psleep(Math.min(9000,2500+L*55));const w=q('dmCap').querySelector('.dmWait');if(w)w.textContent='🎬 تنفيذ الخطوة…';
     await s.f();await psleep(150);if(s.need){const idx=k-7;
@@ -7041,7 +7041,7 @@ DIR['4-5']=function(){let play=false,manual=false;const psleep=async t=>{while(t
 }catch(e){console.error("cfg cfg_4-5.js",e)}
 try{
 WCFG['4-8']={PL:[[['k'],['m']],[['j',0]],[['p',0],['p',1]],[['j',0],['j',1],['p',2],['p',3]],[['j',1],['j',2],['p',4],['p',5]],[['j',2],['m'],['p',1],['p',2]],[['p',3],['p',4]],[['p',5],['p',6]],[['p',1],['p',6]]],XY:{k:[102,205],m:[276,207]}};
-DIR['4-8']=function(){let play=false,manual=false;const psleep=async t=>{while(t>0){await sleep(100);if(play||manual)t-=100}};const nR=document.getElementById('nR');if(!nR)return;const ctl=nR.closest('.ctl');const q=id=>document.getElementById(id);
+DIR['4-8']=function(){let play=false,manual=false;const psleep=async t=>{while(t>0){await sleep(100);if(window.__dmSkip){t=0;break}if(play||manual)t-=100}};const nR=document.getElementById('nR');if(!nR)return;const ctl=nR.closest('.ctl');const q=id=>document.getElementById(id);
   if(!document.getElementById('dmCssO')){const st=document.createElement('style');st.id='dmCssO';st.textContent=CSS;document.head.appendChild(st)}
   const P=document.createElement('div');P.className='dmP';P.innerHTML=`<h4>⚡ تنفيذ التجربة</h4><div id="dmSW" style="position:relative"><div id="dmS"></div><button id="dmBig" type="button" aria-label="تشغيل">▶ تشغيل</button></div><div id="dmV" class="dmView dmHide"></div><div class="dmBar" id="dmBar"></div><div class="tl"><button class="pri" id="dmPlay" type="button">▶ تشغيل</button><span id="dmTlT"></span><input type="range" id="dmTl" min="0" max="0" step="1" value="0"></div><div class="dmCap" id="dmCap"></div><div id="dmLog"></div><div id="dmA"></div><div class="dmBtns"><button id="dmNext" class="pri">التالي ←</button><button id="dmPrev">→ السابق</button><button id="dmRe">↺ من البداية بمقاومات جديدة</button></div>`;
   q('prog').after(P);
@@ -7073,12 +7073,12 @@ DIR['4-8']=function(){let play=false,manual=false;const psleep=async t=>{while(t
     [...q('dmBar').children].forEach((x,j)=>x.classList.toggle('d',j<=i));
     q('dmS').classList.toggle('dmHide',!live());q('dmA').classList.toggle('dmHide',!live());const V=q('dmV');V.classList.toggle('dmHide',live());if(!live()){V.innerHTML=SN[view].s+SN[view].z}
     const tl=q('dmTl');tl.max=Math.max(0,k+1);tl.value=i+1;q('dmTlT').innerHTML='الخطوة <b>'+(i+1)+'</b> من '+ST.length;
-    const s=ST[k],wait=live()&&s&&s.need&&!ok(s.need);const nb=q('dmNext');nb.disabled=busy||wait||(live()&&k>=ST.length-1);
-    nb.textContent=busy?'⏳ جار عرض الخطوة':wait?(play?'⏳ يستمر بعد تسجيل القراءة':'⏳ سجل القراءة أولا'):(live()&&k>=ST.length-1)?'✓ انتهت القياسات':'التالي ←';q('dmPrev').disabled=busy||i<=0};
+    const s=ST[k],wait=live()&&s&&s.need&&!ok(s.need);const nb=q('dmNext');nb.disabled=wait||(!busy&&live()&&k>=ST.length-1);
+    nb.textContent=busy&&live()?'التالي ←':wait?(play?'⏳ يستمر بعد تسجيل القراءة':'⏳ سجل القراءة أولا'):(live()&&k>=ST.length-1)?'✓ انتهت القياسات':'التالي ←';q('dmPrev').disabled=i<=0};
   const goView=i=>{view=(i>=k)?-1:i;ui()};
   const typeCap=async()=>{const el=q('dmCap'),W=document.createTreeWalker(el,NodeFilter.SHOW_TEXT),T=[];let n;while(n=W.nextNode())T.push([n,n.textContent]);T.forEach(([x])=>x.textContent='');let c=0;
     for(const [x,t] of T){for(let i=0;i<t.length;i++){x.textContent=t.slice(0,i+1);c++;if(c%2===0)await psleep(28)}}return c};
-  q('dmNext').onclick=async()=>{if(busy)return;if(!live()){goView(view+1);return}busy=true;manual=!play;k++;const s=ST[k];if(s.need){q(s.need).textContent='';q(s.need).className='fb2'}ui();q('dmA').style.visibility='hidden';
+  q('dmNext').onclick=async()=>{if(!live()){goView(view+1);return}if(busy){window.__dmSkip=1;return}busy=true;window.__dmSkip=0;manual=!play;k++;const s=ST[k];if(s.need){q(s.need).textContent='';q(s.need).className='fb2'}ui();q('dmA').style.visibility='hidden';
     const L=q('dmCap').textContent.length;q('dmCap').insertAdjacentHTML('beforeend','<div class="dmWait" style="font-size:12.5px;font-weight:800;color:var(--muted);margin-top:4px">📖 اقرأ الخطوة…</div>');
     await psleep(Math.min(9000,2500+L*55));const w=q('dmCap').querySelector('.dmWait');if(w)w.textContent='🎬 تنفيذ الخطوة…';
     await s.f();await psleep(150);if(s.need){const ph=s.need==='iInFb'?'iIn':'vIn',unit=ph==='iIn'?' A':' V',idx=ph==='iIn'?k-2:3+(k-6);

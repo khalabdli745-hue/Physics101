@@ -797,19 +797,44 @@ async function drawRatings(){
 const GVM=[['Iapetus','واضح'],['Rasalgethi','معلوماتي'],['Sadaltager','واثق'],['Algieba','ناعم'],['Schedar','متزن'],['Orus','حازم'],['Charon','معلوماتي']],GVF=[['Kore','حازم'],['Erinome','واضح'],['Sulafat','دافئ'],['Achernar','ناعم'],['Aoede','مرح'],['Leda','شبابي']];
 const GVTXT='مرحبا بك، أنا المدرب الذكي. سنشرح اليوم قانون كولوم خطوة بخطوة.';
 let GVAU=null;
+/* صفحة المنصة مخفية داخل اللوحة: منها يؤخذ نص شرح الدرس كما يسمعه المتدرب */
+let GPF=null;const gpFrame=()=>new Promise((res,rej)=>{try{if(GPF&&GPF.contentWindow&&GPF.contentWindow.P101PREP)return res(GPF.contentWindow)}catch(e){}
+  if(!GPF){GPF=document.createElement('iframe');GPF.setAttribute('aria-hidden','true');GPF.tabIndex=-1;GPF.style.cssText='position:fixed;width:390px;height:700px;left:-10000px;top:0;border:0;visibility:hidden';GPF.src='index.html?prep=1';document.body.appendChild(GPF)}
+  let n=0;const t=setInterval(()=>{n++;try{const w=GPF.contentWindow;if(w&&w.P101PREP&&w.go&&w.openBoard){clearInterval(t);setTimeout(()=>res(w),1200)}}catch(e){}if(n>100){clearInterval(t);rej({error:'net'})}},300)});
 async function drawGV(){const box=$('#gvBox');if(!box)return;let x;try{x=await api({a:'tvoice',token:TOKEN})}catch(e){x={}}
   if(!x||!x.ok){box.innerHTML='<p class="msg bad">هذه الميزة تحتاج تحديث كود الخادم (code.gs) إلى الإصدار 29 ونشره.</p>';return}
+  try{localStorage.setItem('p101-gvraw',JSON.stringify(x.cfg))}catch(e){}
   const c=x.cfg,opt=(L,v)=>L.map(([n,d])=>`<option value="${n}"${n===v?' selected':''}>${n} (${d})</option>`).join('');
-  box.innerHTML=`<p class="sub">الحالة: ${c.on&&x.gem?'<b style="color:var(--good)">✓ مفعّل للمتدربين</b>':'<b style="color:var(--bad)">غير مفعّل للمتدربين</b>'}${x.gem?'':' · يحتاج تفعيل Gemini في البند 2 أولا'}<br>صوت طبيعي من Google Gemini للمدرب الذكي على السبورة. يسمعه المتدرب في الدروس التي جهزتها بزر «🎙 تجهيز» على السبورة من حسابك، والدروس غير المجهزة تبقى تلقائيا بصوت حامد أو زارية.</p>
+  box.innerHTML=`<p class="sub">الحالة: ${c.on&&x.gem?'<b style="color:var(--good)">✓ مفعّل للمتدربين</b>':'<b style="color:var(--bad)">غير مفعّل للمتدربين</b>'}${x.gem?'':' · يحتاج تفعيل Gemini في البند 2 أولا'}<br>صوت طبيعي من Google Gemini للمدرب الذكي على السبورة وللمساعد الذكي. يسمعه المتدرب في الدروس التي جهزتها من «تجهيز صوت الدروس» تحت، والدروس غير المجهزة تبقى تلقائيا بصوت حامد أو زارية.</p>
    <div class="row gvRow"><label class="gvL">👨 صوت الرجل</label><select id="gvm">${opt(GVM,c.m)}</select><button class="btn ghost" id="gvpm">▶ استماع</button></div>
    <div class="row gvRow"><label class="gvL">👩 صوت المرأة</label><select id="gvf">${opt(GVF,c.f)}</select><button class="btn ghost" id="gvpf">▶ استماع</button></div>
    <div class="row"><button class="btn" id="gvsv">حفظ الصوتين</button>${c.on?'<button class="btn danger" id="gvoff">إيقاف للمتدربين</button>':'<button class="btn" id="gvon"'+(x.gem?'':' disabled')+'>تفعيل للمتدربين</button>'}</div>
-   <p class="sub" style="font-size:13px">لتجهيز درس: من تبويب «حسابي التجريبي» اضغط «▶ ادخل المنصة كمتدرب تجريبي»، ثم افتح الدرس و«ابدأ الشرح»، واضغط زر الصوت حتى يظهر «جيميني»، واختر الصوت نفسه، ثم اضغط «🎙 تجهيز». يأخذ الدرس نحو 40 دقيقة مرة واحدة، ويحفظ في Drive.</p><p class="msg" id="gvm2"></p>`;
+   <div class="gpBox"><h4 style="margin:12px 0 4px">🎙 تجهيز صوت الدروس</h4><p class="sub" style="font-size:13px">اختر الدرس ثم «تجهيز الصوتين»: يجهز شرح الدرس بصوت الرجل ثم صوت المرأة ويحفظه، فيسمعه المتدرب فورا بعد التفعيل. الدرس يأخذ نحو 40 دقيقة لكل صوت مرة واحدة، فاترك الصفحة مفتوحة حتى ينتهي.</p>
+   <div class="row gvRow"><select id="gpL">${LESSONS.map(L=>`<option value="${L.k}"${L.k==='3-1'?' selected':''}>${L.k} · ${esc(L.raw)}</option>`).join('')}</select></div>
+   <div class="row"><button class="btn ghost" id="gpChk">فحص الحالة</button><button class="btn" id="gpGo">تجهيز الصوتين</button></div><p class="msg" id="gpSt"></p></div><p class="msg" id="gvm2"></p>`;
   const play=async(v,b)=>{try{if(GVAU){GVAU.pause();GVAU=null}}catch(e){}const t=b.textContent;b.disabled=true;b.innerHTML='<span class="spin"></span>';
     try{const y=await api({a:'gtts',token:TOKEN,voice:v,text:GVTXT});if(!y.ok)throw y;const bin=atob(y.audio),u8=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u8[i]=bin.charCodeAt(i);GVAU=new Audio(URL.createObjectURL(new Blob([u8],{type:y.mime||'audio/wav'})));GVAU.play()}catch(e){toast(errText((e&&e.error)||'net'))}b.disabled=false;b.textContent=t};
   $('#gvpm').onclick=e=>play($('#gvm').value,e.currentTarget);$('#gvpf').onclick=e=>play($('#gvf').value,e.currentTarget);
   const save=async o=>{$('#gvm2').className='msg';$('#gvm2').innerHTML='<span class="spin"></span>';const y=await api({a:'tvoice',token:TOKEN,set:Object.assign({m:$('#gvm').value,f:$('#gvf').value},o||{})});
-    if(y.ok){try{localStorage.setItem('p101-gvoice',y.cfg.m)}catch(e){}toast('تم الحفظ');drawGV()}else{$('#gvm2').className='msg bad';$('#gvm2').textContent=errText(y.error)}};
+    if(y.ok){try{localStorage.setItem('p101-gvoice',y.cfg.m);localStorage.setItem('p101-gvraw',JSON.stringify(y.cfg))}catch(e){}toast('تم الحفظ');drawGV()}else{$('#gvm2').className='msg bad';$('#gvm2').textContent=errText(y.error)}};
+  const gp=$('#gpSt'),gpW=ms=>new Promise(r=>setTimeout(r,ms));
+  const gpTxt=async(k,vo)=>{const w=await gpFrame();const [u,l]=k.split('-').map(Number);return w.P101PREP(u,l,vo)};
+  const gpChk=async()=>{const k=$('#gpL').value;gp.className='msg';gp.innerHTML='<span class="spin"></span> فحص…';
+    try{const out=[];for(const [vo,v,lb] of [['m',c.m,'👨 صوت الرجل'],['f',c.f,'👩 صوت المرأة']]){const T=await gpTxt(k,vo);const y=await api({a:'gcheck',token:TOKEN,voice:v,texts:T});if(!y.ok)throw y;out.push(lb+': '+(y.n===y.total?'<b style="color:var(--good)">✓ جاهز</b>':y.n+' من '+y.total))}gp.innerHTML=out.join('<br>')}
+    catch(e){gp.className='msg bad';gp.textContent=(e&&e.error==='unknown_action')?'حدّث code.gs إلى الإصدار 31 أولا.':errText((e&&e.error)||'net')}};
+  let gpRun=false;
+  const gpGo=async()=>{if(gpRun){gpRun=false;return}const k=$('#gpL').value;gpRun=true;$('#gpGo').textContent='■ إيقاف';
+    try{for(const [vo,v,lb] of [['m',c.m,'👨 صوت الرجل'],['f',c.f,'👩 صوت المرأة']]){const T=await gpTxt(k,vo);const y=await api({a:'gcheck',token:TOKEN,voice:v,texts:T});if(!y.ok)throw y;
+      let done=y.n,busy=0;const miss=y.miss.slice();
+      for(let i=0;i<miss.length;i++){if(!gpRun)throw {stop:1};gp.className='msg';gp.innerHTML='⏳ '+lb+': '+done+' من '+T.length+' · المتبقي نحو '+Math.ceil((miss.length-i)*21/60)+' دقيقة';
+        let z;try{z=await api({a:'gtts',token:TOKEN,voice:v,text:T[miss[i]],nodata:1})}catch(e){z={error:'net'}}
+        if(z&&z.ok){done++;busy=0;if(!z.cached)await gpW(21000);continue}
+        if(z&&z.error==='gem_busy'&&busy<5){busy++;i--;gp.innerHTML='⏸ '+lb+': '+done+' من '+T.length+' · انتظار دقيقة (حد جيميني)';await gpW(60000);continue}
+        throw z||{error:'net'}}}
+      gp.className='msg good';gp.innerHTML='✅ الدرس جاهز بالصوتين'}
+    catch(e){if(e&&e.stop){gp.className='msg';gp.textContent='توقف التجهيز، ويكمل من مكانه عند الضغط مرة ثانية.'}else{gp.className='msg bad';gp.textContent=(e&&e.error==='unknown_action')?'حدّث code.gs إلى الإصدار 31 أولا.':'توقف: '+errText((e&&e.error)||'net')}}
+    gpRun=false;$('#gpGo').textContent='تجهيز الصوتين'};
+  $('#gpChk').onclick=gpChk;$('#gpGo').onclick=gpGo;
   $('#gvsv').onclick=()=>save();if($('#gvon'))$('#gvon').onclick=()=>save({on:true});if($('#gvoff'))$('#gvoff').onclick=()=>{if(confirm('إيقاف صوت جيميني للمتدربين؟ يعودون إلى صوت حامد وزارية.'))save({on:false})}}
 async function drawAI(){
   const m=$(tab==='settings'?'#aiSet':'#main');if(!m)return;m.innerHTML='<p class="empty"><span class="spin"></span></p>';
