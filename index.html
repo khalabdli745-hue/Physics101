@@ -1864,7 +1864,7 @@ function openBoard(dry){const dryS=dry==='slides';dry=dry===true||dryS;
       const LEAD={r:'لا بأس، ',s:'جيد، لكن ',g:'انتبه هنا، ',i:'محاولة جيدة، لكن ',m:'جيد، لكن '};
       const HINT={r:'تذكر الفكرة الأساسية في الدرس السابق.',s:'انظر إلى موقع الرمز في القانون وما يمثله.',g:'اقرأ آخر السؤال، ففيه ما نريد إيجاده.',i:q.t===3?'انقل الكميات إلى الطرف الآخر بالعملية العكسية.':'انظر: هل الكمية في البسط أم في المقام؟',m:'ابحث عن الخيار الذي لا يحتوي على أي خطأ.'};
       const nm=()=>{try{return window.coachName?coachName():''}catch(e){return ''}};
-      const fb=(c,x)=>{f.className='bQf '+c;f.innerHTML=x;void f.offsetWidth;f.classList.add('pop');ct.dataset.fb=(+ct.dataset.fb||0)+1;/* في التنقل اليدوي ينطق المدرب الشكر والتلميح والتصحيح أيضا */if(!auto){try{TTS.stop()}catch(e){}say(f.textContent,runId)}};
+      const fb=(c,x)=>{f.className='bQf '+c;f.innerHTML=x;void f.offsetWidth;f.classList.add('pop');ct.dataset.fb=(+ct.dataset.fb||0)+1;/* في التنقل اليدوي ينطق المدرب الشكر والتلميح والتصحيح أيضا */if(!auto){try{TTS.stop()}catch(e){}say(CQS(f),runId)}};
       const tail=q.say?' '+inl(q.say):'',mark=(b,t)=>{const L=b.querySelector('.bL');if(L)L.textContent=t};
       bs.forEach(b=>b.onclick=()=>{if(O.dataset.done)return;const j=+b.dataset.j;
       if(j===q.a){b.classList.add('ok');mark(b,'✓');O.dataset.done=1;O.classList.add('done');try{window.__bqAns&&__bqAns(cur,tries?0.5:1,out.filter(x=>x.type==='q').length)}catch(e){}
@@ -1950,7 +1950,7 @@ function openBoard(dry){const dryS=dry==='slides';dry=dry===true||dryS;
   const narrAt=(cur,step)=>{const sl=out[cur];
     if(sl.type==='t')return (K2==='3-1'&&N31?'أهلًا وسهلًا بك'+((!dry&&window.coachName&&coachName())?' يا '+coachName():'')+'، ومرحبًا بك في هذا الدرس. يسعدني أن أكون معك اليوم. ':'مرحبًا بك'+((!dry&&window.coachName&&coachName())?' يا '+coachName():'')+'، يسعدني أن أكون معك اليوم. ')+(VO==='z'?'أنا مدربتك الذكية':'أنا مدربك الذكي')+'، وسأشرح لك '+((window.COACHINTRO||[]).includes(K2)?'مقدمة الوحدة '+['الأولى','الثانية','الثالثة','الرابعة','الخامسة'][+K2.split('-')[0]]+' وأهدافها ثم درس: ':'درس: ')+l.t+'. '+(TOP?'ومواضيع الدرس كالتالي: '+topSay()+'. ركّز معي، وهيا نبدأ.':heads.length?'سنتعلم في هذا الدرس: '+heads.join('، ')+'. ركّز معي، وهيا نبدأ.':'ركّز معي، وهيا نبدأ.');
     if(sl.type==='e'){const n=!dry&&window.coachName&&coachName(),lab=!!(window.LABS&&LABS[K2]);return 'شكرًا لمتابعتك'+(n?' يا '+n:'')+'. انتهينا من شرح الدرس، والآن حل الأمثلة والتمارين التفاعلية، ثم اختبر نفسك'+(lab?'، وبعدها انتقل إلى التجربة العملية لترى ما تعلمته يتحقق أمامك.':'.')+(K2==='3-1'&&N31?' أتمنى لك التوفيق.':'')}
-    if(sl.type==='q')return sl.q.ct?sl.q.lead+' '+sl.q.q+' اختر الإجابة الصحيحة.':'والآن سؤال لك: '+sl.q.q;
+    if(sl.type==='q')return window.CQQ||'والآن حان دورك، توقف لحظة وأجب عن هذا السؤال.';
     if(step===0){if(!sl.title)return '';if(sl.sayT)return sl.sayT;if(/\(تابع\)$/.test(sl.title))return sl.s4?'':'نكمل معًا.';
       if(sl.title==='ملخص الدرس')return 'والآن، لنستعرض خلاصة ما تعلمناه في هذا الدرس.';
       if(sl.s4&&/^تمرين/.test(sl.title))return 'والآن '+sl.title+'.';
@@ -1995,8 +1995,8 @@ function openBoard(dry){const dryS=dry==='slides';dry=dry===true||dryS;
       if(sl.type==='c'&&step<sl.steps.length){next();await say(narr(),id);if(id!==runId)return;continue}
       if(sl.type==='t'||sl.type==='e'){if(NS(KY())){await say(narr(),id);if(id!==runId)return}if(sl.type==='e'){stopAuto();return}next();continue}
       if(sl.type==='q'){let seen=+ct.dataset.fb||0;if(!N31||(step<1&&lastSaid!==cur+':0')){await say(narr(),id);if(id!==runId)return}
-        while(id===runId&&step<1){if((+ct.dataset.fb||0)!==seen){seen=+ct.dataset.fb;await say(ct.querySelector('.bQf').textContent,id);if(id!==runId)return}else await wait(300)}if(id!==runId)return;
-        if(NS(KY())){await say(ct.querySelector('.bQf').textContent,id);if(id!==runId)return}next();continue}
+        while(id===runId&&step<1){if((+ct.dataset.fb||0)!==seen){seen=+ct.dataset.fb;await say(CQS(ct.querySelector('.bQf')),id);if(id!==runId)return}else await wait(300)}if(id!==runId)return;
+        if(NS(KY())){await say(CQS(ct.querySelector('.bQf')),id);if(id!==runId)return}next();continue}
       next()}}
   const autoBtn=B.querySelector('.bAuto');
   function stopAuto(hold){if(!auto){if(held&&!hold){held='';TTS.stop()}return}auto=false;runId++;held='';
@@ -3684,8 +3684,11 @@ html:not(.lgWide) .loginWrap>.loginBox>.lgPg:not([hidden]),html:not(.lgWide) .lo
   else if(!fs&&pushed){pushed=false;try{if(history.state&&history.state.labFS)history.back()}catch(e){}}}).observe(document.body,{attributes:true,attributeFilter:['class']});
  addEventListener('popstate',()=>{if(document.body.classList.contains('labFS')){pushed=false;document.body.classList.remove('labFS');try{const v=document.getElementById('view');if(v)v.scrollTop=0}catch(e){}scrollTo(0,0)}});
 })();</script><script>/* لوحة المدرب: نص شرح الدرس مقسما كما يرسل لجيميني (لتجهيز الصوت من اللوحة) */
+/* المدرب 31 أكتوبر 11:11: أسئلة المشاركة تنطق بجمل قصيرة ثابتة (تجهز بصوت جيميني مرة واحدة)، والسؤال والتلميح والسبب مكتوبة على الشاشة */
+window.CQQ='والآن حان دورك، توقف لحظة وأجب عن هذا السؤال.';window.CQP=['أحسنت، إجابة صحيحة.','فكر مرة أخرى.','الإجابة الصحيحة مظللة بالأخضر.'];
+window.CQS=function(el){const c=(el&&el.className)||'';return /good/.test(c)?CQP[0]:/hint/.test(c)?CQP[1]:/bad/.test(c)?CQP[2]:''};
 window.P101PREP=function(u,l,vo){let old=null;try{old=localStorage.getItem('p101-bvo');localStorage.setItem('p101-bvo',vo==='f'?'z':'h')}catch(e){}
-  try{go(u,l);const L=openBoard(true)||[];const out=[],seen=new Set();
+  try{go(u,l);const L=(openBoard(true)||[]).slice();try{if(window.COACHQ&&COACHQ[u+'-'+l])L.push(CQQ,...CQP)}catch(e){}const out=[],seen=new Set();
     L.forEach(t=>{try{TTS.chunksAz(t).forEach(ch=>{const x=ch.map(y=>y.t).join(' ').replace(/[\u064B-\u0652\u0670]/g,'').replace(/\s+/g,' ').trim();if(x&&!seen.has(x)){seen.add(x);out.push(x)}})}catch(e){}});
     return out}finally{try{if(old===null)localStorage.removeItem('p101-bvo');else localStorage.setItem('p101-bvo',old)}catch(e){}}};</script><script>/* شرح الدرس: الرجوع بزر «→ رجوع» أو بالسحب (رجوع المتصفح) إلى تبويبات الدرس */
 (function(){let pushed=false;
