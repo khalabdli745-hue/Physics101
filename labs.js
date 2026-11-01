@@ -1,3 +1,5 @@
+/* المدرب 1 نوفمبر: لا يعاد بناء بطاقات النتائج والسجل إلا إذا تغير محتواها، فلا تهتز أثناء حركة المشهد */
+try{if(!Object.getOwnPropertyDescriptor(Element.prototype,'html'))Object.defineProperty(Element.prototype,'html',{configurable:true,get(){return this.innerHTML},set(h){h=String(h);if(this.__h===h&&this.__f===this.firstChild&&this.firstChild)return;this.innerHTML=h;this.__h=h;this.__f=this.firstChild}})}catch(e){}
 /* المدرب 1 نوفمبر: تحديث المشهد دون إعادة إنشاء الصور، حتى لا تختفي الأجهزة (صور webp) أثناء تحريك المجس على الجوال */
 window.__lrLocal=function(root,key){/* المدرب 1 نوفمبر: نسخ تدرجات التلوين داخل الرسم نفسه بمعرف خاص به، فلا يعتمد على رسم خارجي (سفاري الآيفون لا يرسمها) */
   if(!root||root.dataset.lr==='host')return;key=key||root.dataset.lrk||(root.dataset.lrk='__v'+(window.__lrN=(window.__lrN||0)+1));let L=root.querySelector(':scope>defs[data-lrl]');
@@ -765,15 +767,15 @@ function forceLab(box){
   function sub(){const f1=cl('cQ',fx(F1(),3)),f2=cl('cQ',fx(F2(),3));
     $('sbF1').innerHTML=ok.m1?['F₁ = m₁·g',E(`m₁ = ${cl('cV',m1.toFixed(1))} g = ${cl('cV',m1/1000)} kg`),E(`F₁ = ${cl('cV',m1/1000)} × 9.8`)].join('\n'):'F₁ = m₁·g';
     $('sbF2').innerHTML=ok.m2?['F₂ = m₂·g',E(`m₂ = ${cl('cV',m2.toFixed(1))} g = ${cl('cV',m2/1000)} kg`),E(`F₂ = ${cl('cV',m2/1000)} × 9.8`)].join('\n'):'F₂ = m₂·g';
-    $('sbTH').innerHTML=ok.t1&&ok.t2?['θ = θ₂ − θ₁',E(`θ = ${cl('cT',t2+'°')} − ${cl('cT',t1+'°')}`)].join('\n'):'θ = θ₂ − θ₁';
+    $('sbTH').html=ok.t1&&ok.t2?['θ = θ₂ − θ₁',E(`θ = ${cl('cT',t2+'°')} − ${cl('cT',t1+'°')}`)].join('\n'):'θ = θ₂ − θ₁';
     $('sb4').innerHTML=ok.cF1&&ok.cF2&&ok.cTH?['R = √( F₁² + F₂² + 2·F₁·F₂·cos θ )',E(`R = √( ${f1}² + ${f2}² + 2 × ${f1} × ${f2} × cos ${cl('cT',TH()+'°')} )`)].join('\n'):'R = √( F₁² + F₂² + 2·F₁·F₂·cos θ )'}
   function logs(){const lb=$('logB'),nw=lb?[...lb.querySelectorAll('tr.nw')].map(r=>r.dataset.k):[],K=['m1In','m2In','t1In','t2In','eIn'];let ri=0;const c=(k,x)=>`<b class="${k}" dir="ltr">${x}</b>`,row=(n,v)=>{const k=K[ri++];return `<tr data-k="${k}"${nw.includes(k.replace(/2$/,''))?' class="nw"':''}><td>${n}</td><td>${v}</td></tr>`};
     const h='<table>'+row('<span class="cV">m₁</span> كتلة الحامل الأول',ok.m1?c('cV',m1.toFixed(1)+' g'):'—')+row('<span class="cV">m₂</span> كتلة الحامل الثاني',ok.m2?c('cV',m2.toFixed(1)+' g'):'—')
       +row('<span class="cT">θ₁</span> زاوية الخيط الأول',ok.t1?c('cT',t1+'°'):'—')+row('<span class="cT">θ₂</span> زاوية الخيط الثاني',ok.t2?c('cT',t2+'°'):'—')
       +row('قوة الاتزان <span class="cV">m₃</span> و <span class="cT">θ₃</span>',ok.e?c('cV',ok.e.m+' g')+' ، '+c('cT',ok.e.t+'°'):'—')+'</table>';
-    $('logA').innerHTML=h;$('logB').innerHTML='<div class="amLog"><h5>📋 سجل القراءات</h5>'+h.replace('<table>','<table class="lxLog">')+'</div>';if(nw.length)setTimeout(()=>$('logB').querySelectorAll('tr.nw').forEach(r=>r.className='ok'),1400)}
+    $('logA').html=h;$('logB').html='<div class="amLog"><h5>📋 سجل القراءات</h5>'+h.replace('<table>','<table class="lxLog">')+'</div>';if(nw.length)setTimeout(()=>$('logB').querySelectorAll('tr.nw').forEach(r=>r.className='ok'),1400)}
   function progS(){const L=[[ok.m1&&ok.m2,'الكتلتان'],[ok.t1&&ok.t2,'الزاويتان'],[!!ok.e,'الاتزان'],[ok.cF1&&ok.cF2,'F₁ و F₂'],[!!ok.cTH,'θ'],[!!ok.c4,'R']];
-    $('prog').innerHTML=L.map(([d,t])=>`<span class="${d?'d':''}">${d?'✓ ':''}${t}</span>`).join('<i>←</i>')}
+    $('prog').html=L.map(([d,t])=>`<span class="${d?'d':''}">${d?'✓ ':''}${t}</span>`).join('<i>←</i>')}
 
   function rDraw(){const st=$('rStage');if(!ok.c4){st.hidden=true;return}st.hidden=false;
     const C=[200,175],P=(r,a)=>[C[0]+r*Math.cos(a*D2R),C[1]-r*Math.sin(a*D2R)],k=135/Math.max(RR(),F1(),F2());
@@ -934,15 +936,15 @@ function vecLab(box){
     $('eS').svgHTML=ftDisk({strings:st,ring:[n?nx/n*sz:0,n?-ny/n*sz:0]});return bal}
   const cl=(c,x)=>`<b class="${c}">${x}</b>`;
   function sub(){const f=cl('cQ',fx(F(),3)),t=cl('cT',th+'°');
-    $('sbF').innerHTML=ok.m?['F = m·g',E(`m = ${cl('cV',m)} g = ${cl('cV',m/1000)} kg`),E(`F = ${cl('cV',m/1000)} × 9.8`)].join('\n'):'F = m·g';
+    $('sbF').html=ok.m?['F = m·g',E(`m = ${cl('cV',m)} g = ${cl('cV',m/1000)} kg`),E(`F = ${cl('cV',m/1000)} × 9.8`)].join('\n'):'F = m·g';
     $('sb1').innerHTML=ok.cF&&ok.t?['Fx = F·cos θ',E(`Fx = ${f} × cos ${t}`)].join('\n'):'Fx = F·cos θ';
     $('sb2').innerHTML=ok.cF&&ok.t?['Fy = F·sin θ',E(`Fy = ${f} × sin ${t}`)].join('\n'):'Fy = F·sin θ'}
   function logs(){const lb=$('logB'),nw=lb?[...lb.querySelectorAll('tr.nw')].map(r=>r.dataset.k):[],K=['mIn','tIn','eIn','eIn2'];let ri=0;const c=(k,x)=>`<b class="${k}" dir="ltr">${x}</b>`,row=(n,x)=>{const k=K[ri++];return `<tr data-k="${k}"${nw.includes(k.replace(/2$/,''))?' class="nw"':''}><td>${n}</td><td>${x}</td></tr>`};
     const h='<table>'+row('<span class="cV">m</span> كتلة الحامل',ok.m?c('cV',m.toFixed(1)+' g'):'—')+row('<span class="cT">θ</span> زاوية القوة',ok.t?c('cT',th+'°'):'—')
       +row('<span class="cV">mₓ</span> كتلة المركبة السينية',ok.e?c('cV',ok.e.x+' g'):'—')+row('<span class="cV">mᵧ</span> كتلة المركبة الصادية',ok.e?c('cV',ok.e.y+' g'):'—')+'</table>';
-    $('logA').innerHTML=h;$('logB').innerHTML='<div class="amLog"><h5>📋 سجل القراءات</h5>'+h.replace('<table>','<table class="lxLog">')+'</div>';if(nw.length)setTimeout(()=>$('logB').querySelectorAll('tr.nw').forEach(r=>r.className='ok'),1400)}
+    $('logA').html=h;$('logB').html='<div class="amLog"><h5>📋 سجل القراءات</h5>'+h.replace('<table>','<table class="lxLog">')+'</div>';if(nw.length)setTimeout(()=>$('logB').querySelectorAll('tr.nw').forEach(r=>r.className='ok'),1400)}
   function progS(){const L=[[!!ok.m,'الكتلة'],[!!ok.t,'الزاوية'],[!!ok.e,'المركبتان تجريبيا'],[!!ok.cF,'F'],[!!ok.c1,'Fx'],[!!ok.c2,'Fy']];
-    $('prog').innerHTML=L.map(([d,t])=>`<span class="${d?'d':''}">${d?'✓ ':''}${t}</span>`).join('<i>←</i>')}
+    $('prog').html=L.map(([d,t])=>`<span class="${d?'d':''}">${d?'✓ ':''}${t}</span>`).join('<i>←</i>')}
   function rDraw(){const st=$('rStage');if(!(ok.c1&&ok.c2)){st.hidden=true;return}st.hidden=false;
     const ox=200,oy=180,K=135/F(),fxp=FX()*K,fyp=FY()*K;
     const arr=(x1,y1,x2,y2,c,lab,lx,ly)=>{const a=Math.atan2(y2-y1,x2-x1),h=13;return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${c}" stroke-width="4"/><path d="M${x2} ${y2} L${x2-h*Math.cos(a-.4)} ${y2-h*Math.sin(a-.4)} L${x2-h*Math.cos(a+.4)} ${y2-h*Math.sin(a+.4)} Z" fill="${c}"/><text x="${x2+lx}" y="${y2+ly}" font-size="16" font-weight="800" fill="${c}" text-anchor="middle">${lab}</text>`};
@@ -2197,7 +2199,7 @@ function frLab(box){
     const all=ok.cF&&ok.f;
     $('cmpS').textContent=all?['قوة الاحتكاك المحسوبة: '+E(`fk = ${FK().toFixed(2)} N`),'قوة السحب (قوة الشد): '+E(`F = ${FS().toFixed(1)} N`)].join('\n'):'أكمل الخطوات في 5.1';
     $('cmpN').textContent=all?'قوة الاحتكاك المحسوبة تساوي قوة السحب (قوة الشد) المقاسة بالميزان النابضي تقريبا، لأن الصندوق يتحرك بسرعة ثابتة فتكون F = fk.':'';
-    $('rNote').innerHTML=all?'الاستنتاج: قوة الاحتكاك الحركي المحسوبة من <span dir="ltr" style="white-space:nowrap">fk = μk·N</span> تساوي قوة السحب (قوة الشد) المقاسة بالميزان النابضي تقريبا عند السحب بسرعة ثابتة.':'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
+    $('rNote').html=all?'الاستنتاج: قوة الاحتكاك الحركي المحسوبة من <span dir="ltr" style="white-space:nowrap">fk = μk·N</span> تساوي قوة السحب (قوة الشد) المقاسة بالميزان النابضي تقريبا عند السحب بسرعة ثابتة.':'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
   $('mCk').onclick=()=>{const v=num($('mIn').value);if(isNaN(v))return fb('mFb',false,'اكتب قراءتك بالجرام.');
     if(Math.abs(v-M)<0.5){ok.m=true;fb('mFb',true,'✓ قراءة صحيحة:\n'+E(`m = ${M} g = ${fx(KG(),3)} kg`))}else fb('mFb',false,'✗ اقرأ الرقم الظاهر على شاشة الميزان.');sub();results()};
   const chk=(c,need,needMsg,val,unit,tol,okMsg,bad)=>{if(!need())return fb(c+'f',false,needMsg);const v=num($(c).value);if(isNaN(v))return fb(c+'f',false,'اكتب الناتج بوحدة '+unit+'.');
@@ -2342,7 +2344,7 @@ function wkLab2(box){
   function sub(){$('sbW').textContent=ok.f&&ok.x?['W = F·x',E(`F = ${F.toFixed(1)} N`),'x = xf − xi',E(`x = ${X.toFixed(1)} − 0 = ${X.toFixed(1)} cm = ${fx(XM(),3)} m`),E(`W = ${F.toFixed(1)} × ${fx(XM(),3)}`)].join('\n'):'W = F·x'}
   function results(){
     $('r1').textContent=ok.f?E(F.toFixed(1)+' N'):'—';$('r2').textContent=ok.x?E(fx(XM(),3)+' m'):'—';$('r3').textContent=ok.cW?E(fx(WW(),3)+' J'):'—';
-    $('rNote').innerHTML=ok.cW?'الاستنتاج: الشغل المبذول يساوي حاصل ضرب قوة السحب (قوة الشد) في الإزاحة <span dir="ltr" style="white-space:nowrap">W = F·x</span>، لأن القوة في اتجاه الحركة.':'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
+    $('rNote').html=ok.cW?'الاستنتاج: الشغل المبذول يساوي حاصل ضرب قوة السحب (قوة الشد) في الإزاحة <span dir="ltr" style="white-space:nowrap">W = F·x</span>، لأن القوة في اتجاه الحركة.':'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
   $('gR').oninput=gDraw;$('pR').oninput=pDraw;
   $('fHn').onclick=()=>{hF=true;gDraw();fb('fFb',true,'تلميح: الأرقام على التدريج بالنيوتن، وبين كل رقمين 5 أقسام صغيرة كل قسم '+E('0.1 N')+'. اسحب الصندوق حتى يتحرك بسرعة ثابتة، ثم اقرأ الخط الأحمر تحت المؤشر.')};
   $('fCk').onclick=()=>{if(!moving())return fb('fFb',false,'اسحب المؤشر حتى يتحرك الصندوق بسرعة ثابتة أولا.');const v=num($('fIn').value);if(isNaN(v))return fb('fFb',false,'اكتب قراءتك بالنيوتن.');
@@ -2557,7 +2559,7 @@ function peLab(box){
     z+=`<rect x="352" y="82" width="44" height="24" rx="6" fill="#F7931E"/><text x="374" y="99" font-size="15" font-weight="800" text-anchor="middle" fill="#fff">cm</text><text x="6" y="106" font-size="12" font-weight="700" fill="var(--muted)">تكبير الشريط المتري</text>`;
     $('pZ'+k).innerHTML=z}
   function sub(){[1,2].forEach(k=>{$('sbP'+k).textContent=ok.m&&ok['h'+k]?['PE = m·g·h',E(`m = ${M} g = ${fx(KG(),3)} kg`),E(`h = ${H[k].toFixed(1)} cm = ${fx(HM(k),3)} m`),E(`PE = ${fx(KG(),3)} × 9.8 × ${fx(HM(k),3)}`)].join('\n'):'PE = m·g·h'})}
-  function chart(){if(!(ok.cP1&&ok.cP2)){$('peC').innerHTML='';return}
+  function chart(){if(!(ok.cP1&&ok.cP2)){$('peC').html='';return}
     const hs=[0,HM(1),HM(2)],ps=hs.map(h=>KG()*G*h),hx=Math.ceil((HM(2)+0.3)*5)/5,pxm=Math.ceil(PE(2)*2+0.0001)/2;
     const X0=48,Y0=232,W=300,H=200,X=h=>X0+h/hx*W,Y=p=>Y0-p/pxm*H;let s='';
     const nh=Math.round(hx/0.2),np=Math.round(pxm/0.5);
@@ -2567,14 +2569,14 @@ function peLab(box){
     s+=`<text x="${X0+W}" y="${Y0+34}" font-size="13" font-weight="700" text-anchor="end" fill="var(--ink)">h (m)</text><text x="${X0+4}" y="${Y0-H-12}" font-size="13" font-weight="700" fill="var(--ink)">PE (J)</text>`;
     {const he=Math.min(hx,pxm/(KG()*G));s+=`<line x1="${X(0)}" y1="${Y(0)}" x2="${X(he)}" y2="${Y(KG()*G*he)}" stroke="#F7931E" stroke-width="3"/>`}
     hs.forEach((h,k)=>{s+=`<circle cx="${X(h)}" cy="${Y(ps[k])}" r="6" fill="${k?'#2563EB':'var(--ink)'}" stroke="#fff" stroke-width="2"/>`;if(k)s+=`<text x="${X(h)+10}" y="${Y(ps[k])+18}" font-size="11.5" font-weight="700" fill="#2563EB" direction="ltr" text-anchor="start">${k===1?'المحاولة الأولى':'المحاولة الثانية'}</text><text x="${X(h)+10}" y="${Y(ps[k])+33}" font-size="11" fill="#2563EB">(${fx(h,3)} m , ${fx(ps[k],3)} J)</text>`});
-    $('peC').innerHTML=`<div class="stage"><svg viewBox="0 0 380 280" style="direction:ltr;display:block;width:100%;height:auto" aria-label="رسم طاقة الوضع مع الارتفاع">${s}</svg></div><div class="vcap">رسم طاقة الوضع مع الارتفاع: خط مستقيم يمر بنقطة الأصل، فطاقة الوضع تتناسب طرديا مع الارتفاع</div>`}
+    $('peC').html=`<div class="stage"><svg viewBox="0 0 380 280" style="direction:ltr;display:block;width:100%;height:auto" aria-label="رسم طاقة الوضع مع الارتفاع">${s}</svg></div><div class="vcap">رسم طاقة الوضع مع الارتفاع: خط مستقيم يمر بنقطة الأصل، فطاقة الوضع تتناسب طرديا مع الارتفاع</div>`}
   function results(){
     $('rM').textContent='كتلة الجسم (الثقل) m: '+(ok.m?E(fx(KG(),3)+' kg'):'—')+' (نفسها في المحاولتين)';
     [1,2].forEach(k=>{$('rh'+k).textContent=ok['h'+k]?E(fx(HM(k),3)+' m'):'—';$('rp'+k).textContent=ok['cP'+k]?E(fx(PE(k),3)+' J'):'—'});
     const all=ok.cP1&&ok.cP2;
     $('cmpS').textContent=all?['المحاولة الأولى (ارتفاع منخفض):',E(`h = ${fx(HM(1),3)} m`),E(`PE = ${fx(PE(1),3)} J`),'المحاولة الثانية (ارتفاع أعلى):',E(`h = ${fx(HM(2),3)} m`),E(`PE = ${fx(PE(2),3)} J`)].join('\n'):'أكمل المحاولتين أولا';
     $('cmpN').textContent=all?'طاقة الوضع في المحاولة الثانية أكبر، لأن الجسم (الثقل) نفسه رفع إلى ارتفاع أعلى.':'';
-    chart();$('rNote').innerHTML=all?'الاستنتاج: كلما زاد ارتفاع الجسم (الثقل) زادت طاقة الوضع، لأن طاقة الوضع تتناسب طرديا مع الارتفاع <span dir="ltr" style="white-space:nowrap">PE = m·g·h</span>.':'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
+    chart();$('rNote').html=all?'الاستنتاج: كلما زاد ارتفاع الجسم (الثقل) زادت طاقة الوضع، لأن طاقة الوضع تتناسب طرديا مع الارتفاع <span dir="ltr" style="white-space:nowrap">PE = m·g·h</span>.':'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
   $('mCk').onclick=()=>{const v=num($('mIn').value);if(isNaN(v))return fb('mFb',false,'اكتب قراءتك بالجرام.');
     if(Math.abs(v-M)<0.5){ok.m=true;fb('mFb',true,'✓ قراءة صحيحة:\n'+E(`m = ${M} g = ${fx(KG(),3)} kg`))}else fb('mFb',false,'✗ اقرأ الرقم الظاهر على شاشة الميزان.');sub();results()};
   [1,2].forEach(k=>{
@@ -2755,7 +2757,7 @@ function ceLab(box){
     const all=ok.cP&&ok.cK;
     $('cmpS').textContent=all?['طاقة الوضع عند الإفلات:',E(`PE = ${fx(PE(),3)} J`),'طاقة الحركة عند البوابة الضوئية:',E(`KE = ${fx(KE(),3)} J`)].join('\n'):'أكمل الخطوات في 5.1';
     $('cmpN').textContent=all?'طاقة الحركة عند البوابة تساوي طاقة الوضع عند الإفلات تقريبا، والفرق الصغير بسبب مقاومة الهواء.':'';
-    $('rNote').innerHTML=all?'الاستنتاج: طاقة الوضع للجسم (الثقل) تحولت إلى طاقة حركة أثناء السقوط، فالطاقة الميكانيكية محفوظة <span dir="ltr" style="white-space:nowrap">m·g·h = ½·m·v²</span>.':'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
+    $('rNote').html=all?'الاستنتاج: طاقة الوضع للجسم (الثقل) تحولت إلى طاقة حركة أثناء السقوط، فالطاقة الميكانيكية محفوظة <span dir="ltr" style="white-space:nowrap">m·g·h = ½·m·v²</span>.':'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
   $('pR').oninput=pDraw;$('gR').oninput=gDraw;
   $('mCk').onclick=()=>{const v=num($('mIn').value);if(isNaN(v))return fb('mFb',false,'اكتب قراءتك بالجرام.');
     if(Math.abs(v-M)<0.5){ok.m=true;fb('mFb',true,'✓ قراءة صحيحة:\n'+E(`m = ${M} g = ${fx(KG(),3)} kg`))}else fb('mFb',false,'✗ اقرأ الرقم الظاهر على شاشة الميزان.');sub();results()};
@@ -2967,7 +2969,7 @@ function eqLab(box){
     $('dS'+n).innerHTML=htScene(mixed?{px:CX,tz:ZIN,R,t,hl:0,cl:1}:{px:CX,tz:ZUP,R:null,t,hl:1,cl:CL()});
     $('dZ'+n).innerHTML=zoom(scr(30,196,`T = ${R} °C`)+scr(234,136,`t = ${t} s`),'‏شاشة الميزان الحراري وساعة الإيقاف (مكبرتان)‏')}
   function sub(){$('sbT').textContent=ok.m1&&ok.m2&&ok.a&&ok.b?['T_final = (m₁·T₁ + m₂·T₂) / (m₁ + m₂)',E(`T_final = (${M1} × ${T1.toFixed(1)} + ${M2} × ${T2.toFixed(1)}) / (${M1} + ${M2})`)].join('\n'):'T_final = (m₁·T₁ + m₂·T₂) / (m₁ + m₂)'}
-  function chart(){if(!ok.k3){$('htC').innerHTML='';return}
+  function chart(){if(!ok.k3){$('htC').html='';return}
     const y0=Math.floor(T2/10)*10,y1=Math.ceil((TFC()+2)/10)*10,X0=48,Yb=232,W=300,H=200,X=t=>X0+t/60*W,Y=v=>Yb-(v-y0)/(y1-y0)*H;let s='';
     for(let t=0;t<=60;t+=10)s+=`<line x1="${X(t)}" y1="${Yb}" x2="${X(t)}" y2="${Yb-H}" stroke="var(--line)"/><text x="${X(t)}" y="${Yb+16}" font-size="11" text-anchor="middle" fill="var(--ink)">${t}</text>`;
     for(let v=y0;v<=y1;v+=5)s+=`<line x1="${X0}" y1="${Y(v)}" x2="${X0+W}" y2="${Y(v)}" stroke="var(--line)"/><text x="${X0-6}" y="${Y(v)+4}" font-size="11" text-anchor="end" fill="var(--ink)">${v}</text>`;
@@ -2976,7 +2978,7 @@ function eqLab(box){
     if(ok.cT)s+=`<line x1="${X0}" y1="${Y(TFC())}" x2="${X0+W}" y2="${Y(TFC())}" stroke="#2563EB" stroke-width="1.6" stroke-dasharray="6 4"/><text x="${X(26)}" y="${Y(TFC())-8}" font-size="12" font-weight="800" text-anchor="end" fill="#2563EB">المحسوبة</text><text x="${X(28)}" y="${Y(TFC())-8}" font-size="12" font-weight="800" text-anchor="start" fill="#2563EB">T_final = ${fx(TFC(),1)} °C</text>`;
     let d='';for(let t=0;t<=60;t+=1)d+=(t?'L':'M')+X(t).toFixed(1)+','+Y(TFM+(T2-TFM)*Math.exp(-t/TAU)).toFixed(1);s+=`<path d="${d}" fill="none" stroke="#F7931E" stroke-width="3"/>`;
     [[0,T2],[10,Tt(10)],[30,Tt(30)],[60,Tt(60)]].forEach(([t,v])=>{s+=`<circle cx="${X(t)}" cy="${Y(v)}" r="5.5" fill="#7E22CE" stroke="#fff" stroke-width="2"/><text x="${X(t)+6}" y="${Y(v)+18}" font-size="11" font-weight="700" fill="#6B21A8">${v.toFixed(1)}</text>`});
-    $('htC').innerHTML=`<div class="stage"><svg viewBox="0 0 380 280" style="direction:ltr;display:block;width:100%;height:auto" aria-label="منحنى درجة حرارة الخليط مع الزمن">${s}</svg></div><div class="vcap">ترتفع درجة حرارة الخليط ثم تثبت عند درجة حرارة الاتزان T_final</div>`}
+    $('htC').html=`<div class="stage"><svg viewBox="0 0 380 280" style="direction:ltr;display:block;width:100%;height:auto" aria-label="منحنى درجة حرارة الخليط مع الزمن">${s}</svg></div><div class="vcap">ترتفع درجة حرارة الخليط ثم تثبت عند درجة حرارة الاتزان T_final</div>`}
   function results(){
     $('r1').textContent=ok.m1?E(M1+' g'):'—';$('r2').textContent=ok.m2?E(M2+' g'):'—';$('r3').textContent=ok.a?E(T2.toFixed(1)+' °C'):'—';$('r4').textContent=ok.b?E(T1.toFixed(1)+' °C'):'—';
     $('r5').textContent=ok.k1?E(Tt(10).toFixed(1)+' °C'):'—';$('r6').textContent=ok.k2?E(Tt(30).toFixed(1)+' °C'):'—';$('r7').textContent=ok.k3?E(TFM.toFixed(1)+' °C'):'—';$('r8').textContent=ok.cT?E(fx(TFC(),1)+' °C'):'—';
@@ -2984,7 +2986,7 @@ function eqLab(box){
     $('cmpS').textContent=all?['درجة حرارة الاتزان المقاسة بالمجس:',E(`T_final = ${TFM.toFixed(1)} °C`),'درجة حرارة الاتزان المحسوبة من القانون:',E(`T_final = ${fx(TFC(),1)} °C`),'الفرق:',E(`${fx(TFC(),1)} − ${TFM.toFixed(1)} = ${fx(r1(TFC())-TFM,1)} °C`)].join('\n'):'أكمل الخطوات في 5.1';
     $('cmpN').textContent=all?'درجة حرارة الاتزان المقاسة قريبة من المحسوبة، وأقل منها قليلا لأن جزءا صغيرا من الحرارة انتقل إلى المسعر الحراري والهواء المحيط.':'';
     chart();
-    $('rNote').innerHTML=all?'الاستنتاج: فقد الماء الساخن حرارة واكتسبها الماء البارد حتى وصل الخليط إلى درجة حرارة واحدة <span dir="ltr">T_final</span> بين <span dir="ltr">T₂</span> و <span dir="ltr">T₁</span>، وهذا هو الاتزان الحراري، والحرارة المفقودة تساوي الحرارة المكتسبة <span dir="ltr" style="white-space:nowrap">Q₁ + Q₂ = 0</span>.':'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
+    $('rNote').html=all?'الاستنتاج: فقد الماء الساخن حرارة واكتسبها الماء البارد حتى وصل الخليط إلى درجة حرارة واحدة <span dir="ltr">T_final</span> بين <span dir="ltr">T₂</span> و <span dir="ltr">T₁</span>، وهذا هو الاتزان الحراري، والحرارة المفقودة تساوي الحرارة المكتسبة <span dir="ltr" style="white-space:nowrap">Q₁ + Q₂ = 0</span>.':'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
   $('aR').oninput=aDraw;$('bR').oninput=bDraw;['cR','pR'].forEach(k=>$(k).oninput=cDraw);[0,1,2].forEach(n=>$('tR'+n).oninput=()=>dDraw(n));
   const mk=(inp,f,val,key,lab)=>{const v=num($(inp).value);if(isNaN(v))return fb(f,false,'اكتب قراءتك بالجرام.');
     if(Math.abs(v-val)<0.5){ok[key]=true;fb(f,true,'✓ قراءة صحيحة:\n'+E(`${lab} = ${val} g`))}else fb(f,false,'✗ اقرأ الرقم الظاهر على شاشة الميزان.');sub();results()};
@@ -3202,7 +3204,7 @@ function q1Lab(box){
   function results(){$('r1').textContent=ok.q?E(T0.toFixed(1)+' °C'):'—';$('r2').textContent=ok.q?E(r1(T0+DT).toFixed(1)+' °C'):'—';$('r3').textContent=ok.q?E(Q+' J'):'—';$('r4').textContent=ok.cC?E(fx(QC(),1)+' cal'):'—';$('r5').textContent=ok.cK?E(fx(QK(),3)+' kcal'):'—';
     const all=ok.cK;$('cmpS').textContent=all?[E(`Q = ${Q} J`),E(`Q = ${fx(QC(),1)} cal`),E(`Q = ${fx(QK(),3)} kcal`)].join('\n'):'أكمل الخطوات في 5.1';
     $('cmpN').textContent=all?'الكمية نفسها من الطاقة الحرارية، لكن عددها بالجول أكبر لأن الجول وحدة أصغر من السعر، وعددها بالكيلو سعر أصغر لأنه وحدة أكبر.':'';
-    $('rNote').innerHTML=all?`الاستنتاج: تحولت الطاقة الكهربائية في السخان إلى طاقة حرارية انتقلت إلى الماء فارتفعت درجة حرارته من <span dir="ltr">${T0.toFixed(1)} °C</span> إلى <span dir="ltr">${r1(T0+DT).toFixed(1)} °C</span>، والحرارة طاقة تقاس بالجول ويمكن تحويلها إلى السعر <span dir="ltr" style="white-space:nowrap">1 cal = 4.186 J</span>.`:'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
+    $('rNote').html=all?`الاستنتاج: تحولت الطاقة الكهربائية في السخان إلى طاقة حرارية انتقلت إلى الماء فارتفعت درجة حرارته من <span dir="ltr">${T0.toFixed(1)} °C</span> إلى <span dir="ltr">${r1(T0+DT).toFixed(1)} °C</span>، والحرارة طاقة تقاس بالجول ويمكن تحويلها إلى السعر <span dir="ltr" style="white-space:nowrap">1 cal = 4.186 J</span>.`:'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
   $('sR').oninput=sDraw;
   $('qInCk').onclick=()=>{if(+$('sR').value<100)return fb('qInFb',false,'ابدأ تشغيل السخان حتى يتوقف تلقائيا أولا.');const v=num($('qIn').value);if(isNaN(v))return fb('qInFb',false,'اكتب قراءتك بالجول.');
     if(Math.abs(v-Q)<0.5){ok.q=true;fb('qInFb',true,'✓ قراءة صحيحة:\n'+E(`Q = ${Q} J`))}else fb('qInFb',false,'✗ اكتب الرقم الظاهر على شاشة عداد الطاقة.');sub();results()};
@@ -3281,7 +3283,7 @@ function tsLab(box){
     const all=ok.K1&&ok.K2&&ok.F1&&ok.F2;
     $('cmpS').textContent=all?['خليط الماء والجليد:',E(`${C1.toFixed(1)} °C = ${fx(KK(C1),1)} K = ${fx(FF(C1),2)} °F`),'(القيمة المعيارية: 0 °C = 273 K = 32 °F)','الماء المغلي:',E(`${C2.toFixed(1)} °C = ${fx(KK(C2),1)} K = ${fx(FF(C2),2)} °F`),'(القيمة المعيارية: 100 °C = 373 K = 212 °F)'].join('\n'):'أكمل الخطوات في 5.1';
     $('cmpN').textContent=all?'القراءتان قريبتان من القيم المعيارية، ودرجة غليان الماء أقل قليلا من 100 °C لأن الضغط الجوي في المعمل أقل من الضغط المعياري.':'';
-    $('rNote').innerHTML=all?'الاستنتاج: درجة الحرارة الواحدة يعبر عنها بأرقام مختلفة في المقاييس الثلاثة، ويحول بينها بالقانونين <span dir="ltr" style="white-space:nowrap">K = C + 273</span> و <span dir="ltr" style="white-space:nowrap">F = 1.8·C + 32</span>، ومقياس كلفن لا يحتوي على قيم سالبة.':'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
+    $('rNote').html=all?'الاستنتاج: درجة الحرارة الواحدة يعبر عنها بأرقام مختلفة في المقاييس الثلاثة، ويحول بينها بالقانونين <span dir="ltr" style="white-space:nowrap">K = C + 273</span> و <span dir="ltr" style="white-space:nowrap">F = 1.8·C + 32</span>، ومقياس كلفن لا يحتوي على قيم سالبة.':'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
   $('aR').oninput=aDraw;$('bR').oninput=bDraw;
   const rd=(id,need,msg,val,key,lab)=>{if(!need())return fb(id+'Fb',false,msg);const v=num($(id).value);if(isNaN(v))return fb(id+'Fb',false,'اكتب قراءتك بوحدة °C.');
     if(Math.abs(v-val)<0.05){ok[key]=true;fb(id+'Fb',true,'✓ قراءة صحيحة:\n'+E(`${lab} = ${val.toFixed(1)} °C`))}else fb(id+'Fb',false,'✗ اكتب درجة الحرارة كما تظهر على الشاشة المكبرة، برقم عشري واحد.');sub();results()};
@@ -3372,7 +3374,7 @@ function shLab(box){
     $('r5').textContent=ok.cC?E(fx(CC(),1)+' J/°C'):'—';$('r6').textContent=ok.cQ?E(fx(QQ(),1)+' J'):'—';$('r7').textContent=ok.e?E(EN+' J'):'—';
     const all=ok.cQ&&ok.e;$('cmpS').textContent=all?['كمية الحرارة التي اكتسبها الماء:',E(`Q = ${fx(QQ(),1)} J`),'الطاقة التي قاسها عداد الطاقة:',E(`E = ${EN} J`)].join('\n'):'أكمل الخطوات في 5.1';
     $('cmpN').textContent=all?'كمية الحرارة التي اكتسبها الماء أقل قليلا من الطاقة الكهربائية، لأن جزءا من الحرارة انتقل إلى الكوب والسخان والهواء المحيط.':'';
-    $('rNote').innerHTML=all?'الاستنتاج: كمية الحرارة اللازمة لتسخين الماء تتناسب مع كتلته وحرارته النوعية والتغير في درجة حرارته <span dir="ltr" style="white-space:nowrap">Q = m·c·ΔT</span>، والسعة الحرارية <span dir="ltr" style="white-space:nowrap">C = m·c</span> هي الحرارة اللازمة لرفع درجة حرارة الماء كله درجة واحدة.':'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
+    $('rNote').html=all?'الاستنتاج: كمية الحرارة اللازمة لتسخين الماء تتناسب مع كتلته وحرارته النوعية والتغير في درجة حرارته <span dir="ltr" style="white-space:nowrap">Q = m·c·ΔT</span>، والسعة الحرارية <span dir="ltr" style="white-space:nowrap">C = m·c</span> هي الحرارة اللازمة لرفع درجة حرارة الماء كله درجة واحدة.':'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
   $('aR').oninput=aDraw;$('sR').oninput=sDraw;
   $('mInCk').onclick=()=>{const v=num($('mIn').value);if(isNaN(v))return fb('mInFb',false,'اكتب قراءتك بالجرام.');if(Math.abs(v-M)<0.5){ok.m=true;fb('mInFb',true,'✓ قراءة صحيحة:\n'+E(`m = ${M} g = ${fx(KG(),3)} kg`))}else fb('mInFb',false,'✗ اقرأ الرقم الظاهر على شاشة الميزان.');sub();results()};
   const rd=(id,need,msg,val,key,lab,u,tol)=>{if(!need())return fb(id+'Fb',false,msg);const v=num($(id).value);if(isNaN(v))return fb(id+'Fb',false,`اكتب قراءتك بوحدة ${u}.`);
@@ -3470,7 +3472,7 @@ function lhLab(box){
     $('r5').textContent=ok.c1?E(fx(Q1(),1)+' J'):'—';$('r6').textContent=ok.c2?E(fx(Q2(),1)+' J'):'—';$('r7').textContent=ok.cH?E(fx(HH(),0)+' J/kg'):'—';
     const all=ok.cH;$('cmpS').textContent=all?['الحرارة الكامنة المحسوبة:',E(`H = ${fx(HH(),0)} J/kg`),'القيمة المرجعية:',E(`H = 336000 J/kg`),'الفرق:',E(`${fx(Math.abs(HH()-HR),0)} J/kg`)].join('\n'):'أكمل الخطوات في 5.1';
     $('cmpN').textContent=all?'الحرارة الكامنة المحسوبة قريبة من القيمة المرجعية، والفرق بسبب تبادل جزء صغير من الحرارة مع الكوب والهواء المحيط.':'';
-    $('rNote').innerHTML=all?'الاستنتاج: يمتص الجليد كمية من الحرارة لينصهر دون أن ترتفع درجة حرارته عن <span dir="ltr">0 °C</span>، وهذه الحرارة تتناسب مع كتلته <span dir="ltr" style="white-space:nowrap">Q = m·H</span>، والحرارة الكامنة لانصهار الجليد نحو <span dir="ltr">336000 J/kg</span>.':'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
+    $('rNote').html=all?'الاستنتاج: يمتص الجليد كمية من الحرارة لينصهر دون أن ترتفع درجة حرارته عن <span dir="ltr">0 °C</span>، وهذه الحرارة تتناسب مع كتلته <span dir="ltr" style="white-space:nowrap">Q = m·H</span>، والحرارة الكامنة لانصهار الجليد نحو <span dir="ltr">336000 J/kg</span>.':'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
   $('aR').oninput=aDraw;$('dR').oninput=dDraw;
   const mk=(id,val,key,lab,k)=>{$(id+'Ck').onclick=()=>{const v=num($(id).value);if(isNaN(v))return fb(id+'Fb',false,'اكتب قراءتك بالجرام.');if(Math.abs(v-val())<0.5){ok[key]=true;fb(id+'Fb',true,'✓ قراءة صحيحة:\n'+E(`${lab} = ${val()} g = ${fx(k(),3)} kg`))}else fb(id+'Fb',false,'✗ اقرأ الرقم الظاهر على شاشة الميزان.');sub();results()}};
   mk('wIn',()=>MW,'w','m_w',KW);mk('iIn',()=>MI,'i','m_ice',KI);
@@ -3651,7 +3653,7 @@ function trLab(box){
     const all=ok.t1&&ok.t2&&ok.t3&&ok.v&&ok.b1&&ok.b2;
     $('cmpS').textContent=all?['التوصيل (الأسرع أجود توصيلا):',E(`${F[0]} s < ${F[1]} s < ${F[2]} s`),'النحاس ثم الألومنيوم ثم الحديد','الإشعاع:',E(`${BK.toFixed(1)} °C > ${SH.toFixed(1)} °C`),'الوجه الأسود يشع أكثر من الوجه اللامع'].join('\n'):'أكمل الخطوات في 5.1';
     $('cmpN').textContent=all?'الوجهان عند درجة الحرارة نفسها لأن الماء الساخن نفسه بداخلهما، لكن الوجه الأسود يصدر إشعاعا حراريا أكبر فيقرؤه المقياس أعلى.':'';
-    $('rNote').innerHTML=all?'الاستنتاج: تنتقل الحرارة بالتوصيل في المواد الصلبة، والنحاس أجود الفلزات الثلاثة توصيلا للحرارة ثم الألومنيوم ثم الحديد، وتنتقل بالحمل في السوائل بحركة المائع الساخن إلى أعلى، وتنتقل بالإشعاع على شكل موجات كهرومغناطيسية، والسطح الأسود يشع أكثر من السطح اللامع.':'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
+    $('rNote').html=all?'الاستنتاج: تنتقل الحرارة بالتوصيل في المواد الصلبة، والنحاس أجود الفلزات الثلاثة توصيلا للحرارة ثم الألومنيوم ثم الحديد، وتنتقل بالحمل في السوائل بحركة المائع الساخن إلى أعلى، وتنتقل بالإشعاع على شكل موجات كهرومغناطيسية، والسطح الأسود يشع أكثر من السطح اللامع.':'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
   $('tR').oninput=cDraw;$('vR').oninput=vDraw;$('lR').oninput=lDraw;
   const nm=['النحاس','الألومنيوم','الحديد'];
   [0,1,2].forEach(i=>{$('t'+(i+1)+'Ck').onclick=()=>{const id='t'+(i+1);if(+$('tR').value<F[i])return fb(id+'Fb',false,'اسحب مؤشر ساعة الإيقاف حتى تسقط الكرة عن قضيب '+nm[i]+' أولا.');const v=num($(id).value);if(isNaN(v))return fb(id+'Fb',false,'اكتب الزمن بالثانية.');
@@ -3861,9 +3863,9 @@ function clLab(box){
     logs();chart();progS()}
   function logs(){const c=(cl,x)=>`<b class="${cl}" dir="ltr">${x}</b>`,row=(n,v)=>`<tr><td>${n}</td><td>${v}</td></tr>`;
     const h='<table>'+[0,1,2].map(i=>row(`<span class="cV">F${SB[i]}</span> عند <span class="cT" dir="ltr">r${SB[i]} = ${RS_[i]} cm</span>`,rec.has(i)?c('cV',FS(i)+' mN'):'—')).join('')+'</table>';
-    $('logA').innerHTML=h;$('logB').innerHTML='<div class="amLog"><h5>📋 سجل القراءات</h5>'+h+'</div>'}
+    $('logA').html=h;$('logB').html='<div class="amLog"><h5>📋 سجل القراءات</h5>'+h+'</div>'}
   function progS(){const L=[[rec.size===3,'القراءات 3/3'],[!!fit,'المنحنى'],[!!ok.cFR,'F₃ / F₁']];
-    $('prog').innerHTML=L.map(([d,t])=>`<span class="${d?'d':''}">${d?'✓ ':''}${t}</span>`).join('<i>←</i>')}
+    $('prog').html=L.map(([d,t])=>`<span class="${d?'d':''}">${d?'✓ ':''}${t}</span>`).join('<i>←</i>')}
   function chart(){const pts=[0,1,2].filter(i=>rec.has(i)).map(i=>[RS_[i],FmN(i),i]);const xm=12,ymax=FmN(2)*1.2||10,ym=Math.ceil(ymax/2)*2,X0=56,Yb=232,W=290,H=196,X=x=>X0+x/xm*W,Y=y=>Yb-y/ym*H;let s='';
     for(let x=0;x<=xm;x+=2)s+=`<line x1="${X(x)}" y1="${Yb}" x2="${X(x)}" y2="${Yb-H}" stroke="var(--line)"/><text x="${X(x)}" y="${Yb+16}" font-size="11" text-anchor="middle" fill="var(--ink)">${x}</text>`;
     for(let k=0;k<=4;k++){const y=ym/4*k;s+=`<line x1="${X0}" y1="${Y(y)}" x2="${X0+W}" y2="${Y(y)}" stroke="var(--line)"/><text x="${X0-6}" y="${Y(y)+4}" font-size="11" text-anchor="end" fill="var(--ink)">${fx(y,1)}</text>`}
@@ -3871,13 +3873,13 @@ function clLab(box){
     s+=`<text x="${X0+W}" y="${Yb+34}" font-size="13" font-weight="700" text-anchor="end" fill="#16A34A">r (cm)</text><text x="${X0+4}" y="${Yb-H-12}" font-size="13" font-weight="700" fill="#DC2626">F (mN)</text>`;
     if(fit){const c=K*Q*Q*1000*1e4;let d='';for(let r=3;r<=xm+1e-9;r+=0.1){const y=c/(r*r);if(y>ym)continue;d+=(d?' L':'M')+X(r).toFixed(1)+' '+Y(y).toFixed(1)}s+=`<path d="${d}" fill="none" stroke="#7C3AED" stroke-width="2.6"/>`}
     pts.forEach(([x,y])=>{s+=`<circle cx="${X(x)}" cy="${Y(y)}" r="5.5" fill="#DC2626" stroke="#fff" stroke-width="2"/><text x="${X(x)+8}" y="${Y(y)-8}" font-size="11" font-weight="700" text-anchor="start" fill="#DC2626" direction="ltr">${fx(y,2)}</text>`});
-    const HC=`<div class="stage"><svg viewBox="0 0 380 280" style="direction:ltr;display:block;width:100%;height:auto" aria-label="منحنى القوة الكهربائية مع المسافة">${s}</svg></div>`;$('clC').innerHTML=HC;if($('clC2'))$('clC2').innerHTML=HC;
-    if($('gCap'))$('gCap').innerHTML=fit?'📉 المنحنى يمر بالنقاط الثلاث ويتناقص: كلما زادت المسافة <bdi dir="ltr">r</bdi> قلت القوة الكهربائية <bdi dir="ltr">F</bdi> بسرعة، لأن القوة تتناسب عكسيا مع مربع المسافة.':'يظهر المنحنى بعد تسجيل القراءات الثلاث.'}
+    const HC=`<div class="stage"><svg viewBox="0 0 380 280" style="direction:ltr;display:block;width:100%;height:auto" aria-label="منحنى القوة الكهربائية مع المسافة">${s}</svg></div>`;$('clC').html=HC;if($('clC2'))$('clC2').html=HC;
+    if($('gCap'))$('gCap').html=fit?'📉 المنحنى يمر بالنقاط الثلاث ويتناقص: كلما زادت المسافة <bdi dir="ltr">r</bdi> قلت القوة الكهربائية <bdi dir="ltr">F</bdi> بسرعة، لأن القوة تتناسب عكسيا مع مربع المسافة.':'يظهر المنحنى بعد تسجيل القراءات الثلاث.'}
   function newObj(){Q=40e-9;NZ=[1,1,1];$('qR').value=0;qDraw();ok={};rec=new Set();fit=false;$('sR').value=0;['dIn','mIn'].forEach(k=>$(k).value='');['recFb','gFb'].forEach(fb0);['FR'].forEach(k=>{$('c'+k).value='';fb0('c'+k+'f')});draw();sub();results()}
-  function sub(){const c=(cl,x)=>`<b class="${cl}">${x}</b>`;$('sbFR').innerHTML=rec.has(2)&&rec.has(0)?'F₃ / F₁\n'+E(`F₃ / F₁ = ${c('cV',FS(2))} / ${c('cV',FS(0))}`):'F₃ / F₁'}
+  function sub(){const c=(cl,x)=>`<b class="${cl}">${x}</b>`;$('sbFR').html=rec.has(2)&&rec.has(0)?'F₃ / F₁\n'+E(`F₃ / F₁ = ${c('cV',FS(2))} / ${c('cV',FS(0))}`):'F₃ / F₁'}
   function results(){[0,1,2].forEach(i=>{$('cf'+i).textContent=rec.has(i)?E(FS(i)+' mN'):'—'});
     $('r4').textContent=ok.cFR?E(`${fx(RAT(),2)} ≈ 4`):'—';
-    $('rNote').innerHTML=fit&&ok.cFR?'الاستنتاج: منحنى القوة مع المسافة متناقص، فكلما قلت المسافة <span dir="ltr">r</span> زادت القوة الكهربائية <span dir="ltr">F</span>. وعند مضاعفة المسافة من <span dir="ltr">4 cm</span> إلى <span dir="ltr">8 cm</span> قلت القوة إلى الربع تقريبا، فالقوة الكهربائية تتناسب عكسيا مع مربع المسافة <span dir="ltr" style="white-space:nowrap">F ∝ 1/r²</span> كما في قانون كولوم.':'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.';
+    $('rNote').html=fit&&ok.cFR?'الاستنتاج: منحنى القوة مع المسافة متناقص، فكلما قلت المسافة <span dir="ltr">r</span> زادت القوة الكهربائية <span dir="ltr">F</span>. وعند مضاعفة المسافة من <span dir="ltr">4 cm</span> إلى <span dir="ltr">8 cm</span> قلت القوة إلى الربع تقريبا، فالقوة الكهربائية تتناسب عكسيا مع مربع المسافة <span dir="ltr" style="white-space:nowrap">F ∝ 1/r²</span> كما في قانون كولوم.':'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.';
     logs();chart();progS()}
   $('sR').oninput=()=>{draw();qDraw()};$('qR').oninput=()=>{qDraw();draw()};
   $('recB').onclick=()=>{const f='recFb',r=rNow(),i=RS_.indexOf(r);if(!QD())return fb(f,false,'اشحن الكرتين أولا في الخطوة (أ).');if(i<0)return fb(f,false,'أوقف الكرة المنزلقة عند 8.0 أو 6.0 أو 4.0 cm أولا.');if(rec.has(i))return fb(f,false,'سجلت هذه القراءة، قرب الكرة إلى المسافة التالية.');
@@ -4072,9 +4074,9 @@ function efLab(box){
     logs();chart();progS()}
   function logs(){const c=(cl,x)=>`<b class="${cl}" dir="ltr">${x}</b>`,row=(n,v)=>`<tr><td>${n}</td><td>${v}</td></tr>`;
     const h='<table>'+[0,1,2].map(i=>row(`<span class="cV">E${SB[i]}</span> عند <span class="cT" dir="ltr">r${SB[i]} = ${RS_[i]} cm</span>`,rec.has(i)?c('cV',Ei(i)+' N/C'):'—')).join('')+'</table>';
-    $('logA').innerHTML=h;$('logB').innerHTML='<div class="amLog"><h5>📋 سجل القراءات</h5>'+h+'</div>'}
+    $('logA').html=h;$('logB').html='<div class="amLog"><h5>📋 سجل القراءات</h5>'+h+'</div>'}
   function progS(){const L=[[rec.size===3,'القراءات 3/3'],[!!fit,'الرسم'],[!!ok.cER,'E₃ / E₁']];
-    $('prog').innerHTML=L.map(([d,t])=>`<span class="${d?'d':''}">${d?'✓ ':''}${t}</span>`).join('<i>←</i>')}
+    $('prog').html=L.map(([d,t])=>`<span class="${d?'d':''}">${d?'✓ ':''}${t}</span>`).join('<i>←</i>')}
   function chart(){const pts=[0,1,2].filter(i=>rec.has(i)).map(i=>[RS_[i],Ei(i)]);const xm=24,ym=Math.ceil(Ei(2)*1.15/4000)*4000||4000,X0=56,Yb=232,W=290,H=196,X=x=>X0+x/xm*W,Y=y=>Yb-y/ym*H;let s='';
     for(let x=0;x<=xm;x+=4)s+=`<line x1="${X(x)}" y1="${Yb}" x2="${X(x)}" y2="${Yb-H}" stroke="var(--line)"/><text x="${X(x)}" y="${Yb+16}" font-size="11" text-anchor="middle" fill="var(--ink)">${x}</text>`;
     for(let k=0;k<=4;k++){const y=ym/4*k;s+=`<line x1="${X0}" y1="${Y(y)}" x2="${X0+W}" y2="${Y(y)}" stroke="var(--line)"/><text x="${X0-6}" y="${Y(y)+4}" font-size="11" text-anchor="end" fill="var(--ink)">${fx(y,0)}</text>`}
@@ -4082,13 +4084,13 @@ function efLab(box){
     s+=`<text x="${X0+W}" y="${Yb+34}" font-size="13" font-weight="700" text-anchor="end" fill="#16A34A">r (cm)</text><text x="${X0+4}" y="${Yb-H-12}" font-size="13" font-weight="700" fill="#DC2626">E (N/C)</text>`;
     if(fit){const f=r=>K*Q/(r/100)**2;let r0=Math.sqrt(K*Q/ym)*100;r0=Math.max(r0,4);const P=[];for(let r=r0;r<=xm+0.001;r+=0.25)P.push(X(r).toFixed(1)+','+Y(f(r)).toFixed(1));s+=`<polyline points="${P.join(' ')}" fill="none" stroke="#7C3AED" stroke-width="2.6"/>`}
     pts.forEach(([x,y])=>{s+=`<circle cx="${X(x)}" cy="${Y(y)}" r="5.5" fill="#DC2626" stroke="#fff" stroke-width="2"/><text x="${X(x)+8}" y="${Y(y)-8}" font-size="11" font-weight="700" text-anchor="start" fill="#DC2626" direction="ltr">${y}</text>`});
-    $('efC').innerHTML=`<div class="stage"><svg viewBox="0 0 380 280" style="direction:ltr;display:block;width:100%;height:auto" aria-label="شدة المجال مع المسافة">${s}</svg></div>`;if($('efC2'))$('efC2').innerHTML=$('efC').innerHTML;if($('gCap'))$('gCap').innerHTML=fit?'المنحنى يمر بالنقاط الثلاث وهو متناقص: كلما زادت المسافة <bdi dir="ltr">r</bdi> قلت شدة المجال <bdi dir="ltr">E</bdi>، فالعلاقة بينهما عكسية.':'يظهر الرسم بعد تسجيل القراءات الثلاث.'}
+    $('efC').html=`<div class="stage"><svg viewBox="0 0 380 280" style="direction:ltr;display:block;width:100%;height:auto" aria-label="شدة المجال مع المسافة">${s}</svg></div>`;if($('efC2'))$('efC2').html=$('efC').innerHTML;if($('gCap'))$('gCap').html=fit?'المنحنى يمر بالنقاط الثلاث وهو متناقص: كلما زادت المسافة <bdi dir="ltr">r</bdi> قلت شدة المجال <bdi dir="ltr">E</bdi>، فالعلاقة بينهما عكسية.':'يظهر الرسم بعد تسجيل القراءات الثلاث.'}
   function newObj(){Q=10e-9;NZ=[1,1,1];$('qR').value=0;qDraw();ok={};rec=new Set();fit=false;$('sR').value=0;['dIn','mIn'].forEach(k=>$(k).value='');['recFb','gFb'].forEach(fb0);['ER'].forEach(k=>{$('c'+k).value='';fb0('c'+k+'f')});draw();sub();results()}
   function sub(){const c=(cl,x)=>`<b class="${cl}">${x}</b>`;
-    $('sbER').innerHTML=rec.has(2)&&rec.has(0)?'E₃ / E₁\n'+E(`E₃ / E₁ = ${c('cV',Ei(2))} / ${c('cV',Ei(0))}`):'E₃ / E₁'}
+    $('sbER').html=rec.has(2)&&rec.has(0)?'E₃ / E₁\n'+E(`E₃ / E₁ = ${c('cV',Ei(2))} / ${c('cV',Ei(0))}`):'E₃ / E₁'}
   function results(){[0,1,2].forEach(i=>$('er'+i).textContent=rec.has(i)?E(Ei(i)+' N/C'):'—');
     $('er4').textContent=ok.cER?E(`${fx(RAT(),2)} ≈ 4`):'—';
-    $('eNote').innerHTML=ok.cER&&fit?'الاستنتاج: كلما زادت المسافة <span dir="ltr">r</span> عن الشحنة قلت شدة المجال <span dir="ltr">E</span>، فالعلاقة بين شدة المجال والمسافة <b>عكسية</b>. وعندما صارت المسافة النصف (من <span dir="ltr">20 cm</span> إلى <span dir="ltr">10 cm</span>) زادت شدة المجال <span dir="ltr">'+fx(RAT(),2)+'</span> مرة، أي أربع مرات تقريبا.':'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.';
+    $('eNote').html=ok.cER&&fit?'الاستنتاج: كلما زادت المسافة <span dir="ltr">r</span> عن الشحنة قلت شدة المجال <span dir="ltr">E</span>، فالعلاقة بين شدة المجال والمسافة <b>عكسية</b>. وعندما صارت المسافة النصف (من <span dir="ltr">20 cm</span> إلى <span dir="ltr">10 cm</span>) زادت شدة المجال <span dir="ltr">'+fx(RAT(),2)+'</span> مرة، أي أربع مرات تقريبا.':'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.';
     logs();chart();progS()}
   $('sR').oninput=()=>{draw();qDraw()};$('qR').oninput=()=>{qDraw();draw()};
   $('recB').onclick=()=>{const f='recFb',r=rNow(),i=RS_.indexOf(r);if(!QD())return fb(f,false,'اشحن الكرة أولا في الخطوة (أ).');if(i<0)return fb(f,false,'أوقف مقياس المجال عند 20.0 أو 15.0 أو 10.0 cm أولا.');if(rec.has(i))return fb(f,false,'سجلت هذه القراءة، حرك المقياس إلى المسافة التالية.');
@@ -4389,16 +4391,16 @@ function pdLab(box){
     logs();graph();progS()}
   function logs(){const c=(cl,x)=>`<b class="${cl}" dir="ltr">${x}</b>`,row=(n,v)=>`<tr><td>${n}</td><td>${v}</td></tr>`;
     const h='<table>'+SL.map((s,i)=>row(`<span class="cV">${s.n}</span> ${s.t}`,rec.has(i)?c('cV',fx(Vs(i),2)+' V'):'—')).join('')+'</table>';
-    $('logA').innerHTML=h;$('logB').innerHTML='<div class="amLog"><h5>📋 سجل القراءات</h5>'+h+'</div>'}
+    $('logA').html=h;$('logB').html='<div class="amLog"><h5>📋 سجل القراءات</h5>'+h+'</div>'}
   function graph(){const X=d=>50+d*32,Y=v=>196-v/12*170;let s=`<line x1="50" y1="196" x2="380" y2="196" stroke="var(--ink)" stroke-width="1.5"/><line x1="50" y1="196" x2="50" y2="18" stroke="var(--ink)" stroke-width="1.5"/>`;
     for(let d=0;d<=10;d+=2)s+=`<line x1="${X(d)}" y1="196" x2="${X(d)}" y2="200" stroke="var(--ink)"/><text x="${X(d)}" y="212" font-size="11" text-anchor="middle" fill="var(--ink)" direction="ltr">${d}</text>`;
     for(let v=0;v<=12;v+=3)s+=`<line x1="46" y1="${Y(v)}" x2="50" y2="${Y(v)}" stroke="var(--ink)"/><text x="42" y="${Y(v)+4}" font-size="11" text-anchor="end" fill="var(--ink)" direction="ltr">${v}</text>`;
     s+=`<text x="380" y="226" font-size="11.5" font-weight="700" text-anchor="end" fill="#16A34A" direction="ltr">d (cm)</text><text x="54" y="14" font-size="11.5" font-weight="700" fill="#DC2626" direction="ltr">V (V)</text>`;
     if(fit){const m=Vs(2)/6;s+=`<line x1="${X(0)}" y1="${Y(0)}" x2="${X(10)}" y2="${Y(m*10)}" stroke="#7C3AED" stroke-width="2.2"/>`}
     [0,1,2].forEach(i=>{if(rec.has(i))s+=`<circle cx="${X(SL[i].d)}" cy="${Y(Vs(i))}" r="5" fill="#DC2626" stroke="#fff"/><text x="${X(SL[i].d)-8}" y="${Y(Vs(i))-8}" font-size="10.5" font-weight="800" text-anchor="end" fill="#DC2626" direction="ltr">${fx(Vs(i),2)}</text>`});
-    $('gS').innerHTML=s;if($('gS2'))$('gS2').innerHTML=rec.size?`<svg viewBox="0 0 400 230" style="direction:ltr;display:block;width:100%;height:auto">${s}</svg>`:'';if($('gCap'))$('gCap').innerHTML=fit?'📈 النقاط على خط مستقيم يمر بنقطة الأصل: الجهد يتناسب طرديا مع المسافة، وميل الخط هو شدة المجال <bdi dir="ltr">E</bdi>.':'يظهر الرسم بعد تسجيل قراءات الخط الأوسط الثلاث.'}
+    $('gS').innerHTML=s;if($('gS2'))$('gS2').innerHTML=rec.size?`<svg viewBox="0 0 400 230" style="direction:ltr;display:block;width:100%;height:auto">${s}</svg>`:'';if($('gCap'))$('gCap').html=fit?'📈 النقاط على خط مستقيم يمر بنقطة الأصل: الجهد يتناسب طرديا مع المسافة، وميل الخط هو شدة المجال <bdi dir="ltr">E</bdi>.':'يظهر الرسم بعد تسجيل قراءات الخط الأوسط الثلاث.'}
   function progS(){const L=[[+$('nR').value>=100,'ضبط المصدر'],[setOk(),'إعداد الجهاز'],[[0,1,2].every(i=>rec.has(i)),'الخط الأوسط 3/3'],[rec.has(3)&&rec.has(4),'تساوي الجهد 2/2'],[!!fit,'الرسم'],[!!(ok.cP1&&ok.cP3),'E = V / d'],[!!ok.cPE,'E = ΔV / d']];
-    $('prog').innerHTML=L.map(([d,t])=>`<span class="${d?'d':''}">${d?'✓ ':''}${t}</span>`).join('<i>←</i>')}
+    $('prog').html=L.map(([d,t])=>`<span class="${d?'d':''}">${d?'✓ ':''}${t}</span>`).join('<i>←</i>')}
   const KS=['P1','P3','PV','PE'];
   function newObj(){V0=VSS[Math.floor(Math.random()*VSS.length)];NZ={2:0.99+Math.random()*0.02,4:0.99+Math.random()*0.02,6:0.99+Math.random()*0.02};
     ok={};cfg={};rec=new Set();fit=false;$('nR').value=0;['dIn','vIn'].forEach(k=>$(k).value='');['vFb','recFb','gFb'].forEach(fb0);KS.forEach(k=>{$('c'+k).value='';fb0('c'+k+'f')});
@@ -4406,12 +4408,12 @@ function pdLab(box){
   function sub(){const c=(cl,x)=>`<b class="${cl}">${x}</b>`;
     $('sbP1').innerHTML=rec.has(0)?'E₁ = V₁ / d₁\n'+E(`E₁ = ${c('cV',fx(Vs(0),2))} / ${c('cT','0.02')}`):'E₁ = V₁ / d₁';
     $('sbP3').innerHTML=rec.has(2)?'E₃ = V₃ / d₃\n'+E(`E₃ = ${c('cV',fx(Vs(2),2))} / ${c('cT','0.06')}`):'E₃ = V₃ / d₃';
-    $('sbPV').innerHTML=rec.has(0)&&rec.has(2)?'ΔV = V₃ − V₁\n'+E(`ΔV = ${c('cV',fx(Vs(2),2))} − ${c('cV',fx(Vs(0),2))}`):'ΔV = V₃ − V₁';
-    $('sbPE').innerHTML=ok.cPV?'E = ΔV / (d₃ − d₁)\n'+E(`E = ${c('cV',fx(DV(),2))} / (${c('cT','0.06')} − ${c('cT','0.02')})`):'E = ΔV / (d₃ − d₁)'}
+    $('sbPV').html=rec.has(0)&&rec.has(2)?'ΔV = V₃ − V₁\n'+E(`ΔV = ${c('cV',fx(Vs(2),2))} − ${c('cV',fx(Vs(0),2))}`):'ΔV = V₃ − V₁';
+    $('sbPE').html=ok.cPV?'E = ΔV / (d₃ − d₁)\n'+E(`E = ${c('cV',fx(DV(),2))} / (${c('cT','0.06')} − ${c('cT','0.02')})`):'E = ΔV / (d₃ − d₁)'}
   function results(){$('pr1').innerHTML=[0,1,2].every(i=>rec.has(i))?[0,1,2].map(i=>E(fx(Vs(i),2)+' V')).join('<br>'):'—';
     $('pr2').innerHTML=rec.has(3)&&rec.has(4)?[3,4].map(i=>E(fx(Vs(i),2)+' V')).join('<br>'):'—';
     $('pr3').innerHTML=ok.cP1&&ok.cP3?E(fx(E1(),1)+' N/C')+'<br>'+E(fx(E3(),1)+' N/C'):'—';$('pr4').textContent=ok.cPV?E(fx(DV(),2)+' V'):'—';$('pr5').textContent=ok.cPE?E(fx(EE(),1)+' N/C'):'—';
-    $('pNote').innerHTML=ok.cP1&&ok.cP3&&ok.cPE&&rec.has(3)&&rec.has(4)&&fit?`الاستنتاج: يزيد الجهد بانتظام مع المسافة عن القطب السالب، فالرسم خط مستقيم يمر بنقطة الأصل، وميله هو شدة المجال. وشدة المجال متساوية تقريبا عند كل النقاط (<span dir="ltr">${fx(E1(),0)}</span> و <span dir="ltr">${fx(E3(),0)}</span> و <span dir="ltr">${fx(EE(),0)} N/C</span>)، فالمجال بين القطبين <b>مجال منتظم</b>. والجهد ثابت على الخط الموازي للقطبين (<span dir="ltr">${fx(Vs(1),2)} V</span>)، فهو <b>خط تساوي جهد</b> عمودي على خطوط المجال.`:'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.';
+    $('pNote').html=ok.cP1&&ok.cP3&&ok.cPE&&rec.has(3)&&rec.has(4)&&fit?`الاستنتاج: يزيد الجهد بانتظام مع المسافة عن القطب السالب، فالرسم خط مستقيم يمر بنقطة الأصل، وميله هو شدة المجال. وشدة المجال متساوية تقريبا عند كل النقاط (<span dir="ltr">${fx(E1(),0)}</span> و <span dir="ltr">${fx(E3(),0)}</span> و <span dir="ltr">${fx(EE(),0)} N/C</span>)، فالمجال بين القطبين <b>مجال منتظم</b>. والجهد ثابت على الخط الموازي للقطبين (<span dir="ltr">${fx(Vs(1),2)} V</span>)، فهو <b>خط تساوي جهد</b> عمودي على خطوط المجال.`:'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.';
     logs();graph();progS()}
   function pick(k,v){cfg[k]=v;const bad=['mode','port'].map(kk=>cfg[kk]&&cfg[kk]!==good[kk]?MSG[kk][cfg[kk]]:null).filter(Boolean);
     if(bad.length)fb('vFb',false,bad.join('\n'));else if(setOk())fb('vFb',true,'✓ إعداد صحيح: وضع DC V بمدى 20 V، والمجس الأحمر في المنفذ V والأسود في COM. ضع المجس الأحمر على الورقة أدناه.');else fb0('vFb');
@@ -4590,14 +4592,14 @@ function capLab(box){
     $('kSt').textContent='';$('kSt').style.display='none';logs();chart();progS()}
   function logs(){const c=(cl,x)=>`<b class="${cl}" dir="ltr">${x}</b>`,row=(n,v)=>`<tr><td>${n}</td><td>${v}</td></tr>`;
     const h='<table>'+[2,1,0].map(i=>row(`<span class="cV">C${SB[i]}</span> عند <span class="cT" dir="ltr">d${SB[i]} = ${DX[i]} mm</span>`,rec.has(i)?c('cV',CM(i).toFixed(1)+' pF'):'—')).join('')+'</table>';
-    $('logA').innerHTML=h;$('logB').innerHTML='<div class="amLog"><h5>📋 سجل القراءات</h5>'+h+'</div>'}
+    $('logA').html=h;$('logB').html='<div class="amLog"><h5>📋 سجل القراءات</h5>'+h+'</div>'}
   function progS(){const L=[[rec.size===3,'القراءات 3/3'],[!!fit,'الرسم'],[[0,1,2].every(i=>ok['cT'+i]),'C من القانون 3/3'],[!!ok.cEP,'ε₀ من القياس']];
-    $('prog').innerHTML=L.map(([d,t])=>`<span class="${d?'d':''}">${d?'✓ ':''}${t}</span>`).join('<i>←</i>')}
+    $('prog').html=L.map(([d,t])=>`<span class="${d?'d':''}">${d?'✓ ':''}${t}</span>`).join('<i>←</i>')}
   function newObj(){NZ=[0,0,0].map(()=>0.99+Math.random()*0.02);ok={};rec=new Set();fit=false;$('kR').value=0;['dIn','cIn'].forEach(k=>$(k).value='');['recFb','gFb'].forEach(fb0);
     ['T0','T1','T2','EP'].forEach(k=>{$('c'+k).value='';fb0('c'+k+'f')});draw();sub();results()}
   function sub(){const c=(cl,x)=>`<b class="${cl}">${x}</b>`;
     DX.forEach((d,i)=>{const n=SB[i];$('sbT'+i).innerHTML=rec.has(i)?'C'+n+' = ε₀·A / d'+n+'\n'+E(`C${n} = (${c('cQ','8.85 × 10⁻¹²')}) × ${c('cQ','0.08')} / ${c('cT',fx(d/1000,3))}`):'C'+n+' = ε₀·A / d'+n});
-    $('sbEP').innerHTML=rec.has(1)?'ε₀ = C₂·d₂ / A\n'+E(`ε₀ = (${c('cV',CM(1).toFixed(1))} × 10⁻¹²) × ${c('cT','0.004')} / ${c('cQ','0.08')}`):'ε₀ = C₂·d₂ / A'}
+    $('sbEP').html=rec.has(1)?'ε₀ = C₂·d₂ / A\n'+E(`ε₀ = (${c('cV',CM(1).toFixed(1))} × 10⁻¹²) × ${c('cT','0.004')} / ${c('cQ','0.08')}`):'ε₀ = C₂·d₂ / A'}
   function chart(){const pts=[0,1,2].filter(i=>rec.has(i)).map(i=>[1000/DX[i],CM(i),i]);
     const xm=600,ym=Math.ceil(TH(0)/100+0.5)*100,X0=56,Yb=232,W=290,H=196,X=x=>X0+x/xm*W,Y=y=>Yb-y/ym*H;let s='';
     for(let x=0;x<=xm;x+=100)s+=`<line x1="${X(x)}" y1="${Yb}" x2="${X(x)}" y2="${Yb-H}" stroke="var(--line)"/><text x="${X(x)}" y="${Yb+16}" font-size="11" text-anchor="middle" fill="var(--ink)">${x}</text>`;
@@ -4606,11 +4608,11 @@ function capLab(box){
     s+=`<text x="${X0+W}" y="${Yb+34}" font-size="13" font-weight="700" text-anchor="end" fill="#16A34A">1/d (1/m)</text><text x="${X0+4}" y="${Yb-H-12}" font-size="13" font-weight="700" fill="#DC2626">C (pF)</text>`;
     if(fit){const sl=E0*A*1e12;s+=`<line x1="${X(0)}" y1="${Y(0)}" x2="${X(xm)}" y2="${Y(sl*xm)}" stroke="#7C3AED" stroke-width="2.6"/>`}
     pts.forEach(([x,y,i])=>{s+=`<circle cx="${X(x)}" cy="${Y(y)}" r="5.5" fill="#DC2626" stroke="#fff" stroke-width="2"/><text x="${X(x)-8}" y="${Y(y)-8}" font-size="11" font-weight="700" text-anchor="end" fill="#DC2626" direction="ltr">${y.toFixed(1)}</text>`});
-    $('kC').innerHTML=`<div class="stage"><svg viewBox="0 0 380 280" style="direction:ltr;display:block;width:100%;height:auto" aria-label="السعة مع مقلوب المسافة">${s}</svg></div>`;if($('kC2'))$('kC2').innerHTML=rec.size?$('kC').innerHTML:'';
-    if($('gCap'))$('gCap').innerHTML=fit?'📈 النقاط على خط مستقيم يمر بنقطة الأصل: السعة تتناسب طرديا مع <bdi dir="ltr">1/d</bdi>، أي عكسيا مع المسافة <bdi dir="ltr">d</bdi>.':'يظهر الرسم بعد تسجيل القراءات الثلاث.'}
+    $('kC').html=`<div class="stage"><svg viewBox="0 0 380 280" style="direction:ltr;display:block;width:100%;height:auto" aria-label="السعة مع مقلوب المسافة">${s}</svg></div>`;if($('kC2'))$('kC2').html=rec.size?$('kC').innerHTML:'';
+    if($('gCap'))$('gCap').html=fit?'📈 النقاط على خط مستقيم يمر بنقطة الأصل: السعة تتناسب طرديا مع <bdi dir="ltr">1/d</bdi>، أي عكسيا مع المسافة <bdi dir="ltr">d</bdi>.':'يظهر الرسم بعد تسجيل القراءات الثلاث.'}
   function results(){[0,1,2].forEach(i=>{$('kq'+i).textContent=rec.has(i)?E(CM(i).toFixed(1)+' pF'):'—';$('kl'+i).textContent=ok['cT'+i]?E(fx(TH(i),1)+' pF'):'—'});
     $('kE').textContent=ok.cEP?E(sciS(EPm())+' F/m'):'—';
-    $('kNote').innerHTML=ok.cT0&&ok.cT1&&ok.cT2&&ok.cEP&&fit?`الاستنتاج: السعة المحسوبة من القانون عند كل مسافة قريبة من قراءة الجهاز، ونقاط السعة مع <span dir="ltr">1/d</span> على خط مستقيم يمر بنقطة الأصل، فسعة المكثف تتناسب عكسيا مع المسافة بين اللوحين <span dir="ltr" style="white-space:nowrap">C = ε₀·A / d</span>. والقيمة التجريبية <span dir="ltr">ε₀ = ${sciS(EPm())} F/m</span> قريبة من القيمة المعروفة <span dir="ltr">8.85 × 10⁻¹² F/m</span>.`:'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.';
+    $('kNote').html=ok.cT0&&ok.cT1&&ok.cT2&&ok.cEP&&fit?`الاستنتاج: السعة المحسوبة من القانون عند كل مسافة قريبة من قراءة الجهاز، ونقاط السعة مع <span dir="ltr">1/d</span> على خط مستقيم يمر بنقطة الأصل، فسعة المكثف تتناسب عكسيا مع المسافة بين اللوحين <span dir="ltr" style="white-space:nowrap">C = ε₀·A / d</span>. والقيمة التجريبية <span dir="ltr">ε₀ = ${sciS(EPm())} F/m</span> قريبة من القيمة المعروفة <span dir="ltr">8.85 × 10⁻¹² F/m</span>.`:'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.';
     logs();chart();progS()}
   $('kR').oninput=draw;
   $('recB').onclick=()=>{const f='recFb',d=dNow(),i=DX.indexOf(d);if(i<0)return fb(f,false,'أوقف اللوح المتحرك عند 6.0 أو 4.0 أو 2.0 mm أولا.');if(rec.has(i))return fb(f,false,'سجلت هذه القراءة، حرك اللوح إلى المسافة التالية.');
@@ -4952,9 +4954,9 @@ function parLab(box){
     logs();progS()}
   function logs(){const c=(cl,x)=>`<b class="${cl}" dir="ltr">${x}</b>`,row=(n,v)=>`<tr><td>${n}</td><td>${v}</td></tr>`;
     const h='<table>'+[0,1,2].map(i=>row(`<span class="cV">V${SB[i]}</span> على C${SB[i]} = <b class="cQ" dir="ltr">${CV[i]} µF</b>`,rec.has(i)?c('cV',fx(Vm,2)+' V'):'—')).join('')+'</table>';
-    $('logA').innerHTML=h;$('logB').innerHTML='<div class="amLog"><h5>📋 سجل القراءات</h5>'+h+'</div>'}
+    $('logA').html=h;$('logB').html='<div class="amLog"><h5>📋 سجل القراءات</h5>'+h+'</div>'}
   function progS(){const L=[[+$('nR').value>=100,'ضبط المصدر'],[setOk(),'إعداد الجهاز'],[rec.size===3,'الجهد 3/3'],[[0,1,2].every(i=>ok['cQ'+i]),'الشحنات 3/3'],[!!ok.cQT,'الشحنة الكلية'],[!!ok.cCM,'C من القياس'],[!!ok.cCE,'C من القانون']];
-    $('prog').innerHTML=L.map(([d,t])=>`<span class="${d?'d':''}">${d?'✓ ':''}${t}</span>`).join('<i>←</i>')}
+    $('prog').html=L.map(([d,t])=>`<span class="${d?'d':''}">${d?'✓ ':''}${t}</span>`).join('<i>←</i>')}
   const KS=['Q0','Q1','Q2','QT','CM','CE'];
   function newObj(){const pool=POOL.slice();CV=[];for(let k=0;k<3;k++)CV.push(pool.splice(Math.floor(Math.random()*pool.length),1)[0]);CV.sort((a,b)=>a-b);
     VS=VSS[Math.floor(Math.random()*VSS.length)];Vm=Math.round(VS*(0.995+Math.random()*0.004)*100)/100;
@@ -4965,14 +4967,14 @@ function parLab(box){
   function sub(){const c=(cl,x)=>`<b class="${cl}">${x}</b>`;
     [0,1,2].forEach(i=>{const n=SB[i];$('sbQ'+i).innerHTML=rec.has(i)?`q${n} = C${n}·V${n}\n`+E(`q${n} = (${c('cQ',CV[i])} × 10⁻⁶) × ${c('cV',fx(Vm,2))}`):`q${n} = C${n}·V${n}`});
     const qq=i=>c('cT',sciS(qC(i)));
-    $('sbQT').innerHTML=[0,1,2].every(i=>ok['cQ'+i])?'q = q₁ + q₂ + q₃\n'+E(`q = ${qq(0)} + ${qq(1)} + ${qq(2)}`):'q = q₁ + q₂ + q₃';
-    $('sbCM').innerHTML=ok.cQT?'C = q / V\n'+E(`C = ${c('cT',sciS(qTC()))} / ${c('cV',fx(Vm,2))}`):'C = q / V';
-    $('sbCE').innerHTML='C = C₁ + C₂ + C₃\n'+E(`C = (${c('cQ',CV[0])} + ${c('cQ',CV[1])} + ${c('cQ',CV[2])}) × 10⁻⁶`)}
+    $('sbQT').html=[0,1,2].every(i=>ok['cQ'+i])?'q = q₁ + q₂ + q₃\n'+E(`q = ${qq(0)} + ${qq(1)} + ${qq(2)}`):'q = q₁ + q₂ + q₃';
+    $('sbCM').html=ok.cQT?'C = q / V\n'+E(`C = ${c('cT',sciS(qTC()))} / ${c('cV',fx(Vm,2))}`):'C = q / V';
+    $('sbCE').html='C = C₁ + C₂ + C₃\n'+E(`C = (${c('cQ',CV[0])} + ${c('cQ',CV[1])} + ${c('cQ',CV[2])}) × 10⁻⁶`)}
   function results(){const all=rec.size===3;
     $('r1').innerHTML=all?[0,1,2].map(()=>E(fx(Vm,2)+' V')).join('<br>'):'—';
     $('r2').innerHTML=[0,1,2].every(i=>ok['cQ'+i])?[0,1,2].map(i=>E(sciS(qC(i))+' C')).join('<br>'):'—';
     $('r3').textContent=ok.cQT?E(sciS(qTC())+' C'):'—';$('r4').textContent=ok.cCM?E(sciS(CmF())+' F'):'—';$('r5').textContent=ok.cCE?E(sciS(CsF())+' F'):'—';
-    $('rNote').innerHTML=ok.cQT&&ok.cCM&&ok.cCE?`الاستنتاج: الجهد على المكثفات الثلاثة واحد (<span dir="ltr">${fx(Vm,2)} V</span>) ويساوي جهد المصدر تقريبا، لأن طرفي كل مكثف على الخطين نفسيهما. واختلفت الشحنة، فأخذ المكثف الأكبر سعة الشحنة الأكبر، والشحنة الكلية مجموع الشحنات. والسعة المكافئة من القياس <span dir="ltr">${sciS(CmF())} F</span> تساوي مجموع السعات <span dir="ltr">${sciS(CsF())} F = ${cs()} µF</span>، وهي <b>أكبر من أكبر سعة</b>.`:'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.';
+    $('rNote').html=ok.cQT&&ok.cCM&&ok.cCE?`الاستنتاج: الجهد على المكثفات الثلاثة واحد (<span dir="ltr">${fx(Vm,2)} V</span>) ويساوي جهد المصدر تقريبا، لأن طرفي كل مكثف على الخطين نفسيهما. واختلفت الشحنة، فأخذ المكثف الأكبر سعة الشحنة الأكبر، والشحنة الكلية مجموع الشحنات. والسعة المكافئة من القياس <span dir="ltr">${sciS(CmF())} F</span> تساوي مجموع السعات <span dir="ltr">${sciS(CsF())} F = ${cs()} µF</span>، وهي <b>أكبر من أكبر سعة</b>.`:'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.';
     logs();progS()}
   function pick(k,v){cfg[k]=v;const bad=['mode','port'].map(kk=>cfg[kk]&&cfg[kk]!==good[kk]?MSG[kk][cfg[kk]]:null).filter(Boolean);
     if(bad.length)fb('vFb',false,bad.join('\n'));else if(setOk())fb('vFb',true,'✓ إعداد صحيح: وضع DC V بمدى 20 V، والمجس الأحمر في المنفذ V والأسود في COM. ضع المجسين في الدائرة أدناه.');else fb0('vFb');
@@ -5544,18 +5546,18 @@ function amLab(box){
     return '<table>'+row('<span class="cV">الجهد V</span> (الملتيميتر DC V)',ok.v?c('cV',fx(V,2)+' V'):'—')+row('<span class="cI">شدة التيار I</span> (الملتيميتر DC A)',ok.i?c('cI',fx(I,3)+' A'):'—')
       +row('عكس الأقطاب',ok.rv?c('cI','−'+fx(I,3)+' A')+' ثم عادت موجبة':'—')+row('<span class="cT">الزمن t</span> (ساعة الإيقاف)',ok.t?c('cT',T+' s'):'—')+'</table>'}
   function prog(){const L=[['v','الجهد'],['i','التيار'],['rv','عكس الأقطاب'],['t','الزمن'],['cQ','الشحنة'],['cN','عدد الإلكترونات']];
-    $('prog').innerHTML=L.map(([k,t])=>`<span class="${ok[k]?'d':''}">${ok[k]?'✓ ':''}${t}</span>`).join('<i>←</i>')}
+    $('prog').html=L.map(([k,t])=>`<span class="${ok[k]?'d':''}">${ok[k]?'✓ ':''}${t}</span>`).join('<i>←</i>')}
   function toV(){$('wTv').appendChild(card);W.phase('v');W.mode(setOk('v')?'v':'')}
   function newObj(){V=0.2*Math.round(15+Math.random()*30);I=0.002*Math.round(100+Math.random()*350);T=5*Math.round(6+Math.random()*18);ok={};rev=false;cfg={v:{},a:{}};st={ph:'v',ok:false,neg:false};
     ['sR','tR'].forEach(k=>$(k).value=0);['vIn','iIn','tIn','cQ','cN'].forEach(k=>$(k).value='');['vFb','aFb','rvFb','vInFb','iInFb','tInFb','cQf','cNf'].forEach(fb0);
     $('rvB').textContent='🔁 اعكس أقطاب المصدر';toV();faces();draw();tDraw();sub();results()}
   function tDraw(){const p=+$('tR').value/100;$('tRO').textContent=p>=1?'توقفت':p>0?'تعمل…':'';$('tS').svgHTML=amWatch(T*p,p>0&&p<1,true)}
   function sub(){const c=(cl,x)=>`<b class="${cl}">${x}</b>`;
-    $('sbQ').innerHTML=ok.i&&ok.t?'q = I × t\n'+E(`q = ${c('cI',fx(I,3))} × ${c('cT',T)}`):'q = I × t';
-    $('sbN').innerHTML=ok.cQ?'n = q / e\n'+E(`n = ${c('cQ',fx(Q(),2))} / (1.6 × 10⁻¹⁹)`):'n = q / e'}
-  function results(){const lg=logH();$('logA').innerHTML=lg;$('logB').innerHTML='<div class="amLog"><h5>📋 سجل القراءات</h5>'+lg+'</div>';prog();$('r1').textContent=ok.v?E(fx(V,2)+' V'):'—';$('r2').textContent=ok.i?E(fx(I,3)+' A'):'—';
+    $('sbQ').html=ok.i&&ok.t?'q = I × t\n'+E(`q = ${c('cI',fx(I,3))} × ${c('cT',T)}`):'q = I × t';
+    $('sbN').html=ok.cQ?'n = q / e\n'+E(`n = ${c('cQ',fx(Q(),2))} / (1.6 × 10⁻¹⁹)`):'n = q / e'}
+  function results(){const lg=logH();$('logA').html=lg;$('logB').html='<div class="amLog"><h5>📋 سجل القراءات</h5>'+lg+'</div>';prog();$('r1').textContent=ok.v?E(fx(V,2)+' V'):'—';$('r2').textContent=ok.i?E(fx(I,3)+' A'):'—';
     $('r3').textContent=ok.rv?'قراءة بإشارة سالبة':'—';$('r4').textContent=ok.t?E(T+' s'):'—';$('r5').textContent=ok.cQ?E(fx(Q(),2)+' C'):'—';$('r6').textContent=ok.cN?E(sci(N(),2)):'—';
-    $('rNote').innerHTML=ok.cN?`الاستنتاج: يقاس الجهد بجهاز الملتيميتر على وضع <span dir="ltr">DC V</span> والمنفذ <span dir="ltr">V</span> بوضع مجسيه على طرفي المقاومة (على التوازي)، ويقاس التيار على وضع <span dir="ltr">DC A</span> والمنفذ <span dir="ltr">A</span> برفع وصلة التوصيل ووضع المجسين في الفجوة (على التوالي). وعكس الأقطاب يجعل القراءة سالبة. ومرور تيار شدته <span dir="ltr">${fx(I,3)} A</span> مدة <span dir="ltr">${T} s</span> يعني عبور شحنة <span dir="ltr">${fx(Q(),2)} C</span>، أي نحو <span dir="ltr">${sci(N(),2)}</span> إلكترون، وهو عدد هائل لأن شحنة الإلكترون صغيرة جدا.`:'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
+    $('rNote').html=ok.cN?`الاستنتاج: يقاس الجهد بجهاز الملتيميتر على وضع <span dir="ltr">DC V</span> والمنفذ <span dir="ltr">V</span> بوضع مجسيه على طرفي المقاومة (على التوازي)، ويقاس التيار على وضع <span dir="ltr">DC A</span> والمنفذ <span dir="ltr">A</span> برفع وصلة التوصيل ووضع المجسين في الفجوة (على التوالي). وعكس الأقطاب يجعل القراءة سالبة. ومرور تيار شدته <span dir="ltr">${fx(I,3)} A</span> مدة <span dir="ltr">${T} s</span> يعني عبور شحنة <span dir="ltr">${fx(Q(),2)} C</span>، أي نحو <span dir="ltr">${sci(N(),2)}</span> إلكترون، وهو عدد هائل لأن شحنة الإلكترون صغيرة جدا.`:'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
   const MSG={a:{mode:{v2:'✗ هذا تدريج الجهد (V⎓)، والمطلوب تدريج التيار (A⎓).',v20:'✗ هذا تدريج الجهد (V⎓)، والمطلوب تدريج التيار (A⎓).',v200:'✗ هذا تدريج الجهد (V⎓)، والمطلوب تدريج التيار (A⎓).',
       a200m:'✗ مدى 200 mA أصغر من التيار المتوقع (حتى 1 A)، فقد يحترق مصهر الجهاز. اختر المدى الأصغر الذي يزيد على القيمة المتوقعة.',a10:'✗ مدى 10 A أكبر من اللازم فتقل دقة القراءة. اختر المدى الأصغر الذي يزيد على القيمة المتوقعة (2 A).'},port:{v:'✗ المنفذ V للجهد. التيار يقاس من المنفذ A.'}},
     v:{mode:{a200m:'✗ هذا تدريج التيار (A⎓)، والمطلوب تدريج الجهد (V⎓).',a2:'✗ هذا تدريج التيار (A⎓)، والمطلوب تدريج الجهد (V⎓).',a10:'✗ هذا تدريج التيار (A⎓)، والمطلوب تدريج الجهد (V⎓).',
@@ -5978,18 +5980,18 @@ function ohmLab(box){
     $('nSt').textContent=!(setOk('a')&&setOk('v'))?'أعد الجهازين أولا (الخطوة أ)':!wired?'وصل المجسات أولا (الخطوة ب)':!on?'ارفع جهد المصدر إلى 2 V':rows.length>=k?'✓ سجلت هذه القراءة، ارفع الجهد إلى الخطوة التالية':'✓ اقرأ الشاشتين وسجل القراءتين';
     $('gS').svgHTML=ohGraph(rows.map(i=>[Vm[i],Im[i]]),fit,R);
     $('oTb').innerHTML=VS.map((v,i)=>{const d=rows.includes(i);return `<tr class="${!d&&i===rows.length?'cur':''}"><td>${i+1}</td><td dir="ltr">${v} V</td><td dir="ltr" class="cV"><b>${d?Vm[i].toFixed(2):''}</b></td><td dir="ltr" class="cI"><b>${d?Im[i].toFixed(3):''}</b></td><td dir="ltr">${d?(Vm[i]/Im[i]).toFixed(1):''}</td></tr>`}).join('');
-    $('logB').innerHTML='<div class="amLog"><h5>📋 سجل القراءات</h5>'+$('oTb').closest('.tw').outerHTML.replace(' id="oTb"','')+'</div>';
+    $('logB').html='<div class="amLog"><h5>📋 سجل القراءات</h5>'+$('oTb').closest('.tw').outerHTML.replace(' id="oTb"','')+'</div>';
     progO()}
   function newObj(){R=RS[Math.floor(Math.random()*RS.length)];bd=ohBands(R);Vm=VS.map(v=>Math.round(v*(0.985+Math.random()*0.012)*100)/100);Im=Vm.map(v=>Math.round(v/R*1000)/1000);
     rows=[];ok={};cfg={v:{},a:{}};fit=false;$('nR').value=0;$('nR').max=3;$('nR').step=1;['mV','mI','cR'].forEach(k=>$(k).value='');['vFb','aFb','mFb','gFb','cRf'].forEach(fb0);
     W.setR('المقاومة R',[OH_C[bd[0]],OH_C[bd[1]],OH_C[bd[2]],OH_G]);
     faces();draw();sub();results()}
   function progO(){if(!cfg||!rows)return;const L=[[setOk('a')&&setOk('v'),'إعداد الجهازين'],[wired,'التوصيل'],[rows.length>=1,'القراءة 1'],[rows.length>=2,'القراءة 2'],[rows.length>=3,'القراءة 3'],[fit,'الرسم البياني'],[!!ok.cR,'المقاومة']];
-    $('prog').innerHTML=L.map(([d,t])=>`<span class="${d?'d':''}">${d?'✓ ':''}${t}</span>`).join('<i>←</i>')}
-  function sub(){const c=(cl,x)=>`<b class="${cl}">${x}</b>`;$('sbR').innerHTML=fit?'R = ΔV / ΔI\n'+E(`R = (${c('cV',fx(Vm[2],2))} − ${c('cV',fx(Vm[0],2))}) / (${c('cI',fx(Im[2],3))} − ${c('cI',fx(Im[0],3))})`):'R = ΔV / ΔI'}
+    $('prog').html=L.map(([d,t])=>`<span class="${d?'d':''}">${d?'✓ ':''}${t}</span>`).join('<i>←</i>')}
+  function sub(){const c=(cl,x)=>`<b class="${cl}">${x}</b>`;$('sbR').html=fit?'R = ΔV / ΔI\n'+E(`R = (${c('cV',fx(Vm[2],2))} − ${c('cV',fx(Vm[0],2))}) / (${c('cI',fx(Im[2],3))} − ${c('cI',fx(Im[0],3))})`):'R = ΔV / ΔI'}
   function results(){progO();$('r1').textContent=rows.length?rows.length+' / 3':'—';$('r2').textContent=fit?'خط مستقيم يمر بنقطة الأصل':'—';
     $('r3').textContent=ok.cR?E(fx(slope(),1)+' Ω'):'—';
-    $('rNote').innerHTML=ok.cR?`الاستنتاج: عند ثبوت المقاومة، تضاعف التيار كلما تضاعف الجهد، وبقيت النسبة <span dir="ltr">V / I</span> ثابتة تقريبا، وكان الرسم البياني خطا مستقيما يمر بنقطة الأصل. فالتيار يتناسب طرديا مع الجهد، وهذا هو قانون أوم <span dir="ltr">V = I × R</span>. والمقاومة من ميل الخط <span dir="ltr">${fx(slope(),1)} Ω</span>، وهي تساوي تقريبا النسبة <span dir="ltr">V / I</span> في كل قراءة.`:'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
+    $('rNote').html=ok.cR?`الاستنتاج: عند ثبوت المقاومة، تضاعف التيار كلما تضاعف الجهد، وبقيت النسبة <span dir="ltr">V / I</span> ثابتة تقريبا، وكان الرسم البياني خطا مستقيما يمر بنقطة الأصل. فالتيار يتناسب طرديا مع الجهد، وهذا هو قانون أوم <span dir="ltr">V = I × R</span>. والمقاومة من ميل الخط <span dir="ltr">${fx(slope(),1)} Ω</span>، وهي تساوي تقريبا النسبة <span dir="ltr">V / I</span> في كل قراءة.`:'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.'}
   function pick(m,k,v){cfg[m][k]=v;const bad=['mode','port'].map(kk=>cfg[m][kk]&&cfg[m][kk]!==good[m][kk]?MSG[m][kk][cfg[m][kk]]:null).filter(Boolean);
     if(bad.length)fb(m+'Fb',false,bad.join('\n'));else if(setOk(m))fb(m+'Fb',true,m==='a'?'✓ إعداد صحيح: وضع DC A بمدى 2 A، والمجس الأحمر في المنفذ A والأسود في COM.':'✓ إعداد صحيح: وضع DC V بمدى 20 V، والمجس الأحمر في المنفذ V والأسود في COM.');else fb0(m+'Fb');
     if(!(setOk('a')&&setOk('v')))$('nR').value=0;faces();draw()}
@@ -6381,9 +6383,9 @@ function serLab(box){
   function logs(){const c=(cl,x)=>`<b class="${cl}" dir="ltr">${x}</b>`,row=(n,v)=>`<tr><td>${n}</td><td>${v}</td></tr>`;
     const h='<table>'+[0,1,2].map(i=>row(`<span class="cI">I</span> قبل R${'₁₂₃'[i]} (J${'₁₂₃'[i]})`,recI.has(i)?c('cI',fx(I,3)+' A'):'—')).join('')
       +[0,1,2,3].map(i=>row(`<span class="cV">${VL[i]}</span> على ${VN[i]}`,rec.has(i)?c('cV',fx(Vk[i],2)+' V'):'—')).join('')+'</table>';
-    $('logA').innerHTML=h;$('logB').innerHTML='<div class="amLog"><h5>📋 سجل القراءات</h5>'+h+'</div>'}
+    $('logA').html=h;$('logB').html='<div class="amLog"><h5>📋 سجل القراءات</h5>'+h+'</div>'}
   function progS(){const f=L=>L.map(([d,t])=>`<span class="${d?'d':''}">${d?'✓ ':''}${t}</span>`).join('<i>←</i>');
-    $('prog').innerHTML=f([[+$('nR').value>=100,'ضبط المصدر'],[recI.size===3,'التيار '+recI.size+'/3'],[rec.size===4,'الجهد '+rec.size+'/4']]);
+    $('prog').html=f([[+$('nR').value>=100,'ضبط المصدر'],[recI.size===3,'التيار '+recI.size+'/3'],[rec.size===4,'الجهد '+rec.size+'/4']]);
     $('prog2').innerHTML=f([[!!ok.cS,'الجهد الكلي'],[!!ok.cA,'R من القياس'],[!!ok.cB,'R من القانون']])}
   function newObj(){const pool=RS.slice();Rv=[];for(let k=0;k<3;k++)Rv.push(pool.splice(Math.floor(Math.random()*pool.length),1)[0]);RR=Rv.map(ohBands);
     Vt=VS*(0.985+Math.random()*0.01);const Ie=Vt/Rsum();I=Math.round(Ie*1000)/1000;Vk=Rv.map(r=>Math.round(Ie*r*100)/100);Vk.push(Math.round(Vt*100)/100);
@@ -6392,12 +6394,12 @@ function serLab(box){
     $('rVals').innerHTML='قيم المقاومات المكتوبة عليها: '+Rv.map((r,k)=>`<span dir="ltr">R${'₁₂₃'[k]} = <b class="cQ">${r}</b> Ω</span>`).join(' · ');
     faces();draw();sub();results()}
   function sub(){const c=(cl,x)=>`<b class="${cl}">${x}</b>`;
-    $('sbS').innerHTML=[0,1,2].every(i=>rec.has(i))?'V₁ + V₂ + V₃\n'+E(`${c('cV',fx(Vk[0],2))} + ${c('cV',fx(Vk[1],2))} + ${c('cV',fx(Vk[2],2))}`):'V₁ + V₂ + V₃';
-    $('sbA').innerHTML=recI.size===3&&rec.has(3)?'R = V / I\n'+E(`R = ${c('cV',fx(Vk[3],2))} / ${c('cI',fx(I,3))}`):'R = V / I';
-    $('sbB').innerHTML='R = R₁ + R₂ + R₃\n'+E(`R = ${c('cQ',Rv[0])} + ${c('cQ',Rv[1])} + ${c('cQ',Rv[2])}`)}
+    $('sbS').html=[0,1,2].every(i=>rec.has(i))?'V₁ + V₂ + V₃\n'+E(`${c('cV',fx(Vk[0],2))} + ${c('cV',fx(Vk[1],2))} + ${c('cV',fx(Vk[2],2))}`):'V₁ + V₂ + V₃';
+    $('sbA').html=recI.size===3&&rec.has(3)?'R = V / I\n'+E(`R = ${c('cV',fx(Vk[3],2))} / ${c('cI',fx(I,3))}`):'R = V / I';
+    $('sbB').html='R = R₁ + R₂ + R₃\n'+E(`R = ${c('cQ',Rv[0])} + ${c('cQ',Rv[1])} + ${c('cQ',Rv[2])}`)}
   function results(){$('r1').textContent=recI.size===3?E(`${fx(I,3)} · ${fx(I,3)} · ${fx(I,3)} A`):'—';$('r2').textContent=[0,1,2].every(i=>rec.has(i))?E(`${fx(Vk[0],2)} · ${fx(Vk[1],2)} · ${fx(Vk[2],2)} V`):'—';$('r3').textContent=rec.has(3)?E(fx(Vk[3],2)+' V'):'—';
     $('r4').textContent=ok.cS?E(fx(Sm(),2)+' V'):'—';$('r5').textContent=ok.cA?E(fx(Rm(),1)+' Ω'):'—';$('r6').textContent=ok.cB?E(Rsum()+' Ω'):'—';
-    $('rNote').innerHTML=ok.cS&&ok.cA&&ok.cB?`الاستنتاج: يمر في المقاومات الثلاث التيار نفسه (<span dir="ltr">${fx(I,3)} A</span>)، لأن للتيار مسارا واحدا. ويتوزع جهد المصدر عليها، فمجموع الجهود (<span dir="ltr">${fx(Sm(),2)} V</span>) يساوي تقريبا الجهد الكلي (<span dir="ltr">${fx(Vk[3],2)} V</span>)، والمقاومة الأكبر عليها جهد أكبر. والمقاومة المكافئة من القياس <span dir="ltr">${fx(Rm(),1)} Ω</span> قريبة من مجموع المقاومات <span dir="ltr">${Rsum()} Ω</span>، وهي <b>أكبر من أكبر مقاومة</b>.`:'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.';
+    $('rNote').html=ok.cS&&ok.cA&&ok.cB?`الاستنتاج: يمر في المقاومات الثلاث التيار نفسه (<span dir="ltr">${fx(I,3)} A</span>)، لأن للتيار مسارا واحدا. ويتوزع جهد المصدر عليها، فمجموع الجهود (<span dir="ltr">${fx(Sm(),2)} V</span>) يساوي تقريبا الجهد الكلي (<span dir="ltr">${fx(Vk[3],2)} V</span>)، والمقاومة الأكبر عليها جهد أكبر. والمقاومة المكافئة من القياس <span dir="ltr">${fx(Rm(),1)} Ω</span> قريبة من مجموع المقاومات <span dir="ltr">${Rsum()} Ω</span>، وهي <b>أكبر من أكبر مقاومة</b>.`:'تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.';
     logs();progS()}
   function pick(m,k,v){if(m==='v'&&recI.size<3)return fb('vFb',false,'سجل التيار قبل المقاومات الثلاث أولا (الخطوة ب)، ثم أعد الجهاز لقياس الجهد.');cfg[m][k]=v;const bad=['mode','port'].map(kk=>cfg[m][kk]&&cfg[m][kk]!==good[m][kk]?MSG[m][kk][cfg[m][kk]]:null).filter(Boolean);
     if(bad.length)fb(m+'Fb',false,bad.join('\n'));else if(setOk(m))fb(m+'Fb',true,m==='a'?'✓ إعداد صحيح: وضع DC A بمدى 2 A، والمجس الأحمر في المنفذ A والأسود في COM.':'✓ إعداد صحيح: وضع DC V بمدى 20 V، والمجس الأحمر في المنفذ V والأسود في COM. ضع المجسين في الدائرة أدناه.');else fb0(m+'Fb');
