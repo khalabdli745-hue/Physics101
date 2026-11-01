@@ -6780,7 +6780,8 @@ function DX(cfg){return function(){
       await E('dmNext').onclick();tick()},k<0?1000:600)};
     function labReset(){restore();const nw=box.querySelector('#nw');if(nw)ck(nw);DXI.forEach(o=>{if(o!==I&&o.mode!=='watch')o.reset(false)})}
     I.pause=()=>{if(play){play=false;E('dmPlay').textContent='▶ تشغيل';clearTimeout(ptm);big()}};
-    I.reset=(lab,keepEmpty)=>{I.pause();restore();if(lab){const nw=box.querySelector('#nw');if(nw)ck(nw)}if(!W){const t=LG();if(t)t.innerHTML=''}k=-1;view=-1;SN.length=0;E('dmS').innerHTML='';if(!W&&cfg.first!==false&&!keepEmpty)show(ST[0]);else E('dmS').innerHTML='<div class="dxEmpty">'+(W?'🎬 اضغط «▶ تشغيل» لمشاهدة خطوات التجربة':'⚡ اضغط «▶ تشغيل» لتبدأ التنفيذ')+'</div>';ui();big()};
+    I.reset=(lab,keepEmpty)=>{I.pause();restore();if(lab){const nw=box.querySelector('#nw');if(nw)ck(nw)}if(!W){const t=LG();if(t)t.innerHTML=''}k=-1;view=-1;SN.length=0;E('dmS').innerHTML='';if(!W&&cfg.first!==false&&!keepEmpty)show(ST[0]);else {/* المدرب 1 نوفمبر: قبل التشغيل يظهر مشهد الخطوة الأولى ثابتا بدل الفراغ، فلا تقفز البطاقة عند التشغيل */const ph=()=>{const st0=stageOf(ST[0]);if(st0&&st0.querySelector('svg')&&k<0&&!E('dmS').querySelector('.stage:not(.dxSnap .stage)')){E('dmS').innerHTML='';E('dmS').appendChild(dxSnapOf(st0));return true}return false};
+      if(!ph()){E('dmS').innerHTML='<div class="dxEmpty">'+(W?'🎬 اضغط «▶ تشغيل» لمشاهدة خطوات التجربة':'⚡ اضغط «▶ تشغيل» لتبدأ التنفيذ')+'</div>';setTimeout(ph,400);setTimeout(ph,1500)}}ui();big()};
     E('dmPlay').onclick=()=>{if(W&&k>=ST.length-1&&!play){I.reset(true)}play=!play;manual=false;E('dmPlay').textContent=play?'⏸ إيقاف':'▶ تشغيل';big();if(play){if(k<0)act();tick()}else clearTimeout(ptm)};E('dmBig').onclick=()=>{if(!play)E('dmPlay').onclick()};
     E('dmPrev').onclick=()=>{I.pause();const i=live()?k:view;if(i>0)goView(i-1)};
     E('dmTl').oninput=()=>{const v=+E('dmTl').value-1;if(v<0)return;goView(Math.min(v,k))};
