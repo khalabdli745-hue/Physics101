@@ -1,4 +1,4 @@
-/* بطاقات العرض ثلاثية الأبعاد (الدرس النموذجي: الشحنات الكهربائية وقانون كولوم 3-1)
+/* بطاقات العرض ثلاثية الأبعاد (الدروس النموذجية: الشحنات الكهربائية وقانون كولوم 3-1، والمجال الكهربائي 3-3)
    - على السبورة: تستبدل شرائح مختارة ببطاقات تظهر أجزاؤها بالتتابع ويقرؤها المدرب الذكي.
    - في الأمثلة والتمارين التفاعلية: رسم ثلاثي الأبعاد فوق السؤال، وتظهر أسهم القوى بعد الحل. */
 (function(){
@@ -10,6 +10,10 @@ function defs(){if(document.getElementById('kcDefs'))return;
   d.innerHTML=`<svg width="0" height="0" aria-hidden="true"><defs>
   <radialGradient id="kc-sP" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#fff1f1"/><stop offset=".18" stop-color="#fca5a5"/><stop offset=".55" stop-color="#dc2626"/><stop offset="1" stop-color="#5f0a0a"/></radialGradient>
   <radialGradient id="kc-sN" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#f1f6ff"/><stop offset=".18" stop-color="#a9c4ff"/><stop offset=".55" stop-color="#2f6fed"/><stop offset="1" stop-color="#0b2363"/></radialGradient>
+  <radialGradient id="kc-limb" cx="50%" cy="50%" r="50%"><stop offset=".62" stop-color="#000" stop-opacity="0"/><stop offset=".9" stop-color="#000" stop-opacity=".22"/><stop offset="1" stop-color="#000" stop-opacity=".45"/></radialGradient>
+  <linearGradient id="kc-win" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".75"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+  <radialGradient id="kc-spec"><stop offset="0" stop-color="#fff" stop-opacity="1"/><stop offset=".45" stop-color="#fff" stop-opacity=".75"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+  <linearGradient id="kc-bnc" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#fff" stop-opacity=".16"/></linearGradient>
   <radialGradient id="kc-sZ" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#ffffff"/><stop offset=".25" stop-color="#e2e8f0"/><stop offset=".65" stop-color="#94a3b8"/><stop offset="1" stop-color="#334155"/></radialGradient>
   <radialGradient id="kc-gP"><stop offset="0" stop-color="#ef4444" stop-opacity=".5"/><stop offset="1" stop-color="#ef4444" stop-opacity="0"/></radialGradient>
   <radialGradient id="kc-gN"><stop offset="0" stop-color="#5b8cff" stop-opacity=".55"/><stop offset="1" stop-color="#5b8cff" stop-opacity="0"/></radialGradient>
@@ -26,7 +30,7 @@ function defs(){if(document.getElementById('kcDefs'))return;
   <linearGradient id="kc-cloth" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1e3a8a"/><stop offset=".4" stop-color="#3b82f6"/><stop offset="1" stop-color="#172554"/></linearGradient>
   <linearGradient id="kc-shoe" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".6" stop-color="#e2e8f0"/><stop offset="1" stop-color="#94a3b8"/></linearGradient>
   <linearGradient id="kc-rug" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a78bfa"/><stop offset="1" stop-color="#6d28d9"/></linearGradient>
-  </defs></svg>`;document.body.appendChild(d)}
+  </defs></svg>`+'<svg width="0" height="0" aria-hidden="true">'+EGRD+'</svg>';document.body.appendChild(d)}
 /* ---------- عناصر الرسم ---------- */
 const f1=v=>Number(v).toFixed(1);
 function stage(w,h,floorY){let g=`<rect width="${w}" height="${h}" fill="url(#kc-bg)"/>`;
@@ -35,11 +39,14 @@ function stage(w,h,floorY){let g=`<rect width="${w}" height="${h}" fill="url(#kc
   for(let i=1;i<9;i++){const t=i/9,x0=40+(w-80)*t,x1=w*t;g+=`<line x1="${f1(x0)}" y1="${floorY}" x2="${f1(x1)}" y2="${h}" stroke="#9fb3d4" stroke-width="1"/>`}
   for(let i=1;i<4;i++){const y=floorY+(h-floorY)*Math.pow(i/4,1.4),dx=40*(1-(y-floorY)/(h-floorY));g+=`<line x1="${f1(dx)}" y1="${f1(y)}" x2="${f1(w-dx)}" y2="${f1(y)}" stroke="#9fb3d4" stroke-width="1"/>`}
   return g+`<line x1="40" y1="${floorY}" x2="${w-40}" y2="${floorY}" stroke="#7f9cc9" stroke-width="1.5" opacity=".9"/>`}
-function sphere(x,y,r,sign,floorY,cls=''){const s=sign==='+'?'P':sign==='-'?'N':'Z',sy=floorY+8;
-  return `<g class="kSph ${cls}"><ellipse cx="${x}" cy="${sy}" rx="${f1(r*1.15)}" ry="${f1(r*.28)}" fill="url(#kc-sh)"/>`+
-  (s!=='Z'?`<circle class="kGlow" cx="${x}" cy="${y}" r="${f1(r*1.75)}" fill="url(#kc-g${s})"/>`:'')+
-  `<circle cx="${x}" cy="${y}" r="${r}" fill="url(#kc-s${s})"/><ellipse cx="${f1(x-r*.34)}" cy="${f1(y-r*.42)}" rx="${f1(r*.3)}" ry="${f1(r*.18)}" fill="#fff" opacity=".6"/>`+
-  (s!=='Z'?`<text x="${x}" y="${f1(y+r*.36)}" text-anchor="middle" font-size="${f1(r*1.05)}" font-weight="900" fill="#fff" style="paint-order:stroke" stroke="rgba(0,0,0,.25)" stroke-width="1.5">${sign==='+'?'+':'−'}</text>`:'')+`</g>`}
+function sphere(x,y,r,sign,floorY,cls=''){const s=sign==='+'?'P':sign==='-'?'N':'Z',sy=floorY+8,R=r;
+  return `<g class="kSph ${cls}"><ellipse cx="${x}" cy="${sy}" rx="${f1(R*1.15)}" ry="${f1(R*.28)}" fill="url(#kc-sh)"/><ellipse cx="${x}" cy="${f1(sy-1)}" rx="${f1(R*.5)}" ry="${f1(R*.1)}" fill="#0b1220" opacity=".35"/>`+
+  (s!=='Z'?`<circle class="kGlow" cx="${x}" cy="${y}" r="${f1(R*1.75)}" fill="url(#kc-g${s})"/>`:'')+
+  `<circle cx="${x}" cy="${y}" r="${R}" fill="url(#kc-s${s})"/><circle cx="${x}" cy="${y}" r="${R}" fill="url(#kc-limb)"/>`+
+  `<ellipse cx="${f1(x-R*.08)}" cy="${f1(y-R*.5)}" rx="${f1(R*.62)}" ry="${f1(R*.3)}" fill="url(#kc-win)" opacity=".55"/>`+
+  `<ellipse cx="${f1(x)}" cy="${f1(y+R*.7)}" rx="${f1(R*.55)}" ry="${f1(R*.17)}" fill="url(#kc-bnc)"/>`+
+  `<ellipse cx="${f1(x-R*.36)}" cy="${f1(y-R*.42)}" rx="${f1(R*.2)}" ry="${f1(R*.13)}" fill="url(#kc-spec)" transform="rotate(-30 ${f1(x-R*.36)} ${f1(y-R*.42)})"/><circle cx="${f1(x-R*.42)}" cy="${f1(y-R*.47)}" r="${f1(Math.max(.8,R*.05))}" fill="#fff"/>`+
+  (s!=='Z'?`<text x="${x}" y="${f1(y+R*.36)}" text-anchor="middle" font-size="${f1(R*1.05)}" font-weight="900" fill="#fff" style="paint-order:stroke" stroke="rgba(0,0,0,.3)" stroke-width="1.6">${sign==='+'?'+':'−'}</text>`:'')+`</g>`}
 /* سهم مجسم أفقي من x1 إلى x2 */
 function arrow(x1,x2,y,kind,delay,th){th=th||13;const dir=x2>x1?1:-1,L=Math.abs(x2-x1),hl=Math.min(24,L*.45),hw=th*1.05,b=x2-dir*hl;
   const pts=(dx,dy)=>[[x1,y-th/2],[b,y-th/2],[b,y-hw],[x2,y],[b,y+hw],[b,y+th/2],[x1,y+th/2]].map(([a,c])=>f1(a+dx)+','+f1(c+dy)).join(' ');
@@ -445,8 +452,8 @@ const KIMG={TOR:IMG_TOR,LIFE:IMG_LIFE};
 const kimgFill=()=>document.querySelectorAll('img[data-kimg]:not([src])').forEach(i=>{i.src=KIMG[i.dataset.kimg]||''});
 /* 3-1: قانون كولوم والتعويض بشكل كسر (بسط ومقام) في كل أقسام الدرس (طلب المدرب 17:26) */
 const kEsc=t=>String(t).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
-const kFrac=()=>{let K='';try{K=key(pos.u,pos.l)}catch(e){}if(K!=='3-1')return;
-  document.querySelectorAll('code,bdi,.kM,.eq').forEach(el=>{if(el.dataset.fr||el.children.length)return;const t=el.textContent.trim(),m=t.match(/^([FE][₀-₉]*\s*=\s*)(.+)\s\/\s*([^\s=]+)(\s*(?:[=≈][\s\S]*)?)$/);if(!m||!/q|10⁻|k/.test(m[2]))return;
+const kFrac=()=>{let K='';try{K=key(pos.u,pos.l)}catch(e){}if(K!=='3-1'&&K!=='3-3')return;
+  document.querySelectorAll('code,bdi,.kM,.eq').forEach(el=>{if(el.dataset.fr||el.children.length)return;if(K==='3-3'&&el.closest('.lab'))return;const t=el.textContent.trim(),m=t.match(/^([FE][₀-₉]*\s*=\s*)(.+)\s\/\s*([0-9.]+ × 10[⁰-⁹⁻]+|[^\s=]+)(\s*(?:[=≈][\s\S]*)?)$/);if(!m||!(K==='3-3'?/q|10⁻|k|F|V|[0-9]/:/q|10⁻|k/).test(m[2]))return;
     let pre='',num=m[2];const k=num.match(/^(k|[0-9.]+ [×/] [0-9.]+[⁰-⁹⁻]+|[0-9.]+[⁰-⁹⁻]+)\s*[·×]\s*/);if(k){pre=k[1]+' × ';num=num.slice(k[0].length)}
     el.dataset.fr=1;el.innerHTML=kEsc(m[1])+kEsc(pre)+'<span class="kFr"><span>'+kEsc(num.replace(/\s*·\s*/g,' × '))+'</span><span>'+kEsc(m[3].replace(/^\((.*)\)(²?)$/,'$1$2'))+'</span></span>'+kEsc(m[4])})};
 const kMulti=()=>document.querySelectorAll('.board .bContent').forEach(c=>{const m=c.querySelectorAll('.bStep .kFig').length>1;if(c.classList.contains('kMultiFig')!==m)c.classList.toggle('kMultiFig',m)});
@@ -576,6 +583,245 @@ const PFIG={'3-1':[
   [/0\.3\s*m/,()=>pair({s1:'+',s2:'+',l1:'q₁ = +4 µC',l2:'q₂ = +2 µC',r:'r = 0.3 m',F:'F₁₂ = 0.8 N'}),REPT],
   [/0\.5\s*m/,()=>pair({s1:'+',s2:'+',l1:'q₁ = +5 µC',l2:'q₂ = +4 µC',r:'r = 0.5 m',F:'F₁₂ = 0.72 N'}),REPT],
   [/0\.9\s*N/,()=>pair({s1:'+',s2:'+',l1:'q₁ = +3 µC',l2:'q₂ = +3 µC',r:'r = 0.3 m',F:'F₁₂ = 0.9 N'}),REPT]]};
+/* ===== الدرس النموذجي 3-3: المجال الكهربائي وخطوطه (بنفس طريقة درس كولوم 3-1) ===== */
+const EGR='',EGRD='<defs><linearGradient id="kc-aE" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a7f3d0"/><stop offset=".5" stop-color="#10b981"/><stop offset="1" stop-color="#065f46"/></linearGradient>'+
+  '<radialGradient id="kc-halo"><stop offset="0" stop-color="#ef4444" stop-opacity=".30"/><stop offset=".55" stop-color="#ef4444" stop-opacity=".10"/><stop offset="1" stop-color="#ef4444" stop-opacity="0"/></radialGradient>'+
+  '<linearGradient id="kc-plP" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7f1d1d"/><stop offset=".5" stop-color="#ef4444"/><stop offset="1" stop-color="#991b1b"/></linearGradient>'+
+  '<linearGradient id="kc-plN" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1e3a8a"/><stop offset=".5" stop-color="#3b82f6"/><stop offset="1" stop-color="#1e40af"/></linearGradient></defs>';
+const EC='#0f766e',ECL='#14b8a6';
+const lblR=(x,y,t,c,sz)=>`<text x="${x}" y="${y}" text-anchor="middle" font-size="${sz||14.5}" font-weight="800" fill="${c||'#1e3a5f'}" direction="rtl" unicode-bidi="plaintext">${t}</text>`;
+const tagR=(x,y,t,c,w)=>{w=w||t.length*8.6+30;return `<rect x="${f1(x-w/2)}" y="${y-15}" width="${f1(w)}" height="30" rx="15" fill="${c}"/><text x="${x}" y="${y+6}" text-anchor="middle" font-size="15" font-weight="800" fill="#fff" direction="rtl" unicode-bidi="plaintext">${t}</text>`};
+/* سهم المجال الأخضر (ينمو بنفس حركة أسهم القوى) */
+const arrowE=(x1,x2,y,d,th)=>arrow(x1,x2,y,'F',d,th).replace('url(#kc-aF)','url(#kc-aE)').replace('#78350f','#064e3b');
+/* سهم ثابت بأي زاوية */
+function arrA(x,y,ang,len,col,th){th=th||9;const hl=Math.min(18,len*.45),hw=th*1.1,b=len-hl;
+  return `<g transform="translate(${f1(x)} ${f1(y)}) rotate(${f1(ang)})"><polygon points="0,${-th/2} ${f1(b)},${-th/2} ${f1(b)},${-hw} ${f1(len)},0 ${f1(b)},${hw} ${f1(b)},${th/2} 0,${th/2}" fill="${col||'#f59e0b'}" stroke="rgba(0,0,0,.35)" stroke-width="1"/></g>`}
+const sph=(x,y,r,s)=>sphere(x,y,r,s,y+4).replace(/<ellipse[^>]*kc-sh[^>]*\/>/,'');
+/* تتبع خطوط المجال لشحنات نقطية */
+function eAt(C,x,y){let ex=0,ey=0;C.forEach(c=>{const dx=x-c.x,dy=y-c.y,r2=dx*dx+dy*dy,r=Math.sqrt(r2)||1e-6;ex+=c.q*dx/(r2*r);ey+=c.q*dy/(r2*r)});return [ex,ey]}
+function trace(C,x,y,W,H,R){const P=[[x,y]];for(let i=0;i<900;i++){const [ex,ey]=eAt(C,x,y),m=Math.hypot(ex,ey)||1e-9;x+=3*ex/m;y+=3*ey/m;P.push([x,y]);
+    if(x<-20||x>W+20||y<-20||y>H+20)break;if(C.some(c=>c.q<0&&Math.hypot(x-c.x,y-c.y)<R))break}return P}
+const pD=P=>'M'+P.map(p=>f1(p[0])+','+f1(p[1])).join(' L');
+/* رأس سهم صغير على الخط عند نسبة f من طوله */
+function headAt(P,f,col){const i=Math.max(1,Math.min(P.length-2,Math.round((P.length-1)*f))),[x,y]=P[i],[a,b]=P[i-1],ang=Math.atan2(y-b,x-a)*180/Math.PI;
+  return `<polygon points="-7,-6 7,0 -7,6" fill="${col}" transform="translate(${f1(x)} ${f1(y)}) rotate(${f1(ang)})"/>`}
+/* خط مجال متدفق (شرطات تتحرك في اتجاه المجال) */
+const flowLine=(d,col,dur)=>`<path d="${d}" fill="none" stroke="${col}" stroke-width="2.4" opacity=".35"/><path d="${d}" fill="none" stroke="${col}" stroke-width="2.6" stroke-dasharray="7 11" stroke-linecap="round"><animate attributeName="stroke-dashoffset" from="36" to="0" dur="${dur||1.2}s" repeatCount="indefinite"/></path>`;
+/* خطوط شعاعية حول شحنة منفردة */
+function radial(cx,cy,R,L,n,out,col,rot){let g='';for(let i=0;i<n;i++){const a=(i/n)*2*Math.PI+(rot||0),x1=cx+R*Math.cos(a),y1=cy+R*Math.sin(a),x2=cx+L*Math.cos(a),y2=cy+L*Math.sin(a);
+    const P=out?[[x1,y1],[x2,y2]]:[[x2,y2],[x1,y1]];g+=flowLine(pD(P),col)+headAt([P[0],[(P[0][0]+P[1][0])/2,(P[0][1]+P[1][1])/2],P[1]],.55,col)}return g}
+
+/* 1) المجال: المنطقة حول الشحنة التي يظهر فيها تأثيرها (مشهد متحرك 12 ث) */
+function eIntroScene(){const W=640,H=330,D=12,cx=300,cy=185;let b=EGR+`<rect width="${W}" height="${H}" fill="url(#kc-bg)"/>`;
+  b+=`<circle cx="${cx}" cy="${cy}" r="150"  fill="url(#kc-halo)"><animate attributeName="r" values="140;158;140" dur="3s" repeatCount="indefinite"/></circle>`;
+  b+=radial(cx,cy,40,150,12,true,'#f87171');
+  b+=sph(cx,cy,34,'+')+lbl(cx,cy+58,'Q','#b91c1c',17);
+  const T=(x,y,ang,len,t0,lab)=>scShow(D,t0,D-.2,sph(x,y,12,'+')+arrA(x+14*Math.cos(ang*Math.PI/180),y+14*Math.sin(ang*Math.PI/180),ang,len,'#f59e0b',9)+lbl(x,y-20,'q₀','#b91c1c',15)+(lab?lbl(x+(len+30)*Math.cos(ang*Math.PI/180),y+(len+30)*Math.sin(ang*Math.PI/180)+5,lab,'#b45309',15):''),true);
+  b+=T(cx+92,cy,0,86,1.6,'F');
+  b+=T(cx+150*Math.cos(-2.3),cy+150*Math.sin(-2.3),-2.3*180/Math.PI,38,4.6,'F');
+  b+=T(cx+210*Math.cos(.55),cy+210*Math.sin(.55),.55*180/Math.PI,18,4.6,'');
+  b+=scCap(D,W,'1. شحنة موجبة Q يحيط بها مجال كهربائي','#475569',0,1.6)+scCap(D,W,'2. شحنة اختبار q₀ قريبة: تتأثر بقوة كبيرة','#b45309',1.6,4.6)+scCap(D,W,'3. كلما ابتعدنا عن الشحنة ضعفت القوة','#0f766e',4.6,8)+scCap(D,W,'4. المجال: المنطقة التي يظهر فيها تأثير الشحنة','#7e22ce',8,D);
+  return svg(W,H,b,'kScene')}
+/* 2) تمثيل المجال بالخطوط: الاتجاه والشدة */
+function eRepFig(){const W=640,H=320,cx=320,cy=170;let b=EGR+`<rect width="${W}" height="${H}" fill="url(#kc-bg)"/>`;
+  b+=radial(cx,cy,38,165,16,true,'#dc2626');b+=sph(cx,cy,32,'+');
+  b+=`<circle cx="${cx}" cy="${cy}" r="70" fill="none" stroke="#0f766e" stroke-width="2" stroke-dasharray="4 5"/><circle cx="${cx}" cy="${cy}" r="150" fill="none" stroke="#64748b" stroke-width="2" stroke-dasharray="4 5"/>`;
+  b+=`<g>${tagR(cx+128,cy-62,'متقاربة: مجال قوي','#0f766e',150)}</g><g>${tagR(cx-180,cy+130,'متباعدة: مجال ضعيف','#475569',160)}</g>`;
+  b+=`<g>${tagR(120,40,'الخط يحدد اتجاه المجال','#b45309',190)}</g>`;
+  return svg(W,H,b,'kAuto')}
+/* 3) أشكال الخطوط: تخرج من الموجبة وتدخل في السالبة (متحرك) */
+function eShapesScene(){const W=640,H=320;let b=EGR+`<rect width="${W}" height="${H}" fill="url(#kc-bg)"/>`;
+  b+=radial(165,160,36,128,12,true,'#dc2626')+sph(165,160,30,'+');
+  b+=radial(475,160,36,128,12,false,'#2563eb')+sph(475,160,30,'-');
+  b+=`<line x1="320" y1="30" x2="320" y2="290" stroke="#c9daf0" stroke-width="2" stroke-dasharray="6 6"/>`;
+  b+=`<g>${tagR(165,304,'تخرج من الموجبة (إلى الخارج)','#b91c1c',230)}</g><g>${tagR(475,304,'تدخل في السالبة (إلى الداخل)','#1d4ed8',230)}</g>`;
+  return svg(W,H,b,'kScene')}
+/* 4) خطوط المجال لشحنتين (مختلفتين أو متشابهتين) مرسومة بالحساب، ولا تتقاطع */
+function ePairLines(like){const W=640,H=330,y=165,x1=210,x2=430,R=30;let b=EGR+`<rect width="${W}" height="${H}" fill="url(#kc-bg)"/>`;
+  const C=[{x:x1,y,q:1},{x:x2,y,q:like?1:-1}],n=16;let ls='';
+  C.filter(c=>c.q>0).forEach(c=>{for(let i=0;i<n;i++){const a=(i+.5)/n*2*Math.PI,P=trace(C,c.x+R*Math.cos(a),c.y+R*Math.sin(a),W,H,R);if(P.length<8)continue;
+    ls+=flowLine(pD(P),'#0f766e',1.4)+headAt(P,like?.35:.5,'#0f766e')}});
+  b+=ls+sph(x1,y,R-2,'+')+sph(x2,y,R-2,like?'+':'-');
+  b+=lbl(x1,y+R+26,'+q','#b91c1c',16)+lbl(x2,y+R+26,like?'+q':'−q',like?'#b91c1c':'#1d4ed8',16);
+  b+=`<g>${scTag(W/2,26,like?'شحنتان متشابهتان: الخطوط تتنافر ولا تتقاطع':'شحنتان مختلفتان: من الموجبة إلى السالبة، ولا تتقاطع',like?'#7f1d1d':'#1e3a8a',like?360:420)}</g>`;
+  return svg(W,H,b,'kScene')}
+/* 5) نوعا المجال: منتظم وغير منتظم */
+function eTypesFig(){const W=640,H=320;let b=EGR+`<rect width="${W}" height="${H}" fill="url(#kc-bg)"/>`;
+  /* منتظم: لوحان متوازيان */
+  b+=`<rect x="40" y="60" width="14" height="200" rx="4" fill="url(#kc-plP)"/><rect x="266" y="60" width="14" height="200" rx="4" fill="url(#kc-plN)"/>`;
+  b+=`<text x="47" y="52" text-anchor="middle" font-size="18" font-weight="900" fill="#b91c1c">+</text><text x="273" y="52" text-anchor="middle" font-size="20" font-weight="900" fill="#1d4ed8">−</text>`;
+  for(let i=0;i<6;i++){const yy=78+i*33;b+=flowLine(`M58,${yy} L262,${yy}`,'#0f766e',1.3)+`<polygon points="-7,-6 7,0 -7,6" fill="#0f766e" transform="translate(160 ${yy})"/>`}
+  b+=`<g>${tagR(160,295,'منتظم: ثابت الشدة والاتجاه','#0f766e',220)}</g>`;
+  b+=`<line x1="320" y1="30" x2="320" y2="300" stroke="#c9daf0" stroke-width="2" stroke-dasharray="6 6"/>`;
+  /* غير منتظم: شحنة نقطية */
+  b+=radial(480,160,32,125,12,true,'#dc2626')+sph(480,160,28,'+');
+  b+=`<g>${tagR(480,295,'غير منتظم: يتغير مقداره واتجاهه','#7e22ce',240)}</g>`;
+  return svg(W,H,b,'kScene')}
+/* 6) شدة المجال: نضاعف شحنة الاختبار فتتضاعف القوة ويبقى E ثابتا (متحرك 12 ث) */
+function eTestScene(){const W=640,H=330,D=12,cy=175,Qx=120,Px=380;let b=EGR+`<rect width="${W}" height="${H}" fill="url(#kc-bg)"/>`;
+  b+=radial(Qx,cy,40,150,10,true,'#fca5a5');b+=sph(Qx,cy,34,'+')+lbl(Qx,cy+58,'Q','#b91c1c',17);
+  b+=`<line x1="${Qx+40}" y1="${cy}" x2="${Px}" y2="${cy}" stroke="#94a3b8" stroke-width="1.6" stroke-dasharray="5 5"/>`+lbl(Px,cy+44,'P','#1e3a5f',17);
+  b+=scShow(D,1.4,6.2,sph(Px,cy,12,'+')+lbl(Px,cy-22,'q₀','#b91c1c',16)+arrA(Px+14,cy,0,80,'#f59e0b',10)+lbl(Px+70,cy-16,'F','#b45309',18),true);
+  b+=scShow(D,6.2,D-.1,sph(Px,cy,17,'+')+lbl(Px,cy-27,'2q₀','#b91c1c',16)+arrA(Px+19,cy,0,160,'#f59e0b',12)+lbl(Px+110,cy-18,'2F','#b45309',18),true);
+  b+=scShow(D,3,D-.1,`<g>${scTag(W/2+40,86,'E = F / q₀','#0f766e',160)}</g>`,true);
+  b+=scShow(D,8.4,D-.1,`<g>${scTag(W/2-10,268,'E = 2F / 2q₀ = F / q₀','#7e22ce',230)+tagR(W/2+170,268,'لا يتغير','#0f766e',90)}</g>`,true);
+  b+=scCap(D,W,'1. شحنة اختبار q₀ عند النقطة P تتأثر بقوة F','#b45309',0,6.2)+scCap(D,W,'2. نضاعف شحنة الاختبار: تتضاعف القوة','#475569',6.2,8.4)+scCap(D,W,'3. شدة المجال عند النقطة لا تتغير','#7e22ce',8.4,D);
+  return svg(W,H,b,'kScene')}
+/* 7) المجال المنتظم بين لوحين: شحنة تتحرك وقوتها ثابتة (متحرك 8 ث) */
+function eUniformScene(){const W=640,H=330,D=8,L=150,Rr=490,top=60,bot=250;let b=EGR+`<rect width="${W}" height="${H}" fill="url(#kc-bg)"/>`;
+  b+=`<rect x="${L-16}" y="${top}" width="16" height="${bot-top}" rx="4" fill="url(#kc-plP)"/><rect x="${Rr}" y="${top}" width="16" height="${bot-top}" rx="4" fill="url(#kc-plN)"/>`;
+  for(let i=0;i<5;i++)b+=`<text x="${L-8}" y="${top+24+i*40}" text-anchor="middle" font-size="15" font-weight="900" fill="#fff">+</text><text x="${Rr+8}" y="${top+24+i*40}" text-anchor="middle" font-size="17" font-weight="900" fill="#fff">−</text>`;
+  for(let i=0;i<6;i++){const yy=top+16+i*35;b+=flowLine(`M${L+4},${yy} L${Rr-4},${yy}`,'#0f766e',1.2)}
+  /* البطارية والأسلاك */
+  b+=`<path d="M${L-8},${bot} V${bot+40} H${W/2-30} M${W/2+30},${bot+40} H${Rr+8} V${bot}" fill="none" stroke="#334155" stroke-width="3"/>`;
+  b+=`<line x1="${W/2-30}" y1="${bot+26}" x2="${W/2-30}" y2="${bot+54}" stroke="#b91c1c" stroke-width="4"/><line x1="${W/2-14}" y1="${bot+32}" x2="${W/2-14}" y2="${bot+48}" stroke="#1d4ed8" stroke-width="6"/><line x1="${W/2+14}" y1="${bot+26}" x2="${W/2+14}" y2="${bot+54}" stroke="#b91c1c" stroke-width="4"/><line x1="${W/2+30}" y1="${bot+32}" x2="${W/2+30}" y2="${bot+48}" stroke="#1d4ed8" stroke-width="6"/>`+lblR(W/2,bot+74,'مصدر الجهد','#334155',14);
+  const mv=sph(0,0,12,'+')+arrA(14,0,0,60,'#f59e0b',9)+lbl(46,-14,'F','#b45309',16);
+  b+=scMove(D,[[0,L+40,155],[D-1,Rr-110,155]],mv);
+  b+=`<g>${scTag(W/2-90,30,'E = V / d','#0f766e',130)}${tagR(W/2+90,30,'ثابت في كل النقاط','#7e22ce',170)}</g>`;
+  b+=`<line x1="${L}" y1="${bot+14}" x2="${Rr}" y2="${bot+14}" stroke="#0369a1" stroke-width="1.6" stroke-dasharray="5 4"/>`+lbl((L+Rr)/2+60,bot+10,'d','#0369a1',16);
+  return svg(W,H,b,'kScene')}
+/* 8) مجال شحنة نقطية: يقل مع مربع المسافة (متحرك 12 ث) */
+function ePointScene(){const W=640,H=320,D=12,cx=80,cy=165,u=140;let b=EGR+`<rect width="${W}" height="${H}" fill="url(#kc-bg)"/>`;
+  b+=radial(cx,cy,38,260,14,true,'#fecaca');b+=sph(cx,cy,32,'+')+lbl(cx,cy+56,'q','#b91c1c',17);
+  const pt=(k,len,lab,t0)=>{const x=cx+k*u*.95;return scShow(D,t0,D-.1,`<circle cx="${x}" cy="${cy}" r="6" fill="#1e3a5f"/>`+arrA(x+8,cy,0,len,'#10b981',11)+`<g>${scTag(x+20,cy-40,lab,'#0f766e',lab.length*9+40)}</g>`+`<line x1="${cx}" y1="${cy+70+k*14}" x2="${x}" y2="${cy+70+k*14}" stroke="#0369a1" stroke-width="1.5" stroke-dasharray="5 4"/>`+lbl(x-10,cy+66+k*14,k===1?'r':k+'r','#0369a1',15),true)};
+  b+=pt(1,108,'E',1)+pt(2,27,'E / 4',4.2)+pt(3,13,'E / 9',7.2);
+  b+=scCap(D,W,'1. على بعد r: المجال E','#0f766e',0,4.2)+scCap(D,W,'2. ضعف المسافة: المجال يقل إلى الربع','#b45309',4.2,7.2)+scCap(D,W,'3. ثلاثة أضعاف المسافة: المجال يقل إلى التسع','#7e22ce',7.2,D);
+  return svg(W,H,b,'kScene')}
+/* 9) القوة على شحنة من شحنتين: نحسب كل قوة ثم نجمعهما مع مراعاة الاتجاه */
+function eMultiFig(){const W=640,H=320,y=140;let b=EGR+stage(W,H,200);
+  b+=sphere(110,y,30,'+',200)+sphere(530,y,30,'-',200)+sphere(300,y,16,'+',200);
+  b+=lbl(110,y-44,'q₁','#b91c1c',18)+lbl(530,y-44,'q₂','#1d4ed8',18)+lbl(300,y-28,'q₀','#b91c1c',16);
+  b+=arrow(318,408,y-10,'F',.1,10)+pill(372,y-42,'F₁','#b45309',.2);
+  b+=arrow(318,388,y+12,'F',.5,10)+pill(356,y+44,'F₂','#b45309',.6);
+  b+=arrow(230,390,256,'R',1,14)+pill(310,292,'Fₜₒₜₐₗ = F₁ + F₂','#7e22ce',1.3);
+  b+=pill(W/2,34,'القوتان في اتجاه واحد: نجمعهما','#0f766e',.8);
+  return svg(W,H,b,'kAuto')}
+/* رسوم الأمثلة: مجال على بعد r من شحنة نقطية */
+function eAtP(o){const W=640,H=300,FY=196,y=128,Qx=150,Px=440;let b=EGR+stage(W,H,FY);
+  b+=`<line x1="${Qx+36}" y1="${y}" x2="${Px}" y2="${y}" stroke="#94a3b8" stroke-width="1.6" stroke-dasharray="5 5"/>`;
+  b+=sphere(Qx,y,34,'+',FY)+lbl(Qx,y-50,o.q,'#b91c1c',18)+`<circle cx="${Px}" cy="${y}" r="7" fill="#1e3a5f"/>`+lbl(Px,y-20,'P','#1e3a5f',18);
+  b+=arrowE(Px+10,Px+120,y,.1,13)+(o.E?pill(Px+66,y+40,o.E,EC,.3):'')+(o.r?dim(Qx,Px,FY+44,o.r):'');
+  return svg(W,H,b,o.cls)}
+/* رسوم الأمثلة: شحنة اختبار في مجال وقوة عليها */
+function eTestQ(o){const W=640,H=300,FY=196,y=128,Px=300;let b=EGR+stage(W,H,FY);
+  for(let i=0;i<4;i++){const yy=58+i*32;b+=`<line x1="60" y1="${yy}" x2="580" y2="${yy}" stroke="#99f6e4" stroke-width="2" stroke-dasharray="7 9"/><polygon points="-6,-5 6,0 -6,5" fill="#5eead4" transform="translate(${120+i*120} ${yy})"/>`}
+  b+=sphere(Px,y,20,'+',FY)+lbl(Px,y-30,o.q,'#b91c1c',17);
+  b+=arrow(Px+24,Px+140,y,'F',.1,12)+pill(Px+80,y+40,o.F,'#b45309',.3);
+  b+=(o.E?pill(W/2,FY+50,o.E,EC,.6):'')+lbl(90,36,'E','#0f766e',18);
+  return svg(W,H,b,o.cls)}
+const lawE=(f,t)=>`<div class="kLawBox"><div class="kLawF"><bdi dir="ltr">${f}</bdi></div>${t?`<div class="kLawT">${t.map(x=>`<span>${x}</span>`).join('')}</div>`:''}</div>`;
+CARDS['3-3']={
+  field:{title:'المجال الكهربائي',sayT:'نبدأ أول موضوعات درسنا: المجال الكهربائي.',steps:()=>[
+    S(pt(B('المجال الكهربائي')+': هو المنطقة المحيطة بالشحنة الكهربائية التي يظهر فيها تأثيرها.'),''),
+    S(fig(eIntroScene(),'مشهد: المجال الكهربائي حول شحنة موجبة'),'شاهد المشهد: حول الشحنة الموجبة منطقة يظهر فيها تأثيرها. عندما نضع فيها شحنة اختبار صغيرة تتأثر بقوة، وكلما ابتعدنا عن الشحنة ضعفت القوة. هذه المنطقة هي المجال الكهربائي.'),
+    S(pt('لا نرى المجال الكهربائي، لكننا نعرف وجوده من '+B('القوة')+' التي يؤثر بها على شحنة توضع فيه.'),'')]},
+  rep:{title:'تمثيل المجال الكهربائي',sayT:'والآن، كيف نمثل المجال الكهربائي بالرسم؟',steps:()=>[
+    S(pt('يمكن تمثيل المجال الكهربائي بخطوط تعرف باسم '+B('خطوط المجال الكهربائي')+'.'),''),
+    S(pt(B('أهمية خطوط المجال')+': (1) تحديد '+B('اتجاه')+' المجال. (2) تحديد '+B('شدة')+' المجال الكهربائي.'),''),
+    S(fig(eRepFig(),'اتجاه الخط يحدد اتجاه المجال، وتقارب الخطوط يدل على قوته'),'لاحظ الرسم: اتجاه الخط يحدد اتجاه المجال. وقرب الشحنة تكون الخطوط متقاربة فالمجال قوي، وبعيدا عنها تكون متباعدة فالمجال ضعيف.')]},
+  props:{title:'خصائص خطوط المجال الكهربائي',sayT:'ولخطوط المجال الكهربائي خصائص مهمة، لنتعرف عليها.',steps:()=>[
+    S(pt('تخرج دائما من الشحنة '+B('الموجبة')+' وتدخل إلى الشحنة '+B('السالبة')+'.'),''),
+    S(pt(B('لا تتقاطع')+' مع بعضها البعض أبدا.'),''),
+    S(pt('تكون '+B('متقاربة')+' في المجالات القوية، و'+B('متباعدة')+' في المجالات الضعيفة.'),''),
+    S(fig(ePairLines(false),'مشهد: خطوط المجال بين شحنتين مختلفتين'),'شاهد المشهد: خطوط المجال تخرج من الشحنة الموجبة وتدخل في السالبة، ولا يتقاطع خطان أبدا، وتتقارب الخطوط قرب الشحنتين حيث المجال قوي.')]},
+  shapes:{title:'أشكال خطوط المجال',sayT:'والآن، كيف تبدو خطوط المجال حول الشحنات؟',steps:()=>[
+    S(pt(B('الشحنة الموجبة')+': خطوط المجال منتشرة إلى '+B('الخارج')+'.'),''),
+    S(pt(B('الشحنة السالبة')+': خطوط المجال منتشرة إلى '+B('الداخل')+'.'),''),
+    S(fig(eShapesScene(),'مشهد: الخطوط تخرج من الموجبة وتدخل في السالبة'),'شاهد المشهد: حول الشحنة الموجبة تخرج الخطوط إلى الخارج، وحول الشحنة السالبة تدخل الخطوط إلى الداخل.'),
+    S(fig(ePairLines(true),'مشهد: خطوط المجال بين شحنتين متشابهتين'),'وبين شحنتين متشابهتين تتنافر الخطوط ولا تتقاطع، وتبقى بينهما منطقة خالية من الخطوط.')]},
+  types:{title:'أنواع المجال الكهربائي',sayT:'وللمجال الكهربائي نوعان، لنتعرف عليهما.',steps:()=>[
+    S(pt(B('المجال الكهربائي المنتظم')+': هو مجال كهربائي ثابت الشدة والاتجاه عند جميع النقاط.'),''),
+    S(pt(B('المجال الكهربائي غير المنتظم')+': هو المجال المتغير في المقدار أو الاتجاه أو كليهما معا، وينشأ عن الشحنات النقطية.'),''),
+    S(fig(eTypesFig(),'المنتظم بين لوحين متوازيين، وغير المنتظم حول شحنة نقطية'),'قارن في الرسم: بين اللوحين خطوط مستقيمة متوازية فالمجال منتظم، وحول الشحنة النقطية خطوط شعاعية تتباعد فالمجال غير منتظم.')]},
+  strength:{title:'شدة المجال الكهربائي',sayT:'ننتقل الآن إلى الموضوع الثاني في درسنا: شدة المجال الكهربائي.',steps:()=>[
+    S(pt(B('شدة المجال الكهربائي')+': القوة الكهربائية المؤثرة على وحدة الشحنات الموجبة (شحنة اختبار موجبة) الموضوعة عند تلك النقطة.'),''),
+    S(fig(eTestScene(),'مشهد: نضاعف شحنة الاختبار فتتضاعف القوة، وتبقى شدة المجال ثابتة'),'شاهد المشهد: نضع شحنة اختبار عند النقطة P فتتأثر بقوة F. وعندما نضاعف شحنة الاختبار تتضاعف القوة، لكن ناتج قسمة القوة على الشحنة يبقى ثابتا، وهو شدة المجال عند النقطة.'),
+    Object.assign(S(pt('<div class="kLaw">'+M('E = F / q₀')+'</div>'),'وقانون شدة المجال: `E = F / q₀`'),{md:'`E = F / q₀`'}),
+    S({html:'<div class="kc kPt kKeep">حيث:<br>'+M('E')+' شدة المجال الكهربائي، ووحدتها '+M('N/C')+'<br>'+M('F')+' القوة الكهربائية المؤثرة على شحنة الاختبار، ووحدتها النيوتن '+M('N')+'<br>'+M('q₀')+' شحنة الاختبار، ووحدتها الكولوم '+M('C')+'</div>'},'حيث: `E` شدة المجال الكهربائي، ووحدتها نيوتن لكل كولوم. و `F` القوة الكهربائية المؤثرة على شحنة الاختبار، ووحدتها النيوتن. و `q₀` شحنة الاختبار، ووحدتها الكولوم.'),
+    S(pt('شدة المجال '+B('كمية متجهة')+'، واتجاهها هو اتجاه القوة المؤثرة على شحنة الاختبار الموجبة.'),'')]},
+  uniform:{title:'المجال الكهربائي المنتظم',sayT:'والآن، لنتعرف أكثر على المجال الكهربائي المنتظم.',steps:()=>[
+    S(pt(B('تعريفه')+': مجال كهربائي ثابت الشدة والاتجاه عند جميع النقاط.'),''),
+    S(pt(B('كيف ينشأ؟')+' بين لوحين معدنيين متوازيين (مكثف) موصلين بمصدر جهد مستمر.'),''),
+    S(pt(B('خطوطه')+': مستقيمة ومتوازية ومتساوية التباعد، وتتجه من اللوح الموجب إلى اللوح السالب.'),''),
+    S(fig(eUniformScene(),'مشهد: الشحنة بين اللوحين تتأثر بالقوة نفسها في كل مكان'),'شاهد المشهد: بين اللوحين خطوط مستقيمة متوازية من اللوح الموجب إلى السالب، والشحنة أينما كانت بينهما تتأثر بالقوة نفسها، لأن المجال منتظم.'),
+    Object.assign(S(pt('<div class="kLaw">'+M('E = V / d')+'</div>'),'وقانونه: `E = V / d`'),{md:'`E = V / d`'}),
+    S({html:'<div class="kc kPt kKeep">حيث:<br>'+M('E')+' شدة المجال المنتظم، ووحدتها '+M('N/C')+' (وتكافئ '+M('V/m')+')<br>'+M('V')+' فرق الجهد بين اللوحين، ووحدته الفولت '+M('V')+'<br>'+M('d')+' المسافة بين اللوحين، ووحدتها المتر '+M('m')+'</div>'},'حيث: `E` شدة المجال المنتظم، ووحدتها نيوتن لكل كولوم، وتكافئ فولت لكل متر. و `V` فرق الجهد بين اللوحين، ووحدته الفولت. و `d` المسافة بين اللوحين، ووحدتها المتر.')]},
+  point:{title:'المجال الكهربائي غير المنتظم (الناشئ عن شحنة نقطية)',sayT:'وننتقل إلى المجال الكهربائي غير المنتظم، الناشئ عن شحنة نقطية.',steps:()=>[
+    S(pt(B('تعريفه')+': مجال يتغير في المقدار أو الاتجاه أو كليهما معا، وينشأ عن الشحنات النقطية.'),''),
+    S(pt(B('خطوطه')+': شعاعية، تخرج من الشحنة الموجبة وتدخل في السالبة، وتتباعد كلما ابتعدنا عن الشحنة فيضعف المجال.'),''),
+    Object.assign(S(pt('<div class="kLaw">'+M('E = k·q / r²')+'</div>'),'وقانونه: `E = k·q / r²`'),{md:'`E = k·q / r²`'}),
+    S({html:'<div class="kc kPt kKeep">حيث:<br>'+M('E')+' شدة المجال الكهربائي عند النقطة، ووحدتها '+M('N/C')+'<br>'+M('k')+' ثابت كولوم، ويساوي '+M('9 × 10⁹ N·m²/C²')+'<br>'+M('q')+' الشحنة المولدة للمجال، ووحدتها الكولوم '+M('C')+'<br>'+M('r')+' بعد النقطة عن الشحنة، ووحدته المتر '+M('m')+'</div>'},'حيث: `E` شدة المجال الكهربائي عند النقطة، ووحدتها نيوتن لكل كولوم. و `k` ثابت كولوم، ويساوي `9 × 10⁹ N·m²/C²`. و `q` الشحنة المولدة للمجال، ووحدتها الكولوم. و `r` بُعْدُ النقطة عن الشحنة، ووحدته المتر.'),
+    S(pt('مضاعفة المسافة ← المجال يقل إلى '+B('الربع')+' (لأن المسافة مربعة).'),'وإذا ضاعفنا المسافة يقل المجال إلى الربع، لأن المسافة مربعة في المقام.'),
+    S(fig(ePointScene(),'مشهد: المجال يضعف كلما ابتعدنا عن الشحنة'),'شاهد المشهد: عَلَى بُعْدِ r يكون المجال E، وعند ضعف المسافة يقل إلى الربع، وعند ثلاثة أضعافها يقل إلى التسع.')]},
+  multi:{title:'القوة على شحنات متعددة',sayT:'وإذا أثرت أكثر من شحنة على شحنة واحدة، فكيف نحسب القوة عليها؟',steps:()=>[
+    S(pt('احسب كل قوة على حدة بقانون كولوم، ثم اجمعها مع مراعاة الاتجاهات.'),''),
+    S(fig(eMultiFig(),'القوتان على q₀ في اتجاه واحد، فالقوة الكلية مجموعهما'),'لاحظ الرسم: الشحنة الموجبة q₁ تدفع q₀ بعيدا عنها، والشحنة السالبة q₂ تجذبها نحوها، فالقوتان في اتجاه واحد، والقوة الكلية مجموعهما. وإذا تعاكستا نطرح الصغرى من الكبرى.')]},
+  ex1:{title:'مثال ١ · صفحة 95',sayT:'والآن لننتقل إلى حل أمثلة الحقيبة التدريبية. لنأخذ المثال الأول، من صفحة 95.',steps:()=>[
+    S(q('أوجد شدة المجال الكهربائي على بعد '+M('0.3 m')+' من شحنة كهربائية '+M('q = 5 × 10⁻⁹ C')+'.','المثال · صفحة 95'),''),
+    S(gr(['q = 5 × 10⁻⁹ C','r = 0.3 m','k = 9 × 10⁹ N·m²/C²'],'شدة المجال '+M('E')+' عند النقطة واتجاهه'),''),
+    S(fig(eAtP({q:'q = +5 nC',r:'r = 0.3 m',E:'E = 500 N/C'})),'لنرسم الشحنة الموجبة والنقطة P عَلَى بُعْدِ ثلاثة أعشار المتر منها.'),
+    S(st(1,'القانون: '+M('E = k·q / r²')+' لأن المجال ناشئ عن شحنة نقطية واحدة.'),'نستخدم قانون مجال الشحنة النقطية: `E = k·q / r²`، لأن المجال هنا ناشئ عن شحنة نقطية واحدة.'),
+    S(st(2,'التعويض: '+M('E = 9 × 10⁹ × 5 × 10⁻⁹ / 0.3²')),'نعوض: `E = 9 × 10⁹ × 5 × 10⁻⁹ / 0.3²`'),
+    S(st(3,'الحساب: '+M('E = 45 ÷ 0.09 = 500 N/C')),'البسط `45` والمقام `0.09`، إذن `E = 500 N/C`'),
+    S(st(4,'الاتجاه: الشحنة '+B('موجبة')+'، فالمجال عند النقطة يتجه '+B('بعيدا عن الشحنة')+'.<span class="kDirOn"></span>','kDir'),'والآن نحدد الاتجاه: الشحنة موجبة، وخطوط المجال تخرج من الشحنة الموجبة، لذلك يتجه المجال عند النقطة بعيدا عن الشحنة. انظر إلى السهم الأخضر في الرسم.'),
+    S(res(M('E = 500 N/C')+' بعيدا عن الشحنة'),'النتيجة: `E = 500 N/C` باتجاه بعيد عن الشحنة.')]},
+  ex2:{title:'مثال ٢ · صفحة 95',sayT:'وتأمل معي المثال الثاني، من صفحة 95.',steps:()=>[
+    S(q('شحنة كهربائية '+M('2 × 10⁻⁹ C')+' وضعت عند نقطة في مجال كهربائي فتأثرت بقوة '+M('4 × 10⁻⁶ N')+'. ما مقدار المجال الكهربائي في تلك النقطة؟','المثال · صفحة 95'),''),
+    S(gr(['q₀ = 2 × 10⁻⁹ C','F = 4 × 10⁻⁶ N'],'شدة المجال '+M('E')+' عند النقطة'),''),
+    S(fig(eTestQ({q:'q₀ = 2 nC',F:'F = 4 × 10⁻⁶ N',E:'E = 2000 N/C'})),'لنرسم شحنة الاختبار في المجال، والقوة المؤثرة عليها.'),
+    S(st(1,'القانون: '+M('E = F / q₀')+' لأننا نعرف القوة المؤثرة على الشحنة.'),'نستخدم تعريف شدة المجال: `E = F / q₀`، لأننا نعرف القوة التي أثر بها المجال على الشحنة.'),
+    S(st(2,'التعويض: '+M('E = 4 × 10⁻⁶ / 2 × 10⁻⁹')),'نعوض: `E = 4 × 10⁻⁶ / 2 × 10⁻⁹`'),
+    S(st(3,'الحساب: '+M('E = 2 × 10³ N/C = 2000 N/C')+'<span class="kDirOn"></span>'),'نقسم الأعداد: أربعة على اثنين يساوي اثنين، ونطرح الأسس، إذن `E = 2000 N/C`'),
+    S(res(M('E = 2 × 10³ N/C')),'النتيجة: `E = 2 × 10³ N/C`.'),
+    S(pt(B('ملاحظة')+': قيمة المجال صفة للنقطة نفسها، فلو وضعنا شحنة أكبر لزادت القوة بالنسبة نفسها وبقي '+M('E')+' ثابتا.'),'')]},
+  tr1:{title:'تمرين ١ · ورقة العمل · سؤال ٥ (صفحة 105)',sayT:'هيا نطبق ما تعلمناه في التمرين الأول، من ورقة العمل، السؤال الخامس، صفحة 105.',steps:()=>[
+    S(q('شحنة '+M('4 × 10⁻⁶ C')+' تأثرت بقوة '+M('8 × 10⁻³ N')+'. ما شدة المجال؟'),''),
+    S(gr(['q₀ = 4 × 10⁻⁶ C','F = 8 × 10⁻³ N'],'شدة المجال '+M('E')),''),
+    S(fig(eTestQ({q:'q₀ = 4 µC',F:'F = 8 × 10⁻³ N',E:'E = 2000 N/C'})),'لنرسم شحنة الاختبار والقوة المؤثرة عليها.'),
+    S(st(1,'القانون: '+M('E = F / q₀')),'القانون: `E = F / q₀`'),
+    S(st(2,'التعويض: '+M('E = 8 × 10⁻³ / 4 × 10⁻⁶')),'نعوض: `E = 8 × 10⁻³ / 4 × 10⁻⁶`'),
+    S(st(3,'الحساب: '+M('E = 2 × 10³ = 2000 N/C')+'<span class="kDirOn"></span>'),'الحساب: `E = 2000 N/C`'),
+    S(res(M('E = 2000 N/C')),'')]},
+  tr2:{title:'تمرين ٢ · ورقة العمل · سؤال ٦ (صفحة 105)',sayT:'والتمرين الثاني، من ورقة العمل، السؤال السادس، صفحة 105.',steps:()=>[
+    S(q('أوجد شدة المجال الكهربائي على بعد '+M('0.25 m')+' من شحنة كهربائية مقدارها '+M('3 × 10⁻⁹ C')+'.'),''),
+    S(gr(['q = 3 × 10⁻⁹ C','r = 0.25 m','k = 9 × 10⁹ N·m²/C²'],'شدة المجال '+M('E')+' واتجاهه'),''),
+    S(fig(eAtP({q:'q = +3 nC',r:'r = 0.25 m',E:'E = 432 N/C'})),'لنرسم الشحنة والنقطة عَلَى بُعْدِ ربع متر منها.'),
+    S(st(1,'القانون: '+M('E = k·q / r²')),'القانون: `E = k·q / r²`'),
+    S(st(2,'التعويض: '+M('E = 9 × 10⁹ × 3 × 10⁻⁹ / 0.25²')),'نعوض: `E = 9 × 10⁹ × 3 × 10⁻⁹ / 0.25²`'),
+    S(st(3,'الحساب: '+M('E = 27 ÷ 0.0625 = 432 N/C')),'البسط `27` والمقام `0.0625`، إذن `E = 432 N/C`'),
+    S(st(4,'الاتجاه: الشحنة موجبة، فالمجال يتجه '+B('بعيدا عنها')+'.<span class="kDirOn"></span>','kDir'),''),
+    S(res(M('E = 432 N/C')+' بعيدا عن الشحنة'),'')]}
+};
+PFIG['3-3']=[
+  [/0\.3\s*m/,()=>eAtP({q:'q = +5 nC',r:'r = 0.3 m',E:'E = 500 N/C'}),'الاتجاه: الشحنة موجبة، فالمجال عند النقطة يتجه بعيدا عنها'],
+  [/0\.25\s*m/,()=>eAtP({q:'q = +3 nC',r:'r = 0.25 m',E:'E = 432 N/C'}),'الاتجاه: الشحنة موجبة، فالمجال يتجه بعيدا عنها'],
+  [/0\.2\s*m/,()=>eAtP({q:'q = +8 nC',r:'r = 0.2 m',E:'E = 1800 N/C'}),'الاتجاه: الشحنة موجبة، فالمجال يتجه بعيدا عنها'],
+  [/0\.6\s*m/,()=>eAtP({q:'q = +4 µC',r:'r = 0.6 m',E:'E = 1 × 10⁵ N/C'}),'الاتجاه: الشحنة موجبة، فالمجال يتجه بعيدا عنها'],
+  [/2 × 10⁻⁹ C/,()=>eTestQ({q:'q₀ = 2 nC',F:'F = 4 × 10⁻⁶ N',E:'E = 2000 N/C'}),'شدة المجال صفة للنقطة: E = F / q₀ = 2000 N/C'],
+  [/4 × 10⁻⁶ C/,()=>eTestQ({q:'q₀ = 4 µC',F:'F = 8 × 10⁻³ N',E:'E = 2000 N/C'}),'شدة المجال صفة للنقطة: E = F / q₀ = 2000 N/C'],
+  [/2000 N\/C/,()=>eTestQ({q:'q = 3 µC',F:'F = 0.006 N',E:'E = 2000 N/C'}),'القوة F = q·E = 0.006 N في اتجاه المجال لأن الشحنة موجبة']];
+
+/* 3-3: استبدال شرائح الدرس ببطاقات الدرس النموذجي */
+const IM33={"tv": "data:image/webp;base64,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", "xray": "data:image/webp;base64,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", "fish": "data:image/webp;base64,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"};
+function apply33(out){defs();if(!SFIX.__33){SFIX.push(['على بعد','عَلَى بُعْدِ'],['بعد النقطة','بُعْدُ النقطة'],['لأننا نعرف','لِأَنَّنَا نَعْرِفُ']);SFIX.__33=1}const K2='3-3',T=sl=>String(sl.title||''),base=t=>t.replace(/\s*\(تابع\)\s*$/,'');let seenProps=0;
+  const R=[[/^المجال الكهربائي$/,()=>card(K2,'field')],[/^تمثيل المجال الكهربائي$/,()=>card(K2,'rep')],
+    [/^خصائص خطوط المجال الكهربائي$/,()=>seenProps++?null:card(K2,'props')],[/^أشكال خطوط المجال$/,()=>card(K2,'shapes')],
+    [/^أنواع المجال الكهربائي$/,()=>card(K2,'types')],[/^شدة المجال الكهربائي$/,()=>card(K2,'strength')],
+    [/^المجال الكهربائي المنتظم$/,()=>card(K2,'uniform')],[/^المجال الكهربائي غير المنتظم/,()=>card(K2,'point')],
+    [/^القوة على شحنات متعددة$/,()=>card(K2,'multi')],[/^أمثلة الحقيبة التدريبية محلولة$/,()=>card(K2,'ex1')],
+    [/^مثال ٢:.*صفحة 95/,()=>card(K2,'ex2')],[/^رسم توضيحي [12]$/,()=>null],
+    [/^تمرين 1 · ورقة العمل/,()=>card(K2,'tr1')],[/^تمرين 2 · ورقة العمل/,()=>card(K2,'tr2')],
+    [/^تطبيقات من الحياة$/,sl=>{sl.sayT='وبعد أن فهمنا المجال الكهربائي وشدته، لنرى أين نجده في حياتنا.';const IC=[[/شاشات|الأشعة/,'tv'],[/أسماك|الرعاش/,'fish']];
+      sl.steps=sl.steps.map(x=>{if(!x||!x.md)return x;const m=x.md.replace(/^[-•]\s*/,'').match(/^\*\*([^*]+?):?\*\*:?\s*(.*)$/);if(!m)return x;
+        const ik=(IC.find(([re])=>re.test(m[1]))||[0,''])[1],icn=ik?'<img src="'+IM33[ik]+'" alt="">':'💡',il=typeof inl==='function'?inl:(t=>t);
+        return {html:`<div class="kc kPt kcT kApp"><span class="kIco" aria-hidden="true">${icn}</span><div><b>${il(m[1])}</b> ${il(m[2])}</div></div>`,say:m[1].trim()+' '+m[2]}});return sl}]];
+  const res=[];let skip=null;
+  out.forEach(sl=>{const t=T(sl);if(skip&&base(t)===skip&&/\(تابع\)/.test(t))return;skip=null;
+    const m=R.find(([re])=>re.test(base(t)));if(!m||sl.type!=='c'){res.push(sl);return}
+    skip=base(t);const n=m[1](sl);if(Array.isArray(n))n.forEach(x=>x&&res.push(x));else if(n)res.push(n);if(n===sl)skip=null});
+  /* ترتيب الحقيبة: التطبيقات بعد الأمثلة وقبل التمارين كما هي */
+  return res}
+
 /* ---------- التطبيق على السبورة ---------- */
 const VOCK={"كولوم": "كُولُوم", "الرسم": "الرَّسْمِ", "رمزها": "رَمْزُهَا", "لنرسم": "لِنَرْسُمِ", "انظر": "انْظُرْ", "رمزه": "رَمْزُهُ", "القياس": "الْقِيَاسِ", "له": "لَهُ", "لها": "لَهَا", "الإلكترونات": "الْإِلِكْتِرُونَات", "إلكترونات": "إِلِكْتِرُونَاتٍ", "أي": "أَيْ", "فتتجه": "فَتَتَّجِهُ", "السهمين": "السَّهْمَيْنِ", "لنتعرف": "لِنَتَعَرَّفْ", "المهمة": "الْمُهِمَّةِ", "فولت": "فُولْت", "فاراد": "فَارَادْ", "تأمل": "تَأَمَّلْ", "وسطها": "وَسَطِهَا", "والنيوترونات": "وَالنُّيُوتْرُونَات", "وحولها": "وَحَوْلَهَا", "تدور": "تَدُورُ", "والقاعدة": "وَالْقَاعِدَةُ", "الأسهم": "الْأَسْهُمِ", "التنافر": "التَّنَافُرِ", "تبتعد": "تَبْتَعِدُ", "التجاذب": "التَّجَاذُبِ", "تقتربان": "تَقْتَرِبَانِ", "والميكروكولوم": "وَالْمَايْكْرُوكُولُوم", "والنانوكولوم": "وَالنَّانُوكُولُوم", "ضاعفنا": "ضَاعَفْنَا", "مربعة": "مُرَبَّعَةٌ", "ونصف": "وَنِصْفْ", "نستخدم": "نَسْتَخْدِمُ", "والآن": "وَالْآنَ", "نحدد": "نُحَدِّدُ", "متشابهتان": "مُتَشَابِهَتَانِ", "والمسافتان": "وَالْمَسَافَتَانِ", "نحسب": "نَحْسُبُ", "ونحدد": "وَنُحَدِّدُ", "نجمع": "نَجْمَعُ", "القوتين": "الْقُوَّتَيْنِ", "كانتا": "كَانَتَا", "ونطرحهما": "وَنَطْرَحُهُمَا", "تعاكستا": "تَعَاكَسَتَا", "أيضا": "أَيْضًا", "القوتان": "الْقُوَّتَانِ", "فنطرح": "فَنَطْرَحُ", "الصغرى": "الصُّغْرَى", "الكبرى": "الْكُبْرَى", "تتجه": "تَتَّجِهُ", "السهم": "السَّهْمَ", "البنفسجي": "الْبَنَفْسَجِيَّ", "نحول": "نُحَوِّلُ", "النانوكولوم": "النَّانُوكُولُوم", "الكولوم": "الْكُولُوم", "الموجبتين": "الْمُوجَبَتَيْنِ", "تبعد": "تُبْعِدُ", "العالم": "الْعَالِمِ", "شارل": "شَارْل", "الجذب": "الْجَذْبِ", "العام": "الْعَامِّ", "شعرت": "شَعَرْتَ", "يوما": "يَوْمًا", "بشرارة": "بِشَرَارَةٍ", "لمست": "لَمَسْتَ", "الباب": "الْبَابِ", "بعد": "بَعْدَ", "السجاد": "السَّجَّادِ", "صوفية": "صُوفِيَّةٍ", "وتنشأ": "وَتَنْشَأُ", "خاصية": "خَاصِّيَّةٌ", "ورمزها": "وَرَمْزُهَا", "جسيمات": "جُسَيْمَاتِ", "جسيم": "جُسَيْمٍ", "وكتلته": "وَكُتْلَتُهُ", "البروتون": "الْبُرُوتُون", "الإلكترون": "الْإِلِكْتِرُون", "النيوترون": "النُّيُوتْرُون", "كرتان": "كُرَتَانِ", "مشحونتان": "مَشْحُونَتَانِ", "ذراع": "ذِرَاعٍ", "معلق": "مُعَلَّقٍ", "بخيط": "بِخَيْطٍ", "الكرتان": "الْكُرَتَانِ", "يلتوي": "يَلْتَوِي", "الخيط": "الْخَيْطُ", "الالتواء": "الِالْتِوَاءِ", "نعرف": "نَعْرِفُ", "عام": "عَامِ", "ألف": "أَلْفٍ", "وسبعمئة": "وَسَبْعِمِئَةٍ", "وأربعة": "وَأَرْبَعَةٍ", "وثمانين": "وَثَمَانِينَ", "مشحونين": "مَشْحُونَيْنِ", "الالتوائي": "الِالْتِوَائِيِّ", "اخترعه": "اخْتَرَعَهُ", "تجاربه": "تَجَارِبِهِ", "وقيمته": "وَقِيمَتُهُ", "ونقربها": "وَنُقَرِّبُهَا", "يشبه": "يُشْبِهُ", "كتلتين": "كُتْلَتَيْنِ", "كليهما": "كِلَيْهِمَا", "التربيع": "التَّرْبِيعِ", "العكسي": "الْعَكْسِيِّ", "لكولوم": "لِكُولُوم", "ستة": "سِتَّةُ", "إبسلون": "إِبْسِلُونْ", "صفر": "صِفْرٍ", "سماحية": "سَمَاحِيَّةِ", "الفراغ": "الْفَرَاغِ", "ثابت": "ثَابِتُ", "يبين": "يُبَيِّنُ", "قدرة": "قُدْرَةَ", "نقل": "نَقْلِ", "التأثير": "التَّأْثِيرِ", "الشحنات": "الشُّحْنَاتِ", "حيث": "حَيْثُ", "هي": "هِيَ", "يساوي": "يُسَاوِي", "واحدا": "وَاحِدًا", "مقسوما": "مَقْسُومًا", "أربعة": "أَرْبَعَةِ", "باي": "بَايْ", "قيمتها": "قِيمَتُهَا"};
 function vk(t){return String(t||'').split(/(`[^`]*`)/).map(x=>x[0]==='`'?x:x.replace(/[\u0621-\u064A]+/g,w=>VOCK[w]||w)).join('')}
@@ -587,7 +833,7 @@ function sayOf(h){const d=document.createElement('div');d.innerHTML=h;d.querySel
   const tq=d.querySelector('.kQ>.kTag');if(tq)tq.textContent='السؤال: ';
   let t=d.textContent.replace(/\s+/g,' ').trim();SFIX.forEach(([a,b])=>{t=t.split(a).join(b)});return t}
 function card(k,id,o){const c=CARDS[k][id];return {type:'c',title:(o&&o.title)||c.title,sayT:(o&&o.sayT)||c.sayT,steps:c.steps(o&&o.lead).map((x,i)=>{if(x.html&&/class="kc k(Q|GR|St|Res|Pt)\b/.test(x.html)&&!/kLaw|kFig|kKeep|<svg/.test(x.html)){const L=i===0&&o&&o.lead?o.lead:'';x.say=L+sayOf(x.html)}if(x.say)x.say=vk(x.say);return x}),kc:1}}
-function apply(out,K2){if(!CARDS[K2])return out;defs();
+function apply(out,K2){if(!CARDS[K2])return out;defs();if(K2==='3-3')return apply33(out);
   const T=sl=>String(sl.title||''),base=t=>t.replace(/\s*\(تابع\)\s*$/,'');
   const R=[[/^تصنيف المواد حسب توصيلها للكهرباء$/,sl=>{if(K2!=='3-1')return sl;sl.sayT='بعد أن عرفنا أن الإلكترونات هي التي تنتقل بين الأجسام، لنتعرف الآن على تصنيف المواد حسب توصيلها للكهرباء.';
       sl.steps=sl.steps.concat([{html:fig(matScene(),'مشهد: حركة الإلكترونات في الموصل وشبه الموصل والعازل').html,say:'شاهد المشهد: في الموصل تتحرك الإلكترونات بحرية، وفي شبه الموصل حركتها قليلة، وفي العازل تبقى مقيدة في مكانها.'}]);return sl}],
@@ -618,7 +864,7 @@ function apply(out,K2){if(!CARDS[K2])return out;defs();
   return res}
 /* ---------- الأمثلة والتمارين التفاعلية ---------- */
 function probFig(K2,p){const L=PFIG[K2];if(!L)return null;const m=L.find(([re])=>re.test(String(p.q||'')));if(!m)return null;defs();
-  const d=document.createElement('div');d.className='kc kFig kProb';d.dataset.cap=m[2];d.innerHTML=m[1]()+'<div class="kCap">تظهر أسهم القوى واتجاهها بعد أن تحسب القوة</div>';return d}
+  const d=document.createElement('div');d.className='kc kFig kProb';d.dataset.cap=m[2];d.innerHTML=m[1]()+'<div class="kCap">'+(K2==='3-3'?'يظهر سهم المجال واتجاهه بعد أن تحسب':'تظهر أسهم القوى واتجاهها بعد أن تحسب القوة')+'</div>';return d}
 function probDone(el){if(!el)return;el.classList.add('kOn');const c=el.querySelector('.kCap');if(c)c.textContent=el.dataset.cap||''}
 
 /* حرارة: جسم ساخن وجسم بارد يتلامسان (سؤال الربط بالدرس السابق) */
@@ -630,6 +876,7 @@ function heat(){const W=640,H=260,FY=190;let b=stage(W,H,FY);
 function lawFig(){return `<div class="kLawBox"><div class="kLawF"><bdi dir="ltr">F = k · |q₁| · |q₂| / r²</bdi></div><div class="kLawT"><span>F القوة (N)</span><span>k ثابت كولوم</span><span>q₁ و q₂ الشحنتان (C)</span><span>r المسافة (m)</span></div></div>`}
 function solveFig(){return `<div class="kLawBox"><div class="kLawF kStep1"><bdi dir="ltr">F = k · q₁ · q₂ / r²</bdi></div><div class="kLawA">↓ نضرب في r² ونقسم على k·q₂</div><div class="kLawF kStep2"><bdi dir="ltr">q₁ = ?</bdi></div></div>`}
 const QFIG={'3-1':{r:()=>svg2(heat()),s:()=>svg2(pair({s1:'+',s2:'+',l1:'q₁',l2:'q₂',r:'r',cls:'kAuto'}))+lawFig(),i:()=>svg2(pair({s1:'+',s2:'+',l1:'q₁',l2:'q₂',r:'2r',cls:'kAuto'}))+'<div class="kLawBox"><div class="kLawF"><bdi dir="ltr">F = k · q₁ · q₂ / r²</bdi></div></div>',m:()=>svg2(likeUnlike())}};
+QFIG['3-3']={r:()=>svg2(likeUnlike()),s:()=>svg2(eTestQ({q:'q₀',F:'F',E:'',cls:'kAuto'}))+lawE('E = F / q₀',['E شدة المجال (N/C)','F القوة (N)','q₀ شحنة الاختبار (C)']),i:()=>svg2(eTestQ({q:'q₀',F:'F',E:'',cls:'kAuto'}))+lawE('E = F / q₀'),m:()=>svg2(eShapesScene())};
 function svg2(x){return `<div class="kc kFig">${x}</div>`}
 function decorQ(ct,K2,c){const F=QFIG[K2]&&QFIG[K2][c];if(!F)return;defs();const Q=ct.querySelector('.bQ');if(!Q)return;Q.classList.add('kQz');
   const card=Q.querySelector('.bQcard');if(!card)return;const d=document.createElement('div');d.className='kc kQf';d.innerHTML=F();card.after(d)}
@@ -719,16 +966,16 @@ css();
 
 /* 3-1: عنوان إنجليزي لكل شريحة */
 const EN31={'مقدمة الوحدة وأهدافها':'Unit Introduction','أهداف الوحدة':'Unit Objectives','مصطلحات الدرس':'Lesson Terminology','الشحنات الكهربائية':'Electric Charges','الشحنة وجسيمات الذرة':'Charge and Atomic Particles','تصنيف المواد حسب توصيلها للكهرباء':'Conductors, Semiconductors and Insulators','طرق شحن الأجسام بالكهرباء الساكنة':'Methods of Charging','قانون كولوم':"Coulomb's Law",'قانون كولوم وقانون الجذب العام والتشابه بينهما':"Coulomb's Law and Newton's Law of Gravitation",'تطبيقات من الحياة':'Real-Life Applications','ملخص الدرس':'Lesson Summary'};
-/* المدرب 31 أكتوبر: الإنجليزي بجانب عنواني «الشحنات الكهربائية» و«قانون كولوم» فقط، والبقية محذوفة */function en(K2,t){if(K2!=='3-1')return '';t=String(t||'');const K={'الشحنات الكهربائية':'Electric Charges','قانون كولوم':"Coulomb's Law"};return K[t]||''}
+/* المدرب 31 أكتوبر: الإنجليزي بجانب عنواني «الشحنات الكهربائية» و«قانون كولوم» فقط، والبقية محذوفة */function en(K2,t){if(K2!=='3-1'&&K2!=='3-3')return '';t=String(t||'');const K=K2==='3-3'?{'المجال الكهربائي':'Electric Field','شدة المجال الكهربائي':'Electric Field Strength'}:{'الشحنات الكهربائية':'Electric Charges','قانون كولوم':"Coulomb's Law"};return K[t]||''}
 /* 3-1: بطاقات ملونة لكل المحتوى المكتوب حسب نوعه */
-function paint(ct,K2,sl){if(K2!=='3-1'||!ct||!sl||sl.type!=='c')return;const T=String(sl.title||''),sum=T==='ملخص الدرس',app=/^تطبيقات/.test(T);let i=0;
+function paint(ct,K2,sl){if((K2!=='3-1'&&K2!=='3-3')||!ct||!sl||sl.type!=='c')return;const T=String(sl.title||''),sum=T==='ملخص الدرس',app=/^تطبيقات/.test(T);let i=0;
   ct.querySelectorAll('.bStep').forEach(st=>{let c=st.firstElementChild;if(!c||st.dataset.kp)return;st.dataset.kp=1;
     if(c.matches('h3,figure,table,.ltWrap,.kFig,.kQ,.kGR,.kSt,.kRes,.kUH,.kUR,.kTerms,.kLawBox,svg'))return;
     if(c.classList.contains('kc')&&!c.classList.contains('kPt'))return;
     if(!c.classList.contains('kc')){if(/^\s*$/.test(st.textContent)||st.querySelector('figure,table,svg,img'))return;const w=document.createElement('div');w.className='kc kPt kMd';while(st.firstChild)w.appendChild(st.firstChild);st.appendChild(w);c=w}
     if(/\bkc[BPGATR]\b/.test(c.className)){i++;return}
     const t=c.textContent.trim();const P=['kcB','kcP','kcG','kcA','kcT','kcR'];
-    const k=sum?P[i%6]:app?'kcT':/^(مثال|من الحياة)/.test(t)?'kcG':/(القاعدة|قانون|F\s*=|تتنافر|تتجاذب|الربع)/.test(t)?'kcP':/^(تحويل|مضاعفة|ملاحظة|انتبه|لذلك)/.test(t)?'kcA':/^حيث/.test(t)?'kcA':/(هي|هو|:)/.test(t.slice(0,60))?'kcB':['kcB','kcT','kcR'][i%3];
+    const k=sum?P[i%6]:app?'kcT':/^(مثال|من الحياة)/.test(t)?'kcG':/(القاعدة|قانون|[FE]\s*=|تتنافر|تتجاذب|الربع|لا تتقاطع)/.test(t)?'kcP':/^(تحويل|مضاعفة|ملاحظة|انتبه|لذلك)/.test(t)?'kcA':/^حيث/.test(t)?'kcA':/(هي|هو|:)/.test(t.slice(0,60))?'kcB':['kcB','kcT','kcR'][i%3];
     c.classList.add(k);i++})}
 window.KC={en,paint,apply,probFig,probDone,decorQ,has:k=>!!CARDS[k],_pair:pair,_three:three,_atom:atom,_lu:likeUnlike,defs};
 })();
