@@ -6683,7 +6683,14 @@ const DXCSS=`.dxW{position:relative;min-height:120px;border-radius:12px}.dxW .st
 .lxLog{width:100%;border-collapse:collapse;font-size:13.5px}.lxLog td{border:1px solid var(--line);padding:5px 6px;text-align:center}.lxLog td:first-child{font-weight:800;text-align:right}.lxLog tr.nw td{background:#F7931E;color:#fff;font-weight:900;animation:dmBl .45s 3}.lxLog tr.ok td:last-child{color:#15803D;font-weight:900}
 [data-did="dmS"] p,[data-did="dmS"] .row,[data-did="dmS"] .chk,[data-did="dmS"] .msg{display:none!important}.dxEmpty{display:grid;place-items:center;min-height:140px;color:var(--muted);font-weight:800;font-size:14px;text-align:center;padding:10px}`;
 const DXHOME=new Map();let DXI=[];
-function dxTake(st,into){if(!st||st.parentElement===into)return;if(!DXHOME.has(st)){const ph=document.createComment('dx');st.before(ph);DXHOME.set(st,ph)}into.appendChild(st)}
+/* المدرب 1 نوفمبر: عندما ينتقل المشهد المشترك من مشغل إلى آخر يبقى في المشغل الأول صورة ثابتة منه، فلا يبقى فارغا ويقفز الشريط والأزرار إلى أعلاه */
+function dxSnapOf(st){const c=st.cloneNode(true);c.querySelectorAll('img.handH,.hud').forEach(e=>e.remove());const sfx='z'+(window.__dxZ=(window.__dxZ||0)+1)+'_';const M=new Map();
+  c.querySelectorAll('[id]').forEach(e=>{if(e.closest('defs')||/^(linearGradient|radialGradient|clipPath|mask|filter|marker|pattern|symbol)$/i.test(e.tagName)){M.set(e.id,sfx+e.id);e.id=sfx+e.id}else e.removeAttribute('id')});
+  if(M.size)c.querySelectorAll('*').forEach(x=>{for(const a of ['fill','stroke','filter','clip-path','mask','href']){const v=x.getAttribute(a);if(!v||v.indexOf('#')<0)continue;const w=v.replace(/url\(#([^)]+)\)/g,(m,k)=>M.has(k)?'url(#'+M.get(k)+')':m).replace(/^#(.+)$/,(m,k)=>M.has(k)?'#'+M.get(k):m);if(w!==v)x.setAttribute(a,w)}});
+  const d=document.createElement('div');d.className='dxSnap';d.setAttribute('aria-hidden','true');d.appendChild(c);return d}
+function dxTake(st,into){if(!st||st.parentElement===into)return;const from=st.parentElement;
+  if(from&&from.matches&&from.matches('[data-did=dmS]')&&from!==into){try{from.appendChild(dxSnapOf(st))}catch(e){}}
+  if(!DXHOME.has(st)){const ph=document.createComment('dx');st.before(ph);DXHOME.set(st,ph)}into.querySelectorAll(':scope>.dxSnap').forEach(e=>e.remove());into.appendChild(st)}
 function dxRelease(st){const ph=DXHOME.get(st);if(st&&ph){ph.replaceWith(st);DXHOME.delete(st)}}
 function DX(cfg){return function(){
   const box=document.querySelector('.card.lab .labBody');if(!box)return;
@@ -6695,7 +6702,7 @@ function DX(cfg){return function(){
   [...c52.querySelectorAll(':scope>.lxM')].forEach(m=>m.classList.add('dmHide'));
   const mk=(mode,host)=>{const W=mode==='watch';
     const P=document.createElement('div');P.className='dmP dx'+(W?'Wt':'Ex');
-    P.innerHTML=`<h4>${W?'🎬 شاهد التجربة خطوة خطوة':'⚡ تنفيذ التجربة'}</h4><div data-did="dmSW" class="dxW"><div data-did="dmS"></div><button data-did="dmBig" type="button" aria-label="تشغيل">▶ تشغيل</button></div><div data-did="dmV" class="dmView dmHide"></div><div class="dmBar" data-did="dmBar"></div><div class="tl"><button class="pri wPlay" data-did="dmPlay" type="button">▶ تشغيل</button><span data-did="dmTlT"></span><input type="range" data-did="dmTl" min="0" max="0" step="1" value="0"></div><div class="dmCap" data-did="dmCap"></div>${W?'':'<button type="button" data-did="dmRec" class="dmRecB" hidden>✓ سجل القراءة</button>'}<div class="dmBtns"><button data-did="dmNext" class="pri">التالي ←</button><button data-did="dmPrev">→ السابق</button>${W?'':'<button data-did="dmRe">↺ من البداية بقيم جديدة</button>'}</div>`;
+    P.innerHTML=`<h4>${W?'🎬 شاهد التجربة خطوة خطوة':'⚡ تنفيذ التجربة'}</h4><div data-did="dmSW" class="dxW"><div data-did="dmS"></div><div data-did="dmV" class="dmView dmHide"></div><button data-did="dmBig" type="button" aria-label="تشغيل">▶ تشغيل</button></div><div class="dmBar" data-did="dmBar"></div><div class="tl"><button class="pri wPlay" data-did="dmPlay" type="button">▶ تشغيل</button><span data-did="dmTlT"></span><input type="range" data-did="dmTl" min="0" max="0" step="1" value="0"></div><div class="dmCap" data-did="dmCap"></div>${W?'':'<button type="button" data-did="dmRec" class="dmRecB" hidden>✓ سجل القراءة</button>'}<div class="dmBtns"><button data-did="dmNext" class="pri">التالي ←</button><button data-did="dmPrev">→ السابق</button>${W?'':'<button data-did="dmRe">↺ من البداية بقيم جديدة</button>'}</div>`;
     host(P);return run(mode,P)};
   function run(mode,P){const W=mode==='watch';
     let play=false,manual=false;const psleep=async t=>{while(t>0){await sleep(100);if(window.__dmSkip){t=0;break}if(play||manual)t-=100}};
