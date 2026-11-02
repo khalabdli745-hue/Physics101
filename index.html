@@ -1158,14 +1158,14 @@ header.top .brand span{color:#DCE8F7}header.top .progress{color:#E6EEF9}
 document.querySelectorAll('.lgEye').forEach(b=>b.onclick=()=>{const i=b.parentNode.querySelector('input');const sh=i.type==='password';i.type=sh?'text':'password';b.classList.toggle('on',sh);b.setAttribute('aria-label',sh?'إخفاء كلمة المرور':'إظهار كلمة المرور')})})()</script>
 <script src="config.js?v=10281453"></script>
 <script src="voc.js?v=10281453" defer></script>
-<script src="sayfix.js?v=11021300" defer></script>
+<script src="sayfix.js?v=11021530" defer></script>
 <script src="tashkeel.js?v=10281453" defer></script>
 <script src="data.js?v=10281453"></script>
 <script src="study.js?v=10281453"></script>
 <script src="quiz2.js?v=10281453"></script>
 <script src="extras.js?v=10281453"></script>
 <script src="figs.js?v=10281453"></script>
-<script src="figs2.js?v=10281453"></script>
+<script src="figs2.js?v=11021530"></script>
 <script src="problems.js?v=10281453"></script>
 <script src="theory.js?v=10281453"></script>
 <script src="gens.js?v=10281453"></script>
@@ -1173,7 +1173,7 @@ document.querySelectorAll('.lgEye').forEach(b=>b.onclick=()=>{const i=b.parentNo
 <script src="more.js?v=11011115"></script>
 <script src="labs.js?v=11011915"></script>
 <script src="coach.js?v=11011115"></script>
-<script>/* الدرس النموذجي 3-1 المطور: للحساب التجريبي والمدرب فقط */(function(){var n=0;try{var a=JSON.parse(localStorage.getItem("p101-auth")||"null");n=(a&&a.demo)||localStorage.getItem("p101-tauth")?1:0}catch(e){}document.write('<script src="kcards'+(n?'31':'')+'.js?v=11020630"><\/script>')})()</script>
+<script>/* الدرس النموذجي 3-1 المطور: للحساب التجريبي والمدرب فقط */(function(){var n=0;try{var a=JSON.parse(localStorage.getItem("p101-auth")||"null");n=(a&&a.demo)||localStorage.getItem("p101-tauth")?1:0}catch(e){}document.write('<script src="kcards'+(n?'31':'')+'.js?v=11021530"><\/script>')})()</script>
 <script>
 const UNITS=window.UNITS,STUDY=window.STUDY,EXTRA=window.EXTRA||{},FIGS=window.FIGS||{};
 window.PAGES=window.PAGES||{};
@@ -1401,6 +1401,7 @@ const TTS=(()=>{
   /* N وحدةً (نيوتن) لا رمزًا للقوة العمودية */
   function markN(t){t=t.replace(/((?:النيوتن|بالنيوتن|نيوتن)[\s:]*)`?\(?\s*N\s*\)?`?(?!\s*[A-Za-z0-9·\/=_²³])/g,'$1').replace(/\(\s*N\s*\)/g,'(Ｎ)').replace(/((?:وحدة|وحدته|وحدتها|بوحدة|الوحدة|النيوتن|بالنيوتن|نيوتن)[\s`:«»]*)N(?![A-Za-z0-9·\/=_])/g,'$1Ｎ').replace(/(^|[\s`])N(\s*=\s*kg)/g,'$1Ｎ$2').replace(/((?:^|[^ء-ي])[وفب]?(?:ال)?وحد(?:ة|ته|تها|تهما|اتها|اته)(?:\s+(?:قياس|قياسه|قياسها|قياسهما|القياس))?[\s`:«»]*)([msJWVACFKLhgN])(?![A-Za-z0-9·\/=_²³⁻¹̂])(?!\s*[=·×\/+−-])/g,(m,a,u)=>a+String.fromCharCode(0xE100+'msJWVACFKLhgN'.indexOf(u)+1));
     if(/^\s*`?N`?\s*$/.test(t))t=t.replace('N','Ｎ');return t}
+const SYAR={A:'إِيهْ',B:'بِي',C:'سِي',D:'دِي',E:'إِي',F:'إِفْ',G:'جِي',H:'إِتْشْ',I:'آيْ',J:'جِيهْ',K:'كِيهْ',L:'إِلْ',M:'إِمْ',N:'إِنْ',O:'أُو',P:'بِي',Q:'كْيُو',R:'آرْ',S:'إِسْ',T:'تِي',U:'يُو',V:'فِي',W:'دَبْلِيُو',X:'إِكْسْ',Y:'وَايْ',Z:'زِدْ',ρ:'رُو',σ:'سِيجْمَا',α:'أَلْفَا',Δ:'دِلْتَا',Ω:'أُومْ',θ:'ثِيتَا',λ:'لَامْدَا',μ:'مِيُو',ε:'إِبْسِلُونْ'};'abcdefghijklmnopqrstuvwxyz'.split('').forEach(c=>SYAR[c]=SYAR[c.toUpperCase()]);const SYSUB={'₀':'صِفْرْ','₁':'وَاحِدْ','₂':'اثْنَيْنْ','₃':'ثَلَاثَةْ','_total':'الْكُلِّيَّةْ','_eq':'الْمُكَافِئَةْ'};
   function spokenEn(t){
     const P=[];const ph=w=>{P.push(w);return ' \u0001'+(P.length-1)+'\u0002 '};
     t=String(t).replace(/K·E/g,'KE');
@@ -1462,6 +1463,10 @@ const TTS=(()=>{
       /* علامات الترقيم في الطرفين تبقى مع العربي */
       const m=k.match(/^([\s،.:؛؟!«»·\-—–]*)([\s\S]*?)([\s،.:؛؟!«»·\-—–]*)$/);
       if(m[1])segs.push({l:'ar',t:m[1]});
+      /* المدرب 2 نوفمبر (أ): الرمز المفرد (E و Q و q₀ و R_total…) يقرأ بالصوت العربي نفسه حتى لا يتقطع الكلام بالانتقال بين الصوتين */
+      if(/^(AC|DC)$/.test(m[2])){segs.push({l:'ar',t:m[2]==='AC'?' إِيهْ سِي ':' دِي سِي '});if(m[3])segs.push({l:'ar',t:m[3]});continue}
+      const sy=m[2].match(/^([A-Za-zρσαΔΩθλμε])(₀|₁|₂|₃|_total|_eq)?$/);
+      if(sy){segs.push({l:'ar',t:' '+SYAR[sy[1]]+(sy[2]?' '+SYSUB[sy[2]]:'')+' '});if(m[3])segs.push({l:'ar',t:m[3]});continue}
       segs.push({l:'en',t:m[2]});
       if(m[3])segs.push({l:'ar',t:m[3]});
     }
@@ -1893,7 +1898,7 @@ function openBoard(dry){const dryS=dry==='slides';dry=dry===true||dryS;
         else if(q.ct)fb('hint','فكر مرة أخرى. '+(q.h||HINT[q.ct]));
         else{f.className='bQf bad';f.textContent='ليست هذه، فكّر مرة أخرى.'}}})}
     upd()};
-  const syncCap=()=>{try{if(auto||!cap||!N31)return;let t=plain(narrAt(cur,step));if(!t&&out[cur].type==='c'&&step===0)t=plain(out[cur].title||'');if(!t)return;cap.innerHTML=inl(t.replace(/^[-•]\s*/,''));if(/^3-[13-6]$/.test(K2))cap.innerHTML=cap.innerHTML.replace(/[\u064B-\u0652\u0670]/g,'')}catch(e){}};
+  const syncCap=()=>{try{if(auto||!cap||!N31)return;let t=plain(narrAt(cur,step));if(!t&&out[cur].type==='c'&&step===0)t=plain(out[cur].title||'');if(!t)return;cap.innerHTML=inl(t.replace(/^[-•]\s*/,''));if(/^(3-[13-6]|4-[158])$/.test(K2))cap.innerHTML=cap.innerHTML.replace(/[\u064B-\u0652\u0670]/g,'')}catch(e){}};
   const upd=()=>{const sl=out[cur],n=nSteps(sl);syncCap();
     ct.querySelectorAll('.bStep').forEach((e,j)=>e.classList.toggle('in',j<step));
     const last=ct.querySelectorAll('.bStep.in');if(last.length){const e=last[last.length-1];setTimeout(()=>{/* الخطوة الأطول من الشاشة (جدول كبير) تظهر من أولها */const tall=e.offsetHeight>slideEl.clientHeight-40;slideEl.scrollTo({top:Math.max(0,tall?e.offsetTop-8:e.offsetTop+e.offsetHeight-slideEl.clientHeight+30),behavior:'smooth'})},30)}
@@ -1939,7 +1944,7 @@ function openBoard(dry){const dryS=dry==='slides';dry=dry===true||dryS;
   const muSet=()=>{muBtn.textContent=MUTE?'🔇':'🔊';muBtn.title=MUTE?'تشغيل صوت المدرب':'كتم صوت المدرب';muBtn.setAttribute('aria-label',muBtn.title);muBtn.classList.toggle('on',MUTE)};muSet();
   muBtn.addEventListener('click',e=>{e.stopPropagation();MUTE=!MUTE;try{localStorage.setItem('p101-bmute',MUTE?'1':'')}catch(_){}muSet();if(MUTE)TTS.stop()});
   if(!dry)setTimeout(()=>{const fs=B.querySelector('.bFsBtn');if(fs)fs.after(muBtn);else{const pr=B.querySelector('.bProg');if(pr)pr.parentElement.insertBefore(muBtn,pr)}},250);
-  const say=async(t,id)=>{t=plain(t);if(!t||id!==runId)return;cap.innerHTML=inl(K2==='1-7'?t.replace(/^[-•]\s*/,'').replace(/[.。]\s*$/,''):t.replace(/^[-•]\s*/,''));if(/^3-[13-6]$/.test(K2))cap.innerHTML=cap.innerHTML.replace(/[\u064B-\u0652\u0670]/g,'');B.classList.add('talking');
+  const say=async(t,id)=>{t=plain(t);if(!t||id!==runId)return;cap.innerHTML=inl(K2==='1-7'?t.replace(/^[-•]\s*/,'').replace(/[.。]\s*$/,''):t.replace(/^[-•]\s*/,''));if(/^(3-[13-6]|4-[158])$/.test(K2))cap.innerHTML=cap.innerHTML.replace(/[\u064B-\u0652\u0670]/g,'');B.classList.add('talking');
     if(!MUTE)try{let c=cur,st=step;for(let n=0;n<4;n++){const sl=out[c];if(sl&&sl.type==='c'&&st<sl.steps.length)st++;else{c++;st=0}if(!out[c])break;const nt=plain(narrAt(c,st));if(nt)TTS.prefetch(nt)}}catch(e){}
     if(MUTE||!TTS.has()){const k1=cur+':'+step;pendKey=k1;await wait(Math.min(9000,1200+t.length*55));if(id===runId){lastSaid=k1;pendKey=''}B.classList.remove('talking');return}
     const k0=cur+':'+step;pendKey=k0;const d=document.createElement('button');TTS.play(t,d);await wait(N31?150:400);
@@ -1964,8 +1969,8 @@ function openBoard(dry){const dryS=dry==='slides';dry=dry===true||dryS;
     return pre+b};
   const narr=()=>narrAt(cur,step);
   const narrAt=(cur,step)=>{const sl=out[cur];
-    if(sl.type==='t')return (/^3-[13-6]$/.test(K2)&&N31?'أهلًا وسهلًا بك'+((!dry&&window.coachName&&coachName())?' يا '+coachName():'')+'، ومرحبًا بك في هذا الدرس. يسعدني أن أكون معك اليوم. ':'مرحبًا بك'+((!dry&&window.coachName&&coachName())?' يا '+coachName():'')+'، يسعدني أن أكون معك اليوم. ')+(VO==='z'?'أنا مدربتك الذكية':'أنا مدربك الذكي')+'، وسأشرح لك '+((window.COACHINTRO||[]).includes(K2)?'مقدمة الوحدة '+['الأولى','الثانية','الثالثة','الرابعة','الخامسة'][+K2.split('-')[0]]+' وأهدافها ثم درس: ':'درس: ')+l.t+'. '+(TOP?'ومواضيع الدرس كالتالي: '+topSay()+'. ركّز معي، وهيا نبدأ.':heads.length?'سنتعلم في هذا الدرس: '+heads.join('، ')+'. ركّز معي، وهيا نبدأ.':'ركّز معي، وهيا نبدأ.');
-    if(sl.type==='e'){const n=!dry&&window.coachName&&coachName(),lab=!!(window.LABS&&LABS[K2]);return 'شكرًا لمتابعتك'+(n?' يا '+n:'')+'. انتهينا من شرح الدرس، والآن حل الأمثلة والتمارين التفاعلية، ثم اختبر نفسك'+(lab?'، وبعدها انتقل إلى التجربة العملية لترى ما تعلمته يتحقق أمامك.':'.')+(/^3-[13-6]$/.test(K2)&&N31?' أتمنى لك التوفيق.':'')}
+    if(sl.type==='t')return (/^(3-[13-6]|4-[158])$/.test(K2)&&N31?'أهلًا وسهلًا بك'+((!dry&&window.coachName&&coachName())?' يا '+coachName():'')+'، ومرحبًا بك في هذا الدرس. يسعدني أن أكون معك اليوم. ':'مرحبًا بك'+((!dry&&window.coachName&&coachName())?' يا '+coachName():'')+'، يسعدني أن أكون معك اليوم. ')+(VO==='z'?'أنا مدربتك الذكية':'أنا مدربك الذكي')+'، وسأشرح لك '+((window.COACHINTRO||[]).includes(K2)?'مقدمة الوحدة '+['الأولى','الثانية','الثالثة','الرابعة','الخامسة'][+K2.split('-')[0]]+' وأهدافها ثم درس: ':'درس: ')+l.t+'. '+(TOP?'ومواضيع الدرس كالتالي: '+topSay()+'. ركّز معي، وهيا نبدأ.':heads.length?'سنتعلم في هذا الدرس: '+heads.join('، ')+'. ركّز معي، وهيا نبدأ.':'ركّز معي، وهيا نبدأ.');
+    if(sl.type==='e'){const n=!dry&&window.coachName&&coachName(),lab=!!(window.LABS&&LABS[K2]);return 'شكرًا لمتابعتك'+(n?' يا '+n:'')+'. انتهينا من شرح الدرس، والآن حل الأمثلة والتمارين التفاعلية، ثم اختبر نفسك'+(lab?'، وبعدها انتقل إلى التجربة العملية لترى ما تعلمته يتحقق أمامك.':'.')+(/^(3-[13-6]|4-[158])$/.test(K2)&&N31?' أتمنى لك التوفيق.':'')}
     if(sl.type==='q')return window.CQQ||'والآن حان دورك، توقف لحظة وأجب عن هذا السؤال.';
     if(step===0){if(!sl.title)return '';if(sl.sayT)return sl.sayT;if(/\(تابع\)$/.test(sl.title))return sl.s4?'':'نكمل معًا.';
       if(sl.title==='ملخص الدرس')return 'والآن، لنستعرض خلاصة ما تعلمناه في هذا الدرس.';
