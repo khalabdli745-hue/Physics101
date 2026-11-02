@@ -1136,6 +1136,7 @@ header.top .brand span{color:#DCE8F7}header.top .progress{color:#E6EEF9}
       <label class="lgF lgFu"><span class="lgL" id="lgIdLab">الرقم التدريبي</span><input id="lgId" placeholder="الرقم التدريبي" inputmode="numeric" autocapitalize="off" autocorrect="off" spellcheck="false" autocomplete="username" required></label>
       <label class="lgF lgFp"><span class="lgL">كلمة المرور</span><input id="lgPw" type="password" autocomplete="current-password" placeholder="كلمة المرور"><button type="button" class="lgEye" aria-label="إظهار كلمة المرور"></button></label>
       <p class="lgHint" id="lgHint">أول مرة تدخل؟ اكتب رقمك التدريبي واترك كلمة المرور فارغة، ثم اختر كلمة مرورك.</p>
+      <p class="lgHint" id="lgFg" hidden style="margin-top:6px"><a href="#" id="lgFgA" style="color:#1565c8;font-weight:700;text-decoration:underline">نسيت كلمة المرور؟</a></p>
     </div>
     <div id="lgStep2" hidden>
       <label class="lgF lgFk" id="lgCodeL"><span class="lgL">رمز التسجيل من المدرب (6 أرقام)</span><input id="lgCode" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="رمز التسجيل من المدرب (6 أرقام)"></label>
@@ -2903,7 +2904,7 @@ function showLogin(){
   let pg='0',grp='s',hD=0;const show=(p,pop)=>{const up=(pg==='0'&&p!=='0')||(pg!=='f'&&p==='f');if(!pop&&up){try{history.pushState({lg:p},'');hD++}catch(e){}}pg=p;$('loginForm').dataset.pg=p;['0','s','t','f'].forEach(x=>$('lgP'+x).hidden=x!==p);$('lgBack').hidden=p==='0';$('lgAbout').hidden=p!=='0';scrollTo(0,0);$('loginWrap').scrollTop=0};
   $('lgBack').onclick=()=>{if(hD>0)history.back();else show(pg==='f'?grp:'0',true)};
   window.addEventListener('popstate',()=>{if($('loginWrap').hidden||hD<=0)return;hD--;show(pg==='f'?grp:'0',true)});
-  const setRole=k=>{const r=k==='te'?'e':k==='g'?'s':k;mode=k;grp=(k==='t'||k==='d'||k==='te'||k==='g')?'t':'s';role=r;step=1;kind='';$('lgStep1').hidden=false;$('lgStep2').hidden=true;$('lgBtn').textContent='دخول';$('lgBtn').disabled=false;
+  const setRole=k=>{const r=k==='te'?'e':k==='g'?'s':k;fgt=false;$('lgFg').hidden=k!=='s';mode=k;grp=(k==='t'||k==='d'||k==='te'||k==='g')?'t':'s';role=r;step=1;kind='';$('lgStep1').hidden=false;$('lgStep2').hidden=true;$('lgBtn').textContent='دخول';$('lgBtn').disabled=false;
     $('lgHd').firstElementChild.innerHTML=LGI[k];$('lgHd').lastElementChild.textContent=LGT[k];
     const R=ROLES[k];$('lgSub').textContent=R.sub;$('lgIdLab').textContent=R.lab;$('lgId').inputMode=R.im;$('lgId').value=R.val;$('lgPw').value='';$('lgHint').innerHTML=R.hint;$('lgMsg').textContent='';
     show('f');setTimeout(()=>(R.val?$('lgPw'):$('lgId')).focus(),50)};
@@ -2914,7 +2915,7 @@ function showLogin(){
   const ok=r=>{const demo=/^demo$/i.test(lastId);localStorage.setItem('p101-auth',JSON.stringify({id:demo?'DEMO':lastId,token:r.token,name:r.name,section:r.section,demo,exam:role==='e'}));if(role==='e')store.set('p101-pos',Object.assign({},pos,{t:'exam'}));location.reload()};
   /* أمان الدخول: كلمة مرور قوية 12 خانة، ورمز التسجيل في أول دخول، وتغيير كلمة المرور الضعيفة */
   const PWR=[['12 خانة على الأقل',p=>p.length>=12],['حرف إنجليزي كبير A-Z',p=>/[A-Z]/.test(p)],['حرف إنجليزي صغير a-z',p=>/[a-z]/.test(p)],['رقم 0-9',p=>/[0-9]/.test(p)],['رمز مثل @ # $ ! %',p=>/[^A-Za-z0-9\s]/.test(p)],['بدون مسافات',p=>!!p&&!/\s/.test(p)],['لا تحتوي رقمك أو اسم المستخدم',(p,u)=>!!p&&!(u&&p.toLowerCase().includes(String(u).toLowerCase()))]];
-  let kind='',oldPw='',uName='';
+  let fgt=false,kind='',oldPw='',uName='';
   const pwOk=()=>{const p=$('lgNew1').value,u=kind==='change'&&!$('lgNewUL').hidden&&$('lgNewU').value.trim()?$('lgNewU').value.trim():uName;let n=0;
     $('lgRules').innerHTML=PWR.map(([t,f])=>{const y=f(p,u);if(y)n++;return '<li class="'+(y?'y':'')+'">'+t+'</li>'}).join('');
     const bar=$('lgBar');bar.style.width=Math.round(n/PWR.length*100)+'%';bar.style.background=n===PWR.length?'#16a34a':n>=5?'#d97706':'#dc2626';return n===PWR.length};
@@ -2931,6 +2932,8 @@ function showLogin(){
   const afterT=token=>{if(role==='t'){localStorage.setItem('p101-tauth',JSON.stringify(token));location.replace('teacher.html');return Promise.resolve()}
     return SYNC.post({a:mode==='d'?'tdemo':'texme',token}).then(x=>{$('lgBtn').disabled=false;if(!x.ok||!x.token)return msg(x.error==='not_found'?'افتح الاختبار التجريبي من لوحة المدرب أولا.':'تعذّر الدخول.',1);lastId=mode==='d'?'demo':String(x.id||'');ok(x)})};
   const dg=v=>v.replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).trim();
+  $('lgFgA').onclick=e=>{e.preventDefault();const id=dg($('lgId').value);if(!id){msg('اكتب رقمك التدريبي أولا، ثم اضغط «نسيت كلمة المرور؟».',1);return $('lgId').focus()}
+    fgt=true;uName=id;lastId=id;toStep2('first',{name:''});$('lgSub').textContent='اكتب رمز التسجيل الذي أرسله المدرب لشعبتك، ثم اختر كلمة مرور جديدة واحفظها في ملاحظات جوالك.';$('lgBtn').textContent='حفظ كلمة المرور الجديدة والدخول'};
   $('loginForm').onsubmit=e=>{e.preventDefault();const b=$('lgBtn');
     const id=dg($('lgId').value);lastId=id;uName=id;
     const fail=()=>{b.disabled=false;msg('تعذّر الاتصال بالخادم. تحقق من الإنترنت ثم حاول مرة أخرى.',1)};
@@ -2940,7 +2943,7 @@ function showLogin(){
       if(!pwOk())return msg('كلمة المرور لا تحقق كل الشروط في القائمة.',1);if(a!==c)return msg('كلمتا المرور غير متطابقتين.',1);
       b.disabled=true;msg('جارٍ الحفظ…');
       if(isT())return SYNC.post({a:'tchpw',user:id,pw:oldPw,newuser:$('lgNewUL').hidden?'':$('lgNewU').value.trim(),newpw:a}).then(r=>{if(r.ok&&r.token)return afterT(r.token);b.disabled=false;msg(tErr(r),1)}).catch(fail);
-      const q=kind==='first'?{a:role==='e'?'exsetpw':'setpw',id,pw:a,code,device:SYNC.dev}:{a:role==='e'?'exchpw':'chpw',id,pw:oldPw,newpw:a,device:SYNC.dev};
+      const q=kind==='first'?{a:role==='e'?'exsetpw':(fgt?'forgotpw':'setpw'),id,pw:a,code,device:SYNC.dev}:{a:role==='e'?'exchpw':'chpw',id,pw:oldPw,newpw:a,device:SYNC.dev};
       return SYNC.post(q).then(r=>{b.disabled=false;if(r.ok&&r.token)return ok(r);msg(errMsg(r),1)}).catch(fail)}
     b.disabled=true;msg('جارٍ التحقق…');oldPw=$('lgPw').value;
     if(isT())return SYNC.post({a:'tlogin',user:id,pw:oldPw}).then(r=>{if(r.ok&&r.needChange){b.disabled=false;return toStep2('change',r)}
