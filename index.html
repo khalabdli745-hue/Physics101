@@ -1163,7 +1163,7 @@ document.querySelectorAll('.lgEye').forEach(b=>b.onclick=()=>{const i=b.parentNo
 <script src="data.js?v=10281453"></script>
 <script src="study.js?v=10281453"></script>
 <script src="quiz2.js?v=10281453"></script>
-<script src="extras.js?v=10281453"></script>
+<script src="extras.js?v=11021935"></script>
 <script src="figs.js?v=10281453"></script>
 <script src="figs2.js?v=11021530"></script>
 <script src="problems.js?v=10281453"></script>
@@ -1171,7 +1171,7 @@ document.querySelectorAll('.lgEye').forEach(b=>b.onclick=()=>{const i=b.parentNo
 <script src="gens.js?v=10281453"></script>
 <script src="art.js?v=10281453"></script>
 <script src="more.js?v=11011115"></script>
-<script src="labs.js?v=11021845"></script>
+<script src="labs.js?v=11022020"></script>
 <script src="coach.js?v=11011115"></script>
 <script>/* الدرس النموذجي 3-1 المطور: للحساب التجريبي والمدرب فقط */(function(){var n=0;try{var a=JSON.parse(localStorage.getItem("p101-auth")||"null");n=(a&&a.demo)||localStorage.getItem("p101-tauth")?1:0}catch(e){}document.write('<script src="kcards'+(n?'31':'')+'.js?v=11021845"><\/script>')})()</script>
 <script>
@@ -1600,7 +1600,7 @@ function buildNav(){
       it.appendChild(lb);ol.appendChild(it)});
     d.append(b,ol);nav.appendChild(d)});
   const f=document.createElement('div');f.className='navfoot';
-  f.innerHTML='<button id="examBtn" hidden>الاختبارات الفصلية</button><button id="bagBtn">الحقيبة التدريبية كاملة</button><button id="guideBtn">دليل المتدرب</button><button id="survBtn">استبانة رضا المتدرب</button><button id="refsBtn">المراجع العربية للمقرر</button><button id="themeBtn">تبديل الوضع الفاتح/الداكن</button>';
+  f.innerHTML='<button id="examBtn" hidden>الاختبارات الفصلية</button><button id="bagBtn">الحقيبة التدريبية كاملة</button><button id="guideBtn">دليل المتدرب</button><button id="survBtn">استبانة رضا المتدرب</button><button id="refsBtn">قائمة المراجع</button><button id="themeBtn">تبديل الوضع الفاتح/الداكن</button>';
   nav.appendChild(f);
   $('refsBtn').onclick=()=>{pos.t='refs';closeNav();render()};
   $('examBtn').hidden=true;
@@ -1639,7 +1639,7 @@ function render(){if(typeof pos!=='undefined'&&pos&&pos.t==='page'&&!(Date.now()
   const u=UNITS[pos.u],l=lesson();
   const refs=GT(pos.t);
   $('crumb').textContent=refs?'المقرر كاملًا':`الوحدة ${ORD[pos.u]} · ${u.t}`;
-  $('lessonTitle').textContent=refs?(pos.t==='exam'?'📝 الاختبارات الفصلية':'المراجع العربية والمصادر'):l.t;if(!refs&&l.pre){const sm=document.createElement('small');sm.className='lpre';sm.textContent=l.pre;$('lessonTitle').prepend(sm)}
+  $('lessonTitle').textContent=refs?(pos.t==='exam'?'📝 الاختبارات الفصلية':'قائمة المراجع'):l.t;if(!refs&&l.pre){const sm=document.createElement('small');sm.className='lpre';sm.textContent=l.pre;$('lessonTitle').prepend(sm)}
   if(pos.t!=='exam'){clearInterval(EXAM.timer);document.body.classList.remove('examMode')}document.body.classList.toggle('examSec',pos.t==='exam');examBar();
   $('doneBtn').hidden=refs;$('tabs').hidden=refs;
   const isDone=done.has(key(pos.u,pos.l));
@@ -2670,7 +2670,7 @@ function renderLab(v){
   /* تطبيقات من الحياة: تبقى في تبويب الدرس فقط، ولا تظهر في تبويب التجارب العملية */
   const r=card('مراجع للاستزادة','من قائمة مراجع الحقيبة التدريبية، المناسبة لهذه الوحدة:');
   const ul=document.createElement('ul');ul.className='refs';
-  (window.REFS||[]).filter(f=>f.u.includes(pos.u)).forEach(f=>{const li=document.createElement('li');li.innerHTML=`<b></b><br><small></small>`;li.querySelector('b').textContent=f.t;li.querySelector('small').textContent=f.a;ul.appendChild(li)});
+  (window.REFS||[]).filter(f=>f.u.includes(pos.u)).forEach(f=>{const li=document.createElement('li');li.innerHTML=`<b></b><br><small></small>`;li.querySelector('b').textContent=f.t;li.querySelector('b').dir='auto';li.querySelector('small').textContent=f.a;if(!f.a){li.querySelector('br').remove();li.querySelector('small').remove();li.querySelector('b').style.fontWeight='600'}ul.appendChild(li)});
   r.appendChild(ul);i.appendChild(r);
 }
 /* ---------- الاختبارات الفصلية ---------- */
@@ -2854,10 +2854,10 @@ function examPaper(i){
 }
 function renderRefs(v){
   const i=wrap(v);
-  const c=card('المراجع العربية للمقرر','المراجع المعتمدة في الحقيبة التدريبية. الأمثلة والتطبيقات في المنصة كُتبت بأسلوب هذه المراجع.');
+  const c=card('قائمة المراجع','المراجع التي اعتمدت عليها المنصة. الأمثلة والتطبيقات في المنصة كُتبت بأسلوب هذه المراجع.');
   const ul=document.createElement('ol');ul.className='refs';
-  (window.REFS||[]).forEach(f=>{const li=document.createElement('li');li.innerHTML='<b></b><br><small></small>';li.querySelector('b').textContent=f.t;li.querySelector('small').textContent=f.a;ul.appendChild(li)});
-  c.appendChild(ul);i.appendChild(c);
+  (window.REFS||[]).forEach(f=>{const li=document.createElement('li');li.innerHTML='<b></b><br><small></small>';li.querySelector('b').textContent=f.t;li.querySelector('b').dir='auto';li.querySelector('small').textContent=f.a;if(!f.a){li.querySelector('br').remove();li.querySelector('small').remove();li.querySelector('b').style.fontWeight='600'}ul.appendChild(li)});
+  c.appendChild(ul);c.insertAdjacentHTML('beforeend','<p style="font-size:.9em;opacity:.8;margin-top:10px">ملاحظة: بعض الصور التوضيحية في المنصة مولدة باستخدام أدوات الذكاء الاصطناعي Claude وChatGPT.</p>');i.appendChild(c);
   const s=card('مصادر رقمية مجانية بالعربية');
   s.insertAdjacentHTML('beforeend',`<div class="md"><ul><li><a href="https://phet.colorado.edu/ar/" target="_blank" rel="noopener">PhET — محاكاة فيزيائية تفاعلية بالعربية</a> (جامعة كولورادو)</li><li><a href="https://claude.ai/artifact/9BRKRrSsZcDSEQSbLHPzec" target="_blank" rel="noopener">المساعد الذكي للمقرر</a> — يجيب عن أسئلتك ويشرح أي صفحة (يحتاج حساب Claude مجاني)</li></ul></div>`);
   i.appendChild(s);
