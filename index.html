@@ -2904,7 +2904,7 @@ function showLogin(){
   let pg='0',grp='s',hD=0;const show=(p,pop)=>{const up=(pg==='0'&&p!=='0')||(pg!=='f'&&p==='f');if(!pop&&up){try{history.pushState({lg:p},'');hD++}catch(e){}}pg=p;$('loginForm').dataset.pg=p;['0','s','t','f'].forEach(x=>$('lgP'+x).hidden=x!==p);$('lgBack').hidden=p==='0';$('lgAbout').hidden=p!=='0';scrollTo(0,0);$('loginWrap').scrollTop=0};
   $('lgBack').onclick=()=>{if(hD>0)history.back();else show(pg==='f'?grp:'0',true)};
   window.addEventListener('popstate',()=>{if($('loginWrap').hidden||hD<=0)return;hD--;show(pg==='f'?grp:'0',true)});
-  const setRole=k=>{const r=k==='te'?'e':k==='g'?'s':k;fgt=false;$('lgFg').hidden=k!=='s';mode=k;grp=(k==='t'||k==='d'||k==='te'||k==='g')?'t':'s';role=r;step=1;kind='';$('lgStep1').hidden=false;$('lgStep2').hidden=true;$('lgBtn').textContent='دخول';$('lgBtn').disabled=false;
+  const setRole=k=>{const r=k==='te'?'e':k==='g'?'s':k;fgt=false;$('lgFg').hidden=k==='g';mode=k;grp=(k==='t'||k==='d'||k==='te'||k==='g')?'t':'s';role=r;step=1;kind='';$('lgStep1').hidden=false;$('lgStep2').hidden=true;$('lgBtn').textContent='دخول';$('lgBtn').disabled=false;
     $('lgHd').firstElementChild.innerHTML=LGI[k];$('lgHd').lastElementChild.textContent=LGT[k];
     const R=ROLES[k];$('lgSub').textContent=R.sub;$('lgIdLab').textContent=R.lab;$('lgId').inputMode=R.im;$('lgId').value=R.val;$('lgPw').value='';$('lgHint').innerHTML=R.hint;$('lgMsg').textContent='';
     show('f');setTimeout(()=>(R.val?$('lgPw'):$('lgId')).focus(),50)};
@@ -2932,7 +2932,7 @@ function showLogin(){
   const afterT=token=>{if(role==='t'){localStorage.setItem('p101-tauth',JSON.stringify(token));location.replace('teacher.html');return Promise.resolve()}
     return SYNC.post({a:mode==='d'?'tdemo':'texme',token}).then(x=>{$('lgBtn').disabled=false;if(!x.ok||!x.token)return msg(x.error==='not_found'?'افتح الاختبار التجريبي من لوحة المدرب أولا.':'تعذّر الدخول.',1);lastId=mode==='d'?'demo':String(x.id||'');ok(x)})};
   const dg=v=>v.replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).trim();
-  $('lgFgA').onclick=e=>{e.preventDefault();const id=dg($('lgId').value);if(!id){msg('اكتب رقمك التدريبي أولا، ثم اضغط «نسيت كلمة المرور؟».',1);return $('lgId').focus()}
+  $('lgFgA').onclick=e=>{e.preventDefault();if(isT()){location.href='teacher.html#forgot';return}const id=dg($('lgId').value);if(!id){msg('اكتب رقمك التدريبي أولا، ثم اضغط «نسيت كلمة المرور؟».',1);return $('lgId').focus()}
     fgt=true;uName=id;lastId=id;toStep2('first',{name:''});$('lgSub').textContent='اكتب رمز التسجيل الذي أرسله المدرب لشعبتك، ثم اختر كلمة مرور جديدة واحفظها في ملاحظات جوالك.';$('lgBtn').textContent='حفظ كلمة المرور الجديدة والدخول'};
   $('loginForm').onsubmit=e=>{e.preventDefault();const b=$('lgBtn');
     const id=dg($('lgId').value);lastId=id;uName=id;
@@ -2943,7 +2943,7 @@ function showLogin(){
       if(!pwOk())return msg('كلمة المرور لا تحقق كل الشروط في القائمة.',1);if(a!==c)return msg('كلمتا المرور غير متطابقتين.',1);
       b.disabled=true;msg('جارٍ الحفظ…');
       if(isT())return SYNC.post({a:'tchpw',user:id,pw:oldPw,newuser:$('lgNewUL').hidden?'':$('lgNewU').value.trim(),newpw:a}).then(r=>{if(r.ok&&r.token)return afterT(r.token);b.disabled=false;msg(tErr(r),1)}).catch(fail);
-      const q=kind==='first'?{a:role==='e'?'exsetpw':(fgt?'forgotpw':'setpw'),id,pw:a,code,device:SYNC.dev}:{a:role==='e'?'exchpw':'chpw',id,pw:oldPw,newpw:a,device:SYNC.dev};
+      const q=kind==='first'?{a:role==='e'?(fgt?'exforgotpw':'exsetpw'):(fgt?'forgotpw':'setpw'),id,pw:a,code,device:SYNC.dev}:{a:role==='e'?'exchpw':'chpw',id,pw:oldPw,newpw:a,device:SYNC.dev};
       return SYNC.post(q).then(r=>{b.disabled=false;if(r.ok&&r.token)return ok(r);msg(errMsg(r),1)}).catch(fail)}
     b.disabled=true;msg('جارٍ التحقق…');oldPw=$('lgPw').value;
     if(isT())return SYNC.post({a:'tlogin',user:id,pw:oldPw}).then(r=>{if(r.ok&&r.needChange){b.disabled=false;return toStep2('change',r)}

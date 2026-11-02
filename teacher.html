@@ -383,6 +383,7 @@ async function authScreen(){
   if(!ready){$('#asub').textContent='أول دخول: أنشئ حساب المدرب. اكتب رمز الإعداد من «سجل التنفيذ» في Apps Script، ثم اختر اسم مستخدم (6 خانات على الأقل) وكلمة مرور قوية، واحفظهما جيدًا.';$('#lc').hidden=false;$('#l2').hidden=false;$('#prl').hidden=false;$('#p1').autocomplete='new-password';$('#ab').textContent='إنشاء حساب المدرب والدخول'}
   else{$('#asub').textContent='أدخل اسم المستخدم وكلمة المرور';$('#fg').hidden=false}
   let rst=false;
+  /* طلب المدرب 2 نوفمبر: رابط «نسيت كلمة المرور؟» من صفحة الدخول يفتح الاستعادة مباشرة */setTimeout(()=>{try{if(location.hash==='#forgot'&&!$('#fg').hidden){history.replaceState(null,'',location.pathname);$('#fg').click()}}catch(e){}},0);
   $('#fg').onclick=async()=>{$('#fg').disabled=true;$('#am').className='msg';$('#am').textContent='جارٍ الإرسال…';
     try{const r=await api({a:'tforgot'});if(!r.ok){$('#fg').disabled=false;$('#am').className='msg bad';$('#am').textContent=r.error==='wait'?'أرسل رمز قبل قليل، تحقق من إيميلك أو انتظر 10 دقائق.':'تعذر إرسال الإيميل.';return}
       rst=true;chg=false;$('#fg').hidden=true;$('#u1').closest('label').hidden=true;$('#l1').hidden=true;$('#u1').required=false;$('#p1').required=false;
