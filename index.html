@@ -1163,7 +1163,7 @@ document.querySelectorAll('.lgEye').forEach(b=>b.onclick=()=>{const i=b.parentNo
 <script src="data.js?v=10281453"></script>
 <script src="study.js?v=10281453"></script>
 <script src="quiz2.js?v=10281453"></script>
-<script src="extras.js?v=11022035"></script>
+<script src="extras.js?v=11022045"></script>
 <script src="figs.js?v=10281453"></script>
 <script src="figs2.js?v=11021530"></script>
 <script src="problems.js?v=10281453"></script>
@@ -1600,13 +1600,13 @@ function buildNav(){
       it.appendChild(lb);ol.appendChild(it)});
     d.append(b,ol);nav.appendChild(d)});
   const f=document.createElement('div');f.className='navfoot';
-  f.innerHTML='<button id="examBtn" hidden>الاختبارات الفصلية</button><button id="bagBtn">الحقيبة التدريبية كاملة</button><button id="guideBtn">دليل المتدرب</button><button id="survBtn">استبانة رضا المتدرب</button><button id="refsBtn">قائمة المراجع</button><button id="themeBtn">تبديل الوضع الفاتح/الداكن</button>';
+  f.innerHTML='<button id="examBtn" hidden>الاختبارات الفصلية</button><button id="guideBtn">دليل المتدرب</button><button id="survBtn">استبانة رضا المتدرب</button><button id="refsBtn">قائمة المراجع</button><button id="themeBtn">تبديل الوضع الفاتح/الداكن</button>';
   nav.appendChild(f);
   $('refsBtn').onclick=()=>{pos.t='refs';closeNav();render()};
   $('examBtn').hidden=true;
   $('survBtn').onclick=()=>{pos.t='survey';closeNav();render()};
   $('guideBtn').onclick=()=>{location.href='guide.html'};
-  $('bagBtn').onclick=()=>{let d=document.getElementById('bagDlg');if(!d){d=document.createElement('div');d.id='bagDlg';d.innerHTML='<div class="bagIn"><b>📘 الحقيبة التدريبية كاملة</b><small>132 صفحة ملونة · 5 ميجا تقريبا</small><a class="btn" href="bag.pdf" target="_blank" rel="noopener">📖 عرض الحقيبة</a><a class="btn ghost" href="bag.pdf" download="الحقيبة التدريبية - الفيزياء العامة 101.pdf">⬇️ تحميل على جهازي</a><button type="button" class="btn ghost bagX">إغلاق</button></div>';document.body.appendChild(d);d.addEventListener('click',e=>{if(e.target===d||e.target.closest('.bagX')||e.target.closest('a'))d.hidden=true})}try{const bg=getComputedStyle(document.body).backgroundColor.match(/\d+/g)||[255,255,255];d.classList.toggle('dk',(+bg[0]+ +bg[1]+ +bg[2])<300)}catch(e){}d.hidden=false};
+  if($('bagBtn'))$('bagBtn').onclick=()=>{let d=document.getElementById('bagDlg');if(!d){d=document.createElement('div');d.id='bagDlg';d.innerHTML='<div class="bagIn"><b>📘 الحقيبة التدريبية كاملة</b><small>132 صفحة ملونة · 5 ميجا تقريبا</small><a class="btn" href="bag.pdf" target="_blank" rel="noopener">📖 عرض الحقيبة</a><a class="btn ghost" href="bag.pdf" download="الحقيبة التدريبية - الفيزياء العامة 101.pdf">⬇️ تحميل على جهازي</a><button type="button" class="btn ghost bagX">إغلاق</button></div>';document.body.appendChild(d);d.addEventListener('click',e=>{if(e.target===d||e.target.closest('.bagX')||e.target.closest('a'))d.hidden=true})}try{const bg=getComputedStyle(document.body).backgroundColor.match(/\d+/g)||[255,255,255];d.classList.toggle('dk',(+bg[0]+ +bg[1]+ +bg[2])<300)}catch(e){}d.hidden=false};
   $('themeBtn').onclick=()=>{const r=document.documentElement;const dark=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches;r.dataset.theme=dark?'light':'dark';store.set('p101-theme',r.dataset.theme)};
 }
 function updateProgress(){const pct=Math.min(100,Math.round([...done].filter(k=>{const[a,b]=k.split('-').map(Number);return !HID(a,b)}).length/total*100));$('progTxt').textContent=AR(pct)+'% مكتمل';$('progBar').style.width=pct+'%'}
