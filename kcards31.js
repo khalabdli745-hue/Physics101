@@ -54,9 +54,11 @@ function arrow(x1,x2,y,kind,delay,th){th=th||13;const dir=x2>x1?1:-1,L=Math.abs(
   const pts=(dx,dy)=>[[x1,y-th/2],[b,y-th/2],[b,y-hw],[x2,y],[b,y+hw],[b,y+th/2],[x1,y+th/2]].map(([a,c])=>f1(a+dx)+','+f1(c+dy)).join(' ');
   const g=kind==='R'?'url(#kc-aR)':'url(#kc-aF)',dk=kind==='R'?'#3b0764':'#78350f';
   return `<g class="kAr" style="--d:${delay||0}s;transform-origin:${x1}px ${y}px"><polygon points="${pts(3,5)}" fill="${dk}" opacity=".85"/><polygon points="${pts(0,0)}" fill="${g}" stroke="rgba(255,255,255,.35)" stroke-width="1"/></g>`}
-function pill(x,y,t,c,delay,cls){const w=t.length*10.2+26;
-  return `<g class="kPl ${cls||''}" style="--d:${delay||0}s"><rect x="${f1(x-w/2)}" y="${y-17}" width="${f1(w)}" height="30" rx="15" fill="#ffffff" stroke="${c}" stroke-width="2" filter="drop-shadow(0 2px 3px rgba(30,58,95,.18))"/><text x="${x}" y="${y+4.5}" text-anchor="middle" font-size="17" font-weight="800" fill="${c}" direction="ltr">${t}</text></g>`}
-function lbl(x,y,t,c,s){return `<text x="${x}" y="${y}" text-anchor="middle" font-size="${s||14.5}" font-weight="800" fill="${c||'#1e3a5f'}" direction="ltr">${t}</text>`}
+/* المدرب 2 نوفمبر: TS يكبر الكتابة في رسوم أمثلة المكثفات فقط (3-5 و3-6) */
+let TS=1;
+function pill(x,y,t,c,delay,cls){const k=TS,w=(t.length*10.2+26)*k;
+  return `<g class="kPl ${cls||''}" style="--d:${delay||0}s"><rect x="${f1(x-w/2)}" y="${f1(y-17*k)}" width="${f1(w)}" height="${f1(30*k)}" rx="${f1(15*k)}" fill="#ffffff" stroke="${c}" stroke-width="2" filter="drop-shadow(0 2px 3px rgba(30,58,95,.18))"/><text x="${x}" y="${f1(y+4.5*k)}" text-anchor="middle" font-size="${f1(17*k)}" font-weight="800" fill="${c}" direction="ltr">${t}</text></g>`}
+function lbl(x,y,t,c,s){return `<text x="${x}" y="${y}" text-anchor="middle" font-size="${f1((s||14.5)*TS)}" font-weight="800" fill="${c||'#1e3a5f'}" direction="ltr">${t}</text>`}
 function dim(x1,x2,y,t){return `<g class="kDim"><line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="#0369a1" stroke-width="1.6" stroke-dasharray="5 4"/><line x1="${x1}" y1="${y-7}" x2="${x1}" y2="${y+7}" stroke="#0369a1" stroke-width="1.6"/><line x1="${x2}" y1="${y-7}" x2="${x2}" y2="${y+7}" stroke="#0369a1" stroke-width="1.6"/>`+pill((x1+x2)/2,y,t,'#0369a1',0,'kOn0')+`</g>`}
 function flow(x1,x2,y,rep){return `<line class="kFlow ${rep?'kRep':'kAtt'}" x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="${rep?'#dc2626':'#2563eb'}" stroke-width="2" stroke-dasharray="4 9" opacity=".55"/>`}
 function svg(w,h,body,cls){return `<svg class="kSvg ${cls||''}" viewBox="0 0 ${w} ${h}" role="img" aria-hidden="true">${body}</svg>`}
@@ -163,7 +165,7 @@ const scArrow=(D,x,y,dir,T,L,col)=>{col=col||'#f59e0b';const th=11,hl=20;
   const shape=`<polygon points="0,${-th/2} 80,${-th/2} 80,${-th} 100,0 80,${th} 80,${th/2} 0,${th/2}" fill="${col}" stroke="#78350f" stroke-width="1.2"/>`;
   const TT=[0].concat(T).concat([D]),LL=[L[0]].concat(L).concat([L[L.length-1]]);
   return `<g transform="translate(${x} ${y}) scale(${dir} 1)"><g><animateTransform attributeName="transform" type="scale" dur="${D}s" repeatCount="indefinite" keyTimes="${scK(D,TT)}" values="${LL.map(l=>(l/100).toFixed(3)+' 1').join(';')}"/>${shape}</g></g>`};
-const scTag=(x,y,t,c,w)=>{w=w||t.length*9+28;return `<rect x="${x-w/2}" y="${y-15}" width="${w}" height="30" rx="15" fill="${c}"/><text x="${x}" y="${y+6}" text-anchor="middle" font-size="15" font-weight="800" fill="#fff" direction="ltr">${t}</text>`};
+const scTag=(x,y,t,c,w)=>{const k=TS;w=(w||t.length*9+28)*k;return `<rect x="${f1(x-w/2)}" y="${f1(y-15*k)}" width="${f1(w)}" height="${f1(30*k)}" rx="${f1(15*k)}" fill="${c}"/><text x="${x}" y="${f1(y+6*k)}" text-anchor="middle" font-size="${f1(15*k)}" font-weight="800" fill="#fff" direction="ltr">${t}</text>`};
 
 /* 1) الشحن باللمس (التوصيل) */
 function touchScene(){const W=640,H=330,D=10,R=44,Y=150;
@@ -592,7 +594,7 @@ const EGR='',EGRD='<defs><linearGradient id="kc-aE" x1="0" y1="0" x2="0" y2="1">
   '<linearGradient id="kc-plN" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1e3a8a"/><stop offset=".5" stop-color="#3b82f6"/><stop offset="1" stop-color="#1e40af"/></linearGradient><linearGradient id="kc-dyF" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fef9c3"/><stop offset=".55" stop-color="#fde68a"/><stop offset="1" stop-color="#facc15"/></linearGradient><linearGradient id="kc-mtF" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f8fafc"/><stop offset=".2" stop-color="#cbd5e1"/><stop offset=".42" stop-color="#f1f5f9"/><stop offset=".62" stop-color="#94a3b8"/><stop offset=".82" stop-color="#e2e8f0"/><stop offset="1" stop-color="#64748b"/></linearGradient><linearGradient id="kc-mtT" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#cbd5e1"/></linearGradient><linearGradient id="kc-mtS" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e2e8f0"/><stop offset=".25" stop-color="#94a3b8"/><stop offset=".45" stop-color="#f8fafc"/><stop offset=".6" stop-color="#cbd5e1"/><stop offset=".8" stop-color="#7c8a9e"/><stop offset="1" stop-color="#cbd5e1"/></linearGradient><linearGradient id="kc-pP2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#991b1b"/><stop offset=".35" stop-color="#f87171"/><stop offset=".55" stop-color="#dc2626"/><stop offset="1" stop-color="#7f1d1d"/></linearGradient><linearGradient id="kc-pN2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1e3a8a"/><stop offset=".35" stop-color="#60a5fa"/><stop offset=".55" stop-color="#2563eb"/><stop offset="1" stop-color="#1e3a8a"/></linearGradient><linearGradient id="kc-cB" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1d4ed8"/><stop offset=".3" stop-color="#60a5fa"/><stop offset=".6" stop-color="#2563eb"/><stop offset="1" stop-color="#1e3a8a"/></linearGradient><linearGradient id="kc-bt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4b5563"/><stop offset=".3" stop-color="#9ca3af"/><stop offset=".55" stop-color="#1f2937"/><stop offset="1" stop-color="#030712"/></linearGradient><linearGradient id="kc-bc" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b45309"/><stop offset=".3" stop-color="#fcd34d"/><stop offset=".6" stop-color="#d97706"/><stop offset="1" stop-color="#78350f"/></linearGradient><linearGradient id="kc-wd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d6a46a"/><stop offset="1" stop-color="#b07a44"/></linearGradient><linearGradient id="kc-lg" x1="0" x2="1"><stop offset="0" stop-color="#6b7280"/><stop offset=".5" stop-color="#f3f4f6"/><stop offset="1" stop-color="#4b5563"/></linearGradient><radialGradient id="kc-sd"><stop offset="0" stop-color="#0b1220" stop-opacity=".35"/><stop offset="1" stop-color="#0b1220" stop-opacity="0"/></radialGradient></defs>';
 const EC='#0f766e',ECL='#14b8a6';
 const lblR=(x,y,t,c,sz)=>`<text x="${x}" y="${y}" text-anchor="middle" font-size="${sz||14.5}" font-weight="800" fill="${c||'#1e3a5f'}" direction="rtl" unicode-bidi="plaintext">${t}</text>`;
-const tagR=(x,y,t,c,w)=>{w=w||t.length*8.6+30;return `<rect x="${f1(x-w/2)}" y="${y-15}" width="${f1(w)}" height="30" rx="15" fill="${c}"/><text x="${x}" y="${y+6}" text-anchor="middle" font-size="15" font-weight="800" fill="#fff" direction="rtl" unicode-bidi="plaintext">${t}</text>`};
+const tagR=(x,y,t,c,w)=>{const k=TS;w=(w||t.length*8.6+30)*k;return `<rect x="${f1(x-w/2)}" y="${f1(y-15*k)}" width="${f1(w)}" height="${f1(30*k)}" rx="${f1(15*k)}" fill="${c}"/><text x="${x}" y="${f1(y+6*k)}" text-anchor="middle" font-size="${f1(15*k)}" font-weight="800" fill="#fff" direction="rtl" unicode-bidi="plaintext">${t}</text>`};
 /* سهم المجال الأخضر (ينمو بنفس حركة أسهم القوى) */
 const arrowE=(x1,x2,y,d,th)=>arrow(x1,x2,y,'F',d,th).replace('url(#kc-aF)','url(#kc-aE)').replace('#78350f','#064e3b');
 /* سهم ثابت بأي زاوية */
@@ -1032,7 +1034,7 @@ const IM35={"flash": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53
 /* لوح مجسم رأسي بمنظور: وجه أمامي ووجه علوي ووجه جانبي */
 function cSlab(x,y,h,w,dx0,dy0,grad,side,n){const {t,dx,dy}=PG(h),pos=grad==='kc-plP';return mPlate(x+w-t,y,t,h,dx,dy,pos,n)}
 /* رمز البطارية: الخط الطويل موجب والقصير السميك سالب */
-function batSym(x,y,lab){return `<rect x="${x-9}" y="${y-6}" width="18" height="12" fill="#eef4fb"/><line x1="${x-7}" y1="${y-22}" x2="${x-7}" y2="${y+22}" stroke="#b91c1c" stroke-width="4" stroke-linecap="round"/><line x1="${x+7}" y1="${y-12}" x2="${x+7}" y2="${y+12}" stroke="#1d4ed8" stroke-width="8" stroke-linecap="round"/>`+lbl(x-20,y-22,'+','#b91c1c',18)+lbl(x+20,y-16,'−','#1d4ed8',20)+(lab?lbl(x,y+40,lab,'#334155',15):'')}
+function batSym(x,y,lab){return `<rect x="${x-9}" y="${y-6}" width="18" height="12" fill="#eef4fb"/><line x1="${x-7}" y1="${y-22}" x2="${x-7}" y2="${y+22}" stroke="#b91c1c" stroke-width="4" stroke-linecap="round"/><line x1="${x+7}" y1="${y-12}" x2="${x+7}" y2="${y+12}" stroke="#1d4ed8" stroke-width="8" stroke-linecap="round"/>`+lbl(x-20,y-22,'+','#b91c1c',18)+lbl(x+20,y-16,'−','#1d4ed8',20)+(lab?lbl(x,y+22+18*TS,lab,'#334155',15):'')}
 /* قطبا مصدر الجهد: موجب وسالب */
 function srcPoles(x,y,lab){const P=(px,pos)=>`<circle cx="${px}" cy="${y+3}" r="20" fill="#000" opacity=".15"/><circle cx="${px}" cy="${y}" r="20" fill="${pos?'#dc2626':'#2563eb'}" stroke="#fff" stroke-width="3"/><circle cx="${px-6}" cy="${y-7}" r="6" fill="#fff" opacity=".35"/><text x="${px}" y="${y+(pos?9:8)}" text-anchor="middle" font-size="${pos?26:30}" font-weight="900" fill="#fff">${pos?'+':'−'}</text>`;
   return P(x-46,true)+P(x+46,false)+(lab?lbl(x,y+42,lab,'#334155',16):'')}
@@ -1124,15 +1126,15 @@ function cFactorsScene(){const W=640,H=330,D=12,cx=320,cy=162;let b=EGR+`<rect w
 /* رسوم الأمثلة: مكثف في دائرة */
 function cCapEx(o){const W=640,H=300,L=300,R=300+Math.round(130*.3)+10,top=60,bot=190;let b=EGR+`<rect width="${W}" height="${H}" fill="url(#kc-bg)"/>`;
   b+=cCircuit(L,R,top,bot,o.V||'',true,4);
-  if(o.q)b+=`<g>${scTag(L-128,top+10,o.q,'#b91c1c',o.q.length*9+26)}</g>`;
-  if(o.C)b+=`<g>${scTag(R+168,top+10,o.C,'#7e22ce',o.C.length*9+26)}</g>`;
+  if(o.q){const bw=o.q.length*9+26,t0=TS;TS=Math.min(t0,(L-44)/bw);const w=bw*TS;b+=`<g>${scTag(Math.min(L-128,L-34-w/2),top+10,o.q,'#b91c1c',bw)}</g>`;TS=t0}
+  if(o.C){const w=(o.C.length*9+26)*TS;b+=`<g>${scTag(Math.max(R+168,R+70+w/2),top+10,o.C,'#7e22ce',o.C.length*9+26)}</g>`}
   if(o.res)b+=pill(W/2,top-26,o.res,'#7e22ce',.3);
   return svg(W,H,b,o.cls)}
 function cPlatesEx(o){const W=640,H=300,top=80,bot=215,h=bot-top,g=PG(h),L=290,R=L+g.dx+34;let b=EGR+`<rect width="${W}" height="${H}" fill="url(#kc-bg)"/>`;
   b+=mPlate(L-4,top,4,h,g.dx,g.dy,true);const rows=4;
   for(let i=0;i<rows;i++){const yy=top+(i+.5)*h/rows-g.dy*.5+h/rows*.5;b+=fArrow(L+g.dx*.5,R+2,yy)}
   b+=mSurf(L,top,h,g.dx,g.dy,true).replace(/<polygon[^>]*\/>/g,'')+mPlate(R+2,top,4,h,g.dx,g.dy,false);
-  b+=dim(L+g.dx,R+2,bot+30,o.d||'d')+(o.A?`<g>${tagR(L-90,top+60,o.A,'#b45309',o.A.length*9+30)}</g>`:'')+(o.V?`<g>${scTag(R+g.dx+90,top+60,o.V,'#334155',o.V.length*9+26)}</g>`:'');
+  b+=dim(L+g.dx,R+2,bot+30,o.d||'d')+(o.A?`<g>${tagR(Math.min(L-90,L-30-(o.A.length*9+30)*TS/2),top+60,o.A,'#b45309',o.A.length*9+30)}</g>`:'')+(o.V?`<g>${scTag(Math.max(R+g.dx+90,R+g.dx+34+(o.V.length*9+26)*TS/2),top+60,o.V,'#334155',o.V.length*9+26)}</g>`:'');
   if(o.res)b+=pill(W/2,top-46,o.res,'#7e22ce',.3);
   return svg(W,H,b,o.cls)}
 cPlatesFig=narrow(cPlatesFig);cPlatesEx=narrow(cPlatesEx);
@@ -1284,12 +1286,12 @@ function sEnergyFig(){const W=640,H=320,x0=170,y0=260,x1=470,y1=70;let b=EGR+`<r
 /* رسوم الأمثلة */
 function sParEx(o){const W=640,H=330,h=60,yb=282;let b=EGR+`<rect width="${W}" height="${H}" fill="url(#kc-bg)"/>`;
   const P=parCol(2,250,84,96,h,33,yb);b+=P.svg+lbl(P.cx,yb+40,o.V||'V','#334155',16);
-  const lx=P.oR+30;b+=P.caps.map((c,i)=>`<text x="${f1(lx)}" y="${f1(c.R[1]+2)}" font-size="17" font-weight="900" fill="#1e3a5f" direction="ltr">${'C'+'₁₂'[i]}</text>`+(((o.C||[])[i]||'').replace(/^C[₁₂] = /,'')&&!/^C[₁₂]$/.test((o.C||[])[i])?`<text x="${f1(lx)}" y="${f1(c.R[1]+22)}" font-size="14" font-weight="800" fill="#0369a1" direction="ltr">${(o.C[i]).replace(/^C[₁₂] = /,'')}</text>`:'')).join('');
+  const lx=P.oR+30;b+=P.caps.map((c,i)=>`<text x="${f1(lx)}" y="${f1(c.R[1]+2)}" font-size="${f1(17*TS)}" font-weight="900" fill="#1e3a5f" direction="ltr">${'C'+'₁₂'[i]}</text>`+(((o.C||[])[i]||'').replace(/^C[₁₂] = /,'')&&!/^C[₁₂]$/.test((o.C||[])[i])?`<text x="${f1(lx)}" y="${f1(c.R[1]+22*TS)}" font-size="${f1(14*TS)}" font-weight="800" fill="#0369a1" direction="ltr">${(o.C[i]).replace(/^C[₁₂] = /,'')}</text>`:'')).join('');
   if(o.res)b+=pill(W/2+40,30,o.res,'#7e22ce',.3);
   return svg(W,H,b,o.cls)}
 function sSerEx(o){const W=640,H=330,top=112,h=80,yb=262;let b=EGR+`<rect width="${W}" height="${H}" fill="url(#kc-bg)"/>`;
   const S2=serRow(2,top,h,42,130,W,yb);b+=S2.svg+lbl(S2.cx,yb+40,o.V||'V','#334155',16);
-  b+=S2.caps.map((c,i)=>lbl(c.cx,top+h+22,'C'+'₁₂'[i],'#1e3a5f',17)+(((o.C||[])[i]||'')&&!/^C[₁₂]$/.test(o.C[i])?lbl(c.cx,top+h+42,o.C[i].replace(/^C[₁₂] = /,''),'#0369a1',14):'')).join('');
+  b+=S2.caps.map((c,i)=>lbl(c.cx,top+h+22,'C'+'₁₂'[i],'#1e3a5f',17)+(((o.C||[])[i]||'')&&!/^C[₁₂]$/.test(o.C[i])?lbl(c.cx,top+h+22+20*TS,o.C[i].replace(/^C[₁₂] = /,''),'#0369a1',14):'')).join('');
   if(o.res)b+=pill(W/2,30,o.res,'#7e22ce',.3);
   return svg(W,H,b,o.cls)}
 CARDS['3-6']={
@@ -1945,7 +1947,7 @@ PFIG['3-4'].unshift([/10000 N\/C/,()=>vEd({E:'E = 10000 N/C',d:'d = 0.01 m',V:'�
 PFIG['3-5'].unshift([/4\.5 × 10⁻⁴ C/,()=>cCapEx({q:'q = 4.5 × 10⁻⁴ C',V:'V = 150 V',res:'C = 3 × 10⁻⁶ F'}),'C = q / V = 3 × 10⁻⁶ F'],[/27 × 10⁻⁶ F/,()=>cCapEx({C:'C = 27 µF',V:'V = 45 V',res:'q = 1.215 × 10⁻³ C'}),'q = C·V = 1.215 × 10⁻³ C'],[/مساحة اللوح 2 m²/,()=>cPlatesEx({A:'A = 2 m²',d:'d = 5 mm',res:'C = 3.54 × 10⁻⁹ F'}),'C = ε₀·A / d = 3.54 × 10⁻⁹ F'],[/4 × 10⁻⁴ C/,()=>cCapEx({q:'q = 4 × 10⁻⁴ C',V:'V = 100 V',res:'C = 4 × 10⁻⁶ F'}),'C = q / V = 4 × 10⁻⁶ F'],[/4\.5 × 10⁻¹² F يتصل ببطارية/,()=>cCapEx({C:'C = 4.5 pF',V:'V = 12 V',res:'q = 5.4 × 10⁻¹¹ C'}),'q = C·V = 5.4 × 10⁻¹¹ C'],[/سعته 6 × 10⁻⁶ F/,()=>cCapEx({q:'q = 6 µC',C:'C = 6 µF',res:'V = 1 V'}),'V = q / C = 1 V'],[/شدة المجال داخله/,()=>cPlatesEx({d:'d = 1 mm',V:'V = 1 V',res:'E = 1000 V/m'}),'E = V / d = 1000 V/m']);
 PFIG['3-6'].unshift([/200 pF و 600 pF/,()=>sParEx({C:['200 pF','600 pF'],res:'C_total = 800 pF'}),'على التوازي نجمع السعات: C = 200 + 600 = 800 pF'],[/6 pF و 3 pF/,()=>sSerEx({C:['6 pF','3 pF'],res:'C_total = 2 pF'}),'على التوالي: C = 6 × 3 / (6 + 3) = 2 pF'],[/سعتهما المكافئة 2 × 10⁻¹² F/,()=>sSerEx({C:['C₁','C₂'],V:'10 V',res:'q = 2 × 10⁻¹¹ C'}),'الشحنة متساوية على المكثفين: q = C·V = 2 × 10⁻¹¹ C'],[/2 [µμ]F و 4 [µμ]F.*التوالي/,()=>sSerEx({C:['2 µF','4 µF'],res:'C_total = 1.33 µF'}),'على التوالي: C = 2 × 4 / (2 + 4) = 1.33 µF'],[/2 [µμ]F و 4 [µμ]F.*التوازي/,()=>sParEx({C:['2 µF','4 µF'],res:'C_total = 6 µF'}),'على التوازي: C = 2 + 4 = 6 µF'],[/4 nF/,()=>sSerEx({C:['4 nF','2 nF'],V:'12 V',res:'C_total = 1.33 nF'}),'على التوالي: C = 4 × 2 / (4 + 2) = 1.33 nF'],[/400 nF/,()=>sParEx({C:['400 nF','100 nF'],V:'110 V',res:'C_total = 500 nF'}),'على التوازي: C = 400 + 100 = 500 nF'],[/2 × 10⁻⁶ F وُصل بجهد 12 V/,()=>cCapEx({C:'C = 2 µF',V:'V = 12 V',res:'PE = 1.44 × 10⁻⁴ J'}),'PE = ½·C·V² = 1.44 × 10⁻⁴ J'],[/2\.4 C/,()=>cCapEx({q:'q = 2.4 C',V:'V = 200 V',res:'PE = 240 J'}),'PE = ½·q·V = 240 J'],[/4\.5 × 10⁻¹² F يتصل لوحاه|الطاقة المختزنة فيه/,()=>cCapEx({C:'C = 4.5 pF',V:'V = 12 V',res:'PE = 3.24 × 10⁻¹⁰ J'}),'PE = ½·C·V² = 3.24 × 10⁻¹⁰ J']);
 function probFig(K2,p){const L=PFIG[K2];if(!L)return null;const m=L.find(([re])=>re.test(String(p.q||'').replace(/`/g,'')));if(!m)return null;defs();
-  const d=document.createElement('div');d.className='kc kFig kProb';d.dataset.cap=m[2];d.innerHTML=m[1]()+'<div class="kCap">'+(K2==='3-3'?'يظهر سهم المجال واتجاهه بعد أن تحسب':/^(3-[456]|4-[158])$/.test(K2)?'تظهر النتيجة على الرسم بعد أن تحسب':'تظهر أسهم القوى واتجاهها بعد أن تحسب القوة')+'</div>';return d}
+  const d=document.createElement('div');d.className='kc kFig kProb';d.dataset.cap=m[2];TS=/^3-[56]$/.test(K2)?1.8:1;let fg;try{fg=m[1]()}finally{TS=1}d.innerHTML=fg+'<div class="kCap">'+(K2==='3-3'?'يظهر سهم المجال واتجاهه بعد أن تحسب':/^(3-[456]|4-[158])$/.test(K2)?'تظهر النتيجة على الرسم بعد أن تحسب':'تظهر أسهم القوى واتجاهها بعد أن تحسب القوة')+'</div>';return d}
 function probDone(el){if(!el)return;el.classList.add('kOn');const c=el.querySelector('.kCap');if(c)c.textContent=el.dataset.cap||''}
 
 /* حرارة: جسم ساخن وجسم بارد يتلامسان (سؤال الربط بالدرس السابق) */
