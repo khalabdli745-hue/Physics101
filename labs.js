@@ -5785,7 +5785,7 @@ details.wsDet{border:2px solid #F7931E;border-radius:14px;padding:4px 10px;margi
 .lab .i3d{display:block;width:100%;height:auto;border-radius:10px}
 .wsc .w3d{border-radius:12px;overflow:hidden;background:#EEF2F6;border:1px solid var(--line,#DDE2EA)}.wsc .w3d img{display:block;width:100%;height:auto;aspect-ratio:3/2}
 .wsc .w3t{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:6px 0}.wsc .w3t button{width:100%}.wsc .w3t button.on{background:#F7931E;border-color:#F7931E;color:#fff}`;
-const P={A:[194,38],B:[230,38],R1:[280,38],R2:[344,38],C:[260,83]};
+const P={A:[194,38],B:[230,38],R1:[272,38],R2:[352,38],C:[260,83]};
 const JACK={ar:[192.4,221.1],ab:[213.0,221.1],vr:[354.7,221.1],vb:[335.0,221.1]};
 const COL={ar:'#DC2626',ab:'#1F2937',vr:'#DC2626',vb:'#1F2937'};
 const NAME={ar:'المجس الأحمر للأميتر',ab:'المجس الأسود للأميتر',vr:'المجس الأحمر للفولتميتر',vb:'المجس الأسود للفولتميتر'};
@@ -5794,7 +5794,7 @@ const BOX={a:[178,254],v:[300,376]};
 /* ثقوب لوحة التوصيل */
 function holes(){let h='';for(let x=106;x<=382;x+=12){if(x>196&&x<228)continue;h+=`<rect x="${x-2}" y="36" width="4" height="4" rx="1" fill="#94A3B8"/><rect x="${x-2}" y="100" width="4" height="4" rx="1" fill="#94A3B8"/>`}
   for(let y=58;y<=86;y+=7)for(let x=106;x<=382;x+=12)h+=`<rect x="${x-1.5}" y="${y-1.5}" width="3" height="3" rx=".8" fill="#CBD5E1"/>`;return h}
-function svg(){return `<svg viewBox="0 -14 400 314" aria-label="دائرة قانون أوم على لوحة التوصيل"><rect x="0" y="-14" width="400" height="314" fill="none" pointer-events="none"/>
+function svg(){return `<svg viewBox="0 -14 400 314" aria-label="دائرة قانون أوم على لوحة التوصيل"><rect x="0" y="-14" width="400" height="314" fill="none" pointer-events="none"/>${/* المدرب 2 نوفمبر (أ): الأجهزة على الطاولة الخشبية بظلال تلامس */'<rect x="0" y="-14" width="400" height="12" fill="#EEF2F7"/>'+efWood(-2,266,0,400)+efSh(232,97,178,4.5,.35)+efSh(80,241,72,3.4,.42)+efSh(216,248,36,3,.42)+efSh(338,248,36,3,.42)}
 <defs><linearGradient id="wsR" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#F5DEB3"/><stop offset="1" stop-color="#D2B48C"/></linearGradient></defs>
 <image href="dv/67-breadboard-clean.webp" x="58.8" y="0.0" width="363" height="95" preserveAspectRatio="none"/>
 
@@ -5804,7 +5804,7 @@ function svg(){return `<svg viewBox="0 -14 400 314" aria-label="دائرة قا�
 <text x="212" y="33" text-anchor="middle" font-size="8.5" font-weight="700" fill="#64748B">فجوة</text>
 
 <image href="dv/47-dc-power-supply.webp" x="6" y="150" width="150" height="90.2" preserveAspectRatio="none"/><rect x="21.8" y="180.2" width="55.5" height="18.9" rx="2" fill="#DCE8CC" stroke="#111827" stroke-width="1.2"/><text id="wsPS" direction="ltr" unicode-bidi="embed" x="49.5" y="195.6" text-anchor="middle" fill="#7C8A6E" font-size="13" font-weight="800" font-family="monospace">0.0 V</text><circle id="wsLed" cx="126.0" cy="172.6" r="3" fill="#475569"/><path d="M75.0 220.4 V246.2 Q75.0 252.2 69.0 252.2 H9 Q3 252.2 3 246.2 V46 Q3 38 11 38 H94" stroke="#DC2626" stroke-width="3" fill="none" stroke-linejoin="round"/><path d="M52.5 220.4 V240.2 Q52.5 246.2 46.5 246.2 H16 Q10 246.2 10 240.2 V91 Q10 83 18 83 H64" stroke="#111827" stroke-width="3" fill="none" stroke-linejoin="round"/>
-<ellipse cx="364" cy="38" rx="3.2" ry="2.4" fill="#0F172A"/><ellipse cx="366" cy="83" rx="3.2" ry="2.4" fill="#0F172A"/><path d="M364 36 C373 50 373 68 366 81" fill="none" stroke="#0F172A" stroke-opacity=".35" stroke-width="5.6" stroke-linecap="round"/><path d="M364 36 C373 50 373 68 366 81" fill="none" stroke="#2563EB" stroke-width="3.4" stroke-linecap="round"/><path d="M280 39 V22 H288 M344 39 V22 H336" fill="none" stroke="#1E293B" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/><path d="M280 39 V22 H288 M344 39 V22 H336" fill="none" stroke="#B6C0CC" stroke-width="1.9" stroke-linejoin="round" stroke-linecap="round"/><ellipse cx="280" cy="38" rx="3.2" ry="2.4" fill="#0F172A"/><ellipse cx="344" cy="38" rx="3.2" ry="2.4" fill="#0F172A"/><image href="dv/70-resistor-hb.webp" x="287" y="15.5" width="50" height="13" preserveAspectRatio="none"/><rect id="wsB0" x="297.5" y="16.6" width="3" height="10.8" fill="#8B4513"/><rect id="wsB1" x="303.0" y="16.6" width="3" height="10.8" fill="#111"/><rect id="wsB2" x="308.5" y="16.6" width="3" height="10.8" fill="#8B4513"/><rect id="wsB3" x="324.0" y="16.6" width="3" height="10.8" fill="#D4AF37"/>
+<ellipse cx="364" cy="38" rx="3.2" ry="2.4" fill="#0F172A"/><ellipse cx="366" cy="83" rx="3.2" ry="2.4" fill="#0F172A"/><path d="M364 36 C373 50 373 68 366 81" fill="none" stroke="#0F172A" stroke-opacity=".35" stroke-width="5.6" stroke-linecap="round"/><path d="M364 36 C373 50 373 68 366 81" fill="none" stroke="#2563EB" stroke-width="3.4" stroke-linecap="round"/><path d="M272 39 V19.0 H279 M352 39 V19.0 H349" fill="none" stroke="#1E293B" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/><path d="M272 39 V19.0 H279 M352 39 V19.0 H349" fill="none" stroke="#B6C0CC" stroke-width="1.9" stroke-linejoin="round" stroke-linecap="round"/><ellipse cx="272" cy="38" rx="3.2" ry="2.4" fill="#0F172A"/><ellipse cx="352" cy="38" rx="3.2" ry="2.4" fill="#0F172A"/><image href="dv/70-resistor-hb.webp" x="276" y="9" width="76" height="20" preserveAspectRatio="none"/><rect id="wsB0" x="292.0" y="10.7" width="4.6" height="16.6" fill="#8B4513"/><rect id="wsB1" x="300.3" y="10.7" width="4.6" height="16.6" fill="#111"/><rect id="wsB2" x="308.7" y="10.7" width="4.6" height="16.6" fill="#8B4513"/><rect id="wsB3" x="332.2" y="10.7" width="4.6" height="16.6" fill="#D4AF37"/>
 <text id="wsRl" x="312" y="-3" text-anchor="middle" font-size="10" font-weight="800" fill="currentColor">المقاومة R = 100 Ω</text>
 <text id="wsJl" x="150" y="14" stroke="#F3F6FA" stroke-width="3" paint-order="stroke" text-anchor="middle" font-size="10" font-weight="800" fill="#C2410C" opacity="0">⬆ الوصلة مرفوعة</text><ellipse cx="194" cy="38" rx="3.2" ry="2.4" fill="#0F172A"/><ellipse cx="230" cy="38" rx="3.2" ry="2.4" fill="#0F172A"/><g id="wsJump"><image href="dv/54-jumper-wire.webp" x="191.2" y="21" width="41.7" height="19" preserveAspectRatio="none"/></g>
 <g id="wsLeads"></g><g id="wsDots"></g>
@@ -5812,10 +5812,15 @@ function svg(){return `<svg viewBox="0 -14 400 314" aria-label="دائرة قا�
 ${Object.entries(P).map(([k,[x,y]])=>`<g class="pt" data-p="${k}"><circle class="h" cx="${x}" cy="${y}" r="10" style="opacity:0"/><circle cx="${x}" cy="${y}" r="4.6" fill="none" stroke="#F7931E" stroke-width="1.8"/></g>`).join('')}
 <g id="wsTag"></g></svg>`}
 /* مسار السلك: ينزل من منفذ الجهاز ثم يلتف حول جانبه (الأحمر يسارا والأسود يمينا) ويصعد إلى الثقب، فلا يمر فوق الشاشة */
-const route=(j,p)=>{const [x1,y1]=JACK[j],[tx,ty]=P[p],[l,r]=BOX[j[0]],red=j[1]==='r',sx=red?l-10:r+10,yb=red?266:274,dx=sx>x1?6:-6,ye=Math.max(ty+18,ty);
-  return `M${x1} ${y1} V${yb-6} Q${x1} ${yb} ${x1+dx} ${yb} H${sx-dx} Q${sx} ${yb} ${sx} ${yb-6} V${ty+22} Q${sx} ${ty} ${tx} ${ty}`};
+/* المدرب 2 نوفمبر: قلم المجس ظاهر، سنه المعدني في الثقب وجسمه نازل نحو الأمام ومائل للخارج (الأحمر يسارا والأسود يمينا)، والسلك يدخل من طرفه الخلفي */
+const TA={r:-158,b:158},PL=30;
+const penEnd=(j,p)=>{const [tx,ty]=P[p],a=TA[j[1]]*Math.PI/180;return [tx+Math.sin(a)*PL,ty-Math.cos(a)*PL]};
+const pen=(j,p,c)=>{const [tx,ty]=P[p];return `<g transform="translate(${tx} ${ty-1}) rotate(${TA[j[1]]})"><line x1="0" y1="0" x2="0" y2="-9" stroke="#E2E8F0" stroke-width="1.8" stroke-linecap="round"/><line x1="0" y1="0" x2="0" y2="-9" stroke="#64748B" stroke-width=".6"/><path d="M-2.4 -9 L2.4 -9 L3.4 -15 L-3.4 -15 Z" fill="${c}" stroke="#0F172A" stroke-width=".6"/><rect x="-4.8" y="-17.6" width="9.6" height="2.8" rx="1.2" fill="${c}" stroke="#0F172A" stroke-width=".6"/><rect x="-3.5" y="-${PL}" width="7" height="${PL-17}" rx="2.6" fill="${c}" stroke="#0F172A" stroke-width=".7"/><rect x="-2.2" y="-${PL-2}" width="1.6" height="${PL-21}" rx=".8" fill="#fff" opacity=".35"/></g>`};
+/* مسار السلك: ينزل من منفذ الجهاز ثم يلتف حول جانبه (الأحمر يسارا والأسود يمينا) ويصعد إلى الطرف الخلفي لقلم المجس، فلا يمر فوق الشاشة */
+const route=(j,p)=>{const [x1,y1]=JACK[j],[ex,ey]=penEnd(j,p),[l,r]=BOX[j[0]],red=j[1]==='r',sx=red?l-10:r+10,yb=red?266:274,dx=sx>x1?6:-6;
+  return `M${x1} ${y1} V${yb-6} Q${x1} ${yb} ${x1+dx} ${yb} H${sx-dx} Q${sx} ${yb} ${sx} ${yb-6} V${(ey+30).toFixed(1)} C${sx} ${(ey+14).toFixed(1)} ${ex.toFixed(1)} ${(ey+18).toFixed(1)} ${ex.toFixed(1)} ${ey.toFixed(1)}`};
 const lead=(j,p)=>{const d=route(j,p),blk=j[1]==='b';
-  return `<g data-j="${j}"><path class="lead" stroke="#fff" style="stroke-width:${blk?8:6.5};stroke-linejoin:round" d="${d}"/><path class="lead" stroke="${blk?'#111827':COL[j]}" style="stroke-width:${blk?4.2:3.6};stroke-linejoin:round" d="${d}"/></g>`};
+  return `<g data-j="${j}"><path class="lead" stroke="#fff" style="stroke-width:${blk?8:6.5};stroke-linejoin:round" d="${d}"/><path class="lead" stroke="${blk?'#111827':COL[j]}" style="stroke-width:${blk?4.2:3.6};stroke-linejoin:round" d="${d}"/>${pen(j,p,blk?'#1F2937':COL[j])}</g>`};
 function mount(host,opts){opts=opts||{};
   const WH=opts.watchHost||host;WH.insertAdjacentHTML('beforeend',`<style>${CSS}</style>
   <div class="wsc"><h4 style="margin:2px 0 6px">🎬 شاهد: تركيب الأجهزة وطريقة القياس</h4>
@@ -5926,7 +5931,7 @@ function ohmLab(box){
   <div class="btns" style="margin-bottom:12px"><button type="button" class="rs" id="nw">🔄 تجربة جديدة</button></div>
   <div class="ctl"><h3>5.1 شاهد التجربة</h3>
     <details class="wsDet" open><summary>🎬 شاهد خطوات التركيب وطريقة القياس (8 خطوات)</summary><div id="wW"></div></details></div>
-  <div class="ctl"><h3>5.2 خطوات وتنفيذ التجربة</h3>
+  <div class="ctl lx52"><h3>5.2 خطوات وتنفيذ التجربة</h3><div class="ctl lxM">
     <div class="amProg" id="prog"></div>
     <h4 class="sbh">أ) إعداد الجهازين</h4>
     <p class="slh"><b style="color:#2563EB">الجهاز 1: أميتر لقياس التيار</b></p>
@@ -5944,16 +5949,16 @@ function ohmLab(box){
     <div class="ans"><label>قراءة الفولتميتر V</label><input id="mV" inputmode="decimal" dir="ltr" placeholder="V"></div>
     <div class="ans"><label>قراءة الأميتر I</label><input id="mI" inputmode="decimal" dir="ltr" placeholder="A"><button type="button" class="go" id="mCk">سجل القراءة</button></div><div class="fb2" id="mFb"></div>
     
-  </div>
+  </div></div>
   <div class="ctl"><h3>5.3 نتائج القياس</h3>
     <div id="logB"></div></div>
   <h3 class="secH">6. الحسابات</h3>
   <div class="ctl">
     <p class="slh">الحسابات تأخذ أرقامها من نتائج القياس، بنفس ألوانها.</p>
     <h4 class="sbh">أ) رسم العلاقة بين الجهد والتيار</h4>
-    <p class="slh">تظهر كل قراءة نقطة على الرسم. بعد تسجيل القراءات الثلاث اضغط الزر لرسم الخط المستقيم.</p>
+    <p class="slh">تظهر كل قراءة نقطة على الرسم، ويرسم الخط المستقيم تلقائيا بعد القراءة الثالثة.</p>
     <div class="stage" id="gS"></div>
-    <div class="btns"><button type="button" class="go" id="gB" style="width:100%;font-size:17px;padding:11px">📈 ارسم الخط المستقيم</button></div><div class="fb2" id="gFb"></div>
+    <div class="btns" style="display:none"><button type="button" class="go" id="gB" style="width:100%;font-size:17px;padding:11px">📈 ارسم الخط المستقيم</button></div><div class="fb2" id="gFb"></div>
     <h4 class="sbh">ب) حساب المقاومة من ميل الخط</h4>
     <p class="slh">استخدم النقطتين الأولى والثالثة: <span dir="ltr">ΔV = V₃ − V₁</span> و<span dir="ltr">ΔI = I₃ − I₁</span>.</p>
     ${hxCalcStep('R','R = ΔV / ΔI','احسب المقاومة R','Ω')}
@@ -5962,9 +5967,11 @@ function ohmLab(box){
     <div class="tw"><table class="rt ohRes"><thead><tr><th>الكمية</th><th>الطريقة</th><th>القيمة</th></tr></thead>
     <tbody><tr><td>قراءات الجهد والتيار</td><td>الفولتميتر والأميتر</td><td id="r1">—</td></tr><tr><td>شكل العلاقة</td><td>الرسم البياني</td><td id="r2">—</td></tr>
     <tr><td>المقاومة R</td><td>ميل الخط</td><td id="r3">—</td></tr></tbody></table></div>
+    <div class="stage" id="gS2" hidden></div>
     <p class="rn" id="rNote">تظهر النتائج هنا بعد إكمال كل خطوة بنجاح.</p></div>`;
   const {$,num,fb,fb0,fx}=hxKit(box);const VS=[2,4,6],RS=[33,39,47,56,68,82,100];
   let R,bd,Vm,Im,rows,ok,cfg,fit,wired=false;
+  box.__ans={mV:()=>{const k=+$('nR').value;return k?Vm[k-1].toFixed(2):''},mI:()=>{const k=+$('nR').value;return k?Im[k-1].toFixed(3):''}};
   const good={v:{mode:'v20',port:'v'},a:{mode:'a2',port:'a'}},setOk=m=>['mode','port'].every(k=>cfg[m][k]===good[m][k]),ready=()=>wired&&setOk('a')&&setOk('v');
   const slope=()=>(Vm[2]-Vm[0])/(Im[2]-Im[0]);
   const MSG={a:{mode:{v2:'✗ هذا تدريج الجهد (V⎓)، والمطلوب تدريج التيار (A⎓).',v20:'✗ هذا تدريج الجهد (V⎓)، والمطلوب تدريج التيار (A⎓).',v200:'✗ هذا تدريج الجهد (V⎓)، والمطلوب تدريج التيار (A⎓).',
@@ -5978,13 +5985,14 @@ function ohmLab(box){
     $('nZ').innerHTML=hxZoom([[30,165,(ra||'0.000')+' A'],[205,165,(rv||'0.00')+' V']],'شاشة الأميتر (يسار) وشاشة الفولتميتر (يمين) مكبرتان');
     $('nRO').textContent=on?VS[k-1]+' V':'0 V';
     $('nSt').textContent=!(setOk('a')&&setOk('v'))?'أعد الجهازين أولا (الخطوة أ)':!wired?'وصل المجسات أولا (الخطوة ب)':!on?'ارفع جهد المصدر إلى 2 V':rows.length>=k?'✓ سجلت هذه القراءة، ارفع الجهد إلى الخطوة التالية':'✓ اقرأ الشاشتين وسجل القراءتين';
-    $('gS').svgHTML=ohGraph(rows.map(i=>[Vm[i],Im[i]]),fit,R);
+    $('gS').svgHTML=ohGraph(rows.map(i=>[Vm[i],Im[i]]),fit,R);$('gS2').hidden=!fit;if(fit)$('gS2').svgHTML=ohGraph(rows.map(i=>[Vm[i],Im[i]]),fit,R);
     $('oTb').innerHTML=VS.map((v,i)=>{const d=rows.includes(i);return `<tr class="${!d&&i===rows.length?'cur':''}"><td>${i+1}</td><td dir="ltr">${v} V</td><td dir="ltr" class="cV"><b>${d?Vm[i].toFixed(2):''}</b></td><td dir="ltr" class="cI"><b>${d?Im[i].toFixed(3):''}</b></td><td dir="ltr">${d?(Vm[i]/Im[i]).toFixed(1):''}</td></tr>`}).join('');
     $('logB').html='<div class="amLog"><h5>📋 سجل القراءات</h5>'+$('oTb').closest('.tw').outerHTML.replace(' id="oTb"','')+'</div>';
     progO()}
   function newObj(){R=RS[Math.floor(Math.random()*RS.length)];bd=ohBands(R);Vm=VS.map(v=>Math.round(v*(0.985+Math.random()*0.012)*100)/100);Im=Vm.map(v=>Math.round(v/R*1000)/1000);
     rows=[];ok={};cfg={v:{},a:{}};fit=false;$('nR').value=0;$('nR').max=3;$('nR').step=1;['mV','mI','cR'].forEach(k=>$(k).value='');['vFb','aFb','mFb','gFb','cRf'].forEach(fb0);
     W.setR('المقاومة R',[OH_C[bd[0]],OH_C[bd[1]],OH_C[bd[2]],OH_G]);
+    {const l=box.querySelector('#wtLeads'),sv=l&&l.ownerSVGElement;if(sv){sv.setAttribute('viewBox','0 -14 400 314');sv.querySelectorAll('g.aTag,g.vTag').forEach(e=>e.remove())}}
     faces();draw();sub();results()}
   function progO(){if(!cfg||!rows)return;const L=[[setOk('a')&&setOk('v'),'إعداد الجهازين'],[wired,'التوصيل'],[rows.length>=1,'القراءة 1'],[rows.length>=2,'القراءة 2'],[rows.length>=3,'القراءة 3'],[fit,'الرسم البياني'],[!!ok.cR,'المقاومة']];
     $('prog').html=L.map(([d,t])=>`<span class="${d?'d':''}">${d?'✓ ':''}${t}</span>`).join('<i>←</i>')}
@@ -6002,7 +6010,7 @@ function ohmLab(box){
     if(rows.includes(k-1))return fb('mFb',false,'سجلت هذه القراءة، ارفع الجهد إلى الخطوة التالية.');if(k-1!==rows.length)return fb('mFb',false,`ارفع الجهد بالترتيب: القراءة التالية عند ${VS[rows.length]} V.`);
     const v=num($('mV').value),i=num($('mI').value);if(isNaN(v)||isNaN(i))return fb('mFb',false,'اكتب قراءة الفولتميتر بالفولت وقراءة الأميتر بالأمبير.');
     const okv=Math.abs(v-Vm[k-1])<0.006,oki=Math.abs(i-Im[k-1])<0.0006;
-    if(okv&&oki){rows.push(k-1);$('mV').value='';$('mI').value='';fb('mFb',true,`✓ سجلت القراءة ${k}: `+E(`V = ${fx(Vm[k-1],2)} V ، I = ${fx(Im[k-1],3)} A`)+(rows.length<3?`\nارفع الجهد إلى ${VS[rows.length]} V.`:'\nاكتملت القراءات الثلاث، انتقل إلى الرسم البياني.'))}
+    if(okv&&oki){rows.push(k-1);$('mV').value='';$('mI').value='';if(rows.length>=3){fit=true;ok.g=true;sub();fb('gFb',true,'✓ رسم الخط المستقيم تلقائيا: النقاط على خط مستقيم يمر بنقطة الأصل، فالتيار يتناسب طرديا مع الجهد (قانون أوم). وميل الخط ΔV / ΔI يساوي المقاومة R.')}fb('mFb',true,`✓ سجلت القراءة ${k}: `+E(`V = ${fx(Vm[k-1],2)} V ، I = ${fx(Im[k-1],3)} A`)+(rows.length<3?`\nارفع الجهد إلى ${VS[rows.length]} V.`:'\nاكتملت القراءات الثلاث، ورسم الخط المستقيم تلقائيا في بطاقة الحسابات.'))}
     else fb('mFb',false,(okv?'':'✗ قراءة الجهد غير صحيحة: اكتب رقم شاشة الفولتميتر (اليمنى).\n')+(oki?'':'✗ قراءة التيار غير صحيحة: اكتب رقم شاشة الأميتر (اليسرى) بوحدة A.'));draw();results()};
   $('gB').onclick=()=>{if(rows.length<3)return fb('gFb',false,`سجل القراءات الثلاث أولا (سجلت ${rows.length}).`);fit=true;ok.g=true;draw();sub();results();
     fb('gFb',true,'✓ النقاط على خط مستقيم يمر بنقطة الأصل: التيار يتناسب طرديا مع الجهد (قانون أوم). وميل الخط ΔV / ΔI يساوي المقاومة R.')};
@@ -7186,68 +7194,38 @@ WCFG['4-1']={PL:[[['k']],[['m']],[['p','R1'],['p','R2']],[['d']],[['k'],['m']],[
 
 }catch(e){console.error("cfg cfg_4-1.js",e)}
 try{
+/* المدرب 2 نوفمبر (أ): تجربة قانون أوم بالقالب المعتمد (مشغل DX مثل 4-1) */
+const agCss=()=>{if(document.getElementById('agGcss'))return;const st=document.createElement('style');st.id='agGcss';st.textContent='.agGx #dmS .amLog,.agGx #dmV .amLog,.agGx #dmS .pdAns,.agGx #dmV .pdAns,.agGx #dmS .btns,.agGx #dmV .btns,.agGx #dmS .fb2,.agGx #dmV .fb2,.agGx #dmV p,.agGx #dmV .row,.agGx #dmV .msg,.agGx #dmV .wsc>h4{display:none!important}';document.head.appendChild(st)};
+const agAt=(svg,x,y)=>{const p=svg.createSVGPoint();p.x=x;p.y=y;const q=p.matrixTransform(svg.getScreenCTM()),S=document.getElementById('dmSW'),b=S.getBoundingClientRect();return [(q.x-b.left)/S.clientWidth,(q.y-b.top)/S.clientHeight]};
 WCFG['4-5']={PL:[[['m'],['m2']],[['j',0]],[['p','A']],[['p','B']],[['p','R1']],[['p','R2']],[['k']],[]],XY:{k:[92,203],m:[216,204],m2:[338,204],j:[212,27]}};
-DIR['4-5']=function(){let play=false,manual=false;const psleep=async t=>{while(t>0){await sleep(100);if(window.__dmSkip){t=0;break}if(play||manual)t-=100}};const nR=document.getElementById('nR');if(!nR)return;const ctl=nR.closest('.ctl');const q=id=>document.getElementById(id);
-  if(!document.getElementById('dmCssO')){const st=document.createElement('style');st.id='dmCssO';st.textContent=CSS+'#dmS p,#dmS .row,#dmS .chk,#dmS .msg,#dmS .wsc>h4{display:none!important}';document.head.appendChild(st)}
-  const P=document.createElement('div');P.className='dmP';P.innerHTML=`<h4>⚡ تنفيذ التجربة</h4><div id="dmSW" style="position:relative"><div id="dmS"></div><button id="dmBig" type="button" aria-label="تشغيل">▶ تشغيل</button></div><div id="dmV" class="dmView dmHide"></div><div class="dmBar" id="dmBar"></div><div class="tl"><button class="pri" id="dmPlay" type="button">▶ تشغيل</button><span id="dmTlT"></span><input type="range" id="dmTl" min="0" max="0" step="1" value="0"></div><div class="dmCap" id="dmCap"></div><div id="dmLog"></div><div id="dmA"></div><div class="dmBtns"><button id="dmNext" class="pri">التالي ←</button><button id="dmPrev">→ السابق</button><button id="dmRe">↺ من البداية بمقاومة جديدة</button></div>`;
-  q('prog').after(P);
-  [...ctl.children].forEach(e=>{if(e!==P&&e.tagName!=='H3'&&e.id!=='prog')e.classList.add('dmHide')});
-  const LOG=q('oTb').closest('.amLog');
-  function place(){const S=q('dmS');const c=q('wT');if(c&&c.parentElement!==S){c.classList.remove('dmHide');S.appendChild(c)}if(LOG.parentElement!==q('dmLog')){LOG.classList.remove('dmHide');q('dmLog').appendChild(LOG)}
-    const A=q('dmA');const z=q('nZ').closest('.stage');if(z.parentElement!==A){z.classList.remove('dmHide');A.appendChild(z)}
-    let rb=q('dmRec');if(!rb){A.insertAdjacentHTML('beforeend','<button type="button" id="dmRec" class="dmRecB" hidden>✓ سجل القراءة</button>')}}
-  const CARD=()=>q('dmS');
-  const pt=n=>CARD().querySelector('.pt[data-p="'+n+'"]'),pb=j=>CARD().querySelector('button[data-j="'+j+'"]');
-  const SV=()=>CARD().querySelector('svg'),GO=()=>play||manual;
-  const probe=async(j,n)=>{const [x,y]=ptXY(SV(),n);await handTo(SV(),x,y,1100,GO);ck(pb(j));ck(pt(n));await psleep(1300);await handAway(SV(),GO)};
-  const jump=async()=>{await handTo(SV(),212,27,1000,GO);ck(q('wtJ'));const h=SV().querySelector('image.hand');const y0=+h.getAttribute('y');let t=0;while(t<700){await sleep(16);if(GO())t+=16;h.setAttribute('y',y0-14*Math.min(1,t/700))}await psleep(400);await handAway(SV(),GO)};
-  const meter=async(m,mode,port,x)=>{await handTo(SV(),x,204,1100,GO);ck(document.querySelector('#'+m+'F [data-k="mode"][data-v="'+mode+'"]'));await psleep(1200);ck(document.querySelector('#'+m+'F [data-k="port"][data-v="'+port+'"]'));await psleep(1000);await handAway(SV(),GO)};
-  const knob=async v=>{await handTo(SV(),92,203,1100,GO);await psleep(500);nR.value=v;nR.dispatchEvent(new Event('input',{bubbles:true}));await psleep(900);await handAway(SV(),GO)};
-  const ok=id=>/^✓ سجلت/.test(q(id).textContent);
-  const ST=[
-   {c:'<b>الخطوة 1: إعداد الجهاز 1 أميترا.</b> المفتاح على تدريج <b style="color:#2563EB">A⎓</b> مدى <b>2 A</b>، والمجس الأحمر في المنفذ <b>A</b>، والأسود في <b>COM</b>.',f:async()=>{await meter('a','a2','a',216)}},
-   {c:'<b>الخطوة 2: إعداد الجهاز 2 فولتميترا.</b> المفتاح على تدريج <b style="color:#DC2626">V⎓</b> مدى <b>20 V</b>، والمجس الأحمر في المنفذ <b>V</b>، والأسود في <b>COM</b>.',f:async()=>{await meter('v','v20','v',338)}},
-   {c:'<b>الخطوة 3: رفع وصلة التوصيل</b> البرتقالية عن الفجوة، فتنفتح الدائرة حتى يوضع الأميتر مكانها.',f:async()=>{await jump()}},
-   {c:'<b>الخطوة 4:</b> المجس <b style="color:#DC2626">الأحمر للأميتر</b> في النقطة <b>قبل الفجوة</b> (جهة القطب الموجب).',f:async()=>{await probe('ar','A')}},
-   {c:'<b>الخطوة 5:</b> المجس <b>الأسود للأميتر</b> في النقطة <b>بعد الفجوة</b>. صار الأميتر مكان الوصلة <b>على التوالي</b>، فيمر فيه تيار المقاومة كله.',f:async()=>{await probe('ab','B')}},
-   {c:'<b>الخطوة 6:</b> المجس <b style="color:#DC2626">الأحمر للفولتميتر</b> على <b>طرف المقاومة الموجب</b>.',f:async()=>{await probe('vr','R1')}},
-   {c:'<b>الخطوة 7:</b> المجس <b>الأسود للفولتميتر</b> على <b>طرفها السالب</b>. صار الفولتميتر على طرفي المقاومة <b>على التوازي</b>.',f:async()=>{await probe('vb','R2')}},
-   ...[2,4,6].map((v,i)=>({c:`<b>الخطوة ${8+i}: رفع جهد المصدر إلى ${v} V.</b> يتحرك التيار من القطب الموجب في الأميتر ثم المقاومة ويعود إلى القطب السالب، وتظهر القراءتان على الجهازين.<br>👀 <b>اقرأ الشاشتين، ثم اضغط «سجل القراءة».</b>`,need:'mFb',f:async()=>{await knob(i+1)}})),
-   {c:'✅ <b>اكتملت القراءات الثلاث.</b> افتح بطاقة <b>الحسابات</b>: ارسم الخط المستقيم، ثم احسب المقاومة من ميله.',f:async()=>{}}];
-  let k=-1,busy=false,view=-1;const SN=[];q('dmBar').innerHTML='<i></i>'.repeat(ST.length);
-  const snapEl=el=>{if(!el)return '';const c=el.cloneNode(true);c.querySelectorAll('p,.row,.chk,.msg,.wsc>h4').forEach(e=>e.remove());const sfx='v'+(++window.__dmN||(window.__dmN=1))+'_';c.querySelectorAll('[id]').forEach(e=>{if(e.closest('defs'))e.id=sfx+e.id;else e.removeAttribute('id')});return c.innerHTML.replace(/url\(#([^)]+)\)/g,(m,x)=>'url(#'+(c.querySelector('[id="'+sfx+x+'"]')?sfx+x:x)+')')};
-  const snap=()=>{SN[k]={s:snapEl(q('dmS')),z:'<div class="stage">'+snapEl(q('nZ').closest('.stage'))+'</div>'}};
-  const live=()=>view<0||view===k;
-  const ui=(cap=true)=>{const i=live()?k:view;if(cap)q('dmCap').innerHTML=i<0?'اضغط «▶ تشغيل» ليبدأ المشهد خطوة خطوة، أو «التالي» لتتقدم بنفسك. المشهد يجري الإعداد والتوصيل، وأنت تقرأ القراءات من الشاشتين وتسجلها.':ST[i].c+(live()?'':'<br><span class="dmOld">⏪ تعرض خطوة سابقة. اضغط «التالي» أو حرك الشريط للعودة.</span>');
-    [...q('dmBar').children].forEach((x,j)=>x.classList.toggle('d',j<=i));
-    q('dmS').classList.toggle('dmHide',!live());q('dmA').classList.toggle('dmHide',!live()||k<0);const V=q('dmV');V.classList.toggle('dmHide',live());if(!live()){V.innerHTML=SN[view].s+SN[view].z}
-    const tl=q('dmTl');tl.max=Math.max(0,k+1);tl.value=i+1;q('dmTlT').innerHTML='الخطوة <b>'+(i+1)+'</b> من '+ST.length;
-    const s=ST[k],wait=live()&&s&&s.need&&!ok(s.need);const nb=q('dmNext');nb.disabled=wait||(!busy&&live()&&k>=ST.length-1);
-    nb.textContent=busy&&live()?'التالي ←':wait?(play?'⏳ يستمر بعد تسجيل القراءة':'⏳ سجل القراءة أولا'):(live()&&k>=ST.length-1)?'✓ انتهت القياسات':'التالي ←';q('dmPrev').disabled=i<=0};
-  const goView=i=>{view=(i>=k)?-1:i;ui()};
-  q('dmNext').onclick=async()=>{if(!live()){goView(view+1);return}if(busy){window.__dmSkip=1;return}busy=true;window.__dmSkip=0;manual=!play;k++;const s=ST[k];if(s.need){q(s.need).textContent='';q(s.need).className='fb2'}ui();q('dmA').style.visibility='hidden';
-    const L=q('dmCap').textContent.length;q('dmCap').insertAdjacentHTML('beforeend','<div class="dmWait" style="font-size:12.5px;font-weight:800;color:var(--muted);margin-top:4px">📖 اقرأ الخطوة…</div>');
-    await psleep(Math.min(9000,2500+L*55));const w=q('dmCap').querySelector('.dmWait');if(w)w.textContent='🎬 تنفيذ الخطوة…';
-    await s.f();await psleep(150);if(s.need){const idx=k-7;
-      const zt=[...q('nZ').querySelectorAll('text')].map(t=>t.textContent).join(' ');const a=(zt.match(/(-?\d+\.\d+)\s*A/)||[0,'0'])[1],v=(zt.match(/(-?\d+\.\d+)\s*V/)||[0,'0'])[1];
-      if(w)w.textContent='👇 اقرأ الشاشتين، ثم اضغط «سجل القراءة»';
-      const rb=q('dmRec');rb.hidden=false;q('dmA').style.visibility='';q('dmNext').textContent='👇 اضغط «سجل القراءة»';await new Promise(res=>rb.onclick=res);rb.hidden=true;
-      const row=()=>q('oTb').querySelectorAll('tr')[idx];row().style.background='rgba(22,163,74,.22)';await sleep(700);
-      {const c=row().children;c[2].innerHTML='<b>'+v+'</b>';c[3].innerHTML='<b>'+a+'</b>';[c[2],c[3]].forEach(x=>x.style.cssText='background:#F7931E;color:#fff;font-weight:900;animation:dmBl .45s 3')}await sleep(1400);
-      q('mV').value=v;q('mI').value=a;ck(q('mCk'));await sleep(150);{const r=row();r.style.background='rgba(22,163,74,.22)'}
-      if(w)w.textContent='✓ سجلت القراءة';await sleep(900)}
-    snap();if(w)w.remove();q('dmA').style.visibility='';if(play&&!(s.need))await psleep(4500);busy=false;ui()};
-  let ptm=null;const big=()=>{q('dmBig').hidden=play;q('dmBig').textContent=k<0?'▶ تشغيل':'▶ متابعة'};
-  const tick=()=>{clearTimeout(ptm);if(!play)return;ptm=setTimeout(async()=>{if(!play||busy)return tick();
-    if(!live()){goView(view+1);return tick()}
-    const s=ST[k];if(s&&s.need&&!ok(s.need))return tick();
-    if(k>=ST.length-1){play=false;q('dmPlay').textContent='▶ تشغيل';big();q('dmBig').hidden=true;return}
-    await q('dmNext').onclick();tick()},k<0?1000:600)};
-  q('dmPlay').onclick=()=>{play=!play;manual=false;q('dmPlay').textContent=play?'⏸ إيقاف':'▶ تشغيل';big();if(play)tick();else clearTimeout(ptm)};q('dmBig').onclick=()=>{if(!play)q('dmPlay').onclick()};
-  q('dmPrev').onclick=()=>{if(play){play=false;q('dmPlay').textContent='▶ تشغيل';clearTimeout(ptm);big()}const i=live()?k:view;if(i>0)goView(i-1)};
-  q('dmTl').oninput=()=>{const v=+q('dmTl').value-1;if(v<0)return;goView(Math.min(v,k))};
-  q('dmRe').onclick=()=>{ck(q('wtReset'));ck(q('nw'));setTimeout(()=>{k=-1;view=-1;SN.length=0;place();ui()},100)};
-  place();ui();big()};
+{const CARD=()=>{const l=document.getElementById('wtLeads');return l&&l.closest('.wsc').parentElement};
+ const SV=H=>H.q('dmS').querySelector('svg');
+ const probe=async(H,j,n)=>{ck(H.q('dmS').querySelector('#wtBtns button[data-j="'+j+'"]'));await H.click(H.q('dmS').querySelector('.pt[data-p="'+n+'"] circle:last-child'))};
+ const meter=async(H,m,mode,port)=>{await H.click(H.q(m+'F').querySelector('[data-k="mode"][data-v="'+mode+'"]'));await H.psleep(500);await H.click(H.q(m+'F').querySelector('[data-k="port"][data-v="'+port+'"]'))};
+ const flash=(H,i)=>setTimeout(()=>{const tr=H.box.querySelectorAll('#logB tbody tr')[i];if(!tr)return;const td=[...tr.querySelectorAll('td')].slice(2,4);td.forEach(c=>c.style.cssText='background:#F7931E;color:#fff;font-weight:900;animation:dmBl .45s 3');setTimeout(()=>td.forEach(c=>c.style.cssText=''),1800)},1250);
+ /* المدرب 2 نوفمبر (أ): تكبير الجزء المهم في كل خطوة، وبطاقات القراءة على الجهازين */
+ const VB0=[0,-14,400,314];
+ const zoom=async(H,r,d)=>{const sv=SV(H);if(!sv)return;const c=(sv.getAttribute('viewBox')||VB0.join(' ')).split(/\s+/).map(Number),t=r?[r[0],r[1],r[2],r[2]*314/400]:VB0;d=window.__dmSkip?0:(d||900);let e=0;
+   while(e<d){await sleep(30);e+=30;const k=Math.min(1,e/d),q=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;sv.setAttribute('viewBox',c.map((v,i)=>(v+(t[i]-v)*q).toFixed(1)).join(' '))}sv.setAttribute('viewBox',t.map(v=>v.toFixed(1)).join(' '));await sleep(80)};
+ const tags=(H,vv,ii)=>{const sv=SV(H);if(!sv)return;sv.querySelectorAll('g.aTag,g.vTag').forEach(e=>e.remove());if(vv==null)return;
+   const tg=(cl,x,y,t,c)=>`<g class="${cl}"><rect x="${x-37}" y="${y-11}" width="74" height="19" rx="9.5" fill="#fff" stroke="${c}" stroke-width="1.6"/><text x="${x}" y="${y+3.6}" text-anchor="middle" direction="ltr" font-size="10.5" font-weight="900" fill="${c}">${t}</text></g>`;
+   sv.insertAdjacentHTML('beforeend',tg('aTag',216,129,'I = '+ii+' A','#2563EB')+tg('vTag',338,129,'V = '+vv+' V','#DC2626'))};
+ const ZJ=[110,-14,210],ZR=[190,-14,210],ZM=[140,108,260];
+ const rd=(i,v)=>({st:CARD,c:`<b>الخطوة 0: رفع جهد المصدر إلى <span dir="ltr" style="white-space:nowrap">${v} V</span>.</b> تدير اليد مقبض جهاز مصدر الجهد المستمر، فيخرج التيار من القطب الموجب، ويمر في الأميتر ثم المقاومة، ويعود إلى القطب السالب. تظهر شدة التيار <b dir="ltr">I</b> على شاشة الأميتر، والجهد <b dir="ltr">V</b> على شاشة الفولتميتر.`+(i===0?'':' لاحظ أن التيار يزيد بالنسبة نفسها التي زاد بها الجهد.')+'<br>👀 <b>اقرأ الشاشتين، ثم اضغط «سجل القراءة».</b>',
+   f:async H=>{tags(H);await zoom(H);await H.slide('nR',i+1,agAt(SV(H),92,203));await H.psleep(500);await zoom(H,ZM);tags(H,H.box.__ans.mV(),H.box.__ans.mI());await H.psleep(400);await H.hand('g.aTag');await H.psleep(1200);await H.hand('g.vTag');await H.psleep(1200)},
+   rec:{in:'mI',ck:'mCk',fb:'mFb',name:`القراءة ${i+1}: الجهد V والتيار I عند ${v} V`,unit:'A',say:'اقرأ الشاشتين، ثم اضغط «سجل القراءة»',val:H=>{H.q('mV').value=H.box.__ans.mV();flash(H,i);return H.box.__ans.mI()}}});
+ const run=DX({steps:[
+  {st:'aF',c:'<b>الخطوة 1: إعداد الجهاز 1 أميترا.</b> التيار المتوقع أقل من <b dir="ltr">1 A</b>، فيدار مفتاح الوضع إلى تدريج <b style="color:#2563EB" dir="ltr">A⎓</b> مدى <b dir="ltr">2 A</b> (المدى الأصغر الذي يزيد على القيمة المتوقعة)، ثم يوضع المجس الأحمر في المنفذ <b dir="ltr">A</b>، والمجس الأسود في <b dir="ltr">COM</b>.',f:async H=>{await meter(H,'a','a2','a')}},
+  {st:'vF',c:'<b>الخطوة 2: إعداد الجهاز 2 فولتميترا.</b> الجهد المتوقع حتى <b dir="ltr">6 V</b>، فيدار مفتاح الوضع إلى تدريج <b style="color:#DC2626" dir="ltr">V⎓</b> مدى <b dir="ltr">20 V</b>، ثم يوضع المجس الأحمر في المنفذ <b dir="ltr">V</b>، والمجس الأسود في <b dir="ltr">COM</b>.',f:async H=>{await meter(H,'v','v20','v')}},
+  {st:CARD,c:'<b>الخطوة 3: رفع وصلة التوصيل.</b> ترفع اليد وصلة التوصيل البرتقالية عن الفجوة في الخط الموجب، فتنفتح الدائرة حتى يوضع الأميتر مكانها. لو بقيت الوصلة لمر التيار فيها وترك الأميتر، فيقرأ صفرا.',
+   f:async H=>{tags(H);await zoom(H,ZJ);const s=SV(H);await H.hand(agAt(s,212,27));await H.psleep(300);ck(H.q('wtJ'));await H.hand(agAt(s,212,12));await H.psleep(500)}},
+  {st:CARD,c:'<b>الخطوة 4: المجس الأحمر للأميتر قبل الفجوة.</b> يوضع المجس <b style="color:#DC2626">الأحمر للأميتر</b> في النقطة <b>قبل الفجوة</b>، وهي جهة القطب الموجب التي يدخل منها التيار إلى الجهاز.',f:async H=>{tags(H);await zoom(H,ZJ);await probe(H,'ar','A')}},
+  {st:CARD,c:'<b>الخطوة 5: المجس الأسود للأميتر بعد الفجوة.</b> يوضع المجس <b>الأسود للأميتر</b> في النقطة <b>بعد الفجوة</b>، فيصير الأميتر مكان الوصلة <b>على التوالي</b>، ويمر فيه تيار المقاومة كله.',f:async H=>{await zoom(H,ZJ);await probe(H,'ab','B')}},
+  {st:CARD,c:'<b>الخطوة 6: المجس الأحمر للفولتميتر.</b> يوضع المجس <b style="color:#DC2626">الأحمر للفولتميتر</b> على ساق المقاومة المتصلة بجهة القطب الموجب، وهي الطرف الأعلى جهدا.',f:async H=>{await zoom(H,ZR);await probe(H,'vr','R1')}},
+  {st:CARD,c:'<b>الخطوة 7: المجس الأسود للفولتميتر.</b> يوضع المجس <b>الأسود للفولتميتر</b> على ساق المقاومة الأخرى، فيصير الفولتميتر على طرفي المقاومة <b>على التوازي</b>. المجسات تبقى ثابتة طوال القراءات، والذي يتغير فقط مقبض المصدر.',f:async H=>{await zoom(H,ZR);await probe(H,'vb','R2');await H.psleep(400);await zoom(H)}},
+  rd(0,2),rd(1,4),rd(2,6),
+  {st:CARD,c:'✅ <b>اكتملت القراءات الثلاث.</b> رسم الخط المستقيم تلقائيا في بطاقة <b>الحسابات</b>: النقاط على خط مستقيم يمر بنقطة الأصل. احسب المقاومة من ميله <b dir="ltr">R = ΔV / ΔI</b>.',f:async H=>{await zoom(H);await H.psleep(600)}}]});
+ DIR['4-5']=function(){const b=document.querySelector('.card.lab .labBody');if(b){b.classList.add('agGx');b.dataset.recY='0.52'}agCss();run()}}
 
 }catch(e){console.error("cfg cfg_4-5.js",e)}
 try{
