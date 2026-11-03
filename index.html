@@ -1606,7 +1606,7 @@ function buildNav(){
   $('examBtn').hidden=true;
   $('survBtn').onclick=()=>{pos.t='survey';closeNav();render()};
   $('guideBtn').onclick=()=>{location.href='guide.html'};
-  if($('bagBtn'))$('bagBtn').onclick=()=>{let d=document.getElementById('bagDlg');if(!d){d=document.createElement('div');d.id='bagDlg';d.innerHTML='<div class="bagIn"><b>📘 الحقيبة التدريبية كاملة</b><small>132 صفحة ملونة · 5 ميجا تقريبا</small><a class="btn" href="bag.pdf" target="_blank" rel="noopener">📖 عرض الحقيبة</a><a class="btn ghost" href="bag.pdf" download="الحقيبة التدريبية - الفيزياء العامة 101.pdf">⬇️ تحميل على جهازي</a><button type="button" class="btn ghost bagX">إغلاق</button></div>';document.body.appendChild(d);d.addEventListener('click',e=>{if(e.target===d||e.target.closest('.bagX')||e.target.closest('a'))d.hidden=true})}try{const bg=getComputedStyle(document.body).backgroundColor.match(/\d+/g)||[255,255,255];d.classList.toggle('dk',(+bg[0]+ +bg[1]+ +bg[2])<300)}catch(e){}d.hidden=false};
+  /* طلب المدرب 3 نوفمبر: حذف زر الحقيبة وملفها */
   $('themeBtn').onclick=()=>{const r=document.documentElement;const dark=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches;r.dataset.theme=dark?'light':'dark';store.set('p101-theme',r.dataset.theme)};
 }
 function updateProgress(){const pct=Math.min(100,Math.round([...done].filter(k=>{const[a,b]=k.split('-').map(Number);return !HID(a,b)}).length/total*100));$('progTxt').textContent=AR(pct)+'% مكتمل';$('progBar').style.width=pct+'%'}
@@ -3545,7 +3545,7 @@ window.showBagIdx=showIdx;
 /* الضغط على «صفحة 93» في نصوص الدرس يفتح الصفحة في الحقيبة */
 document.addEventListener('click',e=>{const a=e.target.closest&&e.target.closest('a.bagLink');if(!a)return;e.preventDefault();e.stopPropagation();openBagPage(a.dataset.p)},true);
 const RX=/صفحة\s*(\d{2,3})/g;
-function linkify(root){const it=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:n=>{const p=n.parentElement;if(!p||p.closest('a,button,input,textarea,script,style,.bagPg,.bagBar,.bagOv,svg,.board'))return NodeFilter.FILTER_REJECT;return /صفحة\s*\d{2,3}/.test(n.nodeValue)?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT}});
+function linkify(root){return;/* طلب المدرب 3 نوفمبر: حذف الحقيبة من المنصة، أرقام الصفحات تبقى نصا */const it=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:n=>{const p=n.parentElement;if(!p||p.closest('a,button,input,textarea,script,style,.bagPg,.bagBar,.bagOv,svg,.board'))return NodeFilter.FILTER_REJECT;return /صفحة\s*\d{2,3}/.test(n.nodeValue)?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT}});
   const ns=[];while(it.nextNode())ns.push(it.currentNode);
   ns.forEach(n=>{const t=n.nodeValue;let last=0,m;const f=document.createDocumentFragment();RX.lastIndex=0;let any=false;
     while((m=RX.exec(t))){const p=+m[1];if(unitOf(p)<0||!findLesson(p))continue;any=true;f.appendChild(document.createTextNode(t.slice(last,m.index)));const a=document.createElement('a');a.className='bagLink';a.dataset.p=p;a.textContent=m[0];f.appendChild(a);last=m.index+m[0].length}
