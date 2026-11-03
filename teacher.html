@@ -377,7 +377,7 @@ async function authScreen(){
     <label class="lgF lgFu"><span class="lgL">اسم المستخدم</span><input placeholder="اسم المستخدم" type="text" id="u1" autocomplete="username" autocapitalize="off" autocorrect="off" spellcheck="false" required></label>
     <label class="lgF lgFp" id="l1"><span class="lgL">كلمة المرور</span><input placeholder="كلمة المرور" type="password" id="p1" autocomplete="current-password" required></label>
     <label class="lgF lgFk" id="lc" hidden><span class="lgL">رمز إعداد المدرب (8 أرقام)</span><input placeholder="رمز إعداد المدرب (8 أرقام)" type="text" id="sc1" inputmode="numeric" maxlength="8" autocomplete="one-time-code" style="direction:ltr"></label><label class="lgF lgFu" id="lu" hidden><span class="lgL">اسم مستخدم جديد (6 خانات على الأقل)</span><input placeholder="اسم مستخدم جديد (6 خانات على الأقل)" type="text" id="nu1" autocapitalize="off" autocorrect="off" spellcheck="false" style="direction:ltr"></label><label class="lgF lgFp" id="ln" hidden><span class="lgL">كلمة مرور جديدة</span><input placeholder="كلمة مرور جديدة" type="password" id="pn" autocomplete="new-password"></label><label class="lgF lgFp" id="l2" hidden><span class="lgL">أعد كتابة كلمة المرور</span><input placeholder="أعد كتابة كلمة المرور" type="password" id="p2" autocomplete="new-password"></label><p class="sub" id="prl" hidden style="font-size:13px;line-height:1.7">كلمة المرور: 12 خانة على الأقل، فيها حرف إنجليزي كبير وصغير ورقم ورمز مثل @ #، بلا مسافات، ولا تحتوي اسم المستخدم.</p>
-    <p class="msg" id="am"></p><button class="btn lgBtn" id="ab" type="submit" disabled>دخول</button><button type="button" id="fg" class="btn ghost" hidden style="font-size:13.5px">نسيت اسم المستخدم أو كلمة المرور؟</button><a href="index.html" style="text-align:center;font-size:13.5px">العودة إلى المنصة</a><div class="credit"><span class="crL">إعداد وتطوير المدرب</span><b>أ / خليل بن موسى المالكي</b></div></form></div>`;
+    <p class="msg" id="am"></p><button class="btn lgBtn" id="ab" type="submit" disabled>دخول</button><button type="button" id="fg" class="btn ghost" hidden style="font-size:13.5px">نسيت اسم المستخدم أو كلمة المرور؟</button><a href="index.html" style="text-align:center;font-size:13.5px">العودة إلى المنصة</a><div class="credit"><span class="crL">إعداد وتطوير</span><b>أ / خليل بن موسى المالكي</b></div></form></div>`;
   let ready=true;
   try{const r=await fetch(API).then(r=>r.json());ready=!!r.teacherReady}catch(e){$('#asub').textContent='تعذّر الاتصال بالخادم. تحقق من الرابط في config.js أو من الإنترنت.';return}
   if(!ready){$('#asub').textContent='أول دخول: أنشئ حساب المدرب. اكتب رمز الإعداد من «سجل التنفيذ» في Apps Script، ثم اختر اسم مستخدم (6 خانات على الأقل) وكلمة مرور قوية، واحفظهما جيدًا.';$('#lc').hidden=false;$('#l2').hidden=false;$('#prl').hidden=false;$('#p1').autocomplete='new-password';$('#ab').textContent='إنشاء حساب المدرب والدخول'}
@@ -1570,7 +1570,7 @@ boot();
 </script>
 
 <style>
-/* 72: بطاقات الدخول بلون بطاقة «إعداد وتطوير المدرب»، وبطاقة الإعداد أغمق قليلا وبلا خطوط */
+/* 72: بطاقات الدخول بلون بطاقة «إعداد وتطوير»، وبطاقة الإعداد أغمق قليلا وبلا خطوط */
 .loginBox .lgTl{background:linear-gradient(180deg,#f5f9ff,#e7f0fd)!important;border:1px solid #cfe0f7!important;box-shadow:0 10px 24px -16px rgba(13,79,168,.5)!important}
 .loginBox .credit{background:#73a5f3!important;border-color:#5f95ea!important;box-shadow:0 10px 24px -14px rgba(13,79,168,.55)!important}
 .loginBox .credit .crL::before,.loginBox .credit .crL::after{content:none!important;display:none!important}
