@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
+<script>/* المدرب 3 نوفمبر: لا تظهر واجهة المنصة لحظة قبل صفحة الدخول */try{if(!localStorage.getItem('p101-auth')&&!localStorage.getItem('p101-tauth'))document.documentElement.classList.add('preL')}catch(e){}addEventListener('load',()=>{const w=document.getElementById('loginWrap');if(!w||w.hidden)document.documentElement.classList.remove('preL')})</script><style>html.preL #app{visibility:hidden}html.preL body{background:#60a5fa}</style>
 <meta charset="utf-8">
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
@@ -2893,7 +2894,7 @@ const SYNC=(()=>{
   return{result,flush,logout,post,dev}
 })();
 function showLogin(){
-  $('loginWrap').hidden=false;let step=1,lastId='',role='s',mode='s';
+  $('loginWrap').hidden=false;document.documentElement.classList.remove('preL');let step=1,lastId='',role='s',mode='s';
   const ROLES={s:{sub:'سجّل دخولك برقمك التدريبي',lab:'الرقم التدريبي',im:'numeric',hint:'أول مرة تدخل؟ اكتب رقمك التدريبي واترك كلمة المرور فارغة، وجهز رمز التسجيل من المدرب.',val:''},
     t:{sub:'دخول المدرب إلى لوحة المتابعة',lab:'اسم المستخدم',im:'text',hint:'أول مرة؟ أنشئ حساب المدرب من <a href="teacher.html">هنا</a>.',val:''},
     e:{sub:'دخول الاختبارات التجريبية',lab:'الرقم التدريبي',im:'numeric',hint:'إذا كنت مسجلا في المنصة فكلمة المرور نفسها. وفي أول دخول اترك كلمة المرور فارغة، وجهز رمز التسجيل من المدرب.',val:''},
