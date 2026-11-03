@@ -599,7 +599,7 @@ body.examMode .exWM{display:block}@media (prefers-color-scheme:dark){:root:not([
 .exSheet .exWl>*:not(b):not(small),.exSheet .exWg>*:not(b):not(small){display:inline}
 body.exSheetOn::before{content:'';position:fixed;inset:0;z-index:1199;background:rgba(0,0,0,.35);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
 @keyframes exFloat{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}
-/* الاختبارات الفصلية */
+/* الاختبارات التجريبية */
 .examBar{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;margin:0 0 10px;padding:10px 14px;border-radius:12px;border:0;background:#F7931E;color:#fff;font:700 15px system-ui,sans-serif;cursor:pointer;text-align:right;box-shadow:0 4px 14px rgba(247,147,30,.35)}
 .examBar[hidden]{display:none}.examBar .go{white-space:nowrap;background:rgba(255,255,255,.22);border-radius:999px;padding:4px 10px;font-size:13.5px}
 .exItem{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-top:12px;background:var(--paper)}
@@ -731,7 +731,7 @@ body.calcNew .view .calc{margin:6px 0 0;box-shadow:none}body.calcNew .view .calc
 .pendM{margin:6px 0 0;font-size:13px;color:#991b1b}
 [data-theme="dark"] .pendC{background:rgba(220,38,38,.12);color:#fecaca}[data-theme="dark"] .pendR{background:rgba(0,0,0,.25);border-color:rgba(248,113,113,.4)}[data-theme="dark"] .pendN{color:#f3f4f6}[data-theme="dark"] .pendS,[data-theme="dark"] .pendM{color:#fecaca}[data-theme="dark"] .pendT button{background:transparent;color:#fca5a5;border-color:#f87171}[data-theme="dark"] .pendX{background:rgba(248,113,113,.2);color:#fecaca}
 .aiFab[hidden],body:has(#loginWrap:not([hidden])) .aiFab{display:none!important}
-</style>
+.lgPriv{margin:8px 0 0;text-align:center;font-size:13.5px}.lgPriv a{color:inherit;opacity:.8}</style>
 <style>
 /* 63: هوية «دفتر المختبر»: ألوان مستمدة من محتوى كل وحدة، بطاقات بتسلسل واضح، الفهرس كهرماني */
 :root{--ink0:#14213D;--paperX:#F4F6F8;--amb1:#F5B23C;--amb2:#E8891A;--ambInk:#3B2200;--r1:12px;--r2:12px;--r3:10px;
@@ -1151,7 +1151,7 @@ header.top .brand span{color:#DCE8F7}header.top .progress{color:#E6EEF9}
     <button class="btn lgBtn" id="lgBtn" type="submit">دخول</button>
     </div>
     <div class="credit"><span class="crL">إعداد وتطوير المدرب</span><b>أ / خليل بن موسى المالكي</b></div>
-    <section class="lgAbout" id="lgAbout" aria-labelledby="lgAboutT"><h2 id="lgAboutT">عن المنصة</h2><p>منصة الفيزياء العامة 101 التدريبية هي منصة تدريبية تفاعلية مدعومة بالذكاء الاصطناعي لمتدربي الكليات التقنية، يرافقك فيها مدرب ذكي يشرح لك الدروس، ثم تنتقل إلى المعمل لتجري التجارب العملية بنفسك، وتثبّت فهمك بأمثلة وتمارين تفاعلية، لتقيس تقدمك في اختبارات تتابع نتائجك خطوة بخطوة.</p><details class="lgMore"><summary>اقرأ المزيد ▾</summary><p>تخيل أن لديك مدربا خاصا يشرح لك دروس الفيزياء خطوة بخطوة، ويتفاعل معك ويجيب عن أسئلتك، ثم يأخذ بيدك إلى المعمل الفيزيائي الافتراضي لتجري التجارب العملية الفيزيائية بنفسك. هذه هي منصة الفيزياء العامة 101 التدريبية لمتدربي الكليات التقنية. يشرح فيها المدرب الذكي التفاعلي دروسا علمية بالصوت على السبورة، ويرافق المساعد الذكي المتدرب في حل الأمثلة والتمارين. ولكل درس علمي تجربة عملية تفاعلية، يمسك فيها المتدرب أدوات القياس بنفسه، فيقيس ويسجل ويحسب ويتحقق من القانون كأنه في معمل حقيقي. ومحتواها العلمي مطابق للحقيبة التدريبية المعتمدة، ومستند إلى مراجع علمية متخصصة، وبعد كل درس تنتظر المتدرب أمثلة وتمارين تفاعلية تقيّمه فورا، وتتابع تقدمه درسا بعد درس.</p></details></section>
+    <section class="lgAbout" id="lgAbout" aria-labelledby="lgAboutT"><h2 id="lgAboutT">عن المنصة</h2><p>منصة الفيزياء العامة 101 التدريبية هي منصة تدريبية تفاعلية مدعومة بالذكاء الاصطناعي لمتدربي الكليات التقنية، يرافقك فيها مدرب ذكي يشرح لك الدروس، ثم تنتقل إلى المعمل لتجري التجارب العملية بنفسك، وتثبّت فهمك بأمثلة وتمارين تفاعلية، لتقيس تقدمك في اختبارات تتابع نتائجك خطوة بخطوة.</p><details class="lgMore"><summary>اقرأ المزيد ▾</summary><p>تخيل أن لديك مدربا خاصا يشرح لك دروس الفيزياء خطوة بخطوة، ويتفاعل معك ويجيب عن أسئلتك، ثم يأخذ بيدك إلى المعمل الفيزيائي الافتراضي لتجري التجارب العملية الفيزيائية بنفسك. هذه هي منصة الفيزياء العامة 101 التدريبية لمتدربي الكليات التقنية. يشرح فيها المدرب الذكي التفاعلي دروسا علمية بالصوت على السبورة، ويرافق المساعد الذكي المتدرب في حل الأمثلة والتمارين. ولكل درس علمي تجربة عملية تفاعلية، يمسك فيها المتدرب أدوات القياس بنفسه، فيقيس ويسجل ويحسب ويتحقق من القانون كأنه في معمل حقيقي. ومحتواها العلمي مطابق للحقيبة التدريبية المعتمدة، ومستند إلى مراجع علمية متخصصة، وبعد كل درس تنتظر المتدرب أمثلة وتمارين تفاعلية تقيّمه فورا، وتتابع تقدمه درسا بعد درس.</p></details><p class="lgPriv"><a href="privacy.html">سياسة الخصوصية</a></p></section>
   </form>
 </div>
 <script>(function(){const lab=document.getElementById('lgIdLab'),inp=document.getElementById('lgId');if(lab&&inp){const sync=()=>inp.placeholder=lab.textContent.trim();sync();new MutationObserver(sync).observe(lab,{childList:true,characterData:true,subtree:true})}
@@ -1600,7 +1600,7 @@ function buildNav(){
       it.appendChild(lb);ol.appendChild(it)});
     d.append(b,ol);nav.appendChild(d)});
   const f=document.createElement('div');f.className='navfoot';
-  f.innerHTML='<button id="examBtn" hidden>الاختبارات الفصلية</button><button id="guideBtn">دليل المتدرب</button><button id="survBtn">استبانة رضا المتدرب</button><button id="refsBtn">قائمة المراجع</button><button id="themeBtn">تبديل الوضع الفاتح/الداكن</button>';
+  f.innerHTML='<button id="examBtn" hidden>الاختبارات التجريبية</button><button id="guideBtn">دليل المتدرب</button><button id="survBtn">استبانة رضا المتدرب</button><button id="refsBtn">قائمة المراجع</button><button id="themeBtn">تبديل الوضع الفاتح/الداكن</button>';
   nav.appendChild(f);
   $('refsBtn').onclick=()=>{pos.t='refs';closeNav();render()};
   $('examBtn').hidden=true;
@@ -1639,7 +1639,7 @@ function render(){if(typeof pos!=='undefined'&&pos&&pos.t==='page'&&!(Date.now()
   const u=UNITS[pos.u],l=lesson();
   const refs=GT(pos.t);
   $('crumb').textContent=refs?'المقرر كاملًا':`الوحدة ${ORD[pos.u]} · ${u.t}`;
-  $('lessonTitle').textContent=refs?(pos.t==='exam'?'📝 الاختبارات الفصلية':'قائمة المراجع'):l.t;if(!refs&&l.pre){const sm=document.createElement('small');sm.className='lpre';sm.textContent=l.pre;$('lessonTitle').prepend(sm)}
+  $('lessonTitle').textContent=refs?(pos.t==='exam'?'📝 الاختبارات التجريبية':'قائمة المراجع'):l.t;if(!refs&&l.pre){const sm=document.createElement('small');sm.className='lpre';sm.textContent=l.pre;$('lessonTitle').prepend(sm)}
   if(pos.t!=='exam'){clearInterval(EXAM.timer);document.body.classList.remove('examMode')}document.body.classList.toggle('examSec',pos.t==='exam');examBar();
   $('doneBtn').hidden=refs;$('tabs').hidden=refs;
   const isDone=done.has(key(pos.u,pos.l));
@@ -2135,7 +2135,7 @@ function calcPend(b){const L=[];UNITS.forEach((U,u)=>U.l.forEach((l,j)=>{if(!l.h
   return out}
 function pendCard(){const c=document.createElement('div');c.className='pendC';
   const MX=4,sh=PEND.slice(0,MX);
-  c.innerHTML='<div class="pendH"><b>📌 أكمل أعمالك الفصلية</b><button class="pendX" aria-label="إغلاق">✕</button></div><p class="pendS">أكمل هذه المهام في الدروس التي فتحتها حتى الآن؛ فهي تدخل في درجة الأعمال الفصلية.</p>'
+  c.innerHTML='<div class="pendH"><b>📌 أكمل مهام دروسك</b><button class="pendX" aria-label="إغلاق">✕</button></div><p class="pendS">أكمل هذه المهام في الدروس التي فتحتها حتى الآن؛ فهي تثبّت فهمك للدرس.</p>'
    +sh.map((x,i)=>'<div class="pendR"><div class="pendN">'+esc(x.n)+'</div><div class="pendT">'+x.t.map(t=>'<button data-i="'+i+'" data-t="'+t[0]+'">'+t[1]+'</button>').join('')+'</div></div>').join('')
    +(PEND.length>MX?'<p class="pendM">و'+AR(PEND.length-MX)+' دروس أخرى فيها مهام لم تكتمل.</p>':'');
   c.querySelector('.pendX').onclick=()=>{PEND_X=true;c.remove()};
@@ -2662,7 +2662,7 @@ function renderLab(v){
   (window.REFS||[]).filter(f=>f.u.includes(pos.u)).forEach(f=>{const li=document.createElement('li');li.innerHTML=`<b></b><br><small></small>`;li.querySelector('b').textContent=f.t;li.querySelector('b').dir='auto';li.querySelector('small').textContent=f.a;if(!f.a){li.querySelector('br').remove();li.querySelector('small').remove();li.querySelector('b').style.fontWeight='600'}ul.appendChild(li)});
   r.appendChild(ul);i.appendChild(r);
 }
-/* ---------- الاختبارات الفصلية ---------- */
+/* ---------- الاختبارات التجريبية ---------- */
 const EXAM={list:null,cur:null,timer:0,saveT:0};
 /* معرف هذا الجهاز للاختبار: الاختبار يحل من جهاز واحد فقط */
 function exDev(){let d=null;try{d=localStorage.getItem('p101-exdev')}catch(e){}if(!d){d=EXAM.dev||(Math.random().toString(36).slice(2)+Date.now().toString(36));try{localStorage.setItem('p101-exdev',d)}catch(e){}}EXAM.dev=d;return d}
@@ -2679,7 +2679,7 @@ function examRules(e){const dur=e.min%60?AR(e.min)+' دقيقة':e.min===60?'س�
   <li><b>جرب الدخول قبل يوم الاختبار</b> من تبويب «الاختبارات»، وتأكد أن رقمك وكلمة مرورك تعمل.</li>
   <li>فعل <b>وضع عدم الإزعاج</b> في جوالك أثناء الاختبار حتى لا تقطعك المكالمات والإشعارات.</li>
   <li>مدة الاختبار <b>${dur}</b>، ويبدأ الوقت عند دخول الاختبار برمز الدخول، ولا يتوقف بالخروج من الصفحة أو إغلاقها.</li>
-  <li>لك <b>محاولة واحدة فقط لحل الاختبار كاملا</b>؛ بعد الإرسال لا يمكن إعادة الحل أو تعديل أي إجابة. الدرجة الكلية <b>${AR(e.max)}</b>.</li>
+  <li>لك <b>محاولة واحدة فقط لحل الاختبار كاملا</b>؛ بعد الإرسال لا يمكن إعادة الحل أو تعديل أي إجابة. مجموع النقاط <b>${AR(e.max)}</b>.</li>
   <li>عدد الأسئلة <b>${AR(e.n)}</b>: أسئلة نظرية اختيار من متعدد، ثم مسائل حسابية.</li>
   <li>يمكنك <b>تغيير إجابة الأسئلة النظرية</b> في أي وقت قبل الإرسال.</li>
   <li class="exRed">المسألة الحسابية <b>أربع خطوات بالترتيب</b>: (1) المعطيات، (2) المطلوب، (3) القانون والحساب، (4) النتيجة.</li>
@@ -2687,11 +2687,11 @@ function examRules(e){const dur=e.min%60?AR(e.min)+' دقيقة':e.min===60?'س�
   <li class="exRed">في الخطوة 3: اختر القانون فتظهر الآلة الحاسبة تحت السؤال وفوقها القانون الذي اخترته، احسب بها ثم اضغط <b>«سجل النتيجة في الخطوة 4»</b> للانتقال؛ ولا يقبل رقم يكتب بدون حساب.</li>
   <li class="exRed exBold"><b>الحساب في آلة المنصة بالتعويض: اكتب العملية الحسابية كاملة بأرقام معطيات المسألة كما هي. لا يقبل رقم جاهز، ولا أي رقم من خارج معطيات المسألة والقانون.</b></li>
   <li class="exRed">في الخطوة 4: تظهر النتيجة تلقائيا ولا تكتب يدويا، ويمكنك تصحيحها بزر «أعد الحساب بالآلة الحاسبة».</li>
-  <li class="exRed">في المسائل الحسابية: إذا توقفت عند خطوة تحسب لك درجات الخطوات التي أنهيتها فقط.</li>
+  <li class="exRed">في المسائل الحسابية: إذا توقفت عند خطوة تحسب لك نقاط الخطوات التي أنهيتها فقط.</li>
   <li class="exRed">في <b>المسائل الحسابية</b> استخدم <b>الآلة الحاسبة الموجودة في الاختبار فقط</b>؛ فالنتيجة لا تسجل إلا منها.</li>
   <li>تحفظ إجاباتك تلقائيا؛ إذا انقطع الإنترنت ادخل مرة أخرى وأكمل من حيث توقفت.</li>
   <li>إذا واجهت أي مشكلة أثناء الاختبار <b>أبلغ المدرب فورا</b>، ولا تغلق الصفحة أو تبدأ من جهاز آخر.</li>
-  <li>بعد الانتهاء اضغط <b>«إنهاء الاختبار وإرساله»</b>، وإذا لم تضغطه يرسل تلقائيا عند انتهاء الوقت. لا تظهر الدرجة بعد الإرسال بل تصل إلى المدرب.</li></ol>`}
+  <li>بعد الانتهاء اضغط <b>«إنهاء الاختبار وإرساله»</b>، وإذا لم تضغطه يرسل تلقائيا عند انتهاء الوقت. لا تظهر النتيجة بعد الإرسال بل تصل إلى المدرب.</li></ol>`}
 /* لوحة الآلة الحاسبة المنبثقة: أعلاها القانون المختار وأرقام التعويض، والناتج يسجل منها فقط بعد حساب فعلي (لا يقبل رقم بدون عملية) */
 /* الأرقام المسموح بها في عملية الاختبار: أرقام نص المسألة والقانون المختار (والأسس المكتوبة بأرقام علوية)، مع 0 و0.5 و1 و2 و10، وأعداد الكلمات (ثلاثة، أربعة...) */
 const EXNUMS=t=>{t=String(t||'').replace(/[⁻⁰¹²³⁴⁵⁶⁷⁸⁹]+/g,m=>' '+m.replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹]/g,c=>'⁰¹²³⁴⁵⁶⁷⁸⁹'.indexOf(c)).replace('⁻','')+' ');return (t.match(/\d*\.?\d+/g)||[]).map(Number)};
@@ -2740,9 +2740,9 @@ function examCheck(){if(!API||!AUTH)return;SYNC.post({a:'exams',token:AUTH.token
 function examOpen(){pos.t='exam';closeNav();buildNav();render()}
 function renderExam(v){
   const i=wrap(v);clearInterval(EXAM.timer);document.body.classList.remove('examMode');{const d=document.getElementById('exDoneBar');if(d)d.remove()}document.querySelectorAll('.exSheet').forEach(x=>x.remove());document.body.classList.remove('exSheetOn');
-  if(!API||!AUTH){i.appendChild(card('📝 الاختبارات الفصلية','تظهر الاختبارات الفصلية للمتدربين بعد تسجيل الدخول برقمهم التدريبي.'));return}
+  if(!API||!AUTH){i.appendChild(card('📝 الاختبارات التجريبية','تظهر الاختبارات التجريبية للمتدربين بعد تسجيل الدخول برقمهم التدريبي.'));return}
   if(EXAM.cur)return examPaper(i);
-  const c=card('📝 الاختبارات الفصلية','أهلا '+esc((AUTH.name||'').split(' ')[0])+'. يفتح المدرب الاختبار لجميع الشعب، فيظهر هنا. لكل اختبار محاولة واحدة ووقت محدد، وتصل درجتك إلى المدرب تلقائيا.');i.appendChild(c);
+  const c=card('📝 الاختبارات التجريبية','أهلا '+esc((AUTH.name||'').split(' ')[0])+'. يفتح المدرب الاختبار لجميع الشعب، فيظهر هنا. لكل اختبار محاولة واحدة ووقت محدد، وتصل نتيجتك إلى المدرب تلقائيا.');i.appendChild(c);
   const box=document.createElement('div');box.innerHTML='<p class="sub"><span class="spin"></span> جار التحميل…</p>';c.appendChild(box);
   SYNC.post({a:'exams',token:AUTH.token}).then(r=>{
     if(r.error==='auth')return SYNC.logout(true);
@@ -2750,7 +2750,7 @@ function renderExam(v){
     EXAM.list=r.list;examBar();
     if(!r.list.length){box.innerHTML='<p class="exEmpty">لا يوجد اختبار متاح الآن. سيظهر هنا عندما يفتحه المدرب.</p>';return}
     box.innerHTML='';r.list.forEach(e=>{if(e.status!=='done'&&e.left!=null)e.status='started';const d=document.createElement('div');d.className='exItem';
-      const info=`عدد الأسئلة ${AR(e.n)} (اختيار من متعدد) · الدرجة ${AR(e.max)} · المدة ${e.min%60?AR(e.min)+' دقيقة':e.min===60?'ساعة':AR(e.min/60)+' ساعات'} · محاولة واحدة`;
+      const info=`عدد الأسئلة ${AR(e.n)} (اختيار من متعدد) · النقاط ${AR(e.max)} · المدة ${e.min%60?AR(e.min)+' دقيقة':e.min===60?'ساعة':AR(e.min/60)+' ساعات'} · محاولة واحدة`;
       d.innerHTML=`<h3>${esc(e.t)}</h3>${e.cover?`<p class="exCov">${esc(e.cover)}</p>`:''}<p class="exInfo">${info}</p><div class="exAct"></div>`;
       const a=d.querySelector('.exAct');
       const wF=x=>new Date(x).toLocaleString('ar-SA-u-ca-gregory-nu-latn',{weekday:'long',day:'numeric',month:'long',hour:'numeric',minute:'2-digit'}),wT=x=>new Date(x).toLocaleTimeString('ar-SA-u-nu-latn',{hour:'numeric',minute:'2-digit'});
@@ -2785,7 +2785,7 @@ function examPaper(i){
     if(!all&&dn)dn.remove()};
   const save=()=>{clearTimeout(EXAM.saveT);EXAM.saveT=setTimeout(()=>{if(EXAM.saving)return save();EXAM.saving=true;SYNC.post({a:'examsave',token:AUTH.token,id:X.id,answers:X.ans,dev:exDev()}).then(r=>{if(r&&r.error==='other_device'&&EXAM.cur){EXAM.cur=null;clearInterval(EXAM.timer);document.body.classList.remove('examMode','exSheetOn');document.querySelectorAll('.exSheet,#exDoneBar').forEach(x=>x.remove());examAsk(EX_OTHER).then(()=>render())}}).catch(()=>{}).finally(()=>{EXAM.saving=false})},4000)};
   const STEPS=['المعطيات','المطلوب','القانون المستخدم والتعويض والحساب بالآلة الحاسبة','النتيجة'];
-  const pts=w=>w===1?'درجة واحدة':w===2?'درجتان':AR(w)+' درجات';
+  const pts=w=>w===1?'نقطة واحدة':w===2?'نقطتان':AR(w)+' نقاط';
   X.qs.forEach((q,qi)=>{const d=document.createElement('div');d.className='qcard exQ';
     d.innerHTML=`<div class="qn">السؤال ${AR(qi+1)} من ${AR(X.qs.length)} <span class="exPts">(${pts(q.w||1)}${q.st?'، نصف درجة لكل خطوة':''})</span></div><div class="qq"></div>`;
     d.querySelector('.qq').innerHTML=inl(q.q);
@@ -2894,10 +2894,10 @@ function showLogin(){
   $('loginWrap').hidden=false;let step=1,lastId='',role='s',mode='s';
   const ROLES={s:{sub:'سجّل دخولك برقمك التدريبي',lab:'الرقم التدريبي',im:'numeric',hint:'أول مرة تدخل؟ اكتب رقمك التدريبي واترك كلمة المرور فارغة، وجهز رمز التسجيل من المدرب.',val:''},
     t:{sub:'دخول المدرب إلى لوحة المتابعة',lab:'اسم المستخدم',im:'text',hint:'أول مرة؟ أنشئ حساب المدرب من <a href="teacher.html">هنا</a>.',val:''},
-    e:{sub:'دخول الاختبارات الفصلية',lab:'الرقم التدريبي',im:'numeric',hint:'إذا كنت مسجلا في المنصة فكلمة المرور نفسها. وفي أول دخول اترك كلمة المرور فارغة، وجهز رمز التسجيل من المدرب.',val:''},
+    e:{sub:'دخول الاختبارات التجريبية',lab:'الرقم التدريبي',im:'numeric',hint:'إذا كنت مسجلا في المنصة فكلمة المرور نفسها. وفي أول دخول اترك كلمة المرور فارغة، وجهز رمز التسجيل من المدرب.',val:''},
     d:{sub:'معاينة المنصة كما يراها المتدرب',lab:'اسم المستخدم',im:'text',hint:'باسم المستخدم وكلمة المرور الخاصة بلوحة المدرب.',val:''},
     g:{sub:'معاينة المنصة كما يراها المتدرب',lab:'اسم المستخدم',im:'text',hint:'ادخل ببيانات الحساب التجريبي التي أعطاك إياها المدرب.',val:'demo'},
-    te:{sub:'تجربة الاختبار التجريبي كما يراه المتدرب',lab:'اسم المستخدم',im:'text',hint:'باسم المستخدم وكلمة المرور الخاصة بلوحة المدرب، ولا تدخل درجتك في النتائج.',val:''}};
+    te:{sub:'تجربة الاختبار التجريبي كما يراه المتدرب',lab:'اسم المستخدم',im:'text',hint:'باسم المستخدم وكلمة المرور الخاصة بلوحة المدرب، ولا تدخل نتيجتك في النتائج.',val:''}};
   const LGI={"s": "<svg viewBox=\"0 0 24 24\"><path d=\"M2 5c3-1.5 6-1.5 9 .5v15c-3-2-6-2-9-.5zM22 5c-3-1.5-6-1.5-9 .5v15c3-2 6-2 9-.5z\"/></svg>", "e": "<svg viewBox=\"0 0 24 24\"><path d=\"M8 2h8v3H8z\"/><path d=\"M5 4h2v3h10V4h2v18H5z\" fill-opacity=\".85\"/><path d=\"M8 12l2 2 4-4M8 17h8\" fill=\"none\" stroke=\"#1565c8\" stroke-width=\"1.8\"/></svg>", "t": "<svg viewBox=\"0 0 24 24\"><rect x=\"2\" y=\"3\" width=\"20\" height=\"14\" rx=\"2\"/><path d=\"M6 13v-3M10 13V7M14 13v-4M18 13V6\" stroke=\"#1565c8\" stroke-width=\"2\"/><path d=\"M8 21h8v-2H8z\"/></svg>", "d": "<svg viewBox=\"0 0 24 24\"><path d=\"M12 5C6 5 2 12 2 12s4 7 10 7 10-7 10-7-4-7-10-7z\"/><circle cx=\"12\" cy=\"12\" r=\"3.5\" fill=\"#1565c8\"/></svg>", "te": "<svg viewBox=\"0 0 24 24\"><path d=\"M8 2h8v3H8z\"/><path d=\"M5 4h2v3h10V4h2v18H5z\" fill-opacity=\".85\"/><path d=\"M8 12l2 2 4-4M8 17h8\" fill=\"none\" stroke=\"#1565c8\" stroke-width=\"1.8\"/></svg>"},LGT={s:"المنصة",e:"الاختبارات",t:"لوحة المدرب",d:"معاينة المدرب",te:"الاختبارات",g:"الحساب التجريبي"};LGI.g=LGI.d;
   let pg='0',grp='s',hD=0;const show=(p,pop)=>{const up=(pg==='0'&&p!=='0')||(pg!=='f'&&p==='f');if(!pop&&up){try{history.pushState({lg:p},'');hD++}catch(e){}}pg=p;$('loginForm').dataset.pg=p;['0','s','t','f'].forEach(x=>$('lgP'+x).hidden=x!==p);$('lgBack').hidden=p==='0';$('lgAbout').hidden=p!=='0';scrollTo(0,0);$('loginWrap').scrollTop=0};
   $('lgBack').onclick=()=>{if(hD>0)history.back();else show(pg==='f'?grp:'0',true)};
@@ -3730,22 +3730,22 @@ new MutationObserver(chk).observe(document.documentElement,{childList:true,subtr
 (window.visualViewport||window).addEventListener('resize',()=>{const w0=Math.round(innerWidth);if(window.__bfVH&&window.__bfVH.w===w0)return;clearTimeout(window.__bfT);window.__bfT=setTimeout(()=>{const bc=document.querySelector('#view .boardCard');if(bc)fit(bc,false)},200)})})();</script><script>/* الجوال الأفقي: عند النزول في الدرس يختفي سطر العنوان ويبقى شريط التبويبات، فتكبر مساحة الشرح */(function(){let on=false;document.addEventListener('scroll',e=>{const v=e.target;if(!v||!v.classList||!v.classList.contains('view'))return;const m=v.scrollTop>24||(!!document.querySelector('#view .boardCard')&&matchMedia('(orientation:landscape) and (max-height:520px)').matches);if(m!==on){on=m;document.body.classList.toggle('lhMini',m)}},true)})();</script><script>/* مراجعة الكود: روابط «صفحة 37» وفهرس الحقيبة وأزرار صفحاتها تفتح صفحة الحقيبة رغم حذف تبويبها */window.addEventListener('click',e=>{try{if(e.target.closest&&e.target.closest('a.bagLink,.bagBar,.bagOv,.bagRes,#pager'))window.__bagPgT=Date.now()}catch(_){}},true);window.addEventListener('keydown',e=>{if((e.key==='ArrowLeft'||e.key==='ArrowRight')&&typeof pos!=='undefined'&&pos&&pos.t==='page')window.__bagPgT=Date.now()},true);</script><script>/* صوت جيميني واحد لكل المتدربين: إذا اختار المدرب صوتا واحدا يختفي زر تبديل الصوت */(function(){const u=()=>{try{const gem=(window.GEMOK&&GEMOK())||(window.GVCFG&&GVCFG.on);const g=window.GVR?GVR():null;document.documentElement.classList.toggle('gv1',!!(gem&&g&&g.m===g.f))}catch(e){}};u();setTimeout(u,2500);setTimeout(u,8000);new MutationObserver(u).observe(document.body,{attributes:true,attributeFilter:['class']})})();</script><script>/* طلب المدرب 30 أكتوبر: «مهام تنتظرك» نافذة تنبثق للمتدرب مرة كل يوم عند أول فتح، وزر 📌 أعلى الشاشة يفتحها في أي وقت */
 (function(){const IC={sum:'🙋 مشاركة',ex:'📝 أمثلة',quiz:'✅ اختبر نفسك',lab:'🧪 تجربة'};let all=false;
 function cnt(){return (typeof PEND!=='undefined'&&PEND||[]).reduce((n,x)=>n+x.t.length,0)}
-function chip(){let c=document.getElementById('pendChip');const n=cnt();if(!c){const u=document.getElementById('userChip');if(!u)return;c=document.createElement('button');c.id='pendChip';c.className='iconbtn';c.type='button';c.onclick=()=>open(true);u.parentNode.insertBefore(c,u)}c.hidden=!n;document.documentElement.classList.toggle('hasPend',!!n);try{const uc=document.getElementById('userChip');uc.classList.toggle('tchChip',/لوحة المدرب/.test(uc.textContent))}catch(e){}c.textContent='📌 '+(typeof AR==='function'?AR(n):n);c.title='مهام الأعمال الفصلية';c.setAttribute('aria-label','مهام الأعمال الفصلية المتبقية: '+n)}
+function chip(){let c=document.getElementById('pendChip');const n=cnt();if(!c){const u=document.getElementById('userChip');if(!u)return;c=document.createElement('button');c.id='pendChip';c.className='iconbtn';c.type='button';c.onclick=()=>open(true);u.parentNode.insertBefore(c,u)}c.hidden=!n;document.documentElement.classList.toggle('hasPend',!!n);try{const uc=document.getElementById('userChip');uc.classList.toggle('tchChip',/لوحة المدرب/.test(uc.textContent))}catch(e){}c.textContent='📌 '+(typeof AR==='function'?AR(n):n);c.title='مهام الدروس';c.setAttribute('aria-label','مهام الدروس المتبقية: '+n)}
 const NM3=()=>{try{const w=String((typeof AUTH!=='undefined'&&AUTH&&AUTH.name)||'').trim().split(/\s+/).filter(x=>x&&!/^(بن|بنت|ابن)$/.test(x));return w.length>3?[w[0],w[1],w[w.length-1]].join(' '):w.join(' ')}catch(e){return ''}};
-const LIST='<div class="pdRed pdRed2"><p class="pdMsg pdLt">📌 مهام الأعمال الفصلية:</p><ol class="pdOl"><li>الإجابة على أسئلة المشاركة في الدرس</li><li>حل الأمثلة والتمارين التفاعلية</li><li>حل اختبر نفسك</li><li>تنفيذ التجارب العملية</li></ol></div>';
+const LIST='<div class="pdRed pdRed2"><p class="pdMsg pdLt">📌 مهام كل درس:</p><ol class="pdOl"><li>الإجابة على أسئلة المشاركة في الدرس</li><li>حل الأمثلة والتمارين التفاعلية</li><li>حل اختبر نفسك</li><li>تنفيذ التجارب العملية</li></ol></div>';
 /* أنواع البطاقات وألوانها: ترحيب (أزرق)، منتظم (برتقالي)، تذكير (أحمر)، شكر (أخضر) */
 let INACT=false;/* المتدرب المنقطع: آخر دخول له على هذا الجهاز قبل أسبوع أو أكثر */try{const id=(typeof AUTH!=='undefined'&&AUTH&&AUTH.id)||'';if(id){const k='p101-lastv|'+id,pv=+localStorage.getItem(k)||0;INACT=!!pv&&Date.now()-pv>=7*864e5;localStorage.setItem(k,String(Date.now()))}}catch(e){}
 function kind(){const n=((typeof PEND!=='undefined'&&PEND)||[]).length;return n&&INACT?'n':n>=2?'x':n===1?'r':'t'}
 function open(mode){const P=(typeof PEND!=='undefined'&&PEND)||[];mode=mode===true||!mode?kind():mode;if((mode==='x'||mode==='r'||mode==='n')&&!P.length)return;
  let d=document.getElementById('pendDlg');if(!d){d=document.createElement('div');d.id='pendDlg';d.setAttribute('role','dialog');d.setAttribute('aria-modal','true');document.body.appendChild(d);d.addEventListener('click',e=>{if(e.target===d)close()})}
  const nm='<p class="pdTo">عزيزي المتدرب / <b>'+esc(NM3()||'المتدرب')+'</b></p>',X='<button class="pdX" type="button" aria-label="إغلاق">✕</button>';
- const T={w:['👋 أهلا وسهلا بك','<p class="pdMsg">مرحبا بك في منصة الفيزياء العامة 101 التدريبية، ونتمنى لك فصلا تدريبيا موفقا.</p><p class="pdMsg">الأعمال الفصلية جزء أساسي من درجاتك النهائية، وتشمل في كل درس مهام الأعمال الفصلية التالية.</p>',true,'ابدأ أول درس','لاحقا'],
-  r:['👏 تشجيع وتحفيز','<p class="pdMsg">أحسنت! أنت ملتزم بمهام الأعمال الفصلية أولا بأول.</p><p class="pdMsg">تبقى عليك بعض المهام للأعمال الفصلية، أكملها لتبقى في المقدمة.</p>',true,'أكمل الآن','لاحقا'],
-  x:['🔔 تذكير هام','<p class="pdMsg">نود تذكيركم أنه تبقى عليكم الكثير من مهام الأعمال الفصلية لمقرر الفيزياء العامة، فبادروا باستكمالها.</p><p class="pdMsg">يرجى العلم أن هذه التقييمات جزء أساسي من درجاتكم النهائية، وعدم تسليمها قد يؤثر مباشرة على معدلكم.</p>',true,'ابدأ الآن','لاحقا'],
-  n:['⚠️ تنبيه هام جدا','<p class="pdMsg">لاحظنا انقطاعك عن المنصة منذ أكثر من أسبوع، وعليك مهام أعمال فصلية متأخرة في مقرر الفيزياء العامة.</p><p class="pdMsg">يرجى المبادرة باستكمالها في أقرب وقت، فهي جزء أساسي من درجاتكم النهائية، وعدم تسليمها قد يؤثر مباشرة على معدلكم.</p>',true,'ابدأ الآن','لاحقا'],
-  t:['🏆 شكر وتقدير','<p class="pdMsg">نشكرك على إنجاز جميع مهام الأعمال الفصلية المطلوبة حتى الآن، فقد أثبت التزامك وحرصك على التميز.</p><p class="pdMsg">هذا الإنجاز يعكس جديتك في التدريب، ونتمنى لك دوام التميز والنجاح.</p><p class="pdMsg pdStars">🌟 🌟 🌟</p>',false,'شكرا','']}[mode];
+ const T={w:['👋 أهلا وسهلا بك','<p class="pdMsg">مرحبا بك في منصة الفيزياء العامة 101 التدريبية، ونتمنى لك فصلا تدريبيا موفقا.</p><p class="pdMsg">وفي كل درس تنتظرك المهام التالية.</p>',true,'ابدأ أول درس','لاحقا'],
+  r:['👏 تشجيع وتحفيز','<p class="pdMsg">أحسنت! أنت ملتزم بمهام الدروس أولا بأول.</p><p class="pdMsg">تبقى عليك بعض مهام الدروس، أكملها لتبقى في المقدمة.</p>',true,'أكمل الآن','لاحقا'],
+  x:['🔔 تذكير هام','<p class="pdMsg">نود تذكيركم أنه تبقى عليكم الكثير من مهام الدروس في مقرر الفيزياء العامة، فبادروا باستكمالها.</p>',true,'ابدأ الآن','لاحقا'],
+  n:['⚠️ تنبيه هام جدا','<p class="pdMsg">لاحظنا انقطاعك عن المنصة منذ أكثر من أسبوع، وعليك مهام دروس متأخرة في مقرر الفيزياء العامة.</p><p class="pdMsg">يرجى المبادرة باستكمالها في أقرب وقت.</p>',true,'ابدأ الآن','لاحقا'],
+  t:['🏆 شكر وتقدير','<p class="pdMsg">نشكرك على إنجاز جميع مهام الدروس المطلوبة حتى الآن، فقد أثبت التزامك وحرصك على التميز.</p><p class="pdMsg">هذا الإنجاز يعكس جديتك في التدريب، ونتمنى لك دوام التميز والنجاح.</p><p class="pdMsg pdStars">🌟 🌟 🌟</p>',false,'شكرا','']}[mode];
  d.className='pd-'+mode;
- d.innerHTML='<div class="pdIn"><div class="pdRed"><div class="pdH"><b>'+T[0]+'</b>'+X+'</div>'+nm+T[1]+'</div>'+(mode==='t'?'<div class="pdRed pdRed2"><p class="pdMsg pdLt">✅ أنجزت جميع مهام الأعمال الفصلية:</p><ul class="pdOl pdDone"><li>الإجابة على أسئلة المشاركة في الدرس</li><li>حل الأمثلة والتمارين التفاعلية</li><li>حل اختبر نفسك</li><li>تنفيذ التجارب العملية</li></ul></div>':T[2]?LIST:'')+'<div class="pdB"><button class="btn pdGo" type="button">'+T[3]+'</button>'+(T[4]?'<button class="btn ghost pdLater" type="button">'+T[4]+'</button>':'')+'</div></div>';
+ d.innerHTML='<div class="pdIn"><div class="pdRed"><div class="pdH"><b>'+T[0]+'</b>'+X+'</div>'+nm+T[1]+'</div>'+(mode==='t'?'<div class="pdRed pdRed2"><p class="pdMsg pdLt">✅ أنجزت جميع مهام الدروس:</p><ul class="pdOl pdDone"><li>الإجابة على أسئلة المشاركة في الدرس</li><li>حل الأمثلة والتمارين التفاعلية</li><li>حل اختبر نفسك</li><li>تنفيذ التجارب العملية</li></ul></div>':T[2]?LIST:'')+'<div class="pdB"><button class="btn pdGo" type="button">'+T[3]+'</button>'+(T[4]?'<button class="btn ghost pdLater" type="button">'+T[4]+'</button>':'')+'</div></div>';
  const g=(x,t)=>{close();try{sessionStorage.setItem('p101-pgAt',x.u+'-'+x.l+'-'+t)}catch(e){}go(x.u,x.l,0,t)};
  d.querySelector('.pdGo').onclick=()=>{if(mode==='t')return close();if(mode==='w'&&!P.length){close();try{const L=[];UNITS.forEach((U,u)=>U.l.forEach((l,j)=>{if(!l.hide)L.push([u,j])}));go(L[0][0],L[0][1],0,'sum')}catch(e){}return}try{sessionStorage.setItem('p101-pguide','1')}catch(e){}try{sessionStorage.setItem('p101-pgN',String(cnt()))}catch(e){}const f=nextT();if(f)g(f[0],f[1]);setTimeout(gbtn,50)};
  const la=d.querySelector('.pdLater');if(la)la.onclick=close;d.querySelector('.pdX').onclick=close;
@@ -3762,7 +3762,7 @@ try{const OR=SYNC.result;SYNC.result=function(kind,lk,lt,score){const r=OR.apply
 function gst(){try{return sessionStorage.getItem('p101-pguide')}catch(e){return null}}
 function gbtn(){let g=document.getElementById('gBar');const st=gst(),on=st==='1'||st==='0';if(!g){if(!on)return;g=document.createElement('div');g.id='gBar';g.setAttribute('role','status');const ap=document.getElementById('app');if(ap)ap.before(g);else document.body.prepend(g)}
  g.hidden=!on;{const H=document.documentElement,was=H.classList.contains('gOn');H.classList.toggle('gOn',on&&st==='1');if(was!==H.classList.contains('gOn'))setTimeout(()=>{try{window.__boardFit&&__boardFit()}catch(e){}},120)}if(!on)return;const N=+(sessionStorage.getItem('p101-pgN')||0)||cnt(),x=Math.min(N,Math.max(1,N-cnt()+1)),A=v=>typeof AR==='function'?AR(v):v;
- if(st!=='1'){g.hidden=true;if(document.documentElement.classList.contains('gOn')){document.documentElement.classList.remove('gOn');setTimeout(()=>{try{window.__boardFit&&__boardFit()}catch(e){}},120)}return}g.innerHTML='<span>🧭 <i class="gL">مهام الأعمال الفصلية · </i>المهمة '+A(x)+' من '+A(N)+'</span><button type="button" class="gB1">إيقاف</button>';
+ if(st!=='1'){g.hidden=true;if(document.documentElement.classList.contains('gOn')){document.documentElement.classList.remove('gOn');setTimeout(()=>{try{window.__boardFit&&__boardFit()}catch(e){}},120)}return}g.innerHTML='<span>🧭 <i class="gL">مهام الدرس · </i>المهمة '+A(x)+' من '+A(N)+'</span><button type="button" class="gB1">إيقاف</button>';
  g.querySelector('.gB1').onclick=()=>{try{sessionStorage.removeItem('p101-pguide')}catch(e){}gbtn()};let hb=document.getElementById('gHB');if(!hb){const pc=document.getElementById('pendChip')||document.getElementById('userChip');if(pc){hb=document.createElement('button');hb.id='gHB';hb.type='button';hb.className='iconbtn';pc.parentNode.insertBefore(hb,pc)}}if(hb){hb.textContent='🧭 '+A(x)+'/'+A(N)+' · إيقاف';hb.onclick=()=>{try{sessionStorage.removeItem('p101-pguide')}catch(e){}gbtn()}}
  const bx=g.querySelector('.gBx');if(bx)bx.onclick=()=>{try{sessionStorage.removeItem('p101-pguide')}catch(e){}gbtn()}}
 setInterval(gbtn,1500);
