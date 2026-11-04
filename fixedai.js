@@ -1,5 +1,5 @@
-/* المساعد الذكي بإجابات محددة مسبقا (نموذج تجريبي: درس الشحنات الكهربائية وقانون كولوم 3-1)
-   لا يتصل بأي نموذج ذكاء اصطناعي: التلميحات والإجابات مكتوبة مسبقا أو تبنى بالكود من بيانات المثال نفسه. */
+/* المساعد الذكي بإجابات محددة مسبقا: التلميحات والإجابات مكتوبة مسبقا (هنا وفي fixeddata.js) أو تبنى بالكود من بيانات المثال نفسه.
+   window.AIHINT: تلميحات اختبر نفسك والأمثلة. window.FXASK: إجابات الأسئلة الجاهزة في السبورة. */
 (function(){
 var NZ=function(x){return String(x==null?'':x).replace(/[ً-ْٰ`*]/g,'').replace(/[٠-٩]/g,function(d){return '٠١٢٣٤٥٦٧٨٩'.indexOf(d)}).replace(/[\s·×]/g,'').replace(/ـ/g,'')};
 
@@ -125,10 +125,7 @@ var PI={simple:0,example:1,why:2};
 var boardAns=function(o){var T=FB[o.lessonKey]||(window.FXB&&FXB[o.lessonKey]);if(!T)return null;var sl=String(o.slide||'').trim(),tt='';Object.keys(T).forEach(function(t){if(t&&(sl===t||sl.indexOf(t+' — ')===0)&&t.length>tt.length)tt=t});var row=T[tt]||T[''];var i=PI[o.preset];
   if(i==null){/* سؤال مكتوب: يبقى المتدرب على الأسئلة الجاهزة */return 'اختر سؤالا من الأسئلة الجاهزة تحت النافذة: «اشرح أبسط»، أو «مثال بالأرقام»، أو «لماذا؟».'}
   return row[i]};
-var wrap=function(){if(typeof SYNC==='undefined'||!SYNC.post||SYNC.post._fx)return;var P=SYNC.post;
-  SYNC.post=function(o){if(o&&o.a==='ask'){if(o.mode==='board'){var a=boardAns(o);if(a)return new Promise(function(r){setTimeout(function(){r({ok:true,answer:a})},350)})}
-      return Promise.resolve({ok:false,error:'fixed'})}return P.apply(this,arguments)};SYNC.post._fx=1};
-wrap();document.addEventListener('DOMContentLoaded',wrap);
+window.FXASK=function(o){var a=o&&o.mode==='board'?boardAns(o):null;return a?new Promise(function(r){setTimeout(function(){r({ok:true,answer:a})},350)}):Promise.resolve({ok:false,error:'fixed'})};
 var css=document.createElement('style');css.textContent='html body .board .bAskP .bAskF,html body .board .bAskP.p102 .bAskF,html body .board.qOpen .bAskP .bAskF{display:none!important}html body .board .bAskP .bAskChips{flex-wrap:wrap!important;overflow:visible!important}';
 var fixT=function(){var w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);var n;while(n=w.nextNode()){if(n.nodeValue.indexOf('اختر سؤالا أو اكتب سؤالك')>=0)n.nodeValue=n.nodeValue.replace('اختر سؤالا أو اكتب سؤالك','اختر سؤالك')}};
 var hideF=function(){document.querySelectorAll('.bAskF').forEach(function(f){f.style.setProperty('display','none','important')})};
