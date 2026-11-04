@@ -126,7 +126,7 @@ var boardAns=function(o){var T=FB[o.lessonKey]||(window.FXB&&FXB[o.lessonKey]);i
   if(i==null){/* سؤال مكتوب: يبقى المتدرب على الأسئلة الجاهزة */return 'اختر سؤالا من الأسئلة الجاهزة تحت النافذة: «اشرح أبسط»، أو «مثال بالأرقام»، أو «لماذا؟».'}
   return row[i]};
 window.FXASK=function(o){var a=o&&o.mode==='board'?boardAns(o):null;return a?new Promise(function(r){setTimeout(function(){r({ok:true,answer:a})},350)}):Promise.resolve({ok:false,error:'fixed'})};
-var css=document.createElement('style');css.textContent='html body .board .bAskP .bAskF,html body .board .bAskP.p102 .bAskF,html body .board.qOpen .bAskP .bAskF{display:none!important}html body .board .bAskP .bAskChips{flex-wrap:wrap!important;overflow:visible!important}';
+var css=document.createElement('style');css.textContent='html body .board .bAskP .bAskF,html body .board .bAskP.p102 .bAskF,html body .board.qOpen .bAskP .bAskF{display:none!important}html body .board .bAskP .bAskChips,html body .board.board.board.board .bAskP.p102.p102 .bAskChips.bAskChips{flex-wrap:wrap!important;overflow:visible!important}html body .board .bAskP .coDock{display:none!important}';
 var fixT=function(){var w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);var n;while(n=w.nextNode()){if(n.nodeValue.indexOf('اختر سؤالا أو اكتب سؤالك')>=0)n.nodeValue=n.nodeValue.replace('اختر سؤالا أو اكتب سؤالك','اختر سؤالك')}};
 var hideF=function(){document.querySelectorAll('.bAskF').forEach(function(f){f.style.setProperty('display','none','important')})};
 document.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('.bAskMini,.bAskBtn')){setTimeout(fixT,50);setTimeout(hideF,50);setTimeout(hideF,400)}},true);(document.head||document.documentElement).appendChild(css);
