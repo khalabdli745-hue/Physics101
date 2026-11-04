@@ -131,3 +131,19 @@ var fixT=function(){var w=document.createTreeWalker(document.body,NodeFilter.SHO
 var hideF=function(){document.querySelectorAll('.bAskF').forEach(function(f){f.style.setProperty('display','none','important')})};
 document.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('.bAskMini,.bAskBtn')){setTimeout(fixT,50);setTimeout(hideF,50);setTimeout(hideF,400)}},true);(document.head||document.documentElement).appendChild(css);
 })();
+
+/* 4 نوفمبر مساء: قفل صوت المتدربين على حامد من لوحة المدرب (code.gs 42: vlock) */
+(function(){
+var L=false;try{L=localStorage.getItem('p101-vlock')==='1'}catch(e){}
+var st=document.createElement('style');st.textContent='html body .board.noVoL .vStrip{display:none!important}html body .board.noVoL .bTeach .bAv{cursor:default}';(document.head||document.documentElement).appendChild(st);
+var apply=function(){var B=document.querySelector('.board');
+  if(!L){if(B&&B.classList.contains('noVoL')){B.classList.remove('noVo','noVoL');B.querySelectorAll('.vStrip').forEach(function(x){x.style.removeProperty('display')})}return}
+  try{localStorage.setItem('p101-bvo','h')}catch(e){}
+  if(B){if(!B.classList.contains('noVoL'))B.classList.add('noVo','noVoL');B.querySelectorAll('.vStrip').forEach(function(x){x.style.setProperty('display','none','important')});if(B.dataset.vo==='z'){var v=B.querySelector('.bVo');if(v){L=false;try{v.click()}catch(e){}L=true}}}};
+var set=function(v){L=!!v;try{localStorage.setItem('p101-vlock',L?'1':'0')}catch(e){}apply()};
+document.addEventListener('click',function(e){if(!L||!e.target.closest)return;if(e.target.closest('.board .bVo, .board .bTeach .bAv')){e.stopImmediatePropagation();e.preventDefault()}},true);
+new MutationObserver(function(){if(L){var B=document.querySelector('.board');if(B&&(!B.classList.contains('noVoL')||B.dataset.vo==='z'||[].some.call(B.querySelectorAll('.vStrip'),function(x){return x.style.display!=='none'})))apply()}}).observe(document.body,{childList:true});
+setInterval(function(){if(!L)return;var B=document.querySelector('.board');if(B&&(!B.classList.contains('noVoL')||B.dataset.vo==='z'||[].some.call(B.querySelectorAll('.vStrip'),function(x){return x.style.display!=='none'})))apply()},700);
+apply();
+try{if(typeof API!=='undefined'&&API)fetch(API,{redirect:'follow'}).then(function(r){return r.json()}).then(function(r){if(r&&r.ok&&'vlock' in r)set(r.vlock)}).catch(function(){})}catch(e){}
+})();
