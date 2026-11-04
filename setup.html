@@ -36,21 +36,21 @@ pre{background:var(--soft);border-radius:10px;padding:10px;direction:ltr;text-al
 <body>
 <main>
 <h1>إعداد قسم المدرب</h1>
-<p class="lead">تُنفَّذ هذه الخطوات مرة واحدة فقط، وتستغرق حوالي ١٠ دقائق من الجوال. بعدها تُحفظ بيانات المتدربين في جدول Google داخل حسابك.</p>
+<p class="lead">تُنفَّذ هذه الخطوات مرة واحدة فقط، وتستغرق حوالي ١٠ دقائق من الجوال. بعدها تحفظ بيانات المتدربين في جدول Google داخل حسابك.</p>
 
 <div class="step"><h2><span class="n">١</span>انسخ كود الخادم</h2>
-<p>اضغط الزر لنسخ الكود كاملًا، ولا تعدّل فيه شيئًا.</p>
+<p>اضغط الزر لنسخ الكود كاملا، ولا تعدل فيه شيئا.</p>
 <button class="btn" id="copyCode">📋 نسخ الكود</button><p class="msg" id="cm"></p></div>
 
 <div class="step"><h2><span class="n">٢</span>افتح Google Apps Script</h2>
-<ol><li>اضغط الزر لفتح الموقع في Safari، وسجّل دخولك بحساب Google.</li>
+<ol><li>اضغط الزر لفتح الموقع في Safari، وسجل دخولك بحساب Google.</li>
 <li><b>مهم على الآيفون:</b> اضغط زر <span class="k">aA</span> في شريط العنوان ← <span class="k">طلب موقع سطح المكتب</span>، لأن الموقع لا يعمل بنسخة الجوال.</li>
 <li>اضغط <span class="k en">New project</span> (مشروع جديد).</li></ol>
 <a class="btn" href="https://script.google.com/home/projects/create" target="_blank" rel="noopener">فتح Google Apps Script ↗</a></div>
 
 <div class="step"><h2><span class="n">٣</span>الصق الكود واحفظه</h2>
-<ol><li>اضغط داخل مساحة الكود، ثم حدّد كل الموجود فيه (اضغط مطوّلًا ← <span class="k">تحديد الكل</span>) واحذفه.</li>
-<li>اضغط مطوّلًا ← <span class="k">لصق</span>.</li>
+<ol><li>اضغط داخل مساحة الكود، ثم حدد كل الموجود فيه (اضغط مطولا ← <span class="k">تحديد الكل</span>) واحذفه.</li>
+<li>اضغط مطولا ← <span class="k">لصق</span>.</li>
 <li>اضغط أيقونة الحفظ 💾 في الأعلى.</li>
 <li>يمكنك تغيير اسم المشروع من أعلى الصفحة إلى <span class="k">فيزياء 101</span> (اختياري).</li></ol></div>
 
@@ -65,7 +65,7 @@ pre{background:var(--soft);border-radius:10px;padding:10px;direction:ltr;text-al
 <ol><li>اضغط الزر الأزرق <span class="k en">Deploy</span> ← <span class="k en">New deployment</span>.</li>
 <li>اضغط أيقونة الترس ⚙️ بجانب <span class="en">Select type</span> واختر <span class="k en">Web app</span>.</li>
 <li><span class="en">Execute as</span>: اختر <span class="k en">Me</span>.</li>
-<li><span class="en">Who has access</span>: اختر <span class="k en">Anyone</span> ← <b>مهم جدًا</b> حتى يستطيع المتدربون الدخول.</li>
+<li><span class="en">Who has access</span>: اختر <span class="k en">Anyone</span> ← <b>مهم جدا</b> حتى يستطيع المتدربون الدخول.</li>
 <li>اضغط <span class="k en">Deploy</span>، ثم انسخ الرابط تحت <span class="en">Web app URL</span>. ينتهي الرابط بـ <span class="en">/exec</span>.</li></ol></div>
 
 <div class="step"><h2><span class="n">٦</span>الصق الرابط واختبره</h2>
@@ -74,40 +74,40 @@ pre{background:var(--soft);border-radius:10px;padding:10px;direction:ltr;text-al
 
 <div class="step" id="s7" hidden><h2><span class="n">٧</span>أضف الرابط إلى موقعك في GitHub</h2>
 <ol><li>اضغط <span class="k">نسخ محتوى config.js</span>.</li>
-<li>اضغط <span class="k">فتح ملف config.js في GitHub</span> وسجّل دخولك إن طُلب منك.</li>
+<li>اضغط <span class="k">فتح ملف config.js في GitHub</span> وسجل دخولك إن طلب منك.</li>
 <li>احذف كل النص الموجود في الملف، والصق المنسوخ.</li>
 <li>اضغط <span class="k en">Commit changes</span> مرتين.</li>
-<li>انتظر دقيقة حتى يحدّث Render الموقع.</li></ol>
+<li>انتظر دقيقة حتى يحدث Render الموقع.</li></ol>
 <pre id="cfg"></pre>
 <div class="row"><button class="btn" id="copyCfg">📋 نسخ محتوى config.js</button><a class="btn ghost" href="https://github.com/khalabdli745-hue/Physics101/edit/main/config.js" target="_blank" rel="noopener">فتح ملف config.js في GitHub ↗</a></div>
 <p class="msg" id="cfm"></p></div>
 
 <div class="step"><h2><span class="n">٨</span>ابدأ</h2>
-<p>افتح لوحة المدرب وأنشئ كلمة مرورك، ثم أضف الشعب واستورد أسماء المتدربين من Excel. جرّب المنصة بنفسك من تبويب «حساب المعاينة».</p>
+<p>افتح لوحة المدرب وأنشئ كلمة مرورك، ثم أضف الشعب واستورد أسماء المتدربين من Excel. جرب المنصة بنفسك من تبويب «حساب المعاينة».</p>
 <a class="btn" href="teacher.html">فتح لوحة المدرب</a></div>
 
-<div class="step"><h2><span class="n">٩</span>فعّل المساعد الذكي (مجاني)</h2>
-<ol><li>افتح <a href="https://console.groq.com/keys" target="_blank" rel="noopener">console.groq.com/keys</a> وسجّل بحساب Google.</li>
+<div class="step"><h2><span class="n">٩</span>فعل المساعد الذكي (مجاني)</h2>
+<ol><li>افتح <a href="https://console.groq.com/keys" target="_blank" rel="noopener">console.groq.com/keys</a> وسجل بحساب Google.</li>
 <li>اضغط <span class="k en">Create API Key</span> وانسخ المفتاح (يبدأ بـ <span class="en">gsk_</span>).</li>
 <li>في لوحة المدرب افتح تبويب <span class="k">أسئلة المساعد الذكي</span>، والصق المفتاح، ثم اضغط <span class="k">حفظ وتفعيل</span>.</li></ol>
 <p>بعدها يظهر المساعد في نهاية كل درس لكل المتدربين.</p></div>
 
-<p class="lead" style="font-size:13.5px">إذا عدّلت الكود لاحقًا في Google Apps Script، انشره من <span class="en">Deploy ← Manage deployments ← ✏️ ← Version: New version</span>، فيبقى الرابط نفسه.</p>
+<p class="lead" style="font-size:13.5px">إذا عدلت الكود لاحقا في Google Apps Script، انشره من <span class="en">Deploy ← Manage deployments ← ✏️ ← Version: New version</span>، فيبقى الرابط نفسه.</p>
 </main>
 <script>
 const $=s=>document.querySelector(s);
 async function copy(text,el,ok){try{await navigator.clipboard.writeText(text);el.className='msg good';el.textContent=ok}catch(e){
   const t=document.createElement('textarea');t.value=text;t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);t.focus();t.select();
-  try{document.execCommand('copy');el.className='msg good';el.textContent=ok}catch(e2){el.className='msg bad';el.textContent='تعذّر النسخ تلقائيًا.'}t.remove()}}
+  try{document.execCommand('copy');el.className='msg good';el.textContent=ok}catch(e2){el.className='msg bad';el.textContent='تعذر النسخ تلقائيا.'}t.remove()}}
 let CODE='';fetch('code.gs',{cache:'no-store'}).then(r=>r.text()).then(t=>CODE=t).catch(()=>{});
-$('#copyCode').onclick=async()=>{if(!CODE){try{CODE=await (await fetch('code.gs')).text()}catch(e){}}if(!CODE){$('#cm').className='msg bad';$('#cm').textContent='تعذّر تحميل الكود. تحقق من الإنترنت.';return}
+$('#copyCode').onclick=async()=>{if(!CODE){try{CODE=await (await fetch('code.gs')).text()}catch(e){}}if(!CODE){$('#cm').className='msg bad';$('#cm').textContent='تعذر تحميل الكود. تحقق من الإنترنت.';return}
   copy(CODE,$('#cm'),'✓ تم نسخ الكود ('+CODE.split('\n').length+' سطرًا). انتقل للخطوة ٢.')};
 $('#test').onclick=async()=>{const u=$('#url').value.trim();const m=$('#tm');
   if(!/^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec$/.test(u)){m.className='msg bad';m.textContent='الرابط غير صحيح. يجب أن يبدأ بـ https://script.google.com/macros/s/ وينتهي بـ /exec';return}
-  m.className='msg';m.textContent='جارٍ الاختبار…';
+  m.className='msg';m.textContent='جار الاختبار…';
   try{const r=await fetch(u).then(r=>r.json());if(r.ok&&r.app==='physics101'){m.className='msg good';m.textContent='✓ الرابط يعمل. انتقل للخطوة ٧.';
     $('#cfg').textContent="window.P101_API = '"+u+"';";$('#s7').hidden=false;$('#s7').scrollIntoView({behavior:'smooth'})}
-    else{m.className='msg bad';m.textContent='الرابط يعمل لكنه لا يعود لهذا الكود. تأكد أنك نسخت الكود كاملًا.'}}
+    else{m.className='msg bad';m.textContent='الرابط يعمل لكنه لا يعود لهذا الكود. تأكد أنك نسخت الكود كاملا.'}}
   catch(e){m.className='msg bad';m.textContent='لم يستجب الرابط. تأكد من اختيار Who has access = Anyone ثم أعد النشر.'}};
 $('#copyCfg').onclick=()=>copy($('#cfg').textContent,$('#cfm'),'✓ تم النسخ. الصقه في ملف config.js على GitHub.');
 </script>

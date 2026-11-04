@@ -339,7 +339,7 @@ const AR=n=>String(n);   // الأرقام بالإنجليزية في كل ال
 const ls={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
 let TOKEN=ls.get('p101-tauth',null);
 let WOPEN=false,WSET=[],WREC='',DATA=null,tab=ls.get('p101-ttab','sections'),secFilter=ls.get('p101-tsec','all'),sortBy={k:'name',asc:true},q='';
-const ERR={tts_bad_key:'مفتاح Azure غير صحيح الشكل. انسخ KEY 1 كما هو.',tts_key:'مفتاح Azure غير صالح. انسخ KEY 1 مرة أخرى من صفحة Keys and endpoint.',tts_region:'المنطقة غير صحيحة. اكتبها كما في Azure، مثل uaenorth.',tts_off:'الصوت الطبيعي غير مفعّل.',tts_quota:'انتهت الحصة المجانية لهذا الشهر.',tts_busy:'الخدمة مشغولة، حاول بعد دقيقة.',tts_error:'تعذّر توليد الصوت. تأكد أنك نشرت الإصدار الجديد من الكود ومنحت صلاحية Google Drive.',bad_key:'المفتاح غير صحيح الشكل. مفتاح Gemini يبدأ بـ AIza ومفتاح Groq يبدأ بـ gsk_',ai_key:'المفتاح غير صالح أو منتهي. أنشئ مفتاحًا جديدًا.',ai_off_g:'Groq غير مفعّل. الصق المفتاح واضغط «حفظ وتفعيل».',wrong_user:'اسم المستخدم غير صحيح.',short_user:'اسم المستخدم قصير (6 خانات على الأقل).',bad_setup_code:'رمز إعداد المدرب غير صحيح أو انتهت مدته. شغّل الدالة newTeacherSetupCode في Apps Script لرمز جديد.',weak_password:'كلمة المرور لا تحقق الشروط: 12 خانة على الأقل، وحرف إنجليزي كبير وصغير ورقم ورمز، بلا مسافات، ولا تحتوي اسم المستخدم.',locked:'الحساب مقفل مؤقتا بسبب محاولات خاطئة. حاول بعد قليل.',bad_user:'اختر اسم مستخدم آخر: 6 خانات على الأقل، وليس demo ولا أرقامًا فقط.',wrong_password:'كلمة المرور غير صحيحة.',short_password:'كلمة المرور قصيرة (12 خانة على الأقل).',already_set:'تم إنشاء كلمة مرور المدرب مسبقًا. استخدم «دخول».',not_setup:'لم تُنشأ كلمة مرور المدرب بعد.',section_not_empty:'لا يمكن حذف شعبة فيها متدربون. انقلهم أو احذفهم أولًا.',name_required:'اكتب اسم الشعبة.',not_found:'غير موجود.',auth:'انتهت الجلسة، سجّل الدخول مرة أخرى.'};
+const ERR={tts_bad_key:'مفتاح Azure غير صحيح الشكل. انسخ KEY 1 كما هو.',tts_key:'مفتاح Azure غير صالح. انسخ KEY 1 مرة أخرى من صفحة Keys and endpoint.',tts_region:'المنطقة غير صحيحة. اكتبها كما في Azure، مثل uaenorth.',tts_off:'الصوت الطبيعي غير مفعل.',tts_quota:'انتهت الحصة المجانية لهذا الشهر.',tts_busy:'الخدمة مشغولة، حاول بعد دقيقة.',tts_error:'تعذر توليد الصوت. تأكد أنك نشرت الإصدار الجديد من الكود ومنحت صلاحية Google Drive.',bad_key:'المفتاح غير صحيح الشكل. مفتاح Gemini يبدأ بـ AIza ومفتاح Groq يبدأ بـ gsk_',ai_key:'المفتاح غير صالح أو منتهي. أنشئ مفتاحا جديدا.',ai_off_g:'Groq غير مفعل. الصق المفتاح واضغط «حفظ وتفعيل».',wrong_user:'اسم المستخدم غير صحيح.',short_user:'اسم المستخدم قصير (6 خانات على الأقل).',bad_setup_code:'رمز إعداد المدرب غير صحيح أو انتهت مدته. شغل الدالة newTeacherSetupCode في Apps Script لرمز جديد.',weak_password:'كلمة المرور لا تحقق الشروط: 12 خانة على الأقل، وحرف إنجليزي كبير وصغير ورقم ورمز، بلا مسافات، ولا تحتوي اسم المستخدم.',locked:'الحساب مقفل مؤقتا بسبب محاولات خاطئة. حاول بعد قليل.',bad_user:'اختر اسم مستخدم آخر: 6 خانات على الأقل، وليس demo ولا أرقاما فقط.',wrong_password:'كلمة المرور غير صحيحة.',short_password:'كلمة المرور قصيرة (12 خانة على الأقل).',already_set:'تم إنشاء كلمة مرور المدرب مسبقا. استخدم «دخول».',not_setup:'لم تنشأ كلمة مرور المدرب بعد.',section_not_empty:'لا يمكن حذف شعبة فيها متدربون. انقلهم أو احذفهم أولا.',name_required:'اكتب اسم الشعبة.',not_found:'غير موجود.',auth:'انتهت الجلسة، سجل الدخول مرة أخرى.'};
 const errText=e=>ERR[e]||('حدث خطأ: '+e);
 function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2600)}
 /* عند ضغط الخادم وقت الاختبار: يعاد الطلب تلقائيا حتى 3 مرات قبل إظهار الخطأ */
@@ -364,7 +364,7 @@ function boot(){
   root.innerHTML=`<header><b>لوحة المدرب</b><span class="tag" id="sheetLink"></span><div class="sp">
     <button class="btn ghost sm" id="reload">↻ تحديث</button><a class="btn ghost sm" href="index.html" onclick="event.preventDefault();location.replace('index.html')">المنصة</a><a class="btn ghost sm" href="teacher-guide.html">📘 الدليل</a><button class="btn ghost sm" id="logout">خروج</button></div></header>
   <nav class="tabs" role="tablist">${[['settings','الإعدادات'],['sections','رمز التسجيل والشعب'],['lessons','متابعة الدروس'],['students','نقاط مهام الدروس'],['exams','الاختبارات التجريبية'],['bank','بنك الأسئلة'],['stats','الإحصائيات'],['reports','التقارير'],['ratings','تقييم المتدربين للمنصة'],['dur','مدة شرح الدروس'],['ai','أسئلة المساعد الذكي'],['demo','حساب المعاينة']].map(([k,n])=>`<button role="tab" data-t="${k}" aria-selected="${tab===k}">${n}</button>`).join('')}</nav>
-  <main id="main"><p class="empty"><span class="spin"></span> جارٍ تحميل البيانات…</p></main>`;
+  <main id="main"><p class="empty"><span class="spin"></span> جار تحميل البيانات…</p></main>`;
   document.documentElement.style.setProperty('--hh',$('header').offsetHeight+'px');
   document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>{tab=b.dataset.t;ls.set('p101-ttab',tab);document.querySelectorAll('nav.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b));draw()});
   $('#reload').onclick=()=>load();
@@ -379,24 +379,24 @@ async function authScreen(){
     <label class="lgF lgFk" id="lc" hidden><span class="lgL">رمز إعداد المدرب (8 أرقام)</span><input placeholder="رمز إعداد المدرب (8 أرقام)" type="text" id="sc1" inputmode="numeric" maxlength="8" autocomplete="one-time-code" style="direction:ltr"></label><label class="lgF lgFu" id="lu" hidden><span class="lgL">اسم مستخدم جديد (6 خانات على الأقل)</span><input placeholder="اسم مستخدم جديد (6 خانات على الأقل)" type="text" id="nu1" autocapitalize="off" autocorrect="off" spellcheck="false" style="direction:ltr"></label><label class="lgF lgFp" id="ln" hidden><span class="lgL">كلمة مرور جديدة</span><input placeholder="كلمة مرور جديدة" type="password" id="pn" autocomplete="new-password"></label><label class="lgF lgFp" id="l2" hidden><span class="lgL">أعد كتابة كلمة المرور</span><input placeholder="أعد كتابة كلمة المرور" type="password" id="p2" autocomplete="new-password"></label><p class="sub" id="prl" hidden style="font-size:13px;line-height:1.7">كلمة المرور: 12 خانة على الأقل، فيها حرف إنجليزي كبير وصغير ورقم ورمز مثل @ #، بلا مسافات، ولا تحتوي اسم المستخدم.</p>
     <p class="msg" id="am"></p><button class="btn lgBtn" id="ab" type="submit" disabled>دخول</button><button type="button" id="fg" class="btn ghost" hidden style="font-size:13.5px">نسيت اسم المستخدم أو كلمة المرور؟</button><a href="index.html" style="text-align:center;font-size:13.5px">العودة إلى المنصة</a><div class="credit"><span class="crL">إعداد وتطوير</span><b>أ / خليل بن موسى المالكي</b></div></form></div>`;
   let ready=true;
-  try{const r=await fetch(API).then(r=>r.json());ready=!!r.teacherReady}catch(e){$('#asub').textContent='تعذّر الاتصال بالخادم. تحقق من الرابط في config.js أو من الإنترنت.';return}
-  if(!ready){$('#asub').textContent='أول دخول: أنشئ حساب المدرب. اكتب رمز الإعداد من «سجل التنفيذ» في Apps Script، ثم اختر اسم مستخدم (6 خانات على الأقل) وكلمة مرور قوية، واحفظهما جيدًا.';$('#lc').hidden=false;$('#l2').hidden=false;$('#prl').hidden=false;$('#p1').autocomplete='new-password';$('#ab').textContent='إنشاء حساب المدرب والدخول'}
+  try{const r=await fetch(API).then(r=>r.json());ready=!!r.teacherReady}catch(e){$('#asub').textContent='تعذر الاتصال بالخادم. تحقق من الرابط في config.js أو من الإنترنت.';return}
+  if(!ready){$('#asub').textContent='أول دخول: أنشئ حساب المدرب. اكتب رمز الإعداد من «سجل التنفيذ» في Apps Script، ثم اختر اسم مستخدم (6 خانات على الأقل) وكلمة مرور قوية، واحفظهما جيدا.';$('#lc').hidden=false;$('#l2').hidden=false;$('#prl').hidden=false;$('#p1').autocomplete='new-password';$('#ab').textContent='إنشاء حساب المدرب والدخول'}
   else{$('#asub').textContent='أدخل اسم المستخدم وكلمة المرور';$('#fg').hidden=false}
   let rst=false;
   /* طلب المدرب 2 نوفمبر: رابط «نسيت كلمة المرور؟» من صفحة الدخول يفتح الاستعادة مباشرة */setTimeout(()=>{try{if(location.hash==='#forgot'&&!$('#fg').hidden){history.replaceState(null,'',location.pathname);$('#fg').click()}}catch(e){}},0);
-  $('#fg').onclick=async()=>{$('#fg').disabled=true;$('#am').className='msg';$('#am').textContent='جارٍ الإرسال…';
+  $('#fg').onclick=async()=>{$('#fg').disabled=true;$('#am').className='msg';$('#am').textContent='جار الإرسال…';
     try{const r=await api({a:'tforgot'});if(!r.ok){$('#fg').disabled=false;$('#am').className='msg bad';$('#am').textContent=r.error==='wait'?'أرسل رمز قبل قليل، تحقق من إيميلك أو انتظر 10 دقائق.':'تعذر إرسال الإيميل.';return}
       rst=true;chg=false;$('#fg').hidden=true;$('#u1').closest('label').hidden=true;$('#l1').hidden=true;$('#u1').required=false;$('#p1').required=false;
       $('#lc').hidden=false;$('#lc').firstChild.textContent='رمز الاستعادة من إيميلك (8 أرقام)';$('#lu').hidden=false;$('#lu').firstChild.textContent='اسم مستخدم جديد (6 خانات على الأقل)';$('#ln').hidden=false;$('#l2').hidden=false;$('#prl').hidden=false;
       $('#asub').textContent='أرسلنا رمز الاستعادة إلى إيميلك '+(r.to||'')+'. يعمل 30 دقيقة. وقد يصل إلى «البريد غير الهام».';$('#ab').textContent='حفظ والدخول';$('#am').textContent=''}
-    catch(e){$('#fg').disabled=false;$('#am').className='msg bad';$('#am').textContent='تعذّر الاتصال بالخادم.'}};
+    catch(e){$('#fg').disabled=false;$('#am').className='msg bad';$('#am').textContent='تعذر الاتصال بالخادم.'}};
   $('#ab').disabled=false;
   /* تحديث حساب المدرب الضعيف: عند الدخول بكلمة مرور لا تحقق الشروط الجديدة */
   let chg=false;const bad=t=>{$('#am').className='msg bad';$('#am').textContent=t;$('#ab').disabled=false};
   const strong=(p,u)=>p.length>=12&&/[A-Z]/.test(p)&&/[a-z]/.test(p)&&/[0-9]/.test(p)&&/[^A-Za-z0-9\s]/.test(p)&&!/\s/.test(p)&&!(u&&p.toLowerCase().includes(u.toLowerCase()));
-  $('#af').onsubmit=async e=>{e.preventDefault();const pw=$('#p1').value,user=$('#u1').value.trim().toLowerCase();$('#ab').disabled=true;$('#am').className='msg';$('#am').textContent='جارٍ التحقق…';
+  $('#af').onsubmit=async e=>{e.preventDefault();const pw=$('#p1').value,user=$('#u1').value.trim().toLowerCase();$('#ab').disabled=true;$('#am').className='msg';$('#am').textContent='جار التحقق…';
     if(rst){const nu=$('#nu1').value.trim().toLowerCase(),np=$('#pn').value;if(!/^\d{8}$/.test($('#sc1').value.trim()))return bad('اكتب رمز الاستعادة (8 أرقام) من إيميلك.');if(nu.length<6)return bad(ERR.short_user);if(!strong(np,nu))return bad(ERR.weak_password);if(np!==$('#p2').value)return bad('كلمتا المرور غير متطابقتين.');
-      try{const r=await api({a:'treset',code:$('#sc1').value.trim(),newuser:nu,newpw:np});if(r.ok){TOKEN=r.token;ls.set('p101-tauth',TOKEN);boot()}else bad(r.error==='locked'?'🔒 مقفل مؤقتا بسبب محاولات خاطئة. حاول بعد '+(r.min||5)+' دقائق.':r.error==='bad_setup_code'?'رمز الاستعادة غير صحيح أو انتهت مدته. اضغط «نسيت» مرة أخرى بعد 10 دقائق.':errText(r.error))}catch(e){bad('تعذّر الاتصال بالخادم.')}return}
+      try{const r=await api({a:'treset',code:$('#sc1').value.trim(),newuser:nu,newpw:np});if(r.ok){TOKEN=r.token;ls.set('p101-tauth',TOKEN);boot()}else bad(r.error==='locked'?'🔒 مقفل مؤقتا بسبب محاولات خاطئة. حاول بعد '+(r.min||5)+' دقائق.':r.error==='bad_setup_code'?'رمز الاستعادة غير صحيح أو انتهت مدته. اضغط «نسيت» مرة أخرى بعد 10 دقائق.':errText(r.error))}catch(e){bad('تعذر الاتصال بالخادم.')}return}
     if(!ready&&user.length<6)return bad(ERR.short_user);
     if(!ready&&!strong(pw,user))return bad(ERR.weak_password);
     if(!ready&&pw!==$('#p2').value)return bad('كلمتا المرور غير متطابقتين.');
@@ -405,14 +405,14 @@ async function authScreen(){
     try{const r=await api(chg?{a:'tchpw',user,pw,newuser:$('#lu').hidden?'':$('#nu1').value.trim(),newpw:$('#pn').value}:{a:ready?'tlogin':'tsetup',user,pw,code:$('#sc1').value.trim()});
       if(r.ok&&r.needChange){chg=true;$('#asub').textContent='حساب المدرب يحتاج تحديثا للأمان: اختر كلمة مرور قوية'+(r.weakUser?' واسم مستخدم من 6 خانات على الأقل':'')+'.';$('#lu').hidden=!r.weakUser;$('#ln').hidden=false;$('#l2').hidden=false;$('#prl').hidden=false;$('#ab').textContent='حفظ والدخول';$('#am').className='msg';$('#am').textContent='';$('#ab').disabled=false;return}
       if(r.ok){TOKEN=r.token;ls.set('p101-tauth',TOKEN);boot()}else bad(r.error==='locked'?'🔒 الحساب مقفل مؤقتا بسبب محاولات خاطئة. حاول بعد '+(r.min||5)+' دقائق.':r.error==='wrong_password'&&r.left?'اسم المستخدم أو كلمة المرور غير صحيحة. بقي لك '+(r.left===1?'محاولة واحدة':'محاولتان')+' قبل القفل المؤقت.':r.error==='wrong_password'?'اسم المستخدم أو كلمة المرور غير صحيحة.':errText(r.error))}
-    catch(e){bad('تعذّر الاتصال بالخادم.')}};
+    catch(e){bad('تعذر الاتصال بالخادم.')}};
 }
 async function load(){
-  const m=$('#main');if(!DATA)m.innerHTML='<p class="empty"><span class="spin"></span> جارٍ تحميل البيانات…</p>';
+  const m=$('#main');if(!DATA)m.innerHTML='<p class="empty"><span class="spin"></span> جار تحميل البيانات…</p>';
   try{const r=await apiR({a:'tdata',token:TOKEN});if(!r.ok){if(r.error!=='auth')m.innerHTML=`<p class="empty">${esc(errText(r.error))}</p>`;return}
     DATA=r;if(Array.isArray(r.wkw)&&r.wkw.length>=3){WKW=r.wkw.map(Number);while(WKW.length<4)WKW.push(0);ls.set('p101-wkw4b',WKW)}DATA.students.forEach(enrich);DATA.demo=DATA.students.find(x=>x.id==='DEMO')||null;DATA.students=DATA.students.filter(x=>x.id!=='DEMO');DATA.sections=DATA.sections.filter(x=>DATA.students.some(y=>y.sectionId===x.id)||!(DATA.demo&&DATA.demo.sectionId===x.id));STATS=null;
     $('#sheetLink').innerHTML=r.sheetUrl?`<a href="${esc(r.sheetUrl)}" target="_blank" rel="noopener">جدول Google ↗</a>`:'';
-    draw();exPrefetch()}catch(e){if(DATA){toast('تعذر التحديث الآن، المعروض آخر بيانات محملة');return}m.innerHTML='<p class="empty">تعذّر الاتصال بالخادم. تحقق من الإنترنت ثم اضغط «تحديث».</p>'}
+    draw();exPrefetch()}catch(e){if(DATA){toast('تعذر التحديث الآن، المعروض آخر بيانات محملة');return}m.innerHTML='<p class="empty">تعذر الاتصال بالخادم. تحقق من الإنترنت ثم اضغط «تحديث».</p>'}
 }
 
 /* ---------- متابعة الدروس: الشرح على السبورة والأمثلة واختبر نفسك والتجارب لكل متدرب ---------- */
@@ -549,7 +549,7 @@ const bkMath=s=>esc(String(s==null?'':s)).replace(/`([^`]*)`/g,'<span dir="ltr" 
 const STEPN=['المعطيات','المطلوب','القانون المستخدم'];
 async function drawBank(force){const m=$('#main');
   if(!BANK||force){m.innerHTML='<p class="empty"><span class="spin"></span> جار تحميل بنك الأسئلة…</p>';let r;try{r=await apiR({a:'tbank',token:TOKEN})}catch(e){m.innerHTML='<p class="empty">تعذر الاتصال بالخادم. اضغط «تحديث».</p>';return}
-    if(!r.ok){m.innerHTML=`<p class="empty">${r.error==='unknown_action'?'انسخ ملف code.gs الجديد إلى Google Apps Script وانشر إصدارًا جديدًا حتى يعمل بنك الأسئلة.':esc(errText(r.error))}</p>`;return}BANK=r}
+    if(!r.ok){m.innerHTML=`<p class="empty">${r.error==='unknown_action'?'انسخ ملف code.gs الجديد إلى Google Apps Script وانشر إصدارا جديدا حتى يعمل بنك الأسئلة.':esc(errText(r.error))}</p>`;return}BANK=r}
   if(tab!=='bank')return;
   const nT=BANK.theory.reduce((a,g)=>a+g.qs.length,0),nN=BANK.num.reduce((a,g)=>a+g.items.length,0),isT=BKT==='theory';
   const hit=s=>!BKQ||String(s).includes(BKQ);
@@ -603,7 +603,7 @@ function drawStudents(){
     cwP:s=>`<td class="num">${s.cwP==null?'—':AR(s.cwP)}</td>`,cwQ:s=>`<td class="num">${s.cwQ==null?'—':AR(s.cwQ)}</td>`,cwB:s=>`<td class="num">${s.cwB==null?'—':AR(s.cwB)}</td>`,
     cw:s=>`<td class="num">${s.cw==null?'—':`<b>${AR(s.cw)}</b><br><small class="exRaw" title="نقاط كل وحدة من 4">${(s.cwU||[]).map(x=>'و'+(x.u+1)+': '+Math.round(x.m*10)/10).join(' · ')}</small>`}</td>`,doneN:s=>`<td class="num">${s.doneN} / ${TOTAL}</td>`,loginCount:s=>`<td class="num">${s.loginCount}</td>`,lastLogin:s=>`<td>${fmtDate(s.lastLogin)}</td>`,totalSec:s=>`<td>${fmtTime(s.totalSec)}</td>`,
     priv:s=>`<td>${s.priv?'<span class="tag" title="وقت الموافقة">✅ وافق · '+fmtDate(s.priv)+'</span>':'<span class="tag warn">لم يوافق بعد</span>'}</td>`,
-    hasPw:s=>`<td>${s.hasPw?'<span class="tag" title="دخل المنصة واختار كلمة المرور">✅ مفعّل: دخل المنصة</span>':'<span class="tag warn" title="مضاف في الكشف ولم يدخل المنصة ولم يختر كلمة مرور">⛔ لم يدخل المنصة بعد</span>'}</td>`};
+    hasPw:s=>`<td>${s.hasPw?'<span class="tag" title="دخل المنصة واختار كلمة المرور">✅ مفعل: دخل المنصة</span>':'<span class="tag warn" title="مضاف في الكشف ولم يدخل المنصة ولم يختر كلمة مرور">⛔ لم يدخل المنصة بعد</span>'}</td>`};
   m.innerHTML=`<div class="card"><h2>📊 سجل نقاط مهام الدروس لمتدربي المنصة (20 نقطة)</h2>
    <div class="exCols"><div class="exCol"><button class="exRoot wRoot ${WOPEN?'on':''}">🏫 الشعبة</button></div>
    ${WOPEN?`<div class="exCol"><button class="exPk wPa ${wAll?'on':''}">☑ الكل</button>${DATA.sections.map(x=>`<button class="exPk wPs ${WSET.includes(x.id)?'on':''}" data-s="${esc(x.id)}">${WSET.includes(x.id)?'✓ ':''}${esc(x.name)} <small>(${AR(DATA.students.filter(y=>y.sectionId===x.id).length)})</small></button>`).join('')}</div>`:''}
@@ -614,7 +614,7 @@ function drawStudents(){
    <div class="row" style="margin:12px 0 8px"><input type="search" id="qs" placeholder="بحث بالاسم أو الرقم" value="${esc(q)}" style="flex:1;min-width:160px"><button class="btn sm" id="addSt">+ متدرب</button></div>
    ${list.length?`<div class="tableWrap"><table><thead><tr>${vc.map(([k,n])=>`<th data-k="${k}" class="${sortBy.k===k?'sorted'+(sortBy.asc?' asc':''):''}">${n}</th>`).join('')}</tr></thead><tbody>
    ${sorted.map((s,i)=>`<tr data-id="${esc(s.id)}">${vc.map(([k])=>cell[k](s,i)).join('')}</tr>`).join('')}
-   </tbody></table></div><p class="sub" style="margin-top:8px">النقاط تراكمية من مهام الدروس (20): الأمثلة والتمارين التفاعلية ${WT[1]}، واختبر نفسك ${WT[0]}، والتجارب العملية التفاعلية ${WT[2]}. كل درس يحله المتدرب يضيف نصيبه تلقائيا، والدرس غير المحلول صفر، فتكتمل النقاط بنهاية المقرر. وتحت مهام الدروس نقاط كل وحدة من 4. حالة الحساب: «مفعّل» = دخل المنصة واختار كلمة مروره، و«لم يدخل المنصة بعد» = مضاف في الكشف ولم يدخل ولا مرة. اضغط على أي متدرب لعرض التفاصيل.</p>`:'<div class="empty">لا يوجد متدربون في الشعب المحددة.</div>'}</div>`:''}</div>`;
+   </tbody></table></div><p class="sub" style="margin-top:8px">النقاط تراكمية من مهام الدروس (20): الأمثلة والتمارين التفاعلية ${WT[1]}، واختبر نفسك ${WT[0]}، والتجارب العملية التفاعلية ${WT[2]}. كل درس يحله المتدرب يضيف نصيبه تلقائيا، والدرس غير المحلول صفر، فتكتمل النقاط بنهاية المقرر. وتحت مهام الدروس نقاط كل وحدة من 4. حالة الحساب: «مفعل» = دخل المنصة واختار كلمة مروره، و«لم يدخل المنصة بعد» = مضاف في الكشف ولم يدخل ولا مرة. اضغط على أي متدرب لعرض التفاصيل.</p>`:'<div class="empty">لا يوجد متدربون في الشعب المحددة.</div>'}</div>`:''}</div>`;
   m.querySelectorAll('.exCols').forEach(c=>{if(c.scrollWidth>c.clientWidth+4)c.scrollLeft=-(c.scrollWidth-c.clientWidth)});
   {const r=m.querySelector('.wRoot');if(r)r.onclick=()=>{WOPEN=!WOPEN;drawStudents()}}
   m.querySelectorAll('.wPs').forEach(b=>b.onclick=()=>{const id=b.dataset.s;WSET=WSET.includes(id)?WSET.filter(z=>z!==id):WSET.concat(id);drawStudents()});
@@ -630,7 +630,7 @@ function drawStudents(){
 }
 async function addStudent(){
   const id=prompt('الرقم التدريبي:');if(!id)return;const name=prompt('اسم المتدرب:');if(!name)return;
-  let sec=WSET.length===1?secName(WSET[0]):(prompt('اسم الشعبة (اتركه فارغًا إن لم توجد):')||'');
+  let sec=WSET.length===1?secName(WSET[0]):(prompt('اسم الشعبة (اتركه فارغا إن لم توجد):')||'');
   const r=await api({a:'tstudents',token:TOKEN,op:'import',rows:[{id,name,section:sec}]});
   if(r.ok){toast(r.added?'تمت إضافة المتدرب':'تم تحديث بيانات المتدرب');load()}else toast(errText(r.error));
 }
@@ -657,7 +657,7 @@ async function openStudent(id){
       else if(det&&det.q)body=`<ul class="det"><li>${esc(det.q)}</li><li class="${det.correct?'ok':'no'}">ناتجه: ${esc(det.answer||'—')} ${det.correct?'✓':'✗ (الصحيح '+esc(det.expected)+')'}</li></ul>`;
       return `<details class="res"><summary><span class="tag">${kind}</span> ${esc(LT[lk]||x.lessonTitle)} ${pct(+x.percent)} <span class="num">${x.score}/${x.max}</span><span class="when">${fmtDate(x.time)}</span></summary>${body}</details>`}).join(''):'<p class="empty">لم يحل أي اختبار أو تمرين بعد.</p>';
     b.querySelector('#logList').innerHTML=r.logins.length?'<ul class="det">'+r.logins.slice().reverse().slice(0,50).map(l=>`<li>${fmtDate(l.time)} — ${esc(l.device)}</li>`).join('')+'</ul>':'<p class="empty">لم يدخل المنصة بعد.</p>';
-  }catch(e){b.querySelector('#resList').innerHTML='<p class="empty">تعذّر تحميل التفاصيل.</p>'}
+  }catch(e){b.querySelector('#resList').innerHTML='<p class="empty">تعذر تحميل التفاصيل.</p>'}
 }
 
 
@@ -665,9 +665,9 @@ async function openStudent(id){
 let STATS=null,statsSec=null;
 async function drawStats(){
   const m=$('#main');const sec=secFilter;
-  if(!STATS||statsSec!==sec){m.innerHTML='<p class="empty"><span class="spin"></span> جارٍ حساب الإحصائيات…</p>';
+  if(!STATS||statsSec!==sec){m.innerHTML='<p class="empty"><span class="spin"></span> جار حساب الإحصائيات…</p>';
     try{const r=await api({a:'tstats',token:TOKEN,sectionId:sec==='all'?'':sec});if(!r.ok){m.innerHTML=`<p class="empty">${esc(errText(r.error))}</p>`;return}STATS=r;statsSec=sec}
-    catch(e){m.innerHTML='<p class="empty">تعذّر الاتصال بالخادم.</p>';return}
+    catch(e){m.innerHTML='<p class="empty">تعذر الاتصال بالخادم.</p>';return}
     if(tab!=='stats')return}
   const st=DATA.students.filter(s=>(sec==='all'||s.sectionId===sec)&&s.id!=='DEMO');
   const now=Date.now(),wk=7*864e5;
@@ -676,7 +676,7 @@ async function drawStats(){
   const totDone=st.reduce((a,s)=>a+s.doneN,0),compl=st.length?Math.round(totDone/(st.length*TOTAL)*100):0;
   const tt=st.reduce((a,s)=>a+s.totalSec,0),avgT=st.length?tt/st.length:0;
   /* توزيع الدرجات */
-  const bins=[['ممتاز مرتفع (A+) 95–100',95,101,'g'],['ممتاز (A) 90–أقل من 95',90,95,'g'],['جيد جدًا مرتفع (B+) 85–أقل من 90',85,90,'g'],['جيد جدًا (B) 80–أقل من 85',80,85,'g'],['جيد مرتفع (C+) 75–أقل من 80',75,80,'m'],['جيد (C) 70–أقل من 75',70,75,'m'],['مقبول مرتفع (D+) 65–أقل من 70',65,70,'m'],['مقبول (D) 60–أقل من 65',60,65,'m'],['غير مجتاز (F) أقل من 60',0,60,'b']];
+  const bins=[['ممتاز مرتفع (A+) 95–100',95,101,'g'],['ممتاز (A) 90–أقل من 95',90,95,'g'],['جيد جدا مرتفع (B+) 85–أقل من 90',85,90,'g'],['جيد جدا (B) 80–أقل من 85',80,85,'g'],['جيد مرتفع (C+) 75–أقل من 80',75,80,'m'],['جيد (C) 70–أقل من 75',70,75,'m'],['مقبول مرتفع (D+) 65–أقل من 70',65,70,'m'],['مقبول (D) 60–أقل من 65',60,65,'m'],['غير مجتاز (F) أقل من 60',0,60,'b']];
   const binN=bins.map(b=>ov.filter(v=>v>=b[1]&&v<b[2]).length),maxB=Math.max(1,...binN);
   const bar=(lab,val,max,cls,txt)=>`<div class="bar"><span class="lab" title="${esc(lab)}">${esc(lab)}</span><span class="trk"><span class="fil ${cls||''}" style="width:${max?Math.max(1,val/max*100):0}%;display:block"></span></span><span class="val">${txt!=null?txt:val}</span></div>`;
   /* النشاط اليومي */
@@ -693,21 +693,21 @@ async function drawStats(){
   /* الشعب */
   const secRows=DATA.sections.map(s=>{const x=DATA.students.filter(y=>y.sectionId===s.id&&y.id!=='DEMO');return{n:s.name,c:x.length,a:avg(x.map(y=>y.overall).filter(v=>v!=null)),t:x.reduce((q,y)=>q+y.totalSec,0)/(x.length||1)}}).filter(s=>s.c);
   /* متابعة */
-  const risk=st.map(s=>{const why=[];if(!s.loginCount)why.push('لم يدخل المنصة أبدًا');else if(!s.lastSeen||now-new Date(s.lastSeen)>wk)why.push('لم يدخل منذ أكثر من أسبوع');
+  const risk=st.map(s=>{const why=[];if(!s.loginCount)why.push('لم يدخل المنصة أبدا');else if(!s.lastSeen||now-new Date(s.lastSeen)>wk)why.push('لم يدخل منذ أكثر من أسبوع');
     if(s.overall!=null&&s.overall<60)why.push('غير مجتاز — المعدل '+AR(Math.round(s.overall))+'%');if(s.loginCount&&!s.attempts)why.push('دخل ولم يحل أي اختبار');return{s,why}}).filter(x=>x.why.length);
   const opts=`<option value="all">كل الشعب</option>`+DATA.sections.map(s=>`<option value="${esc(s.id)}" ${sec===s.id?'selected':''}>${esc(s.name)}</option>`).join('');
   m.innerHTML=`<div class="row" style="margin-bottom:12px"><select id="ssf">${opts}</select><button class="btn ghost sm" id="sref">↻ إعادة الحساب</button><button class="btn sm" id="sexp">⬇ تصدير الإحصائيات Excel</button></div>
-  <div class="stats"><div class="stat"><small>المتدربون</small><b>${AR(st.length)}</b></div><div class="stat"><small>نشطون آخر 7 أيام</small><b>${AR(active7)}</b></div><div class="stat"><small>لم يدخلوا أبدًا</small><b>${AR(never.length)}</b></div>
+  <div class="stats"><div class="stat"><small>المتدربون</small><b>${AR(st.length)}</b></div><div class="stat"><small>نشطون آخر 7 أيام</small><b>${AR(active7)}</b></div><div class="stat"><small>لم يدخلوا أبدا</small><b>${AR(never.length)}</b></div>
   <div class="stat"><small>متوسط المعدل</small><b>${avgOv==null?'—':AR(Math.round(avgOv))+'%'}</b></div><div class="stat"><small>نسبة إنجاز الدروس</small><b>${AR(compl)}%</b></div><div class="stat"><small>متوسط وقت المتدرب</small><b style="font-size:18px">${fmtTime(avgT)}</b></div></div>
   <div class="grid2">
-   <div class="card"><h2>الدخول اليومي — آخر 30 يومًا</h2><div class="days" role="img" aria-label="عدد مرات الدخول يوميًا">${days.map(([k,v])=>`<div style="height:${v/maxD*100}%" data-t="${k.slice(5)}: ${v}"></div>`).join('')}</div><div class="dayAxis"><span>${days[0][0].slice(5)}</span><span>اليوم</span></div><p class="sub" style="margin-top:6px">مجموع مرات الدخول: ${AR(days.reduce((a,d)=>a+d[1],0))}</p></div>
-   <div class="card"><h2>توزيع المعدلات</h2><p class="sub">${AR(ov.length)} متدربًا لهم نقاط</p><div class="bars">${bins.map((b,i)=>bar(b[0],binN[i],maxB,b[3])).join('')}</div></div>
+   <div class="card"><h2>الدخول اليومي — آخر 30 يوما</h2><div class="days" role="img" aria-label="عدد مرات الدخول يوميا">${days.map(([k,v])=>`<div style="height:${v/maxD*100}%" data-t="${k.slice(5)}: ${v}"></div>`).join('')}</div><div class="dayAxis"><span>${days[0][0].slice(5)}</span><span>اليوم</span></div><p class="sub" style="margin-top:6px">مجموع مرات الدخول: ${AR(days.reduce((a,d)=>a+d[1],0))}</p></div>
+   <div class="card"><h2>توزيع المعدلات</h2><p class="sub">${AR(ov.length)} متدربا لهم نقاط</p><div class="bars">${bins.map((b,i)=>bar(b[0],binN[i],maxB,b[3])).join('')}</div></div>
   </div>
   <div class="card"><h2>الأداء حسب الوحدة</h2><div class="tableWrap"><table><thead><tr><th>الوحدة</th><th>متوسط الاختبارات</th><th>متوسط التمارين</th><th>إنجاز الدروس</th></tr></thead><tbody>${unitRows.map(u=>`<tr style="cursor:default"><td>${esc(u.n)}</td><td>${pct(u.q)}</td><td>${pct(u.p)}</td><td class="num">${u.dn}%</td></tr>`).join('')}</tbody></table></div></div>
-  <div class="card"><h2>صعوبة الدروس (الأصعب أولًا)</h2><p class="sub">«أول محاولة» يقيس الفهم الأولي، و«أفضل محاولة» يقيس الإتقان بعد التدريب.</p>
+  <div class="card"><h2>صعوبة الدروس (الأصعب أولا)</h2><p class="sub">«أول محاولة» يقيس الفهم الأولي، و«أفضل محاولة» يقيس الإتقان بعد التدريب.</p>
   ${lessonRows.length?`<div class="tableWrap" style="max-height:420px;overflow:auto"><table><thead><tr><th>الدرس</th><th>متدربون (اختبار)</th><th>اختبار: أول محاولة</th><th>اختبار: أفضل</th><th>متدربون (تمارين)</th><th>تمارين: أول محاولة</th><th>تمارين: أفضل</th><th>المحاولات</th></tr></thead><tbody>
   ${lessonRows.map(l=>`<tr style="cursor:default"><td>${esc(l.t)}</td><td class="num">${l.quizStudents||0}</td><td>${pct(l.quizFirst)}</td><td>${pct(l.quizBest)}</td><td class="num">${l.probStudents||0}</td><td>${pct(l.probFirst)}</td><td>${pct(l.probBest)}</td><td class="num">${(l.quizAttempts||0)+(l.probAttempts||0)}</td></tr>`).join('')}</tbody></table></div>`:'<p class="empty">لا توجد محاولات بعد.</p>'}</div>
-  <div class="card"><h2>الأسئلة الأكثر خطأ</h2><p class="sub">نسبة من أجابوا صحيحًا عن كل سؤال في الاختبارات، مع أكثر إجابة خاطئة تكرارًا.</p>
+  <div class="card"><h2>الأسئلة الأكثر خطأ</h2><p class="sub">نسبة من أجابوا صحيحا عن كل سؤال في الاختبارات، مع أكثر إجابة خاطئة تكرارا.</p>
   ${STATS.questions.length?STATS.questions.slice(0,25).map(x=>`<div class="qrow">${pct(x.pct)} <b>${esc(x.q)}</b><br><small>${esc(LT[x.lessonKey]||'')} · ${AR(x.correct)} صحيحة من ${AR(x.total)}${x.commonWrong?` · أكثر خطأ: «${esc(x.commonWrong)}» (${AR(x.commonWrongN)})`:''}</small></div>`).join(''):'<p class="empty">لا توجد إجابات بعد.</p>'}</div>
   ${secRows.length>1?`<div class="card"><h2>مقارنة الشعب</h2><div class="bars">${secRows.map(s=>bar(s.n+' ('+s.c+')',s.a||0,100,pctCls(s.a),s.a==null?'—':AR(Math.round(s.a))+'%')).join('')}</div></div>`:''}
   <div class="card"><h2>متدربون يحتاجون متابعة (${AR(risk.length)})</h2>${risk.length?`<div class="tableWrap"><table><thead><tr><th>الرقم</th><th>الاسم</th><th>الشعبة</th><th>السبب</th><th>المعدل</th></tr></thead><tbody>${risk.map(x=>`<tr data-id="${esc(x.s.id)}"><td class="num">${esc(x.s.id)}</td><td>${esc(x.s.name)}</td><td>${esc(secName(x.s.sectionId))}</td><td>${x.why.map(esc).join('، ')}</td><td>${pct(x.s.overall)}</td></tr>`).join('')}</tbody></table></div>`:'<p class="empty">لا يوجد. كل المتدربين نشطون ومعدلاتهم جيدة.</p>'}</div>`;
@@ -715,7 +715,7 @@ async function drawStats(){
   $('#sref').onclick=async()=>{STATS=null;await load()};
   m.querySelectorAll('tr[data-id]').forEach(tr=>tr.onclick=()=>openStudent(tr.dataset.id));
   $('#sexp').onclick=()=>saveBook([
-    ['ملخص',[['المؤشر','القيمة'],['عدد المتدربين',st.length],['نشطون آخر 7 أيام',active7],['لم يدخلوا أبدًا',never.length],['متوسط المعدل %',avgOv==null?'':Math.round(avgOv)],['نسبة إنجاز الدروس %',compl],['متوسط وقت المتدرب (دقيقة)',Math.round(avgT/60)],...bins.map((b,i)=>['عدد: '+b[0],binN[i]])],[30,14]],
+    ['ملخص',[['المؤشر','القيمة'],['عدد المتدربين',st.length],['نشطون آخر 7 أيام',active7],['لم يدخلوا أبدا',never.length],['متوسط المعدل %',avgOv==null?'':Math.round(avgOv)],['نسبة إنجاز الدروس %',compl],['متوسط وقت المتدرب (دقيقة)',Math.round(avgT/60)],...bins.map((b,i)=>['عدد: '+b[0],binN[i]])],[30,14]],
     ['الوحدات',[['الوحدة','متوسط الاختبارات %','متوسط التمارين %','إنجاز الدروس %'],...unitRows.map(u=>[u.n,u.q==null?'':Math.round(u.q),u.p==null?'':Math.round(u.p),u.dn])],[40,16,16,14]],
     ['الدروس',[['الدرس','متدربون اختبار','اختبار أول محاولة %','اختبار أفضل %','متدربون تمارين','تمارين أول محاولة %','تمارين أفضل %','المحاولات'],...lessonRows.map(l=>[l.t,l.quizStudents||0,l.quizFirst??'',l.quizBest??'',l.probStudents||0,l.probFirst??'',l.probBest??'',(l.quizAttempts||0)+(l.probAttempts||0)])],[36,12,14,12,12,14,12,10]],
     ['الأسئلة',[['الدرس','السؤال','صحيحة','المجموع','النسبة %','أكثر إجابة خاطئة','تكرارها'],...STATS.questions.map(x=>[LT[x.lessonKey]||x.lessonKey,x.q,x.correct,x.total,x.pct,x.commonWrong,x.commonWrongN])],[30,60,8,8,8,30,8]],
@@ -727,7 +727,7 @@ async function drawStats(){
 /* ---------- تقييم المتدربين للمنصة ---------- */
 const SV_ITEMS=['محتوى الدروس واضح ومنظم','الشرح على السبورة مع المدرب الذكي ساعدني على الفهم','الصوت ونطق المصطلحات واضح','المراجع العلمية في المنصة مفيدة','الأمثلة المحلولة واضحة ومفيدة','خطوات الحل ساعدتني على حل المسائل','الآلة الحاسبة العلمية سهلة الاستخدام','التمارين التفاعلية مناسبة لمستواي','أسئلة الاختبارات مرتبطة بمحتوى الدروس','مستوى صعوبة الاختبارات مناسب','التصحيح الفوري وشرح الإجابة مفيد','المنصة سهلة الاستخدام على الجوال','المنصة ساعدتني على فهم مقرر الفيزياء','أنصح زملائي باستخدام المنصة'];
 const SV_GROUPS=[['الدروس والشرح',0,4],['الأمثلة والتمارين',4,8],['الاختبارات',8,11],['المنصة بشكل عام',11,14]];
-const RT_STAGE={board:'شرح الدرس',ex:'الأمثلة والتمارين',quiz:'الدرس كاملًا (بعد الاختبار)'};
+const RT_STAGE={board:'شرح الدرس',ex:'الأمثلة والتمارين',quiz:'الدرس كاملا (بعد الاختبار)'};
 const P5=v=>v==null?null:Math.round(v/5*100);
 const rbar=(lab,val,max,cls,txt)=>`<div class="bar"><span class="lab" title="${esc(lab)}">${esc(lab)}</span><span class="trk"><span class="fil ${cls||''}" style="width:${max?Math.max(1,val/max*100):0}%;display:block"></span></span><span class="val">${txt!=null?txt:val}</span></div>`;
 let RT=null;
@@ -735,8 +735,8 @@ let RT=null;
 let DURV='ar-SA-HamedNeural';
 async function drawDur(){
   const m=$('#main');m.innerHTML='<p class="empty"><span class="spin"></span></p>';
-  let r;try{r=await api({a:'durget'})}catch(e){m.innerHTML='<p class="empty">تعذّر الاتصال بالخادم.</p>';return}
-  if(!r||!r.ok){m.innerHTML='<p class="empty">تعذّر جلب المدد.</p>';return}
+  let r;try{r=await api({a:'durget'})}catch(e){m.innerHTML='<p class="empty">تعذر الاتصال بالخادم.</p>';return}
+  if(!r||!r.ok){m.innerHTML='<p class="empty">تعذر جلب المدد.</p>';return}
   const D=r.d||{};
   const secOf=k=>{const e=D[k+'|'+DURV];return e?e.sec+e.says*0.6+e.chunks*0.1:null};
   const fm=s=>s==null?'<span style="color:var(--muted)">لم يحسب بعد</span>':Math.max(1,Math.round(s/60))+' '+(Math.round(s/60)>=3&&Math.round(s/60)<=10?'دقائق':'دقيقة');
@@ -758,8 +758,8 @@ async function drawDur(){
 }
 async function drawRatings(){
   const m=$('#main');m.innerHTML='<p class="empty"><span class="spin"></span></p>';
-  let r;try{r=await api({a:'tratings',token:TOKEN,sectionId:secFilter==='all'?'':secFilter})}catch(e){m.innerHTML='<p class="empty">تعذّر الاتصال بالخادم.</p>';return}
-  if(!r.ok){m.innerHTML=`<p class="empty">${esc(r.error==='unknown_action'?'حدّث ملف الخادم code.gs إلى الإصدار 6 لتفعيل التقييمات.':errText(r.error))}</p>`;return}
+  let r;try{r=await api({a:'tratings',token:TOKEN,sectionId:secFilter==='all'?'':secFilter})}catch(e){m.innerHTML='<p class="empty">تعذر الاتصال بالخادم.</p>';return}
+  if(!r.ok){m.innerHTML=`<p class="empty">${esc(r.error==='unknown_action'?'حدث ملف الخادم code.gs إلى الإصدار 6 لتفعيل التقييمات.':errText(r.error))}</p>`;return}
   RT=r;const R=r.ratings||[],S=r.surveys||[];
   const opts=`<option value="all">كل الشعب</option>`+DATA.sections.map(s=>`<option value="${esc(s.id)}" ${secFilter===s.id?'selected':''}>${esc(s.name)}</option>`).join('');
   const st=k=>{const a=R.filter(x=>x.stage===k).map(x=>x.stars);return {n:a.length,p:P5(avg(a))}};
@@ -774,22 +774,22 @@ async function drawRatings(){
   m.innerHTML=`<div class="rp-ctl" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px"><select id="rtf">${opts}</select><button class="btn ghost" id="rtr">↻ تحديث</button><button class="btn" id="rtx">⬇️ تصدير Excel</button></div>
   <div class="stats"><div class="stat"><small>متوسط تقييم الدروس</small><b>${all==null?'—':AR(all)+'%'}</b></div><div class="stat"><small>عدد التقييمات</small><b>${AR(R.length)}</b></div>
    <div class="stat"><small>شرح الدرس</small><b>${st('board').p==null?'—':AR(st('board').p)+'%'}</b></div><div class="stat"><small>الأمثلة والتمارين</small><b>${st('ex').p==null?'—':AR(st('ex').p)+'%'}</b></div>
-   <div class="stat"><small>الدرس كاملًا</small><b>${st('quiz').p==null?'—':AR(st('quiz').p)+'%'}</b></div><div class="stat"><small>رضا المتدربين (الاستبانة)</small><b>${svAvg==null?'—':AR(Math.round(svAvg))+'%'}</b></div><div class="stat"><small>أجابوا الاستبانة</small><b>${AR(S.length)}</b></div></div>
+   <div class="stat"><small>الدرس كاملا</small><b>${st('quiz').p==null?'—':AR(st('quiz').p)+'%'}</b></div><div class="stat"><small>رضا المتدربين (الاستبانة)</small><b>${svAvg==null?'—':AR(Math.round(svAvg))+'%'}</b></div><div class="stat"><small>أجابوا الاستبانة</small><b>${AR(S.length)}</b></div></div>
   ${low.length?`<div class="card" style="border-right:4px solid var(--bad)"><h2>⚠️ دروس تحتاج مراجعة (أقل من 60%)</h2>${low.map(L=>`<div>• <b>${esc(L.t)}</b> — ${pct(L.pa)}</div>`).join('')}</div>`:''}
-  <div class="card"><h2>تقييم الدروس</h2><p class="sub">النسبة = متوسط النجوم ÷ 5. مرتبة من الأقل تقييمًا.</p>
-  ${lessons.length?`<div class="tableWrap" style="max-height:460px;overflow:auto"><table><thead><tr><th>الدرس</th><th>المقيّمون</th><th>شرح الدرس</th><th>الأمثلة والتمارين</th><th>الدرس كاملًا</th><th>المتوسط</th><th>رأوه صعبًا</th><th>أكثر الاختيارات</th></tr></thead><tbody>${lessons.map(L=>{const tg=Object.entries(L.tags).sort((a,b)=>b[1]-a[1]).slice(0,2).map(([t,n])=>esc(t)+' ('+AR(n)+')').join('، ');
-    return `<tr style="cursor:default"><td>${esc(L.t)}</td><td class="num">${AR(L.n)}</td><td>${pct(L.pb)}</td><td>${pct(L.pe)}</td><td>${pct(L.pq)}</td><td>${pct(L.pa)}</td><td class="num">${L.lv?AR(Math.round(L.hard/L.lv*100))+'%':'—'}</td><td><small>${tg||'—'}</small></td></tr>`}).join('')}</tbody></table></div>`:'<p class="empty">لا توجد تقييمات بعد. تظهر هنا عندما يقيّم المتدربون الدروس بعد الشرح والأمثلة والاختبار.</p>'}</div>
+  <div class="card"><h2>تقييم الدروس</h2><p class="sub">النسبة = متوسط النجوم ÷ 5. مرتبة من الأقل تقييما.</p>
+  ${lessons.length?`<div class="tableWrap" style="max-height:460px;overflow:auto"><table><thead><tr><th>الدرس</th><th>المقيمون</th><th>شرح الدرس</th><th>الأمثلة والتمارين</th><th>الدرس كاملا</th><th>المتوسط</th><th>رأوه صعبا</th><th>أكثر الاختيارات</th></tr></thead><tbody>${lessons.map(L=>{const tg=Object.entries(L.tags).sort((a,b)=>b[1]-a[1]).slice(0,2).map(([t,n])=>esc(t)+' ('+AR(n)+')').join('، ');
+    return `<tr style="cursor:default"><td>${esc(L.t)}</td><td class="num">${AR(L.n)}</td><td>${pct(L.pb)}</td><td>${pct(L.pe)}</td><td>${pct(L.pq)}</td><td>${pct(L.pa)}</td><td class="num">${L.lv?AR(Math.round(L.hard/L.lv*100))+'%':'—'}</td><td><small>${tg||'—'}</small></td></tr>`}).join('')}</tbody></table></div>`:'<p class="empty">لا توجد تقييمات بعد. تظهر هنا عندما يقيم المتدربون الدروس بعد الشرح والأمثلة والاختبار.</p>'}</div>
   <div class="card"><h2>📝 استبانة رضا المتدرب</h2>${S.length?`<p class="sub">النسبة = متوسط الإجابات ÷ 5، و«الموافقون» = نسبة من اختار موافق أو موافق بشدة.</p>
    <div class="bars" style="margin-bottom:12px">${gp.map(g=>rbar(g.g,g.p||0,100,pctCls(g.p),g.p==null?'—':AR(g.p)+'%')).join('')}</div>
    <div class="tableWrap"><table><thead><tr><th>#</th><th>العبارة</th><th>الرضا</th><th>الموافقون</th></tr></thead><tbody>${items.map((x,i)=>`<tr style="cursor:default"><td class="num">${AR(i+1)}</td><td>${esc(x.t)}</td><td>${pct(x.p)}</td><td class="num">${x.agree==null?'—':AR(x.agree)+'%'}</td></tr>`).join('')}</tbody></table></div>
    ${S.filter(x=>x.best||x.improve).length?`<h3 style="margin:14px 0 6px">ملاحظات الاستبانة</h3>${S.filter(x=>x.best||x.improve).map(x=>`<div class="qrow"><b>${esc(x.name||x.studentId)}</b> <small>${esc(x.studentId)} · ${pct(x.avg)}</small>${x.best?`<br>👍 ${esc(x.best)}`:''}${x.improve?`<br>💡 ${esc(x.improve)}`:''}</div>`).join('')}`:''}`
-   :'<p class="empty">لم يُجب أي متدرب عن الاستبانة بعد. يجدها المتدرب في الفهرس: «📝 استبانة رضا المتدرب».</p>'}</div>
+   :'<p class="empty">لم يجب أي متدرب عن الاستبانة بعد. يجدها المتدرب في الفهرس: «📝 استبانة رضا المتدرب».</p>'}</div>
   <div class="card"><h2>ملاحظات المتدربين على الدروس (${AR(notes.length)})</h2>${notes.length?notes.slice(0,100).map(x=>`<div class="qrow"><b>${esc(x.name||x.studentId)}</b> <small>${esc(x.studentId)} · ${esc(LT[x.lessonKey]||x.lessonTitle)} · ${RT_STAGE[x.stage]||''} · ${'★'.repeat(x.stars)} · ${fmtDate(x.time)}</small><br>${esc(x.note)}</div>`).join(''):'<p class="empty">لا توجد ملاحظات بعد.</p>'}</div>`;
   $('#rtf').onchange=e=>{secFilter=e.target.value;ls.set('p101-tsec',secFilter);drawRatings()};
   $('#rtr').onclick=drawRatings;
   $('#rtx').onclick=()=>{const sn=id=>{const s=DATA.sections.find(x=>x.id===id);return s?s.name:id};
     saveBook([['تقييم الدروس',[['التاريخ','الرقم التدريبي','الاسم','الشعبة','الدرس','المرحلة','النجوم','النسبة%','الصعوبة','الاختيارات','الملاحظة'],...R.map(x=>[fmtDate(x.time),x.studentId,x.name,sn(x.sectionId),LT[x.lessonKey]||x.lessonTitle,RT_STAGE[x.stage]||x.stage,x.stars,P5(x.stars),x.level||'',x.tags||'',x.note||''])]],
-      ['ملخص الدروس',[['الدرس','المقيّمون','شرح الدرس%','الأمثلة والتمارين%','الدرس كاملًا%','المتوسط%','رأوه صعبًا%'],...lessons.map(L=>[L.t,L.n,L.pb??'',L.pe??'',L.pq??'',L.pa??'',L.lv?Math.round(L.hard/L.lv*100):''])]],
+      ['ملخص الدروس',[['الدرس','المقيمون','شرح الدرس%','الأمثلة والتمارين%','الدرس كاملا%','المتوسط%','رأوه صعبا%'],...lessons.map(L=>[L.t,L.n,L.pb??'',L.pe??'',L.pq??'',L.pa??'',L.lv?Math.round(L.hard/L.lv*100):''])]],
       ['استبانة الرضا',[['التاريخ','الرقم التدريبي','الاسم','الشعبة','متوسط الرضا%',...SV_ITEMS,'ما أعجبه','مقترح التحسين'],...S.map(x=>[fmtDate(x.time),x.studentId,x.name,sn(x.sectionId),x.avg,...SV_ITEMS.map((_,i)=>x.answers[i]||''),x.best||'',x.improve||''])]],
       ['ملخص الاستبانة',[['العبارة','الرضا%','الموافقون%'],...items.map(x=>[x.t,x.p??'',x.agree??''])]]],'تقييم المتدربين للمنصة.xlsx')};
 }
@@ -807,7 +807,7 @@ async function drawGV(){const box=$('#gvBox');if(!box)return;let x;try{x=await a
   if(!x||!x.ok){box.innerHTML='<p class="msg bad">هذه الميزة تحتاج تحديث كود الخادم (code.gs) إلى الإصدار 29 ونشره.</p>';return}
   try{localStorage.setItem('p101-gvraw',JSON.stringify(x.cfg))}catch(e){}
   const c=x.cfg,opt=(L,v)=>L.map(([n,d])=>`<option value="${n}"${n===v?' selected':''}>${n} (${d})</option>`).join('');
-  box.innerHTML=`<p class="sub">الحالة: ${c.on&&x.gem?'<b style="color:var(--good)">✓ مفعّل للمتدربين</b>':'<b style="color:var(--bad)">غير مفعّل للمتدربين</b>'}${x.gem?'':' · يحتاج تفعيل Gemini في البند 2 أولا'}<br>صوت طبيعي من Google Gemini للمدرب الذكي على السبورة وللمساعد الذكي، بصوت واحد تختاره لكل المتدربين. يسمعه المتدرب في الدروس التي جهزتها من «تجهيز صوت الدروس» تحت، والدروس غير المجهزة تبقى تلقائيا بصوت حامد أو زارية.</p>
+  box.innerHTML=`<p class="sub">الحالة: ${c.on&&x.gem?'<b style="color:var(--good)">✓ مفعل للمتدربين</b>':'<b style="color:var(--bad)">غير مفعل للمتدربين</b>'}${x.gem?'':' · يحتاج تفعيل Gemini في البند 2 أولا'}<br>صوت طبيعي من Google Gemini للمدرب الذكي على السبورة وللمساعد الذكي، بصوت واحد تختاره لكل المتدربين. يسمعه المتدرب في الدروس التي جهزتها من «تجهيز صوت الدروس» تحت، والدروس غير المجهزة تبقى تلقائيا بصوت حامد أو زارية.</p>
    <div class="row gvRow"><label class="gvL">🎙 صوت المدرب الذكي</label><select id="gvm"><optgroup label="👨 رجل">${opt(GVM,c.m)}</optgroup><optgroup label="👩 امرأة">${opt(GVF,c.m)}</optgroup></select><button class="btn ghost" id="gvpm">▶ استماع</button></div>
    ${c.m!==c.f?'<p class="sub" style="font-size:13px;color:var(--bad)">الآن صوتان مختلفان. اختر الصوت ثم اضغط «حفظ الصوت» ليصير صوتا واحدا لكل المتدربين.</p>':''}
    <div class="row"><button class="btn" id="gvsv">حفظ الصوت</button>${c.on?'<button class="btn danger" id="gvoff">إيقاف للمتدربين</button>':'<button class="btn" id="gvon"'+(x.gem?'':' disabled')+'>تفعيل للمتدربين</button>'}</div>
@@ -823,7 +823,7 @@ async function drawGV(){const box=$('#gvBox');if(!box)return;let x;try{x=await a
   const gpTxt=async(k,vo)=>{const w=await gpFrame();const [u,l]=k.split('-').map(Number);return w.P101PREP(u,l,vo)};
   const gpChk=async()=>{const k=$('#gpL').value;gp.className='msg';gp.innerHTML='<span class="spin"></span> فحص…';
     try{const out=[];for(const [vo,v,lb] of (c.m===c.f?[['m',c.m,'🎙 الصوت']]:[['m',c.m,'👨 صوت الرجل'],['f',c.f,'👩 صوت المرأة']])){const T=await gpTxt(k,vo);const y=await api({a:'gcheck',token:TOKEN,voice:v,texts:T});if(!y.ok)throw y;out.push(lb+': '+(y.n===y.total?'<b style="color:var(--good)">✓ جاهز</b>':y.n+' من '+y.total))}gp.innerHTML=out.join('<br>')}
-    catch(e){gp.className='msg bad';gp.textContent=(e&&e.error==='unknown_action')?'حدّث code.gs إلى الإصدار 31 أولا.':errText((e&&e.error)||'net')}};
+    catch(e){gp.className='msg bad';gp.textContent=(e&&e.error==='unknown_action')?'حدث code.gs إلى الإصدار 31 أولا.':errText((e&&e.error)||'net')}};
   let gpRun=false;
   const gpGo=async()=>{if(gpRun){gpRun=false;return}const k=$('#gpL').value;gpRun=true;$('#gpGo').textContent='■ إيقاف';
     try{for(const [vo,v,lb] of (c.m===c.f?[['m',c.m,'🎙 الصوت']]:[['m',c.m,'👨 صوت الرجل'],['f',c.f,'👩 صوت المرأة']])){const T=await gpTxt(k,vo);const y=await api({a:'gcheck',token:TOKEN,voice:v,texts:T});if(!y.ok)throw y;
@@ -834,13 +834,13 @@ async function drawGV(){const box=$('#gvBox');if(!box)return;let x;try{x=await a
         if(z&&z.error==='gem_busy'&&busy<5){busy++;i--;gp.innerHTML='⏸ '+lb+': '+done+' من '+T.length+' · انتظار دقيقة (حد جيميني)';await gpW(60000);continue}
         throw z||{error:'net'}}}
       gp.className='msg good';gp.innerHTML='✅ الدرس جاهز'+(c.m===c.f?'':' بالصوتين')}
-    catch(e){if(e&&e.stop){gp.className='msg';gp.textContent='توقف التجهيز، ويكمل من مكانه عند الضغط مرة ثانية.'}else{gp.className='msg bad';gp.textContent=(e&&e.error==='unknown_action')?'حدّث code.gs إلى الإصدار 31 أولا.':'توقف: '+errText((e&&e.error)||'net')}}
+    catch(e){if(e&&e.stop){gp.className='msg';gp.textContent='توقف التجهيز، ويكمل من مكانه عند الضغط مرة ثانية.'}else{gp.className='msg bad';gp.textContent=(e&&e.error==='unknown_action')?'حدث code.gs إلى الإصدار 31 أولا.':'توقف: '+errText((e&&e.error)||'net')}}
     gpRun=false;$('#gpGo').textContent='تجهيز الصوت'};
   $('#gpChk').onclick=gpChk;$('#gpGo').onclick=gpGo;
   $('#gvsv').onclick=()=>save();if($('#gvon'))$('#gvon').onclick=()=>save({on:true});if($('#gvoff'))$('#gvoff').onclick=()=>{if(confirm('إيقاف صوت جيميني للمتدربين؟ يعودون إلى صوت حامد وزارية.'))save({on:false})}}
 async function drawAI(){
   const m=$(tab==='settings'?'#aiSet':'#main');if(!m)return;m.innerHTML='<p class="empty"><span class="spin"></span></p>';
-  let r,ti={};try{[r,ti]=await Promise.all([api({a:'tquestions',token:TOKEN,sectionId:secFilter==='all'?'':secFilter}),api({a:'ttsinfo',token:TOKEN}).catch(()=>({}))])}catch(e){m.innerHTML='<p class="empty">تعذّر الاتصال بالخادم.</p>';return}
+  let r,ti={};try{[r,ti]=await Promise.all([api({a:'tquestions',token:TOKEN,sectionId:secFilter==='all'?'':secFilter}),api({a:'ttsinfo',token:TOKEN}).catch(()=>({}))])}catch(e){m.innerHTML='<p class="empty">تعذر الاتصال بالخادم.</p>';return}
   if(!r.ok){m.innerHTML=`<p class="empty">${esc(errText(r.error))}</p>`;return}
   const nm=Object.fromEntries(DATA.students.map(s=>[s.id,s.name]));nm.TEACHER='المدرب';nm.DEMO='حساب المعاينة';
   const opts=`<option value="all">كل الشعب</option>`+DATA.sections.map(s=>`<option value="${esc(s.id)}" ${secFilter===s.id?'selected':''}>${esc(s.name)}</option>`).join('');
@@ -848,52 +848,52 @@ async function drawAI(){
   const top=Object.entries(byLesson).sort((a,b)=>b[1]-a[1]).slice(0,8),mx=Math.max(1,...top.map(x=>x[1]));
   const tOn=!!ti.tts,tOld=!ti.ok;
   m.innerHTML=`<div class="aiK"><div class="card"><h2>🤖 المدرب الذكي التفاعلي والمساعد الذكي</h2><h3 class="aiH">1. الصوت الطبيعي للدروس (مجاني)</h3>
-   ${tOld?'<p class="msg bad">هذه الميزة تحتاج تحديث كود الخادم (code.gs) في Google Apps Script ونشر إصدار جديد.</p>':`<p class="sub">الحالة: ${tOn?'<b style="color:var(--good)">✓ مفعّل</b> · المنطقة '+esc(ti.region)+' · المستخدم هذا الشهر: '+AR((ti.used||0).toLocaleString('en'))+' حرف من '+AR((ti.cap||0).toLocaleString('en')):'<b style="color:var(--bad)">غير مفعّل</b>'} · صوتان طبيعيان: حامد وزارية، من Microsoft بالخطة المجانية F0 (500 ألف حرف شهريًا). يُحفظ صوت كل مقطع في Google Drive فلا يُستهلك مرة أخرى.</p>`}
+   ${tOld?'<p class="msg bad">هذه الميزة تحتاج تحديث كود الخادم (code.gs) في Google Apps Script ونشر إصدار جديد.</p>':`<p class="sub">الحالة: ${tOn?'<b style="color:var(--good)">✓ مفعل</b> · المنطقة '+esc(ti.region)+' · المستخدم هذا الشهر: '+AR((ti.used||0).toLocaleString('en'))+' حرف من '+AR((ti.cap||0).toLocaleString('en')):'<b style="color:var(--bad)">غير مفعل</b>'} · صوتان طبيعيان: حامد وزارية، من Microsoft بالخطة المجانية F0 (500 ألف حرف شهريا). يحفظ صوت كل مقطع في Google Drive فلا يستهلك مرة أخرى.</p>`}
    <ol class="sub" style="padding-inline-start:1.2em"><li>من بوابة Azure افتح خدمة الصوت ← <b>Keys and endpoint</b>.</li><li>انسخ <b>KEY 1</b> والصقه هنا، وتأكد من المنطقة (Location/Region).</li><li>اضغط «حفظ وتفعيل» ثم «تجربة الصوت».</li></ol>
    <div class="row"><input type="password" id="ttk" placeholder="KEY 1" style="flex:1;min-width:180px;direction:ltr" autocomplete="off"><input type="text" id="ttr" value="${esc(ti.region||'uaenorth')}" style="width:120px;direction:ltr" aria-label="المنطقة"><button class="btn" id="ttsv">حفظ وتفعيل</button></div>
    <div class="row" style="margin-top:8px">${tOn?'<select id="ttvo"><option value="ar-SA-HamedNeural">👨 حامد</option><option value="ar-SA-ZariyahNeural">👩 زارية</option></select><button class="btn ghost" id="ttst">▶ تجربة الصوت</button><button class="btn danger" id="ttoff">إيقاف</button>':''}</div><p class="msg" id="ttm"></p>
   <h3 class="aiH">2. محرك المساعد الذكي Gemini (مجاني)</h3>
-   <p class="sub">الحالة: ${r.gem?'<b style="color:var(--good)">✓ Gemini مفعّل</b>':'<b style="color:var(--bad)">Gemini غير مفعّل</b>'} · الاحتياطي Groq: ${r.groq||(r.ai&&!r.gem)?'<b style="color:var(--good)">✓ مفعّل</b>':'غير مفعّل'}<br>المحرك الأساسي <b>Google Gemini</b> المجاني (قوي في العربية الفصحى والفيزياء)، وإذا انشغل ينتقل تلقائيًا إلى Groq. الحد: 15 سؤالًا لكل متدرب كل 6 ساعات.</p>
-   <ol class="sub" style="padding-inline-start:1.2em"><li>افتح <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> وسجّل دخولك بحساب Google.</li><li>اضغط <b>Create API key</b>، ثم انسخ المفتاح (يبدأ بـ <span dir="ltr">AIza</span>).</li><li>الصقه هنا واضغط «حفظ وتفعيل».</li><li>اختياري للاحتياط: مفتاح Groq من <a href="https://console.groq.com/keys" target="_blank" rel="noopener">console.groq.com/keys</a> (يبدأ بـ <span dir="ltr">gsk_</span>) بنفس الطريقة.</li></ol>
+   <p class="sub">الحالة: ${r.gem?'<b style="color:var(--good)">✓ Gemini مفعل</b>':'<b style="color:var(--bad)">Gemini غير مفعل</b>'} · الاحتياطي Groq: ${r.groq||(r.ai&&!r.gem)?'<b style="color:var(--good)">✓ مفعل</b>':'غير مفعل'}<br>المحرك الأساسي <b>Google Gemini</b> المجاني (قوي في العربية الفصحى والفيزياء)، وإذا انشغل ينتقل تلقائيا إلى Groq. الحد: 15 سؤالا لكل متدرب كل 6 ساعات.</p>
+   <ol class="sub" style="padding-inline-start:1.2em"><li>افتح <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> وسجل دخولك بحساب Google.</li><li>اضغط <b>Create API key</b>، ثم انسخ المفتاح (يبدأ بـ <span dir="ltr">AIza</span>).</li><li>الصقه هنا واضغط «حفظ وتفعيل».</li><li>اختياري للاحتياط: مفتاح Groq من <a href="https://console.groq.com/keys" target="_blank" rel="noopener">console.groq.com/keys</a> (يبدأ بـ <span dir="ltr">gsk_</span>) بنفس الطريقة.</li></ol>
    <div class="row"><input type="password" id="aik" placeholder="AIza… أو gsk_…" style="flex:1;min-width:200px;direction:ltr" autocomplete="off"><button class="btn" id="aisv">حفظ وتفعيل</button>${r.gem?'<button class="btn danger" id="aioff">إيقاف Gemini</button>':''}${r.groq?'<button class="btn danger" id="aioff2">إيقاف Groq</button>':''}</div><p class="msg" id="aim"></p>
   <h3 class="aiH">3. صوت المدرب الذكي بجيميني للمتدربين</h3>
    <div id="gvBox"><p class="sub"><span class="spin"></span></p></div></div>
   <div class="card" id="gqCard"><h2>⚡ محرك Groq للمساعد الذكي</h2>
-   <p class="sub">الحالة: ${(r.groq||(r.ai&&!r.gem))?'<b style="color:var(--good)">✓ Groq مفعّل</b>':'<b style="color:var(--bad)">Groq غير مفعّل</b>'} · المحرك الذي يجيب الآن: <b>${r.gem?'Gemini (وGroq احتياطي)':((r.groq||r.ai)?'Groq':'لا يوجد')}</b><br>يكتب إجابات المساعد الذكي، ويشكّلها قبل أن ينطقها المدرب الذكي بصوت حامد أو زارية.</p>
+   <p class="sub">الحالة: ${(r.groq||(r.ai&&!r.gem))?'<b style="color:var(--good)">✓ Groq مفعل</b>':'<b style="color:var(--bad)">Groq غير مفعل</b>'} · المحرك الذي يجيب الآن: <b>${r.gem?'Gemini (وGroq احتياطي)':((r.groq||r.ai)?'Groq':'لا يوجد')}</b><br>يكتب إجابات المساعد الذكي، ويشكلها قبل أن ينطقها المدرب الذكي بصوت حامد أو زارية.</p>
    <ol class="sub" style="padding-inline-start:1.2em"><li>افتح <a href="https://console.groq.com/keys" target="_blank" rel="noopener">console.groq.com/keys</a> واضغط <b>Create API Key</b>.</li><li>انسخ المفتاح (يبدأ بـ <span dir="ltr">gsk_</span>) والصقه هنا، ثم «حفظ وتفعيل».</li><li>اضغط «تجربة Groq»: يسأل سؤالا قصيرا ويعرض الإجابة وينطقها.</li></ol>
    <div class="row"><input type="password" id="gqk" placeholder="gsk_…" style="flex:1;min-width:200px;direction:ltr" autocomplete="off"><button class="btn" id="gqsv">حفظ وتفعيل</button>${r.groq?'<button class="btn danger" id="gqoff">إيقاف Groq</button>':''}</div>
    <div class="row" style="margin-top:8px">${tOn?'<select id="gqvo"><option value="ar-SA-HamedNeural">👨 حامد</option><option value="ar-SA-ZariyahNeural">👩 زارية</option></select>':''}<button class="btn ghost" id="gqts">▶ تجربة Groq</button></div><p class="msg" id="gqm"></p><div id="gqa"></div></div>
   </div><div class="aiQ">
-  <div class="row" style="margin-bottom:12px"><select id="aqs">${opts}</select><span class="sub" style="margin:0">${AR(r.questions.length)} سؤالًا (آخر 300)</span>${r.questions.length?'<button class="btn ghost sm" id="aexp">⬇ تصدير Excel</button>':''}</div>
-  ${top.length?`<div class="card"><h2>أكثر الدروس سؤالًا</h2><div class="bars">${top.map(([k,v])=>`<div class="bar"><span class="lab" title="${esc(k)}">${esc(k)}</span><span class="trk"><span class="fil" style="width:${v/mx*100}%;display:block"></span></span><span class="val">${v}</span></div>`).join('')}</div></div>`:''}
+  <div class="row" style="margin-bottom:12px"><select id="aqs">${opts}</select><span class="sub" style="margin:0">${AR(r.questions.length)} سؤالا (آخر 300)</span>${r.questions.length?'<button class="btn ghost sm" id="aexp">⬇ تصدير Excel</button>':''}</div>
+  ${top.length?`<div class="card"><h2>أكثر الدروس سؤالا</h2><div class="bars">${top.map(([k,v])=>`<div class="bar"><span class="lab" title="${esc(k)}">${esc(k)}</span><span class="trk"><span class="fil" style="width:${v/mx*100}%;display:block"></span></span><span class="val">${v}</span></div>`).join('')}</div></div>`:''}
   <div class="card"><h2>أسئلة المتدربين</h2>${r.questions.length?r.questions.map(q=>`<details class="res"><summary><b>${esc(nm[q.studentId]||q.studentId)}</b> <span class="tag">${esc(LT[q.lessonKey]||q.lessonTitle||'')}</span> ${esc(q.question.slice(0,90))}${q.question.length>90?'…':''}<span class="when">${fmtDate(q.time)}</span></summary><div class="det"><p style="white-space:pre-wrap;margin:6px 0"><b>السؤال:</b> ${esc(q.question)}</p><p style="white-space:pre-wrap;margin:6px 0;color:var(--muted)"><b>إجابة المساعد:</b> ${esc(q.answer)}</p></div></details>`).join(''):'<p class="empty">لم يسأل أحد بعد.</p>'}</div></div>`;
   $('#aqs').onchange=e=>{secFilter=e.target.value;ls.set('p101-tsec',secFilter);drawAI()};
   const tm=(t,c)=>{$('#ttm').className='msg '+(c||'');$('#ttm').innerHTML=t};
-  $('#ttsv').onclick=async()=>{const k=$('#ttk').value.trim();if(!k)return tm('الصق المفتاح أولًا.','bad');tm('<span class="spin"></span> جارٍ التحقق من المفتاح…');
-    const x=await api({a:'tttskey',token:TOKEN,key:k,region:$('#ttr').value.trim()});if(x.ok){tm('✓ تم تفعيل الصوت الطبيعي لكل المتدربين.','good');setTimeout(drawAI,1200)}else tm(esc(x.error==='unknown_action'?'حدّث كود الخادم أولًا.':errText(x.error)),'bad')};
+  $('#ttsv').onclick=async()=>{const k=$('#ttk').value.trim();if(!k)return tm('الصق المفتاح أولا.','bad');tm('<span class="spin"></span> جار التحقق من المفتاح…');
+    const x=await api({a:'tttskey',token:TOKEN,key:k,region:$('#ttr').value.trim()});if(x.ok){tm('✓ تم تفعيل الصوت الطبيعي لكل المتدربين.','good');setTimeout(drawAI,1200)}else tm(esc(x.error==='unknown_action'?'حدّث كود الخادم أولا.':errText(x.error)),'bad')};
   if(tOn){let au=null;
-    $('#ttst').onclick=async()=>{au=au||new Audio();au.src='data:audio/mpeg;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjYwLjE2LjEwMAAAAAAAAAAAAAAA//OEwAAAAAAAAAAAAEluZm8AAAAPAAAACQAABCAARUVFRUVFRUVFRUVdXV1dXV1dXV1dXXR0dHR0dHR0dHR0i4uLi4uLi4uLi4uioqKioqKioqKiorq6urq6urq6urq60dHR0dHR0dHR0dHo6Ojo6Ojo6Ojo6P//////////////AAAAAExhdmM2MC4zMQAAAAAAAAAAAAAAACQD8AAAAAAAAAQgDeb0IwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//NExAAAAANIAAAAAExBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMu//NExFMAAANIAAAAADEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMu//NExKYAAANIAAAAADEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMu//NExKwAAANIAAAAADEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMu//NExKwAAANIAAAAADEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMu//NExKwAAANIAAAAADEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMu//NExKwAAANIAAAAADEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//NExKwAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//NExKwAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV';au.play().catch(()=>{});tm('<span class="spin"></span> جارٍ توليد الصوت…');
+    $('#ttst').onclick=async()=>{au=au||new Audio();au.src='data:audio/mpeg;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjYwLjE2LjEwMAAAAAAAAAAAAAAA//OEwAAAAAAAAAAAAEluZm8AAAAPAAAACQAABCAARUVFRUVFRUVFRUVdXV1dXV1dXV1dXXR0dHR0dHR0dHR0i4uLi4uLi4uLi4uioqKioqKioqKiorq6urq6urq6urq60dHR0dHR0dHR0dHo6Ojo6Ojo6Ojo6P//////////////AAAAAExhdmM2MC4zMQAAAAAAAAAAAAAAACQD8AAAAAAAAAQgDeb0IwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//NExAAAAANIAAAAAExBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMu//NExFMAAANIAAAAADEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMu//NExKYAAANIAAAAADEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMu//NExKwAAANIAAAAADEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMu//NExKwAAANIAAAAADEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMu//NExKwAAANIAAAAADEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMu//NExKwAAANIAAAAADEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//NExKwAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//NExKwAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV';au.play().catch(()=>{});tm('<span class="spin"></span> جار توليد الصوت…');
       const x=await api({a:'tts',token:TOKEN,voice:$('#ttvo').value,rate:0,segs:[{l:'ar',t:'مَرْحَبًا بِكُمْ فِي مِنَصَّةِ فِيزْياء مِئَةٍ وَواحِد. القُوَّةُ تُساوِي الكُتْلَةَ ضَرْبَ التَّسارُع:'},{l:'en',t:'F equals m times a'}]});
-      if(!x.ok)return tm(esc(errText(x.error)),'bad');tm(x.cached?'✓ الصوت محفوظ مسبقًا.':'✓ تم توليد الصوت وحفظه.','good');au.src='data:audio/mpeg;base64,'+x.audio;au.play().catch(()=>tm('اضغط «تجربة الصوت» مرة أخرى للتشغيل.','bad'))};
+      if(!x.ok)return tm(esc(errText(x.error)),'bad');tm(x.cached?'✓ الصوت محفوظ مسبقا.':'✓ تم توليد الصوت وحفظه.','good');au.src='data:audio/mpeg;base64,'+x.audio;au.play().catch(()=>tm('اضغط «تجربة الصوت» مرة أخرى للتشغيل.','bad'))};
     $('#ttoff').onclick=async()=>{if(!confirm('إيقاف الصوت الطبيعي؟ سيعود المتدربون إلى صوت الجهاز.'))return;const x=await api({a:'tttskey',token:TOKEN,key:''});toast(x.ok?'تم الإيقاف':errText(x.error));drawAI()}}
-  $('#aisv').onclick=async()=>{const k=$('#aik').value.trim();if(!k)return;$('#aim').className='msg';$('#aim').innerHTML='<span class="spin"></span> جارٍ التحقق من المفتاح…';
+  $('#aisv').onclick=async()=>{const k=$('#aik').value.trim();if(!k)return;$('#aim').className='msg';$('#aim').innerHTML='<span class="spin"></span> جار التحقق من المفتاح…';
     const x=await api({a:'tkey',token:TOKEN,key:k});$('#aim').className='msg '+(x.ok?'good':'bad');$('#aim').textContent=x.ok?(x.gem?'✓ تم تفعيل Gemini: المدرب الذكي التفاعلي والمساعد الذكي يعملان الآن لكل المتدربين.':'✓ تم تفعيل Groq الاحتياطي.'):errText(x.error);if(x.ok)setTimeout(drawAI,1200)};
   if(r.gem)$('#aioff').onclick=async()=>{if(!confirm('إيقاف Gemini؟'))return;const x=await api({a:'tkey',token:TOKEN,key:'',which:'gem'});toast(x.ok?'تم الإيقاف':errText(x.error));drawAI()};
   if(r.groq)$('#aioff2').onclick=async()=>{if(!confirm('إيقاف Groq؟'))return;const x=await api({a:'tkey',token:TOKEN,key:'',which:'groq'});toast(x.ok?'تم الإيقاف':errText(x.error));drawAI()};
   {const gm=(t,c)=>{$('#gqm').className='msg '+(c||'');$('#gqm').innerHTML=t};let gau=null;
-   $('#gqsv').onclick=async()=>{const k=$('#gqk').value.trim();if(!k)return gm('الصق مفتاح Groq أولًا.','bad');if(!/^gsk_/.test(k))return gm('مفتاح Groq يبدأ بـ gsk_','bad');gm('<span class="spin"></span> جارٍ التحقق من المفتاح…');
+   $('#gqsv').onclick=async()=>{const k=$('#gqk').value.trim();if(!k)return gm('الصق مفتاح Groq أولا.','bad');if(!/^gsk_/.test(k))return gm('مفتاح Groq يبدأ بـ gsk_','bad');gm('<span class="spin"></span> جار التحقق من المفتاح…');
      const x=await api({a:'tkey',token:TOKEN,key:k});if(x.ok){gm('✓ تم تفعيل Groq.','good');setTimeout(drawAI,1200)}else gm(esc(errText(x.error)),'bad')};
    if(r.groq)$('#gqoff').onclick=async()=>{if(!confirm('إيقاف Groq؟'))return;const x=await api({a:'tkey',token:TOKEN,key:'',which:'groq'});toast(x.ok?'تم الإيقاف':errText(x.error));drawAI()};
    $('#gqts').onclick=async()=>{if(tOn){gau=gau||new Audio();gau.src='data:audio/mpeg;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjYwLjE2LjEwMAAAAAAAAAAAAAAA';gau.play().catch(()=>{})}
-     gm('<span class="spin"></span> جارٍ سؤال Groq…');$('#gqa').innerHTML='';const t0=Date.now();
-     let x;try{x=await api({a:'ask',token:TOKEN,q:'ما وحدة قياس الشحنة الكهربائية؟ أجب في جملتين.',lessonKey:'3-3',lessonTitle:'تجربة Groq من لوحة المدرب',context:'',history:[],mode:'test'})}catch(e){return gm('تعذّر الاتصال بالخادم.','bad')}
+     gm('<span class="spin"></span> جار سؤال Groq…');$('#gqa').innerHTML='';const t0=Date.now();
+     let x;try{x=await api({a:'ask',token:TOKEN,q:'ما وحدة قياس الشحنة الكهربائية؟ أجب في جملتين.',lessonKey:'3-3',lessonTitle:'تجربة Groq من لوحة المدرب',context:'',history:[],mode:'test'})}catch(e){return gm('تعذر الاتصال بالخادم.','bad')}
      const sec=((Date.now()-t0)/1000).toFixed(1);
      if(!x.ok)return gm(esc(errText(x.error==='ai_off'?'ai_off_g':x.error)),'bad');
      $('#gqa').innerHTML='<div class="det" style="margin-top:6px"><p style="white-space:pre-wrap;margin:6px 0"><b>إجابة Groq:</b> '+esc(x.answer.replace(/[ً-ْٰ]/g,''))+'</p><p class="sub" style="margin:4px 0">زمن الإجابة: <span dir="ltr">'+sec+' s</span> · تشكيل الصوت: '+(x.speech?'<b style="color:var(--good)">✓ يعمل</b>':'<b style="color:var(--bad)">لم يصل</b>')+'</p></div>';
-     if(!tOn)return gm('✓ Groq يعمل. فعّل الصوت الطبيعي في البند 1 لسماع الإجابة.','good');
-     gm('<span class="spin"></span> جارٍ توليد الصوت…');const sp=String(x.speech||x.answer).replace(/[#*`>\-]/g,' ').replace(/\s+/g,' ').trim().slice(0,1800);
+     if(!tOn)return gm('✓ Groq يعمل. فعل الصوت الطبيعي في البند 1 لسماع الإجابة.','good');
+     gm('<span class="spin"></span> جار توليد الصوت…');const sp=String(x.speech||x.answer).replace(/[#*`>\-]/g,' ').replace(/\s+/g,' ').trim().slice(0,1800);
      const v=await api({a:'tts',token:TOKEN,voice:$('#gqvo').value,rate:0,segs:[{l:'ar',t:sp}]});
-     if(!v.ok)return gm(esc(errText(v.error)),'bad');gm('✓ Groq يعمل، والإجابة تُنطق الآن.','good');gau.src='data:audio/mpeg;base64,'+v.audio;gau.play().catch(()=>gm('اضغط «تجربة Groq» مرة أخرى للتشغيل.','bad'))}}
+     if(!v.ok)return gm(esc(errText(v.error)),'bad');gm('✓ Groq يعمل، والإجابة تنطق الآن.','good');gau.src='data:audio/mpeg;base64,'+v.audio;gau.play().catch(()=>gm('اضغط «تجربة Groq» مرة أخرى للتشغيل.','bad'))}}
   drawGV();
   if(r.questions.length)$('#aexp').onclick=()=>saveBook([['أسئلة المساعد',[['التاريخ','الرقم','الاسم','الدرس','السؤال','إجابة المساعد'],...r.questions.map(q=>[xd(q.time),q.studentId,nm[q.studentId]||'',LT[q.lessonKey]||q.lessonTitle,q.question,q.answer])],[18,12,24,30,60,80]]],'أسئلة-المساعد.xlsx');
   {const rm=m.querySelector(tab==='settings'?'.aiQ':'.aiK');if(rm)rm.remove()}
@@ -906,12 +906,12 @@ function ring(v,size){const r=size/2-9,c=2*Math.PI*r,o=v==null?c:c*(1-Math.max(0
   return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" role="img" aria-label="${v==null?'لا توجد بيانات':Math.round(v)+'%'}"><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="var(--soft)" stroke-width="12"/><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="var(--accent)" stroke-width="12" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${o}" transform="rotate(-90 ${size/2} ${size/2})"/><text x="50%" y="52%" text-anchor="middle" dominant-baseline="middle" font-size="${size/4.6}" font-weight="700" fill="var(--ink)" style="font-family:inherit">${v==null?'—':AR(Math.round(v))+'%'}</text></svg>`}
 const kpi=(ic,lab,val,sub)=>`<div class="rp-kpi"><span class="ic" aria-hidden="true">${ic}</span><div><small>${lab}</small><b>${val}</b>${sub?`<em>${sub}</em>`:''}</div></div>`;
 const step=(lab,n,tot,o)=>`<div class="rp-step"><span>${lab}</span><span class="trk"><span class="fil" style="width:${tot?Math.max(n?2:0,n/tot*100):0}%;display:block;--o:${o||1}"></span></span><span class="v">${AR(n)} <small style="color:var(--muted);font-weight:400">${tot?'('+AR(Math.round(n/tot*100))+'%)':''}</small></span></div>`;
-const band=v=>v==null?'لم يُختبر':v>=95?'ممتاز مرتفع (A+)':v>=90?'ممتاز (A)':v>=85?'جيد جدًا مرتفع (B+)':v>=80?'جيد جدًا (B)':v>=75?'جيد مرتفع (C+)':v>=70?'جيد (C)':v>=65?'مقبول مرتفع (D+)':v>=60?'مقبول (D)':'غير مجتاز (F)';
+const band=v=>v==null?'لم يُختبر':v>=95?'ممتاز مرتفع (A+)':v>=90?'ممتاز (A)':v>=85?'جيد جدا مرتفع (B+)':v>=80?'جيد جدا (B)':v>=75?'جيد مرتفع (C+)':v>=70?'جيد (C)':v>=65?'مقبول مرتفع (D+)':v>=60?'مقبول (D)':'غير مجتاز (F)';
 async function drawReports(){
   const m=$('#main');const sec=secFilter;
-  if(!STATS||statsSec!==sec){m.innerHTML='<p class="empty"><span class="spin"></span> جارٍ إعداد التقرير…</p>';
+  if(!STATS||statsSec!==sec){m.innerHTML='<p class="empty"><span class="spin"></span> جار إعداد التقرير…</p>';
     try{const r=await api({a:'tstats',token:TOKEN,sectionId:sec==='all'?'':sec});if(!r.ok){m.innerHTML=`<p class="empty">${esc(errText(r.error))}</p>`;return}STATS=r;statsSec=sec}
-    catch(e){m.innerHTML='<p class="empty">تعذّر الاتصال بالخادم.</p>';return}
+    catch(e){m.innerHTML='<p class="empty">تعذر الاتصال بالخادم.</p>';return}
     if(tab!=='reports')return}
   const st=DATA.students.filter(s=>sec==='all'||s.sectionId===sec);
   const secLabel=sec==='all'?'كل الشعب':'الشعبة '+secName(sec);
@@ -935,20 +935,20 @@ async function drawReports(){
     const weak=st.filter(s=>!s.loginCount||(s.overall!=null&&s.overall<60));
     const units=UNITS.map((u,ui)=>{const ks=per.filter(x=>x.u===ui);return{t:u.t,ui,v:avg(ks.map(x=>x.v).filter(v=>v!=null)),d:Math.round(ks.reduce((a,x)=>a+x.done,0)/(n*ks.length)*100)}});
     const ins=[];
-    if(n-logged)ins.push(`${AR(n-logged)} متدربًا لم يدخلوا المنصة بعد (${AR(Math.round((n-logged)/n*100))}%).`);
+    if(n-logged)ins.push(`${AR(n-logged)} متدربا لم يدخلوا المنصة بعد (${AR(Math.round((n-logged)/n*100))}%).`);
     if(hard[0])ins.push(`أصعب درس حتى الآن: «${esc(hard[0].t)}» بمتوسط ${AR(Math.round(hard[0].v))}%.`);
     if(easy[0]&&easy[0]!==hard[0])ins.push(`أفضل أداء في درس «${esc(easy[0].t)}» بمتوسط ${AR(Math.round(easy[0].v))}%.`);
     if(avgOv!=null)ins.push(`متوسط المعدل العام ${AR(Math.round(avgOv))}% — مستوى «${band(avgOv)}».`);
-    if(!tried.length)ins.push('لم يحل أي متدرب اختبارًا أو تمرينًا بعد؛ ستظهر الرسوم تلقائيًا مع بدء الحل.');
-    html=`<div class="rp-hero"><small>تقرير أداء — ${esc(secLabel)}</small><h2>نظرة عامة على الشعبة</h2><div class="meta">${AR(n)} متدربًا · ${AR(TEACH_N)} درسًا (و${LES_NOTE()}) · ${today}</div></div>
+    if(!tried.length)ins.push('لم يحل أي متدرب اختبارا أو تمرينا بعد؛ ستظهر الرسوم تلقائيا مع بدء الحل.');
+    html=`<div class="rp-hero"><small>تقرير أداء — ${esc(secLabel)}</small><h2>نظرة عامة على الشعبة</h2><div class="meta">${AR(n)} متدربا · ${AR(TEACH_N)} درسا (و${LES_NOTE()}) · ${today}</div></div>
     <div class="rp-kpis">${kpi('👥','دخلوا المنصة',AR(logged)+' من '+AR(n),AR(Math.round(logged/n*100))+'% من الشعبة')}${kpi('🟢','نشطون آخر 7 أيام',AR(act))}${kpi('🎯','متوسط المعدل',avgOv==null?'—':AR(Math.round(avgOv))+'%',avgOv==null?'':band(avgOv))}${kpi('📚','إنجاز الدروس',AR(compl)+'%')}${kpi('⏱️','وقت الاستخدام',fmtTime(tt),'متوسط '+fmtTime(tt/n)+' للمتدرب')}${kpi('✍️','محاولات الحل',AR(st.reduce((a,s)=>a+s.attempts,0)))}</div>
     ${ins.length?`<div class="rp-note"><b>💡 أبرز الملاحظات</b><ul style="margin:6px 0 0;padding-inline-start:1.2em">${ins.map(x=>`<li>${x}</li>`).join('')}</ul></div>`:''}
-    <div class="grid2"><div class="card"><h2>الإنجاز العام</h2><div class="rp-ring">${ring(compl,130)}<div class="t">نسبة الدروس التي أنهاها متدربو ${esc(secLabel)} من مجموع ${AR(TOTAL*n)} درسًا مطلوبًا.</div></div></div>
+    <div class="grid2"><div class="card"><h2>الإنجاز العام</h2><div class="rp-ring">${ring(compl,130)}<div class="t">نسبة الدروس التي أنهاها متدربو ${esc(secLabel)} من مجموع ${AR(TOTAL*n)} درسا مطلوبا.</div></div></div>
     <div class="card"><h2>الأداء حسب الوحدة</h2><div class="rp-funnel">${units.map(u=>`<div class="rp-step" title="إنجاز ${u.d}%"><span>الوحدة ${ORD[u.ui]}</span><span class="trk"><span class="fil" style="width:${u.v==null?0:Math.max(2,u.v)}%;display:block"></span></span><span class="v">${u.v==null?'—':AR(Math.round(u.v))+'%'}</span></div>`).join('')}</div><p class="sub" style="margin-top:8px">متوسط أفضل نتيجة في اختبارات وتمارين كل وحدة.</p></div></div>
-    <div class="card"><h2>خريطة الدروس</h2><p class="sub">كل مربع درس: متوسط الشعبة فيه (الاختبارات والتمارين) وعدد من حلّه. اضغط أي درس لفتح تقريره المفصّل.</p>
-      ${UNITS.map((u,ui)=>`<h3 style="font-size:14px;margin:12px 0 6px;color:var(--muted)">الوحدة ${ORD[ui]}: ${esc(u.t)}</h3><div class="rp-map">${per.filter(x=>x.u===ui).map(x=>`<button class="rp-tile ${pctCls(x.v)}" data-k="${x.k}" title="${esc(x.t)} — ${x.v==null?'لم يُحل بعد':Math.round(x.v)+'%'}"><span>${esc(x.t)}</span><span><b>${x.v==null?'—':AR(Math.round(x.v))+'%'}</b> <small>${AR(x.nq)} حلّ</small></span></button>`).join('')}</div>`).join('')}
-      <div class="rp-legend"><span><i style="background:color-mix(in srgb,var(--good) 30%,var(--panel))"></i>جيد جدًا فأعلى 80% فأكثر</span><span><i style="background:color-mix(in srgb,var(--mid) 30%,var(--panel))"></i>مقبول وجيد 60–79%</span><span><i style="background:color-mix(in srgb,var(--bad) 28%,var(--panel))"></i>غير مجتاز أقل من 60%</span><span><i style="background:var(--panel)"></i>لم يُحل بعد</span></div></div>
-    <div class="grid2"><div class="card"><h2>🏆 الأعلى أداءً</h2>${top.length?top.map((s,i)=>`<div class="qrow" data-id="${esc(s.id)}" style="cursor:pointer">${['🥇','🥈','🥉','④','⑤'][i]} <b>${esc(s.name)}</b> ${pct(s.overall)} <small>· ${AR(s.doneN)} درسًا</small></div>`).join(''):'<p class="empty">لا توجد نتائج بعد.</p>'}</div>
+    <div class="card"><h2>خريطة الدروس</h2><p class="sub">كل مربع درس: متوسط الشعبة فيه (الاختبارات والتمارين) وعدد من حله. اضغط أي درس لفتح تقريره المفصل.</p>
+      ${UNITS.map((u,ui)=>`<h3 style="font-size:14px;margin:12px 0 6px;color:var(--muted)">الوحدة ${ORD[ui]}: ${esc(u.t)}</h3><div class="rp-map">${per.filter(x=>x.u===ui).map(x=>`<button class="rp-tile ${pctCls(x.v)}" data-k="${x.k}" title="${esc(x.t)} — ${x.v==null?'لم يحل بعد':Math.round(x.v)+'%'}"><span>${esc(x.t)}</span><span><b>${x.v==null?'—':AR(Math.round(x.v))+'%'}</b> <small>${AR(x.nq)} حل</small></span></button>`).join('')}</div>`).join('')}
+      <div class="rp-legend"><span><i style="background:color-mix(in srgb,var(--good) 30%,var(--panel))"></i>جيد جدا فأعلى 80% فأكثر</span><span><i style="background:color-mix(in srgb,var(--mid) 30%,var(--panel))"></i>مقبول وجيد 60–79%</span><span><i style="background:color-mix(in srgb,var(--bad) 28%,var(--panel))"></i>غير مجتاز أقل من 60%</span><span><i style="background:var(--panel)"></i>لم يحل بعد</span></div></div>
+    <div class="grid2"><div class="card"><h2>🏆 الأعلى أداء</h2>${top.length?top.map((s,i)=>`<div class="qrow" data-id="${esc(s.id)}" style="cursor:pointer">${['🥇','🥈','🥉','④','⑤'][i]} <b>${esc(s.name)}</b> ${pct(s.overall)} <small>· ${AR(s.doneN)} درسا</small></div>`).join(''):'<p class="empty">لا توجد نتائج بعد.</p>'}</div>
     <div class="card"><h2>⚠️ يحتاجون متابعة (${AR(weak.length)})</h2>${weak.length?`<div style="max-height:260px;overflow:auto">${weak.map(s=>`<div class="qrow" data-id="${esc(s.id)}" style="cursor:pointer"><b>${esc(s.name)}</b> ${s.loginCount?pct(s.overall):'<span class="tag warn">لم يدخل</span>'}</div>`).join('')}</div>`:'<p class="empty">لا يوجد. ممتاز!</p>'}</div></div>`;
     xls=[['ملخص الشعبة',[['المؤشر','القيمة'],['الشعبة',secLabel],['عدد المتدربين',n],['دخلوا المنصة',logged],['نشطون آخر 7 أيام',act],['متوسط المعدل %',avgOv==null?'':Math.round(avgOv)],['إنجاز الدروس %',compl],['الوقت الكلي (دقيقة)',Math.round(tt/60)]],[28,20]],
       ['الدروس',[['الوحدة','الدرس','متوسط الاختبار %','متوسط التمارين %','المتوسط %','عدد من حل الاختبار','أنهوا الدرس'],...per.map(x=>['الوحدة '+ORD[x.u],x.t,x.q==null?'':Math.round(x.q),x.p==null?'':Math.round(x.p),x.v==null?'':Math.round(x.v),x.nq,x.done])],[14,34,14,14,10,14,12]],
@@ -959,25 +959,25 @@ async function drawReports(){
     const rows=st.map(s=>({s,q:s.quiz[k]!=null?+s.quiz[k]:null,p:s.probL[k]!=null?s.probL[k]:null,d:s.done.includes(k)}));
     const qs=rows.filter(r=>r.q!=null),ps=rows.filter(r=>r.p!=null),dn=rows.filter(r=>r.d).length;
     const pass=qs.filter(r=>r.q>=60).length,mast=qs.filter(r=>r.q>=90).length,qa=avg(qs.map(r=>r.q)),pa=avg(ps.map(r=>r.p));
-    const bins=[['ممتاز 90–100%',90,101],['جيد جدًا 80–89%',80,90],['جيد 70–79%',70,80],['مقبول 60–69%',60,70],['غير مجتاز أقل من 60%',0,60]],bn=bins.map(b=>qs.filter(r=>r.q>=b[1]&&r.q<b[2]).length),bm=Math.max(1,...bn);
+    const bins=[['ممتاز 90–100%',90,101],['جيد جدا 80–89%',80,90],['جيد 70–79%',70,80],['مقبول 60–69%',60,70],['غير مجتاز أقل من 60%',0,60]],bn=bins.map(b=>qs.filter(r=>r.q>=b[1]&&r.q<b[2]).length),bm=Math.max(1,...bn);
     const qq=(STATS.questions||[]).filter(x=>x.lessonKey===k).sort((a,b)=>a.pct-b.pct);
     const first=L.quizFirst,best=L.quizBest,gain=first!=null&&best!=null?best-first:null;
     const ins=[];
     if(!qs.length&&!ps.length)ins.push('لم يحل أي متدرب اختبار هذا الدرس أو تمارينه بعد.');
-    else{ins.push(`${AR(qs.length)} من ${AR(n)} حلّوا اختبار الدرس، واجتازه ${AR(pass)} منهم (60% فأكثر).`);
-      if(gain!=null&&gain>0)ins.push(`تحسّن متوسط الاختبار من ${AR(first)}% في أول محاولة إلى ${AR(best)}% بعد إعادة المحاولة (+${AR(Math.round(gain))}).`);
-      if(qq[0]&&qq[0].pct<60)ins.push(`أصعب سؤال: «${esc(qq[0].q.slice(0,90))}» — أجاب عنه صحيحًا ${AR(qq[0].pct)}% فقط.`);
-      const no=n-qs.length;if(no)ins.push(`${AR(no)} متدربًا لم يحلّوا الاختبار بعد.`)}
-    html=`<div class="rp-hero"><small>تقرير درس — ${esc(secLabel)} · الوحدة ${ORD[ui]}</small><h2>${esc(LT[k])}</h2><div class="meta">${AR(n)} متدربًا · ${today}</div></div>
-    <div class="rp-kpis">${kpi('📘','أنهوا الدرس',AR(dn)+' من '+AR(n),AR(Math.round(dn/n*100))+'%')}${kpi('📝','حلّوا الاختبار',AR(qs.length),AR(Math.round(qs.length/n*100))+'% من الشعبة')}${kpi('🎯','متوسط الاختبار',qa==null?'—':AR(Math.round(qa))+'%',qa==null?'':band(qa))}${kpi('🧮','متوسط التمارين',pa==null?'—':AR(Math.round(pa))+'%',AR(ps.length)+' متدربًا')}${kpi('✅','نسبة الاجتياز',qs.length?AR(Math.round(pass/qs.length*100))+'%':'—','50% فأكثر')}${kpi('🔁','المحاولات',AR((L.quizAttempts||0)+(L.probAttempts||0)))}</div>
+    else{ins.push(`${AR(qs.length)} من ${AR(n)} حلوا اختبار الدرس، واجتازه ${AR(pass)} منهم (60% فأكثر).`);
+      if(gain!=null&&gain>0)ins.push(`تحسن متوسط الاختبار من ${AR(first)}% في أول محاولة إلى ${AR(best)}% بعد إعادة المحاولة (+${AR(Math.round(gain))}).`);
+      if(qq[0]&&qq[0].pct<60)ins.push(`أصعب سؤال: «${esc(qq[0].q.slice(0,90))}» — أجاب عنه صحيحا ${AR(qq[0].pct)}% فقط.`);
+      const no=n-qs.length;if(no)ins.push(`${AR(no)} متدربا لم يحلوا الاختبار بعد.`)}
+    html=`<div class="rp-hero"><small>تقرير درس — ${esc(secLabel)} · الوحدة ${ORD[ui]}</small><h2>${esc(LT[k])}</h2><div class="meta">${AR(n)} متدربا · ${today}</div></div>
+    <div class="rp-kpis">${kpi('📘','أنهوا الدرس',AR(dn)+' من '+AR(n),AR(Math.round(dn/n*100))+'%')}${kpi('📝','حلوا الاختبار',AR(qs.length),AR(Math.round(qs.length/n*100))+'% من الشعبة')}${kpi('🎯','متوسط الاختبار',qa==null?'—':AR(Math.round(qa))+'%',qa==null?'':band(qa))}${kpi('🧮','متوسط التمارين',pa==null?'—':AR(Math.round(pa))+'%',AR(ps.length)+' متدربا')}${kpi('✅','نسبة الاجتياز',qs.length?AR(Math.round(pass/qs.length*100))+'%':'—','50% فأكثر')}${kpi('🔁','المحاولات',AR((L.quizAttempts||0)+(L.probAttempts||0)))}</div>
     ${ins.length?`<div class="rp-note"><b>💡 أبرز الملاحظات</b><ul style="margin:6px 0 0;padding-inline-start:1.2em">${ins.map(x=>`<li>${x}</li>`).join('')}</ul></div>`:''}
-    <div class="grid2"><div class="card"><h2>مسار المتدربين في الدرس</h2><div class="rp-funnel">${step('في الشعبة',n,n)}${step('دخلوا المنصة',logged,n,.9)}${step('أنهوا الدرس',dn,n,.8)}${step('حلّوا الاختبار',qs.length,n,.7)}${step('اجتازوا (60%+)',pass,n,.6)}${step('ممتاز (90%+)',mast,n,.5)}</div></div>
+    <div class="grid2"><div class="card"><h2>مسار المتدربين في الدرس</h2><div class="rp-funnel">${step('في الشعبة',n,n)}${step('دخلوا المنصة',logged,n,.9)}${step('أنهوا الدرس',dn,n,.8)}${step('حلوا الاختبار',qs.length,n,.7)}${step('اجتازوا (60%+)',pass,n,.6)}${step('ممتاز (90%+)',mast,n,.5)}</div></div>
     <div class="card"><h2>توزيع نقاط الاختبار</h2>${qs.length?`<div class="bars">${bins.map((b,i)=>`<div class="bar"><span class="lab">${b[0]}</span><span class="trk"><span class="fil ${['g','g','m','m','b'][i]}" style="width:${bn[i]/bm*100}%;display:block"></span></span><span class="val">${AR(bn[i])}</span></div>`).join('')}</div><p class="sub" style="margin-top:8px">حسب أفضل محاولة لكل متدرب.</p>`:'<p class="empty">لا توجد نتائج بعد.</p>'}</div></div>
     <div class="grid2"><div class="card"><h2>أثر إعادة المحاولة</h2>${first!=null?`<div class="rp-cmp" role="img" aria-label="أول محاولة ${first}% وأفضل محاولة ${best}%"><div class="f" style="height:${first}%"><span>${AR(first)}%</span></div><div style="height:${best}%"><span>${AR(best)}%</span></div></div><div class="rp-cmpx"><span>أول محاولة</span><span>أفضل محاولة</span></div>${gain!=null?`<p class="sub" style="margin-top:8px">التحسن: <b>${gain>=0?'+':''}${AR(Math.round(gain))}</b> نقطة.</p>`:''}`:'<p class="empty">لا توجد محاولات بعد.</p>'}</div>
-    <div class="card"><h2>الأسئلة الأكثر خطأ</h2>${qq.length?qq.slice(0,6).map(x=>`<div class="rp-q"><b>${esc(x.q)}</b><div class="trk"><div class="fil" style="width:${x.pct}%;background:var(--${pctCls(x.pct)==='g'?'good':pctCls(x.pct)==='m'?'mid':'bad'})"></div></div><small style="color:var(--muted)">${AR(x.pct)}% أجابوا صحيحًا (${AR(x.correct)} من ${AR(x.total)})${x.commonWrong?` · أكثر خطأ: «${esc(x.commonWrong)}»`:''}</small></div>`).join(''):'<p class="empty">لا توجد إجابات بعد.</p>'}</div></div>
+    <div class="card"><h2>الأسئلة الأكثر خطأ</h2>${qq.length?qq.slice(0,6).map(x=>`<div class="rp-q"><b>${esc(x.q)}</b><div class="trk"><div class="fil" style="width:${x.pct}%;background:var(--${pctCls(x.pct)==='g'?'good':pctCls(x.pct)==='m'?'mid':'bad'})"></div></div><small style="color:var(--muted)">${AR(x.pct)}% أجابوا صحيحا (${AR(x.correct)} من ${AR(x.total)})${x.commonWrong?` · أكثر خطأ: «${esc(x.commonWrong)}»`:''}</small></div>`).join(''):'<p class="empty">لا توجد إجابات بعد.</p>'}</div></div>
     <div class="card"><h2>نتائج المتدربين في الدرس</h2><div class="tableWrap" style="max-height:480px;overflow:auto"><table><thead><tr><th>الاسم</th><th>الاختبار</th><th>التمارين</th><th>أنهى الدرس</th><th>المستوى</th></tr></thead><tbody>
     ${rows.slice().sort((a,b)=>(b.q??-1)-(a.q??-1)||a.s.name.localeCompare(b.s.name,'ar')).map(r=>`<tr data-id="${esc(r.s.id)}"><td>${esc(r.s.name)}</td><td>${pct(r.q)}</td><td>${pct(r.p)}</td><td>${r.d?'✓':'—'}</td><td><span class="tag ${r.q!=null&&r.q<60?'warn':''}">${band(r.q)}</span></td></tr>`).join('')}</tbody></table></div></div>`;
-    xls=[['تقرير الدرس',[['المؤشر','القيمة'],['الدرس',LT[k]],['الشعبة',secLabel],['عدد المتدربين',n],['أنهوا الدرس',dn],['حلّوا الاختبار',qs.length],['متوسط الاختبار %',qa==null?'':Math.round(qa)],['متوسط التمارين %',pa==null?'':Math.round(pa)],['اجتازوا (60%+)',pass],['ممتاز (90%+)',mast],['أول محاولة %',first??''],['أفضل محاولة %',best??'']],[26,34]],
+    xls=[['تقرير الدرس',[['المؤشر','القيمة'],['الدرس',LT[k]],['الشعبة',secLabel],['عدد المتدربين',n],['أنهوا الدرس',dn],['حلوا الاختبار',qs.length],['متوسط الاختبار %',qa==null?'':Math.round(qa)],['متوسط التمارين %',pa==null?'':Math.round(pa)],['اجتازوا (60%+)',pass],['ممتاز (90%+)',mast],['أول محاولة %',first??''],['أفضل محاولة %',best??'']],[26,34]],
       ['المتدربون',[['الرقم','الاسم','الاختبار %','التمارين %','أنهى الدرس','المستوى'],...rows.map(r=>[r.s.id,r.s.name,r.q==null?'':Math.round(r.q),r.p==null?'':Math.round(r.p),r.d?'نعم':'لا',band(r.q)])],[14,30,12,12,12,12]],
       ['الأسئلة',[['السؤال','صحيحة','المجموع','النسبة %','أكثر إجابة خاطئة'],...qq.map(x=>[x.q,x.correct,x.total,x.pct,x.commonWrong])],[60,8,8,8,30]]];
   }
@@ -998,9 +998,9 @@ const CONTENT={lessons:50,quiz:540,probs:194,gens:40,examples:51,figs:51,tables:
 const METHODS=['محاضرة','تطبيق عملي','مراجعة','اختبار قصير','تطبيق على المنصة','حل تمارين'];
 let TLOG=null;
 async function drawTrainer(m,ctl,st,sec,secLabel,today,n,logged){
-  if(!TLOG){m.innerHTML=ctl+'<p class="empty"><span class="spin"></span> جارٍ تحميل سجل الإنجاز…</p>';
+  if(!TLOG){m.innerHTML=ctl+'<p class="empty"><span class="spin"></span> جار تحميل سجل الإنجاز…</p>';
     try{const r=await api({a:'tlog',token:TOKEN});if(!r.ok){m.innerHTML=ctl+`<p class="empty">${r.error==='unknown_action'?'هذه الميزة تحتاج تحديث كود الخادم (code.gs) ونشر إصدار جديد.':esc(errText(r.error))}</p>`;bindT();return}TLOG=r}
-    catch(e){m.innerHTML=ctl+'<p class="empty">تعذّر الاتصال بالخادم.</p>';bindT();return}
+    catch(e){m.innerHTML=ctl+'<p class="empty">تعذر الاتصال بالخادم.</p>';bindT();return}
     if(tab!=='reports'||RPL!=='trainer')return}
   const P=Object.assign({name:'خليل موسى المالكي',course:'الفيزياء العامة 101'},TLOG.profile||{});
   const log=TLOG.log.filter(x=>sec==='all'||!x.sectionId||x.sectionId===sec).sort((a,b)=>a.date<b.date?1:-1);
@@ -1013,15 +1013,15 @@ async function drawTrainer(m,ctl,st,sec,secLabel,today,n,logged){
   const lessonOpts=UNITS.map((u,ui)=>`<optgroup label="الوحدة ${ORD[ui]}">${u.l.map((l,li)=>l.hide?'':`<option value="${ui}-${li}">${esc(l.t)}${covered.has(ui+'-'+li)?' ✓':''}</option>`).join('')}</optgroup>`).join('');
   const field=(k,lab,ph)=>`<label>${lab}<input id="pf_${k}" value="${esc(P[k]||'')}" placeholder="${ph||''}"></label>`;
   const html=`<div class="rp-hero"><small>تقرير إنجاز المدرب — ${esc(P.course||'الفيزياء العامة 101')}${P.term?' · '+esc(P.term):''}</small><h2>${esc(P.name||'المدرب')}</h2><div class="meta">${[P.college,P.dept].filter(Boolean).map(esc).join(' · ')}${P.college||P.dept?' · ':''}${esc(secLabel)} · ${today}</div></div>
-  <div class="card rp-edit"><h2>بيانات التقرير</h2><p class="sub">تظهر في رأس التقرير المطبوع. تُحفظ مرة واحدة.</p><div class="rp-form">${field('name','اسم المدرب')}${field('college','المنشأة','اسم المنشأة')}${field('dept','القسم','العلوم العامة')}${field('course','المقرر')}${field('term','الفصل التدريبي','الأول 1448هـ')}${field('head','رئيس القسم')}</div><div class="row" style="margin-top:8px"><button class="btn sm" id="pfs">حفظ البيانات</button></div></div>
-  <h3 style="margin:4px 0 8px">📦 المحتوى الذي أعدّه المدرب على المنصة</h3>
-  <div class="rp-kpis">${kpi('📘','دروس تفاعلية',AR(TEACH_N),'إضافة إلى '+LES_NOTE())}${kpi('📝','أسئلة اختبارات',AR(CONTENT.quiz),'اختيار من متعدد')}${kpi('🧮','مسائل حسابية تفاعلية',AR(CONTENT.probs),'بأربع خطوات')}${kpi('🎲','مولّدات تمارين متجددة',AR(CONTENT.gens),'تمارين لا تنتهي')}${kpi('💡','أمثلة محلولة',AR(CONTENT.examples))}${kpi('🖼️','رسوم توضيحية',AR(CONTENT.figs))}${kpi('📋','جداول تعليمية',AR(CONTENT.tables))}${kpi('🔬','تجارب ومحاكاة',AR(CONTENT.sims),'PhET بالعربية')}</div>
+  <div class="card rp-edit"><h2>بيانات التقرير</h2><p class="sub">تظهر في رأس التقرير المطبوع. تحفظ مرة واحدة.</p><div class="rp-form">${field('name','اسم المدرب')}${field('college','المنشأة','اسم المنشأة')}${field('dept','القسم','العلوم العامة')}${field('course','المقرر')}${field('term','الفصل التدريبي','الأول 1448هـ')}${field('head','رئيس القسم')}</div><div class="row" style="margin-top:8px"><button class="btn sm" id="pfs">حفظ البيانات</button></div></div>
+  <h3 style="margin:4px 0 8px">📦 المحتوى الذي أعده المدرب على المنصة</h3>
+  <div class="rp-kpis">${kpi('📘','دروس تفاعلية',AR(TEACH_N),'إضافة إلى '+LES_NOTE())}${kpi('📝','أسئلة اختبارات',AR(CONTENT.quiz),'اختيار من متعدد')}${kpi('🧮','مسائل حسابية تفاعلية',AR(CONTENT.probs),'بأربع خطوات')}${kpi('🎲','مولدات تمارين متجددة',AR(CONTENT.gens),'تمارين لا تنتهي')}${kpi('💡','أمثلة محلولة',AR(CONTENT.examples))}${kpi('🖼️','رسوم توضيحية',AR(CONTENT.figs))}${kpi('📋','جداول تعليمية',AR(CONTENT.tables))}${kpi('🔬','تجارب ومحاكاة',AR(CONTENT.sims),'PhET بالعربية')}</div>
   <h3 style="margin:4px 0 8px">👥 أثر المنصة على المتدربين</h3>
   <div class="rp-kpis">${kpi('🎓','متدربون مستفيدون',AR(n),AR(logged)+' دخلوا المنصة')}${kpi('🔑','مرات الدخول',AR(T.logins||0))}${kpi('✍️','محاولات حل',AR(T.results||0))}${kpi('🤖','أسئلة أجاب عنها المساعد',AR(T.questions||0))}${kpi('🎯','متوسط معدل المتدربين',avgOv==null?'—':AR(Math.round(avgOv))+'%',avgOv==null?'':band(avgOv))}${kpi('✅','نسبة الإتقان في اختبر نفسك (60% فأكثر)',passR==null?'—':AR(passR)+'%')}${kpi('📚','إنجاز الدروس',AR(compl)+'%')}</div>
   <h3 style="margin:4px 0 8px">🗓️ تقارير إنجاز المدرب</h3>
-  <div class="grid2"><div class="card"><h2>تغطية المقرر</h2><div class="rp-ring">${ring(cov,130)}<div class="t">${AR(covT)} من ${AR(TEACH_N)} درسًا مُدرَّسًا<br>${AR(log.length)} لقاءً · ${AR(hrs)} ساعة تدريبية</div></div></div>
+  <div class="grid2"><div class="card"><h2>تغطية المقرر</h2><div class="rp-ring">${ring(cov,130)}<div class="t">${AR(covT)} من ${AR(TEACH_N)} درسا مُدرَّسًا<br>${AR(log.length)} لقاء · ${AR(hrs)} ساعة تدريبية</div></div></div>
   <div class="card"><h2>التغطية حسب الوحدة</h2><div class="rp-funnel">${unitCov.map(u=>`<div class="rp-step"><span>الوحدة ${ORD[u.ui]}</span><span class="trk"><span class="fil" style="width:${u.c/u.t*100}%;display:block"></span></span><span class="v">${AR(u.c)}/${AR(u.t)}</span></div>`).join('')}</div></div></div>
-  <div class="card rp-edit"><h2>➕ تسجيل لقاء تدريبي</h2><div class="rp-form"><label>التاريخ<input type="date" id="tl_d" value="${iso}"></label><label>الدرس<select id="tl_l">${lessonOpts}</select></label><label>الشعبة<select id="tl_s"><option value="">—</option>${DATA.sections.map(s=>`<option value="${esc(s.id)}" ${sec===s.id?'selected':''}>${esc(s.name)}</option>`).join('')}</select></label><label>الساعات<input type="number" id="tl_h" value="2" min="0" max="12" step="0.5"></label><label>طريقة التنفيذ<select id="tl_m">${METHODS.map(x=>`<option>${x}</option>`).join('')}</select></label><label style="grid-column:1/-1">ملاحظات<input id="tl_n" placeholder="مثال: نُفّذ مع تجربة عملية في المعمل"></label></div><div class="row" style="margin-top:8px"><button class="btn" id="tl_add">إضافة إلى السجل</button><span class="msg" id="tl_msg"></span></div></div>
+  <div class="card rp-edit"><h2>➕ تسجيل لقاء تدريبي</h2><div class="rp-form"><label>التاريخ<input type="date" id="tl_d" value="${iso}"></label><label>الدرس<select id="tl_l">${lessonOpts}</select></label><label>الشعبة<select id="tl_s"><option value="">—</option>${DATA.sections.map(s=>`<option value="${esc(s.id)}" ${sec===s.id?'selected':''}>${esc(s.name)}</option>`).join('')}</select></label><label>الساعات<input type="number" id="tl_h" value="2" min="0" max="12" step="0.5"></label><label>طريقة التنفيذ<select id="tl_m">${METHODS.map(x=>`<option>${x}</option>`).join('')}</select></label><label style="grid-column:1/-1">ملاحظات<input id="tl_n" placeholder="مثال: نفذ مع تجربة عملية في المعمل"></label></div><div class="row" style="margin-top:8px"><button class="btn" id="tl_add">إضافة إلى السجل</button><span class="msg" id="tl_msg"></span></div></div>
   <div class="card"><h2>سجل اللقاءات التدريبية (${AR(log.length)})</h2>${log.length?`<div class="tableWrap"><table><thead><tr><th>التاريخ</th><th>الوحدة</th><th>الدرس</th><th>الشعبة</th><th>الساعات</th><th>التنفيذ</th><th>ملاحظات</th><th class="rp-edit"></th></tr></thead><tbody>${log.map(x=>`<tr style="cursor:default"><td class="num">${esc(x.date)}</td><td>${ORD[+x.lessonKey.split('-')[0]]||''}</td><td>${esc(LT[x.lessonKey]||x.lessonKey)}</td><td>${esc(x.sectionId?secName(x.sectionId):'—')}</td><td class="num">${AR(x.hours)}</td><td>${esc(x.method)}</td><td style="white-space:normal;min-width:140px">${esc(x.notes)}</td><td class="rp-edit"><button class="btn danger sm" data-del="${esc(x.id)}">حذف</button></td></tr>`).join('')}</tbody></table></div>`:'<p class="empty">لم تُسجَّل لقاءات بعد. أضف أول لقاء من النموذج أعلاه.</p>'}</div>
   <div class="rp-off"><div class="rp-sign"><div>المدرب: ${esc(P.name||'')}<br><br>التوقيع: ................</div><div>رئيس القسم: ${esc(P.head||'')}<br><br>التوقيع: ................</div></div></div>`;
   m.innerHTML=ctl+html;bindT();
@@ -1091,7 +1091,7 @@ async function drawExams(){
   let r;try{r=EXP?await EXP:await apiR({a:'texams',token:TOKEN})}catch(e){if(!EXR)m.innerHTML='<p class="empty">تعذر الاتصال بالخادم. اضغط «تحديث».</p>';else toast('تعذر التحديث الآن، المعروض آخر بيانات محملة');return}
   if(!r){try{r=await apiR({a:'texams',token:TOKEN})}catch(e){if(!EXR)m.innerHTML='<p class="empty">تعذر الاتصال بالخادم. اضغط «تحديث».</p>';else toast('تعذر التحديث الآن، المعروض آخر بيانات محملة');return}}
   if(r.ok&&!Array.isArray(r.rows))r={ok:false,error:'busy'};
-  if(!r.ok){if(EXR&&r.error!=='unknown_action'){toast('تعذر التحديث الآن، المعروض آخر بيانات محملة');return}m.innerHTML=`<p class="empty">${r.error==='unknown_action'?'انسخ ملف code.gs الجديد إلى Google Apps Script وانشر إصدارًا جديدًا حتى يعمل قسم الاختبارات.':esc(errText(r.error))}</p>`;return}
+  if(!r.ok){if(EXR&&r.error!=='unknown_action'){toast('تعذر التحديث الآن، المعروض آخر بيانات محملة');return}m.innerHTML=`<p class="empty">${r.error==='unknown_action'?'انسخ ملف code.gs الجديد إلى Google Apps Script وانشر إصدارا جديدا حتى يعمل قسم الاختبارات.':esc(errText(r.error))}</p>`;return}
   EXR=r;if(tab!=='exams')return;exSafe()}
 /* إذا حدث خطأ أثناء عرض التبويب يظهر نصه بدل التحميل المستمر */
 function exSafe(){try{exDraw()}catch(e){console.error(e);$('#main').innerHTML=`<p class="empty">تعذر عرض الاختبارات: <b dir="ltr">${esc(String(e&&e.message||e))}</b><br><small dir="ltr">${esc(String(e&&e.stack||'').split('\n').slice(0,3).join(' | '))}</small></p>`}}
@@ -1129,16 +1129,16 @@ function exDraw(){
   const by={};r.rows.forEach(x=>{(by[x.studentId]=by[x.studentId]||{})[x.examId]=x});
   const list=st.filter(s=>!selA.length||selA.includes(s.sectionId)).sort((a,b)=>sn(a.sectionId).localeCompare(sn(b.sectionId),'ar')||String(a.name||'').localeCompare(String(b.name||''),'ar'));
   const nOf=(id,f)=>r.rows.filter(x=>x.examId===id&&f(x)).length;
-  /* الاختبار الذي فتح أو سلّمه أحد يعد «أُجري»: من لم يختبره درجته صفر */
+  /* الاختبار الذي فتح أو سلمه أحد يعد «أجري»: من لم يختبره درجته صفر */
   const held=e=>e.open||r.rows.some(x=>x.examId===e.id);
   /* وقت دخول المتدرب ووقت تسليمه (أو نهاية وقته لمن يحل الآن) */
   const hm=d=>{const t=new Date(d);return isNaN(t)?'':t.toLocaleTimeString('ar-SA-u-nu-latn',{hour:'numeric',minute:'2-digit'})};
-  const tm=(x,e)=>{if(!x.startedAt)return '';const a=new Date(x.startedAt);if(x.submittedAt){const m=Math.max(1,Math.round((new Date(x.submittedAt)-a)/60000));return `<br><small class="exTm">دخل ${hm(x.startedAt)} · سلّم ${hm(x.submittedAt)}<br>(${AR(m)} دقيقة)</small>`}
+  const tm=(x,e)=>{if(!x.startedAt)return '';const a=new Date(x.startedAt);if(x.submittedAt){const m=Math.max(1,Math.round((new Date(x.submittedAt)-a)/60000));return `<br><small class="exTm">دخل ${hm(x.startedAt)} · سلم ${hm(x.submittedAt)}<br>(${AR(m)} دقيقة)</small>`}
     const mm=(()=>{const sid=((st.find(q=>q.id===x.studentId)||{}).sectionId)||x.sectionId||'_';const v=+((e.smin||{})[sid]);return v>0?v:e.min})();return `<br><small class="exTm">دخل ${hm(x.startedAt)}${mm?' · ينتهي '+hm(new Date(a.getTime()+mm*60000)):''}</small>`};
   /* مدة الحل: من دخول المتدرب إلى تسليمه بالدقائق، في عمود مستقل بجانب درجة كل اختبار */
   const durM=x=>x&&x.startedAt&&x.submittedAt?Math.max(1,Math.round((new Date(x.submittedAt)-new Date(x.startedAt))/60000)):null;
   const dcell=(s,e)=>{const x=(by[s.id]||{})[e.id];if(!x||!x.startedAt)return '<td class="num">—</td>';const m=durM(x);
-    return m!=null?`<td class="num"><b>${AR(m)}</b> <small>دقيقة</small><br><small class="exTm">دخل ${hm(x.startedAt)} · سلّم ${hm(x.submittedAt)}</small></td>`:`<td class="num"><small class="exTm">يحل الآن</small>${tm(x,e)}</td>`};
+    return m!=null?`<td class="num"><b>${AR(m)}</b> <small>دقيقة</small><br><small class="exTm">دخل ${hm(x.startedAt)} · سلم ${hm(x.submittedAt)}</small></td>`:`<td class="num"><small class="exTm">يحل الآن</small>${tm(x,e)}</td>`};
   const cell=(s,e)=>{const x=(by[s.id]||{})[e.id];if(!x)return `<td class="num">${held(e)?'<span class="exZ">0</span><br><small class="exTm exAb">غائب · لم يدخل</small>':'—'}</td>`;
     return `<td class="num" data-s="${esc(s.id)}" data-e="${e.id}">${x.submittedAt?`<b${+x.score===0?' class="exZ"':''}>${AR(x.score)}</b>${+x.score===0?'<br><small class="exTm">دخل وحل · نقاطه صفر</small>':''}${x.raw!==x.score?`<br><small class="exRaw">(${AR(x.raw)})</small>`:''}`:'<span class="tag">يحل الآن</span>'+(x.dev?`<br><button class="btn ghost sm exFree" data-s="${esc(s.id)}" data-e="${e.id}" title="إذا تعطل جواله أو انتقل إلى جهاز آخر">🔓 السماح بجهاز آخر</button>`:'')}</td>`};
   /* الحد الأدنى للاختبار النهائي: من لم يحصل على 25% من نقاطه (10 من 40) لا يجتاز مهما كان مجموعه */
@@ -1153,7 +1153,7 @@ function exDraw(){
   const total=s=>{if(!(r.exams.some(held)||s.work!=null))return '—';const t=Math.round(sumOf(s)*100)/100;return (t?AR(t):'<span class="exZ">0</span>')+`<br><small class="exRaw">من ${outOf(s)}</small>`};
   /* ملخص كل اختبار في الشعبة المختارة: المسلمون والمتوسط والأعلى والأدنى ونسبة النجاح (60% فأكثر) */
   const exStats=()=>`<div class="exStats">${rx.map(e=>{const v=list.map(s=>(by[s.id]||{})[e.id]).filter(x=>x&&x.submittedAt).map(x=>x.score);
-    const f=x=>AR(Math.round(x*100)/100);return `<div class="exStat"><b>${esc(e.t)}</b><span>سلّم ${AR(v.length)} من ${AR(list.length)}</span>${v.length?`<span>المتوسط ${f(v.reduce((a,x)=>a+x,0)/v.length)} من ${AR(e.max)}</span><span>الأعلى ${f(Math.max(...v))} · الأدنى ${f(Math.min(...v))}</span>`:'<span>لا توجد نتائج بعد</span>'}</div>`}).join('')}</div>`;
+    const f=x=>AR(Math.round(x*100)/100);return `<div class="exStat"><b>${esc(e.t)}</b><span>سلم ${AR(v.length)} من ${AR(list.length)}</span>${v.length?`<span>المتوسط ${f(v.reduce((a,x)=>a+x,0)/v.length)} من ${AR(e.max)}</span><span>الأعلى ${f(Math.max(...v))} · الأدنى ${f(Math.min(...v))}</span>`:'<span>لا توجد نتائج بعد</span>'}</div>`}).join('')}</div>`;
   const secOpts=(cur,all)=>(all?`<option value="all">جميع شعب الاختبارات</option>`:'')+secs.map(s=>`<option value="${esc(s.id)}" ${s.id===cur?'selected':''}>${esc(s.name)}</option>`).join('');
   /* موعد الاختبار لكل شعبة: بدون موعد = مفتوح طوال فتح الاختبار (كما هو الآن) */
   const wLoc=iso=>{if(!iso)return '';const d=new Date(iso);d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,16)};
@@ -1161,7 +1161,7 @@ function exDraw(){
   const wSt=w=>{const n=Date.now(),f=new Date(w.from).getTime(),t=new Date(w.to).getTime();return n<f?'⏳ لم يبدأ':n>t?'⛔ انتهى':'🟢 جار الآن'};
   const exWinHtml=e=>{const W=e.win||{},L=secs.concat(st.some(x=>!x.sectionId)?[{id:'_',name:'بدون شعبة'}]:[]),k=L.filter(x=>W[x.id]).length;
     return `<details class="exWin"><summary>🗓 <b>موعد الاختبار لكل شعبة</b> <small>(${k?AR(k)+' محدد':'بدون موعد: مفتوح ما دام الاختبار مفتوحا'})</small></summary>
-    <small class="sub">الشعبة بدون موعد تختبر في أي وقت ما دام الاختبار مفتوحا (كما هو الآن). الشعبة بموعد لا تبدأ قبل وقت البداية، وينتهي وقت الجميع عند وقت النهاية ولو دخل متأخرا، وتصحح إجابات من لم يسلّم تلقائيا. ويجب أن يكون الاختبار مفتوحا.</small>
+    <small class="sub">الشعبة بدون موعد تختبر في أي وقت ما دام الاختبار مفتوحا (كما هو الآن). الشعبة بموعد لا تبدأ قبل وقت البداية، وينتهي وقت الجميع عند وقت النهاية ولو دخل متأخرا، وتصحح إجابات من لم يسلم تلقائيا. ويجب أن يكون الاختبار مفتوحا.</small>
     ${L.map(x=>{const w=W[x.id];return `<div class="exWR" data-sec="${esc(x.id)}"><b>${esc(x.name)}</b>${w?`<span class="exWNow">${wSt(w)} · ${esc(wFmt(w.from))} ← ${esc(new Date(w.to).toLocaleTimeString('ar-SA-u-nu-latn',{hour:'numeric',minute:'2-digit'}))}</span>`:'<span class="exWNow">بدون موعد (مفتوح)</span>'}
       <label>البداية<input type="datetime-local" class="exWF" value="${wLoc(w&&w.from)}"></label><label>النهاية<input type="datetime-local" class="exWT" value="${wLoc(w&&w.to)}"></label>
       <div class="row" style="gap:6px"><button class="btn sm exWS">حفظ الموعد</button>${w?'<button class="btn ghost sm exWC">إلغاء الموعد</button>':''}</div></div>`}).join('')}</details>`};
@@ -1178,12 +1178,12 @@ function exDraw(){
         <div class="exPH"><span class="exSRn">شعبة <b>${esc(x.name)}</b></span><span class="exSRs">${e.open?S.t:'⚪ مغلقة'}</span>${w?`<span class="exSRw">${S.k==='closed'?'أغلقت '+esc(hm(w.to)):'الموعد: '+esc(tFmt(w.from))+' ← '+esc(hm(w.to))}</span>`:''}</div>
         <div class="exPR"><span class="exSRa">${e.ready===false?'<span class="exRaw">بانتظار بنك الأسئلة</span>':isOpen?`<button class="btn danger exSC">🔒 إغلاق</button>`:`<button class="btn exSO">🔓 فتح</button>`}</span>
           <span class="exPI exSRc">🔑 ${code?`<b dir="ltr">${code}</b><button class="btn ghost sm exNC" data-sec="${esc(x.id)}" title="رمز جديد">↻</button>`:'<span class="exRaw">—</span>'}</span>
-          <span class="exPI exSRk">سلّم <b>${AR(c.dn)}</b>${c.tot?` من ${AR(c.tot)}`:''} · يحل <b class="${c.nw?'exNw':''}">${AR(c.nw)}</b></span>
+          <span class="exPI exSRk">سلم <b>${AR(c.dn)}</b>${c.tot?` من ${AR(c.tot)}`:''} · يحل <b class="${c.nw?'exNw':''}">${AR(c.nw)}</b></span>
           <label class="exPI exSRm">⏱ <input type="number" class="exSMin ${own?'':'gen'}" min="5" max="180" value="${sMin(e,x.id)}" title="${own?'مدة خاصة بالشعبة':'المدة العامة'}"> د</label>
           <button class="btn ghost sm exSW">🗓 موعد</button></div>
         <div class="exWR" hidden><label>البداية<input type="datetime-local" class="exWF" value="${wLoc(w&&w.from)}"></label><label>النهاية<input type="datetime-local" class="exWT" value="${wLoc(w&&w.to)}"></label>
           <div class="row" style="gap:6px"><button class="btn sm exWS">حفظ الموعد</button>${w?'<button class="btn ghost sm exWC">إلغاء الموعد</button>':''}</div>
-          <small class="sub">الشعبة بموعد لا تبدأ قبل وقت البداية، وينتهي وقت الجميع عند وقت النهاية ولو دخل متأخرا، وتصحح إجابات من لم يسلّم تلقائيا.</small></div>
+          <small class="sub">الشعبة بموعد لا تبدأ قبل وقت البداية، وينتهي وقت الجميع عند وقت النهاية ولو دخل متأخرا، وتصحح إجابات من لم يسلم تلقائيا.</small></div>
       </div>`}).join('')}`};
   const SL=secs.concat(st.some(x=>!x.sectionId)?[{id:'_',name:'بدون شعبة'}]:[]);
   EXSET=EXSET.filter(id=>SL.some(x=>x.id===id));if(!EXSET.length||!AX.some(e=>e.id===EXSEL))EXSEL='';if(!EXOPEN){EXSET=[];EXSEL=''}
@@ -1200,7 +1200,7 @@ function exDraw(){
   const tDone=tList.filter(o=>o.x&&o.x.submittedAt),tAvg=tDone.length?tDone.reduce((a,o)=>a+tSc(o.x),0)/tDone.length:0;
   const trialHtml=TE?`<div class="card"><h2>🧪 نقاط الاختبار التعريفي</h2><p class="sub">للاطلاع فقط، ولا تدخل في النتائج. النقاط من ${AR(TE.max)}.</p>
    <div class="row" style="flex-wrap:wrap;gap:6px"><select id="exTrSec">${secOpts(tsel,true)}</select><button class="btn ghost sm" id="exTrX">⬇ تصدير Excel</button><button class="btn ghost sm" id="exTrR">↻ تحديث</button></div>
-   <p class="sub" style="margin-top:8px">سلّم ${AR(tDone.length)} من ${AR(tList.length)} · يحل الآن ${AR(tList.filter(o=>o.x&&!o.x.submittedAt).length)}${tDone.length?` · المتوسط <b>${AR(Math.round(tAvg*100)/100)}</b> من ${AR(TE.max)}`:''}</p>
+   <p class="sub" style="margin-top:8px">سلم ${AR(tDone.length)} من ${AR(tList.length)} · يحل الآن ${AR(tList.filter(o=>o.x&&!o.x.submittedAt).length)}${tDone.length?` · المتوسط <b>${AR(Math.round(tAvg*100)/100)}</b> من ${AR(TE.max)}`:''}</p>
    ${tList.length?`<div class="tableWrap"><table><thead><tr><th>الرقم</th><th>الاسم</th><th>النقاط<br><small>(${AR(TE.max)})</small></th><th>الشعبة</th></tr></thead><tbody>
    ${tList.map(o=>`<tr style="cursor:default"><td class="num">${esc(o.s.id)}</td><td>${esc(o.s.name)}</td><td class="num">${tSt(o.x)?`<span class="exRaw">${tSt(o.x)}</span>`:`<b>${AR(tSc(o.x))}</b>`}</td><td>${esc(sn(o.s.sectionId))}</td></tr>`).join('')}
    </tbody></table></div>`:'<p class="empty">لا يوجد متدربون في هذه الشعبة.</p>'}</div>`:'';
@@ -1226,11 +1226,11 @@ function exDraw(){
      <label class="rkAll"><input type="checkbox" class="rkSA" data-t="rkSC"> تحديد الكل (الظاهرين)</label><div class="rkList">${((DATA&&DATA.students)||[]).map(x=>{const inEx=st.some(y=>y.id===x.id),sn2=(pSecs.find(z=>z.id===x.sectionId)||{}).name||'';return `<label class="rkR" data-q="${esc((x.id+' '+x.name).toLowerCase())}"><input type="checkbox" class="rkSC" value="${esc(x.id)}" data-n="${esc(x.name)}" data-s="${esc(sn2)}"><span class="num">${esc(x.id)}</span><b>${esc(x.name)}</b><small>${esc(sn2)}${inEx?' · موجود في الاختبارات':''}</small></label>`}).join('')||'<p class="empty">لا يوجد متدربون في المنصة.</p>'}</div>
      <div class="row" style="gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn" id="rkSAdd">➕ إضافة المحددين</button><button class="btn ghost" id="exFromP">⬇ إضافة جميع متدربي المنصة</button></div></div>
     <div class="rkP" ${RKOPEN&&RK==='so'&&RKS==='xls'?'':'hidden'}><h3>📄 متدربون من خارج المنصة: ملف Excel</h3>
-     <ol class="rkSteps"><li>نزّل النموذج: <button class="btn ghost sm" id="exTpl">⬇ نموذج Excel</button></li><li>عبئه بثلاثة أعمدة: الرقم التدريبي، الاسم، الشعبة.</li><li>اختر الملف: <label class="btn ghost sm" style="cursor:pointer">📂 اختيار الملف<input type="file" id="exFile" accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv" hidden></label></li><li>اضغط «رفع» الذي يظهر تحت. المتدرب من خارج المنصة يختار كلمة مروره في أول دخول.</li></ol>
+     <ol class="rkSteps"><li>نزل النموذج: <button class="btn ghost sm" id="exTpl">⬇ نموذج Excel</button></li><li>عبئه بثلاثة أعمدة: الرقم التدريبي، الاسم، الشعبة.</li><li>اختر الملف: <label class="btn ghost sm" style="cursor:pointer">📂 اختيار الملف<input type="file" id="exFile" accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv" hidden></label></li><li>اضغط «رفع» الذي يظهر تحت. المتدرب من خارج المنصة يختار كلمة مروره في أول دخول.</li></ol>
      <div id="exImp"></div></div>
     <div class="rkP" ${RKOPEN&&RK==='so'&&RKS==='add'?'':'hidden'}><h3>➕ متدرب واحد من خارج المنصة</h3>
      <div class="rkF"><label>الرقم التدريبي<input type="text" id="exAid" inputmode="numeric"></label><label>الاسم<input type="text" id="exAnm"></label><label>الشعبة<select id="exAsec">${secs.map(s=>`<option value="${esc(s.name)}">${esc(s.name)}</option>`).join('')}<option value="__new">شعبة جديدة…</option></select></label></div>
-     <button class="btn" id="exAdd">➕ إضافة المتدرب</button><p class="sub">إذا كان الرقم موجودا تحدّث بياناته. متدرب المنصة يدخل بكلمة مرور المنصة، ومن خارجها يختار كلمة مروره في أول دخول.</p></div>
+     <button class="btn" id="exAdd">➕ إضافة المتدرب</button><p class="sub">إذا كان الرقم موجودا تحدث بياناته. متدرب المنصة يدخل بكلمة مرور المنصة، ومن خارجها يختار كلمة مروره في أول دخول.</p></div>
     <div class="rkP" ${RKOPEN&&RK==='snew'&&RKS==='p'?'':'hidden'}><h3>🏫 شعبة من المنصة</h3>
      <p class="sub" style="margin-top:0">اختر شعبة أو أكثر من شعب المنصة، فتضاف إلى الاختبارات بنفس الاسم ومعها جميع متدربيها، ويدخلون بكلمة مرور المنصة.</p>
      ${pSecs.length?`<label class="rkAll"><input type="checkbox" class="rkPSA" ${pSecs.length&&RKP.length===pSecs.length?'checked':''}> تحديد كل الشعب</label><div class="rkChk">${pSecs.map(x=>`<label class="rkC ${RKP.includes(x.id)?'on':''}"><input type="checkbox" class="rkPC" value="${esc(x.id)}" ${RKP.includes(x.id)?'checked':''}><b>${esc(x.name)}</b><small>${AR(x.n)} متدرب${x.inEx?' · موجودة في الاختبارات (تحدّث)':''}</small></label>`).join('')}</div>
@@ -1243,7 +1243,7 @@ function exDraw(){
      ${secs.length?`<div class="tableWrap"><table class="rkT"><thead><tr><th>الشعبة</th><th>عدد المتدربين</th><th></th></tr></thead><tbody>${secs.map(s=>`<tr class="exSec" data-id="${esc(s.id)}" style="cursor:default"><td><b>${esc(s.name)}</b></td><td class="num">${AR(st.filter(x=>x.sectionId===s.id).length)}</td><td style="white-space:nowrap">${RKM==='del'?'<button class="btn danger sm exSd">🗑 حذف</button>':'<button class="btn ghost sm exSr">✏ تعديل الاسم</button>'}</td></tr>`).join('')}</tbody></table></div>`:'<p class="empty">لا توجد شعب اختبارات بعد. استورد متدربي المنصة أو ملف Excel فتنشأ الشعب تلقائيا.</p>'}
      ${RKM==='del'?'<p class="sub">لا تحذف شعبة فيها متدربون: انقلهم أولا من «✏ تعديل ← 👨‍🎓 المتدرب»، أو احذفهم من «🗑 حذف ← 👨‍🎓 المتدرب».</p>':''}</div>
     <div class="rkP" ${RKOPEN&&RK==='stl'?'':'hidden'}><h3>${RKM==='del'?'🗑 حذف متدرب':'✏ تعديل متدرب'}</h3>
-     <p class="sub" style="margin-top:0">${RKM==='del'?'ابحث وحدد متدربا أو أكثر ثم اضغط «حذف المحددين». الحذف من كشف الاختبارات فقط، ولا يحذف من المنصة.':'ابحث عن المتدرب ثم عدّل اسمه أو انقله لشعبة أخرى أو أعد تعيين كلمة مروره.'}</p>
+     <p class="sub" style="margin-top:0">${RKM==='del'?'ابحث وحدد متدربا أو أكثر ثم اضغط «حذف المحددين». الحذف من كشف الاختبارات فقط، ولا يحذف من المنصة.':'ابحث عن المتدرب ثم عدل اسمه أو انقله لشعبة أخرى أو أعد تعيين كلمة مروره.'}</p>
      <div class="rkF"><label>بحث<input type="search" class="rkQ2" placeholder="الرقم التدريبي أو الاسم"></label></div>
      ${RKM==='del'?'<label class="rkAll"><input type="checkbox" class="rkSA" data-t="rkDC"> تحديد الكل (الظاهرين)</label>':''}<div class="rkList">${st.map(x=>`<div class="rkR rkE" data-id="${esc(x.id)}" data-q="${esc((x.id+' '+x.name).toLowerCase())}">${RKM==='del'?`<input type="checkbox" class="rkDC" value="${esc(x.id)}">`:''}<span class="num">${esc(x.id)}</span><b>${esc(x.name)}</b><small>${x.platform?'المنصة':'خارجي'}</small>${RKM==='del'?`<small>${esc(sn(x.sectionId))}</small>`:`<select class="rkMv">${secOpts(x.sectionId,false)}</select><button class="btn ghost sm rkEn">✏ الاسم</button><button class="btn ghost sm rkPw">🔑 كلمة المرور</button>`}</div>`).join('')||'<p class="empty">لا يوجد متدربون في الكشف.</p>'}</div>
      ${RKM==='del'?'<button class="btn danger" id="rkDel" style="margin-top:10px">🗑 حذف المحددين</button>':''}</div>
@@ -1337,13 +1337,13 @@ function exDraw(){
     const inp=c.querySelector('.exMin input');inp.onchange=async()=>{const x=await api({a:'texams',token:TOKEN,op:'set',id,min:+inp.value});if(x.ok){toast('تم حفظ المدة');drawExams()}else toast(errText(x.error))}});
   $('#exFromP').onclick=()=>{if(!confirm('إضافة جميع متدربي المنصة إلى كشف الاختبارات بشعبهم الحالية؟ تنشأ شعب الاختبارات بأسماء شعب المنصة.'))return;run({op:'fromplatform'},'تم استيراد متدربي المنصة')};
   $('#exTpl').onclick=()=>saveBook([['متدربو الاختبارات',[['الرقم التدريبي','الاسم','الشعبة'],['441001','أحمد محمد','شعبة 101'],['441002','خالد سعد','شعبة 102']],[18,28,18]]],'نموذج-متدربي-الاختبارات.xlsx');
-  $('#exFile').onchange=async e=>{const f=e.target.files[0];if(!f)return;const box=$('#exImp');box.innerHTML='<p class="empty"><span class="spin"></span> جارٍ قراءة الملف…</p>';
-    let rows;try{rows=(await EXCEL.read(f)).map(x=>(x||[]).map(c=>c==null?'':c)).filter(x=>x.some(c=>String(c).trim()))}catch(err){box.innerHTML='<p class="msg bad">تعذّرت قراءة الملف. احفظه بصيغة .xlsx أو CSV.</p>';return}
+  $('#exFile').onchange=async e=>{const f=e.target.files[0];if(!f)return;const box=$('#exImp');box.innerHTML='<p class="empty"><span class="spin"></span> جار قراءة الملف…</p>';
+    let rows;try{rows=(await EXCEL.read(f)).map(x=>(x||[]).map(c=>c==null?'':c)).filter(x=>x.some(c=>String(c).trim()))}catch(err){box.innerHTML='<p class="msg bad">تعذرت قراءة الملف. احفظه بصيغة .xlsx أو CSV.</p>';return}
     let hi=rows.findIndex(x=>x.some(c=>HEAD.id.map(norm).includes(norm(c))||HEAD.name.map(norm).includes(norm(c)))),ci={id:0,name:1,section:2};
     if(hi>=0){const h=rows[hi].map(norm);ci={id:h.findIndex(c=>HEAD.id.map(norm).includes(c)),name:h.findIndex(c=>HEAD.name.map(norm).includes(c)),section:h.findIndex(c=>HEAD.section.map(norm).includes(c))};rows=rows.slice(hi+1)}
     if(ci.id<0||ci.name<0){box.innerHTML='<p class="msg bad">لم أجد عمودي «الرقم التدريبي» و«الاسم». استخدم النموذج.</p>';return}
     const good=rows.map(x=>({id:String(x[ci.id]||'').replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).trim(),name:String(x[ci.name]||'').trim(),section:ci.section>=0?String(x[ci.section]||'').trim():''})).filter(x=>x.id&&x.name);
-    box.innerHTML=`<p class="sub">${AR(good.length)} متدربًا في الملف.</p><button class="btn" id="exUp" ${good.length?'':'disabled'}>رفع ${AR(good.length)} متدربًا إلى كشف الاختبارات</button>`;
+    box.innerHTML=`<p class="sub">${AR(good.length)} متدربا في الملف.</p><button class="btn" id="exUp" ${good.length?'':'disabled'}>رفع ${AR(good.length)} متدربا إلى كشف الاختبارات</button>`;
     $('#exUp').onclick=async()=>{$('#exUp').disabled=true;for(let i=0;i<good.length;i+=150){const x=await api({a:'texroster',token:TOKEN,op:'import',rows:good.slice(i,i+150)});if(!x.ok){toast(errText(x.error));return}}toast('تم الاستيراد');drawExams()}};
   $('#exAdd').onclick=()=>{const id=$('#exAid').value.replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).trim(),name=$('#exAnm').value.trim();let sec=$('#exAsec').value;
     if(!id||!name)return toast('اكتب الرقم التدريبي والاسم');if(sec==='__new'){sec=(prompt('اسم الشعبة الجديدة:')||'').trim();if(!sec)return}
@@ -1356,7 +1356,7 @@ function exDraw(){
   $('#exSec').onchange=e=>{EXSEC=e.target.value;ls.set('p101-exsec',EXSEC);exDraw()};
   $('#exR').onclick=()=>drawExams();
   if(TE){$('#exTrSec').onchange=e=>{EXTS=e.target.value;ls.set('p101-extrs',EXTS);exDraw()};$('#exTrR').onclick=()=>drawExams();
-    $('#exTrX').onclick=()=>saveBook([['الاختبار التجريبي',[['الرقم التدريبي','الاسم','الشعبة','النقاط ('+TE.max+')','الحالة'],...tList.map(o=>[o.s.id,o.s.name,sn(o.s.sectionId),tSt(o.x)?'':tSc(o.x),tSt(o.x)||'سلّم'])],[16,28,18,14,12]]],'نقاط-الاختبار-التجريبي.xlsx')}
+    $('#exTrX').onclick=()=>saveBook([['الاختبار التجريبي',[['الرقم التدريبي','الاسم','الشعبة','النقاط ('+TE.max+')','الحالة'],...tList.map(o=>[o.s.id,o.s.name,sn(o.s.sectionId),tSt(o.x)?'':tSc(o.x),tSt(o.x)||'سلم'])],[16,28,18,14,12]]],'نقاط-الاختبار-التجريبي.xlsx')}
     document.querySelectorAll('.exWkW').forEach(x=>x.onchange=()=>{const v=Math.max(0,Math.min(WK_UNIT,+x.value||0));WKW[+x.dataset.i]=v;const t=Math.round(WKW.reduce((a,y)=>a+(+y||0),0)*100)/100;if(t!==WK_UNIT){const e=$('#exWkSum');e.textContent='المجموع '+t+' من 4 — يجب أن يكون 4';e.className='bad';return}ls.set('p101-wkw4b',WKW);exDraw()});
   m.querySelectorAll('tbody tr[data-id]:not(.exSec)').forEach(tr=>{const id=tr.dataset.id,s=st.find(x=>x.id===id);
     tr.querySelector('.exMv').onchange=e=>run({op:'move',id,sectionId:e.target.value},'تم نقل المتدرب');
@@ -1370,7 +1370,7 @@ function exDraw(){
     const d=document.createElement('div');d.className='exRD';
     d.innerHTML=`<div role="dialog" aria-label="إعادة الاختبار"><h3>🔄 إعادة الاختبار</h3><p>المتدرب: <b>${esc(s.name)}</b> (${esc(s.id)})</p>
      ${!opts.length?'<p>لا توجد له محاولة في '+(one?'هذا الاختبار':'أي اختبار')+'، فلا شيء يعاد.</p>':opts.length===1?`<p>الاختبار: <b>${esc(opts[0].e.t)}</b><br>الحالة الآن: <b>${st2(opts[0])}</b></p><input type="hidden" name="exRE" value="${opts[0].e.id}">`:`<p style="margin-bottom:4px">اختر الاختبار:</p>${opts.map((o,k)=>`<label class="exRO"><input type="radio" name="exRE" value="${o.e.id}" ${k===0?'checked':''}> <b>${esc(o.e.t)}</b> <small>(${st2(o)})</small></label>`).join('')}`}
-     ${opts.length?'<p class="exRDw">تُحذف محاولته ونقاطه في هذا الاختبار نهائيا، ويبدأ من جديد بأسئلة جديدة.</p>':''}
+     ${opts.length?'<p class="exRDw">تحذف محاولته ونقاطه في هذا الاختبار نهائيا، ويبدأ من جديد بأسئلة جديدة.</p>':''}
      <div class="row" style="gap:8px">${opts.length?'<button class="btn danger" data-k="ok">🔄 إعادة الاختبار</button>':''}<button class="btn ghost" data-k="no">${opts.length?'إلغاء':'إغلاق'}</button></div></div>`;
     document.body.appendChild(d);const close=()=>d.remove();d.onclick=e2=>{if(e2.target===d)close()};d.querySelector('[data-k=no]').onclick=close;d.querySelector('[data-k=no]').focus();
     const ok=d.querySelector('[data-k=ok]');if(ok)ok.onclick=async()=>{const v=(d.querySelector('input[name=exRE]:checked')||d.querySelector('input[name=exRE]')).value;ok.disabled=true;
@@ -1381,7 +1381,7 @@ function exDraw(){
 }
 /* ===== رمز التسجيل للشعب (أول دخول المتدرب) والحسابات المقفلة ===== */
 let REG=null,REGI=null;
-const REGCARD=`<div class="card" id="regC"><h2>🔑 رمز التسجيل لأول دخول</h2><p class="sub">افتح رمز الشعبة واكتبه على السبورة أو أرسله لقروب الشعبة. يستخدمه فقط من لم يسجل بعد أو من أعدت تعيين كلمة مروره، ومن سجّل لا يحتاجه. يعمل لمتدربي المنصة والاختبارات.</p><div id="regB"><p class="sub"><span class="spin"></span></p></div></div>`;
+const REGCARD=`<div class="card" id="regC"><h2>🔑 رمز التسجيل لأول دخول</h2><p class="sub">افتح رمز الشعبة واكتبه على السبورة أو أرسله لقروب الشعبة. يستخدمه فقط من لم يسجل بعد أو من أعدت تعيين كلمة مروره، ومن سجل لا يحتاجه. يعمل لمتدربي المنصة والاختبارات.</p><div id="regB"><p class="sub"><span class="spin"></span></p></div></div>`;
 async function regLoad(op){const b=$('#regB');if(!b)return;let r;try{r=await api(Object.assign({a:'tregcode',token:TOKEN},op||{}))}catch(e){b.innerHTML='<p class="sub">تعذر الاتصال بالخادم.</p>';return}
   if(!r.ok){b.innerHTML='<p class="sub">'+(r.error==='unknown_action'?'انسخ ملف code.gs الجديد (الإصدار 21) وانشر إصدارا جديدا حتى يعمل رمز التسجيل.':esc(errText(r.error)))+'</p>';return}
   REG=r;REG.at=Date.now();regDraw();clearInterval(REGI);REGI=setInterval(()=>{if(!$('#regB'))return clearInterval(REGI);regDraw()},30000)}
@@ -1399,7 +1399,7 @@ function drawSections(){
   m.innerHTML=REGCARD+`<div class="card"><h2>إضافة شعبة</h2><div class="row"><input type="text" id="ns" placeholder="مثال: شعبة 101 — الفصل الأول" style="flex:1;min-width:180px"><button class="btn" id="addS">إضافة</button></div></div>
   ${DATA.sections.length?`<div class="tableWrap"><table><thead><tr><th>الشعبة</th><th>المتدربون</th><th>دخلوا</th><th>متوسط الاختبارات</th><th>متوسط التمارين</th><th>مجموع الوقت</th><th></th></tr></thead><tbody>
   ${DATA.sections.map(s=>{const st=DATA.students.filter(x=>x.sectionId===s.id&&x.id!=='DEMO');return `<tr data-id="${esc(s.id)}"><td><b>${esc(s.name)}</b></td><td class="num">${st.length}</td><td class="num">${st.filter(x=>x.loginCount).length}</td><td>${pct(avg(st.map(x=>x.quizAvg).filter(v=>v!=null)))}</td><td>${pct(avg(st.map(x=>x.probAvg).filter(v=>v!=null)))}</td><td>${fmtTime(st.reduce((a,x)=>a+x.totalSec,0))}</td><td><button class="btn ghost sm ren">تعديل</button> <button class="btn danger sm del">حذف</button></td></tr>`}).join('')}
-  </tbody></table></div>`:'<div class="card empty">لا توجد شعب بعد. أضف شعبة، أو استورد ملف Excel فيه عمود «الشعبة» فتُنشأ الشعب تلقائيًا.</div>'}`;
+  </tbody></table></div>`:'<div class="card empty">لا توجد شعب بعد. أضف شعبة، أو استورد ملف Excel فيه عمود «الشعبة» فتنشأ الشعب تلقائيا.</div>'}`;
   regLoad();
   $('#addS').onclick=async()=>{const n=$('#ns').value.trim();if(!n)return toast(ERR.name_required);const r=await api({a:'tsection',token:TOKEN,op:'add',name:n});if(r.ok){toast('تمت إضافة الشعبة');load()}else toast(errText(r.error))};
   m.querySelectorAll('tbody tr').forEach(tr=>{const id=tr.dataset.id;
@@ -1411,7 +1411,7 @@ function drawSections(){
 
 /* ---------- Excel ---------- */
 
-/* الطباعة لا تعمل داخل تطبيق الشاشة الرئيسية في الآيفون؛ نوجّه المدرب إلى Safari */
+/* الطباعة لا تعمل داخل تطبيق الشاشة الرئيسية في الآيفون؛ نوجه المدرب إلى Safari */
 function printReport(){
   const standalone=navigator.standalone||matchMedia('(display-mode: standalone)').matches;
   if(!standalone){print();return}
@@ -1419,17 +1419,17 @@ function printReport(){
   const d=document.createElement('div');d.className='drawer';
   d.innerHTML=`<div role="dialog" aria-label="حفظ التقرير PDF" style="max-width:460px;margin:auto;align-self:center"><div class="dhead"><div><h2>📄 حفظ التقرير PDF</h2></div><button class="x" aria-label="إغلاق">✕</button></div>
   <div style="padding:14px 16px;line-height:1.9"><p>الطباعة وحفظ PDF لا يعملان داخل أيقونة المنصة على الشاشة الرئيسية. افتح لوحة المدرب في <b>Safari</b>:</p>
-  <ol style="padding-inline-start:1.3em;margin:6px 0"><li>انسخ الرابط بالزر أدناه.</li><li>افتح Safari والصق الرابط، ثم سجّل الدخول.</li><li>افتح التقارير واضغط «طباعة / PDF»، ثم اختر <b>حفظ في الملفات</b> أو شارك الملف.</li></ol>
+  <ol style="padding-inline-start:1.3em;margin:6px 0"><li>انسخ الرابط بالزر أدناه.</li><li>افتح Safari والصق الرابط، ثم سجل الدخول.</li><li>افتح التقارير واضغط «طباعة / PDF»، ثم اختر <b>حفظ في الملفات</b> أو شارك الملف.</li></ol>
   <div class="row" style="margin-top:10px"><input readonly value="${url}" style="flex:1;direction:ltr" id="prU"><button class="btn sm" id="prC">نسخ الرابط</button></div></div></div>`;
   document.body.appendChild(d);const close=()=>d.remove();d.onclick=e=>{if(e.target===d)close()};d.querySelector('.x').onclick=close;
   d.querySelector('#prC').onclick=async()=>{const i=d.querySelector('#prU');try{await navigator.clipboard.writeText(url);toast('تم نسخ الرابط')}catch(e){i.select();document.execCommand('copy');toast('تم نسخ الرابط')}};
 }
-function saveBook(sheets,name){try{EXCEL.write(sheets,name);toast('تم إنشاء الملف: '+name)}catch(e){toast('تعذّر إنشاء ملف Excel.')}return Promise.resolve()}
+function saveBook(sheets,name){try{EXCEL.write(sheets,name);toast('تم إنشاء الملف: '+name)}catch(e){toast('تعذر إنشاء ملف Excel.')}return Promise.resolve()}
 const HEAD={id:['الرقم التدريبي','الرقم','رقم المتدرب','رقم','id','ID','student id','StudentID','الرقم الأكاديمي','رقم الهوية'],name:['الاسم','اسم المتدرب','الاسم الكامل','name','Name','student name'],section:['الشعبة','الشعبه','رقم الشعبة','section','Section','class','المجموعة']};
 const norm=s=>String(s||'').trim().toLowerCase().replace(/[ـ]/g,'');
 function drawImport(){
   const m=$(tab==='sections'?'#impBox':'#main');if(!m)return;
-  m.innerHTML=`<div class="card"><h2>1. حمّل النموذج</h2><p class="sub">ملف Excel بثلاثة أعمدة: <b>الرقم التدريبي</b>، <b>الاسم</b>، <b>الشعبة</b>. يمكنك أيضًا استخدام أي ملف لديك فيه هذه الأعمدة.</p><button class="btn ghost" id="tpl">⬇ تحميل نموذج Excel</button></div>
+  m.innerHTML=`<div class="card"><h2>1. حمل النموذج</h2><p class="sub">ملف Excel بثلاثة أعمدة: <b>الرقم التدريبي</b>، <b>الاسم</b>، <b>الشعبة</b>. يمكنك أيضا استخدام أي ملف لديك فيه هذه الأعمدة.</p><button class="btn ghost" id="tpl">⬇ تحميل نموذج Excel</button></div>
   <div class="card"><h2>2. اختر الملف</h2><label class="drop" id="drop"><input type="file" id="file" accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv" hidden>اضغط لاختيار ملف Excel أو CSV<br><small>من الجوال: يفتح تطبيق «الملفات»</small></label>
   <div class="row" style="margin-top:10px"><span>شعبة المتدربين الذين ليس لهم شعبة في الملف:</span><select id="defSec"><option value="">بدون شعبة</option>${DATA.sections.map(s=>`<option value="${esc(s.name)}">${esc(s.name)}</option>`).join('')}</select></div></div>
   <div id="prev"></div>`;
@@ -1438,9 +1438,9 @@ function drawImport(){
   $('#file').onchange=e=>{if(e.target.files[0])readFile(e.target.files[0])};
 }
 async function readFile(f){
-  const p=$('#prev');p.innerHTML='<p class="empty"><span class="spin"></span> جارٍ قراءة الملف…</p>';
+  const p=$('#prev');p.innerHTML='<p class="empty"><span class="spin"></span> جار قراءة الملف…</p>';
   let rows;
-  try{rows=await EXCEL.read(f)}catch(e){p.innerHTML=`<p class="empty">${e.message==='old_xls'?'هذا ملف Excel قديم (.xls). افتحه واحفظه بصيغة .xlsx ثم أعد المحاولة.':e.message==='no_inflate'?'متصفحك قديم ولا يدعم قراءة ملفات Excel. حدّث النظام أو احفظ الملف بصيغة CSV.':'تعذّرت قراءة الملف. تأكد أنه ملف Excel (.xlsx) أو CSV.'}</p>`;return}
+  try{rows=await EXCEL.read(f)}catch(e){p.innerHTML=`<p class="empty">${e.message==='old_xls'?'هذا ملف Excel قديم (.xls). افتحه واحفظه بصيغة .xlsx ثم أعد المحاولة.':e.message==='no_inflate'?'متصفحك قديم ولا يدعم قراءة ملفات Excel. حدث النظام أو احفظ الملف بصيغة CSV.':'تعذرت قراءة الملف. تأكد أنه ملف Excel (.xlsx) أو CSV.'}</p>`;return}
   rows=rows.map(r=>(r||[]).map(c=>c==null?'':c));
   rows=rows.filter(r=>r.some(c=>String(c).trim()));
   if(!rows.length){p.innerHTML='<p class="empty">الملف فارغ.</p>';return}
@@ -1453,17 +1453,17 @@ async function readFile(f){
   const good=data.filter(x=>x.id&&x.name),bad=data.length-good.length;
   const ids=new Set(DATA.students.map(s=>s.id));const nw=good.filter(x=>!ids.has(x.id)).length;
   const secs=[...new Set(good.map(x=>x.section).filter(Boolean))];const newSecs=secs.filter(s=>!DATA.sections.some(x=>x.name===s));
-  p.innerHTML=`<div class="card"><h2>3. راجع ثم ارفع</h2><p class="sub">${AR(good.length)} متدربًا صالحًا (${AR(nw)} جديد، ${AR(good.length-nw)} موجود وسيُحدَّث)${bad?` · ${AR(bad)} صفًا ناقصًا سيُتجاهل`:''}${newSecs.length?` · شعب جديدة ستُنشأ: ${newSecs.map(esc).join('، ')}`:''}</p>
+  p.innerHTML=`<div class="card"><h2>3. راجع ثم ارفع</h2><p class="sub">${AR(good.length)} متدربا صالحا (${AR(nw)} جديد، ${AR(good.length-nw)} موجود وسيُحدَّث)${bad?` · ${AR(bad)} صفا ناقصا سيتجاهل`:''}${newSecs.length?` · شعب جديدة ستنشأ: ${newSecs.map(esc).join('، ')}`:''}</p>
   <div class="tableWrap" style="max-height:320px;overflow:auto"><table><thead><tr><th>الرقم التدريبي</th><th>الاسم</th><th>الشعبة</th></tr></thead><tbody>${good.slice(0,200).map(x=>`<tr><td class="num">${esc(x.id)}</td><td>${esc(x.name)}</td><td>${esc(x.section||'—')}</td></tr>`).join('')}</tbody></table></div>
-  <div class="row" style="margin-top:12px"><button class="btn" id="up" ${good.length?'':'disabled'}>رفع ${AR(good.length)} متدربًا</button><span class="msg" id="upm"></span></div></div>`;
+  <div class="row" style="margin-top:12px"><button class="btn" id="up" ${good.length?'':'disabled'}>رفع ${AR(good.length)} متدربا</button><span class="msg" id="upm"></span></div></div>`;
   $('#up').onclick=async()=>{const b=$('#up');b.disabled=true;let a=0,u=0;
     for(let i=0;i<good.length;i+=150){$('#upm').innerHTML=`<span class="spin"></span> ${AR(Math.min(i+150,good.length))} / ${AR(good.length)}`;
       const r=await api({a:'tstudents',token:TOKEN,op:'import',rows:good.slice(i,i+150)});if(!r.ok){$('#upm').className='msg bad';$('#upm').textContent=errText(r.error);b.disabled=false;return}a+=r.added;u+=r.updated}
-    $('#upm').className='msg good';$('#upm').textContent=`تم: أُضيف ${AR(a)} وحُدِّث ${AR(u)}.`;toast('تم الاستيراد');await load()};
+    $('#upm').className='msg good';$('#upm').textContent=`تم: أضيف ${AR(a)} وحُدِّث ${AR(u)}.`;toast('تم الاستيراد');await load()};
 }
 function drawExport(){
   const m=$(tab==='students'?'#expBox':'#main');if(!m)return;
-  m.innerHTML=`<div class="card"><h2>تصدير إلى Excel</h2><p class="sub">اختر الشعبة ثم نوع التقرير. يُحفظ الملف في «الملفات» على الجوال أو «التنزيلات» على الكمبيوتر.</p>
+  m.innerHTML=`<div class="card"><h2>تصدير إلى Excel</h2><p class="sub">اختر الشعبة ثم نوع التقرير. يحفظ الملف في «الملفات» على الجوال أو «التنزيلات» على الكمبيوتر.</p>
   <div class="row" style="margin-bottom:12px"><select id="es"><option value="all">كل الشعب</option>${DATA.sections.map(s=>`<option value="${esc(s.id)}">${esc(s.name)}</option>`).join('')}</select></div>
   <div class="row"><button class="btn" id="e1">⬇ ملخص النقاط والحضور</button><button class="btn ghost" id="e2">⬇ نقاط كل درس (جدول تفصيلي)</button><button class="btn ghost" id="e3">⬇ سجل كل المحاولات</button><button class="btn ghost" id="e4">⬇ قائمة المتدربين فقط</button></div><p class="msg" id="em"></p></div>`;
   const sel=()=>$('#es').value,stu=()=>DATA.students.filter(s=>sel()==='all'||s.sectionId===sel()),tag=()=>sel()==='all'?'كل-الشعب':secName(sel());
@@ -1472,7 +1472,7 @@ function drawExport(){
     ...stu().map(s=>[s.id,s.name,secName(s.sectionId),s.loginCount,xd(s.firstLogin),xd(s.lastLogin),Math.round(s.totalSec/60),r0(s.quizAvg),r0(s.probAvg),r0(s.overall),s.doneN,s.progress])],[16,26,16,10,20,20,14,14,14,10,12,10]]],`نقاط-${tag()}.xlsx`);
   $('#e2').onclick=()=>{const head=['الرقم التدريبي','الاسم','الشعبة'];LESSONS.forEach(l=>{head.push('اختبار: '+l.t);head.push('تمارين: '+l.t)});
     saveBook([['نقاط الدروس',[head,...stu().map(s=>{const r=[s.id,s.name,secName(s.sectionId)];LESSONS.forEach(l=>{r.push(r0(s.quiz[l.k]));r.push(r0(s.probL[l.k]))});return r})]]],`نقاط-الدروس-${tag()}.xlsx`)};
-  $('#e3').onclick=async()=>{$('#em').innerHTML='<span class="spin"></span> جارٍ جلب السجل…';const r=await api({a:'tresults',token:TOKEN,sectionId:sel()==='all'?'':sel()});if(!r.ok){$('#em').textContent=errText(r.error);return}
+  $('#e3').onclick=async()=>{$('#em').innerHTML='<span class="spin"></span> جار جلب السجل…';const r=await api({a:'tresults',token:TOKEN,sectionId:sel()==='all'?'':sel()});if(!r.ok){$('#em').textContent=errText(r.error);return}
     const nm=Object.fromEntries(DATA.students.map(s=>[s.id,s.name]));
     await saveBook([['المحاولات',[['التاريخ','الرقم التدريبي','الاسم','الشعبة','النوع','الدرس','النقاط','من','النسبة %'],...r.results.map(x=>[xd(x.time),x.studentId,nm[x.studentId]||'',secName(x.sectionId),x.kind==='quiz'?'اختبار':'تمرين',LT[String(x.lessonKey).split('.')[0]]||x.lessonTitle,x.score,x.max,x.percent])],[20,16,26,16,10,34,8,6,10]]],`سجل-المحاولات-${tag()}.xlsx`);$('#em').textContent=''};
   $('#e4').onclick=()=>saveBook([['المتدربون',[['الرقم التدريبي','الاسم','الشعبة'],...stu().map(s=>[s.id,s.name,secName(s.sectionId)])],[16,26,16]]],`المتدربون-${tag()}.xlsx`);
@@ -1490,7 +1490,7 @@ function drawSettings(){
   const m=$('#main');
   m.innerHTML=`<div class="card"><h2>رابط المنصة للمتدربين</h2><p class="sub">أرسل هذا الرابط لمتدربيك، ويدخل كل منهم برقمه التدريبي:</p><div class="row"><input type="text" readonly value="${esc(location.href.replace(/teacher\.html.*$/,''))}" style="flex:1;direction:ltr" id="lnk"><button class="btn ghost" id="cpl">نسخ</button></div></div><div id="aiSet"></div><div class="card lgG"><h2>🔑 بيانات الدخول</h2><div class="card inC"><h2>المدرب</h2><p class="sub">تغيير اسم المستخدم أو كلمة المرور لدخول لوحة المدرب.</p><div class="row"><input type="text" id="nu" placeholder="اسم مستخدم جديد: 6 خانات (اختياري)" autocapitalize="off" style="flex:1;min-width:160px;direction:ltr"><input type="password" id="np" placeholder="كلمة مرور جديدة: 12 خانة قوية (اختياري)" style="flex:1;min-width:160px" autocomplete="new-password"><button class="btn" id="cp">حفظ</button></div></div>
   <div class="card inC"><h2>حساب المعاينة</h2><p class="sub">يدخل به المدرب من شاشة دخول المتدربين على أي جهاز، كما يدخل متدربوه.</p>
-  <div class="stats" style="margin-bottom:8px"><div class="stat"><small>اسم المستخدم</small><b class="en" style="direction:ltr;display:block;text-align:right">demo</b></div><div class="stat"><small>كلمة المرور</small><b style="font-size:16px">${DATA.demo&&DATA.demo.hasPw?'✓ محددة':'لم تُحدد بعد'}</b></div></div>
+  <div class="stats" style="margin-bottom:8px"><div class="stat"><small>اسم المستخدم</small><b class="en" style="direction:ltr;display:block;text-align:right">demo</b></div><div class="stat"><small>كلمة المرور</small><b style="font-size:16px">${DATA.demo&&DATA.demo.hasPw?'✓ محددة':'لم تحدد بعد'}</b></div></div>
   <div class="row"><input type="password" id="dpw" placeholder="كلمة مرور حساب المعاينة (4 أحرف على الأقل)" autocomplete="new-password" style="flex:1;min-width:200px"><button class="btn" id="dsp">${DATA.demo&&DATA.demo.hasPw?'تغيير كلمة المرور':'تعيين كلمة المرور'}</button></div><p class="msg" id="dpm"></p>${DATA.demo?'<div class="row" style="margin-top:8px"><button class="btn danger" id="rs">مسح نتائج حساب المعاينة</button></div><p class="sub" style="margin:6px 0 0">يمسح نتائج حساب المعاينة فقط، ولا يمس المتدربين.</p>':''}</div></div><div class="card"><h2>👥 إدارة المتدربين</h2><p class="sub">اختر الشعبة ثم المتدرب. يدخل المتدرب برقمه التدريبي، ويختار كلمة مروره بنفسه.</p><div class="row"><select id="psS">${DATA.sections.map(x=>`<option value="${esc(x.id)}">${esc(x.name)}</option>`).join('')}</select><select id="psT" style="flex:1"></select></div><p class="sub" id="psL" style="margin:8px 0"></p><div class="row"><button class="btn" id="psR">إعادة تعيين كلمة المرور</button><button class="btn ghost" id="psU" hidden>🔓 فك القفل</button></div><div class="row" style="margin-top:8px"><button class="btn ghost" id="pmN">تعديل الاسم</button><select id="pmS"><option value="">نقل إلى شعبة…</option>${DATA.sections.map(x=>`<option value="${esc(x.id)}">${esc(x.name)}</option>`).join('')}</select><button class="btn danger" id="pmD">حذف المتدرب</button></div></div><div id="wkC"><div class="card"><h2>📐 توزيع نقاط مهام الدروس</h2><p class="sub">مهام الدروس (20) = 4 نقاط لكل وحدة × 5 وحدات. وزع نقاط الوحدة (4) على الأجزاء الأربعة، والمجموع 4. الجزء الذي نقاطه 0 لا يدخل في الحساب.</p><div class="wkS">${[[0,'اختبر نفسك'],[1,'الأمثلة والتمارين التفاعلية'],[2,'التجارب العملية التفاعلية'],[3,'أسئلة المشاركة']].map(([i,t])=>`<label class="wkR"><span>${t}</span><input class="wWkS" data-i="${i}" type="number" min="0" max="4" step="0.25" value="${WKW[i]}"></label>`).join('')}</div><div class="row" style="margin-top:8px;align-items:center"><span id="wkSum" class="good">المجموع ${AR(WKW.reduce((a,x)=>a+(+x||0),0))} من 4</span><button class="btn" id="wkSv">حفظ التوزيع</button></div><p class="sub" style="margin:6px 0 0">يطبق فورا على كل المتدربين وفي كل الأجهزة، وتعاد حسبة نقاطهم من إنجازهم المحفوظ.</p></div></div>`;
   $('#cp').onclick=async()=>{const pw=$('#np').value,user=$('#nu').value.trim();if(!pw&&!user)return;
     if(user&&user.length<6)return toast(ERR.short_user);if(pw&&!(pw.length>=12&&/[A-Z]/.test(pw)&&/[a-z]/.test(pw)&&/[0-9]/.test(pw)&&/[^A-Za-z0-9\s]/.test(pw)&&!/\s/.test(pw)))return toast(ERR.weak_password);const r=await api({a:'tpw',token:TOKEN,pw,user});toast(r.ok?'تم الحفظ':errText(r.error));if(r.ok){$('#np').value='';$('#nu').value=''}};
@@ -1513,7 +1513,7 @@ function drawSettings(){
   {const cur=()=>{const id=$('#psT').value;return id?(DATA.students.find(x=>x.id===id)||null):null};
    $('#pmN').onclick=async()=>{const st=cur();if(!st)return;const n=prompt('الاسم الجديد:',st.name);if(!n)return;const r=await api({a:'tstudents',token:TOKEN,op:'update',id:st.id,name:n});if(r.ok){toast('تم التعديل');load()}else toast(errText(r.error))};
    $('#pmS').onchange=async e=>{const st=cur();if(!st||!e.target.value)return;const r=await api({a:'tstudents',token:TOKEN,op:'update',id:st.id,sectionId:e.target.value});if(r.ok){toast('تم النقل');load()}else toast(errText(r.error))};
-   $('#pmD').onclick=async()=>{const st=cur();if(!st||!confirm('حذف '+st.name+' نهائيًا؟'))return;const r=await api({a:'tstudents',token:TOKEN,op:'delete',id:st.id});if(r.ok){toast('تم الحذف');load()}else toast(errText(r.error))}}
+   $('#pmD').onclick=async()=>{const st=cur();if(!st||!confirm('حذف '+st.name+' نهائيا؟'))return;const r=await api({a:'tstudents',token:TOKEN,op:'delete',id:st.id});if(r.ok){toast('تم الحذف');load()}else toast(errText(r.error))}}
   drawAI();
 }
 boot();

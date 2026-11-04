@@ -4800,7 +4800,7 @@ function mount(host,opts){opts=opts||{};const WH=opts.watchHost||host;
   WH.insertAdjacentHTML('beforeend',`<style>${CSS}</style><div class="wsc"><h4 style="margin:2px 0 6px">🎬 شاهد: تركيب الأجهزة وطريقة القياس</h4>
    ${svg('cs')}<div class="pb">${'<i></i>'.repeat(7)}</div><div class="cap" id="csCap">اضغط «▶ شاهد» لترى شحن المكثفات، ثم قياس الجهد على كل مكثف، خطوة خطوة.</div>
    <div class="row"><button class="pri" id="csPlay">▶ شاهد</button><button id="csPrev">→ السابق</button><button id="csNext">التالي ←</button></div></div>`);
-  host.insertAdjacentHTML('beforeend',`<div class="wsc"><h4 style="margin:2px 0 6px">🔌 طبق بنفسك: وصّل المجسات</h4>
+  host.insertAdjacentHTML('beforeend',`<div class="wsc"><h4 style="margin:2px 0 6px">🔌 طبق بنفسك: وصل المجسات</h4>
    <p style="margin:0 0 6px;font-size:14px;line-height:1.8" id="ctP">الجهاز على وضع الجهد: اختر مجسا واضغط على النقطة البرتقالية. الأحمر على الساق الخلفية للمكثف (في الخط الموجب)، والأسود على ساقه الأمامية (في الخط السالب).</p>
    ${svg('ct')}
    <div class="row" id="ctBtns"><button data-j="r" style="color:#DC2626">المجس الأحمر</button><button data-j="b">المجس الأسود</button><button id="ctReset">↺ من جديد</button></div>
@@ -5366,7 +5366,7 @@ function mount(host,opts){opts=opts||{};
   WH.insertAdjacentHTML('beforeend',`<style>${CSS}</style><div class="wsc"><h4 style="margin:2px 0 6px">🎬 شاهد: تركيب جهاز الملتيميتر وطريقة القياس</h4>
    ${svg('ms')}<div class="pb">${'<i></i>'.repeat(9)}</div><div class="cap" id="msCap">اضغط «▶ شاهد» لترى طريقة قياس الجهد ثم التيار بجهاز واحد، خطوة خطوة.</div>
    <div class="row"><button class="pri" id="msPlay">▶ شاهد</button><button id="msPrev">→ السابق</button><button id="msNext">التالي ←</button></div></div>`);
-  host.insertAdjacentHTML('beforeend',`<div class="wsc"><h4 style="margin:2px 0 6px" id="mtH">🔌 طبق بنفسك: وصّل المجسين</h4>
+  host.insertAdjacentHTML('beforeend',`<div class="wsc"><h4 style="margin:2px 0 6px" id="mtH">🔌 طبق بنفسك: وصل المجسين</h4>
    <p style="margin:0 0 6px;font-size:14px;line-height:1.8" id="mtP"></p>
    ${svg('mt')}
    <div class="row" id="mtBtns"><button id="mtJ">⬆ ارفع وصلة التوصيل</button><button data-j="r" style="color:#DC2626">المجس الأحمر</button><button data-j="b">المجس الأسود</button><button id="mtReset">↺ من جديد</button></div>
@@ -5586,7 +5586,7 @@ function amLab(box){
     if(rev)fb('rvFb',false,'⚠️ بدل سلكا المصدر، فانعكس اتجاه التيار في الدائرة، وظهرت القراءة بإشارة سالبة. فإشارة القراءة تدل على اتجاه التيار، ولا يتلف الجهاز. اضغط الزر مرة أخرى لإعادة الأقطاب.');
     else{ok.rv=true;fb('rvFb',true,'✓ أعيدت الأقطاب، فعادت القراءة موجبة. انتقل إلى قياس الزمن (الخطوة هـ).');if(!card.closest('#dmS'))$('wTt').appendChild(card)}$('rvB').textContent=rev?'↩️ أعد الأقطاب إلى وضعها الصحيح':'🔁 اعكس أقطاب المصدر';results()};
   $('tR').oninput=()=>{if(!ok.i||rev||!st.ok)$('tR').value=0;tDraw()};
-  $('tInCk').onclick=()=>{if(!ok.rv)return fb('tInFb',false,'أكمل قياس التيار وعكس الأقطاب أولا.');if(+$('tR').value<100)return fb('tInFb',false,'شغّل ساعة الإيقاف حتى تتوقف تلقائيا أولا.');const v=num($('tIn').value);if(isNaN(v))return fb('tInFb',false,'اكتب الزمن بالثانية.');
+  $('tInCk').onclick=()=>{if(!ok.rv)return fb('tInFb',false,'أكمل قياس التيار وعكس الأقطاب أولا.');if(+$('tR').value<100)return fb('tInFb',false,'شغل ساعة الإيقاف حتى تتوقف تلقائيا أولا.');const v=num($('tIn').value);if(isNaN(v))return fb('tInFb',false,'اكتب الزمن بالثانية.');
     if(Math.abs(v-T)<0.5){ok.t=true;fb('tInFb',true,'✓ قراءة صحيحة:\n'+E(`t = ${T} s`))}else fb('tInFb',false,'✗ الشاشة تعرض الدقائق ثم «:» ثم الثواني. حول القراءة إلى ثوان: كل دقيقة '+E('60 s')+'، فمثلا '+E('1:05.00')+' تعني '+E('t = 65 s')+'.');sub();results()};
   $('cQk').onclick=()=>{if(!(ok.i&&ok.t))return fb('cQf',false,'اقرأ شدة التيار والزمن أولا.');const v=num($('cQ').value);if(isNaN(v))return fb('cQf',false,'اكتب الناتج بوحدة C.');
     if(((window.__lt=[v,Q()]),Math.abs(v-Q()))/Q()<0.005){ok.cQ=true;fb('cQf',true,'✓ إجابة صحيحة:\n'+E(`q = ${fx(I,3)} × ${T} = ${fx(Q(),2)} C`))}else fb('cQf',false,'✗ اضرب شدة التيار في الزمن:\n'+E(`q = ${fx(I,3)} × ${T}`));sub();results()};
@@ -5837,13 +5837,13 @@ function mount(host,opts){opts=opts||{};
    <div class="w3s">${svg()}</div><div class="pb">${'<i></i>'.repeat(8)}</div><div class="cap" id="wsCap">اضغط «▶ شاهد» لترى خطوات توصيل الأجهزة وطريقة القراءة خطوة خطوة.</div>
    <div class="row"><button class="pri" id="wsPlay">▶ شاهد</button><button id="wsPrev">→ السابق</button><button id="wsNext">التالي ←</button></div></div>`);
   host.insertAdjacentHTML('beforeend',`
-  <div class="wsc"><h4 style="margin:2px 0 6px">🔌 طبق بنفسك: وصّل المجسات</h4>
+  <div class="wsc"><h4 style="margin:2px 0 6px">🔌 طبق بنفسك: وصل المجسات</h4>
    <p style="margin:0 0 6px;font-size:14px;line-height:1.8">اختر مجسا من الأزرار، ثم اضغط على النقطة البرتقالية التي تريد توصيله بها. ابدأ برفع وصلة التوصيل.</p>
    ${svg().replace(/id="ws/g,'id="wt')}
    <div class="row" id="wtBtns"><button id="wtJ">⬆ ارفع وصلة التوصيل</button>${Object.keys(JACK).map(j=>`<button data-j="${j}" style="color:${COL[j]==='#1F2937'?'inherit':COL[j]}">${NAME[j]}</button>`).join('')}<button id="wtReset">↺ من جديد</button></div>
    <ul class="chk" id="wtChk"><li>رفع وصلة التوصيل</li><li>الأميتر على التوالي مكان الفجوة (الأحمر قبلها والأسود بعدها)</li><li>الفولتميتر على التوازي على طرفي المقاومة (الأحمر على الموجب)</li></ul>
    <div class="msg" id="wtMsg" hidden></div>
-   <div class="row" ${opts.lab?'style="display:none"':''}><button class="pri" id="wtOn" disabled>⚡ شغّل المصدر على 6 V واقرأ</button></div></div>`);
+   <div class="row" ${opts.lab?'style="display:none"':''}><button class="pri" id="wtOn" disabled>⚡ شغل المصدر على 6 V واقرأ</button></div></div>`);
   /* ===== أ) المشاهدة ===== */
   const Q=q=>host.querySelector(q)||WH.querySelector(q),W=id=>Q('#'+id);
   const STEPS=[
@@ -5853,7 +5853,7 @@ function mount(host,opts){opts=opts||{};
    ['<b>الخطوة 4:</b> المجس <b>الأسود للأميتر</b> في النقطة <b>بعد الفجوة</b>. صار الأميتر مكان الوصلة، فيمر فيه التيار كله: هذا <b>التوصيل على التوالي</b>.',()=>addL('ws','ab','B')],
    ['<b>الخطوة 5:</b> المجس <b style="color:#DC2626">الأحمر للفولتميتر</b> على <b>طرف المقاومة الموجب</b>.',()=>addL('ws','vr','R1')],
    ['<b>الخطوة 6:</b> المجس <b>الأسود للفولتميتر</b> على <b>طرفها السالب</b>. الفولتميتر على طرفي المقاومة: هذا <b>التوصيل على التوازي</b>.',()=>addL('ws','vb','R2')],
-   ['<b>الخطوة 7: شغّل المصدر</b> وارفع الجهد إلى <b>6 V</b>. يتحرك التيار من القطب الموجب، ويمر في الأميتر ثم المقاومة ويعود إلى القطب السالب.',()=>power('ws',true)],
+   ['<b>الخطوة 7: شغل المصدر</b> وارفع الجهد إلى <b>6 V</b>. يتحرك التيار من القطب الموجب، ويمر في الأميتر ثم المقاومة ويعود إلى القطب السالب.',()=>power('ws',true)],
    ['<b>الخطوة 8: طريقة القراءة:</b> اقرأ الرقم مع وحدته من كل شاشة: الفولتميتر <b>6.00 V</b>، والأميتر <b>0.060 A</b>. فالمقاومة <span dir="ltr" style="unicode-bidi:isolate;white-space:nowrap"><b>R = V / I = 6 / 0.06 = 100 Ω</b></span>.',()=>{W('wsAd').classList.add('glow');W('wsVd').classList.add('glow')}]];
   let k=-1,timer=null;
   function addL(p,j,pt){const g=Q('#'+p+'Leads');if(g.querySelector(`[data-j="${j}"]`))return;g.insertAdjacentHTML('beforeend',lead(j,pt));g.lastElementChild.querySelectorAll('path').forEach(e=>{const L=e.getTotalLength();e.style.strokeDasharray=L;e.style.strokeDashoffset=L;e.getBoundingClientRect();e.style.transition='stroke-dashoffset 1s ease';e.style.strokeDashoffset=0})}
@@ -5893,7 +5893,7 @@ function mount(host,opts){opts=opts||{};
     else if(con.ar==='B'&&con.ab==='A'){msg('⚠️ <b>مجسا الأميتر معكوسان:</b> ستظهر القراءة بإشارة سالبة. الأحمر قبل الفجوة (جهة الموجب)، والأسود بعدها.','warn')}
     else if(con.vr==='R2'&&con.vb==='R1'){msg('⚠️ <b>مجسا الفولتميتر معكوسان:</b> ستظهر القراءة بإشارة سالبة. الأحمر على طرف المقاومة الموجب.','warn')}
     else if(j)msg('✓ '+NAME[j]+' على '+PN[con[j]]+'.','ok');
-    const ok=mark();W('wtOn').disabled=!ok;opts.onWired&&opts.onWired(ok);W('wtBtns').classList.toggle('done',ok&&!!opts.lab);if(ok)msg(opts.lab?'✅ <b>التوصيل صحيح:</b> الأميتر على التوالي، والفولتميتر على التوازي. انتقل إلى الخطوة ج وارفع جهد المصدر.':'✅ <b>التوصيل صحيح:</b> الأميتر على التوالي، والفولتميتر على التوازي. شغّل المصدر الآن واقرأ.','ok')}
+    const ok=mark();W('wtOn').disabled=!ok;opts.onWired&&opts.onWired(ok);W('wtBtns').classList.toggle('done',ok&&!!opts.lab);if(ok)msg(opts.lab?'✅ <b>التوصيل صحيح:</b> الأميتر على التوالي، والفولتميتر على التوازي. انتقل إلى الخطوة ج وارفع جهد المصدر.':'✅ <b>التوصيل صحيح:</b> الأميتر على التوالي، والفولتميتر على التوازي. شغل المصدر الآن واقرأ.','ok')}
   W('wtOn').onclick=()=>{power('wt',true);msg('📟 <b>القراءات:</b> الفولتميتر <b>6.00 V</b>، والأميتر <b>0.060 A</b>. اقرأ الرقم مع وحدته، فالمقاومة <span dir="ltr" style="unicode-bidi:isolate;white-space:nowrap"><b>R = 6 / 0.06 = 100 Ω</b></span>.','ok')};
   return {setR(lab,cols){W('wtRl').textContent=lab;cols.forEach((c,i)=>W('wtB'+i).setAttribute('fill',c))},show(on,o){power('wt',on,o)}}
 }
@@ -6223,7 +6223,7 @@ function mount(host,opts){opts=opts||{};const WH=opts.watchHost||host;
   WH.insertAdjacentHTML('beforeend',`<style>${CSS}</style><div class="wsc"><h4 style="margin:2px 0 6px">🎬 شاهد: تركيب الأجهزة وطريقة القياس</h4>
    ${svg('ss')}<div class="pb">${'<i></i>'.repeat(9)}</div><div class="cap" id="ssCap">اضغط «▶ شاهد» لترى قياس التيار قبل كل مقاومة، ثم الجهد على كل مقاومة، خطوة خطوة.</div>
    <div class="row"><button class="pri" id="ssPlay">▶ شاهد</button><button id="ssPrev">→ السابق</button><button id="ssNext">التالي ←</button></div></div>`);
-  host.insertAdjacentHTML('beforeend',`<div class="wsc"><h4 style="margin:2px 0 6px">🔌 طبق بنفسك: وصّل المجسات</h4>
+  host.insertAdjacentHTML('beforeend',`<div class="wsc"><h4 style="margin:2px 0 6px">🔌 طبق بنفسك: وصل المجسات</h4>
    <p style="margin:0 0 6px;font-size:14px;line-height:1.8" id="stP"></p>
    ${svg('st')}
    <div class="row" id="stJs">${[0,1,2].map(i=>`<button data-jg="${i}">⬆ ارفع J${SUB[i]}</button>`).join('')}</div><div class="row" id="stBtns"><button data-j="r" style="color:#DC2626">المجس الأحمر</button><button data-j="b">المجس الأسود</button><button id="stReset">↺ من جديد</button></div>
