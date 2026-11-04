@@ -6187,7 +6187,7 @@ function holes(){let h='';for(let x=106;x<=382;x+=12){h+=`<rect x="${x-2}" y="10
 function svg(p){const seg=SEG;
   return `<svg viewBox="0 -14 400 314" aria-label="ثلاث مقاومات على التوالي على لوحة التوصيل"><rect x="0" y="-14" width="400" height="314" fill="none" pointer-events="none"/>
 <defs><linearGradient id="${p}Rg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#F5DEB3"/><stop offset="1" stop-color="#D2B48C"/></linearGradient></defs>
-${'<rect x="0" y="-14" width="400" height="12" fill="#EEF2F7"/>'+efWood(-2,286,0,400)+efSh(240,97,178,4.5,.35)+efSh(114,246,76,3.4,.42)+efSh(276,262,42,3,.42)}
+${'<rect x="-12" y="-14" width="446" height="12" fill="#EEF2F7"/>'+efWood(-2,323.1,-12,434)+efSh(240,97,178,4.5,.35)+efSh(114,246,76,3.4,.42)+efSh(276,262,42,3,.42)}
 <image href="dv/67-breadboard-clean.webp" x="58.8" y="0.0" width="363" height="95" preserveAspectRatio="none"/>
 
 
@@ -6422,7 +6422,7 @@ function serLab(box){
     W.setR(Rv);phase='a';$('wTi').appendChild(card);W.phase('a');W.mode('');['nZ','vZ'].forEach(k=>$(k).innerHTML='');
     $('rVals').innerHTML='قيم المقاومات المكتوبة عليها: '+Rv.map((r,k)=>`<span dir="ltr">R${'₁₂₃'[k]} = <b class="cQ">${r}</b> Ω</span>`).join(' · ');
     faces();draw();sub();results();
-    {const l=box.querySelector('#stLeads'),sv=l&&l.ownerSVGElement;if(sv){sv.setAttribute('viewBox','0 -14 400 314');sv.querySelectorAll('g.mTag').forEach(e=>e.remove())}}}
+    {const l=box.querySelector('#stLeads'),sv=l&&l.ownerSVGElement;if(sv){sv.dataset.cam='1';sv.setAttribute('viewBox','-12 -14 446 350.1');sv.querySelectorAll('g.mTag').forEach(e=>e.remove())}}}
   function sub(){const c=(cl,x)=>`<b class="${cl}">${x}</b>`;
     $('sbS').html=[0,1,2].every(i=>rec.has(i))?'V₁ + V₂ + V₃\n'+E(`${c('cV',fx(Vk[0],2))} + ${c('cV',fx(Vk[1],2))} + ${c('cV',fx(Vk[2],2))}`):'V₁ + V₂ + V₃';
     $('sbA').html=recI.size===3&&rec.has(3)?'R = V / I\n'+E(`R = ${c('cV',fx(Vk[3],2))} / ${c('cI',fx(I,3))}`):'R = V / I';
@@ -6560,7 +6560,7 @@ function skin(svg){if(svg.dataset.lr==='host'||svg.closest('[data-lr-off]'))retu
     else if(k!=='w'&&k!=='l'&&A>2200&&!e.getAttribute('filter')&&!(+e.getAttribute('fill-opacity')<1)&&!(+e.getAttribute('opacity')<1))e.setAttribute('filter','url(#lrSh)')})}
 /* تكبير: قص الفراغ حول الرسم (اتحاد كل ما ظهر فيه)، دون تجاوز حدود الرسم الأصلية */
 const U=new WeakMap();
-function fit(svg){if(svg.dataset.lr==='host'||svg.closest('[data-lr-off]')||svg.closest('[data-nofit]')||svg.closest('.amLog'))return;const o=svg.getAttribute('data-vb0')||svg.getAttribute('viewBox');if(!o)return;
+function fit(svg){if(svg.dataset.cam||svg.dataset.lr==='host'||svg.closest('[data-lr-off]')||svg.closest('[data-nofit]')||svg.closest('.amLog'))return;const o=svg.getAttribute('data-vb0')||svg.getAttribute('viewBox');if(!o)return;
   const v=o.trim().split(/[\s,]+/).map(Number);if(v.length!==4||!(v[2]>0))return;if(svg.getBoundingClientRect().width<140)return;
   let b;try{b=svg.getBBox()}catch(_){return}if(!b||b.width<1||b.height<1)return;
   const par=svg.parentElement,key=o+'|'+(svg.id||'');let m=U.get(par);if(!m){m={};U.set(par,m)}
@@ -7268,16 +7268,16 @@ WCFG['4-8']={PL:[[['k'],['m']],[['j',0]],[['p',0],['p',1]],[['j',0],['j',1],['p'
  const probe=async(H,j,n)=>{ck(H.q('dmS').querySelector('#stBtns button[data-j="'+j+'"]'));await H.click(H.q('dmS').querySelector('.pt[data-p="'+n+'"] circle:last-child'))};
  const meter=async(H,m,mode,port)=>{await H.click(H.q(m+'F').querySelector('[data-k="mode"][data-v="'+mode+'"]'));await H.psleep(500);await H.click(H.q(m+'F').querySelector('[data-k="port"][data-v="'+port+'"]'))};
  const jmp=async(H,g)=>{const s=SV(H);await H.hand(agAt(s,GX[g],Y-8));await H.psleep(300);ck(H.q('dmS').querySelector('#stJs button[data-jg="'+g+'"]'));await H.psleep(700)};
- const VB0=[0,-14,400,314];
+ const VB0=[-12,-14,446,350.1];
  const zoom=async(H,r,d)=>{const sv=SV(H);if(!sv)return;const c=(sv.getAttribute('viewBox')||VB0.join(' ')).split(/\s+/).map(Number),t=r?[r[0],r[1],r[2],r[2]*314/400]:VB0;d=window.__dmSkip?0:(d||900);let e=0;
    while(e<d){await sleep(30);e+=30;const k=Math.min(1,e/d),q=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;sv.setAttribute('viewBox',c.map((v,i)=>(v+(t[i]-v)*q).toFixed(1)).join(' '))}sv.setAttribute('viewBox',t.map(v=>v.toFixed(1)).join(' '));await sleep(80)};
  /* بطاقة القراءة فوق الجهاز داخل المشهد */
  const tag=(H,t,c)=>{const sv=SV(H);if(!sv)return;sv.querySelectorAll('g.mTag').forEach(e=>e.remove());if(!t)return;const x=276,y=116;
    sv.insertAdjacentHTML('beforeend',`<g class="mTag"><rect x="${x-40}" y="${y-11}" width="80" height="19" rx="9.5" fill="#fff" stroke="${c}" stroke-width="1.6"/><text x="${x}" y="${y+3.6}" text-anchor="middle" direction="ltr" font-size="10.5" font-weight="900" fill="${c}">${t}</text></g>`)};
  /* مربع التكبير يبقى داخل حدود المشهد، حتى لا يقصه القص التلقائي */
- const CL=(x,w)=>[Math.max(0,Math.min(400-w,x)),-14,w],ZG=g=>CL(GX[g]-85,170),ZV=i=>i<3?CL(RX[i]-95,190):[80,-14,320],ZM=[186,92,180];
+ const CL=(x,w)=>[Math.max(-12,Math.min(434-w,x)),-14,w],ZG=g=>CL(GX[g]-85,170),ZV=i=>i<3?CL(RX[i]-95,190):[80,-14,320],ZM=[186,92,180];
  const VP=[[1,2],[3,4],[5,6],[1,6]],VN=['R₁','R₂','R₃','المقاومات الثلاث معا'],VL=['V₁','V₂','V₃','V'];
- const read=async(H,t,c)=>{await zoom(H,ZM);tag(H,t,c);await H.psleep(400);await H.hand('g.mTag');await H.psleep(1200)};
+ const read=async(H,t,c)=>{/* المدرب 3 نوفمبر: لقطة كاملة للدائرة والجهاز موصول قبل تكبير الشاشة */await zoom(H,null,800);await H.psleep(1800);await zoom(H,ZM);tag(H,t,c);await H.psleep(400);await H.hand('g.mTag');await H.psleep(1200)};
  const steps=[
   {st:CARD,c:'<b>الخطوة 1: ضبط جهد المصدر.</b> تدير اليد مقبض جهاز مصدر الجهد المستمر حتى يتوقف عند <b dir="ltr">9 V</b>. الوصلات الثلاث في أماكنها، فيخرج التيار من القطب الموجب، ويمر في <b>R₁ ثم R₂ ثم R₃</b>، ويعود في سلك العودة إلى القطب السالب.',
    f:async H=>{tag(H);await zoom(H);await H.slide('nR','max',agAt(SV(H),123.7,204.6))}},
