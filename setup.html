@@ -59,7 +59,7 @@ pre{background:var(--soft);border-radius:10px;padding:10px;direction:ltr;text-al
 <li>تظهر نافذة <span class="k en">Authorization required</span> ← اضغط <span class="k en">Review permissions</span> واختر حسابك.</li>
 <li>تظهر رسالة <span class="en">“Google hasn’t verified this app”</span>. هذا طبيعي لأن الكود خاص بك: اضغط <span class="k en">Advanced</span> ثم <span class="k en">Go to … (unsafe)</span>.</li>
 <li>اضغط <span class="k en">Allow</span> (سماح).</li></ol>
-<div class="note">يطلب الكود صلاحيتين فقط: إنشاء جدول Google في حسابك ليحفظ فيه بيانات المتدربين، والاتصال بخدمة خارجية ليعمل المساعد الذكي.</div></div>
+<div class="note">يطلب الكود صلاحيتين فقط: إنشاء جدول Google في حسابك ليحفظ فيه بيانات المتدربين، والاتصال بخدمة الصوت الطبيعي لقراءة شرح الدروس.</div></div>
 
 <div class="step"><h2><span class="n">٥</span>انشره كتطبيق ويب</h2>
 <ol><li>اضغط الزر الأزرق <span class="k en">Deploy</span> ← <span class="k en">New deployment</span>.</li>
@@ -86,11 +86,8 @@ pre{background:var(--soft);border-radius:10px;padding:10px;direction:ltr;text-al
 <p>افتح لوحة المدرب وأنشئ كلمة مرورك، ثم أضف الشعب واستورد أسماء المتدربين من Excel. جرب المنصة بنفسك من تبويب «حساب المعاينة».</p>
 <a class="btn" href="teacher.html">فتح لوحة المدرب</a></div>
 
-<div class="step"><h2><span class="n">٩</span>فعل المساعد الذكي (مجاني)</h2>
-<ol><li>افتح <a href="https://console.groq.com/keys" target="_blank" rel="noopener">console.groq.com/keys</a> وسجل بحساب Google.</li>
-<li>اضغط <span class="k en">Create API Key</span> وانسخ المفتاح (يبدأ بـ <span class="en">gsk_</span>).</li>
-<li>في لوحة المدرب افتح تبويب <span class="k">أسئلة المساعد الذكي</span>، والصق المفتاح، ثم اضغط <span class="k">حفظ وتفعيل</span>.</li></ol>
-<p>بعدها يظهر المساعد في نهاية كل درس لكل المتدربين.</p></div>
+<div class="step"><h2><span class="n">٩</span>فعل الصوت الطبيعي للدروس (مجاني)</h2>
+<p>في لوحة المدرب افتح <span class="k">الإعدادات</span>، والصق مفتاح خدمة الصوت من Microsoft Azure، ثم اضغط <span class="k">حفظ وتفعيل</span>. المساعد الذكي يعمل في كل الدروس دون أي إعداد، لأن إجاباته وتلميحاته مكتوبة مسبقا داخل المنصة.</p></div>
 
 <p class="lead" style="font-size:13.5px">إذا عدلت الكود لاحقا في Google Apps Script، انشره من <span class="en">Deploy ← Manage deployments ← ✏️ ← Version: New version</span>، فيبقى الرابط نفسه.</p>
 </main>

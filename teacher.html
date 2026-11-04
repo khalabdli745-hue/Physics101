@@ -339,7 +339,7 @@ const AR=n=>String(n);   // الأرقام بالإنجليزية في كل ال
 const ls={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
 let TOKEN=ls.get('p101-tauth',null);
 let WOPEN=false,WSET=[],WREC='',DATA=null,tab=ls.get('p101-ttab','sections'),secFilter=ls.get('p101-tsec','all'),sortBy={k:'name',asc:true},q='';
-const ERR={tts_bad_key:'مفتاح Azure غير صحيح الشكل. انسخ KEY 1 كما هو.',tts_key:'مفتاح Azure غير صالح. انسخ KEY 1 مرة أخرى من صفحة Keys and endpoint.',tts_region:'المنطقة غير صحيحة. اكتبها كما في Azure، مثل uaenorth.',tts_off:'الصوت الطبيعي غير مفعل.',tts_quota:'انتهت الحصة المجانية لهذا الشهر.',tts_busy:'الخدمة مشغولة، حاول بعد دقيقة.',tts_error:'تعذر توليد الصوت. تأكد أنك نشرت الإصدار الجديد من الكود ومنحت صلاحية Google Drive.',bad_key:'المفتاح غير صحيح الشكل. مفتاح Gemini يبدأ بـ AIza ومفتاح Groq يبدأ بـ gsk_',ai_key:'المفتاح غير صالح أو منتهي. أنشئ مفتاحا جديدا.',ai_off_g:'Groq غير مفعل. الصق المفتاح واضغط «حفظ وتفعيل».',wrong_user:'اسم المستخدم غير صحيح.',short_user:'اسم المستخدم قصير (6 خانات على الأقل).',bad_setup_code:'رمز إعداد المدرب غير صحيح أو انتهت مدته. شغل الدالة newTeacherSetupCode في Apps Script لرمز جديد.',weak_password:'كلمة المرور لا تحقق الشروط: 12 خانة على الأقل، وحرف إنجليزي كبير وصغير ورقم ورمز، بلا مسافات، ولا تحتوي اسم المستخدم.',locked:'الحساب مقفل مؤقتا بسبب محاولات خاطئة. حاول بعد قليل.',bad_user:'اختر اسم مستخدم آخر: 6 خانات على الأقل، وليس demo ولا أرقاما فقط.',wrong_password:'كلمة المرور غير صحيحة.',short_password:'كلمة المرور قصيرة (12 خانة على الأقل).',already_set:'تم إنشاء كلمة مرور المدرب مسبقا. استخدم «دخول».',not_setup:'لم تنشأ كلمة مرور المدرب بعد.',section_not_empty:'لا يمكن حذف شعبة فيها متدربون. انقلهم أو احذفهم أولا.',name_required:'اكتب اسم الشعبة.',not_found:'غير موجود.',auth:'انتهت الجلسة، سجل الدخول مرة أخرى.'};
+const ERR={tts_bad_key:'مفتاح Azure غير صحيح الشكل. انسخ KEY 1 كما هو.',tts_key:'مفتاح Azure غير صالح. انسخ KEY 1 مرة أخرى من صفحة Keys and endpoint.',tts_region:'المنطقة غير صحيحة. اكتبها كما في Azure، مثل uaenorth.',tts_off:'الصوت الطبيعي غير مفعل.',tts_quota:'انتهت الحصة المجانية لهذا الشهر.',tts_busy:'الخدمة مشغولة، حاول بعد دقيقة.',tts_error:'تعذر توليد الصوت. تأكد أنك نشرت الإصدار الجديد من الكود ومنحت صلاحية Google Drive.',bad_key:'المفتاح غير صحيح الشكل.',ai_key:'المفتاح غير صالح أو منتهي. أنشئ مفتاحا جديدا.',wrong_user:'اسم المستخدم غير صحيح.',short_user:'اسم المستخدم قصير (6 خانات على الأقل).',bad_setup_code:'رمز إعداد المدرب غير صحيح أو انتهت مدته. شغل الدالة newTeacherSetupCode في Apps Script لرمز جديد.',weak_password:'كلمة المرور لا تحقق الشروط: 12 خانة على الأقل، وحرف إنجليزي كبير وصغير ورقم ورمز، بلا مسافات، ولا تحتوي اسم المستخدم.',locked:'الحساب مقفل مؤقتا بسبب محاولات خاطئة. حاول بعد قليل.',bad_user:'اختر اسم مستخدم آخر: 6 خانات على الأقل، وليس demo ولا أرقاما فقط.',wrong_password:'كلمة المرور غير صحيحة.',short_password:'كلمة المرور قصيرة (12 خانة على الأقل).',already_set:'تم إنشاء كلمة مرور المدرب مسبقا. استخدم «دخول».',not_setup:'لم تنشأ كلمة مرور المدرب بعد.',section_not_empty:'لا يمكن حذف شعبة فيها متدربون. انقلهم أو احذفهم أولا.',name_required:'اكتب اسم الشعبة.',not_found:'غير موجود.',auth:'انتهت الجلسة، سجل الدخول مرة أخرى.'};
 const errText=e=>ERR[e]||('حدث خطأ: '+e);
 function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2600)}
 /* عند ضغط الخادم وقت الاختبار: يعاد الطلب تلقائيا حتى 3 مرات قبل إظهار الخطأ */
@@ -795,49 +795,6 @@ async function drawRatings(){
 }
 /* ---------- المساعد الذكي ---------- */
 
-/* صوت المدرب الذكي بجيميني: تفعيل للمتدربين واختيار صوتي الرجل والمرأة */
-const GVM=[['Iapetus','واضح'],['Rasalgethi','معلوماتي'],['Sadaltager','واثق'],['Algieba','ناعم'],['Schedar','متزن'],['Orus','حازم'],['Charon','معلوماتي']],GVF=[['Kore','حازم'],['Erinome','واضح'],['Sulafat','دافئ'],['Achernar','ناعم'],['Aoede','مرح'],['Leda','شبابي']];
-const GVTXT='مرحبا بك، أنا المدرب الذكي. سنشرح اليوم قانون كولوم خطوة بخطوة.';
-let GVAU=null;
-/* صفحة المنصة مخفية داخل اللوحة: منها يؤخذ نص شرح الدرس كما يسمعه المتدرب */
-let GPF=null;const gpFrame=()=>new Promise((res,rej)=>{try{if(GPF&&GPF.contentWindow&&GPF.contentWindow.P101PREP)return res(GPF.contentWindow)}catch(e){}
-  if(!GPF){GPF=document.createElement('iframe');GPF.setAttribute('aria-hidden','true');GPF.tabIndex=-1;GPF.style.cssText='position:fixed;width:390px;height:700px;left:-10000px;top:0;border:0;visibility:hidden';GPF.src='index.html?prep=1';document.body.appendChild(GPF)}
-  let n=0;const t=setInterval(()=>{n++;try{const w=GPF.contentWindow;if(w&&w.P101PREP&&w.go&&w.openBoard){clearInterval(t);setTimeout(()=>res(w),1200)}}catch(e){}if(n>100){clearInterval(t);rej({error:'net'})}},300)});
-async function drawGV(){const box=$('#gvBox');if(!box)return;let x;try{x=await api({a:'tvoice',token:TOKEN})}catch(e){x={}}
-  if(!x||!x.ok){box.innerHTML='<p class="msg bad">هذه الميزة تحتاج تحديث كود الخادم (code.gs) إلى الإصدار 29 ونشره.</p>';return}
-  try{localStorage.setItem('p101-gvraw',JSON.stringify(x.cfg))}catch(e){}
-  const c=x.cfg,opt=(L,v)=>L.map(([n,d])=>`<option value="${n}"${n===v?' selected':''}>${n} (${d})</option>`).join('');
-  box.innerHTML=`<p class="sub">الحالة: ${c.on&&x.gem?'<b style="color:var(--good)">✓ مفعل للمتدربين</b>':'<b style="color:var(--bad)">غير مفعل للمتدربين</b>'}${x.gem?'':' · يحتاج تفعيل Gemini في البند 2 أولا'}<br>صوت طبيعي من Google Gemini للمدرب الذكي على السبورة وللمساعد الذكي، بصوت واحد تختاره لكل المتدربين. يسمعه المتدرب في الدروس التي جهزتها من «تجهيز صوت الدروس» تحت، والدروس غير المجهزة تبقى تلقائيا بصوت حامد أو زارية.</p>
-   <div class="row gvRow"><label class="gvL">🎙 صوت المدرب الذكي</label><select id="gvm"><optgroup label="👨 رجل">${opt(GVM,c.m)}</optgroup><optgroup label="👩 امرأة">${opt(GVF,c.m)}</optgroup></select><button class="btn ghost" id="gvpm">▶ استماع</button></div>
-   ${c.m!==c.f?'<p class="sub" style="font-size:13px;color:var(--bad)">الآن صوتان مختلفان. اختر الصوت ثم اضغط «حفظ الصوت» ليصير صوتا واحدا لكل المتدربين.</p>':''}
-   <div class="row"><button class="btn" id="gvsv">حفظ الصوت</button>${c.on?'<button class="btn danger" id="gvoff">إيقاف للمتدربين</button>':'<button class="btn" id="gvon"'+(x.gem?'':' disabled')+'>تفعيل للمتدربين</button>'}</div>
-   <div class="gpBox"><h4 style="margin:12px 0 4px">🎙 تجهيز صوت الدروس</h4><p class="sub" style="font-size:13px">اختر الدرس ثم «تجهيز الصوت»: يجهز شرح الدرس بالصوت المختار ويحفظه، فيسمعه المتدرب فورا بعد التفعيل. الدرس يأخذ نحو 40 دقيقة مرة واحدة، فاترك الصفحة مفتوحة حتى ينتهي، ويمكن إيقافه وإكماله من مكانه.</p>
-   <div class="row gvRow"><select id="gpL">${LESSONS.map(L=>`<option value="${L.k}"${L.k==='3-1'?' selected':''}>${L.k} · ${esc(L.raw)}</option>`).join('')}</select></div>
-   <div class="row"><button class="btn ghost" id="gpChk">فحص الحالة</button><button class="btn" id="gpGo">تجهيز الصوت</button></div><p class="msg" id="gpSt"></p></div><p class="msg" id="gvm2"></p>`;
-  const play=async(v,b)=>{try{if(GVAU){GVAU.pause();GVAU=null}}catch(e){}const t=b.textContent;b.disabled=true;b.innerHTML='<span class="spin"></span>';
-    try{const y=await api({a:'gtts',token:TOKEN,voice:v,text:GVTXT});if(!y.ok)throw y;const bin=atob(y.audio),u8=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u8[i]=bin.charCodeAt(i);GVAU=new Audio(URL.createObjectURL(new Blob([u8],{type:y.mime||'audio/wav'})));GVAU.play()}catch(e){toast(errText((e&&e.error)||'net'))}b.disabled=false;b.textContent=t};
-  $('#gvpm').onclick=e=>play($('#gvm').value,e.currentTarget);
-  const save=async o=>{$('#gvm2').className='msg';$('#gvm2').innerHTML='<span class="spin"></span>';const y=await api({a:'tvoice',token:TOKEN,set:Object.assign({m:$('#gvm').value,f:$('#gvm').value},o||{})});
-    if(y.ok){try{localStorage.setItem('p101-gvoice',y.cfg.m);localStorage.setItem('p101-gvraw',JSON.stringify(y.cfg))}catch(e){}toast('تم الحفظ');drawGV()}else{$('#gvm2').className='msg bad';$('#gvm2').textContent=errText(y.error)}};
-  const gp=$('#gpSt'),gpW=ms=>new Promise(r=>setTimeout(r,ms));
-  const gpTxt=async(k,vo)=>{const w=await gpFrame();const [u,l]=k.split('-').map(Number);return w.P101PREP(u,l,vo)};
-  const gpChk=async()=>{const k=$('#gpL').value;gp.className='msg';gp.innerHTML='<span class="spin"></span> فحص…';
-    try{const out=[];for(const [vo,v,lb] of (c.m===c.f?[['m',c.m,'🎙 الصوت']]:[['m',c.m,'👨 صوت الرجل'],['f',c.f,'👩 صوت المرأة']])){const T=await gpTxt(k,vo);const y=await api({a:'gcheck',token:TOKEN,voice:v,texts:T});if(!y.ok)throw y;out.push(lb+': '+(y.n===y.total?'<b style="color:var(--good)">✓ جاهز</b>':y.n+' من '+y.total))}gp.innerHTML=out.join('<br>')}
-    catch(e){gp.className='msg bad';gp.textContent=(e&&e.error==='unknown_action')?'حدث code.gs إلى الإصدار 31 أولا.':errText((e&&e.error)||'net')}};
-  let gpRun=false;
-  const gpGo=async()=>{if(gpRun){gpRun=false;return}const k=$('#gpL').value;gpRun=true;$('#gpGo').textContent='■ إيقاف';
-    try{for(const [vo,v,lb] of (c.m===c.f?[['m',c.m,'🎙 الصوت']]:[['m',c.m,'👨 صوت الرجل'],['f',c.f,'👩 صوت المرأة']])){const T=await gpTxt(k,vo);const y=await api({a:'gcheck',token:TOKEN,voice:v,texts:T});if(!y.ok)throw y;
-      let done=y.n,busy=0;const miss=y.miss.slice();
-      for(let i=0;i<miss.length;i++){if(!gpRun)throw {stop:1};gp.className='msg';gp.innerHTML='⏳ '+lb+': '+done+' من '+T.length+' · المتبقي نحو '+Math.ceil((miss.length-i)*21/60)+' دقيقة';
-        let z;try{z=await api({a:'gtts',token:TOKEN,voice:v,text:T[miss[i]],nodata:1})}catch(e){z={error:'net'}}
-        if(z&&z.ok){done++;busy=0;if(!z.cached)await gpW(21000);continue}
-        if(z&&z.error==='gem_busy'&&busy<5){busy++;i--;gp.innerHTML='⏸ '+lb+': '+done+' من '+T.length+' · انتظار دقيقة (حد جيميني)';await gpW(60000);continue}
-        throw z||{error:'net'}}}
-      gp.className='msg good';gp.innerHTML='✅ الدرس جاهز'+(c.m===c.f?'':' بالصوتين')}
-    catch(e){if(e&&e.stop){gp.className='msg';gp.textContent='توقف التجهيز، ويكمل من مكانه عند الضغط مرة ثانية.'}else{gp.className='msg bad';gp.textContent=(e&&e.error==='unknown_action')?'حدث code.gs إلى الإصدار 31 أولا.':'توقف: '+errText((e&&e.error)||'net')}}
-    gpRun=false;$('#gpGo').textContent='تجهيز الصوت'};
-  $('#gpChk').onclick=gpChk;$('#gpGo').onclick=gpGo;
-  $('#gvsv').onclick=()=>save();if($('#gvon'))$('#gvon').onclick=()=>save({on:true});if($('#gvoff'))$('#gvoff').onclick=()=>{if(confirm('إيقاف صوت جيميني للمتدربين؟ يعودون إلى صوت حامد وزارية.'))save({on:false})}}
 async function drawAI(){
   const m=$(tab==='settings'?'#aiSet':'#main');if(!m)return;m.innerHTML='<p class="empty"><span class="spin"></span></p>';
   let r,ti={};try{[r,ti]=await Promise.all([api({a:'tquestions',token:TOKEN,sectionId:secFilter==='all'?'':secFilter}),api({a:'ttsinfo',token:TOKEN}).catch(()=>({}))])}catch(e){m.innerHTML='<p class="empty">تعذر الاتصال بالخادم.</p>';return}
@@ -847,22 +804,12 @@ async function drawAI(){
   const byLesson={};r.questions.forEach(q=>{const k=LT[q.lessonKey]||q.lessonTitle||'—';byLesson[k]=(byLesson[k]||0)+1});
   const top=Object.entries(byLesson).sort((a,b)=>b[1]-a[1]).slice(0,8),mx=Math.max(1,...top.map(x=>x[1]));
   const tOn=!!ti.tts,tOld=!ti.ok;
-  m.innerHTML=`<div class="aiK"><div class="card"><h2>🤖 المدرب الذكي التفاعلي والمساعد الذكي</h2><h3 class="aiH">1. الصوت الطبيعي للدروس (مجاني)</h3>
+  m.innerHTML=`<div class="aiK"><div class="card"><h2>🔊 الصوت الطبيعي للدروس (مجاني)</h2>
    ${tOld?'<p class="msg bad">هذه الميزة تحتاج تحديث كود الخادم (code.gs) في Google Apps Script ونشر إصدار جديد.</p>':`<p class="sub">الحالة: ${tOn?'<b style="color:var(--good)">✓ مفعل</b> · المنطقة '+esc(ti.region)+' · المستخدم هذا الشهر: '+AR((ti.used||0).toLocaleString('en'))+' حرف من '+AR((ti.cap||0).toLocaleString('en')):'<b style="color:var(--bad)">غير مفعل</b>'} · صوتان طبيعيان: حامد وزارية، من Microsoft بالخطة المجانية F0 (500 ألف حرف شهريا). يحفظ صوت كل مقطع في Google Drive فلا يستهلك مرة أخرى.</p>`}
    <ol class="sub" style="padding-inline-start:1.2em"><li>من بوابة Azure افتح خدمة الصوت ← <b>Keys and endpoint</b>.</li><li>انسخ <b>KEY 1</b> والصقه هنا، وتأكد من المنطقة (Location/Region).</li><li>اضغط «حفظ وتفعيل» ثم «تجربة الصوت».</li></ol>
    <div class="row"><input type="password" id="ttk" placeholder="KEY 1" style="flex:1;min-width:180px;direction:ltr" autocomplete="off"><input type="text" id="ttr" value="${esc(ti.region||'uaenorth')}" style="width:120px;direction:ltr" aria-label="المنطقة"><button class="btn" id="ttsv">حفظ وتفعيل</button></div>
    <div class="row" style="margin-top:8px">${tOn?'<select id="ttvo"><option value="ar-SA-HamedNeural">👨 حامد</option><option value="ar-SA-ZariyahNeural">👩 زارية</option></select><button class="btn ghost" id="ttst">▶ تجربة الصوت</button><button class="btn danger" id="ttoff">إيقاف</button>':''}</div><p class="msg" id="ttm"></p>
-  <h3 class="aiH">2. محرك المساعد الذكي Gemini (مجاني)</h3>
-   <p class="sub">الحالة: ${r.gem?'<b style="color:var(--good)">✓ Gemini مفعل</b>':'<b style="color:var(--bad)">Gemini غير مفعل</b>'} · الاحتياطي Groq: ${r.groq||(r.ai&&!r.gem)?'<b style="color:var(--good)">✓ مفعل</b>':'غير مفعل'}<br>المحرك الأساسي <b>Google Gemini</b> المجاني (قوي في العربية الفصحى والفيزياء)، وإذا انشغل ينتقل تلقائيا إلى Groq. الحد: 15 سؤالا لكل متدرب كل 6 ساعات.</p>
-   <ol class="sub" style="padding-inline-start:1.2em"><li>افتح <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> وسجل دخولك بحساب Google.</li><li>اضغط <b>Create API key</b>، ثم انسخ المفتاح (يبدأ بـ <span dir="ltr">AIza</span>).</li><li>الصقه هنا واضغط «حفظ وتفعيل».</li><li>اختياري للاحتياط: مفتاح Groq من <a href="https://console.groq.com/keys" target="_blank" rel="noopener">console.groq.com/keys</a> (يبدأ بـ <span dir="ltr">gsk_</span>) بنفس الطريقة.</li></ol>
-   <div class="row"><input type="password" id="aik" placeholder="AIza… أو gsk_…" style="flex:1;min-width:200px;direction:ltr" autocomplete="off"><button class="btn" id="aisv">حفظ وتفعيل</button>${r.gem?'<button class="btn danger" id="aioff">إيقاف Gemini</button>':''}${r.groq?'<button class="btn danger" id="aioff2">إيقاف Groq</button>':''}</div><p class="msg" id="aim"></p>
-  <h3 class="aiH">3. صوت المدرب الذكي بجيميني للمتدربين</h3>
-   <div id="gvBox"><p class="sub"><span class="spin"></span></p></div></div>
-  <div class="card" id="gqCard"><h2>⚡ محرك Groq للمساعد الذكي</h2>
-   <p class="sub">الحالة: ${(r.groq||(r.ai&&!r.gem))?'<b style="color:var(--good)">✓ Groq مفعل</b>':'<b style="color:var(--bad)">Groq غير مفعل</b>'} · المحرك الذي يجيب الآن: <b>${r.gem?'Gemini (وGroq احتياطي)':((r.groq||r.ai)?'Groq':'لا يوجد')}</b><br>يكتب إجابات المساعد الذكي، ويشكلها قبل أن ينطقها المدرب الذكي بصوت حامد أو زارية.</p>
-   <ol class="sub" style="padding-inline-start:1.2em"><li>افتح <a href="https://console.groq.com/keys" target="_blank" rel="noopener">console.groq.com/keys</a> واضغط <b>Create API Key</b>.</li><li>انسخ المفتاح (يبدأ بـ <span dir="ltr">gsk_</span>) والصقه هنا، ثم «حفظ وتفعيل».</li><li>اضغط «تجربة Groq»: يسأل سؤالا قصيرا ويعرض الإجابة وينطقها.</li></ol>
-   <div class="row"><input type="password" id="gqk" placeholder="gsk_…" style="flex:1;min-width:200px;direction:ltr" autocomplete="off"><button class="btn" id="gqsv">حفظ وتفعيل</button>${r.groq?'<button class="btn danger" id="gqoff">إيقاف Groq</button>':''}</div>
-   <div class="row" style="margin-top:8px">${tOn?'<select id="gqvo"><option value="ar-SA-HamedNeural">👨 حامد</option><option value="ar-SA-ZariyahNeural">👩 زارية</option></select>':''}<button class="btn ghost" id="gqts">▶ تجربة Groq</button></div><p class="msg" id="gqm"></p><div id="gqa"></div></div>
+  </div>
   </div><div class="aiQ">
   <div class="row" style="margin-bottom:12px"><select id="aqs">${opts}</select><span class="sub" style="margin:0">${AR(r.questions.length)} سؤالا (آخر 300)</span>${r.questions.length?'<button class="btn ghost sm" id="aexp">⬇ تصدير Excel</button>':''}</div>
   ${top.length?`<div class="card"><h2>أكثر الدروس سؤالا</h2><div class="bars">${top.map(([k,v])=>`<div class="bar"><span class="lab" title="${esc(k)}">${esc(k)}</span><span class="trk"><span class="fil" style="width:${v/mx*100}%;display:block"></span></span><span class="val">${v}</span></div>`).join('')}</div></div>`:''}
@@ -876,25 +823,6 @@ async function drawAI(){
       const x=await api({a:'tts',token:TOKEN,voice:$('#ttvo').value,rate:0,segs:[{l:'ar',t:'مَرْحَبًا بِكُمْ فِي مِنَصَّةِ فِيزْياء مِئَةٍ وَواحِد. القُوَّةُ تُساوِي الكُتْلَةَ ضَرْبَ التَّسارُع:'},{l:'en',t:'F equals m times a'}]});
       if(!x.ok)return tm(esc(errText(x.error)),'bad');tm(x.cached?'✓ الصوت محفوظ مسبقا.':'✓ تم توليد الصوت وحفظه.','good');au.src='data:audio/mpeg;base64,'+x.audio;au.play().catch(()=>tm('اضغط «تجربة الصوت» مرة أخرى للتشغيل.','bad'))};
     $('#ttoff').onclick=async()=>{if(!confirm('إيقاف الصوت الطبيعي؟ سيعود المتدربون إلى صوت الجهاز.'))return;const x=await api({a:'tttskey',token:TOKEN,key:''});toast(x.ok?'تم الإيقاف':errText(x.error));drawAI()}}
-  $('#aisv').onclick=async()=>{const k=$('#aik').value.trim();if(!k)return;$('#aim').className='msg';$('#aim').innerHTML='<span class="spin"></span> جار التحقق من المفتاح…';
-    const x=await api({a:'tkey',token:TOKEN,key:k});$('#aim').className='msg '+(x.ok?'good':'bad');$('#aim').textContent=x.ok?(x.gem?'✓ تم تفعيل Gemini: المدرب الذكي التفاعلي والمساعد الذكي يعملان الآن لكل المتدربين.':'✓ تم تفعيل Groq الاحتياطي.'):errText(x.error);if(x.ok)setTimeout(drawAI,1200)};
-  if(r.gem)$('#aioff').onclick=async()=>{if(!confirm('إيقاف Gemini؟'))return;const x=await api({a:'tkey',token:TOKEN,key:'',which:'gem'});toast(x.ok?'تم الإيقاف':errText(x.error));drawAI()};
-  if(r.groq)$('#aioff2').onclick=async()=>{if(!confirm('إيقاف Groq؟'))return;const x=await api({a:'tkey',token:TOKEN,key:'',which:'groq'});toast(x.ok?'تم الإيقاف':errText(x.error));drawAI()};
-  {const gm=(t,c)=>{$('#gqm').className='msg '+(c||'');$('#gqm').innerHTML=t};let gau=null;
-   $('#gqsv').onclick=async()=>{const k=$('#gqk').value.trim();if(!k)return gm('الصق مفتاح Groq أولا.','bad');if(!/^gsk_/.test(k))return gm('مفتاح Groq يبدأ بـ gsk_','bad');gm('<span class="spin"></span> جار التحقق من المفتاح…');
-     const x=await api({a:'tkey',token:TOKEN,key:k});if(x.ok){gm('✓ تم تفعيل Groq.','good');setTimeout(drawAI,1200)}else gm(esc(errText(x.error)),'bad')};
-   if(r.groq)$('#gqoff').onclick=async()=>{if(!confirm('إيقاف Groq؟'))return;const x=await api({a:'tkey',token:TOKEN,key:'',which:'groq'});toast(x.ok?'تم الإيقاف':errText(x.error));drawAI()};
-   $('#gqts').onclick=async()=>{if(tOn){gau=gau||new Audio();gau.src='data:audio/mpeg;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjYwLjE2LjEwMAAAAAAAAAAAAAAA';gau.play().catch(()=>{})}
-     gm('<span class="spin"></span> جار سؤال Groq…');$('#gqa').innerHTML='';const t0=Date.now();
-     let x;try{x=await api({a:'ask',token:TOKEN,q:'ما وحدة قياس الشحنة الكهربائية؟ أجب في جملتين.',lessonKey:'3-3',lessonTitle:'تجربة Groq من لوحة المدرب',context:'',history:[],mode:'test'})}catch(e){return gm('تعذر الاتصال بالخادم.','bad')}
-     const sec=((Date.now()-t0)/1000).toFixed(1);
-     if(!x.ok)return gm(esc(errText(x.error==='ai_off'?'ai_off_g':x.error)),'bad');
-     $('#gqa').innerHTML='<div class="det" style="margin-top:6px"><p style="white-space:pre-wrap;margin:6px 0"><b>إجابة Groq:</b> '+esc(x.answer.replace(/[ً-ْٰ]/g,''))+'</p><p class="sub" style="margin:4px 0">زمن الإجابة: <span dir="ltr">'+sec+' s</span> · تشكيل الصوت: '+(x.speech?'<b style="color:var(--good)">✓ يعمل</b>':'<b style="color:var(--bad)">لم يصل</b>')+'</p></div>';
-     if(!tOn)return gm('✓ Groq يعمل. فعل الصوت الطبيعي في البند 1 لسماع الإجابة.','good');
-     gm('<span class="spin"></span> جار توليد الصوت…');const sp=String(x.speech||x.answer).replace(/[#*`>\-]/g,' ').replace(/\s+/g,' ').trim().slice(0,1800);
-     const v=await api({a:'tts',token:TOKEN,voice:$('#gqvo').value,rate:0,segs:[{l:'ar',t:sp}]});
-     if(!v.ok)return gm(esc(errText(v.error)),'bad');gm('✓ Groq يعمل، والإجابة تنطق الآن.','good');gau.src='data:audio/mpeg;base64,'+v.audio;gau.play().catch(()=>gm('اضغط «تجربة Groq» مرة أخرى للتشغيل.','bad'))}}
-  drawGV();
   if(r.questions.length)$('#aexp').onclick=()=>saveBook([['أسئلة المساعد',[['التاريخ','الرقم','الاسم','الدرس','السؤال','إجابة المساعد'],...r.questions.map(q=>[xd(q.time),q.studentId,nm[q.studentId]||'',LT[q.lessonKey]||q.lessonTitle,q.question,q.answer])],[18,12,24,30,60,80]]],'أسئلة-المساعد.xlsx');
   {const rm=m.querySelector(tab==='settings'?'.aiQ':'.aiK');if(rm)rm.remove()}
 }
