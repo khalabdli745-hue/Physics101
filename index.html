@@ -1659,7 +1659,7 @@ function card(title,sub){const c=document.createElement('div');c.className='card
 function wrap(v){v.innerHTML='';const i=document.createElement('div');i.className='inner';v.appendChild(i);return i}
 const GT=t=>t==='refs'||t==='exam';
 /* ---------- استبانة رضا المتدرب ---------- */
-const SURVEY=[['الدروس والشرح',['محتوى الدروس واضح ومنظم','الشرح على السبورة مع المدرب الذكي ساعدني على الفهم','الصوت ونطق المصطلحات واضح','صفحات الحقيبة التدريبية في المنصة مفيدة']],
+const SURVEY=[['الدروس والشرح',['محتوى الدروس واضح ومنظم','الشرح على السبورة مع المدرب الذكي ساعدني على الفهم','الصوت ونطق المصطلحات واضح','المراجع العلمية في المنصة مفيدة']],
  ['الأمثلة والتمارين',['الأمثلة المحلولة واضحة ومفيدة','خطوات الحل (المعطيات ← المطلوب ← القانون ← النتيجة) ساعدتني على حل المسائل','الآلة الحاسبة العلمية سهلة الاستخدام','التمارين التفاعلية مناسبة لمستواي']],
  ['الاختبارات',['أسئلة الاختبارات مرتبطة بمحتوى الدروس','مستوى صعوبة الاختبارات مناسب','التصحيح الفوري وشرح الإجابة مفيد']],
  ['المنصة بشكل عام',['المنصة سهلة الاستخدام على الجوال','المنصة ساعدتني على فهم مقرر الفيزياء','أنصح زملائي باستخدام المنصة']]];
@@ -2899,7 +2899,7 @@ function showLogin(){
     t:{sub:'دخول المدرب إلى لوحة المتابعة',lab:'اسم المستخدم',im:'text',hint:'أول مرة؟ أنشئ حساب المدرب من <a href="teacher.html">هنا</a>.',val:''},
     e:{sub:'دخول الاختبارات التجريبية',lab:'الرقم التدريبي',im:'numeric',hint:'إذا كنت مسجلا في المنصة فكلمة المرور نفسها. وفي أول دخول اترك كلمة المرور فارغة، وجهز رمز التسجيل من المدرب.',val:''},
     d:{sub:'معاينة المنصة كما يراها المتدرب',lab:'اسم المستخدم',im:'text',hint:'باسم المستخدم وكلمة المرور الخاصة بلوحة المدرب.',val:''},
-    g:{sub:'معاينة المنصة كما يراها المتدرب',lab:'اسم المستخدم',im:'text',hint:'ادخل ببيانات الحساب التجريبي التي أعطاك إياها المدرب.',val:'demo'},
+    g:{sub:'معاينة المنصة كما يراها المتدرب',lab:'اسم المستخدم',im:'text',hint:'ادخل ببيانات حساب المعاينة التي أعطاك إياها المدرب.',val:'demo'},
     te:{sub:'تجربة الاختبار التجريبي كما يراه المتدرب',lab:'اسم المستخدم',im:'text',hint:'باسم المستخدم وكلمة المرور الخاصة بلوحة المدرب، ولا تدخل نتيجتك في النتائج.',val:''}};
   const LGI={"s": "<svg viewBox=\"0 0 24 24\"><path d=\"M2 5c3-1.5 6-1.5 9 .5v15c-3-2-6-2-9-.5zM22 5c-3-1.5-6-1.5-9 .5v15c3-2 6-2 9-.5z\"/></svg>", "e": "<svg viewBox=\"0 0 24 24\"><path d=\"M8 2h8v3H8z\"/><path d=\"M5 4h2v3h10V4h2v18H5z\" fill-opacity=\".85\"/><path d=\"M8 12l2 2 4-4M8 17h8\" fill=\"none\" stroke=\"#1565c8\" stroke-width=\"1.8\"/></svg>", "t": "<svg viewBox=\"0 0 24 24\"><rect x=\"2\" y=\"3\" width=\"20\" height=\"14\" rx=\"2\"/><path d=\"M6 13v-3M10 13V7M14 13v-4M18 13V6\" stroke=\"#1565c8\" stroke-width=\"2\"/><path d=\"M8 21h8v-2H8z\"/></svg>", "d": "<svg viewBox=\"0 0 24 24\"><path d=\"M12 5C6 5 2 12 2 12s4 7 10 7 10-7 10-7-4-7-10-7z\"/><circle cx=\"12\" cy=\"12\" r=\"3.5\" fill=\"#1565c8\"/></svg>", "te": "<svg viewBox=\"0 0 24 24\"><path d=\"M8 2h8v3H8z\"/><path d=\"M5 4h2v3h10V4h2v18H5z\" fill-opacity=\".85\"/><path d=\"M8 12l2 2 4-4M8 17h8\" fill=\"none\" stroke=\"#1565c8\" stroke-width=\"1.8\"/></svg>"},LGT={s:"المنصة",e:"الاختبارات التجريبية",t:"لوحة المدرب",d:"معاينة المدرب",te:"الاختبارات التجريبية",g:"المعاينة"};LGI.g=LGI.d;
   let pg='0',grp='s',hD=0;const show=(p,pop)=>{const up=(pg==='0'&&p!=='0')||(pg!=='f'&&p==='f');if(!pop&&up){try{history.pushState({lg:p},'');hD++}catch(e){}}pg=p;$('loginForm').dataset.pg=p;['0','s','t','f'].forEach(x=>$('lgP'+x).hidden=x!==p);$('lgBack').hidden=p==='0';$('lgAbout').hidden=p!=='0';scrollTo(0,0);$('loginWrap').scrollTop=0};
@@ -2953,7 +2953,7 @@ function showLogin(){
     if(isT())return SYNC.post({a:'tlogin',user:id,pw:oldPw}).then(r=>{if(r.ok&&r.needChange){b.disabled=false;return toStep2('change',r)}
         if(!r.ok){b.disabled=false;return msg(tErr(r),1)}return afterT(r.token)}).catch(fail);
     SYNC.post({a:role==='e'?'exlogin':'login',id,pw:oldPw,device:SYNC.dev}).then(r=>{b.disabled=false;
-      if(r.firstTime){if(mode==='g')return msg('لم تُعيّن كلمة مرور الحساب التجريبي بعد. عيّنها من لوحة المدرب ← تبويب «حسابي التجريبي».',1);return toStep2('first',r)}
+      if(r.firstTime){if(mode==='g')return msg('لم تُعيّن كلمة مرور حساب المعاينة بعد. عيّنها من لوحة المدرب ← تبويب «حساب المعاينة».',1);return toStep2('first',r)}
       if(r.ok&&r.needChange)return toStep2('change',r);
       if(r.ok&&r.token)return ok(r);
       msg(errMsg(r),1)}).catch(fail)};
@@ -2977,7 +2977,7 @@ else{
   if(API&&AUTH){
     if(AUTH.exam){document.body.classList.add('examOnly');pos.t='exam'}else if(pos.t==='exam')pos.t='sum';
     const u=$('userChip');u.hidden=false;u.textContent=(AUTH.exam?'📝 ':AUTH.demo?'👁 ':'👤 ')+(AUTH.demo&&!AUTH.exam?'معاينة المدرب':(AUTH.name||AUTH.id).split(' ')[0])+(AUTH.exam?' · خروج':'');u.title='خروج';
-    u.onclick=()=>{if(AUTH.demo){if(confirm('الخروج من الحساب التجريبي والعودة إلى لوحة المدرب؟')){try{localStorage.removeItem('p101-auth')}catch(e){}location.replace('teacher.html')}return}
+    u.onclick=()=>{if(AUTH.demo){if(confirm('الخروج من حساب المعاينة والعودة إلى لوحة المدرب؟')){try{localStorage.removeItem('p101-auth')}catch(e){}location.replace('teacher.html')}return}
       if(confirm('تسجيل الخروج من حساب '+(AUTH.name||AUTH.id)+'؟'))SYNC.logout()};
     if(!AUTH.exam)SYNC.post({a:'me',token:AUTH.token}).then(r=>{
       if(r.error==='auth')return SYNC.logout(true);
