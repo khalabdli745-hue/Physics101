@@ -797,7 +797,7 @@ async function drawRatings(){
 
 async function drawAI(){
   const m=$(tab==='settings'?'#aiSet':'#main');if(!m)return;m.innerHTML='<p class="empty"><span class="spin"></span></p>';
-  let r,ti={};try{[r,ti]=await Promise.all([api({a:'tquestions',token:TOKEN,sectionId:secFilter==='all'?'':secFilter}),api({a:'ttsinfo',token:TOKEN}).catch(()=>({}))])}catch(e){m.innerHTML='<p class="empty">تعذر الاتصال بالخادم.</p>';return}
+  let r={ok:true,questions:[]},ti={};try{ti=await api({a:'ttsinfo',token:TOKEN})}catch(e){m.innerHTML='<p class="empty">تعذر الاتصال بالخادم.</p>';return}
   if(!r.ok){m.innerHTML=`<p class="empty">${esc(errText(r.error))}</p>`;return}
   const nm=Object.fromEntries(DATA.students.map(s=>[s.id,s.name]));nm.TEACHER='المدرب';nm.DEMO='حساب المعاينة';
   const opts=`<option value="all">كل الشعب</option>`+DATA.sections.map(s=>`<option value="${esc(s.id)}" ${secFilter===s.id?'selected':''}>${esc(s.name)}</option>`).join('');

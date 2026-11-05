@@ -147,3 +147,11 @@ setInterval(function(){if(!L)return;var B=document.querySelector('.board');if(B&
 apply();
 try{if(typeof API!=='undefined'&&API)fetch(API,{redirect:'follow'}).then(function(r){return r.json()}).then(function(r){if(r&&r.ok&&'vlock' in r)set(r.vlock)}).catch(function(){})}catch(e){}
 })();
+
+/* 5 نوفمبر: توحيد الأرقام في العناوين إلى الإنجليزية (مثال ١ ← مثال 1) في الدروس والسبورة */
+(function(){
+var AD=/[٠-٩]/;var conv=function(s){return s.replace(/[٠-٩]/g,function(d){return '٠١٢٣٤٥٦٧٨٩'.indexOf(d)})};
+var SEL='#view h1,#view h2,#view h3,#view h4,.board h1,.board h2,.board h3,.board h4';
+var fix=function(){try{document.querySelectorAll(SEL).forEach(function(h){if(!AD.test(h.textContent))return;var w=document.createTreeWalker(h,NodeFilter.SHOW_TEXT);var n;while(n=w.nextNode()){if(AD.test(n.nodeValue))n.nodeValue=conv(n.nodeValue)}})}catch(e){}};
+var t=0;new MutationObserver(function(){if(t)return;t=setTimeout(function(){t=0;fix()},60)}).observe(document.body,{childList:true,subtree:true,characterData:true});fix();
+})();
