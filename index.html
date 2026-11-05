@@ -113,7 +113,7 @@ main{display:flex;flex-direction:column;min-height:0;min-width:0}
 .md p{margin:0 0 .6em}
 .md ul,.md ol{margin:.2em 0 .7em;padding-inline-start:1.3em}
 .md li{margin:.15em 0}
-.nu{direction:ltr;unicode-bidi:isolate;display:inline-block}
+.nu{direction:ltr;unicode-bidi:isolate;display:inline-block}.coAt .eq{background:none!important;font:inherit!important;padding:0!important;margin:0!important;color:inherit!important}
 .eq{direction:ltr;unicode-bidi:isolate;display:inline-block;font-family:"Cambria Math","STIX Two Math","Times New Roman",serif;font-size:1.05em;background:var(--soft);border-radius:5px;padding:0 6px;margin:1px 2px;white-space:normal;max-width:100%;box-sizing:border-box}
 .eqblock{display:block;white-space:normal;direction:ltr;text-align:center;font-family:"Cambria Math","STIX Two Math","Times New Roman",serif;font-size:1.2em;background:var(--accent-soft);border-radius:8px;padding:8px 12px;margin:.5em 0;overflow-x:auto}
 .speak{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:-2px 0 12px}
@@ -1117,7 +1117,7 @@ document.querySelectorAll('.lgEye').forEach(b=>b.onclick=()=>{const i=b.parentNo
 <script src="more.js?v=11041800"></script>
 <script src="labs.js?v=11041350"></script>
 <script src="coach.js?v=11011115"></script>
-<script>/* الدرس النموذجي 3-1 المطور: للحساب التجريبي والمدرب فقط */(function(){var n=0;try{var a=JSON.parse(localStorage.getItem("p101-auth")||"null");n=(a&&a.demo)||localStorage.getItem("p101-tauth")?1:0}catch(e){}document.write('<script src="kcards'+(n?'31':'')+'.js?v=11021845"><\/script>')})()</script>
+<script>/* 5 نوفمبر: الدروس النموذجية (kcards31) لكل المتدربين */(function(){var n=1;document.write('<script src="kcards'+(n?'31':'')+'.js?v=11021845"><\/script>')})()</script>
 <script>
 const UNITS=window.UNITS,STUDY=window.STUDY,EXTRA=window.EXTRA||{},FIGS=window.FIGS||{};
 window.PAGES=window.PAGES||{};
@@ -3864,7 +3864,7 @@ function setup(B){if(!B||B._p103)return;var sl=B.querySelector('.bSlide'),P=B.qu
   var ms=log.querySelectorAll('.bAskM'),me=null,bot=null;for(var i=ms.length-1;i>=0;i--){if(!bot&&(ms[i].classList.contains('bot')||ms[i].classList.contains('err')))bot=ms[i];if(ms[i].classList.contains('me')){me=ms[i];break}}
   if(bot&&me&&bot.compareDocumentPosition(me)&Node.DOCUMENT_POSITION_FOLLOWING)bot=null;
   var q1=me?'سؤالك: '+me.textContent.trim():'';if(aq.textContent!==q1)aq.textContent=q1;
-  var t1=!bot||bot.classList.contains('wait')?'لحظة، أفكر في سؤالك…':txt(bot);if(at.textContent!==t1)at.textContent=t1;
+  var t1=!bot||bot.classList.contains('wait')?'لحظة، أفكر في سؤالك…':txt(bot);if(at._t!==t1){at._t=t1;/* 5 نوفمبر: عرض المعادلات معزولة حتى لا تنقلب */if(bot&&!bot.classList.contains('wait')&&bot.querySelector('.eq,.nu')){var c=bot.cloneNode(true);c.querySelectorAll('p,div,li').forEach(function(x){x.insertAdjacentHTML('afterend','<br>');x.replaceWith.apply(x,Array.prototype.slice.call(x.childNodes))});at.innerHTML=c.innerHTML.replace(/(<br>\s*)+$/,'')}else at.textContent=t1}
   var qa=B.querySelector('.qActs');if(qa&&qa.parentNode!==A)A.appendChild(qa);
   if(A.hidden)A.hidden=false;if(!B.classList.contains('coAnsOn'))B.classList.add('coAnsOn')};
  new MutationObserver(upd).observe(log,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['class']});
@@ -3875,5 +3875,5 @@ new MutationObserver(function(){var B=document.querySelector('.board');if(B&&B._
 setInterval(function(){var B=document.querySelector('.board');if(B&&B._p102&&!B._p103)setup(B)},500);
 })();
 </script>
-<script src="fixeddata.js?v=1"></script><script src="fixedai.js?v=6"></script></body>
+<script src="fixeddata.js?v=2"></script><script src="fixedai.js?v=6"></script></body>
 </html>
