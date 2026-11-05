@@ -59,7 +59,7 @@ let TS=1;
 function pill(x,y,t,c,delay,cls){const k=TS,w=(t.length*10.2+26)*k;
   return `<g class="kPl ${cls||''}" style="--d:${delay||0}s"><rect x="${f1(x-w/2)}" y="${f1(y-17*k)}" width="${f1(w)}" height="${f1(30*k)}" rx="${f1(15*k)}" fill="#ffffff" stroke="${c}" stroke-width="2" filter="drop-shadow(0 2px 3px rgba(30,58,95,.18))"/><text x="${x}" y="${f1(y+4.5*k)}" text-anchor="middle" font-size="${f1(17*k)}" font-weight="800" fill="${c}" direction="ltr">${t}</text></g>`}
 function lbl(x,y,t,c,s){return `<text x="${x}" y="${y}" text-anchor="middle" font-size="${f1((s||14.5)*TS)}" font-weight="800" fill="${c||'#1e3a5f'}" direction="ltr">${t}</text>`}
-function dim(x1,x2,y,t){return `<g class="kDim"><line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="#0369a1" stroke-width="1.6" stroke-dasharray="5 4"/><line x1="${x1}" y1="${y-7}" x2="${x1}" y2="${y+7}" stroke="#0369a1" stroke-width="1.6"/><line x1="${x2}" y1="${y-7}" x2="${x2}" y2="${y+7}" stroke="#0369a1" stroke-width="1.6"/>`+pill((x1+x2)/2,y,t,'#0369a1',0,'kOn0')+`</g>`}
+function dim(x1,x2,y,t,px){px=px==null?(x1+x2)/2:px;return `<g class="kDim"><line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="#0369a1" stroke-width="1.6" stroke-dasharray="5 4"/><line x1="${x1}" y1="${y-7}" x2="${x1}" y2="${y+7}" stroke="#0369a1" stroke-width="1.6"/><line x1="${x2}" y1="${y-7}" x2="${x2}" y2="${y+7}" stroke="#0369a1" stroke-width="1.6"/>`+pill(px,y,t,'#0369a1',0,'kOn0')+`</g>`}
 function flow(x1,x2,y,rep){return `<line class="kFlow ${rep?'kRep':'kAtt'}" x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="${rep?'#dc2626':'#2563eb'}" stroke-width="2" stroke-dasharray="4 9" opacity=".55"/>`}
 function svg(w,h,body,cls){return `<svg class="kSvg ${cls||''}" viewBox="0 0 ${w} ${h}" role="img" aria-hidden="true">${body}</svg>`}
 /* ---------- المشاهد ---------- */
@@ -2077,8 +2077,8 @@ function fTrack(o){o=o||{};const W=640,H=300,FY=200,D=8,acc=/a\s*=/.test(o.b||''
   b+=gRoad(W,FY-34,FY+40);if(o.x!==undefined)b+=gFlag(210,FY-70,FY-34,"#16a34a")+gFlag(610,FY-70,FY-34,"#dc2626")+`<rect x="208" y="${FY-34}" width="4" height="74" fill="#fff" opacity=".85"/><rect x="608" y="${FY-34}" width="4" height="74" fill="#fff" opacity=".85"/>`;
   const sp=acc?` calcMode="spline" keySplines="0 0 1 1;.55 0 .9 .6;0 0 1 1"`:'';
   b+=`<g><animateTransform attributeName="transform" type="translate" dur="${D}s" repeatCount="indefinite" keyTimes="${scK(D,[0,1,5.5,D])}" values="0 0;0 0;400 0;400 0"${sp}/>${gCarS(13,FY+16,.75,D,1,5.5,6)}</g>`;
-  if(o.a)b+=zS(D,.5,zT(150,70,o.a,'#0369a1'));if(o.b)b+=zS(D,1.5,zT(320,70,o.b,'#b45309'));if(o.c)b+=zS(D,5.5,zT(500,70,o.c,'#7c3aed'));
-  if(o.x)b+=zS(D,5.5,dim(210,610,FY+66,o.x));
+  if(o.a)b+=zS(D,.5,zT(125,70,o.a,'#0369a1'));if(o.b)b+=zS(D,1.5,zT(320,70,o.b,'#b45309'));if(o.c)b+=zS(D,5.5,zT(515,70,o.c,'#7c3aed'));
+  if(o.x)b+=zS(D,5.5,dim(210,610,FY+66,o.x,330));
   return svg(W,H,b,'kScene')}
 
 /* الحركة في بعد واحد: سيارة على طريق مستقيم على محور x (مشهد أبسط — طلب المدرب 07:20) */
@@ -2097,7 +2097,7 @@ function fPull(o){o=o||{};const W=640,H=300,FY=196,D=7;let b=gDefs()+stage(W,H,F
   if(o.ang)b+=zS(D,.6,vArr(x+w+22,by,x+w+22+150*Math.cos(dg(o.ang)),by-150*Math.sin(dg(o.ang)),'#ea580c',9)+zT(x+w+22+150*Math.cos(dg(o.ang))+56,by-150*Math.sin(dg(o.ang))-6,o.Fa||'F','#b45309')+`<line x1="${x+w+22}" y1="${by}" x2="${x+w+152}" y2="${by}" stroke="#7c3aed" stroke-width="1.6" stroke-dasharray="5 4"/>`+arcA(x+w+22,by,44,0,o.ang,'#7c3aed','')+zT(x+w+122,by-24,'θ = '+o.ang+'°','#7c3aed',80));
   if(o.f)b+=zS(D,1.8,vArr(x-6,by+20,x-96,by+20,'#2563eb',9)+zT(x-50,by-14,o.f,'#1d4ed8'));
   if(o.N)b+=zS(D,3,vArr(bx,y-20,bx,y-86,'#16a34a',9)+zT(bx+20+Math.max(44,o.N.length*9.5+30)/2,y-72,o.N,'#15803d'));
-  if(o.W)b+=zS(D,3,vArr(bx,yb+4,bx,yb+58,'#dc2626',9)+zT(bx+20+Math.max(44,o.W.length*9.5+30)/2,yb+48,o.W,'#b91c1c'));
+  if(o.W)b+=zS(D,3,vArr(bx,yb+4,bx,yb+58,'#dc2626',9)+zT(bx-20-Math.max(44,o.W.length*9.5+30)*TS/2,yb+48,o.W,'#b91c1c'));
   b+='</g>';
   if(o.x)b+=zS(D,5,dim(bx,bx+mv,yb+40,o.x));
   if(o.note)b+=scCap(D,W,o.note,'#334155',0,D);
@@ -2126,7 +2126,7 @@ function fFall(o){o=o||{};const W=640,H=330,FY=300,D=8,t0=1.2,t1=3.2;let b=gDefs
   b+=`<line x1="${bx+40}" y1="${y0}" x2="${bx+40}" y2="${y1}" stroke="#0369a1" stroke-width="2" stroke-dasharray="6 5"/>`+zT(bx+70,(y0+y1)/2,'h','#0369a1',36);
   const base=250,M=150,bar=(X,c,t,vals)=>`<rect x="${X}" y="${base-M}" width="40" height="${M}" rx="5" fill="${c}" opacity=".12"/><rect x="${X}" width="40" rx="5" fill="${c}"><animate attributeName="y" dur="${D}s" repeatCount="indefinite" keyTimes="${kt}" values="${vals.map(v=>base-v).join(';')}"${sp}/><animate attributeName="height" dur="${D}s" repeatCount="indefinite" keyTimes="${kt}" values="${vals.join(';')}"${sp}/></rect><text x="${X+20}" y="${base+18}" text-anchor="middle" font-size="13" font-weight="900" fill="${c}" direction="ltr">${t}</text>`;
   b+=bar(400,'#2563eb','PE',[M,M,4,4])+bar(456,'#16a34a','KE',[4,4,M,M])+bar(512,'#7c3aed','ME',[M,M,M,M]);
-  b+=zT(476,base+48,o.me||'ME ثابتة','#7c3aed',120);
+  b+=zT(476,base-M-28,o.me||'ME ثابتة','#7c3aed');
   b+=scCap(D,W,'في الأعلى: طاقة الوضع أكبر ما يمكن','#2563eb',0,t1)+scCap(D,W,'قبل الاصطدام: تحولت إلى طاقة حركية','#16a34a',t1,D);
   return svg(W,H+16,b,'kScene')}
 
@@ -2419,7 +2419,7 @@ CARDS['1-1']={
     S(pt(B('الإزاحة')+': التغير في موضع الجسم، وتمثل بمتجه من نقطة البداية إلى نقطة النهاية، وهي كمية '+B('متجهة')+'.'),'الْإِزَاحَةُ: التَّغَيُّرُ فِي مَوْضِعِ الْجِسْمِ، وَتُمَثَّلُ بِمُتَّجِهٍ مِنْ نُقْطَةِ الْبِدَايَةِ إِلَى نُقْطَةِ النِّهَايَةِ، وَهِيَ كَمِّيَّةٌ مُتَّجِهَهْ.')]},
   exd:{title:'مثال · صفحة 35',sayT:'لِنَأْخُذْ مِثَالَ الْحَقِيبَةِ التَّدْرِيبِيَّةِ عَلَى الْمَسَافَةِ وَالْإِزَاحَةِ، مِنْ صَفْحَةِ 35.',steps:()=>[
     S(q('سيارة تحركت من A إلى B غربا '+M('6 km')+'، ثم من B إلى C شرقا '+M('2 km')+'. أوجد: الإزاحة، والمسافة.','المثال · صفحة 35'),''),
-    S(fig(fDisp(),'المسار الفعلي باللونين الأزرق والأحمر، والإزاحة بالأخضر'),'لَاحِظِ الرَّسْمَ: الْمَسَارُ الْفِعْلِيُّ بِالْأَزْرَقِ وَالْأَحْمَرِ، وَالْإِزَاحَةُ بِالْأَخْضَرِ مِنَ الْبِدَايَةِ إِلَى النِّهَايَهْ.'),
+    S(fig(fDispR({show:1}),'المسار الفعلي باللونين الأزرق والأحمر، والإزاحة بالأخضر'),'لَاحِظِ الرَّسْمَ: الْمَسَارُ الْفِعْلِيُّ بِالْأَزْرَقِ وَالْأَحْمَرِ، وَالْإِزَاحَةُ بِالْأَخْضَرِ مِنَ الْبِدَايَةِ إِلَى النِّهَايَهْ.'),
     S(st(1,'المسافة: '+M('6 + 2 = 8 km')),'الْمَسَافَةُ مَجْمُوعُ طُولِ الْمَسَارِ: سِتَّةٌ زَائِدَ اثْنَيْنِ، تُسَاوِي ثَمَانِيَةَ كِيلُومِتْرَاتْ.'),
     S(st(2,'الإزاحة: '+M('6 − 2 = 4 km')+' غربا'),'الْإِزَاحَةُ: سِتَّةٌ نَاقِصَ اثْنَيْنِ، تُسَاوِي أَرْبَعَةَ كِيلُومِتْرَاتٍ غَرْبَا.'),
     S(res('المسافة '+M('8 km')+' · الإزاحة '+M('4 km')+' غربا'),'')]},
@@ -2977,13 +2977,78 @@ PFIG['3-5'].unshift([/4\.5 × 10⁻⁴ C/,()=>cCapEx({q:'q = 4.5 × 10⁻⁴ C',
 PFIG['3-6'].unshift([/200 pF و 600 pF/,()=>sParEx({C:['200 pF','600 pF'],res:'C_total = 800 pF'}),'على التوازي نجمع السعات: C = 200 + 600 = 800 pF'],[/6 pF و 3 pF/,()=>sSerEx({C:['6 pF','3 pF'],res:'C_total = 2 pF'}),'على التوالي: C = 6 × 3 / (6 + 3) = 2 pF'],[/سعتهما المكافئة 2 × 10⁻¹² F/,()=>sSerEx({C:['C₁','C₂'],V:'10 V',res:'q = 2 × 10⁻¹¹ C'}),'الشحنة متساوية على المكثفين: q = C·V = 2 × 10⁻¹¹ C'],[/2 [µμ]F و 4 [µμ]F.*التوالي/,()=>sSerEx({C:['2 µF','4 µF'],res:'C_total = 1.33 µF'}),'على التوالي: C = 2 × 4 / (2 + 4) = 1.33 µF'],[/2 [µμ]F و 4 [µμ]F.*التوازي/,()=>sParEx({C:['2 µF','4 µF'],res:'C_total = 6 µF'}),'على التوازي: C = 2 + 4 = 6 µF'],[/4 nF/,()=>sSerEx({C:['4 nF','2 nF'],V:'12 V',res:'C_total = 1.33 nF'}),'على التوالي: C = 4 × 2 / (4 + 2) = 1.33 nF'],[/400 nF/,()=>sParEx({C:['400 nF','100 nF'],V:'110 V',res:'C_total = 500 nF'}),'على التوازي: C = 400 + 100 = 500 nF'],[/2 × 10⁻⁶ F وُصل بجهد 12 V/,()=>cCapEx({C:'C = 2 µF',V:'V = 12 V',res:'PE = 1.44 × 10⁻⁴ J'}),'PE = ½·C·V² = 1.44 × 10⁻⁴ J'],[/2\.4 C/,()=>cCapEx({q:'q = 2.4 C',V:'V = 200 V',res:'PE = 240 J'}),'PE = ½·q·V = 240 J'],[/4\.5 × 10⁻¹² F يتصل لوحاه|الطاقة المختزنة فيه/,()=>cCapEx({C:'C = 4.5 pF',V:'V = 12 V',res:'PE = 3.24 × 10⁻¹⁰ J'}),'PE = ½·C·V² = 3.24 × 10⁻¹⁰ J']);
 /* ---------- الأمثلة والتمارين التفاعلية للوحدات 1-3: مشهد مجسم فوق كل مسألة، والناتج يظهر على المشهد بعد الحل (طلب المدرب 5 نوفمبر 07:54) ---------- */
 function pRes(f,res){const m=f.match(/viewBox="0 0 (\d+) (\d+)"/),W=m?+m[1]:640,H=m?+m[2]:300,w=Math.max(96,res.length*9.5+34);
-  return f.replace(/<\/svg>\s*$/,`<g class="kPl" style="--d:.15s">${zT(W-w/2-14,H-24,res,'#15803d',w)}</g></svg>`)}
+  return f.replace(/<\/svg>\s*$/,`<g class="kPl" style="--d:.15s">${zT(W-w*TS/2-12,H-14-15*TS,res,'#15803d',w)}</g></svg>`)}
 function pScale(txt){const W=640,H=250,FY=210;return svg(W,H,gDefs()+stage(W,H,FY)+gScale(220,FY+8,200,txt),'kScene')}
-function pWatch(txt){const W=640,H=240,FY=200;return svg(W,H,gDefs()+stage(W,H,FY)+`<g transform="translate(320 120) scale(1.9) translate(-320 -120)">${gWatch(320,120,8,0,6)}</g>`+zT(150,120,txt,'#0369a1'),'kScene')}
-function pArea(a){const W=640,H=250,FY=90;let b=gDefs()+stage(W,H,FY);b+=`<polygon points="200,120 460,120 520,210 140,210" fill="#86efac" stroke="#15803d" stroke-width="2"/><polygon points="200,120 460,120 520,210 140,210" fill="url(#g-wt)" opacity=".15"/>`+Array.from({length:5},(_,i)=>`<line x1="${200-12*i}" y1="${120+18*i}" x2="${460+12*i}" y2="${120+18*i}" stroke="#15803d" stroke-width=".7" opacity=".5"/>`).join('');
-  b+=dim(140,520,232,a)+zT(560,160,a,'#15803d');return svg(W,H+10,b,'kScene')}
-function pTemp(t,col){const W=640,H=300,FY=270;let b=gDefs()+hDefs()+stage(W,H,FY);b+=gSh(320,FY-10,30)+gTh(320,FY-40,200,col==='#2563eb'?.25:.7,col==='#2563eb'?.25:.7,6,0,1,col);b+=zT(460,150,t,col==='#2563eb'?'#1d4ed8':'#b91c1c');return svg(W,H,b,'kScene')}
-function pMetal(m,t){const W=640,H=300,FY=270;let b=gDefs()+hDefs()+stage(W,H,FY)+kBench(170,FY,10,630);b+=gPlate(260,FY-18,200)+gMetal(196,FY-58,120,50,t?'url(#h-hot)':'#c2410c',t?.55:.35);b+=zT(500,110,m,'#334155');if(t)b+=zT(500,160,t,'#b91c1c');return svg(W,H,b,'kScene')}
+function pArea(a){/* منظر علوي لمربع ضلعه 1 km = 1000 m */const W=640,H=260,X0=230,Y0=24,S=180,X1=X0+S,Y1=Y0+S;let b=gDefs()+`<rect x="0" y="0" width="${W}" height="${H}" fill="#F3F7FC"/>`;
+  b+=`<rect x="${X0}" y="${Y0}" width="${S}" height="${S}" fill="#bbf7d0" stroke="#15803d" stroke-width="2.5"/>`+Array.from({length:9},(_,i)=>{const t=(i+1)*S/10;return `<line x1="${X0+t}" y1="${Y0}" x2="${X0+t}" y2="${Y1}" stroke="#15803d" stroke-width=".6" opacity=".35"/><line x1="${X0}" y1="${Y0+t}" x2="${X1}" y2="${Y0+t}" stroke="#15803d" stroke-width=".6" opacity=".35"/>`}).join('');
+  b+=`<text x="${X0+S/2}" y="${Y0+S/2}" font-size="30" font-weight="800" text-anchor="middle" fill="#14532d" direction="ltr">1 km²</text><text x="${X0+S/2}" y="${Y0+S/2+28}" font-size="15" font-weight="700" text-anchor="middle" fill="#166534" direction="ltr">1000 m × 1000 m</text>`;
+  const vx=X0-26;b+=`<g class="kDim"><line x1="${vx}" y1="${Y0}" x2="${vx}" y2="${Y1}" stroke="#0369a1" stroke-width="1.6" stroke-dasharray="5 4"/><line x1="${vx-7}" y1="${Y0}" x2="${vx+7}" y2="${Y0}" stroke="#0369a1" stroke-width="1.6"/><line x1="${vx-7}" y1="${Y1}" x2="${vx+7}" y2="${Y1}" stroke="#0369a1" stroke-width="1.6"/>`+pill(vx-62,Y0+S/2,'1 km = 1000 m','#0369a1',0,'kOn0')+`</g>`;
+  b+=dim(X0,X1,Y1+22,'1 km = 1000 m');return svg(W,H,b,'kScene')}
+function pMetal(m,t){const W=640,H=300,FY=270;let b=gDefs()+hDefs()+stage(W,H,FY)+kBench(170,FY,10,630);b+=gPlate(260,FY-18,200)+gMetal(196,FY-58,120,50,t?'url(#h-hot)':'#c2410c',t?.55:.35);const cx=q=>Math.min(500,628-(q.length*9.5+30)*TS/2);b+=zT(cx(m),110,m,'#334155');if(t)b+=zT(cx(t),160,t,'#b91c1c');return svg(W,H,b,'kScene')}
+function pTemp(t,col,ru){/* ميزان حرارة زجاجي حقيقي بتدريجين: المعطى يسارا، ومقياس النتيجة يمينا يظهر بعد الحل */
+  const W=640,H=320,FY=296,blue=col==='#2563eb',m=t.match(/T([CFK])\s*=\s*(-?[\d.]+)/),lu=m?m[1]:'C',v=m?+m[2]:20;
+  const toC=(x,u)=>u==='C'?x:u==='F'?(x-32)/1.8:x-273,fromC=(c,u)=>u==='C'?c:u==='F'?c*1.8+32:c+273;ru=ru||(lu==='C'?'F':'C');
+  const C=toC(v,lu),cmin=C<35?-20:0,cmax=[50,100,150,200,250,300,400].find(x=>x>=C*1.12+8)||500;
+  const X=320,top=40,yb=246,yTop=60,yBot=226,Y=c=>yBot-(c-cmin)*(yBot-yTop)/(cmax-cmin),uid='tq'+Math.random().toString(36).slice(2,6);
+  const nice=r=>[1,2,5,10,20,25,50,100,200].find(s=>r/s<=8);
+  const scale=(u,side)=>{const a=fromC(cmin,u),b=fromC(cmax,u),st=nice(b-a),mn=st/5;let g='';
+    for(let x=Math.ceil(a/mn)*mn;x<=b+1e-9;x+=mn){const yy=Y(toC(x,u)),big=Math.abs(x/st-Math.round(x/st))<1e-6,L=big?13:7,x0=side<0?X-15:X+15;
+      g+=`<line x1="${x0}" y1="${f1(yy)}" x2="${x0+side*L}" y2="${f1(yy)}" stroke="#1f2937" stroke-width="${big?1.6:.8}"/>`;
+      if(big)g+=`<text x="${x0+side*(L+4)}" y="${f1(yy+4.5)}" font-size="12.5" font-weight="800" text-anchor="${side<0?'end':'start'}" fill="#1f2937" direction="ltr">${Math.round(x)}</text>`}
+    const un=u==='K'?'K':'°'+u;g+=`<text x="${side<0?X-38:X+38}" y="${top+8}" font-size="15" font-weight="900" text-anchor="middle" fill="${side<0?'#7f1d1d':'#14532d'}" direction="ltr">${un}</text>`;return g};
+  const lq=blue?['#93c5fd','#2563eb','#1e3a8a']:['#fca5a5','#dc2626','#7f1d1d'],yl=Y(C);
+  let b=gDefs()+stage(W,H,FY)+`<defs><linearGradient id="${uid}g" x1="0" x2="1"><stop offset="0" stop-color="#cbd5e1" stop-opacity=".9"/><stop offset=".25" stop-color="#ffffff" stop-opacity=".95"/><stop offset=".5" stop-color="#e2e8f0" stop-opacity=".55"/><stop offset="1" stop-color="#94a3b8" stop-opacity=".9"/></linearGradient>
+<linearGradient id="${uid}l" x1="0" x2="1"><stop offset="0" stop-color="${lq[2]}"/><stop offset=".45" stop-color="${lq[0]}"/><stop offset="1" stop-color="${lq[1]}"/></linearGradient>
+<radialGradient id="${uid}b" cx=".35" cy=".3" r=".75"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset=".3" stop-color="${lq[0]}"/><stop offset=".75" stop-color="${lq[1]}"/><stop offset="1" stop-color="${lq[2]}"/></radialGradient>
+<linearGradient id="${uid}p" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#fffdf5"/><stop offset="1" stop-color="#f3ead6"/></linearGradient>
+<linearGradient id="${uid}w" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#9a6234"/><stop offset="1" stop-color="#5b3517"/></linearGradient></defs>`;
+  /* لوح التدريج الخشبي بحامل قائم على الطاولة */
+  b+=gSh(X,FY-4,90)+`<path d="M${X-70},${FY-6} L${X+70},${FY-6} L${X+58},${FY-22} L${X-58},${FY-22}Z" fill="url(#${uid}w)"/><rect x="${X-8}" y="${yb+8}" width="16" height="${FY-22-yb-8}" fill="#6b4423"/>`;
+  b+=`<rect x="${X-78}" y="${top-12}" width="156" height="${yb-top+30}" rx="12" fill="url(#${uid}p)" stroke="#c8b48a" stroke-width="1.5" filter="drop-shadow(0 4px 6px rgba(30,41,59,.25))"/>`;
+  b+=scale(lu,-1)+`<g class="kPl" style="--d:.1s">${scale(ru,1)}</g>`;
+  /* الأنبوب الزجاجي والخزان */
+  b+=`<rect x="${X-9}" y="${top}" width="18" height="${yb-top}" rx="9" fill="url(#${uid}g)" stroke="#94a3b8" stroke-width="1"/><rect x="${X-7}" y="${top-8}" width="14" height="10" rx="3" fill="#94a3b8"/>`;
+  b+=`<rect x="${X-3}" y="${f1(yl)}" width="6" height="${f1(yb-yl)}" fill="url(#${uid}l)"><animate attributeName="y" dur="3s" fill="freeze" values="${yb};${f1(yl)}"/><animate attributeName="height" dur="3s" fill="freeze" values="0;${f1(yb-yl)}"/></rect>`;
+  b+=`<circle cx="${X}" cy="${yb+8}" r="16" fill="url(#${uid}b)" stroke="${lq[2]}" stroke-width="1"/><ellipse cx="${X-5}" cy="${yb+2}" rx="4" ry="6" fill="#fff" opacity=".6"/><rect x="${X-6}" y="${top+6}" width="2.5" height="${yb-top-14}" rx="1.2" fill="#fff" opacity=".75"/>`;
+  /* مؤشر القراءة */
+  b+=`<line x1="${X-82}" y1="${f1(yl)}" x2="${X-62}" y2="${f1(yl)}" stroke="${blue?'#1d4ed8':'#b91c1c'}" stroke-width="2" stroke-dasharray="4 3"/><path d="M${X-11},${f1(yl)} l-9,-6 l0,12Z" fill="${blue?'#1d4ed8':'#b91c1c'}"/>`;
+  b+=zT(150,yl<70?80:yl,t,blue?'#1d4ed8':'#b91c1c');
+  return svg(W,H,b,'kScene')}
+function pWatch(txt){/* ساعة حائط واقعية: عقرب الدقائق يدور دورة كاملة = ساعة واحدة */
+  const W=640,H=300,cx=330,cy=138,R=104,D=8,u='ck'+Math.random().toString(36).slice(2,6);let b=gDefs()+`<rect width="${W}" height="${H}" fill="url(#kc-bg)"/>`;
+  b+=`<defs><linearGradient id="${u}r" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f1f5f9"/><stop offset=".35" stop-color="#94a3b8"/><stop offset=".6" stop-color="#e2e8f0"/><stop offset="1" stop-color="#475569"/></linearGradient><radialGradient id="${u}f" cx=".5" cy=".45" r=".6"><stop offset="0" stop-color="#ffffff"/><stop offset=".85" stop-color="#f8fafc"/><stop offset="1" stop-color="#e2e8f0"/></radialGradient><linearGradient id="${u}g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/></linearGradient></defs>`;
+  b+=`<ellipse cx="${cx+6}" cy="${cy+10}" rx="${R+12}" ry="${R+12}" fill="#0f172a" opacity=".18" filter="url(#g-blur)"/><circle cx="${cx}" cy="${cy}" r="${R+12}" fill="url(#${u}r)" stroke="#334155" stroke-width="1.5"/><circle cx="${cx}" cy="${cy}" r="${R+3}" fill="#1e293b"/><circle cx="${cx}" cy="${cy}" r="${R}" fill="url(#${u}f)"/>`;
+  for(let i=0;i<60;i++){const a=i*6*Math.PI/180,big=i%5===0,r1=R-(big?14:7),r2=R-3;b+=`<line x1="${f1(cx+r1*Math.sin(a))}" y1="${f1(cy-r1*Math.cos(a))}" x2="${f1(cx+r2*Math.sin(a))}" y2="${f1(cy-r2*Math.cos(a))}" stroke="#0f172a" stroke-width="${big?3:1.1}" stroke-linecap="round"/>`}
+  for(let h=1;h<=12;h++){const a=h*30*Math.PI/180,r=R-30;b+=`<text x="${f1(cx+r*Math.sin(a))}" y="${f1(cy-r*Math.cos(a)+7)}" font-size="20" font-weight="800" text-anchor="middle" fill="#0f172a" direction="ltr" font-family="Georgia,serif">${h}</text>`}
+  /* القطاع الذي يمسحه عقرب الدقائق خلال ساعة */
+  b+=`<circle cx="${cx}" cy="${cy}" r="${R*.42}" fill="none" stroke="#f97316" stroke-opacity=".35" stroke-width="${R*.84}" pathLength="100" stroke-dasharray="0 100" transform="rotate(-90 ${cx} ${cy})"><animate attributeName="stroke-dasharray" dur="${D}s" repeatCount="indefinite" keyTimes="0;.1;.8;1" values="0 100;0 100;100 0;100 0"/></circle>`;
+  const hand=(len,w,c,deg0,deg1,tail)=>`<g><animateTransform attributeName="transform" type="rotate" dur="${D}s" repeatCount="indefinite" keyTimes="0;.1;.8;1" values="${deg0} ${cx} ${cy};${deg0} ${cx} ${cy};${deg1} ${cx} ${cy};${deg1} ${cx} ${cy}"/><path d="M${cx-w/2},${cy+(tail||12)} L${cx-w/3},${cy-len} L${cx},${cy-len-6} L${cx+w/3},${cy-len} L${cx+w/2},${cy+(tail||12)}Z" fill="${c}"/></g>`;
+  b+=hand(R*.5,8,'#0f172a',90,120)+hand(R*.78,6,'#1e293b',0,360);
+  b+=`<g><animateTransform attributeName="transform" type="rotate" dur="${D/12}s" repeatCount="indefinite" values="0 ${cx} ${cy};360 ${cx} ${cy}"/><line x1="${cx}" y1="${cy+18}" x2="${cx}" y2="${cy-R+10}" stroke="#dc2626" stroke-width="2"/><circle cx="${cx}" cy="${cy-R+26}" r="3.5" fill="#dc2626"/></g>`;
+  b+=`<circle cx="${cx}" cy="${cy}" r="7" fill="#dc2626" stroke="#7f1d1d"/><circle cx="${cx}" cy="${cy}" r="2.5" fill="#fca5a5"/><path d="M${cx-R},${cy} A${R},${R} 0 0 1 ${cx+R*.7},${cy-R*.7} L${cx-R*.2},${cy+R*.2}Z" fill="url(#${u}g)"/>`;
+  b+=zT(130,cy,txt,'#0369a1')+`<g class="kPl" style="--d:.1s">${zT(530,cy-40,'1 h = 60 min','#b45309')}${zT(530,cy+10,'1 min = 60 s','#7c3aed')}</g>`;
+  return svg(W,H,b,'kScene')}
+function fDispR(o){/* سيارة على طريق: تتحرك غربا 6 km ثم ترجع شرقا 2 km، والإزاحة من A إلى C */
+  o=o||{};const W=640,H=400,D=10,RY=196,K=70,A=560,B=A-6*K,C=B+2*K,u='ds'+Math.random().toString(36).slice(2,6);
+  let b=gDefs()+gCarDefs()+`<defs><linearGradient id="${u}s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#bfe3fb"/><stop offset="1" stop-color="#eef7fd"/></linearGradient><linearGradient id="${u}a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4b5563"/><stop offset="1" stop-color="#1f2937"/></linearGradient><linearGradient id="${u}g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#86c46a"/><stop offset="1" stop-color="#4d8f3a"/></linearGradient></defs>`;
+  b+=`<rect width="${W}" height="${H}" fill="url(#${u}s)"/><path d="M0,140 Q80,96 170,128 T340,118 T520,124 T640,112 L640,170 L0,170Z" fill="#a7c99a" opacity=".7"/><path d="M0,156 Q120,128 250,150 T470,146 T640,140 L640,175 L0,175Z" fill="#7fb36b"/>`;
+  b+=`<rect x="0" y="168" width="${W}" height="${H-168}" fill="url(#${u}g)"/><rect x="0" y="${RY-26}" width="${W}" height="56" fill="url(#${u}a)"/><rect x="0" y="${RY-28}" width="${W}" height="3" fill="#e5e7eb"/><rect x="0" y="${RY+28}" width="${W}" height="3" fill="#e5e7eb"/>`;
+  for(let x=-10;x<W;x+=44)b+=`<rect x="${x}" y="${RY-1.5}" width="24" height="3" fill="#fde047"/>`;
+  /* لافتات النقاط وتدريج المسافة */
+  for(let i=0;i<=6;i++){const x=A-i*K;b+=`<line x1="${x}" y1="${RY+36}" x2="${x}" y2="${RY+44}" stroke="#14532d" stroke-width="2"/><text x="${x}" y="${RY+58}" font-size="12" font-weight="800" text-anchor="middle" fill="#14532d" direction="ltr">${i} km</text>`}
+  b+=`<line x1="${B}" y1="${RY+40}" x2="${A}" y2="${RY+40}" stroke="#14532d" stroke-width="1.5"/>`;
+  [['A',A],['B',B],['C',C]].forEach(([t,x])=>{b+=`<rect x="${x-2}" y="${RY-74}" width="4" height="48" fill="#64748b"/><circle cx="${x}" cy="${RY-82}" r="15" fill="#fff" stroke="#0f172a" stroke-width="2.5"/><text x="${x}" y="${RY-76}" font-size="17" font-weight="900" text-anchor="middle" fill="#0f172a">${t}</text>`});
+  /* البوصلة */
+  {const x=86,y=46;b+=`<circle cx="${x}" cy="${y}" r="30" fill="#fff" opacity=".85" stroke="#334155"/><path d="M${x},${y-24} L${x+6},${y} L${x},${y+24} L${x-6},${y}Z" fill="#94a3b8"/><path d="M${x-24},${y} L${x},${y-6} L${x+24},${y} L${x},${y+6}Z" fill="#475569"/><text x="${x}" y="${y-31}" font-size="11" font-weight="900" text-anchor="middle" fill="#0f172a">شمال</text><text x="${x-48}" y="${y+5}" font-size="13" font-weight="900" text-anchor="middle" fill="#1d4ed8">غرب</text><text x="${x+48}" y="${y+5}" font-size="13" font-weight="900" text-anchor="middle" fill="#b91c1c">شرق</text></g>`.replace('</g>','')}
+  /* أسهم المسار: الأزرق غربا ثم الأحمر شرقا، يرسمان مع الحركة */
+  const kt='0;.05;.38;.48;.68;1',arr=(x1,x2,y,c,lab,lx,k0,k1)=>{const L=Math.abs(x2-x1),dir=Math.sign(x2-x1);return `<g><line x1="${x1}" y1="${y}" x2="${x2-dir*10}" y2="${y}" stroke="${c}" stroke-width="6" stroke-linecap="round" stroke-dasharray="${L} ${L}" stroke-dashoffset="${L}"><animate attributeName="stroke-dashoffset" dur="${D}s" repeatCount="indefinite" keyTimes="0;${k0};${k1};1" values="${L};${L};0;0"/></line><path d="M${x2},${y} l${-dir*16},-9 l0,18Z" fill="${c}" opacity="0"><animate attributeName="opacity" dur="${D}s" repeatCount="indefinite" keyTimes="0;${k1};${k1+.01};1" values="0;0;1;1"/></path><text x="${lx}" y="${y-10}" font-size="15" font-weight="900" text-anchor="middle" fill="${c}" opacity="0">${lab}<animate attributeName="opacity" dur="${D}s" repeatCount="indefinite" keyTimes="0;${k1};${k1+.01};1" values="0;0;1;1"/></text></g>`};
+  b+=arr(A,B,RY-104,'#1d4ed8','6 km غربا',(A+B)/2,.05,.38)+arr(B,C,RY+140,'#dc2626','2 km شرقا',(B+C)/2,.48,.68);
+  /* السيارة: تتجه غربا ثم تستدير شرقا */
+  const sc=.4,cw=260*sc,cy=RY+12,car=(face,vis)=>`<g opacity="${vis[0]}"><animate attributeName="opacity" dur="${D}s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;.43;1" values="${vis.join(';')}"/>${face<0?`<g transform="translate(${A} 0) scale(-1 1) translate(${-A} 0)">${gCarS(A-cw/2,cy,sc,D,.5,3.8,6)}</g>`:gCarS(A-cw/2,cy,sc,D,4.8,6.8,2)}</g>`;
+  b+=`<g><animateTransform attributeName="transform" type="translate" dur="${D}s" repeatCount="indefinite" keyTimes="${kt}" values="0 0;0 0;${B-A} 0;${B-A} 0;${C-A} 0;${C-A} 0"/>${car(-1,[1,0,0])}${car(1,[0,1,1])}</g>`;
+  if(o.res!==false)b+=`<g class="${o.show?'':'kPl'}" style="--d:.1s">${vArr(A,RY+92,C,RY+92,'#16a34a',8)}<text x="${(A+C)/2}" y="${RY+80}" font-size="15" font-weight="900" text-anchor="middle" fill="#15803d">الإزاحة</text></g>`;
+  return svg(W,H,b,'kScene')}
+
 const P13=(re,fn,res,cap)=>[re,()=>pRes(fn(),res),cap];
 PFIG['0-1']=[P13(/500 cm/,()=>qMeter({lab:'500 cm = ? m'}),'= 5 m','500 cm = 500 / 100 = 5 m')];
 PFIG['0-2']=[
@@ -3021,7 +3086,7 @@ PFIG['0-6']=[
 PFIG['1-1']=[
   P13(/120 m في زمن مقداره 10 s/,()=>fTrack({a:'t = 10 s',x:'x = 120 m'}),'v̄ = 12 m/s','v̄ = x / t = 120 / 10 = 12 m/s'),
   P13(/من 20 m\/s إلى 80 m\/s/,()=>fTrack({a:'vi = 20 m/s',b:'a = ?',c:'vf = 80 m/s',x:'t = 3 s'}),'a = 20 m/s²','a = (80 − 20) / 3 = 20 m/s²'),
-  P13(/6 km غرب/,()=>fDisp({res:false}),'الإزاحة = 4 km','الإزاحة = 6 − 2 = 4 km غربا'),
+  P13(/6 km غرب/,()=>fDispR(),'Δx = 4 km غربا','Δx = 6 km − 2 km = 4 km (غربا)'),
   P13(/100 m في زمن مقداره 5 s/,()=>fTrack({a:'t = 5 s',x:'x = 100 m'}),'v̄ = 20 m/s','v̄ = 100 / 5 = 20 m/s'),
   P13(/من 30 m\/s إلى 90 m\/s/,()=>fTrack({a:'vi = 30 m/s',b:'a = ?',c:'vf = 90 m/s',x:'t = 5 s'}),'a = 12 m/s²','a = (90 − 30) / 5 = 12 m/s²'),
   P13(/300 m خلال 10 s/,()=>fTrack({a:'t = 10 s',x:'x = 300 m'}),'v̄ = 30 m/s','v̄ = 300 / 10 = 30 m/s'),
@@ -3078,17 +3143,17 @@ PFIG['1-9']=[
   P13(/قط كتلته 1 kg/,()=>fFall({me:'m = 1 kg · v = 6 m/s'}),'h ≈ 1.84 m','½ m v² = m g h ← h = 36 / 19.6 ≈ 1.84 m'),
   P13(/10 J وطاقة الوضع له 30 J/,()=>fFall({me:'KE = 10 J · PE = 30 J'}),'ME = 40 J','ME = 10 + 30 = 40 J')];
 PFIG['2-1']=[
-  P13(/300°C\. ما قيمتها بالكلفن/,()=>pTemp('TC = 300 °C'),'TK = 573 K','TK = 300 + 273 = 573 K'),
-  P13(/72°F/,()=>pTemp('TF = 72 °F'),'TC ≈ 22.2 °C','TC = (72 − 32) / 1.8 ≈ 22.2 °C'),
-  P13(/300°C، فما درجة حرارته على مقياس فهرنهايت/,()=>pTemp('TC = 300 °C'),'TF = 572 °F','TF = 1.8 × 300 + 32 = 572 °F'),
-  P13(/200°C\. ما قيمتها بالكلفن/,()=>pTemp('TC = 200 °C'),'TK = 473 K','TK = 200 + 273 = 473 K'),
-  P13(/150°C\. كم تساوي بالفهرنهايت/,()=>pTemp('TC = 150 °C'),'TF = 302 °F','TF = 1.8 × 150 + 32 = 302 °F'),
-  P13(/80°F/,()=>pTemp('TF = 80 °F'),'TC ≈ 26.7 °C','TC = (80 − 32) / 1.8 ≈ 26.7 °C'),
-  P13(/الرياض 30°C/,()=>pTemp('TC = 30 °C'),'TF = 86 °F','TF = 1.8 × 30 + 32 = 86 °F'),
-  P13(/300 K/,()=>pTemp('TK = 300 K','#2563eb'),'TF = 80.6 °F','TC = 300 − 273 = 27 ← TF = 1.8 × 27 + 32 = 80.6 °F'),
-  P13(/20°C إلى كلفن/,()=>pTemp('TC = 20 °C','#2563eb'),'TK = 293 K','TK = 20 + 273 = 293 K'),
-  P13(/95°F/,()=>pTemp('TF = 95 °F'),'TC = 35 °C','TC = (95 − 32) / 1.8 = 35 °C'),
-  P13(/42°C/,()=>pTemp('TC = 42 °C'),'TF = 107.6 °F','TF = 1.8 × 42 + 32 = 107.6 °F')];
+  P13(/300°C\. ما قيمتها بالكلفن/,()=>pTemp('TC = 300 °C',null,'K'),'TK = 573 K','TK = 300 + 273 = 573 K'),
+  P13(/72°F/,()=>pTemp('TF = 72 °F',null,'C'),'TC ≈ 22.2 °C','TC = (72 − 32) / 1.8 ≈ 22.2 °C'),
+  P13(/300°C، فما درجة حرارته على مقياس فهرنهايت/,()=>pTemp('TC = 300 °C',null,'F'),'TF = 572 °F','TF = 1.8 × 300 + 32 = 572 °F'),
+  P13(/200°C\. ما قيمتها بالكلفن/,()=>pTemp('TC = 200 °C',null,'K'),'TK = 473 K','TK = 200 + 273 = 473 K'),
+  P13(/150°C\. كم تساوي بالفهرنهايت/,()=>pTemp('TC = 150 °C',null,'F'),'TF = 302 °F','TF = 1.8 × 150 + 32 = 302 °F'),
+  P13(/80°F/,()=>pTemp('TF = 80 °F',null,'C'),'TC ≈ 26.7 °C','TC = (80 − 32) / 1.8 ≈ 26.7 °C'),
+  P13(/الرياض 30°C/,()=>pTemp('TC = 30 °C',null,'F'),'TF = 86 °F','TF = 1.8 × 30 + 32 = 86 °F'),
+  P13(/300 K/,()=>pTemp('TK = 300 K','#2563eb','F'),'TF = 80.6 °F','TC = 300 − 273 = 27 ← TF = 1.8 × 27 + 32 = 80.6 °F'),
+  P13(/20°C إلى كلفن/,()=>pTemp('TC = 20 °C','#2563eb','K'),'TK = 293 K','TK = 20 + 273 = 293 K'),
+  P13(/95°F/,()=>pTemp('TF = 95 °F',null,'C'),'TC = 35 °C','TC = (95 − 32) / 1.8 = 35 °C'),
+  P13(/42°C/,()=>pTemp('TC = 42 °C',null,'F'),'TF = 107.6 °F','TF = 1.8 × 42 + 32 = 107.6 °F')];
 PFIG['2-3']=[
   P13(/100 g ماء من 10°C إلى 30°C/,()=>hHeat({m:'m = 0.1 kg',Ti:'Ti = 10 °C',Tf:'Tf = 30 °C',dT:'ΔT = 20 °C',Q:'Q = ?'}),'Q = 8360 J','Q = m c ΔT = 0.1 × 4180 × 20 = 8360 J'),
   P13(/نحاس كتلته 20 g، حرارته النوعية 400/,()=>pMetal('m = 0.02 kg · c = 400'),'C = 8 J/°C','C = m c = 0.02 × 400 = 8 J/°C'),
@@ -3106,7 +3171,7 @@ PFIG['2-5']=[
   P13(/الحرارة التي اكتسبها الماء/,()=>hCal({T1:'T1 = ?',T2:'T2 = 21 °C',Tf:'Tf = 25 °C'}),'Q2 = 2511.6 J','Q2 = 0.15 × 4186 × (25 − 21) = 2511.6 J'),
   P13(/فقد 2511\.6 J/,()=>hCal({T1:'T1 = ?',T2:'Q = 2511.6 J',Tf:'Tf = 25 °C'}),'T1 ≈ 80.9 °C','T1 − 25 = 2511.6 / (0.05 × 899) ← T1 ≈ 80.9 °C')];
 function probFig(K2,p){const L=PFIG[K2];if(!L)return null;const m=L.find(([re])=>re.test(String(p.q||'').replace(/`/g,'')));if(!m)return null;defs();
-  const d=document.createElement('div');d.className='kc kFig kProb';d.dataset.cap=m[2];TS=/^3-[56]$/.test(K2)?1.8:1;let fg;try{fg=m[1]()}finally{TS=1}d.innerHTML=fg+'<div class="kCap">'+(K2==='3-3'?'يظهر سهم المجال واتجاهه بعد أن تحسب':/^(3-[456]|4-[158]|[012]-\d)$/.test(K2)?'تظهر النتيجة على الرسم بعد أن تحسب':'تظهر أسهم القوى واتجاهها بعد أن تحسب القوة')+'</div>';return d}
+  const d=document.createElement('div');d.className='kc kFig kProb';d.dataset.cap=m[2];TS=/^3-[56]$/.test(K2)?1.8:/^[012]-\d$/.test(K2)?1.3:1;let fg;try{fg=m[1]()}finally{TS=1}d.innerHTML=fg+'<div class="kCap">'+(K2==='3-3'?'يظهر سهم المجال واتجاهه بعد أن تحسب':/^(3-[456]|4-[158]|[012]-\d)$/.test(K2)?'تظهر النتيجة على الرسم بعد أن تحسب':'تظهر أسهم القوى واتجاهها بعد أن تحسب القوة')+'</div>';return d}
 function probDone(el){if(!el)return;el.classList.add('kOn');const c=el.querySelector('.kCap');if(c){c.textContent=el.dataset.cap||'';c.dir='auto';c.style.unicodeBidi='plaintext'}}
 
 /* حرارة: جسم ساخن وجسم بارد يتلامسان (سؤال الربط بالدرس السابق) */
@@ -3183,7 +3248,7 @@ html body .board .bTpc .bEnT{margin:0 12px 0 0!important}html body .board .bH .b
 .kThree .kTot{opacity:0;transition:opacity .5s}.kOn .kThree .kTot,.bContent:has(.bStep.in .kTotOn) .kThree .kTot{opacity:1}
 .kOn .kThree .kTot .kAr,.bContent:has(.bStep.in .kTotOn) .kThree .kTot .kAr{animation:kcGrow .9s cubic-bezier(.2,.9,.3,1.2) .2s forwards!important}
 .kOn .kThree .kTot .kPl,.bContent:has(.bStep.in .kTotOn) .kThree .kTot .kPl{animation:kcFade .5s ease .5s forwards!important}
-.kProb{margin:8px 0 12px}
+.kProb{margin:8px 0 12px}.kProb .kCap{font-size:1.05em;padding:9px 12px;line-height:1.7}
 .board .bContent:has(.kc){font-size:clamp(16.5px,min(2.5vw,2.6vh),25px)}
 .board .bContent:has(.kc) .bStep.in{margin:0 0 10px}
 @media (min-width:1000px){.board .bContent:has(.kFig):not(:has(.bQ)){display:grid;grid-template-columns:1fr 1.08fr;column-gap:18px;align-items:start}
