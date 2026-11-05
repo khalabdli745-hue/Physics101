@@ -1101,7 +1101,7 @@ header.top .brand span{color:#DCE8F7}header.top .progress{color:#E6EEF9}
 <script>(function(){const lab=document.getElementById('lgIdLab'),inp=document.getElementById('lgId');if(lab&&inp){const sync=()=>inp.placeholder=lab.textContent.trim();sync();new MutationObserver(sync).observe(lab,{childList:true,characterData:true,subtree:true})}
 document.querySelectorAll('.lgEye').forEach(b=>b.onclick=()=>{const i=b.parentNode.querySelector('input');const sh=i.type==='password';i.type=sh?'text':'password';b.classList.toggle('on',sh);b.setAttribute('aria-label',sh?'إخفاء كلمة المرور':'إظهار كلمة المرور')})})()</script>
 <script src="config.js?v=10281453"></script>
-<script src="voc.js?v=10281453" defer></script>
+<script src="voc.js?v=11053" defer></script>
 <script src="sayfix.js?v=11021530" defer></script>
 <script src="tashkeel.js?v=10281453" defer></script>
 <script src="data.js?v=10281453"></script>
@@ -1115,7 +1115,7 @@ document.querySelectorAll('.lgEye').forEach(b=>b.onclick=()=>{const i=b.parentNo
 <script src="gens.js?v=10281453"></script>
 <script src="art.js?v=10281453"></script>
 <script src="more.js?v=11041800"></script>
-<script src="labs.js?v=11097"></script>
+<script src="labs.js?v=11123"></script>
 <script src="coach.js?v=11011115"></script>
 <script>/* 5 نوفمبر: الدروس النموذجية (kcards31) لكل المتدربين */(function(){var n=1;document.write('<script src="kcards'+(n?'31':'')+'.js?v=11087"><\/script>')})()</script>
 <script>
@@ -1521,7 +1521,7 @@ function buildNav(){
       const it=document.createElement('li');if(done.has(key(ui,li)))it.classList.add('done');
       const lb=document.createElement('button');lb.innerHTML='<span class="tick"></span><span></span>';if(l.pre){const sm=document.createElement('small');sm.className='lpre';sm.textContent=l.pre;lb.lastChild.appendChild(sm);lb.lastChild.appendChild(document.createTextNode(l.t))}else lb.lastChild.textContent=l.t;
       if(ui===pos.u&&li===pos.l&&!GT(pos.t))lb.setAttribute('aria-current','true');
-      lb.onclick=()=>{/* طلب المدرب 30 أكتوبر: الدرس المختار من الفهرس يفتح دائما على تبويب «الدرس» في كل الأجهزة */go(ui,li,0,'sum');closeNav()};
+      lb.onclick=()=>{/* طلب المدرب 30 أكتوبر: الدرس المختار من الفهرس يفتح دائما على تبويب «الدرس» في كل الأجهزة */go(ui,li,0,'sum');closeNav();/* المدرب 5 نوفمبر: ترحيب صوتي وتوجيه لبدء الدرس */try{window.lessonWelcome&&lessonWelcome()}catch(e){}};
       it.appendChild(lb);ol.appendChild(it)});
     d.append(b,ol);nav.appendChild(d)});
   const f=document.createElement('div');f.className='navfoot';
@@ -1868,11 +1868,11 @@ function openBoard(dry){const dryS=dry==='slides';dry=dry===true||dryS;
   const muSet=()=>{muBtn.textContent=MUTE?'🔇':'🔊';muBtn.title=MUTE?'تشغيل صوت المدرب':'كتم صوت المدرب';muBtn.setAttribute('aria-label',muBtn.title);muBtn.classList.toggle('on',MUTE)};muSet();
   muBtn.addEventListener('click',e=>{e.stopPropagation();MUTE=!MUTE;try{localStorage.setItem('p101-bmute',MUTE?'1':'')}catch(_){}muSet();if(MUTE)TTS.stop()});
   if(!dry)setTimeout(()=>{const fs=B.querySelector('.bFsBtn');if(fs)fs.after(muBtn);else{const pr=B.querySelector('.bProg');if(pr)pr.parentElement.insertBefore(muBtn,pr)}},250);
-  const say=async(t,id)=>{t=plain(t);if(!t||id!==runId)return;cap.innerHTML=inl(K2==='1-7'?t.replace(/^[-•]\s*/,'').replace(/[.。]\s*$/,''):t.replace(/^[-•]\s*/,''));if(/^(3-[13-6]|4-[158])$/.test(K2))cap.innerHTML=cap.innerHTML.replace(/[\u064B-\u0652\u0670]/g,'');B.classList.add('talking');
+  const say=async(t,id)=>{t=plain(t);if(!t||id!==runId)return;cap.innerHTML=inl(K2==='1-7'?t.replace(/^[-•]\s*/,'').replace(/[.。]\s*$/,''):t.replace(/^[-•]\s*/,''));if(/^(3-[13-6]|4-[158])$/.test(K2))cap.innerHTML=cap.innerHTML.replace(/[\u064B-\u0652\u0670]/g,'');B.classList.add('talking');const SC=scSync();
     if(!MUTE)try{let c=cur,st=step;for(let n=0;n<4;n++){const sl=out[c];if(sl&&sl.type==='c'&&st<sl.steps.length)st++;else{c++;st=0}if(!out[c])break;const nt=plain(narrAt(c,st));if(nt)TTS.prefetch(nt)}}catch(e){}
-    if(MUTE||!TTS.has()){const k1=cur+':'+step;pendKey=k1;await wait(Math.min(9000,1200+t.length*55));if(id===runId){lastSaid=k1;pendKey=''}B.classList.remove('talking');return}
+    if(MUTE||!TTS.has()){const k1=cur+':'+step;pendKey=k1;await wait(Math.min(9000,1200+t.length*55));await SC.done(()=>id===runId);if(id===runId){lastSaid=k1;pendKey=''}B.classList.remove('talking');return}
     const k0=cur+':'+step;pendKey=k0;const d=document.createElement('button');TTS.play(t,d);await wait(N31?150:400);
-    while(id===runId&&TTS.busy())await wait(N31?50:120);if(id===runId){lastSaid=k0;pendKey=''}B.classList.remove('talking');await wait(N31?50:150)};
+    while(id===runId&&TTS.busy())await wait(N31?50:120);await SC.done(()=>id===runId);if(id===runId){lastSaid=k0;pendKey=''}B.classList.remove('talking');await wait(N31?50:150)};
   /* أسلوب المدرب: عبارات انتقال وشرح متنوعة كأنه معلم حقيقي يخاطب المتدرب */
   const pick=(arr,k)=>arr[Math.abs(k|0)%arr.length];
   const ORDW=['أولًا','ثانيًا','ثالثًا','رابعًا','خامسًا','سادسًا'].concat(KC_ORD(K2));
@@ -3875,5 +3875,23 @@ new MutationObserver(function(){var B=document.querySelector('.board');if(B&&B._
 setInterval(function(){var B=document.querySelector('.board');if(B&&B._p102&&!B._p103)setup(B)},500);
 })();
 </script>
-<script src="fixeddata.js?v=7"></script><script src="fixedai.js?v=6"></script></body>
+<script src="fixeddata.js?v=7"></script><script src="fixedai.js?v=6"></script><script>/* المدرب 5 نوفمبر: عند فتح درس من الفهرس يرحب المدرب بالمتدرب بالصوت ويوجهه إلى زر «ابدأ الشرح» على السبورة، والزر يتوهج حتى يضغطه */
+window.lessonWelcome=function(){setTimeout(function(){try{
+  if(typeof TTS==='undefined'||!TTS.has())return;var m=false;try{m=localStorage.getItem('p101-bmute')==='1'}catch(e){}if(m)return;
+  var ob=document.querySelector('.boardCard .sbGo');var L=null;try{L=lesson()}catch(e){}
+  var t=String((L&&(L.t||L.n))||'').replace(/[«»"]/g,'').trim();
+  var vo='h';try{vo=localStorage.getItem('p101-bvo')==='z'?'z':'h'}catch(e){}
+  try{TTS.setOV(vo==='z'?'ar-SA-ZariyahNeural':'ar-SA-HamedNeural')}catch(e){}
+  var nm='';try{nm=(window.coachName&&coachName())||''}catch(e){}
+  var txt='أَهْلًا وَسَهْلًا بِكَ'+(nm?' يَا '+nm:'')+'. '+(t?'هٰذَا دَرْسُ: '+t+'. ':'')+(ob?'لِتَبْدَأَ الدَّرْس، اِضْغَطْ زِرَّ: اِبْدَأِ الشَّرْح، عَلَى السَّبُّورَة.':'');
+  var d=document.createElement('button');TTS.play(txt,d);
+  if(ob){ob.classList.add('sbHint');try{ob.scrollIntoView({block:'center',behavior:'smooth'})}catch(e){}
+    var off=function(){ob.classList.remove('sbHint')};ob.addEventListener('click',off,{once:true});setTimeout(off,15000)}
+}catch(e){}},700)};
+</script><style>@keyframes sbHintK{0%,100%{box-shadow:0 0 0 0 rgba(247,147,30,.85);transform:scale(1)}50%{box-shadow:0 0 0 14px rgba(247,147,30,0);transform:scale(1.06)}}.sbGo.sbHint{animation:sbHintK 1.2s ease-in-out infinite}</style><script>/* المدرب 5 نوفمبر: مشهد الخطوة على السبورة يبدأ حركته مع صوتها، ولا تنتقل الخطوة حتى تكتمل الحركة، ثم يثبت على مشهده الأخير فلا يتكرر بعد انتهاء الكلام */
+window.scSync=function(){const none={done:async()=>{}};try{const B=document.querySelector('.board');if(!B)return none;const st=[...B.querySelectorAll('.bContent .bStep.in')].pop();const sv=st&&st.querySelector('svg.kScene');if(!sv||sv.__scs)return none;sv.__scs=1;
+  let D=0;sv.querySelectorAll('animate,animateTransform,animateMotion').forEach(a=>{const d=parseFloat(a.getAttribute('dur'));if(d>D)D=d});D=Math.min(12,D);if(!D)return none;
+  try{sv.setCurrentTime(0);sv.unpauseAnimations()}catch(e){}const t0=performance.now();setTimeout(()=>{try{if(sv.isConnected){sv.pauseAnimations();sv.setCurrentTime(Math.max(0,D-0.05))}}catch(e){}},D*1000);
+  return {D,done:async ok=>{const left=D*1000-(performance.now()-t0);if(left>0&&ok()){const e=performance.now()+left;while(performance.now()<e&&ok())await new Promise(r=>setTimeout(r,100))}}}}catch(e){return none}};
+</script></body>
 </html>
