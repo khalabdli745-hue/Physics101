@@ -143,6 +143,8 @@ var apply=function(){var B=document.querySelector('.board');
 var set=function(v){L=!!v;try{localStorage.setItem('p101-vlock',L?'1':'0')}catch(e){}apply()};
 document.addEventListener('click',function(e){if(!L||!e.target.closest)return;if(e.target.closest('.board .bVo, .board .bTeach .bAv')){e.stopImmediatePropagation();e.preventDefault()}},true);
 new MutationObserver(function(){if(L){var B=document.querySelector('.board');if(B&&(!B.classList.contains('noVoL')||B.dataset.vo==='z'||[].some.call(B.querySelectorAll('.vStrip'),function(x){return x.style.display!=='none'})))apply()}}).observe(document.body,{childList:true});
+var rad=function(){var B=document.querySelector('.board');if(!B)return;var av=B.querySelector('.bTeach .bAv');if(!av)return;var r=L?'16px':'16px 0 0 16px';if(av.style.borderRadius!==r)av.style.setProperty('border-radius',r,'important');B.querySelectorAll('.vStrip').forEach(function(x){if(x.style.borderRadius!=='0px 16px 16px 0px')x.style.setProperty('border-radius','0 16px 16px 0','important')})};
+setInterval(rad,700);
 setInterval(function(){if(!L)return;var B=document.querySelector('.board');if(B&&(!B.classList.contains('noVoL')||B.dataset.vo==='z'||[].some.call(B.querySelectorAll('.vStrip'),function(x){return x.style.display!=='none'})))apply()},700);
 apply();
 try{if(typeof API!=='undefined'&&API)fetch(API,{redirect:'follow'}).then(function(r){return r.json()}).then(function(r){if(r&&r.ok&&'vlock' in r)set(r.vlock)}).catch(function(){})}catch(e){}
