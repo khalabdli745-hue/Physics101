@@ -1930,33 +1930,208 @@ const qIco=k=>{const P={
   Iv:'<circle cx="14" cy="11" r="8" fill="#fef9c3" stroke="#ca8a04" stroke-width="1.6"/><rect x="10" y="19" width="8" height="5" rx="1.5" fill="#94a3b8"/><path d="M14 0v1.5M4 3l1.5 1.5M24 3l-1.5 1.5" stroke="#ca8a04" stroke-width="1.6" stroke-linecap="round"/>',
   n:'<path d="M10 3h8M12 3v7l-7 13a2 2 0 0 0 2 3h14a2 2 0 0 0 2-3l-7-13V3" fill="#dcfce7" stroke="#15803d" stroke-width="1.6" stroke-linejoin="round"/><circle cx="12" cy="20" r="1.8" fill="#15803d"/><circle cx="17" cy="22" r="1.4" fill="#15803d"/>'};
   return `<svg class="kQIco" viewBox="0 0 28 28" width="26" height="26" aria-hidden="true" style="vertical-align:middle;margin-inline-end:6px;flex:none">${P[k]||''}</svg>`};
-/* 1) مشهد الحركة: عربة المعمل الحقيقية على المسار (طلب المدرب 05:39) */
-function qMotion(){const W=640,H=300,FY=236;let b=`<rect width="${W}" height="${H}" fill="url(#kc-bg)"/>`+kBench(140,FY,10,630);
-  /* المسار والعربة الحقيقيان كما في تجربة السرعة 0-2، بلا عربة مكررة (طلب المدرب 05:43) */
-  const TW=600,TH=TW*141/900,TX=20,TY=FY-26-TH;b+=kSh(TX+TW/2,FY-22,TW*.48)+kIM('08-track-cart-tape',TX,TY,TW,TH);
-  const xs=TX+TW*236/900,xe=TX+TW*718/900;
-  b+=`<line x1="${f1(xs)}" y1="${f1(TY-14)}" x2="${f1(xs)}" y2="${f1(TY+TH*.62)}" stroke="#16a34a" stroke-width="3"/><line x1="${f1(xe)}" y1="${f1(TY-14)}" x2="${f1(xe)}" y2="${f1(TY+TH*.62)}" stroke="#dc2626" stroke-width="3"/><text x="${f1(xs)}" y="${f1(TY-20)}" text-anchor="middle" font-size="14" font-weight="900" fill="#15803d">البداية</text><text x="${f1(xe)}" y="${f1(TY-20)}" text-anchor="middle" font-size="14" font-weight="900" fill="#b91c1c">النهاية</text>`;
-  b+=`<g class="kAr" style="--d:.3s">${arrow(xs+30,xe-40,TY-44,'F',0,9)}</g><text x="${f1((xs+xe)/2)}" y="${f1(TY-60)}" text-anchor="middle" font-size="13" font-weight="800" fill="#b45309">اتجاه حركة العربة</text>`;
-  b+=kIM('06-stopwatch-analog',30,10,66,66*900/816)+pill(160,44,'t = 2 s','#0369a1',.6)+pill(520,44,'v = 0.5 m/s','#7c3aed',.9);
-  b+=dim(+f1(xs),+f1(xe),FY+32,'x = 1 m');
-  return svg(W,H+16,b,'kAuto')}
+/* عينة أسلوب الوحدتين الرابعة والخامسة: مشاهد متحركة بأجسام لامعة مجسمة */
+function gDefs(){return `<defs><linearGradient id="g-cb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#93c5fd"/><stop offset=".35" stop-color="#3b82f6"/><stop offset="1" stop-color="#1e3a8a"/></linearGradient>
+<linearGradient id="g-ct" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#dbeafe"/><stop offset="1" stop-color="#60a5fa"/></linearGradient>
+<radialGradient id="g-wh" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#6b7280"/><stop offset=".6" stop-color="#1f2937"/><stop offset="1" stop-color="#030712"/></radialGradient>
+<radialGradient id="g-hub" cx="35%" cy="30%" r="80%"><stop offset="0" stop-color="#fff"/><stop offset=".55" stop-color="#cbd5e1"/><stop offset="1" stop-color="#64748b"/></radialGradient>
+<linearGradient id="g-wf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d6a46a"/><stop offset=".5" stop-color="#b7793f"/><stop offset="1" stop-color="#7c4a1f"/></linearGradient>
+<linearGradient id="g-wt" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3d3a3"/><stop offset="1" stop-color="#cf9a5f"/></linearGradient>
+<linearGradient id="g-ws" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#9a6234"/><stop offset="1" stop-color="#5b3517"/></linearGradient>
+<radialGradient id="g-sw" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="#ffffff"/><stop offset=".7" stop-color="#e2e8f0"/><stop offset="1" stop-color="#94a3b8"/></radialGradient>
+<filter id="g-blur"><feGaussianBlur stdDeviation="3"/></filter></defs>`}
+const gSh=(cx,cy,rx)=>`<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="6" fill="#1e293b" opacity=".3" filter="url(#g-blur)"/>`;
+/* عربة لامعة مجسمة */
+function gCart(x,y){return gSh(x+70,y+50,72)+`<polygon points="${x+8},${y} ${x+132},${y} ${x+146},${y-12} ${x+22},${y-12}" fill="url(#g-ct)"/><polygon points="${x+132},${y} ${x+146},${y-12} ${x+146},${y+26} ${x+132},${y+38}" fill="#1e3a8a"/><rect x="${x}" y="${y}" width="132" height="38" rx="8" fill="url(#g-cb)"/><rect x="${x+10}" y="${y+6}" width="112" height="6" rx="3" fill="#fff" opacity=".45"/>`+
+  [x+30,x+104].map(cx=>`<circle cx="${cx}" cy="${y+40}" r="14" fill="url(#g-wh)"/><circle cx="${cx}" cy="${y+40}" r="6" fill="url(#g-hub)"/>`).join('')}
+/* صندوق خشبي لامع مجسم */
+function gBox(x,y,w,h,d,lab){d=d||22;return gSh(x+w/2+8,y+h+2,w*.6)+`<polygon points="${x},${y} ${x+w},${y} ${x+w+d},${y-d*.7} ${x+d},${y-d*.7}" fill="url(#g-wt)"/><polygon points="${x+w},${y} ${x+w+d},${y-d*.7} ${x+w+d},${y+h-d*.7} ${x+w},${y+h}" fill="url(#g-ws)"/><rect x="${x}" y="${y}" width="${w}" height="${h}" fill="url(#g-wf)"/>`+[.33,.66].map(f=>`<line x1="${x+3}" y1="${y+h*f}" x2="${x+w-3}" y2="${y+h*f}" stroke="#7c4a1f" stroke-width="1.2" opacity=".5"/>`).join('')+`<rect x="${x+4}" y="${y+3}" width="${w-8}" height="4" fill="#fff" opacity=".3"/>`+(lab?`<text x="${x+w/2}" y="${y+h/2+6}" text-anchor="middle" font-size="16" font-weight="900" fill="#fff" direction="ltr" style="paint-order:stroke;stroke:#5b3517;stroke-width:3px">${lab}</text>`:'')}
+/* ساعة إيقاف لامعة بعقرب يدور */
+function gWatch(cx,cy,D,t0,t1){return gSh(cx,cy+40,28)+`<rect x="${cx-7}" y="${cy-44}" width="14" height="10" rx="3" fill="#f59e0b"/><circle cx="${cx}" cy="${cy}" r="34" fill="#475569"/><circle cx="${cx}" cy="${cy}" r="28" fill="url(#g-sw)"/>`+[0,30,60,90,120,150,180,210,240,270,300,330].map(a=>`<line x1="${cx+22*Math.sin(a*Math.PI/180)}" y1="${cy-22*Math.cos(a*Math.PI/180)}" x2="${cx+26*Math.sin(a*Math.PI/180)}" y2="${cy-26*Math.cos(a*Math.PI/180)}" stroke="#334155" stroke-width="1.6"/>`).join('')+`<line x1="${cx}" y1="${cy}" x2="${cx}" y2="${cy-22}" stroke="#f97316" stroke-width="3" stroke-linecap="round"><animateTransform attributeName="transform" type="rotate" dur="${D}s" repeatCount="indefinite" keyTimes="${scK(D,[0,t0,t1,D])}" values="0 ${cx} ${cy};0 ${cx} ${cy};300 ${cx} ${cy};300 ${cx} ${cy}"/></line><circle cx="${cx}" cy="${cy}" r="3.5" fill="#0f172a"/>`}
+/* سيارة شبه واقعية (جانبية، متجهة لليمين). x يسار السيارة، y مستوى الأرض */
+function gCarDefs(){return `<defs><linearGradient id="c-bd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#93c5fd"/><stop offset=".2" stop-color="#3b82f6"/><stop offset=".6" stop-color="#1d4ed8"/><stop offset="1" stop-color="#1e3a8a"/></linearGradient>
+<linearGradient id="c-gl" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e0f2fe"/><stop offset=".45" stop-color="#7dd3fc"/><stop offset="1" stop-color="#1e3a5f"/></linearGradient>
+<radialGradient id="c-ty" cx="50%" cy="50%" r="50%"><stop offset=".62" stop-color="#374151"/><stop offset=".8" stop-color="#111827"/><stop offset="1" stop-color="#030712"/></radialGradient>
+<radialGradient id="c-rm" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="#ffffff"/><stop offset=".5" stop-color="#cbd5e1"/><stop offset="1" stop-color="#475569"/></radialGradient>
+<linearGradient id="c-ch" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f1f5f9"/><stop offset="1" stop-color="#64748b"/></linearGradient></defs>`}
+function gWheel(cx,cy,D,t0,t1,turns){const sp=[0,72,144,216,288].map(a=>`<rect x="${cx-2}" y="${cy-13}" width="4" height="13" rx="2" fill="#94a3b8" transform="rotate(${a} ${cx} ${cy})"/>`).join('');
+  return `<circle cx="${cx}" cy="${cy}" r="22" fill="url(#c-ty)"/><circle cx="${cx}" cy="${cy}" r="14" fill="url(#c-rm)"/><g>${sp}<animateTransform attributeName="transform" type="rotate" dur="${D}s" repeatCount="indefinite" keyTimes="${scK(D,[0,t0,t1,D])}" values="0 ${cx} ${cy};0 ${cx} ${cy};${360*turns} ${cx} ${cy};${360*turns} ${cx} ${cy}"/></g><circle cx="${cx}" cy="${cy}" r="4.5" fill="#334155"/><circle cx="${cx}" cy="${cy}" r="14" fill="none" stroke="#e2e8f0" stroke-width="1.5"/>`}
+function gCar(x,y,D,t0,t1,turns){const k=.4,T=(a,b)=>`${f1(x+(680-a)*k)},${f1(y+(b-520)*k)}`,R=v=>f1(v*k);
+  const pth=(d)=>d.replace(/(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/g,(m,a,b)=>T(+a,+b));
+  const w1=x+(680-151)*k,w2=x+(680-554)*k,wy=y+(460-520)*k;
+  return `<ellipse cx="${f1(x+130)}" cy="${y+1}" rx="132" ry="6" fill="#0f172a" opacity=".45" filter="url(#g-blur)"/>
+  <path d="${pth('M640,485 Q682,482 680,440 L676,392 Q672,372 640,368 L600,360 C560,330 520,303 440,300 C380,298 330,300 290,318 L235,352 C150,360 70,372 42,385 Q22,395 24,420 L28,465 Q32,485 60,485 L89,485')} A${R(62)} ${R(62)} 0 0 0 ${T(213,485)} L${T(492,485)} A${R(62)} ${R(62)} 0 0 0 ${T(616,485)} Z" fill="url(#c-bd)" stroke="#172554" stroke-width="1"/>
+  <path d="${pth('M89,484')} A${R(62)} ${R(62)} 0 0 0 ${T(213,484)}" fill="none" stroke="#172554" stroke-width="2.5" opacity=".5"/><path d="${pth('M492,484')} A${R(62)} ${R(62)} 0 0 0 ${T(616,484)}" fill="none" stroke="#172554" stroke-width="2.5" opacity=".5"/>
+  <path d="${pth('M258,366 C290,340 330,322 388,318 L392,366 Z')}" fill="url(#c-gl)" stroke="#0f172a" stroke-width="2.2"/>
+  <path d="${pth('M402,318 C450,316 480,320 494,327 L494,363 L402,366 Z')}" fill="url(#c-gl)" stroke="#0f172a" stroke-width="2.2"/>
+  <path d="${pth('M502,330 C516,335 526,343 532,353 L502,358 Z')}" fill="url(#c-gl)" stroke="#0f172a" stroke-width="2"/>
+  <path d="${pth('M240,350 C300,312 340,305 400,303')}" fill="none" stroke="#bfdbfe" stroke-width="2" opacity=".7"/>
+  <path d="${pth('M50,392 C200,372 450,368 660,378')}" fill="none" stroke="#fff" stroke-width="2.5" opacity=".5"/>
+  <path d="${pth('M120,440 C260,432 450,428 600,432')}" fill="none" stroke="#1e3a8a" stroke-width="1.4" opacity=".7"/>
+  <path d="${pth('M397,320 L397,478')}" stroke="#172554" stroke-width="1.3"/><path d="${pth('M255,368 Q250,420 240,470')}" fill="none" stroke="#172554" stroke-width="1.3"/><path d="${pth('M535,356 Q545,420 520,470')}" fill="none" stroke="#172554" stroke-width="1.2"/>
+  <path d="${pth('M340,392 L370,392')}" stroke="url(#c-ch)" stroke-width="4" stroke-linecap="round"/><path d="${pth('M470,390 L500,390')}" stroke="url(#c-ch)" stroke-width="4" stroke-linecap="round"/>
+  <path d="${pth('M262,366 L238,362 L232,378 L256,380 Z')}" fill="#1e3a8a" stroke="#172554" stroke-width=".8"/>
+  <path d="${pth('M30,404 Q60,394 102,397 L94,411 Q60,414 32,416 Z')}" fill="#fefce8" stroke="#a16207" stroke-width=".8"/><path d="${pth('M45,404 L90,401')}" stroke="#fff" stroke-width="1.6"/>
+  <path d="${pth('M28,440 L80,440 L76,458 L30,458 Z')}" fill="#1e293b"/><path d="${pth('M34,446 L74,446 M34,452 L72,452')}" stroke="#64748b" stroke-width="1"/>
+  <path d="${pth('M610,388 L676,392 L677,404 L616,402 Z')}" fill="#ef4444" stroke="#7f1d1d" stroke-width=".9"/><path d="${pth('M620,396 L672,398')}" stroke="#fbbf24" stroke-width="1.5"/>
+  <path d="${pth('M215,478 L490,478')}" stroke="#172554" stroke-width="3" opacity=".6"/>
+  <circle cx="${f1(w1)}" cy="${f1(wy)}" r="24" fill="#0b0f19"/><circle cx="${f1(w2)}" cy="${f1(wy)}" r="24" fill="#0b0f19"/>
+  ${gWheel(w1,wy,D,t0,t1,turns)}${gWheel(w2,wy,D,t0,t1,turns)}`}
+/* طريق إسفلتي واقعي */
+function gRoad(W,y0,y1){const m=(y0+y1)/2;let r=`<defs><linearGradient id="r-as" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6b7280"/><stop offset=".5" stop-color="#4b5563"/><stop offset="1" stop-color="#374151"/></linearGradient><pattern id="r-gr" width="6" height="6" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".6" fill="#9ca3af" opacity=".5"/><circle cx="4" cy="4" r=".5" fill="#111827" opacity=".4"/></pattern></defs>`;
+  r+=`<rect x="0" y="${y0-14}" width="${W}" height="14" fill="#d6d3d1"/>`+Array.from({length:Math.ceil(W/40)},(_,k)=>`<rect x="${k*40}" y="${y0-6}" width="20" height="6" fill="${k%2?'#f8fafc':'#dc2626'}"/><rect x="${k*40+20}" y="${y0-6}" width="20" height="6" fill="${k%2?'#dc2626':'#f8fafc'}"/>`).join('');
+  r+=`<rect x="0" y="${y0}" width="${W}" height="${y1-y0}" fill="url(#r-as)"/><rect x="0" y="${y0}" width="${W}" height="${y1-y0}" fill="url(#r-gr)"/><rect x="0" y="${y0}" width="${W}" height="3" fill="#1f2937" opacity=".5"/>`;
+  r+=Array.from({length:Math.ceil(W/60)},(_,k)=>`<rect x="${k*60+10}" y="${m+8}" width="34" height="4" rx="1" fill="#f8fafc" opacity=".9"/>`).join('');
+  r+=`<rect x="0" y="${y1-6}" width="${W}" height="3" fill="#fde047"/><rect x="0" y="${y1}" width="${W}" height="10" fill="#a8a29e"/>`;return r}
+function gFlag(x,y0,y1,c){return `<rect x="${x-1.5}" y="${y0}" width="3" height="${y1-y0}" fill="#e5e7eb"/><line x1="${x}" y1="${y0}" x2="${x}" y2="${y1}" stroke="#475569" stroke-width="3"/><path d="M${x+1},${y0} q14,-4 26,3 q-12,5 -26,10 Z" fill="${c}"/>`}
 
-/* 2) من الكميات الأساسية إلى المشتقة: الطول والزمن ينتجان السرعة */
-function qTypes(){const W=640,H=250,FY=200;let b=`<rect width="${W}" height="${H}" fill="url(#kc-bg)"/>`+kBench(120,FY,10,630);
-  b+=kIM('92-meter-stick-h',24,FY-78,200,200*82/844)+`<text x="124" y="${FY-90}" text-anchor="middle" font-size="16" font-weight="900" fill="#1d4ed8">الطول  m</text>`;
-  b+=`<text x="244" y="${FY-46}" text-anchor="middle" font-size="34" font-weight="900" fill="#1e3a5f">÷</text>`;
-  b+=kSh(318,FY-22,40)+kIM('06-stopwatch-analog',276,FY-118,84,84*900/816)+`<text x="318" y="${FY-128}" text-anchor="middle" font-size="16" font-weight="900" fill="#15803d">الزمن  s</text>`;
-  b+=arrow(380,438,FY-60,'F',.3,10);
-  const tw=124,th=tw*784/900,tx=476,ty=FY-20-th;b+=kSh(tx+tw/2,FY-18,70)+kIM('19-digital-timer-front',tx,ty,tw,th)+`<text x="${f1(tx+tw/2)}" y="${f1(ty+th*.34)}" text-anchor="middle" font-size="14" font-weight="900" fill="#14532D" direction="ltr" font-family="Consolas,monospace">v = 0.5 m/s</text><text x="${f1(tx+tw/2)}" y="${f1(ty-10)}" text-anchor="middle" font-size="16" font-weight="900" fill="#6d28d9">السرعة  m/s</text>`;
-  b+=`<text x="170" y="30" text-anchor="middle" font-size="15" font-weight="900" fill="#1d4ed8">كميتان أساسيتان</text><text x="537" y="30" text-anchor="middle" font-size="15" font-weight="900" fill="#6d28d9">كمية مشتقة</text>`;
-  return svg(W,H,b,'kAuto')}
+function gCarS(x,y,sc,D,t0,t1,turns){return `<g transform="translate(${x} ${y}) scale(${sc})">${gCar(0,0,D,t0,t1,turns)}</g>`}
+
+/* ===== مشاهد مجسمة متحركة للدروس النموذجية (الوحدتان الأولى والثانية) بأسلوب الوحدتين الرابعة والخامسة — اعتمدها المدرب 5 نوفمبر ===== */
+const zS=(D,t0,inner)=>scShow(D,t0,D-.1,`<g>${inner}</g>`,true);
+const zT=(x,y,t,c,w)=>scTag(x,y,t,c,w||Math.max(44,t.length*9.5+30));
+/* أسطوانة كتلة معدنية لامعة */
+function gCyl(cx,yb,w,h,lab){const r=w/2,ry=w*.16;return `<defs><linearGradient id="z-cy" x1="0" x2="1"><stop offset="0" stop-color="#475569"/><stop offset=".3" stop-color="#e2e8f0"/><stop offset=".55" stop-color="#94a3b8"/><stop offset="1" stop-color="#1e293b"/></linearGradient><radialGradient id="z-ct" cx="40%" cy="40%" r="70%"><stop offset="0" stop-color="#f8fafc"/><stop offset="1" stop-color="#94a3b8"/></radialGradient></defs>`+gSh(cx+6,yb+2,r*1.15)+
+  `<path d="M${cx-r},${yb-h} L${cx-r},${yb} A${r} ${ry} 0 0 0 ${cx+r},${yb} L${cx+r},${yb-h} Z" fill="url(#z-cy)" stroke="#334155" stroke-width=".8"/><ellipse cx="${cx}" cy="${yb-h}" rx="${r}" ry="${ry}" fill="url(#z-ct)" stroke="#475569" stroke-width=".8"/>`+
+  `<rect x="${cx-4}" y="${yb-h-ry-12}" width="8" height="12" rx="2" fill="#64748b"/><path d="M${cx-7},${yb-h-ry-12} a7 7 0 1 1 14 0" fill="none" stroke="#475569" stroke-width="3"/>`+
+  `<rect x="${cx-r+5}" y="${yb-h+ry+4}" width="5" height="${h-ry-10}" rx="2.5" fill="#fff" opacity=".45"/>`+
+  (lab?`<text x="${cx}" y="${yb-h/2+6}" text-anchor="middle" font-size="${lab.length>4?13:16}" font-weight="900" fill="#fff" direction="ltr" style="paint-order:stroke;stroke:#1e293b;stroke-width:3px">${lab}</text>`:'')}
+/* مسطرة مترية خشبية مجسمة */
+function gRuler(x,y,L,o){o=o||{};const h=o.h||30,d=8,n=o.n||10;let r=`<defs><linearGradient id="z-ru" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fef3c7"/><stop offset=".5" stop-color="#fcd34d"/><stop offset="1" stop-color="#d97706"/></linearGradient></defs>`+gSh(x+L/2,y+h+6,L*.5);
+  r+=`<polygon points="${x},${y} ${x+L},${y} ${x+L+d},${y-d*.7} ${x+d},${y-d*.7}" fill="#fde68a" stroke="#b45309" stroke-width=".6"/><polygon points="${x+L},${y} ${x+L+d},${y-d*.7} ${x+L+d},${y+h-d*.7} ${x+L},${y+h}" fill="#b45309"/><rect x="${x}" y="${y}" width="${L}" height="${h}" fill="url(#z-ru)" stroke="#92400e" stroke-width=".8"/>`;
+  const sub=o.sub||10;for(let i=0;i<=n*sub;i++){const X=x+8+(L-16)*i/(n*sub),big=i%sub===0,mid=sub===10&&i%5===0;r+=`<line x1="${f1(X)}" y1="${y}" x2="${f1(X)}" y2="${y+(big?14:mid?10:6)}" stroke="#451a03" stroke-width="${big?1.4:.7}"/>`;
+    if(big&&o.lab!==false)r+=`<text x="${f1(X)}" y="${y+h-4}" text-anchor="middle" font-size="${o.fs||10}" font-weight="800" fill="#451a03" direction="ltr">${o.lab?o.lab(i/sub):i/sub}</text>`}
+  return r+`<rect x="${x+2}" y="${y+2}" width="${L-4}" height="3" fill="#fff" opacity=".45"/>`}
+/* عداد سرعة لامع بعقرب يتحرك */
+function gGauge(cx,cy,R,D,t0,t1,frac,txt){const a0=-120,a1=a0+240*frac;let g=`<defs><radialGradient id="z-gf" cx="45%" cy="38%" r="70%"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#cbd5e1"/></radialGradient><linearGradient id="z-gr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#94a3b8"/><stop offset="1" stop-color="#1e293b"/></linearGradient></defs>`+gSh(cx,cy+R+10,R*.9);
+  g+=`<circle cx="${cx}" cy="${cy}" r="${R+7}" fill="url(#z-gr)"/><circle cx="${cx}" cy="${cy}" r="${R}" fill="url(#z-gf)"/>`;
+  const P=(a,r)=>[cx+r*Math.sin(a*Math.PI/180),cy-r*Math.cos(a*Math.PI/180)];
+  const [ax,ay]=P(-120,R-10),[bx,by]=P(120,R-10);g+=`<path d="M${f1(ax)},${f1(ay)} A${R-10} ${R-10} 0 1 1 ${f1(bx)},${f1(by)}" fill="none" stroke="#e2e8f0" stroke-width="7"/>`;
+  const [mx,my]=P(60,R-10);g+=`<path d="M${f1(mx)},${f1(my)} A${R-10} ${R-10} 0 0 1 ${f1(bx)},${f1(by)}" fill="none" stroke="#ef4444" stroke-width="7"/>`;
+  for(let i=0;i<=12;i++){const a=-120+20*i,[p,q]=P(a,R-16),[u,v]=P(a,R-(i%2?22:27));g+=`<line x1="${f1(p)}" y1="${f1(q)}" x2="${f1(u)}" y2="${f1(v)}" stroke="#0f172a" stroke-width="${i%2?1:2}"/>`}
+  g+=`<line x1="${cx}" y1="${cy}" x2="${cx}" y2="${cy-R+18}" stroke="#ea580c" stroke-width="3.5" stroke-linecap="round"><animateTransform attributeName="transform" type="rotate" dur="${D}s" repeatCount="indefinite" keyTimes="${scK(D,[0,t0,t1,D])}" values="${a0} ${cx} ${cy};${a0} ${cx} ${cy};${a1} ${cx} ${cy};${a1} ${cx} ${cy}"/></line><circle cx="${cx}" cy="${cy}" r="6" fill="#0f172a"/>`;
+  if(txt)g+=`<rect x="${cx-34}" y="${cy+R*.35}" width="68" height="20" rx="4" fill="#0f172a"/><text x="${cx}" y="${cy+R*.35+15}" text-anchor="middle" font-size="12" font-weight="800" fill="#4ade80" direction="ltr" font-family="Consolas,monospace">${txt}</text>`;
+  return g}
+/* ميزان رقمي لامع بشاشة */
+function gScale(x,yb,w,txt){const h=54,d=16;return `<defs><linearGradient id="z-sb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#64748b"/><stop offset="1" stop-color="#1e293b"/></linearGradient><linearGradient id="z-sp" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#94a3b8"/></linearGradient></defs>`+gSh(x+w/2+6,yb+2,w*.55)+
+  `<polygon points="${x},${yb-h} ${x+w},${yb-h} ${x+w+d},${yb-h-d*.7} ${x+d},${yb-h-d*.7}" fill="#475569"/><polygon points="${x+w},${yb-h} ${x+w+d},${yb-h-d*.7} ${x+w+d},${yb-d*.7} ${x+w},${yb}" fill="#0f172a"/><rect x="${x}" y="${yb-h}" width="${w}" height="${h}" rx="6" fill="url(#z-sb)"/>`+
+  `<polygon points="${x+14},${yb-h-4} ${x+w-14},${yb-h-4} ${x+w+d-18},${yb-h-d*.7-8} ${x+d+10},${yb-h-d*.7-8}" fill="url(#z-sp)" stroke="#64748b" stroke-width=".8"/>`+
+  `<rect x="${x+w*.18}" y="${yb-h+12}" width="${w*.64}" height="30" rx="5" fill="#052e16" stroke="#94a3b8" stroke-width="1.5"/><text x="${x+w/2}" y="${yb-h+33}" text-anchor="middle" font-size="${txt.length>6?15:19}" font-weight="900" fill="#4ade80" direction="ltr" font-family="Consolas,monospace">${txt}</text>`+
+  `<rect x="${x+6}" y="${yb-h+4}" width="${w-12}" height="3" rx="1.5" fill="#fff" opacity=".25"/>`}
+/* حامل معمل لامع: قاعدة وساق وذراع أفقي، ويعيد نقطة التعليق */
+function gStand(x,yb,top,ax){const bw=92,th=14,dx=28,dy=22,rx=x+bw/2+dx/2,ry=yb-th-dy/2,arm=ax-rx-7.5;return `<defs><linearGradient id="z-rod" x1="0" x2="1"><stop offset="0" stop-color="#64748b"/><stop offset=".45" stop-color="#f8fafc"/><stop offset="1" stop-color="#475569"/></linearGradient><linearGradient id="z-arm" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f8fafc"/><stop offset="1" stop-color="#64748b"/></linearGradient><linearGradient id="z-bs" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#64748b"/><stop offset="1" stop-color="#334155"/></linearGradient></defs>`+gSh(x+bw/2+dx/2,yb+2,bw*.62)+
+  `<polygon points="${x},${yb-th} ${x+bw},${yb-th} ${x+bw+dx},${yb-th-dy} ${x+dx},${yb-th-dy}" fill="url(#z-bs)"/><polygon points="${x+bw},${yb-th} ${x+bw+dx},${yb-th-dy} ${x+bw+dx},${yb-dy} ${x+bw},${yb}" fill="#0f172a"/><rect x="${x}" y="${yb-th}" width="${bw}" height="${th}" fill="#1e293b"/><line x1="${x+3}" y1="${yb-th+2}" x2="${x+bw-3}" y2="${yb-th+2}" stroke="#fff" stroke-opacity=".25" stroke-width="2"/>`+
+  `<ellipse cx="${rx}" cy="${ry}" rx="12" ry="4" fill="#94a3b8"/><rect x="${rx-4.5}" y="${top}" width="9" height="${ry-top}" rx="3" fill="url(#z-rod)"/><rect x="${rx-10.5}" y="${top+16}" width="22" height="18" rx="3" fill="#1e293b"/><rect x="${rx+7.5}" y="${top+21}" width="${arm}" height="8" rx="3" fill="url(#z-arm)" stroke="#475569" stroke-width=".6"/>`}
+/* كرة فولاذية لامعة */
+const gBall=(cx,cy,r)=>`<defs><radialGradient id="z-bl" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#ffffff"/><stop offset=".4" stop-color="#cbd5e1"/><stop offset="1" stop-color="#334155"/></radialGradient></defs><circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#z-bl)" stroke="#1e293b" stroke-width=".8"/>`;
+/* ميزان نابضي أفقي لامع */
+function gSpring(x1,y,x2){const L=x2-x1;return `<defs><linearGradient id="z-ss" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e0f2fe"/><stop offset=".5" stop-color="#38bdf8"/><stop offset="1" stop-color="#0369a1"/></linearGradient></defs>`+
+  `<line x1="${x1}" y1="${y}" x2="${x1+20}" y2="${y}" stroke="#334155" stroke-width="2.5"/><rect x="${x1+20}" y="${y-11}" width="${L-44}" height="22" rx="8" fill="url(#z-ss)" stroke="#075985" stroke-width=".8"/>`+
+  Array.from({length:9},(_,i)=>`<line x1="${f1(x1+34+i*(L-72)/8)}" y1="${y-11}" x2="${f1(x1+34+i*(L-72)/8)}" y2="${y-3}" stroke="#0c4a6e" stroke-width="1"/>`).join('')+
+  `<rect x="${x1+24}" y="${y-8}" width="${L-52}" height="3" rx="1.5" fill="#fff" opacity=".55"/><circle cx="${x2-12}" cy="${y}" r="9" fill="none" stroke="#475569" stroke-width="3.5"/>`}
+
+/* 1) مشهد الحركة: سيارة على طريق بين علمين (اعتمده المدرب) */
+function qMotion(){const W=640,H=320,FY=220,D=10;let b=gDefs()+gCarDefs()+stage(W,H,FY);
+  b+=gRoad(W,FY-34,FY+40)+gFlag(210,FY-70,FY-34,"#16a34a")+gFlag(610,FY-70,FY-34,"#dc2626")+`<rect x="208" y="${FY-34}" width="4" height="74" fill="#fff" opacity=".85"/><rect x="608" y="${FY-34}" width="4" height="74" fill="#fff" opacity=".85"/>`;
+  b+=`<g><animateTransform attributeName="transform" type="translate" dur="${D}s" repeatCount="indefinite" keyTimes="${scK(D,[0,1,6,D])}" values="0 0;0 0;400 0;400 0"/>${gCarS(13,FY+16,.75,D,1,6,6)}</g>`;
+  b+=gWatch(560,104,D,1,6);
+  b+=zS(D,6,dim(210,610,FY+68,'x = 20 m'))+zS(D,6,scTag(440,96,'t = 2 s','#0369a1',100))+zS(D,7.5,scTag(250,96,'v = x / t = 10 m/s','#7e22ce',210));
+  b+=scCap(D,W,'1. السيارة تبدأ الحركة من نقطة البداية','#475569',0,3.5)+scCap(D,W,'2. نقيس المسافة والزمن','#b45309',3.5,7.5)+scCap(D,W,'3. ومنهما نحسب السرعة','#7e22ce',7.5,D);
+  return svg(W,H,b,'kScene')}
+
+/* 2) من الكميات الأساسية إلى المشتقة: الطول ÷ الزمن = السرعة */
+function qTypes(){const W=640,H=290,FY=250,D=9;let b=gDefs()+stage(W,H,FY);
+  b+=zS(D,.3,gRuler(26,170,190,{n:5,sub:10,h:30})+zT(125,128,'الطول  m','#1d4ed8'));
+  b+=zS(D,2.6,`<text x="250" y="190" text-anchor="middle" font-size="40" font-weight="900" fill="#1e3a5f">÷</text>`+gWatch(318,170,D,2.6,5)+zT(318,104,'الزمن  s','#15803d'));
+  b+=zS(D,5.4,vArr(374,170,432,170,'#ea580c',8)+gGauge(526,176,56,D,5.6,7.2,.42,'10 m/s')+zT(526,92,'السرعة  m/s','#7e22ce'));
+  b+=zS(D,.3,zT(170,272,'كميتان أساسيتان','#334155',150))+zS(D,5.4,zT(526,272,'كمية مشتقة','#7e22ce',120));
+  b+=scCap(D,W,'1. الطول كمية أساسية','#1d4ed8',0,2.6)+scCap(D,W,'2. والزمن كمية أساسية','#15803d',2.6,5.4)+scCap(D,W,'3. الطول ÷ الزمن = السرعة: كمية مشتقة','#7e22ce',5.4,D);
+  return svg(W,H+6,b,'kScene')}
 
 /* 3) المتر يساوي 100 سنتيمتر */
-function qMeter(o){o=o||{};const W=640,H=230,FY=170;let b=`<rect width="${W}" height="${H}" fill="url(#kc-bg)"/>`+kBench(70,FY,10,630);
-  const x0=40,L=560,h=L*82/844,y0=FY-50-h;b+=kSh(320,FY-46,290)+kIM('92-meter-stick-h',x0,y0,L,h);
-  const t0=x0+L*78/844,tk=L*72.2/844;for(let i=0;i<=10;i++)b+=`<text x="${f1(t0+i*tk)}" y="${f1(y0-6)}" text-anchor="middle" font-size="13" font-weight="800" fill="#78350f" direction="ltr">${i*10}</text>`;
-  b+=`<text x="${f1(t0+10*tk+26)}" y="${f1(y0-6)}" font-size="12" font-weight="800" fill="#78350f" direction="ltr">cm</text>`+dim(+f1(t0),+f1(t0+10*tk),FY+30,o.lab||'1 m = 100 cm');
-  return svg(W,H+10,b,'kAuto')}
+function qMeter(o){o=o||{};const W=640,H=230,FY=200,D=7,x=40,L=560,y=104;let b=gDefs()+stage(W,H,FY);
+  b+=gRuler(x,y,L,{n:10,sub:10,h:40,fs:12,lab:i=>i*10})+`<text x="${x+L+14}" y="${y+34}" font-size="12" font-weight="800" fill="#78350f" direction="ltr">cm</text>`;
+  b+=`<rect x="${x+8}" y="${y+44}" width="0" height="7" rx="3.5" fill="#2563eb"><animate attributeName="width" dur="${D}s" repeatCount="indefinite" keyTimes="${scK(D,[0,.6,4,D])}" values="0;0;${L-16};${L-16}"/></rect>`;
+  b+=zS(D,4,dim(x+8,x+L-8,y+78,o.lab||'1 m = 100 cm'));
+  b+=scCap(D,W,'المتر الواحد = 100 سنتيمتر','#1d4ed8',0,D);
+  return svg(W,H,b,'kScene')}
+
+/* الميزانان: وحدتا طرفي القانون متساويتان */
+function unitBal(L,R){const W=640,H=280,FY=236,D=7;let b=gDefs()+stage(W,H,FY);
+  const sc=(x,t,c,lab,t0)=>zS(D,t0,gScale(x,FY-6,200,t)+zT(x+108,FY-104,lab,c,120));
+  b+=sc(380,L,'#b91c1c','الطرف الأيسر',.4)+sc(60,R,'#1d4ed8','الطرف الأيمن',1.8);
+  b+=zS(D,3.2,`<text x="322" y="${FY-30}" text-anchor="middle" font-size="44" font-weight="900" fill="#15803d">=</text>`);
+  b+=scCap(D,W,'نقرأ وحدة كل طرف من القانون','#334155',0,3.2)+scCap(D,W,'الوحدتان متساويتان ✓ القانون صحيح','#15803d',3.2,D);
+  return svg(W,H,b,'kScene')}
+
+/* الكمية القياسية والمتجهة: أسطوانتان متماثلتان، والثانية تؤثر فيها قوة */
+function sVsV(){const W=640,H=270,FY=230,D=7;let b=gDefs()+stage(W,H,FY)+kBench(150,FY,10,630);
+  const yb=FY-18,h=92;b+=gCyl(150,yb,84,h,'m = 5 kg')+gCyl(420,yb,84,h,'');
+  b+=zS(D,1,vArr(472,yb-h/2,610,yb-h/2,'#ea580c',10)+zT(545,yb-h/2-34,'F = 10 N','#b45309',110));
+  b+=zT(150,70,'قياسية: مقدار ووحدة','#b45309',190)+zS(D,1,zT(470,70,'متجهة: مقدار ووحدة واتجاه','#1d4ed8',240));
+  b+=scCap(D,W,'الكتلة 5 kg: لا تحتاج اتجاها','#b45309',0,3)+scCap(D,W,'القوة 10 N نحو اليمين: لها اتجاه','#1d4ed8',3,D);
+  return svg(W,H,b,'kScene')}
+
+/* السيارة على الطريق مع بطاقات قيم (السرعة المتوسطة، التسارع، الطاقة الحركية) */
+function fTrack(o){o=o||{};const W=640,H=300,FY=200,D=8,acc=/a\s*=/.test(o.b||'');let b=gDefs()+gCarDefs()+stage(W,H,FY);
+  b+=gRoad(W,FY-34,FY+40);if(o.x!==undefined)b+=gFlag(210,FY-70,FY-34,"#16a34a")+gFlag(610,FY-70,FY-34,"#dc2626")+`<rect x="208" y="${FY-34}" width="4" height="74" fill="#fff" opacity=".85"/><rect x="608" y="${FY-34}" width="4" height="74" fill="#fff" opacity=".85"/>`;
+  const sp=acc?` calcMode="spline" keySplines="0 0 1 1;.55 0 .9 .6;0 0 1 1"`:'';
+  b+=`<g><animateTransform attributeName="transform" type="translate" dur="${D}s" repeatCount="indefinite" keyTimes="${scK(D,[0,1,5.5,D])}" values="0 0;0 0;400 0;400 0"${sp}/>${gCarS(13,FY+16,.75,D,1,5.5,6)}</g>`;
+  if(o.a)b+=zS(D,.5,zT(150,70,o.a,'#0369a1'));if(o.b)b+=zS(D,1.5,zT(320,70,o.b,'#b45309'));if(o.c)b+=zS(D,5.5,zT(500,70,o.c,'#7c3aed'));
+  if(o.x)b+=zS(D,5.5,dim(210,610,FY+66,o.x));
+  return svg(W,H,b,'kScene')}
+
+/* الحركة في بعد واحد: سيارة على طريق مستقيم على محور x (مشهد أبسط — طلب المدرب 07:20) */
+function fAir(){const W=640,H=250,FY=170,D=7;let b=gDefs()+gCarDefs()+stage(W,H,FY);
+  b+=gRoad(W,FY-34,FY+40);
+  b+=`<g><animateTransform attributeName="transform" type="translate" dur="${D}s" repeatCount="indefinite" keyTimes="${scK(D,[0,.8,5.5,D])}" values="0 0;0 0;400 0;400 0"/>${gCarS(13,FY+16,.75,D,.8,5.5,6)}</g>`;
+  b+=vArr(40,FY+64,580,FY+64,'#16a34a',7)+zT(606,FY+64,'x','#15803d',40)+`<circle cx="40" cy="${FY+64}" r="5" fill="#15803d"/><text x="40" y="${FY+86}" text-anchor="middle" font-size="13" font-weight="900" fill="#15803d" direction="ltr">0</text>`;
+  b+=scCap(D,W,'حركة في بعد واحد: على محور x فقط','#15803d',0,D);
+  return svg(W,H+26,b,'kScene')}
+/* صندوق خشبي على طاولة يسحبه ميزان نابضي، مع أسهم القوى */
+function fPull(o){o=o||{};const W=640,H=300,FY=196,D=7;let b=gDefs()+stage(W,H,FY);
+  /* بلا طاولة وبلا ميزان نابضي: الصندوق على الأرض وأسهم القوى فقط (طلب المدرب 07:27) */
+  const x=o.x?80:200,w=130,h=80,yb=FY+34,y=yb-h,bx=x+w/2,by=y+h*.5,mv=o.x?150:0;
+  b+=`<g><animateTransform attributeName="transform" type="translate" dur="${D}s" repeatCount="indefinite" keyTimes="${scK(D,[0,1.2,5,D])}" values="0 0;0 0;${mv} 0;${mv} 0"/>${gBox(x,y,w,h,24,'')}`;
+  if(o.F)b+=zS(D,.6,vArr(x+w+28,by,x+w+160,by,'#ea580c',9)+zT(x+w+94,by-30,o.F,'#b45309'));
+  if(o.ang)b+=zS(D,.6,vArr(x+w+22,by,x+w+22+150*Math.cos(dg(o.ang)),by-150*Math.sin(dg(o.ang)),'#ea580c',9)+zT(x+w+22+150*Math.cos(dg(o.ang))+56,by-150*Math.sin(dg(o.ang))-6,o.Fa||'F','#b45309')+`<line x1="${x+w+22}" y1="${by}" x2="${x+w+152}" y2="${by}" stroke="#7c3aed" stroke-width="1.6" stroke-dasharray="5 4"/>`+arcA(x+w+22,by,44,0,o.ang,'#7c3aed','')+zT(x+w+122,by-24,'θ = '+o.ang+'°','#7c3aed',80));
+  if(o.f)b+=zS(D,1.8,vArr(x-6,by+20,x-96,by+20,'#2563eb',9)+zT(x-50,by-14,o.f,'#1d4ed8'));
+  if(o.N)b+=zS(D,3,vArr(bx,y-20,bx,y-86,'#16a34a',9)+zT(bx+20+Math.max(44,o.N.length*9.5+30)/2,y-72,o.N,'#15803d'));
+  if(o.W)b+=zS(D,3,vArr(bx,yb+4,bx,yb+58,'#dc2626',9)+zT(bx+20+Math.max(44,o.W.length*9.5+30)/2,yb+48,o.W,'#b91c1c'));
+  b+='</g>';
+  if(o.x)b+=zS(D,5,dim(bx,bx+mv,yb+40,o.x));
+  if(o.note)b+=scCap(D,W,o.note,'#334155',0,D);
+  return svg(W,H+10,b,'kScene')}
+/* أسطوانة كتلة تؤثر فيها قوة أفقية فتتسارع */
+function fCylF(o){o=o||{};const W=640,H=270,FY=230,D=7;let b=gDefs()+stage(W,H,FY)+kBench(150,FY,10,630);const yb=FY-18,h=104,cx=150;
+  b+=`<g><animateTransform attributeName="transform" type="translate" dur="${D}s" repeatCount="indefinite" keyTimes="${scK(D,[0,1.6,5.4,D])}" values="0 0;0 0;150 0;150 0" calcMode="spline" keySplines="0 0 1 1;.55 0 .9 .6;0 0 1 1"/>${gCyl(cx,yb,88,h,o.m||'m')}`+zS(D,.5,vArr(cx+52,yb-h/2,cx+190,yb-h/2,'#ea580c',10)+zT(cx+122,yb-h/2-34,o.F||'F','#b45309'))+'</g>';
+  if(o.a)b+=zS(D,2,zT(540,80,o.a,'#7c3aed'))+zS(D,2,vArr(470,110,600,110,'#7c3aed',6));
+  if(o.note)b+=scCap(D,W,o.note,'#334155',0,D);
+  return svg(W,H,b,'kScene')}
+
+/* حامل معمل وكتلة معلقة: الوزن، أو جسم على ارتفاع h */
+function fStand(o){o=o||{};const W=640,H=350,FY=310,D=6;let b=gDefs()+stage(W,H,FY)+kBench(150,FY,10,630);const yb=Math.round((150+FY)/2)+10,top=30,sx=216,hx=sx+180,hy=top+25,cy=hy+40,ch=70;
+  b+=gStand(sx,yb,top,hx);
+  b+=`<g><animateTransform attributeName="transform" type="rotate" dur="3s" repeatCount="indefinite" values="-2 ${hx} ${hy};2 ${hx} ${hy};-2 ${hx} ${hy}"/><line x1="${hx}" y1="${hy}" x2="${hx}" y2="${cy-18}" stroke="#334155" stroke-width="2"/>${gCyl(hx,cy+ch,56,ch,o.m||'m')}</g>`;
+  if(o.W)b+=zS(D,.8,vArr(hx,cy+ch+10,hx,cy+ch+70,'#dc2626',8)+zT(hx+60,cy+ch+56,o.W,'#b91c1c'));
+  if(o.h)b+=zS(D,.8,`<line x1="${hx+56}" y1="${cy+ch}" x2="${hx+56}" y2="${yb}" stroke="#0369a1" stroke-width="2" stroke-dasharray="6 5"/><line x1="${hx+44}" y1="${cy+ch}" x2="${hx+68}" y2="${cy+ch}" stroke="#0369a1" stroke-width="2"/><line x1="${hx+44}" y1="${yb}" x2="${hx+68}" y2="${yb}" stroke="#0369a1" stroke-width="2"/>`+zT(hx+100,(cy+ch+yb)/2,o.h,'#0369a1'));
+  if(o.pe)b+=zS(D,1.8,zT(520,70,o.pe,'#7c3aed'));
+  return svg(W,H,b,'kScene')}
+
+/* السقوط الحر: كرة تسقط وتتحول طاقة الوضع إلى طاقة حركية */
+function fFall(o){o=o||{};const W=640,H=330,FY=300,D=8,t0=1.2,t1=3.2;let b=gDefs()+stage(W,H,FY)+kBench(190,FY,10,630);const yb=FY-16,top=58,bx=250,y0=104,y1=yb-22;
+  b+=gStand(60,yb,top,bx+6)+`<rect x="${bx-14}" y="${top+30}" width="28" height="22" rx="4" fill="#1e3a8a"/>`+gSh(bx+3,yb+2,36)+`<path d="M${bx-32},${yb-7} L${bx-32},${yb-1} A32 7 0 0 0 ${bx+32},${yb-1} L${bx+32},${yb-7} Z" fill="#111827"/><ellipse cx="${bx}" cy="${yb-7}" rx="32" ry="7" fill="#334155"/><ellipse cx="${bx}" cy="${yb-7}" rx="22" ry="4.5" fill="#1f2937"/><ellipse cx="${bx-8}" cy="${yb-9}" rx="10" ry="1.6" fill="#fff" opacity=".2"/>`;
+  const kt=scK(D,[0,t0,t1,D]),sp=` calcMode="spline" keySplines="0 0 1 1;.5 0 1 1;0 0 1 1"`;
+  b+=`<g><animateTransform attributeName="transform" type="translate" dur="${D}s" repeatCount="indefinite" keyTimes="${kt}" values="0 0;0 0;0 ${y1-y0};0 ${y1-y0}"${sp}/>${gBall(bx,y0,15)}</g>`;
+  b+=`<line x1="${bx+40}" y1="${y0}" x2="${bx+40}" y2="${y1}" stroke="#0369a1" stroke-width="2" stroke-dasharray="6 5"/>`+zT(bx+70,(y0+y1)/2,'h','#0369a1',36);
+  const base=250,M=150,bar=(X,c,t,vals)=>`<rect x="${X}" y="${base-M}" width="40" height="${M}" rx="5" fill="${c}" opacity=".12"/><rect x="${X}" width="40" rx="5" fill="${c}"><animate attributeName="y" dur="${D}s" repeatCount="indefinite" keyTimes="${kt}" values="${vals.map(v=>base-v).join(';')}"${sp}/><animate attributeName="height" dur="${D}s" repeatCount="indefinite" keyTimes="${kt}" values="${vals.join(';')}"${sp}/></rect><text x="${X+20}" y="${base+18}" text-anchor="middle" font-size="13" font-weight="900" fill="${c}" direction="ltr">${t}</text>`;
+  b+=bar(400,'#2563eb','PE',[M,M,4,4])+bar(456,'#16a34a','KE',[4,4,M,M])+bar(512,'#7c3aed','ME',[M,M,M,M]);
+  b+=zT(476,base+48,o.me||'ME ثابتة','#7c3aed',120);
+  b+=scCap(D,W,'في الأعلى: طاقة الوضع أكبر ما يمكن','#2563eb',0,t1)+scCap(D,W,'قبل الاصطدام: تحولت إلى طاقة حركية','#16a34a',t1,D);
+  return svg(W,H+16,b,'kScene')}
+
+
+
 
 const U01=[['الطول','L','المتر','m','L'],['الزمن','t','الثانية','s','t'],['الكتلة','m','الكيلوجرام','kg','m'],['شدة التيار الكهربائي','I','الأمبير','A','I'],['درجة الحرارة','T','الكلفن','K','T'],['شدة الإضاءة','I_v','الشمعة (الكانديلا)','cd','Iv'],['كمية المادة','n','المول','mol','n']];
 const D01=[['المساحة','A','طول × طول','m²','المتر المربع'],['الحجم','V','طول × طول × طول','m³','المتر المكعب'],['السرعة','v','طول مقسوم على زمن','m/s','متر لكل ثانية'],['التسارع','a','سرعة مقسومة على زمن','m/s²','متر لكل ثانية تربيع'],['القوة','F','كتلة × تسارع','N = kg·m/s²','النيوتن'],['الشغل','W','قوة × مسافة','J = kg·m²/s²','الجول'],['الطاقة','E','مثل الشغل','J','الجول']];
@@ -1965,7 +2140,7 @@ const SAYD01=['الْمِسَاحَةُ طُولٌ فِي طُولٍ، وَوَ�
 CARDS['0-1']={
   intro:{title:'الكمية الفيزيائية',sayT:'نَبْدَأُ وِحْدَتَنَا الْأُولَى بِتَعْرِيفِ الْكَمِّيَّةِ الْفِيزْيَائِيَّةِ.',steps:()=>[
     S(pt(B('الكمية الفيزيائية')+': صفة فيزيائية تصف ظاهرة طبيعية، يمكن قياسها أو حسابها.'),'الْكَمِّيَّةُ الْفِيزْيَائِيَّةُ: صِفَةٌ فِيزْيَائِيَّةٌ تَصِفُ ظَاهِرَةً طَبِيعِيَّةً، يُمْكِنُ قِيَاسُهَا أَوْ حِسَابُهَا.'),
-    S(fig(qMotion(),'في ظاهرة الحركة: المسافة والزمن والسرعة كميات فيزيائية'),'شَاهِدِ الْمَشْهَدَ: الْعَرَبَةُ تَتَحَرَّكُ عَلَى الْمَسَارِ بَيْنَ نُقْطَتَيْنِ، فَالْمَسَافَةُ الَّتِي تَقْطَعُهَا، وَالزَّمَنُ الَّذِي تَسْتَغْرِقُهُ، وَالسُّرْعَةُ الَّتِي تَسِيرُ بِهَا، كَمَا تَقِيسُهَا سَاعَةُ الْإِيقَافِ وَالْمِسْطَرَةُ، كُلُّهَا كَمِّيَّاتٌ فِيزْيَائِيَّةٌ، لِأَنَّنَا نَقِيسُهَا بِأَرْقَامٍ وَوَحَدَاتْ.'),
+    S(fig(qMotion(),'في ظاهرة الحركة: المسافة والزمن والسرعة كميات فيزيائية'),'شَاهِدِ الْمَشْهَدَ: السَّيَّارَةُ تَتَحَرَّكُ عَلَى الطَّرِيقِ بَيْنَ نُقْطَتَيْنِ، فَالْمَسَافَةُ الَّتِي تَقْطَعُهَا، وَالزَّمَنُ الَّذِي تَسْتَغْرِقُهُ، وَالسُّرْعَةُ الَّتِي تَسِيرُ بِهَا، كَمَا تَقِيسُهَا سَاعَةُ الْإِيقَافِ، كُلُّهَا كَمِّيَّاتٌ فِيزْيَائِيَّةٌ، لِأَنَّنَا نَقِيسُهَا بِأَرْقَامٍ وَوَحَدَاتْ.'),
     S(pt('أما '+B('الحركة واللون والصوت والضوء والحرارة')+' فليست كميات فيزيائية، لأنها لا تقاس ولا تتحدد بمقدار.'),'أَمَّا الْحَرَكَةُ وَاللَّوْنُ وَالصَّوْتُ وَالضَّوْءُ وَالْحَرَارَةُ، فَلَيْسَتْ كَمِّيَّاتٍ فِيزْيَائِيَّةً، لِأَنَّهَا لَا تُقَاسُ وَلَا تَتَحَدَّدُ بِمِقْدَارْ.')]},
   goals:{title:'أهداف الوحدة',sayT:'وَالْآنَ، لِنَتَعَرَّفْ عَلَى أَهْدَافِ الْوِحْدَةِ.',steps:()=>[
     S({html:`<div class="kc kPt kKeep kcB">في نهاية هذه الوحدة يكون المتدرب قادرا على:</div>`},'فِي نِهَايَةِ هَذِهِ الْوِحْدَةِ، يَكُونُ الْمُتَدَرِّبُ قَادِرًا عَلَى:'),
@@ -1988,7 +2163,7 @@ CARDS['0-1']={
     S(pt(M('1 kg = 1000 g')+' الكيلوجرام يساوي ألف جرام.'),'الْكِيلُوجْرَامُ يُسَاوِي أَلْفَ جْرَامْ.'),
     S(pt(M('1 km = 1000 m')+' الكيلومتر يساوي ألف متر.'),'الْكِيلُومِتْرُ يُسَاوِي أَلْفَ مِتْرْ.'),
     S(pt(M('1 h = 3600 s')+' الساعة تساوي ثلاثة آلاف وست مئة ثانية.'),'السَّاعَةُ تُسَاوِي ثَلَاثَةَ آلَافٍ وَسِتَّ مِئَةِ ثَانِيَهْ.'),
-    S(fig(qMeter(),'المتر الواحد مقسم إلى مئة سنتيمتر'),'لَاحِظِ الْمِسْطَرَةَ: الْمِتْرُ الْوَاحِدُ مُقَسَّمٌ إِلَى مِئَةِ سَنْتِيمِتْرْ.'),
+    S(fig(qMeter(),'المتر الواحد مقسم إلى مئة سنتيمتر'),'لَاحِظِ الْمِسْطَرَةَ الْمِتْرِيَّةَ: الْمِتْرُ الْوَاحِدُ مُقَسَّمٌ إِلَى مِئَةِ سَنْتِيمِتْرْ.'),
     S(pt('للتحويل من وحدة كبيرة إلى صغيرة '+B('نضرب')+'، ومن وحدة صغيرة إلى كبيرة '+B('نقسم')+'.'),'وَالْقَاعِدَةُ: لِلتَّحْوِيلِ مِنْ وَحْدَةٍ كَبِيرَةٍ إِلَى وَحْدَةٍ صَغِيرَةٍ نَضْرِبُ، وَمِنْ وَحْدَةٍ صَغِيرَةٍ إِلَى وَحْدَةٍ كَبِيرَةٍ نَقْسِمُ.')]},
   ex1:{title:'مثال ١ · صفحة 12',sayT:'وَالْآنَ لِنَنْتَقِلْ إِلَى حَلِّ مِثَالِ الْحَقِيبَةِ التَّدْرِيبِيَّةِ، مِنْ صَفْحَةِ 12.',steps:()=>[
     S(q('حول '+M('500 cm')+' إلى المتر.','المثال · صفحة 12'),'حَوِّلْ خَمْسَ مِئَةِ سَنْتِيمِتْرٍ إِلَى الْمِتْرِ.'),
@@ -2064,21 +2239,8 @@ function speedSign(){const W=640,H=270,FY=210;let b=stage(W,H,FY);
   b+=`<ellipse cx="170" cy="${FY-2}" rx="22" ry="5" fill="#1e3a5f" opacity=".3"/><rect x="164" y="80" width="12" height="${FY-80}" fill="url(#kc-pl)"/><circle cx="173" cy="78" r="58" fill="#7f1d1d"/><circle cx="170" cy="74" r="58" fill="#dc2626"/><circle cx="170" cy="74" r="44" fill="url(#kc-sg)"/><text x="170" y="86" text-anchor="middle" font-size="34" font-weight="900" fill="#0f172a">72</text><text x="170" y="104" text-anchor="middle" font-size="11" font-weight="800" fill="#334155" direction="ltr">km/h</text>`;
   b+=`<g class="kAr" style="--d:.4s">${arrow(260,350,96,'F',0,10)}</g>`+pill(470,70,'72 km/h ÷ 3.6','#0369a1',.6)+pill(470,126,'= 20 m/s','#16a34a',1);
   return svg(W,H+30,b,'kAuto')}
-/* الميزان: وحدتا طرفي القانون متساويتان */
-function unitBal(L,R){const W=640,H=280,FY=236;let b=`<rect width="${W}" height="${H}" fill="url(#kc-bg)"/>`+kBench(120,FY,10,630);
-  const sc=(x,t,c,lab)=>{const w=220,h=w*583/900,y=FY-14-h;return kSh(x+w/2,FY-12,w*.48)+kIM('73-balance-empty',x,y,w,h)+`<text x="${f1(x+w*.40)}" y="${f1(y+h*.806+8)}" font-size="${t.length>6?15:20}" font-weight="900" text-anchor="middle" fill="#14532D" direction="ltr" font-family="Consolas,monospace">${t}</text><text x="${f1(x+w/2)}" y="${f1(y-14)}" text-anchor="middle" font-size="15" font-weight="900" fill="${c}">${lab}</text>`};
-  b+=sc(370,L,'#b91c1c','الطرف الأيسر')+sc(50,R,'#1d4ed8','الطرف الأيمن')+`<text x="320" y="${FY-56}" text-anchor="middle" font-size="40" font-weight="900" fill="#15803d">=</text><text x="320" y="24" text-anchor="middle" font-size="16" font-weight="900" fill="#15803d">الوحدتان متساويتان ✓ القانون صحيح</text>`;
-  return svg(W,H,b,'kAuto')}
 
 function clBench0(top,fy,x0,x1){const ins=Math.min(26,(fy-top)*.7);let g=`<path d="M${x0+ins},${top} L${x1-ins},${top} L${x1},${fy} L${x0},${fy}Z" fill="#d9a86c" stroke="#7C4A1F" stroke-width=".8"/>`;g+=`<rect x="${x0}" y="${fy}" width="${x1-x0}" height="12" fill="#8a5a30" stroke="#5B3517" stroke-width=".8"/>`;return g}
-/* الكمية القياسية والمتجهة: صندوق كتلته 5 kg وقوة 10 N نحو اليمين */
-function sVsV(){const W=640,H=260,FY=210;let b=`<rect width="${W}" height="${H}" fill="url(#kc-bg)"/>`+kBench(110,FY,10,630);
-  /* جسمان متماثلان (أسطوانة الكتلة الحقيقية): الأول كتلته فقط، والثاني تؤثر فيه قوة باتجاه (طلب المدرب 05:43) */
-  const cw=96,ch=cw*900/649,cyl=(x)=>kSh(x+cw/2,FY-18,cw*.55)+kIM('26-cylinder-mass',x,FY-18-ch,cw,ch);
-  b+=cyl(90)+`<text x="${90+cw/2}" y="${f1(FY-18-ch*.45)}" text-anchor="middle" font-size="17" font-weight="900" fill="#fff" direction="ltr" style="paint-order:stroke;stroke:#1e3a8a;stroke-width:3px">m = 5 kg</text>`;
-  b+=cyl(360)+arrow(462,600,FY-18-ch*.5,'F',.3,12)+pill(530,FY-18-ch*.5-34,'F = 10 N','#b45309',.5);
-  b+=`<text x="138" y="30" text-anchor="middle" font-size="15" font-weight="900" fill="#b45309">قياسية: مقدار ووحدة</text><text x="470" y="30" text-anchor="middle" font-size="15" font-weight="900" fill="#1d4ed8">متجهة: مقدار ووحدة واتجاه</text>`;
-  return svg(W,H,b,'kAuto')}
 
 const RW=(t)=>pt('<b>'+t[0]+':</b> '+t[1]);
 CARDS['0-2']={
@@ -2229,7 +2391,557 @@ function applyU1(out,K2){defs();const T=sl=>String(sl.title||''),base=t=>t.repla
     const m=R.find(([re])=>re.test(base(t)));if(!m||sl.type!=='c'){res.push(sl);return}
     skip=base(t);const n=m[1](sl);if(Array.isArray(n))n.forEach(x=>x&&res.push(x));else if(n)res.push(n);if(n===sl)skip=null});
   return res}
-function apply(out,K2){if(!CARDS[K2])return out;defs();if(K2==='0-1')return apply01(out);if(/^0-[2456]$/.test(K2))return applyU1(out,K2);if(K2==='4-1')return apply41(out);if(K2==='4-8')return apply48(out);if(K2==='4-5')return apply45(out);if(K2==='3-3')return V33(apply33(out));if(K2==='3-4')return apply34(out);if(K2==='3-5')return apply35(out);if(K2==='3-6')return apply36(out);
+/* ===== الدروس النموذجية للوحدة الثانية 1-1 إلى 1-9 (الحقيبة التدريبية صفحات 33-57) — 5 نوفمبر ===== */
+const kBG=(W,H)=>`<rect width="${W}" height="${H}" fill="url(#kc-bg)"/>`;
+/* المسافة والإزاحة: A ثم B غربا ثم C شرقا */
+function fDisp(o){o=o||{};const W=640,H=270;let b=svg0(W,H)+gPaper(W,H);const y=150,A=[520,y],B=[130,y],C=[260,y];
+  b+=vArr(A[0],y-22,B[0],y-22,'#2563eb',7,'6 km غربا',325,y-36)+vArr(B[0],y+22,C[0],y+22,'#dc2626',7,'2 km شرقا',195,y+52);
+  if(o.res!==false)b+=`<g class="kAr" style="--d:.6s">${vArr(A[0],y+70,C[0],y+70,'#16a34a',9,'الإزاحة 4 km غربا',390,y+100)}</g>`;
+  [['A',A],['B',B],['C',C]].forEach(([t,p])=>{b+=`<circle cx="${p[0]}" cy="${y}" r="9" fill="#0f172a"/><text x="${p[0]}" y="${y-48}" text-anchor="middle" font-size="18" font-weight="900" fill="#0f172a">${t}</text>`});
+  b+=`<text x="580" y="42" font-size="14" font-weight="900" fill="#334155">شرق ←</text><text x="40" y="42" font-size="14" font-weight="900" fill="#334155">→ غرب</text>`;return b+'</svg>'}
+const PH=(src,cap,say)=>S({html:`<div class="kc kFig"><img src="${src}" alt="${cap}" style="display:block;width:100%;max-width:640px;margin:0 auto;border-radius:12px"><div class="kCap">${cap}</div></div>`},say);
+const LAWB=(f,say)=>Object.assign(S(pt('<div class="kLaw">'+M(f)+'</div>'),say+': `'+f+'`'),{md:'`'+f+'`'});
+CARDS['1-1']={
+  intro:{title:'الحركة على خط مستقيم',sayT:'مَرْحَبًا بِكَ فِي الْوِحْدَةِ الثَّانِيَةِ: الْحَرَكَةُ وَالْقُوَّةُ وَالشُّغْلُ وَالطَّاقَهْ. وَنَبْدَأُ بِأَنْوَاعِ الْحَرَكَهْ.',steps:()=>[
+    S(pt(B('1. الحركة في بعد واحد')+': لمتجه موضع الجسم مركبة واحدة في اتجاه محور واحد.'),'الْأَوَّلُ: الْحَرَكَةُ فِي بُعْدٍ وَاحِدٍ، وَفِيهَا لِمُتَّجِهِ مَوْضِعِ الْجِسْمِ مُرَكَّبَةٌ وَاحِدَهْ.'),
+    S(fig(fAir(),'سيارة تتحرك على طريق مستقيم في بعد واحد'),'لَاحِظِ الْمَشْهَدَ: السَّيَّارَةُ عَلَى الطَّرِيقِ تَتَحَرَّكُ فِي خَطٍّ مُسْتَقِيمٍ، أَيْ فِي بُعْدٍ وَاحِدْ.'),
+    S(pt(B('2. الحركة في بعدين')+': لمتجه الموضع مركبتان، مثل حركة المقذوفات والحركة الدائرية.'),'الثَّانِي: الْحَرَكَةُ فِي بُعْدَيْنِ، مِثْلَ حَرَكَةِ الْمَقْذُوفَاتِ وَالْحَرَكَةِ الدَّائِرِيَّهْ.'),
+    S(pt(B('3. الحركة في ثلاثة أبعاد')+': يتغير موضع الجسم بالنسبة لمحاور الإسناد الثلاثة، مثل حركة طائرة في الجو.'),'الثَّالِثُ: الْحَرَكَةُ فِي ثَلَاثَةِ أَبْعَادٍ، مِثْلَ حَرَكَةِ طَائِرَةٍ فِي الْجَوّْ.')]},
+  goals:{title:'أهداف الوحدة',sayT:'وَالْآنَ، لِنَتَعَرَّفْ عَلَى أَهْدَافِ الْوِحْدَةِ.',steps:()=>[
+    S({html:`<div class="kc kPt kKeep kcB">في نهاية هذه الوحدة يكون المتدرب قادرا على:</div>`},'فِي نِهَايَةِ هَذِهِ الْوِحْدَةِ، يَكُونُ الْمُتَدَرِّبُ قَادِرًا عَلَى:')].concat([
+    ['تقديم المفهوم المناسب لقوانين الحركة على خط مستقيم بتسارع ثابت.','تَقْدِيمِ الْمَفْهُومِ الْمُنَاسِبِ لِقَوَانِينِ الْحَرَكَةِ عَلَى خَطٍّ مُسْتَقِيمٍ بِتَسَارُعٍ ثَابِتْ.'],
+    ['بيان علاقة القوة بالحركة.','بَيَانِ عَلَاقَةِ الْقُوَّةِ بِالْحَرَكَهْ.'],
+    ['التعرف على الكميات الفيزيائية كالإزاحة والسرعة والتسارع.','التَّعَرُّفِ عَلَى الْكَمِّيَّاتِ الْفِيزْيَائِيَّةِ، كَالْإِزَاحَةِ وَالسُّرْعَةِ وَالتَّسَارُعْ.'],
+    ['ربط المفاهيم والكميات الفيزيائية بقوانين نيوتن في الحركة.','رَبْطِ الْمَفَاهِيمِ وَالْكَمِّيَّاتِ الْفِيزْيَائِيَّةِ بِقَوَانِينِ نِيُوتُنَ فِي الْحَرَكَهْ.'],
+    ['التعرف على العلاقة بين الشغل والتغير في الطاقة الميكانيكية (حفظ الطاقة).','التَّعَرُّفِ عَلَى الْعَلَاقَةِ بَيْنَ الشُّغْلِ وَالتَّغَيُّرِ فِي الطَّاقَةِ الْمِيكَانِيكِيَّهْ.']].map(([t,s],i)=>S({html:`<div class="kc kPt kKeep kcT"><b>${i+1}.</b> ${t}</div>`},s)))},
+  dist:{title:'المسافة والإزاحة',sayT:'بَعْدَ أَنْ تَعَرَّفْنَا عَلَى أَهْدَافِ الْوِحْدَةِ، نَبْدَأُ أَوَّلَ مَوْضُوعَاتِهَا: الْمَسَافَةُ وَالْإِزَاحَهْ.',steps:()=>[
+    S(pt(B('المسافة')+': طول المسار الفعلي الذي يقطعه الجسم بين نقطتين، وهي كمية '+B('قياسية')+'.'),'الْمَسَافَةُ: طُولُ الْمَسَارِ الْفِعْلِيِّ الَّذِي يَقْطَعُهُ الْجِسْمُ بَيْنَ نُقْطَتَيْنِ، وَهِيَ كَمِّيَّةٌ قِيَاسِيَّهْ.'),
+    S(pt(B('الإزاحة')+': التغير في موضع الجسم، وتمثل بمتجه من نقطة البداية إلى نقطة النهاية، وهي كمية '+B('متجهة')+'.'),'الْإِزَاحَةُ: التَّغَيُّرُ فِي مَوْضِعِ الْجِسْمِ، وَتُمَثَّلُ بِمُتَّجِهٍ مِنْ نُقْطَةِ الْبِدَايَةِ إِلَى نُقْطَةِ النِّهَايَةِ، وَهِيَ كَمِّيَّةٌ مُتَّجِهَهْ.')]},
+  exd:{title:'مثال · صفحة 35',sayT:'لِنَأْخُذْ مِثَالَ الْحَقِيبَةِ التَّدْرِيبِيَّةِ عَلَى الْمَسَافَةِ وَالْإِزَاحَةِ، مِنْ صَفْحَةِ 35.',steps:()=>[
+    S(q('سيارة تحركت من A إلى B غربا '+M('6 km')+'، ثم من B إلى C شرقا '+M('2 km')+'. أوجد: الإزاحة، والمسافة.','المثال · صفحة 35'),''),
+    S(fig(fDisp(),'المسار الفعلي باللونين الأزرق والأحمر، والإزاحة بالأخضر'),'لَاحِظِ الرَّسْمَ: الْمَسَارُ الْفِعْلِيُّ بِالْأَزْرَقِ وَالْأَحْمَرِ، وَالْإِزَاحَةُ بِالْأَخْضَرِ مِنَ الْبِدَايَةِ إِلَى النِّهَايَهْ.'),
+    S(st(1,'المسافة: '+M('6 + 2 = 8 km')),'الْمَسَافَةُ مَجْمُوعُ طُولِ الْمَسَارِ: سِتَّةٌ زَائِدَ اثْنَيْنِ، تُسَاوِي ثَمَانِيَةَ كِيلُومِتْرَاتْ.'),
+    S(st(2,'الإزاحة: '+M('6 − 2 = 4 km')+' غربا'),'الْإِزَاحَةُ: سِتَّةٌ نَاقِصَ اثْنَيْنِ، تُسَاوِي أَرْبَعَةَ كِيلُومِتْرَاتٍ غَرْبَا.'),
+    S(res('المسافة '+M('8 km')+' · الإزاحة '+M('4 km')+' غربا'),'')]},
+  speed:{title:'السرعة المتوسطة',sayT:'وَنَنْتَقِلُ إِلَى السُّرْعَةِ الْمُتَوَسِّطَهْ.',steps:()=>[
+    S(pt(B('السرعة المتوسطة')+': النسبة بين إزاحة الجسم المتحرك والزمن المستغرق لحدوثها.'),'السُّرْعَةُ الْمُتَوَسِّطَةُ: النِّسْبَةُ بَيْنَ إِزَاحَةِ الْجِسْمِ الْمُتَحَرِّكِ، وَالزَّمَنِ الْمُسْتَغْرَقِ لِحُدُوثِهَا.'),
+    LAWB('v̄ = x / t','وَالْقَانُونُ'),
+    S(fig(fTrack({a:'t = 2 s',c:'v̄ = 10 m/s',x:'x = 20 m'}),'السيارة تقطع 20 m في 2 s، فسرعتها المتوسطة 10 m/s'),'لَاحِظِ الْمَشْهَدَ: السَّيَّارَةُ تَقْطَعُ عِشْرِينَ مِتْرًا فِي ثَانِيَتَيْنِ، فَسُرْعَتُهَا الْمُتَوَسِّطَةُ عَشَرَةُ أَمْتَارٍ لِكُلِّ ثَانِيَهْ.'),
+    S(pt('وحدة قياس السرعة '+M('m/s')+'.'),'وَوَحْدَةُ قِيَاسِ السُّرْعَةِ: مِتْرٌ لِكُلِّ ثَانِيَهْ.')]},
+  acc:{title:'التسارع',sayT:'وَإِذَا تَغَيَّرَتِ السُّرْعَةُ، نَتَحَدَّثُ عَنِ التَّسَارُعْ.',steps:()=>[
+    S(pt(B('التسارع')+': المعدل الزمني لتغير السرعة، أي التغير في السرعة بالنسبة للزمن.'),'التَّسَارُعُ: الْمُعَدَّلُ الزَّمَنِيُّ لِتَغَيُّرِ السُّرْعَةِ.'),
+    LAWB('a = (vf − vi) / t','وَالْقَانُونُ'),
+    S(pt('وحدة قياس التسارع '+M('m/s²')+'. التسارع الموجب يزيد السرعة، والسالب يقللها.'),'وَوَحْدَتُهُ مِتْرٌ لِكُلِّ ثَانِيَةٍ تَرْبِيعٌ. التَّسَارُعُ الْمُوجَبُ يَزِيدُ السُّرْعَةَ، وَالسَّالِبُ يُقَلِّلُهَا.')]},
+  ex1:{title:'مثال ١ · صفحة 36',sayT:'وَالْآنَ لِنَنْتَقِلْ إِلَى أَمْثِلَةِ الْحَقِيبَةِ، الْمِثَالُ الْأَوَّلُ مِنْ صَفْحَةِ 36.',steps:()=>[
+    S(q('سيارة تتحرك في خط مستقيم قطعت '+M('120 m')+' في '+M('10 s')+'. أوجد السرعة المتوسطة.','المثال · صفحة 36'),''),
+    S(gr(['x = 120 m','t = 10 s'],'السرعة المتوسطة '+M('v̄')),'الْمُعْطَيَاتُ أَمَامَكَ عَلَى السَّبُّورَةِ، وَالْمَطْلُوبُ: السُّرْعَةُ الْمُتَوَسِّطَهْ.'),
+    S(st(1,'القانون: '+M('v̄ = x / t')),'نَسْتَخْدِمُ قَانُونَ السُّرْعَةِ الْمُتَوَسِّطَهْ.'),
+    S(st(2,'التعويض: '+M('v̄ = 120 / 10')+'<span class="kDirOn"></span>'),'نَقْسِمُ مِئَةً وَعِشْرِينَ عَلَى عَشَرَهْ.'),
+    S(res(M('v̄ = 12 m/s')),'النَّتِيجَةُ: اثْنَا عَشَرَ مِتْرًا لِكُلِّ ثَانِيَهْ.')]},
+  ex2:{title:'مثال ٢ · صفحة 36',sayT:'وَالْمِثَالُ الثَّانِي، مِنْ صَفْحَةِ 36.',steps:()=>[
+    S(q('سيارة تتغير سرعتها من '+M('20 m/s')+' إلى '+M('80 m/s')+' في '+M('3 s')+'. أوجد التسارع.','المثال · صفحة 36'),''),
+    S(gr(['vi = 20 m/s','vf = 80 m/s','t = 3 s'],'التسارع '+M('a')),'الْمُعْطَيَاتُ أَمَامَكَ عَلَى السَّبُّورَةِ، وَالْمَطْلُوبُ: التَّسَارُعْ.'),
+    S(st(1,'القانون: '+M('a = (vf − vi) / t')),'نَسْتَخْدِمُ قَانُونَ التَّسَارُعْ.'),
+    S(st(2,'التعويض: '+M('a = (80 − 20) / 3 = 60 / 3')+'<span class="kDirOn"></span>'),'التَّغَيُّرُ فِي السُّرْعَةِ سِتُّونَ، نَقْسِمُهُ عَلَى ثَلَاثَهْ.'),
+    S(res(M('a = 20 m/s²')),'النَّتِيجَةُ: عِشْرُونَ مِتْرًا لِكُلِّ ثَانِيَةٍ تَرْبِيعْ.')]}};
+CARDS['1-2']={
+  eqs:{title:'معادلات الحركة بتسارع ثابت',sayT:'نَتَعَرَّفُ الْيَوْمَ عَلَى مُعَادَلَاتِ الْحَرَكَةِ عَلَى خَطٍّ مُسْتَقِيمٍ بِتَسَارُعٍ ثَابِتْ.',steps:()=>[
+    S({html:`<div class="kc kUH"><span>العلاقة</span><span>المعادلة</span></div>`},'هَذَا جَدْوَلُ الْمُعَادَلَاتِ الْخَمْسِ.')].concat([
+    ['السرعة والتسارع والزمن','vf = vi + a t','الْأُولَى: عَلَاقَةُ السُّرْعَةِ وَالتَّسَارُعِ وَالزَّمَنْ.'],['السرعة المتوسطة','v̄ = (vf + vi) / 2','الثَّانِيَةُ: السُّرْعَةُ الْمُتَوَسِّطَهْ.'],['الإزاحة والسرعة والزمن','x = v̄ t','الثَّالِثَةُ: الْإِزَاحَةُ تُسَاوِي السُّرْعَةَ الْمُتَوَسِّطَةَ فِي الزَّمَنْ.'],
+    ['الإزاحة والسرعة والتسارع والزمن','x = vi t + ½ a t²','الرَّابِعَةُ: عَلَاقَةُ الْإِزَاحَةِ وَالسُّرْعَةِ وَالتَّسَارُعِ وَالزَّمَنْ.'],['السرعة والتسارع والإزاحة','vf² = vi² + 2 a x','الْخَامِسَةُ: عَلَاقَةُ السُّرْعَةِ وَالتَّسَارُعِ وَالْإِزَاحَهْ.']].map(([n,f,s])=>S({html:`<div class="kc kUR"><span>${n}</span><span class="kUS">${M(f)}</span></div>`},s))).concat([
+    S(fig(fTrack({a:'vi',b:'a = ثابت',c:'vf',x:'x'}),'سيارة تتسارع بانتظام على الطريق'),'نَخْتَارُ الْمُعَادَلَةَ الَّتِي فِيهَا الْمَعْلُومُ وَالْمَطْلُوبُ، وَلَيْسَ فِيهَا مَجْهُولٌ آخَرْ.')])},
+  ex1:{title:'مثال ١ · صفحة 37',sayT:'وَالْآنَ لِنَنْتَقِلْ إِلَى أَمْثِلَةِ الْحَقِيبَةِ، الْمِثَالُ الْأَوَّلُ مِنْ صَفْحَةِ 37.',steps:()=>[
+    S(q('سيارة سرعتها '+M('5 m/s')+' ثم توقفت بعد أن قطعت '+M('20 m')+' بتسارع منتظم. أوجد: الزمن، والتسارع.','المثال · صفحة 37'),''),
+    S(gr(['vi = 5 m/s','vf = 0','x = 20 m'],'الزمن '+M('t')+' والتسارع '+M('a')),'الْمُعْطَيَاتُ أَمَامَكَ عَلَى السَّبُّورَةِ.'),
+    S(st(1,M('v̄ = (0 + 5) / 2 = 2.5 m/s')),'السُّرْعَةُ الْمُتَوَسِّطَةُ: اثْنَانِ فَاصِلَةٌ خَمْسَةٌ.'),
+    S(st(2,M('t = x / v̄ = 20 / 2.5 = 8 s')),'الزَّمَنُ: عِشْرُونَ عَلَى اثْنَيْنِ فَاصِلَةٍ خَمْسَةٍ، يُسَاوِي ثَمَانِيَ ثَوَانْ.'),
+    S(st(3,M('a = (0 − 5) / 8 = −0.625 m/s²')+'<span class="kDirOn"></span>'),'التَّسَارُعُ سَالِبٌ لِأَنَّ السَّيَّارَةَ تَتَبَاطَأُ: سَالِبُ صِفْرٍ فَاصِلَةٍ سِتِّ مِئَةٍ وَخَمْسَةٍ وَعِشْرِينْ.'),
+    S(res(M('t = 8 s')+' · '+M('a = −0.625 m/s²')),'')]},
+  ex2:{title:'مثال ٢ · صفحة 38',sayT:'وَالْمِثَالُ الثَّانِي، مِنْ صَفْحَةِ 38.',steps:()=>[
+    S(q('سيارة تحركت بسرعة '+M('13 m/s')+' وبتسارع منتظم حتى وصلت سرعتها إلى '+M('26 m/s')+' في '+M('10 s')+'. أوجد المسافة.','المثال · صفحة 38'),''),
+    S(gr(['vi = 13 m/s','vf = 26 m/s','t = 10 s'],'المسافة '+M('x')),'الْمُعْطَيَاتُ أَمَامَكَ عَلَى السَّبُّورَةِ، وَالْمَطْلُوبُ: الْمَسَافَهْ.'),
+    S(st(1,M('v̄ = (26 + 13) / 2 = 19.5 m/s')),'السُّرْعَةُ الْمُتَوَسِّطَةُ: تِسْعَةَ عَشَرَ فَاصِلَةً خَمْسَهْ.'),
+    S(st(2,M('x = v̄ t = 19.5 × 10')+'<span class="kDirOn"></span>'),'نَضْرِبُهَا فِي الزَّمَنْ.'),
+    S(res(M('x = 195 m')),'النَّتِيجَةُ: مِئَةٌ وَخَمْسَةٌ وَتِسْعُونَ مِتْرَا.')]},
+  ex3:{title:'مثال ٣ · صفحة 38',sayT:'وَالْمِثَالُ الثَّالِثُ، مِنْ صَفْحَةِ 38.',steps:()=>[
+    S(q('سيارة تحركت من السكون بتسارع منتظم وقطعت '+M('110 m')+' في '+M('5 s')+'. أوجد التسارع.','المثال · صفحة 38'),''),
+    S(gr(['vi = 0','x = 110 m','t = 5 s'],'التسارع '+M('a')),'الْمُعْطَيَاتُ أَمَامَكَ عَلَى السَّبُّورَةِ، وَالْمَطْلُوبُ: التَّسَارُعْ.'),
+    S(st(1,'القانون: '+M('x = vi t + ½ a t²')),'نَسْتَخْدِمُ الْمُعَادَلَةَ الرَّابِعَةَ، لِأَنَّنَا نَعْرِفُ الْإِزَاحَةَ وَالزَّمَنْ.'),
+    S(st(2,M('110 = 0 + ½ a (5²) = 12.5 a')),'نُعَوِّضُ: مِئَةٌ وَعَشَرَةٌ تُسَاوِي اثْنَيْ عَشَرَ فَاصِلَةً خَمْسَةً فِي التَّسَارُعْ.'),
+    S(st(3,M('a = 110 / 12.5')+'<span class="kDirOn"></span>'),'نَقْسِمُ الطَّرَفَيْنْ.'),
+    S(res(M('a = 8.8 m/s²')),'النَّتِيجَةُ: ثَمَانِيَةٌ فَاصِلَةٌ ثَمَانِيَةٌ مِتْرٌ لِكُلِّ ثَانِيَةٍ تَرْبِيعْ.')]},
+  ex4:{title:'مثال ٤ · صفحة 38',sayT:'وَالْمِثَالُ الرَّابِعُ، مِنْ صَفْحَةِ 38.',steps:()=>[
+    S(q('سيارة بدأت من السكون بتسارع '+M('4 m/s²')+'. ما سرعتها بعد أن قطعت '+M('20 m')+'؟','المثال · صفحة 38'),''),
+    S(gr(['vi = 0','a = 4 m/s²','x = 20 m'],'السرعة النهائية '+M('vf')),'الْمُعْطَيَاتُ أَمَامَكَ عَلَى السَّبُّورَةِ، وَالْمَطْلُوبُ: السُّرْعَةُ النِّهَائِيَّهْ.'),
+    S(st(1,'القانون: '+M('vf² = vi² + 2 a x')),'نَسْتَخْدِمُ الْمُعَادَلَةَ الْخَامِسَةَ، لِأَنَّ الزَّمَنَ غَيْرُ مَعْلُومْ.'),
+    S(st(2,M('vf² = 0 + 2 × 4 × 20 = 160')),'مُرَبَّعُ السُّرْعَةِ النِّهَائِيَّةِ مِئَةٌ وَسِتُّونْ.'),
+    S(st(3,M('vf = √160')+'<span class="kDirOn"></span>'),'نَأْخُذُ الْجَذْرَ التَّرْبِيعِيَّ.'),
+    S(res(M('vf ≈ 12.6 m/s')),'النَّتِيجَةُ: اثْنَا عَشَرَ فَاصِلَةٌ سِتَّةٌ مِتْرٌ لِكُلِّ ثَانِيَةٍ تَقْرِيبَا.')]}};
+CARDS['1-3']={
+  force:{title:'القوة',sayT:'نَبْدَأُ دَرْسَنَا بِمَفْهُومِ الْقُوَّهْ.',steps:()=>[
+    S(pt(B('القوة')+': دفع أو سحب يؤثر على الجسم، وهي كمية '+B('متجهة')+'، ووحدة قياسها النيوتن '+M('N')+'.'),'الْقُوَّةُ: دَفْعٌ أَوْ سَحْبٌ يُؤَثِّرُ عَلَى الْجِسْمِ، وَهِيَ كَمِّيَّةٌ مُتَّجِهَةٌ، وَوَحْدَتُهَا النِّيُوتُنْ.'),
+    PH('nw-push.jpg','رجل يدفع سيارة: القوة دفع يؤثر على الجسم','لَاحِظِ الصُّورَةَ: الرَّجُلُ يَدْفَعُ السَّيَّارَةَ، فَيُؤَثِّرُ عَلَيْهَا بِقُوَّهْ.')]},
+  law1:{title:'قانون نيوتن الأول',sayT:'وَالْآنَ إِلَى قَوَانِينِ نِيُوتُنَ، وَأَوَّلُهَا قَانُونُ الْقُصُورِ الذَّاتِيّْ.',steps:()=>[
+    S(pt('الجسم الساكن يبقى ساكنا ما لم تؤثر عليه قوة محصلة خارجية، والجسم المتحرك يستمر في الحركة بسرعة ثابتة وفي خط مستقيم ما لم تؤثر عليه قوة محصلة خارجية.'),'الْجِسْمُ السَّاكِنُ يَبْقَى سَاكِنًا مَا لَمْ تُؤَثِّرْ عَلَيْهِ قُوَّةٌ مُحَصِّلَةٌ خَارِجِيَّةٌ، وَالْجِسْمُ الْمُتَحَرِّكُ يَسْتَمِرُّ فِي الْحَرَكَةِ بِسُرْعَةٍ ثَابِتَةٍ، وَفِي خَطٍّ مُسْتَقِيمٍ، مَا لَمْ تُؤَثِّرْ عَلَيْهِ قُوَّةٌ مُحَصِّلَةٌ خَارِجِيَّهْ.'),
+    LAWB('ΣF = 0','أَيْ أَنَّ مُحَصِّلَةَ الْقُوَى صِفْرٌ')]},
+  law2:{title:'قانون نيوتن الثاني',sayT:'وَقَانُونُ نِيُوتُنَ الثَّانِي يَرْبِطُ الْقُوَّةَ بِالتَّسَارُعْ.',steps:()=>[
+    S(pt('إذا أثرت قوة '+M('F')+' على جسم كتلته '+M('m')+' فإنها تكسبه تسارعا '+M('a')+' يتناسب طرديا مع القوة، وعكسيا مع الكتلة.'),'إِذَا أَثَّرَتْ قُوَّةٌ عَلَى جِسْمٍ، فَإِنَّهَا تُكْسِبُهُ تَسَارُعًا يَتَنَاسَبُ طَرْدِيًّا مَعَ الْقُوَّةِ، وَعَكْسِيًّا مَعَ الْكُتْلَهْ.'),
+    LAWB('F = m a','وَالْقَانُونُ'),
+    S(fig(fCylF({m:'m',F:'F',a:'a'}),'القوة تكسب الكتلة تسارعا في اتجاهها'),'لَاحِظِ الصُّورَةَ: الْقُوَّةُ تُكْسِبُ الْكُتْلَةَ تَسَارُعًا فِي اتِّجَاهِهَا.'),
+    S(pt('حيث: '+M('F')+' القوة بوحدة '+M('N')+'، و'+M('m')+' الكتلة بوحدة '+M('kg')+'، و'+M('a')+' التسارع بوحدة '+M('m/s²')+'.'),'حَيْثُ: الْقُوَّةُ بِالنِّيُوتُنِ، وَالْكُتْلَةُ بِالْكِيلُوجْرَامِ، وَالتَّسَارُعُ بِالْمِتْرِ لِكُلِّ ثَانِيَةٍ تَرْبِيعْ.')]},
+  weight:{title:'الوزن',sayT:'وَمِنْ أَهَمِّ الْقُوَى: الْوَزْنْ.',steps:()=>[
+    S(pt(B('الوزن')+': قوة جاذبية الأرض للجسم.'),'الْوَزْنُ: قُوَّةُ جَاذِبِيَّةِ الْأَرْضِ لِلْجِسْمْ.'),
+    LAWB('W = m g','وَالْقَانُونُ'),
+    S(fig(fStand({m:'m',W:'W = m g'}),'الوزن قوة جاذبية الأرض للكتلة المعلقة، واتجاهه إلى الأسفل'),'لَاحِظِ الصُّورَةَ: الْوَزْنُ يَشُدُّ الْكُتْلَةَ الْمُعَلَّقَةَ إِلَى الْأَسْفَلْ.'),
+    S(pt('حيث '+M('g = 9.8 m/s²')+' تسارع الجاذبية الأرضية، ووحدة الوزن النيوتن '+M('N')+'.'),'حَيْثُ: تَسَارُعُ الْجَاذِبِيَّةِ الْأَرْضِيَّةِ تِسْعَةٌ فَاصِلَةٌ ثَمَانِيَةٌ، وَوَحْدَةُ الْوَزْنِ النِّيُوتُنْ.'),
+    S(pt(B('الفرق بين الوزن والكتلة:')),'وَالْفَرْقُ بَيْنَ الْوَزْنِ وَالْكُتْلَةِ:'),
+    S(pt(B('التعريف')+': الوزن قوة جاذبية الأرض للجسم، والكتلة مقدار ما يحتويه الجسم من مادة.'),'الْوَزْنُ قُوَّةُ جَاذِبِيَّةٍ، وَالْكُتْلَةُ مِقْدَارُ الْمَادَّهْ.'),
+    S(pt(B('الوحدة')+': الوزن بالنيوتن '+M('N')+'، والكتلة بالكيلوجرام '+M('kg')+'.'),'الْوَزْنُ بِالنِّيُوتُنِ، وَالْكُتْلَةُ بِالْكِيلُوجْرَامْ.'),
+    S(pt(B('النوع')+': الوزن كمية متجهة، والكتلة كمية قياسية.'),'الْوَزْنُ كَمِّيَّةٌ مُتَّجِهَةٌ، وَالْكُتْلَةُ كَمِّيَّةٌ قِيَاسِيَّهْ.'),
+    S(pt(B('تغير المكان')+': الوزن يتغير لأنه يعتمد على الجاذبية، والكتلة ثابتة.'),'الْوَزْنُ يَتَغَيَّرُ بِتَغَيُّرِ الْمَكَانِ، وَالْكُتْلَةُ ثَابِتَهْ.')]},
+  law3:{title:'قانون نيوتن الثالث',sayT:'وَالْقَانُونُ الثَّالِثُ يَتَحَدَّثُ عَنِ الْفِعْلِ وَرَدِّ الْفِعْلْ.',steps:()=>[
+    S(pt('لكل فعل رد فعل '+B('مساو')+' له في المقدار و'+B('معاكس')+' له في الاتجاه.'),'لِكُلِّ فِعْلٍ رَدُّ فِعْلٍ، مُسَاوٍ لَهُ فِي الْمِقْدَارِ، وَمُعَاكِسٌ لَهُ فِي الِاتِّجَاهْ.'),
+    PH('nw-row.jpg','التجديف: المجداف يدفع الماء للخلف فيندفع القارب للأمام','مِثَالٌ مِنَ الْحَقِيبَةِ: يُؤَثِّرُ الْمِجْدَافُ عَلَى الْمَاءِ بِقُوَّةِ فِعْلٍ إِلَى الْخَلْفِ، فَيَرُدُّ الْمَاءُ عَلَى الْقَارِبِ بِقُوَّةِ رَدِّ فِعْلٍ إِلَى الْأَمَامْ.')]},
+  ex1:{title:'مثال ١ · صفحة 40',sayT:'وَالْآنَ لِنَنْتَقِلْ إِلَى أَمْثِلَةِ الْحَقِيبَةِ، الْمِثَالُ الْأَوَّلُ مِنْ صَفْحَةِ 40.',steps:()=>[
+    S(q('أوجد القوة المؤثرة على جسم كتلته '+M('5 kg')+' إذا تسارع بمعدل '+M('17 m/s²')+'.','المثال · صفحة 40'),''),
+    S(gr(['m = 5 kg','a = 17 m/s²'],'القوة '+M('F')),'الْمُعْطَيَاتُ أَمَامَكَ عَلَى السَّبُّورَةِ، وَالْمَطْلُوبُ: الْقُوَّهْ.'),
+    S(fig(fCylF({m:'5 kg',F:'F = ?',a:'a = 17 m/s²'}),'كتلة 5 kg تتسارع 17 m/s²'),'لِنَرْسُمِ الْكُتْلَةَ وَالْقُوَّهْ.'),
+    S(st(1,M('F = m a = 5 × 17')+'<span class="kDirOn"></span>'),'نَضْرِبُ الْكُتْلَةَ فِي التَّسَارُعْ.'),
+    S(res(M('F = 85 N')),'النَّتِيجَةُ: خَمْسَةٌ وَثَمَانُونَ نِيُوتُنْ.')]},
+  ex2:{title:'مثال ٢ · صفحة 40',sayT:'وَالْمِثَالُ الثَّانِي، مِنْ صَفْحَةِ 40.',steps:()=>[
+    S(q('سيارة أثرت عليها قوة '+M('30000 N')+' وكتلتها '+M('1000 kg')+'. أوجد التسارع.','المثال · صفحة 40'),''),
+    S(gr(['F = 30000 N','m = 1000 kg'],'التسارع '+M('a')),'الْمُعْطَيَاتُ أَمَامَكَ عَلَى السَّبُّورَةِ، وَالْمَطْلُوبُ: التَّسَارُعْ.'),
+    S(st(1,M('a = F / m = 30000 / 1000')+'<span class="kDirOn"></span>'),'نَقْسِمُ الْقُوَّةَ عَلَى الْكُتْلَهْ.'),
+    S(res(M('a = 30 m/s²')),'النَّتِيجَةُ: ثَلَاثُونَ مِتْرًا لِكُلِّ ثَانِيَةٍ تَرْبِيعْ.')]},
+  ex3:{title:'مثال ٣ · صفحة 41',sayT:'وَالْمِثَالُ الثَّالِثُ، مِنْ صَفْحَةِ 41.',steps:()=>[
+    S(q('قوة ثابتة '+M('50 N')+' تؤثر على صندوق ساكن كتلته '+M('10 kg')+'. أوجد سرعته بعد '+M('3 s')+'.','المثال · صفحة 41'),''),
+    S(gr(['F = 50 N','m = 10 kg','vi = 0','t = 3 s'],'السرعة النهائية '+M('vf')),'الْمُعْطَيَاتُ أَمَامَكَ عَلَى السَّبُّورَةِ، وَالْمَطْلُوبُ: السُّرْعَةُ النِّهَائِيَّهْ.'),
+    S(fig(fPull({F:'F = 50 N',note:'صندوق ساكن يسحب بقوة ثابتة'}),'صندوق يسحب بقوة ثابتة 50 N'),'لِنَرْسُمِ الصُّنْدُوقَ وَالْقُوَّهْ.'),
+    S(st(1,M('a = F / m = 50 / 10 = 5 m/s²')),'أَوَّلًا التَّسَارُعُ: خَمْسُونَ عَلَى عَشَرَةٍ، يُسَاوِي خَمْسَهْ.'),
+    S(st(2,M('vf = vi + a t = 0 + 5 × 3')+'<span class="kDirOn"></span>'),'ثُمَّ السُّرْعَةُ: خَمْسَةٌ فِي ثَلَاثَهْ.'),
+    S(res(M('vf = 15 m/s')),'النَّتِيجَةُ: خَمْسَةَ عَشَرَ مِتْرًا لِكُلِّ ثَانِيَهْ.')]},
+  ex4:{title:'مثال ٤ · صفحة 41',sayT:'وَالْمِثَالُ الرَّابِعُ، مِنْ صَفْحَةِ 41.',steps:()=>[
+    S(q('صندوق ساكن كتلته '+M('20 kg')+' على سطح أملس، سحب بقوة '+M('80 N')+' لمدة '+M('4 s')+'. أوجد: التسارع، والسرعة النهائية، والمسافة.','المثال · صفحة 41'),''),
+    S(gr(['m = 20 kg','F = 80 N','vi = 0','t = 4 s'],M('a')+' و '+M('vf')+' و '+M('x')),'الْمُعْطَيَاتُ أَمَامَكَ عَلَى السَّبُّورَهْ.'),
+    S(st(1,M('a = 80 / 20 = 4 m/s²')),'التَّسَارُعُ: ثَمَانُونَ عَلَى عِشْرِينَ، يُسَاوِي أَرْبَعَهْ.'),
+    S(st(2,M('vf = 0 + 4 × 4 = 16 m/s')),'السُّرْعَةُ النِّهَائِيَّةُ: سِتَّةَ عَشَرَ مِتْرًا لِكُلِّ ثَانِيَهْ.'),
+    S(st(3,M('x = 0 + ½ × 4 × 4² = 32 m')+'<span class="kDirOn"></span>'),'الْمَسَافَةُ: اثْنَانِ وَثَلَاثُونَ مِتْرَا.'),
+    S(res(M('a = 4 m/s²')+' · '+M('vf = 16 m/s')+' · '+M('x = 32 m')),'')]},
+  exw:{title:'مثال · صفحة 42',sayT:'وَمِثَالُ الْوَزْنِ، مِنْ صَفْحَةِ 42.',steps:()=>[
+    S(q('جسم كتلته '+M('100 kg')+'، ما وزنه على سطح الأرض؟','المثال · صفحة 42'),''),
+    S(gr(['m = 100 kg','g = 9.8 m/s²'],'الوزن '+M('W')),'الْمُعْطَيَاتُ أَمَامَكَ عَلَى السَّبُّورَةِ، وَالْمَطْلُوبُ: الْوَزْنْ.'),
+    S(st(1,M('W = m g = 100 × 9.8')+'<span class="kDirOn"></span>'),'نَضْرِبُ الْكُتْلَةَ فِي تَسَارُعِ الْجَاذِبِيَّهْ.'),
+    S(res(M('W = 980 N')),'النَّتِيجَةُ: تِسْعُ مِئَةٍ وَثَمَانُونَ نِيُوتُنْ.')]}};
+CARDS['1-5']={
+  fr:{title:'قوة الاحتكاك',sayT:'نَتَعَرَّفُ الْيَوْمَ عَلَى قُوَّةِ الِاحْتِكَاكْ.',steps:()=>[
+    S(pt(B('قوة الاحتكاك')+': قوة بين سطحين متلامسين تعيق انزلاق أحدهما على الآخر، وتكون دائما معاكسة لاتجاه الحركة.'),'قُوَّةُ الِاحْتِكَاكِ: قُوَّةٌ بَيْنَ سَطْحَيْنِ مُتَلَامِسَيْنِ، تُعِيقُ انْزِلَاقَ أَحَدِهِمَا عَلَى الْآخَرِ، وَتَكُونُ دَائِمًا مُعَاكِسَةً لِاتِّجَاهِ الْحَرَكَهْ.'),
+    S(fig(fPull({F:'F',f:'fk',N:'N',W:'W'}),'القوى على الصندوق: السحب F والاحتكاك fk والقوة العمودية N والوزن W'),'لَاحِظِ الْمَشْهَدَ: قُوَّةُ السَّحْبِ تَسْحَبُ الصُّنْدُوقَ إِلَى الْيَمِينِ، وَالِاحْتِكَاكُ يُعَاكِسُهُ إِلَى الْيَسَارِ، وَالْوَزْنُ إِلَى الْأَسْفَلِ، وَالْقُوَّةُ الْعَمُودِيَّةُ إِلَى الْأَعْلَى.'),
+    S(pt(B('أنواعها')+': قوة الاحتكاك السكوني، وقوة الاحتكاك الحركي.'),'وَلَهَا نَوْعَانِ: الِاحْتِكَاكُ السُّكُونِيُّ، وَالِاحْتِكَاكُ الْحَرَكِيّْ.'),
+    LAWB('fk = μk N','وَقَانُونُ الِاحْتِكَاكِ الْحَرَكِيِّ'),
+    S(pt(B('ملحوظة')+': القوة العمودية '+M('N')+' تساوي الوزن '+M('W')+' عندما يكون الجسم على سطح أفقي ولا تؤثر عليه قوى رأسية أخرى.'),'مُلَاحَظَةٌ: الْقُوَّةُ الْعَمُودِيَّةُ تُسَاوِي الْوَزْنَ، عِنْدَمَا يَكُونُ الْجِسْمُ عَلَى سَطْحٍ أُفُقِيّْ.')]},
+  ex1:{title:'مثال ١ · صفحة 45',sayT:'وَالْآنَ لِنَنْتَقِلْ إِلَى أَمْثِلَةِ الْحَقِيبَةِ، الْمِثَالُ الْأَوَّلُ مِنْ صَفْحَةِ 45.',steps:()=>[
+    S(q('صندوق وزنه '+M('40 N')+' ينزلق على طاولة أفقية، ومعامل الاحتكاك الحركي '+M('0.2')+'. ما قوة الاحتكاك؟','المثال · صفحة 45'),''),
+    S(gr(['W = N = 40 N','μk = 0.2'],'قوة الاحتكاك '+M('fk')),'الْمُعْطَيَاتُ أَمَامَكَ عَلَى السَّبُّورَةِ، وَالْمَطْلُوبُ: قُوَّةُ الِاحْتِكَاكْ.'),
+    S(fig(fPull({f:'fk = ?',N:'N = 40 N',W:'W = 40 N'}),'صندوق وزنه 40 N على طاولة أفقية'),'لِنَرْسُمِ الصُّنْدُوقَ وَالْقُوَى عَلَيْهْ.'),
+    S(st(1,M('fk = μk N = 0.2 × 40')+'<span class="kDirOn"></span>'),'نَضْرِبُ الْمُعَامِلَ فِي الْقُوَّةِ الْعَمُودِيَّهْ.'),
+    S(res(M('fk = 8 N')),'النَّتِيجَةُ: ثَمَانِيَةُ نِيُوتُنْ.')]},
+  ex2:{title:'مثال ٢ · صفحة 45',sayT:'وَالْمِثَالُ الثَّانِي، مِنْ صَفْحَةِ 45.',steps:()=>[
+    S(q('ما معامل الاحتكاك الحركي إذا كانت القوة العمودية '+M('30 N')+' وقوة الاحتكاك '+M('3 N')+'؟','المثال · صفحة 45'),''),
+    S(gr(['N = 30 N','fk = 3 N'],'المعامل '+M('μk')),'الْمُعْطَيَاتُ أَمَامَكَ عَلَى السَّبُّورَةِ، وَالْمَطْلُوبُ: مُعَامِلُ الِاحْتِكَاكْ.'),
+    S(st(1,M('μk = fk / N = 3 / 30')+'<span class="kDirOn"></span>'),'نَقْسِمُ قُوَّةَ الِاحْتِكَاكِ عَلَى الْقُوَّةِ الْعَمُودِيَّهْ.'),
+    S(res(M('μk = 0.1')),'النَّتِيجَةُ: صِفْرٌ فَاصِلَةٌ وَاحِدْ.')]},
+  ex3:{title:'مثال ٣ · صفحة 45',sayT:'وَالْمِثَالُ الثَّالِثُ، مِنْ صَفْحَةِ 45: هَلْ يَتَحَرَّكُ الصُّنْدُوقُ؟',steps:()=>[
+    S(q('صندوق كتلته '+M('5 kg')+' على طاولة، دفع بقوة أفقية '+M('15 N')+'. إذا كان معامل الاحتكاك السكوني '+M('0.4')+'، هل يتحرك الصندوق؟','المثال · صفحة 45'),''),
+    S(gr(['m = 5 kg','F = 15 N','μs = 0.4'],'هل '+M('F')+' أكبر من '+M('fs(max)')+'؟'),'الْمُعْطَيَاتُ أَمَامَكَ عَلَى السَّبُّورَهْ.'),
+    S(st(1,M('N = W = m g = 5 × 9.8 = 49 N')),'الْقُوَّةُ الْعَمُودِيَّةُ تُسَاوِي الْوَزْنَ: تِسْعَةً وَأَرْبَعِينَ نِيُوتُنْ.'),
+    S(st(2,M('fs(max) = μs N = 0.4 × 49 = 19.6 N')+'<span class="kDirOn"></span>'),'أَقْصَى احْتِكَاكٍ سُكُونِيٍّ: تِسْعَةَ عَشَرَ فَاصِلَةً سِتَّهْ.'),
+    S(res('لا يتحرك، لأن '+M('15 N')+' أقل من '+M('19.6 N')),'النَّتِيجَةُ: الصُّنْدُوقُ لَا يَتَحَرَّكُ، لِأَنَّ قُوَّةَ الدَّفْعِ أَقَلُّ مِنْ أَقْصَى احْتِكَاكٍ سُكُونِيّْ.')]}};
+CARDS['1-7']={
+  work:{title:'الشغل',sayT:'نَتَعَرَّفُ الْيَوْمَ عَلَى الشُّغْلْ.',steps:()=>[
+    S(pt(B('الشغل')+': حاصل ضرب مركبة القوة في اتجاه الإزاحة في مقدار إزاحة الجسم.'),'الشُّغْلُ: حَاصِلُ ضَرْبِ مُرَكَّبَةِ الْقُوَّةِ فِي اتِّجَاهِ الْإِزَاحَةِ، فِي مِقْدَارِ إِزَاحَةِ الْجِسْمْ.'),
+    S(pt(B('1.')+' إذا كانت القوة في اتجاه الإزاحة: '+M('W = F x')),'إِذَا كَانَتِ الْقُوَّةُ فِي اتِّجَاهِ الْإِزَاحَةِ: الشُّغْلُ يُسَاوِي الْقُوَّةَ فِي الْإِزَاحَهْ.'),
+    S(fig(fPull({F:'F',x:'x',note:'القوة في اتجاه الإزاحة'}),'قوة في اتجاه الإزاحة تبذل شغلا'),'لَاحِظِ الصُّورَةَ: الْقُوَّةُ فِي اتِّجَاهِ الْحَرَكَةِ، فَتَبْذُلُ شُغْلَا.'),
+    S(pt(B('2.')+' إذا صنعت القوة زاوية θ مع الإزاحة:'),'وَإِذَا صَنَعَتِ الْقُوَّةُ زَاوِيَةً مَعَ الْإِزَاحَةِ:'),
+    LAWB('W = F x cos θ','فَالْقَانُونُ'),
+    S(pt('الشغل كمية '+B('قياسية')+'، ووحدته الجول '+M('J')+': الشغل الذي تبذله قوة '+M('1 N')+' عندما تزيح جسما '+M('1 m')+' في اتجاهها.'),'الشُّغْلُ كَمِّيَّةٌ قِيَاسِيَّةٌ، وَوَحْدَتُهُ الْجُولُ: الشُّغْلُ الَّذِي تَبْذُلُهُ قُوَّةُ نِيُوتُنٍ وَاحِدٍ، عِنْدَمَا تُزِيحُ جِسْمًا مِتْرًا وَاحِدًا فِي اتِّجَاهِهَا.'),
+    S(pt(B('ملحوظة')+': الشغل ينعدم بانعدام الإزاحة، أو إذا كانت القوة عمودية على الإزاحة '+M('θ = 90°')+'.'),'مُلَاحَظَةٌ: الشُّغْلُ يَنْعَدِمُ إِذَا انْعَدَمَتِ الْإِزَاحَةُ، أَوْ إِذَا كَانَتِ الْقُوَّةُ عَمُودِيَّةً عَلَى الْإِزَاحَهْ.')]},
+  ex1:{title:'مثال ١ · صفحة 53',sayT:'وَالْآنَ لِنَنْتَقِلْ إِلَى أَمْثِلَةِ الْحَقِيبَةِ، الْمِثَالُ الْأَوَّلُ مِنْ صَفْحَةِ 53.',steps:()=>[
+    S(q('قوة مقدارها '+M('50 N')+' أثرت على جسم فأزاحته '+M('200 m')+'. أوجد الشغل.','المثال · صفحة 53'),''),
+    S(gr(['F = 50 N','x = 200 m','θ = 0°'],'الشغل '+M('W')),'الْمُعْطَيَاتُ أَمَامَكَ عَلَى السَّبُّورَةِ، وَالْمَطْلُوبُ: الشُّغْلْ.'),
+    S(st(1,M('W = F x cos θ = 50 × 200 × cos 0°')+'<span class="kDirOn"></span>'),'نُعَوِّضُ، وَجَيْبُ تَمَامِ الصِّفْرِ يُسَاوِي وَاحِدَا.'),
+    S(res(M('W = 10000 J')),'النَّتِيجَةُ: عَشَرَةُ آلَافِ جُولْ.')]},
+  ex2:{title:'مثال ٢ · صفحة 53',sayT:'وَالْمِثَالُ الثَّانِي، مِنْ صَفْحَةِ 53.',steps:()=>[
+    S(q('صندوق سحب بقوة '+M('100 N')+' بزاوية '+M('60°')+' مع الأفقي، فتحرك '+M('8 m')+'. ما الشغل؟','المثال · صفحة 53'),''),
+    S(gr(['F = 100 N','θ = 60°','x = 8 m'],'الشغل '+M('W')),'الْمُعْطَيَاتُ أَمَامَكَ عَلَى السَّبُّورَةِ، وَالْمَطْلُوبُ: الشُّغْلْ.'),
+    S(fig(fPull({ang:60,Fa:'F = 100 N',x:'x = 8 m'}),'القوة تصنع زاوية 60° مع اتجاه الحركة'),'لَاحِظِ الرَّسْمَ: الْقُوَّةُ مَائِلَةٌ بِزَاوِيَةِ سِتِّينَ دَرَجَةً مَعَ الْأُفُقِيّْ.'),
+    S(st(1,M('W = 100 × 8 × cos 60° = 800 × 0.5')+'<span class="kDirOn"></span>'),'جَيْبُ تَمَامِ سِتِّينَ يُسَاوِي نِصْفَا.'),
+    S(res(M('W = 400 J')),'النَّتِيجَةُ: أَرْبَعُ مِئَةِ جُولْ.')]},
+  ex3:{title:'مثال ٣ · صفحة 53',sayT:'وَالْمِثَالُ الثَّالِثُ، مِنْ صَفْحَةِ 53.',steps:()=>[
+    S(q('احسب الشغل المبذول في تحريك جسم كتلته '+M('0.2 kg')+' مسافة '+M('0.8 m')+' بتسارع '+M('2 m/s²')+'.','المثال · صفحة 53'),''),
+    S(gr(['m = 0.2 kg','x = 0.8 m','a = 2 m/s²'],'الشغل '+M('W')),'الْمُعْطَيَاتُ أَمَامَكَ عَلَى السَّبُّورَةِ، وَالْمَطْلُوبُ: الشُّغْلْ.'),
+    S(st(1,M('F = m a = 0.2 × 2 = 0.4 N')),'أَوَّلًا الْقُوَّةُ: صِفْرٌ فَاصِلَةٌ أَرْبَعَةُ نِيُوتُنْ.'),
+    S(st(2,M('W = F x = 0.4 × 0.8')+'<span class="kDirOn"></span>'),'ثُمَّ الشُّغْلُ: الْقُوَّةُ فِي الْمَسَافَهْ.'),
+    S(res(M('W = 0.32 J')),'النَّتِيجَةُ: صِفْرٌ فَاصِلَةٌ اثْنَانِ وَثَلَاثُونَ جُولْ.')]}};
+CARDS['1-8']={
+  energy:{title:'الطاقة',sayT:'نَتَعَرَّفُ الْيَوْمَ عَلَى الطَّاقَهْ.',steps:()=>[
+    S(pt(B('الطاقة')+': القدرة على إنجاز شغل، ووحدتها الجول '+M('J')+'.'),'الطَّاقَةُ: الْقُدْرَةُ عَلَى إِنْجَازِ شُغْلٍ، وَوَحْدَتُهَا الْجُولْ.'),
+    S(pt(B('أنواعها')+': الميكانيكية (حركية ووضع)، والكهربائية، والحرارية، والكيميائية، والنووية، والشمسية.'),'وَمِنْ أَنْوَاعِهَا: الطَّاقَةُ الْمِيكَانِيكِيَّةُ، وَتَنْقَسِمُ إِلَى حَرَكِيَّةٍ وَوَضْعٍ، وَالْكَهْرَبَائِيَّةُ، وَالْحَرَارِيَّةُ، وَالْكِيمْيَائِيَّةُ، وَالنَّوَوِيَّةُ، وَالشَّمْسِيَّهْ.')]},
+  ke:{title:'الطاقة الحركية',sayT:'أَوَّلًا: الطَّاقَةُ الْحَرَكِيَّهْ.',steps:()=>[
+    S(pt(B('الطاقة الحركية')+': الطاقة التي يحصل عليها الجسم بسبب حركته.'),'الطَّاقَةُ الْحَرَكِيَّةُ: الطَّاقَةُ الَّتِي يَحْصُلُ عَلَيْهَا الْجِسْمُ بِسَبَبِ حَرَكَتِهْ.'),
+    LAWB('KE = ½ m v²','وَالْقَانُونُ'),
+    S(fig(fTrack({a:'m',c:'v',x:''}),'السيارة المتحركة تمتلك طاقة حركية'),'لَاحِظِ الْمَشْهَدَ: السَّيَّارَةُ الْمُتَحَرِّكَةُ تَمْتَلِكُ طَاقَةً حَرَكِيَّةً بِسَبَبِ سُرْعَتِهَا.')]},
+  pe:{title:'طاقة الوضع',sayT:'ثَانِيًا: الطَّاقَةُ الْكَامِنَةُ، أَوْ طَاقَةُ الْوَضْعْ.',steps:()=>[
+    S(pt(B('طاقة الوضع')+': الطاقة التي يحصل عليها الجسم بسبب موضعه، أي ارتفاعه عن مستوى الإسناد.'),'طَاقَةُ الْوَضْعِ: الطَّاقَةُ الَّتِي يَحْصُلُ عَلَيْهَا الْجِسْمُ بِسَبَبِ ارْتِفَاعِهِ عَنْ مُسْتَوَى الْإِسْنَادْ.'),
+    LAWB('PE = m g h','وَالْقَانُونُ'),
+    S(fig(fStand({m:'m',h:'h',pe:'PE = m g h'}),'كتلة على ارتفاع h عن سطح الطاولة'),'لَاحِظِ الصُّورَةَ: الْكُتْلَةُ عَلَى ارْتِفَاعٍ عَنْ سَطْحِ الطَّاوِلَةِ، فَتَمْتَلِكُ طَاقَةَ وَضْعْ.')]},
+  ex1:{title:'مثال ١ · صفحة 55',sayT:'وَالْآنَ لِنَنْتَقِلْ إِلَى أَمْثِلَةِ الْحَقِيبَةِ، الْمِثَالُ الْأَوَّلُ مِنْ صَفْحَةِ 55.',steps:()=>[
+    S(q('ما الطاقة الحركية لجسم كتلته '+M('45 kg')+' يتحرك بسرعة '+M('13 m/s')+'؟','المثال · صفحة 55'),''),
+    S(gr(['m = 45 kg','v = 13 m/s'],'الطاقة الحركية '+M('KE')),'الْمُعْطَيَاتُ أَمَامَكَ عَلَى السَّبُّورَةِ، وَالْمَطْلُوبُ: الطَّاقَةُ الْحَرَكِيَّهْ.'),
+    S(st(1,M('KE = ½ × 45 × 13² = 7605 / 2')+'<span class="kDirOn"></span>'),'نُعَوِّضُ فِي الْقَانُونِ، وَنَقْسِمُ عَلَى اثْنَيْنْ.'),
+    S(res(M('KE = 3802.5 J')),'النَّتِيجَةُ: ثَلَاثَةُ آلَافٍ وَثَمَانِ مِئَةٍ وَاثْنَانِ فَاصِلَةٌ خَمْسَةُ جُولْ.')]},
+  ex2:{title:'مثال ٢ · صفحة 55',sayT:'وَالْمِثَالُ الثَّانِي، مِنْ صَفْحَةِ 55.',steps:()=>[
+    S(q('ما كتلة كرة تتحرك بسرعة '+M('3 m/s')+' وطاقتها الحركية '+M('18 J')+'؟','المثال · صفحة 55'),''),
+    S(gr(['v = 3 m/s','KE = 18 J'],'الكتلة '+M('m')),'الْمُعْطَيَاتُ أَمَامَكَ عَلَى السَّبُّورَةِ، وَالْمَطْلُوبُ: الْكُتْلَهْ.'),
+    S(st(1,M('18 = ½ m × 3²')+' ← '+M('36 = 9 m')),'نُعَوِّضُ، ثُمَّ نَضْرِبُ الطَّرَفَيْنِ فِي اثْنَيْنْ.'),
+    S(st(2,M('m = 36 / 9')+'<span class="kDirOn"></span>'),'نَقْسِمُ عَلَى تِسْعَهْ.'),
+    S(res(M('m = 4 kg')),'النَّتِيجَةُ: أَرْبَعَةُ كِيلُوجْرَامَاتْ.')]},
+  ex3:{title:'مثال ٣ · صفحة 56',sayT:'وَالْمِثَالُ الثَّالِثُ، مِنْ صَفْحَةِ 56.',steps:()=>[
+    S(q('ما طاقة الوضع لجسم كتلته '+M('5 kg')+' وضع على حافة ارتفاعها '+M('3 m')+'؟','المثال · صفحة 56'),''),
+    S(gr(['m = 5 kg','h = 3 m','g = 9.8 m/s²'],'طاقة الوضع '+M('PE')),'الْمُعْطَيَاتُ أَمَامَكَ عَلَى السَّبُّورَةِ، وَالْمَطْلُوبُ: طَاقَةُ الْوَضْعْ.'),
+    S(st(1,M('PE = m g h = 5 × 9.8 × 3')+'<span class="kDirOn"></span>'),'نَضْرِبُ الْكُتْلَةَ فِي تَسَارُعِ الْجَاذِبِيَّةِ فِي الِارْتِفَاعْ.'),
+    S(res(M('PE = 147 J')),'النَّتِيجَةُ: مِئَةٌ وَسَبْعَةٌ وَأَرْبَعُونَ جُولْ.')]}};
+CARDS['1-9']={
+  cons:{title:'مبدأ حفظ الطاقة',sayT:'نَتَعَرَّفُ الْيَوْمَ عَلَى مَبْدَأِ حِفْظِ الطَّاقَهْ.',steps:()=>[
+    S(pt('في أي نظام معزول: الطاقة '+B('لا تفنى ولا تستحدث')+' من العدم، ولكن يمكن تحويلها من صورة إلى أخرى.'),'فِي أَيِّ نِظَامٍ مَعْزُولٍ، الطَّاقَةُ لَا تَفْنَى وَلَا تُسْتَحْدَثُ مِنَ الْعَدَمِ، وَلَكِنْ يُمْكِنُ تَحْوِيلُهَا مِنْ صُورَةٍ إِلَى أُخْرَى.'),
+    LAWB('ΔKE + ΔPE = 0','وَعِنْدَ غِيَابِ الِاحْتِكَاكِ'),
+    S(fig(fFall({}),'في السقوط الحر تتحول طاقة الوضع إلى طاقة حركية، والطاقة الميكانيكية ثابتة'),'لَاحِظِ الصُّورَةَ: فِي الْأَعْلَى طَاقَةُ الْوَضْعِ كَبِيرَةٌ، وَقَبْلَ الِاصْطِدَامِ تَتَحَوَّلُ إِلَى طَاقَةٍ حَرَكِيَّةٍ، وَالْمَجْمُوعُ ثَابِتْ.')]},
+  me:{title:'الطاقة الميكانيكية لنظام محفوظ',sayT:'وَمِنْ هَذَا الْمَبْدَأِ نَصِلُ إِلَى حِفْظِ الطَّاقَةِ الْمِيكَانِيكِيَّهْ.',steps:()=>[
+    S(pt(M('KEf − KEi + PEf − PEi = 0')),'نَكْتُبُ التَّغَيُّرَ فِي الطَّاقَتَيْنِ، وَمَجْمُوعُهُمَا صِفْرْ.'),
+    S(pt(M('KEf + PEf = KEi + PEi')),'فَيَكُونُ مَجْمُوعُ الطَّاقَتَيْنِ فِي النِّهَايَةِ، مُسَاوِيًا لِمَجْمُوعِهِمَا فِي الْبِدَايَهْ.'),
+    LAWB('MEf = MEi','أَيْ أَنَّ الطَّاقَةَ الْمِيكَانِيكِيَّةَ مَحْفُوظَةٌ')]},
+  ex1:{title:'مثال ١ · صفحة 56',sayT:'وَالْآنَ لِنَنْتَقِلْ إِلَى أَمْثِلَةِ الْحَقِيبَةِ، الْمِثَالُ الْأَوَّلُ مِنْ صَفْحَةِ 56.',steps:()=>[
+    S(q('إذا كانت الطاقة الحركية لجسم ساقط '+M('12 J')+' وطاقة الوضع له '+M('35 J')+'، فما الطاقة الميكانيكية؟','المثال · صفحة 56'),''),
+    S(gr(['KE = 12 J','PE = 35 J'],'الطاقة الميكانيكية '+M('ME')),'الْمُعْطَيَاتُ أَمَامَكَ عَلَى السَّبُّورَةِ، وَالْمَطْلُوبُ: الطَّاقَةُ الْمِيكَانِيكِيَّهْ.'),
+    S(st(1,M('ME = KE + PE = 12 + 35')+'<span class="kDirOn"></span>'),'نَجْمَعُ الطَّاقَتَيْنْ.'),
+    S(res(M('ME = 47 J')),'النَّتِيجَةُ: سَبْعَةٌ وَأَرْبَعُونَ جُولْ.')]},
+  ex2:{title:'مثال ٢ · صفحة 57',sayT:'وَالْمِثَالُ الثَّانِي، مِنْ صَفْحَةِ 57.',steps:()=>[
+    S(q('قط كتلته '+M('1 kg')+' يركض بسرعة '+M('6 m/s')+'. أوجد أعلى حائط يستطيع أن يقفز عليه.','المثال · صفحة 57'),''),
+    S(gr(['m = 1 kg','v = 6 m/s','g = 9.8 m/s²'],'الارتفاع '+M('h')),'الْمُعْطَيَاتُ أَمَامَكَ عَلَى السَّبُّورَةِ، وَالْمَطْلُوبُ: أَقْصَى ارْتِفَاعْ.'),
+    S(st(1,M('KEi = PEf')+' ← '+M('½ m v² = m g h')),'الطَّاقَةُ الْحَرَكِيَّةُ فِي الْبِدَايَةِ، تَتَحَوَّلُ كُلُّهَا إِلَى طَاقَةِ وَضْعٍ فِي الْأَعْلَى.'),
+    S(st(2,M('½ × 1 × 6² = 1 × 9.8 × h')+' ← '+M('18 = 9.8 h')),'نُعَوِّضُ: ثَمَانِيَةَ عَشَرَ تُسَاوِي تِسْعَةً فَاصِلَةً ثَمَانِيَةً فِي الِارْتِفَاعْ.'),
+    S(st(3,M('h = 18 / 9.8')+'<span class="kDirOn"></span>'),'نَقْسِمُ الطَّرَفَيْنْ.'),
+    S(res(M('h ≈ 1.84 m')),'النَّتِيجَةُ: وَاحِدٌ فَاصِلَةٌ أَرْبَعَةٌ وَثَمَانُونَ مِتْرًا تَقْرِيبَا.')]}};
+const RU2={
+ '1-1':[[/^مقدمة الوحدة وأهدافها$/,'intro'],[/^الهدف العام للوحدة$/,'goals'],[/^ما ستتعلمه في الوحدة$/,null],[/^المسافة والإزاحة$/,'dist',1],[/^السرعة المتوسطة$/,'speed'],[/^التسارع$/,'acc'],[/^أمثلة الحقيبة التدريبية محلولة$/,['exd','ex1']],[/^مثال ١: سرعة سيارة/,null],[/^مثال ٢: تسارع سيارة/,'ex2']],
+ '1-2':[[/^علاقة السرعة والتسارع والزمن$/,'eqs'],[/^السرعة المتوسطة$/,null],[/^علاقة الإزاحة/,null],[/^علاقة السرعة والتسارع والإزاحة$/,null],[/^كيف تختار المعادلة/,null],[/^أمثلة الحقيبة التدريبية محلولة$/,'ex1'],[/^مثال ٢: المسافة/,'ex2'],[/^مثال ٣: تسارع سيارة/,'ex3'],[/^مثال ٤: السرعة بعد/,'ex4'],[/^معادلات الحركة بتسارع ثابت$/,null]],
+ '1-3':[[/^القوة$/,'force'],[/^قانون نيوتن الأول/,'law1'],[/^قانون نيوتن الثاني$/,'law2'],[/^الوزن$/,'weight'],[/^قانون نيوتن الثالث$/,'law3'],[/^أمثلة على قانون نيوتن الثالث$/,null],[/^أمثلة الحقيبة التدريبية محلولة$/,'ex1'],[/^مثال ٢: تسارع سيارة/,'ex2'],[/^مثال ٣: سرعة صندوق/,'ex3'],[/^مثال ٤: صندوق يُسحب/,'ex4'],[/^مثال ١: وزن جسم/,'exw'],[/^ملخص قوانين نيوتن$/,null]],
+ '1-5':[[/^قوة الاحتكاك$/,'fr'],[/^أنواع قوى الاحتكاك$/,null],[/^قانون قوة الاحتكاك$/,null],[/^هل يتحرك الجسم/,null],[/^أمثلة الحقيبة التدريبية محلولة$/,'ex1'],[/^مثال ٢: إيجاد معامل/,'ex2'],[/^مثال ٣: هل يتحرك/,'ex3']],
+ '1-7':[[/^تعريف الشغل$/,'work'],[/^حالات مهمة$/,null],[/^أمثلة الحقيبة التدريبية محلولة$/,'ex1'],[/^مثال ٢: شغل قوة/,'ex2'],[/^مثال ٣: الشغل بمعلومية/,'ex3']],
+ '1-8':[[/^الطاقة$/,'energy'],[/^أولا: الطاقة الحركية$/,'ke'],[/^ثانيا: الطاقة الكامنة/,'pe'],[/^أمثلة الحقيبة التدريبية محلولة$/,'ex1'],[/^مثال ٢: كتلة كرة/,'ex2'],[/^مثال ٣: طاقة الوضع/,'ex3'],[/^الطاقة الحركية وطاقة الوضع$/,null]],
+ '1-9':[[/^مبدأ قانون حفظ الطاقة$/,'cons'],[/^الطاقة الميكانيكية لنظام محفوظ$/,'me'],[/^أمثلة الحقيبة التدريبية محلولة$/,'ex1'],[/^مثال ٢: أعلى حائط/,'ex2']]};
+const LIFE2={'1-1':'وَبَعْدَ أَنْ فَهِمْنَا الْإِزَاحَةَ وَالسُّرْعَةَ وَالتَّسَارُعَ، لِنَرَ أَيْنَ نَجِدُهَا فِي حَيَاتِنَا.','1-2':'وَبَعْدَ أَنْ تَدَرَّبْنَا عَلَى مُعَادَلَاتِ الْحَرَكَةِ، لِنَرَ أَيْنَ نَسْتَخْدِمُهَا فِي حَيَاتِنَا.','1-3':'وَبَعْدَ أَنْ فَهِمْنَا قَوَانِينَ نِيُوتُنَ، لِنَرَ أَيْنَ نَجِدُهَا فِي حَيَاتِنَا.','1-5':'وَبَعْدَ أَنْ فَهِمْنَا الِاحْتِكَاكَ، لِنَرَ أَيْنَ نَجِدُهُ فِي حَيَاتِنَا.','1-7':'وَبَعْدَ أَنْ فَهِمْنَا الشُّغْلَ، لِنَرَ أَيْنَ نَجِدُهُ فِي حَيَاتِنَا.','1-8':'وَبَعْدَ أَنْ فَهِمْنَا الطَّاقَةَ الْحَرَكِيَّةَ وَطَاقَةَ الْوَضْعِ، لِنَرَ أَيْنَ نَجِدُهُمَا فِي حَيَاتِنَا.','1-9':'وَبَعْدَ أَنْ فَهِمْنَا حِفْظَ الطَّاقَةِ، لِنَرَ أَيْنَ نَجِدُهُ فِي حَيَاتِنَا.'};
+function applyU2(out,K2){defs();const T=sl=>String(sl.title||''),base=t=>t.replace(/\s*\(تابع\)\s*$/,'');const seen={};
+  const R=(RU2[K2]||[]).map(([re,id,once])=>[re,sl=>{if(once){if(seen[id])return null;seen[id]=1}if(id===null)return null;return Array.isArray(id)?id.map(i=>card(K2,i)):card(K2,id)}]);
+  R.push([/^تمرين \d+ ·/,()=>null],[/^رسم توضيحي/,()=>null],[/^تطبيقات من الحياة$/,sl=>{sl.sayT=LIFE2[K2];return typeof appCards==='function'?appCards(sl):sl}]);
+  if(K2==='1-1')R.push([/^مقدمة الوحدة وأهدافها$/,()=>null]);
+  const res=[];let skip=null;
+  out.forEach(sl=>{const t=T(sl);if(skip&&base(t)===skip&&/\(تابع\)/.test(t))return;skip=null;
+    const m=R.find(([re])=>re.test(base(t)));if(!m||sl.type!=='c'){res.push(sl);return}
+    skip=base(t);const n=m[1](sl);if(Array.isArray(n))n.forEach(x=>x&&res.push(x));else if(n)res.push(n);if(n===sl)skip=null});
+  return res}
+/* ===== مشاهد الوحدة الثالثة (الفيزياء الحرارية) بأجهزة مجسمة واقعية — طلب المدرب 5 نوفمبر 07:33 ===== */
+function hDefs(){return `<defs>
+<linearGradient id="h-gl" x1="0" x2="1"><stop offset="0" stop-color="#bae6fd" stop-opacity=".75"/><stop offset=".12" stop-color="#e0f2fe" stop-opacity=".25"/><stop offset=".5" stop-color="#ffffff" stop-opacity=".06"/><stop offset=".88" stop-color="#e0f2fe" stop-opacity=".25"/><stop offset="1" stop-color="#7dd3fc" stop-opacity=".8"/></linearGradient>
+<linearGradient id="h-cold" x1="0" x2="1"><stop offset="0" stop-color="#1e40af"/><stop offset=".35" stop-color="#3b82f6"/><stop offset=".6" stop-color="#60a5fa"/><stop offset="1" stop-color="#1e3a8a"/></linearGradient>
+<linearGradient id="h-hot" x1="0" x2="1"><stop offset="0" stop-color="#991b1b"/><stop offset=".35" stop-color="#ef4444"/><stop offset=".6" stop-color="#fb923c"/><stop offset="1" stop-color="#7f1d1d"/></linearGradient>
+<linearGradient id="h-mid" x1="0" x2="1"><stop offset="0" stop-color="#5b21b6"/><stop offset=".45" stop-color="#a78bfa"/><stop offset="1" stop-color="#4c1d95"/></linearGradient>
+<linearGradient id="h-tube" x1="0" x2="1"><stop offset="0" stop-color="#94a3b8"/><stop offset=".3" stop-color="#ffffff"/><stop offset=".7" stop-color="#f1f5f9"/><stop offset="1" stop-color="#64748b"/></linearGradient>
+<linearGradient id="h-chr" x1="0" x2="1"><stop offset="0" stop-color="#334155"/><stop offset=".25" stop-color="#cbd5e1"/><stop offset=".45" stop-color="#ffffff"/><stop offset=".7" stop-color="#94a3b8"/><stop offset="1" stop-color="#1e293b"/></linearGradient>
+<linearGradient id="h-chrV" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".45" stop-color="#cbd5e1"/><stop offset="1" stop-color="#334155"/></linearGradient>
+<linearGradient id="h-dark" x1="0" x2="1"><stop offset="0" stop-color="#0f172a"/><stop offset=".4" stop-color="#475569"/><stop offset="1" stop-color="#0b1120"/></linearGradient>
+<linearGradient id="h-darkV" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#64748b"/><stop offset="1" stop-color="#0f172a"/></linearGradient>
+<linearGradient id="h-jk" x1="0" x2="1"><stop offset="0" stop-color="#94a3b8"/><stop offset=".3" stop-color="#f8fafc"/><stop offset=".6" stop-color="#e2e8f0"/><stop offset="1" stop-color="#64748b"/></linearGradient>
+<radialGradient id="h-bR" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#fecaca"/><stop offset=".45" stop-color="#ef4444"/><stop offset="1" stop-color="#7f1d1d"/></radialGradient>
+<radialGradient id="h-bB" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#bfdbfe"/><stop offset=".45" stop-color="#3b82f6"/><stop offset="1" stop-color="#1e3a8a"/></radialGradient>
+<radialGradient id="h-coil" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#fde047"/><stop offset=".5" stop-color="#f97316"/><stop offset="1" stop-color="#7c2d12" stop-opacity="0"/></radialGradient>
+<radialGradient id="h-ice" cx="35%" cy="30%" r="80%"><stop offset="0" stop-color="#ffffff"/><stop offset=".55" stop-color="#e0f2fe"/><stop offset="1" stop-color="#7dd3fc"/></radialGradient>
+<radialGradient id="h-mc" cx="35%" cy="30%" r="70%"><stop offset="0" stop-color="#dbeafe"/><stop offset=".5" stop-color="#2563eb"/><stop offset="1" stop-color="#172554"/></radialGradient>
+<radialGradient id="h-mh" cx="35%" cy="30%" r="70%"><stop offset="0" stop-color="#fee2e2"/><stop offset=".5" stop-color="#dc2626"/><stop offset="1" stop-color="#450a0a"/></radialGradient>
+<linearGradient id="h-fl" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#1d4ed8" stop-opacity=".9"/><stop offset=".45" stop-color="#60a5fa" stop-opacity=".8"/><stop offset="1" stop-color="#bfdbfe" stop-opacity=".2"/></linearGradient>
+<linearGradient id="h-fi" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#e0f2fe"/><stop offset=".6" stop-color="#7dd3fc"/><stop offset="1" stop-color="#fde047"/></linearGradient>
+<radialGradient id="h-sf" cx="45%" cy="35%" r="70%"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset=".6" stop-color="#fff" stop-opacity=".15"/><stop offset="1" stop-color="#0f172a" stop-opacity=".25"/></radialGradient><filter id="h-glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="8"/></filter>
+<filter id="h-soft"><feGaussianBlur stdDeviation="1.2"/></filter></defs>`}
+/* كأس زجاجية أسطوانية مجسمة بسائل وتدريج */
+/* سطح سائل مجسم: بيضاوي بتدرج وحافة خلفية داكنة وأمامية لامعة وانعكاس */
+function hSurf(cx,ly,rx,ry,fill){return `<ellipse cx="${cx}" cy="${ly}" rx="${rx}" ry="${ry}" fill="${fill}"/><ellipse cx="${cx}" cy="${ly}" rx="${rx}" ry="${ry}" fill="url(#h-sf)"/><path d="M${cx-rx},${ly} A${rx} ${ry} 0 0 1 ${cx+rx},${ly}" fill="none" stroke="#0f172a" stroke-opacity=".35" stroke-width="2"/><path d="M${cx-rx},${ly} A${rx} ${ry} 0 0 0 ${cx+rx},${ly}" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="2"/><ellipse cx="${cx-rx*.25}" cy="${ly-ry*.2}" rx="${rx*.35}" ry="${ry*.28}" fill="#fff" opacity=".45"/><ellipse cx="${cx+rx*.3}" cy="${ly+ry*.25}" rx="${rx*.18}" ry="${ry*.15}" fill="#fff" opacity=".3"/>`}
+function bLiq(cx,yb,w,ly){const x=cx-w/2+3,rx=w/2-3,ry=w*.15;return `M${x},${ly} L${x},${yb} A${rx} ${ry} 0 0 0 ${x+2*rx},${yb} L${x+2*rx},${ly} A${rx} ${ry} 0 0 1 ${x},${ly} Z`}
+function gBeaker(cx,yb,w,h,lev,fill,extra,top){const x=cx-w/2,rx=w/2,ry=w*.15,ly=yb-h*lev;let g=gSh(cx+4,yb+ry+2,w*.62);
+  g+=`<ellipse cx="${cx}" cy="${yb-h}" rx="${rx}" ry="${ry}" fill="#e0f2fe" opacity=".35"/>`;
+  if(lev>0)g+=`<path d="${bLiq(cx,yb,w,ly)}" fill="${fill}" opacity=".92"/>`+hSurf(cx,ly,rx-3,ry,fill);
+  g+=(extra||'');
+  g+=`<path d="M${x},${yb-h} L${x},${yb} A${rx} ${ry} 0 0 0 ${x+w},${yb} L${x+w},${yb-h}" fill="url(#h-gl)" stroke="#94a3b8" stroke-width="1.6"/><path d="M${x},${yb} A${rx} ${ry} 0 0 0 ${x+w},${yb}" fill="none" stroke="#64748b" stroke-width="3" opacity=".6"/>`;
+  g+=`<path d="M${x},${yb-h} A${rx} ${ry} 0 0 0 ${x+w},${yb-h}" fill="none" stroke="#e2e8f0" stroke-width="3"/><path d="M${x},${yb-h} A${rx} ${ry} 0 0 1 ${x+w},${yb-h}" fill="none" stroke="#cbd5e1" stroke-width="2"/><path d="M${x-2},${yb-h} q-8,-2 -10,-8" fill="none" stroke="#cbd5e1" stroke-width="2.5"/>`;
+  for(let i=1;i<5;i++){const yy=yb-h*i/5;g+=`<path d="M${cx+w*.12},${f1(yy+ry*.9)} L${cx+w*.3},${f1(yy+ry*.7)}" stroke="#334155" stroke-width="1.3" opacity=".7"/><text x="${cx+w*.33}" y="${f1(yy+ry*.7+3)}" font-size="8" font-weight="800" fill="#334155" opacity=".75" direction="ltr">${i*50}</text>`}
+  return g+`<rect x="${x+6}" y="${yb-h+ry+4}" width="6" height="${h-ry*2-8}" rx="3" fill="#fff" opacity=".7"/><rect x="${x+16}" y="${yb-h+ry+10}" width="2.5" height="${h-ry*2-24}" rx="1.2" fill="#fff" opacity=".5"/><rect x="${x+w-14}" y="${yb-h+ry+6}" width="4" height="${h-ry*2-14}" rx="2" fill="#fff" opacity=".35"/>`+(top||'')}
+/* ترمومتر زجاجي مجسم بعمود يتحرك من p0 إلى p1 */
+function gTh(x,yb,h,p0,p1,D,t0,t1,col){const blue=col==='#2563eb',lq=blue?'#2563eb':'#dc2626',top=yb-h,ch0=(h-16)*p0,ch1=(h-16)*p1;
+  let g=`<rect x="${x-8}" y="${top}" width="16" height="${h+2}" rx="8" fill="url(#h-tube)" stroke="#94a3b8" stroke-width="1.2"/><circle cx="${x}" cy="${yb+6}" r="12" fill="url(#${blue?'h-bB':'h-bR'})" stroke="#475569" stroke-width="1"/><circle cx="${x-4}" cy="${yb+1}" r="3.5" fill="#fff" opacity=".75"/>`;
+  g+=`<rect x="${x-2.2}" width="4.4" rx="2" fill="${lq}"><animate attributeName="y" dur="${D}s" repeatCount="indefinite" keyTimes="${scK(D,[0,t0,t1,D])}" values="${yb-ch0};${yb-ch0};${yb-ch1};${yb-ch1}"/><animate attributeName="height" dur="${D}s" repeatCount="indefinite" keyTimes="${scK(D,[0,t0,t1,D])}" values="${ch0+6};${ch0+6};${ch1+6};${ch1+6}"/></rect>`;
+  for(let i=0;i<=10;i++){const yy=f1(yb-8-(h-22)*i/10);g+=`<line x1="${x+3}" y1="${yy}" x2="${x+(i%5?6.5:8)}" y2="${yy}" stroke="#1e293b" stroke-width="${i%5?.8:1.3}"/>`}
+  return g+`<rect x="${x-6}" y="${top+5}" width="2.6" height="${h-12}" rx="1.3" fill="#fff" opacity=".9"/><rect x="${x-5}" y="${top-6}" width="10" height="8" rx="3" fill="url(#h-chr)"/>`}
+/* سخان كهربائي مجسم بصفيحة متوهجة ومقبض */
+function gPlate(cx,yb,w){const x=cx-w/2,d=16;return gSh(cx+6,yb+4,w*.62)+
+  `<polygon points="${x},${yb-30} ${x+w},${yb-30} ${x+w+d},${yb-30-d*.7} ${x+d},${yb-30-d*.7}" fill="#475569"/><polygon points="${x+w},${yb-30} ${x+w+d},${yb-30-d*.7} ${x+w+d},${yb-d*.7} ${x+w},${yb}" fill="#0f172a"/><rect x="${x}" y="${yb-30}" width="${w}" height="30" rx="4" fill="url(#h-darkV)"/><rect x="${x+4}" y="${yb-28}" width="${w-8}" height="2" fill="#fff" opacity=".25"/>`+
+  `<ellipse cx="${cx+d/2}" cy="${yb-30-d*.35}" rx="${w/2-12}" ry="7" fill="#111827" stroke="#334155"/><ellipse cx="${cx+d/2}" cy="${yb-30-d*.35}" rx="${w/2-20}" ry="5" fill="url(#h-coil)"><animate attributeName="opacity" dur="1.8s" repeatCount="indefinite" values=".6;1;.6"/></ellipse>`+
+  `<circle cx="${x+w-20}" cy="${yb-15}" r="8" fill="url(#h-chr)" stroke="#1e293b"/><line x1="${x+w-20}" y1="${yb-15}" x2="${x+w-15}" y2="${yb-20}" stroke="#0f172a" stroke-width="2"/><circle cx="${x+16}" cy="${yb-15}" r="3.5" fill="#ef4444"><animate attributeName="opacity" dur="1.2s" repeatCount="indefinite" values="1;.35;1"/></circle>`}
+/* لهب موقد بنزن واقعي: مخروط أزرق خارجي وداخلي */
+const gFlame=(cx,yb,s)=>`<g transform="translate(${cx} ${yb}) scale(${s})"><g><animateTransform attributeName="transform" type="scale" dur=".6s" repeatCount="indefinite" values="1 1;1.05 .92;.96 1.06;1 1"/><path d="M0,0 C-13,-8 -12,-30 0,-50 C12,-30 13,-8 0,0 Z" fill="url(#h-fl)"/><path d="M0,-2 C-6,-8 -6,-18 0,-28 C6,-18 6,-8 0,-2 Z" fill="url(#h-fi)"/></g><ellipse cx="0" cy="-20" rx="14" ry="26" fill="#93c5fd" opacity=".25" filter="url(#h-soft)"/></g>`;
+/* موقد بنزن مجسم */
+const gBurner=(cx,yb)=>gSh(cx,yb+3,38)+`<ellipse cx="${cx}" cy="${yb-4}" rx="32" ry="9" fill="#1e293b"/><path d="M${cx-32},${yb-10} L${cx-32},${yb-4} A32 9 0 0 0 ${cx+32},${yb-4} L${cx+32},${yb-10} Z" fill="url(#h-dark)"/><ellipse cx="${cx}" cy="${yb-10}" rx="32" ry="9" fill="#334155"/>`+
+  `<rect x="${cx-8}" y="${yb-62}" width="16" height="54" fill="url(#h-chr)"/><rect x="${cx-10}" y="${yb-30}" width="20" height="10" rx="2" fill="url(#h-chr)" stroke="#475569" stroke-width=".6"/><rect x="${cx-3}" y="${yb-28}" width="6" height="5" rx="1" fill="#0f172a"/><ellipse cx="${cx}" cy="${yb-62}" rx="8" ry="2.5" fill="#1e293b"/><path d="M${cx+30},${yb-8} q24,2 30,-4" fill="none" stroke="#ea580c" stroke-width="5" stroke-linecap="round"/>`+gFlame(cx,yb-62,1);
+/* جزيئات كروية لامعة تهتز: سعة a وزمن دورة p */
+function gMols(cx,cy,w,h,n,a,p,c,seed){const gid=c==='#1e3a8a'?'h-mc':'h-mh';let g='';for(let i=0;i<n;i++){const r=(k)=>{const v=Math.sin((i+1)*(seed+k)*12.9898)*43758.5453;return v-Math.floor(v)};const x=cx-w/2+10+r(1)*(w-20),y=cy-h/2+10+r(2)*(h-20);
+  const pts=[0,1,2,3].map(k=>`${f1((r(k+3)-.5)*2*a)} ${f1((r(k+7)-.5)*2*a)}`);g+=`<circle cx="${f1(x)}" cy="${f1(y)}" r="6.5" fill="url(#${gid})"><animateTransform attributeName="transform" type="translate" dur="${p}s" repeatCount="indefinite" values="0 0;${pts.join(';')};0 0"/></circle>`}return g}
+/* قطعة فلز مجسمة */
+function gMetal(x,yb,w,h,tint,op){const d=22;return gSh(x+w/2+8,yb+2,w*.6)+`<polygon points="${x},${yb-h} ${x+w},${yb-h} ${x+w+d},${yb-h-d*.7} ${x+d},${yb-h-d*.7}" fill="#f1f5f9"/><polygon points="${x+w},${yb-h} ${x+w+d},${yb-h-d*.7} ${x+w+d},${yb-d*.7} ${x+w},${yb}" fill="#475569"/><rect x="${x}" y="${yb-h}" width="${w}" height="${h}" fill="url(#h-chrV)"/>`+(tint?`<rect x="${x}" y="${yb-h}" width="${w}" height="${h}" fill="${tint}" opacity="${op||.75}"/><polygon points="${x},${yb-h} ${x+w},${yb-h} ${x+w+d},${yb-h-d*.7} ${x+d},${yb-h-d*.7}" fill="${tint}" opacity="${(op||.75)*.5}"/>`:'')+`<line x1="${x+3}" y1="${yb-h+3}" x2="${x+w-3}" y2="${yb-h+3}" stroke="#fff" stroke-width="2" opacity=".6"/>`}
+
+/* 1) الطاقة الداخلية: جزيئات الماء البارد بطيئة والساخن سريعة */
+function hMol(){const W=640,H=330,FY=292,D=8;let b=gDefs()+hDefs()+stage(W,H,FY)+kBench(170,FY,10,630);const yb=FY-30;
+  b+=gBeaker(200,yb,150,160,.78,'url(#h-cold)',gMols(200,yb-62,124,100,12,3,2.4,'#1e3a8a',1))+gTh(150,yb-22,140,.25,.25,D,0,1,'#2563eb');
+  b+=gBeaker(440,yb,150,160,.78,'url(#h-hot)',gMols(440,yb-62,124,100,12,9,.45,'#7f1d1d',2))+gTh(390,yb-22,140,.8,.8,D,0,1);
+  b+=`<g opacity=".7">${[420,440,460].map((x,i)=>`<path d="M${x},${yb-176} q-8,-14 0,-26 q8,-12 0,-24" fill="none" stroke="#cbd5e1" stroke-width="4" stroke-linecap="round" filter="url(#h-soft)"><animate attributeName="opacity" dur="2s" begin="${i*.6}s" repeatCount="indefinite" values="0;1;0"/></path>`).join('')}</g>`;
+  b+=zT(200,66,'بارد: حركة بطيئة','#1d4ed8',150)+zT(440,66,'ساخن: حركة سريعة','#b91c1c',150);
+  b+=scCap(D,W,'الجسم الساخن طاقته الداخلية أكبر من البارد','#7c3aed',0,D);
+  return svg(W,H,b,'kScene')}
+
+/* 2) الحرارة تنتقل من الساخن إلى البارد حتى الاتزان */
+function hFlow(){const W=640,H=280,FY=240,D=9;let b=gDefs()+hDefs()+stage(W,H,FY)+kBench(150,FY,10,630);const yb=FY-24,bh=90,bw=150;
+  b+=`<ellipse cx="225" cy="${yb-bh/2}" rx="95" ry="60" fill="#f97316" opacity=".35" filter="url(#h-glow)"><animate attributeName="opacity" dur="${D}s" repeatCount="indefinite" keyTimes="${scK(D,[0,1,5.5,D])}" values=".45;.45;0;0"/></ellipse>`;
+  const ov=(x)=>`<rect x="${x}" y="${yb-bh}" width="${bw}" height="${bh}" fill="url(#h-mid)" opacity="0"><animate attributeName="opacity" dur="${D}s" repeatCount="indefinite" keyTimes="${scK(D,[0,1,5.5,D])}" values="0;0;.7;.7"/></rect>`;
+  b+=gMetal(300,yb,bw,bh,'url(#h-cold)',.7)+ov(300)+gMetal(150,yb,bw,bh,'url(#h-hot)',.75)+ov(150);
+  b+=zS(D,.6,`<g>${vArr(190,yb-bh-40,410,yb-bh-40,'#ea580c',10)}<circle r="6" fill="#fde047"><animateMotion dur="1.2s" repeatCount="indefinite" path="M190,${yb-bh-40} L400,${yb-bh-40}"/></circle></g>`+zT(450,yb-bh-40,'Q','#b45309',44));
+  b+=scShow(D,0,5.5,`<g>${zT(225,yb-bh/2,'80 °C','#b91c1c',80)}${zT(375,yb-bh/2,'20 °C','#1d4ed8',80)}</g>`,true)+zS(D,5.5,zT(225,yb-bh/2,'50 °C','#7c3aed',80)+zT(375,yb-bh/2,'50 °C','#7c3aed',80));
+  b+=scCap(D,W,'الحرارة تنتقل تلقائيا من الساخن إلى البارد','#b45309',0,5.5)+scCap(D,W,'حتى تتساوى درجتا الحرارة: الاتزان الحراري','#7c3aed',5.5,D);
+  return svg(W,H,b,'kScene')}
+
+/* 3) نقطتا تجمد الماء وغليانه على المقاييس الثلاثة */
+function hTherm3(){const W=640,H=340,FY=300,D=8;let b=gDefs()+hDefs()+stage(W,H,FY);const yb=FY-40,h=190,yF=yb-8-(h-16)*.25,yB=yb-8-(h-16)*.85;
+  b+=`<line x1="40" y1="${f1(yB)}" x2="600" y2="${f1(yB)}" stroke="#dc2626" stroke-width="1.6" stroke-dasharray="6 5"/><line x1="40" y1="${f1(yF)}" x2="600" y2="${f1(yF)}" stroke="#2563eb" stroke-width="1.6" stroke-dasharray="6 5"/>`;
+  b+=zT(70,yB-18,'غليان الماء','#b91c1c',100)+zT(70,yF-18,'تجمد الماء','#1d4ed8',100);
+  [[230,'المئوي','100 °C','0 °C'],[380,'الكلفن','373 K','273 K'],[530,'الفهرنهايت','212 °F','32 °F']].forEach(([x,n,hb,hf],i)=>{
+    b+=gSh(x,yb+22,30)+gTh(x,yb,h,.12,.85,D,.8+i*.2,5+i*.2)+zT(x,yb+46,n,'#334155',96)+zS(D,1.5+i*.2,zT(x+50,yF,hf,'#1d4ed8',70))+zS(D,4.6+i*.2,zT(x+50,yB,hb,'#b91c1c',76))});
+  b+=scCap(D,W,'تجمد الماء وغليانه على المقاييس الثلاثة','#334155',0,D);
+  return svg(W,H+20,b,'kScene')}
+
+/* 4) تسخين الماء: Q = m c ΔT */
+function hHeat(o){o=o||{};const W=640,H=330,FY=300,D=9;let b=gDefs()+hDefs()+stage(W,H,FY)+kBench(190,FY,10,630);const yb=FY-20,cx=230,by=yb-38;
+  b+=gPlate(cx-8,yb,200);
+  const hot=`<path d="${bLiq(cx,by,150,by-140*.72)}" fill="url(#h-hot)" opacity="0"><animate attributeName="opacity" dur="${D}s" repeatCount="indefinite" keyTimes="${scK(D,[0,1,6,D])}" values="0;0;.8;.8"/></path>`;
+  b+=gBeaker(cx,by,150,140,.72,'url(#h-cold)',hot,gTh(cx-42,by-26,150,.2,.55,D,1,6));
+  b+=zS(D,.6,vArr(cx-150,by-40,cx-82,by-40,'#ea580c',8)+zT(cx-120,by-70,'Q','#b45309',40));
+  b+=zT(cx-120,by-120,o.m||'m','#334155');
+  b+=scShow(D,0,6,`<g>${zT(480,120,o.Ti||'Ti','#1d4ed8',110)}</g>`,true)+zS(D,6,zT(480,120,o.Tf||'Tf','#b91c1c',110)+zT(480,170,o.dT||'ΔT = Tf − Ti','#7c3aed',150));
+  b+=zS(D,6.8,zT(480,220,o.Q||'Q = m c ΔT','#b45309',150));
+  b+=scCap(D,W,'نعطي الماء حرارة Q فترتفع درجة حرارته','#b45309',0,6)+scCap(D,W,'كمية الحرارة تعتمد على m و c و ΔT','#7c3aed',6,D);
+  return svg(W,H,b,'kScene')}
+
+/* 5) انصهار الجليد: درجة الحرارة ثابتة عند 0 °C */
+function hMelt(o){o=o||{};const W=640,H=330,FY=300,D=9;let b=gDefs()+hDefs()+stage(W,H,FY)+kBench(190,FY,10,630);const yb=FY-20,cx=230,by=yb-38;
+  b+=gPlate(cx-8,yb,200);
+  const water=`<g><animate attributeName="opacity" dur="${D}s" repeatCount="indefinite" keyTimes="${scK(D,[0,1,7,D])}" values=".25;.25;.92;.92"/><path d="${bLiq(cx,by,150,by-48)}" fill="url(#h-cold)"/>${hSurf(cx,by-48,72,22.5,"url(#h-cold)")}</g>`;
+  const ice=[[-36,-34],[8,-38],[-12,-66],[30,-64]].map(([dx,dy],i)=>`<g transform="translate(${cx+dx} ${by+dy})"><g><animateTransform attributeName="transform" type="scale" dur="${D}s" repeatCount="indefinite" keyTimes="${scK(D,[0,1,7,D])}" values="1;1;.15;.15"/><g transform="rotate(${i*13-8})"><polygon points="-17,-12 9,-12 17,-18 -9,-18" fill="#f8fafc" opacity=".95"/><polygon points="9,-12 17,-18 17,8 9,14" fill="#93c5fd" opacity=".9"/><rect x="-17" y="-12" width="26" height="26" rx="3" fill="url(#h-ice)" stroke="#7dd3fc" stroke-width="1"/><rect x="-14" y="-9" width="6" height="16" rx="3" fill="#fff" opacity=".8"/></g></g></g>`).join('');
+  b+=gBeaker(cx,by,150,140,0,'',water+ice,gTh(cx-42,by-26,150,.3,.3,D,0,1,'#2563eb'));
+  b+=zS(D,.6,vArr(cx-150,by-40,cx-82,by-40,'#ea580c',8)+zT(cx-120,by-70,'Q','#b45309',40));
+  b+=zT(480,110,o.T||'T = 0 °C ثابتة','#1d4ed8',150)+zS(D,3,zT(480,160,'صلب ← سائل','#334155',120))+zS(D,5,zT(480,210,o.Q||'Q = m H','#b45309',120));
+  b+=scCap(D,W,'الحرارة تصهر الجليد ودرجة حرارته ثابتة','#1d4ed8',0,D);
+  return svg(W,H,b,'kScene')}
+
+/* 6) المسعر الحراري: قطعة فلز ساخنة في ماء بارد حتى الاتزان (مقطع يظهر الداخل) */
+function hCal(o){o=o||{};const W=640,H=340,FY=310,D=10;let b=gDefs()+hDefs()+stage(W,H,FY)+kBench(200,FY,10,630);const yb=FY-28,cx=240,w=190,h=160,x=cx-w/2,rx=w/2,ry=w*.11;
+  const ix=cx-62,iw=124,ib=yb-14,ih=h-30,wy=ib-ih*.75,ly=yb-h-10,tx=cx+36,sx2=cx-50;
+  b+=gSh(cx+6,yb+ry+2,w*.6);
+  b+=`<path d="M${x},${yb-h} L${x},${yb} A${rx} ${ry} 0 0 0 ${x+w},${yb} L${x+w},${yb-h}" fill="url(#h-jk)" opacity=".55" stroke="#64748b" stroke-width="1.4"/>`;
+  b+=`<path d="${bLiq(cx,ib,iw,wy)}" fill="url(#h-cold)" opacity=".92"/><path d="${bLiq(cx,ib,iw,wy)}" fill="url(#h-mid)" opacity="0"><animate attributeName="opacity" dur="${D}s" repeatCount="indefinite" keyTimes="${scK(D,[0,3,7.5,D])}" values="0;0;.75;.75"/></path>`+hSurf(cx,wy,iw/2-3,iw*.15,'url(#h-cold)');
+  b+=`<g><animateTransform attributeName="transform" type="translate" dur="${D}s" repeatCount="indefinite" keyTimes="${scK(D,[0,1,2.6,D])}" values="0 -170;0 -170;0 0;0 0" calcMode="spline" keySplines="0 0 1 1;.5 0 1 1;0 0 1 1"/>${gMetal(cx-34,ib-12,52,38,'url(#h-hot)',.8).replace(/<ellipse[^>]*>/,'')}</g>`;
+  /* المقلب والترمومتر يمران من ثقبين في الغطاء ويغمران في الماء */
+  const ST=`<rect x="${sx2-2.5}" y="${ly-48}" width="5" height="${ib-6-(ly-48)}" rx="2.5" fill="url(#h-chr)"/><circle cx="${sx2}" cy="${ly-50}" r="6" fill="url(#h-chr)"/>`;
+  const TH=gTh(tx,ib-24,ib-24-(ly-46),.2,.32,D,3,7.5);
+  b+=ST+`<ellipse cx="${sx2}" cy="${ib-8}" rx="10" ry="3" fill="none" stroke="#cbd5e1" stroke-width="3"/>`+TH;
+  b+=`<rect x="${sx2-6}" y="${wy}" width="12" height="${ib-6-wy}" fill="url(#h-cold)" opacity=".35"/><rect x="${tx-13}" y="${wy}" width="26" height="${ib+18-wy}" fill="url(#h-cold)" opacity=".3"/><ellipse cx="${tx}" cy="${wy}" rx="11" ry="3" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="1.2"/><ellipse cx="${sx2}" cy="${wy}" rx="8" ry="2.4" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="1.2"/>`;
+  b+=`<path d="M${ix},${ib-ih} L${ix},${ib} A${iw/2} ${iw*.15} 0 0 0 ${ix+iw},${ib} L${ix+iw},${ib-ih}" fill="url(#h-gl)" stroke="#94a3b8" stroke-width="1.2"/>`;
+  b+=`<path d="M${x},${yb-h} A${rx} ${ry} 0 0 0 ${x+w},${yb-h}" fill="none" stroke="#475569" stroke-width="3"/><rect x="${x+8}" y="${yb-h+ry+6}" width="7" height="${h-ry*2-12}" rx="3.5" fill="#fff" opacity=".55"/>`;
+  b+=`<ellipse cx="${cx}" cy="${yb-h-8}" rx="${rx+6}" ry="${ry+2}" fill="#1e293b"/><path d="M${x-6},${yb-h-8} L${x-6},${yb-h-2} A${rx+6} ${ry+2} 0 0 0 ${x+w+6},${yb-h-2} L${x+w+6},${yb-h-8} Z" fill="#0f172a"/><ellipse cx="${cx}" cy="${ly}" rx="${rx+2}" ry="${ry}" fill="#334155"/><ellipse cx="${cx-30}" cy="${ly-4}" rx="${rx*.5}" ry="${ry*.3}" fill="#fff" opacity=".08"/>`;
+  b+=`<ellipse cx="${tx}" cy="${ly}" rx="10" ry="3.4" fill="#020617"/><ellipse cx="${sx2}" cy="${ly}" rx="7" ry="2.6" fill="#020617"/>`;
+  b+=`<defs><clipPath id="h-cu"><rect x="0" y="0" width="${W}" height="${ly}"/></clipPath></defs><g clip-path="url(#h-cu)">${ST}${TH}</g>`;
+  b+=zS(D,3,`<g>${[0,1,2].map(i=>`<path d="M${cx-38},${ib-30+i*9} q-12,-6 -24,0" fill="none" stroke="#ea580c" stroke-width="2.5"><animate attributeName="opacity" dur="1s" begin="${i*.3}s" repeatCount="indefinite" values="0;1;0"/></path>`).join('')}</g>`);
+  b+=zT(490,80,o.T1||'T1: الفلز الساخن','#b91c1c',170)+zT(490,130,o.T2||'T2: الماء البارد','#1d4ed8',170)+zS(D,7.5,zT(490,180,o.Tf||'Tf: درجة الاتزان','#7c3aed',170))+zS(D,8,zT(490,230,'Q1 + Q2 = 0','#b45309',130));
+  b+=zT(sx2-44,ly-34,'مقلب','#475569',56)+zT(tx+54,ly-34,'ترمومتر','#475569',74);
+  b+=scCap(D,W,'الفلز الساخن يفقد حرارة والماء البارد يكتسبها','#b45309',0,7.5)+scCap(D,W,'حتى يصلا إلى درجة واحدة Tf','#7c3aed',7.5,D);
+  return svg(W,H,b,'kScene')}
+/* 7) طرق انتقال الحرارة: التوصيل والحمل والإشعاع */
+function hCond(){const W=640,H=270,FY=240,D=8;let b=gDefs()+hDefs()+stage(W,H,FY)+kBench(150,FY,10,630);const yb=FY-22,ry=yb-104;
+  b+=`<defs><linearGradient id="h-rod" x1="0" x2="1"><stop offset="0" stop-color="#fde047"/><stop offset="0" stop-color="#ef4444"><animate attributeName="offset" dur="${D}s" repeatCount="indefinite" keyTimes="${scK(D,[0,.5,6,D])}" values="0;0;.6;.6"/></stop><stop offset="0" stop-color="#f97316" stop-opacity=".0"><animate attributeName="offset" dur="${D}s" repeatCount="indefinite" keyTimes="${scK(D,[0,.5,6,D])}" values="0;0;1;1"/></stop><stop offset="1" stop-color="#f97316" stop-opacity="0"/></linearGradient></defs>`;
+  b+=gBurner(120,yb)+gSh(470,yb+2,30)+`<rect x="440" y="${yb-10}" width="60" height="10" rx="4" fill="url(#h-darkV)"/><rect x="466" y="${ry+6}" width="8" height="${yb-ry-16}" fill="url(#h-chr)"/><rect x="458" y="${ry+2}" width="24" height="12" rx="3" fill="#1e293b"/>`;
+  b+=`<rect x="80" y="${ry-9}" width="400" height="18" rx="9" fill="url(#h-chrV)" stroke="#475569" stroke-width=".8"/><rect x="80" y="${ry-9}" width="400" height="18" rx="9" fill="url(#h-rod)" opacity=".85"/><rect x="88" y="${ry-6}" width="384" height="4" rx="2" fill="#fff" opacity=".6"/>`;
+  for(let i=0;i<9;i++){const x=136+i*38,a=Math.max(1,7-i*.7);b+=`<circle cx="${x}" cy="${ry+30}" r="7" fill="url(#h-mh)"><animateTransform attributeName="transform" type="translate" dur="${.25+i*.04}s" repeatCount="indefinite" values="0 0;${a} 0;${-a} 0;0 0"/></circle>`}
+  b+=zT(190,ry+62,'اهتزاز قوي','#b91c1c',100)+zT(420,ry+62,'اهتزاز ضعيف','#475569',110);
+  b+=scCap(D,W,'التوصيل: تنتقل الحرارة خلال المادة دون انتقالها','#b45309',0,D);
+  return svg(W,H,b,'kScene')}
+function hConv(){const W=640,H=340,FY=310,D=6;let b=gDefs()+hDefs()+stage(W,H,FY)+kBench(210,FY,10,630);const yb=FY-22,cx=250,by=yb-84;
+  b+=gBurner(cx,yb)+[[-70,1],[70,1],[0,.5]].map(([dx,o])=>`<line x1="${cx+dx*.75}" y1="${by+4}" x2="${cx+dx}" y2="${yb-2}" stroke="#334155" stroke-width="4" opacity="${o}"/>`).join('')+`<rect x="${cx-96}" y="${by}" width="192" height="6" rx="2" fill="#64748b"/><rect x="${cx-70}" y="${by+1}" width="140" height="4" fill="#94a3b8" opacity=".7"/>`;
+  const L=(s)=>`M${cx},${by-16} C${cx},${by-58} ${cx},${by-92} ${cx+s*38},${by-100} C${cx+s*76},${by-100} ${cx+s*86},${by-84} ${cx+s*76},${by-48} C${cx+s*66},${by-20} ${cx+s*30},${by-16} ${cx},${by-16}`;
+  let cur='';[-1,1].forEach(s=>{cur+=`<path d="${L(s)}" fill="none" stroke="#fff" stroke-width="1.5" stroke-dasharray="4 6" opacity=".75"/>`;for(let k=0;k<5;k++)cur+=`<circle r="6" fill="#ef4444" stroke="#fff" stroke-width="1.5"><animateMotion dur="${D}s" begin="-${k*D/5}s" repeatCount="indefinite" path="${L(s)}"/><animate attributeName="fill" dur="${D}s" begin="-${k*D/5}s" repeatCount="indefinite" values="#ef4444;#ef4444;#3b82f6;#3b82f6;#ef4444" keyTimes="0;.3;.5;.9;1"/></circle>`});
+  b+=gBeaker(cx,by,210,124,.86,'url(#h-cold)',cur);
+  b+=zT(510,110,'الساخن يتمدد فيرتفع','#b91c1c',170)+zT(510,160,'البارد الأكثف يهبط','#1d4ed8',170);
+  b+=scCap(D,W,'الحمل: تيارات في السوائل والغازات','#b45309',0,D);
+  return svg(W,H,b,'kScene')}
+function hRad(){const W=640,H=280,FY=250,D=6;let b=gDefs()+hDefs();const cy=140;
+  b+=`<defs><radialGradient id="h-space" cx="50%" cy="50%" r="75%"><stop offset="0" stop-color="#1e293b"/><stop offset="1" stop-color="#020617"/></radialGradient>
+  <radialGradient id="h-sun" cx="45%" cy="42%" r="55%"><stop offset="0" stop-color="#fffbeb"/><stop offset=".35" stop-color="#fde047"/><stop offset=".75" stop-color="#f97316"/><stop offset="1" stop-color="#c2410c"/></radialGradient>
+  <filter id="h-sunT" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".09" numOctaves="3" seed="4"><animate attributeName="baseFrequency" dur="8s" repeatCount="indefinite" values=".09;.1;.09"/></feTurbulence><feColorMatrix values="0 0 0 0 .75  0 0 0 0 .2  0 0 0 0 0  0 0 0 1.4 -.55"/></filter>
+  <radialGradient id="h-ea" cx="38%" cy="35%" r="70%"><stop offset="0" stop-color="#7dd3fc"/><stop offset=".5" stop-color="#2563eb"/><stop offset="1" stop-color="#0c1e4a"/></radialGradient>
+  <radialGradient id="h-night" cx="25%" cy="45%" r="85%"><stop offset=".45" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#020617" stop-opacity=".85"/></radialGradient>
+  <clipPath id="h-sc"><circle cx="110" cy="${cy}" r="56"/></clipPath><clipPath id="h-ec"><circle cx="540" cy="${cy}" r="50"/></clipPath></defs>`;
+  b+=`<rect width="${W}" height="${H}" fill="url(#h-space)"/>`+Array.from({length:60},(_,i)=>`<circle cx="${(i*137)%W}" cy="${(i*71)%H}" r="${i%5?.8:1.5}" fill="#fff" opacity="${.3+(i%4)*.15}"/>`).join('');
+  b+=`<circle cx="110" cy="${cy}" r="86" fill="#f97316" opacity=".55" filter="url(#h-glow)"><animate attributeName="r" dur="3s" repeatCount="indefinite" values="82;90;82"/></circle><circle cx="110" cy="${cy}" r="56" fill="url(#h-sun)"/><rect x="54" y="${cy-56}" width="112" height="112" filter="url(#h-sunT)" clip-path="url(#h-sc)" opacity=".55"/><circle cx="96" cy="${cy-18}" r="16" fill="#fff" opacity=".25" filter="url(#h-soft)"/>`;
+  [-24,0,24].forEach((dy,i)=>{const p=`M175,${cy+dy*.5} q12,-10 24,0 t24,0 t24,0 t24,0 t24,0 t24,0 t24,0 t24,0 t24,0 t24,0 t24,0 t24,0 t24,0`;b+=`<path d="${p}" fill="none" stroke="#fb923c" stroke-width="3" stroke-linecap="round" stroke-dasharray="190 420"><animate attributeName="stroke-dashoffset" dur="2s" begin="${i*.5}s" repeatCount="indefinite" values="200;-420"/></path>`});
+  b+=`<circle cx="540" cy="${cy}" r="58" fill="#60a5fa" opacity=".35" filter="url(#h-glow)"/><circle cx="540" cy="${cy}" r="50" fill="url(#h-ea)"/><g clip-path="url(#h-ec)"><path d="M500,${cy-36} q22,-12 34,4 q-8,16 10,26 q-20,14 -40,-4 q-10,-12 -4,-26 Z M548,${cy+4} q22,-8 30,12 q-12,20 -32,8 q-6,-10 2,-20 Z M520,${cy+26} q14,2 16,14 q-14,6 -22,-4 Z" fill="#16a34a"/><path d="M500,${cy-36} q22,-12 34,4 q-8,16 10,26" fill="none" stroke="#a16207" stroke-width="3" opacity=".5"/><path d="M490,${cy-12} q30,-10 60,2 q20,8 46,-4 M500,${cy+16} q30,-8 50,4" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".55" filter="url(#h-soft)"/><circle cx="540" cy="${cy}" r="50" fill="url(#h-night)"/></g><circle cx="540" cy="${cy}" r="50" fill="none" stroke="#bae6fd" stroke-width="2" opacity=".6"/>`;
+  b+=zT(110,cy+100,'الشمس','#b45309',70)+zT(540,cy+100,'الأرض','#1d4ed8',70)+zT(325,cy+70,'موجات كهرومغناطيسية عبر الفراغ','#7c3aed',270);
+  b+=scCap(D,W,'الإشعاع: لا يحتاج وسطا ماديا','#b45309',0,D);
+  return svg(W,H,b,'kScene')}
+
+/* ===== الدروس النموذجية للوحدة الثالثة 2-1 و2-3 و2-5 (الحقيبة التدريبية صفحات 69-78) — 5 نوفمبر ===== */
+CARDS['2-1']={
+  intro:{title:'الطاقة الداخلية',sayT:'مَرْحَبًا بِكَ فِي الْوِحْدَةِ الثَّالِثَةِ: الْفِيزْيَاءُ الْحَرَارِيَّهْ. وَنَبْدَأُ بِالطَّاقَةِ الدَّاخِلِيَّهْ.',steps:()=>[
+    S(pt('جزيئات المادة دائمة الحركة، وتمتلك '+B('طاقة حركية')+' (انتقالية واهتزازية)، و'+B('طاقة وضع')+' بسبب قوى التجاذب بينها.'),'جُزَيْئَاتُ الْمَادَّةِ دَائِمَةُ الْحَرَكَةِ، وَتَمْتَلِكُ طَاقَةً حَرَكِيَّةً، وَطَاقَةَ وَضْعٍ بِسَبَبِ قُوَى التَّجَاذُبِ بَيْنَهَا.'),
+    S(fig(hMol(),'جزيئات الماء البارد بطيئة، وجزيئات الماء الساخن سريعة'),'لَاحِظِ الْمَشْهَدَ: جُزَيْئَاتُ الْمَاءِ الْبَارِدِ تَتَحَرَّكُ بِبُطْءٍ، وَجُزَيْئَاتُ الْمَاءِ السَّاخِنِ تَتَحَرَّكُ بِسُرْعَهْ.'),
+    S(pt(B('الطاقة الداخلية')+': مجموع طاقتي الحركة والوضع للذرات أو الجزيئات المكونة للمادة.'),'الطَّاقَةُ الدَّاخِلِيَّةُ: مَجْمُوعُ طَاقَتَيِ الْحَرَكَةِ وَالْوَضْعِ لِلذَّرَّاتِ أَوِ الْجُزَيْئَاتِ الْمُكَوِّنَةِ لِلْمَادَّهْ.'),
+    S(pt('وللجسم نفسه وهو ساخن طاقة داخلية '+B('أعلى')+' مما له وهو بارد.'),'وَلِلْجِسْمِ نَفْسِهِ وَهُوَ سَاخِنٌ طَاقَةٌ دَاخِلِيَّةٌ أَعْلَى مِمَّا لَهُ وَهُوَ بَارِدْ.')]},
+  goals:{title:'أهداف الوحدة',sayT:'وَالْآنَ، لِنَتَعَرَّفْ عَلَى أَهْدَافِ الْوِحْدَةِ.',steps:()=>[
+    S({html:`<div class="kc kPt kKeep kcB">في نهاية هذه الوحدة يكون المتدرب قادرا على:</div>`},'فِي نِهَايَةِ هَذِهِ الْوِحْدَةِ، يَكُونُ الْمُتَدَرِّبُ قَادِرًا عَلَى:')].concat([
+    ['تعريف درجة الحرارة، وذكر اسم الجهاز المستخدم لقياسها.','تَعْرِيفِ دَرَجَةِ الْحَرَارَةِ، وَذِكْرِ اسْمِ الْجِهَازِ الْمُسْتَخْدَمِ لِقِيَاسِهَا.'],
+    ['تعداد ثلاثة مقاييس مشهورة مع درجتي التجمد والغليان للماء في كل منها.','تَعْدَادِ ثَلَاثَةِ مَقَايِيسَ مَشْهُورَةٍ، مَعَ دَرَجَتَيِ التَّجَمُّدِ وَالْغَلَيَانِ لِلْمَاءِ فِي كُلٍّ مِنْهَا.'],
+    ['تحويل قيمة درجة الحرارة من مقياس إلى آخر.','تَحْوِيلِ قِيمَةِ دَرَجَةِ الْحَرَارَةِ مِنْ مِقْيَاسٍ إِلَى آخَرْ.'],
+    ['التفريق بين مفهوم درجة الحرارة وكمية الحرارة.','التَّفْرِيقِ بَيْنَ مَفْهُومِ دَرَجَةِ الْحَرَارَةِ وَكَمِّيَّةِ الْحَرَارَهْ.'],
+    ['حساب الحرارة النوعية.','حِسَابِ الْحَرَارَةِ النَّوْعِيَّهْ.']].map(([t,s],i)=>S({html:`<div class="kc kPt kKeep kcT"><b>${i+1}.</b> ${t}</div>`},s)))},
+  heat:{title:'الحرارة (كمية الحرارة)',sayT:'وَنَتَعَرَّفُ الْآنَ عَلَى الْحَرَارَهْ.',steps:()=>[
+    S(pt(B('الحرارة')+': شكل من أشكال الطاقة، تنتقل بين الأجسام بسبب اختلاف درجات حرارتها.'),'الْحَرَارَةُ: شَكْلٌ مِنْ أَشْكَالِ الطَّاقَةِ، تَنْتَقِلُ بَيْنَ الْأَجْسَامِ بِسَبَبِ اخْتِلَافِ دَرَجَاتِ حَرَارَتِهَا.'),
+    S(fig(hFlow(),'الحرارة تنتقل من الجسم الساخن إلى الجسم البارد حتى يتساويا'),'لَاحِظِ الْمَشْهَدَ: الْحَرَارَةُ تَنْتَقِلُ تِلْقَائِيًّا مِنَ الْجِسْمِ السَّاخِنِ إِلَى الْجِسْمِ الْبَارِدِ، حَتَّى تَتَسَاوَى دَرَجَتَا حَرَارَتِهِمَا.'),
+    S(pt('تنتقل '+B('تلقائيا')+' من الجسم الساخن إلى الجسم البارد حتى يصلا إلى '+B('الاتزان الحراري')+'.'),'وَتَنْتَقِلُ تِلْقَائِيًّا حَتَّى يَصِلَ الْجِسْمَانِ إِلَى الِاتِّزَانِ الْحَرَارِيّْ.'),
+    S(pt('وحدتها '+B('الجول')+' '+M('J')+' نسبة للعالم جيمس جول، ومن وحداتها أيضا '+B('السعر')+' '+M('cal')+'.'),'وَوَحْدَتُهَا الْجُولُ، نِسْبَةً لِلْعَالِمِ جِيمْس جُولْ، وَمِنْ وَحَدَاتِهَا أَيْضًا السُّعْرْ.'),
+    S(pt(B('مصادرها')+': الشمس، وباطن الأرض، والتفاعلات الكيميائية، والطاقة النووية، والاحتكاك، والكهرباء.'),'وَمِنْ مَصَادِرِهَا: الشَّمْسُ، وَبَاطِنُ الْأَرْضِ، وَالتَّفَاعُلَاتُ الْكِيمْيَائِيَّةُ، وَالطَّاقَةُ النَّوَوِيَّةُ، وَالِاحْتِكَاكُ، وَالْكَهْرَبَاءْ.')]},
+  temp:{title:'درجة الحرارة',sayT:'وَالْآنَ، مَا الْفَرْقُ بَيْنَ الْحَرَارَةِ وَدَرَجَةِ الْحَرَارَهْ؟',steps:()=>[
+    S(pt(B('درجة الحرارة')+': مقياس لمتوسط طاقة حركة جزيئات المادة، وتقاس بالترمومتر.'),'دَرَجَةُ الْحَرَارَةِ: مِقْيَاسٌ لِمُتَوَسِّطِ طَاقَةِ حَرَكَةِ جُزَيْئَاتِ الْمَادَّةِ، وَتُقَاسُ بِالتِّرْمُومِتْرْ.'),
+    S(pt('وهي التي تحدد '+B('اتجاه انتقال الحرارة')+' بين جسمين متلامسين: من الأعلى درجة إلى الأقل.'),'وَهِيَ الَّتِي تُحَدِّدُ اتِّجَاهَ انْتِقَالِ الْحَرَارَةِ بَيْنَ جِسْمَيْنِ مُتَلَامِسَيْنِ: مِنَ الْأَعْلَى دَرَجَةً إِلَى الْأَقَلّْ.'),
+    S(pt(B('الفرق')+': درجة الحرارة تصف سخونة الجسم، أما كمية الحرارة فهي الطاقة المنتقلة نفسها، وتقاس بالجول.'),'وَالْفَرْقُ: دَرَجَةُ الْحَرَارَةِ تَصِفُ سُخُونَةَ الْجِسْمِ، أَمَّا كَمِّيَّةُ الْحَرَارَةِ فَهِيَ الطَّاقَةُ الْمُنْتَقِلَةُ نَفْسُهَا، وَتُقَاسُ بِالْجُولْ.')]},
+  scales:{title:'المقاييس الثلاثة لدرجة الحرارة',sayT:'وَلِدَرَجَةِ الْحَرَارَةِ ثَلَاثَةُ مَقَايِيسَ مَشْهُورَهْ.',steps:()=>[
+    S(fig(hTherm3(),'نقطتا تجمد الماء وغليانه على المقاييس الثلاثة'),'لَاحِظِ الْمَشْهَدَ: نُقْطَتَا تَجَمُّدِ الْمَاءِ وَغَلَيَانِهِ عَلَى الْمَقَايِيسِ الثَّلَاثَهْ.'),
+    S(pt(B('المئوي (سلسيوس)')+': التجمد '+M('0 °C')+' والغليان '+M('100 °C')+'، وبينهما 100 قسم.'),'الْمِئَوِيُّ: يَتَجَمَّدُ الْمَاءُ عِنْدَ الصِّفْرِ، وَيَغْلِي عِنْدَ مِئَةٍ، وَبَيْنَهُمَا مِئَةُ قِسْمْ.'),
+    S(pt(B('المطلق (الكلفن)')+': التجمد '+M('273 K')+' والغليان '+M('373 K')+'، وبينهما 100 قسم.'),'الْكِلْفِنُ: يَتَجَمَّدُ الْمَاءُ عِنْدَ مِئَتَيْنِ وَثَلَاثَةٍ وَسَبْعِينَ، وَيَغْلِي عِنْدَ ثَلَاثِمِئَةٍ وَثَلَاثَةٍ وَسَبْعِينْ.'),
+    S(pt(B('الفهرنهايت')+': التجمد '+M('32 °F')+' والغليان '+M('212 °F')+'، وبينهما 180 قسما.'),'الْفَهْرِنْهَايْتُ: يَتَجَمَّدُ الْمَاءُ عِنْدَ اثْنَيْنِ وَثَلَاثِينَ، وَيَغْلِي عِنْدَ مِئَتَيْنِ وَاثْنَيْ عَشَرَ، وَبَيْنَهُمَا مِئَةٌ وَثَمَانُونَ قِسْمَا.')]},
+  laws:{title:'قوانين التحويل',sayT:'وَلِلتَّحْوِيلِ بَيْنَ الْمَقَايِيسِ نَسْتَخْدِمُ ثَلَاثَةَ قَوَانِينْ.',steps:()=>[
+    LAWB('TK = TC + 273','أَوَّلًا: مِنَ الْمِئَوِيِّ إِلَى الْكِلْفِنْ'),
+    LAWB('TC = (TF − 32) / 1.8','ثَانِيًا: مِنَ الْفَهْرِنْهَايْتِ إِلَى الْمِئَوِيّْ'),
+    LAWB('TF = 1.8 TC + 32','ثَالِثًا: مِنَ الْمِئَوِيِّ إِلَى الْفَهْرِنْهَايْتْ')]},
+  ex1:{title:'مثال ١ · صفحة 72',sayT:'وَالْآنَ لِنَنْتَقِلْ إِلَى أَمْثِلَةِ الْحَقِيبَةِ، الْمِثَالُ الْأَوَّلُ مِنْ صَفْحَةِ 72.',steps:()=>[
+    S(q('درجة حرارة جسم ساخن '+M('300 °C')+'، فما هي على مقياس كلفن؟','المثال · صفحة 72'),''),
+    S(gr(['TC = 300 °C'],'درجة الحرارة بالكلفن '+M('TK')),'الْمُعْطَيَاتُ أَمَامَكَ عَلَى السَّبُّورَةِ، وَالْمَطْلُوبُ: دَرَجَةُ الْحَرَارَةِ بِالْكِلْفِنْ.'),
+    S(st(1,M('TK = TC + 273 = 300 + 273')+'<span class="kDirOn"></span>'),'نُضِيفُ مِئَتَيْنِ وَثَلَاثَةً وَسَبْعِينَ إِلَى الدَّرَجَةِ الْمِئَوِيَّهْ.'),
+    S(res(M('TK = 573 K')),'النَّتِيجَةُ: خَمْسُمِئَةٍ وَثَلَاثَةٌ وَسَبْعُونَ كِلْفِنْ.')]},
+  ex2:{title:'مثال ٢ · صفحة 73',sayT:'وَالْمِثَالُ الثَّانِي، مِنْ صَفْحَةِ 73.',steps:()=>[
+    S(q('درجة حرارة الغرفة '+M('72 °F')+'، فما درجة حرارتها على مقياس سلسيوس؟','المثال · صفحة 73'),''),
+    S(gr(['TF = 72 °F'],'درجة الحرارة بالمئوي '+M('TC')),'الْمُعْطَيَاتُ أَمَامَكَ عَلَى السَّبُّورَةِ، وَالْمَطْلُوبُ: دَرَجَةُ الْحَرَارَةِ بِالْمِئَوِيّْ.'),
+    S(st(1,M('TC = (72 − 32) / 1.8 = 40 / 1.8')+'<span class="kDirOn"></span>'),'نَطْرَحُ اثْنَيْنِ وَثَلَاثِينَ، ثُمَّ نَقْسِمُ عَلَى وَاحِدٍ فَاصِلَةٍ ثَمَانِيَهْ.'),
+    S(res(M('TC ≈ 22.2 °C')),'النَّتِيجَةُ: اثْنَانِ وَعِشْرُونَ فَاصِلَةُ اثْنَيْنِ دَرَجَةً مِئَوِيَّهْ.')]},
+  ex3:{title:'مثال ٣ · صفحة 73',sayT:'وَالْمِثَالُ الثَّالِثُ، مِنْ صَفْحَةِ 73.',steps:()=>[
+    S(q('درجة حرارة جسم ساخن '+M('300 °C')+'، فما درجة حرارته على مقياس الفهرنهايت؟','المثال · صفحة 73'),''),
+    S(gr(['TC = 300 °C'],'درجة الحرارة بالفهرنهايت '+M('TF')),'الْمُعْطَيَاتُ أَمَامَكَ عَلَى السَّبُّورَةِ، وَالْمَطْلُوبُ: دَرَجَةُ الْحَرَارَةِ بِالْفَهْرِنْهَايْتْ.'),
+    S(st(1,M('TF = 1.8 × 300 + 32 = 540 + 32')+'<span class="kDirOn"></span>'),'نَضْرِبُ فِي وَاحِدٍ فَاصِلَةٍ ثَمَانِيَةٍ، ثُمَّ نُضِيفُ اثْنَيْنِ وَثَلَاثِينْ.'),
+    S(res(M('TF = 572 °F')),'النَّتِيجَةُ: خَمْسُمِئَةٍ وَاثْنَانِ وَسَبْعُونَ فَهْرِنْهَايْتْ.')]},
+  q1:{title:'سؤال ١ · صفحة 74',sayT:'وَالْآنَ سُؤَالٌ مِنْ صَفْحَةِ 74: مَتَى تَتَسَاوَى قِرَاءَةُ الْفَهْرِنْهَايْتِ وَالسِّلْسِيُوسْ؟',steps:()=>[
+    S(q('متى تتساوى قراءة درجة الحرارة على مقياسي الفهرنهايت والسلسيوس؟','السؤال · صفحة 74'),''),
+    S(gr(['TF = TC = x'],'قيمة '+M('x')),'نُسَمِّي الْقِرَاءَةَ الْمُتَسَاوِيَةَ إِكْسْ.'),
+    S(st(1,M('x = 1.8 x + 32')),'نُعَوِّضُ فِي قَانُونِ الْفَهْرِنْهَايْتْ.'),
+    S(st(2,M('−0.8 x = 32')+'<span class="kDirOn"></span>'),'نَجْمَعُ الْحُدُودَ الَّتِي فِيهَا إِكْسْ فِي طَرَفٍ وَاحِدْ.'),
+    S(res(M('x = −40')+' أي '+M('−40 °C = −40 °F')),'النَّتِيجَةُ: يَتَسَاوَى الْمِقْيَاسَانِ عِنْدَ سَالِبِ أَرْبَعِينْ.')]},
+  q2:{title:'سؤال ٢ · صفحة 74',sayT:'وَالسُّؤَالُ الثَّانِي: مَتَى تَتَسَاوَى قِرَاءَةُ الْفَهْرِنْهَايْتِ وَالْكِلْفِنْ؟',steps:()=>[
+    S(q('متى تتساوى قراءة درجة الحرارة على مقياسي الفهرنهايت والكلفن؟','السؤال · صفحة 74'),''),
+    S(gr(['TF = TK = x','TC = TK − 273'],'قيمة '+M('x')),'نَمُرُّ عَبْرَ الْمِقْيَاسِ الْمِئَوِيِّ، لِأَنَّهُ لَا يُوجَدُ قَانُونٌ مُبَاشِرٌ بَيْنَهُمَا.'),
+    S(st(1,M('x = 1.8 (x − 273) + 32')),'نُعَوِّضُ فِي قَانُونِ الْفَهْرِنْهَايْتْ.'),
+    S(st(2,M('0.8 x = 459.4')+'<span class="kDirOn"></span>'),'نَفُكُّ الْقَوْسَ وَنُرَتِّبُ الْمُعَادَلَهْ.'),
+    S(res(M('x = 574.25')+' أي '+M('574.25 K = 574.25 °F')),'النَّتِيجَةُ: يَتَسَاوَى الْمِقْيَاسَانِ عِنْدَ خَمْسِمِئَةٍ وَأَرْبَعَةٍ وَسَبْعِينَ فَاصِلَةِ خَمْسَةٍ وَعِشْرِينْ.')]}};
+CARDS['2-3']={
+  sh:{title:'الحرارة النوعية',sayT:'نَتَعَرَّفُ الْيَوْمَ عَلَى الْحَرَارَةِ النَّوْعِيَّهْ.',steps:()=>[
+    S(pt(B('الحرارة النوعية')+': كمية الحرارة اللازمة لرفع درجة حرارة كيلوجرام واحد من المادة درجة مئوية واحدة.'),'الْحَرَارَةُ النَّوْعِيَّةُ: كَمِّيَّةُ الْحَرَارَةِ اللَّازِمَةِ لِرَفْعِ دَرَجَةِ حَرَارَةِ كِيلُوجْرَامٍ وَاحِدٍ مِنَ الْمَادَّةِ، دَرَجَةً مِئَوِيَّةً وَاحِدَهْ.'),
+    S(fig(hHeat({}),'نعطي الماء حرارة Q فترتفع درجة حرارته بمقدار ΔT'),'لَاحِظِ الْمَشْهَدَ: نُعْطِي الْمَاءَ حَرَارَةً، فَتَرْتَفِعُ دَرَجَةُ حَرَارَتِهِ.'),
+    LAWB('Q = m c ΔT','وَالْقَانُونُ'),
+    S(pt('حيث '+M('Q')+' كمية الحرارة، و'+M('m')+' الكتلة، و'+M('c')+' الحرارة النوعية، و'+M('ΔT')+' التغير في درجة الحرارة.'),'حَيْثُ: كِيُو كَمِّيَّةُ الْحَرَارَةِ، وَإِمْ الْكُتْلَةُ، وَسِي الْحَرَارَةُ النَّوْعِيَّةُ، وَدِلْتَا تِي التَّغَيُّرُ فِي دَرَجَةِ الْحَرَارَهْ.'),
+    S(pt('وحدتها '+M('J/(kg·°C)')+' أو '+M('J/(kg·K)')+'، وللماء '+M('c = 4180 J/(kg·°C)')+'.'),'وَوَحْدَتُهَا: جُولٌ لِكُلِّ كِيلُوجْرَامٍ لِكُلِّ دَرَجَةٍ مِئَوِيَّهْ.')]},
+  cap:{title:'السعة الحرارية',sayT:'وَنَنْتَقِلُ إِلَى السَّعَةِ الْحَرَارِيَّهْ.',steps:()=>[
+    S(pt(B('السعة الحرارية')+': كمية الحرارة اللازمة لرفع درجة حرارة الجسم كله درجة مئوية واحدة.'),'السَّعَةُ الْحَرَارِيَّةُ: كَمِّيَّةُ الْحَرَارَةِ اللَّازِمَةِ لِرَفْعِ دَرَجَةِ حَرَارَةِ الْجِسْمِ كُلِّهِ، دَرَجَةً مِئَوِيَّةً وَاحِدَهْ.'),
+    LAWB('C = m c','وَالْقَانُونُ'),
+    S(pt('وحدتها '+M('J/°C')+' أو '+M('J/K')+'.'),'وَوَحْدَتُهَا: جُولٌ لِكُلِّ دَرَجَةٍ مِئَوِيَّهْ.'),
+    S(pt(B('تنبيه')+': حول الكتلة إلى الكيلوجرام دائما، مثل '+M('100 g = 0.1 kg')+'.'),'تَنْبِيهٌ: حَوِّلِ الْكُتْلَةَ إِلَى الْكِيلُوجْرَامِ دَائِمَا.')]},
+  lat:{title:'الحرارة الكامنة للانصهار',sayT:'وَالْآنَ، مَاذَا يَحْدُثُ عِنْدَ انْصِهَارِ الْجَلِيدْ؟',steps:()=>[
+    S(pt(B('الحرارة الكامنة للانصهار')+': كمية الطاقة اللازمة لتحويل كيلوجرام واحد من المادة من الحالة الصلبة إلى الحالة السائلة عند درجة الانصهار.'),'الْحَرَارَةُ الْكَامِنَةُ لِلِانْصِهَارِ: كَمِّيَّةُ الطَّاقَةِ اللَّازِمَةِ لِتَحْوِيلِ كِيلُوجْرَامٍ وَاحِدٍ مِنَ الْمَادَّةِ، مِنَ الْحَالَةِ الصُّلْبَةِ إِلَى الْحَالَةِ السَّائِلَةِ، عِنْدَ دَرَجَةِ الِانْصِهَارْ.'),
+    S(fig(hMelt({}),'الجليد ينصهر ودرجة حرارته ثابتة عند 0 °C'),'لَاحِظِ الْمَشْهَدَ: الْجَلِيدُ يَنْصَهِرُ، وَدَرَجَةُ حَرَارَتِهِ ثَابِتَةٌ عِنْدَ الصِّفْرِ الْمِئَوِيّْ.'),
+    LAWB('Q = m H','وَالْقَانُونُ'),
+    S(pt('حيث '+M('H')+' الحرارة الكامنة لانصهار المادة، ووحدتها '+M('J/kg')+'، و'+M('m')+' كتلة المادة الصلبة.'),'حَيْثُ: إِتْشْ الْحَرَارَةُ الْكَامِنَةُ لِلِانْصِهَارِ، وَوَحْدَتُهَا جُولٌ لِكُلِّ كِيلُوجْرَامْ.')]},
+  ex1:{title:'مثال ١ · صفحة 75',sayT:'وَالْآنَ لِنَنْتَقِلْ إِلَى أَمْثِلَةِ الْحَقِيبَةِ، الْمِثَالُ الْأَوَّلُ مِنْ صَفْحَةِ 75.',steps:()=>[
+    S(q('أوجد قيمة الطاقة الحرارية التي تحتاجها لتسخين '+M('100 g')+' من الماء من '+M('10 °C')+' إلى '+M('30 °C')+'، علما بأن الحرارة النوعية للماء '+M('4180 J/(kg·°C)')+'.','المثال · صفحة 75'),''),
+    S(gr(['m = 100 g = 0.1 kg','c = 4180 J/(kg·°C)','ΔT = 30 − 10 = 20 °C'],'كمية الحرارة '+M('Q')),'الْمُعْطَيَاتُ أَمَامَكَ عَلَى السَّبُّورَةِ، وَالْمَطْلُوبُ: كَمِّيَّةُ الْحَرَارَهْ.'),
+    S(fig(hHeat({m:'m = 0.1 kg',Ti:'Ti = 10 °C',Tf:'Tf = 30 °C',dT:'ΔT = 20 °C',Q:'Q = ?'}),'تسخين 0.1 kg من الماء من 10 °C إلى 30 °C'),'لِنَرْسُمِ الْمَاءَ وَهُوَ يَسْخُنْ.'),
+    S(st(1,M('Q = m c ΔT = 0.1 × 4180 × 20')+'<span class="kDirOn"></span>'),'نُعَوِّضُ فِي الْقَانُونْ.'),
+    S(res(M('Q = 8360 J')),'النَّتِيجَةُ: ثَمَانِيَةُ آلَافٍ وَثَلَاثُمِئَةٍ وَسِتُّونَ جُولْ.')]},
+  ex2:{title:'مثال ٢ · صفحة 75',sayT:'وَالْمِثَالُ الثَّانِي، مِنْ صَفْحَةِ 75.',steps:()=>[
+    S(q('قطعة من النحاس كتلتها '+M('20 g')+' سخنت من '+M('20 °C')+' إلى '+M('100 °C')+'، علما بأن الحرارة النوعية للنحاس '+M('400 J/(kg·°C)')+'. أوجد السعة الحرارية، وكمية الحرارة.','المثال · صفحة 75'),''),
+    S(gr(['m = 20 g = 0.02 kg','c = 400 J/(kg·°C)','ΔT = 100 − 20 = 80 °C'],'السعة الحرارية '+M('C')+' وكمية الحرارة '+M('Q')),'الْمُعْطَيَاتُ أَمَامَكَ عَلَى السَّبُّورَةِ، وَالْمَطْلُوبُ: السَّعَةُ الْحَرَارِيَّةُ، وَكَمِّيَّةُ الْحَرَارَهْ.'),
+    S(st(1,M('C = m c = 0.02 × 400 = 8 J/°C')),'أَوَّلًا: السَّعَةُ الْحَرَارِيَّةُ تُسَاوِي الْكُتْلَةَ فِي الْحَرَارَةِ النَّوْعِيَّةِ: ثَمَانِيَةُ جُولَاتٍ لِكُلِّ دَرَجَهْ.'),
+    S(st(2,M('Q = m c ΔT = 0.02 × 400 × 80')+'<span class="kDirOn"></span>'),'ثَانِيًا: نُعَوِّضُ فِي قَانُونِ كَمِّيَّةِ الْحَرَارَهْ.'),
+    S(res(M('C = 8 J/°C')+' · '+M('Q = 640 J')),'النَّتِيجَةُ: السَّعَةُ ثَمَانِيَةُ جُولَاتٍ لِكُلِّ دَرَجَةٍ، وَكَمِّيَّةُ الْحَرَارَةِ سِتُّمِئَةٍ وَأَرْبَعُونَ جُولْ.')]},
+  ex3:{title:'مثال · صفحة 76',sayT:'وَالْآنَ مِثَالُ الْحَرَارَةِ الْكَامِنَةِ، مِنْ صَفْحَةِ 76.',steps:()=>[
+    S(q('إذا كانت الطاقة الحرارية اللازمة لصهر '+M('4 kg')+' من الجليد عند درجة حرارة '+M('0 °C')+' تساوي '+M('1344000 J')+'، احسب الحرارة الكامنة لانصهار الجليد.','المثال · صفحة 76'),''),
+    S(gr(['Q = 1344000 J','m = 4 kg'],'الحرارة الكامنة '+M('H')),'الْمُعْطَيَاتُ أَمَامَكَ عَلَى السَّبُّورَةِ، وَالْمَطْلُوبُ: الْحَرَارَةُ الْكَامِنَةُ لِلِانْصِهَارْ.'),
+    S(fig(hMelt({Q:'Q = 1344000 J'}),'صهر 4 kg من الجليد عند 0 °C'),'لِنَرْسُمِ الْجَلِيدَ وَهُوَ يَنْصَهِرْ.'),
+    S(st(1,M('H = Q / m = 1344000 / 4')+'<span class="kDirOn"></span>'),'نَقْسِمُ كَمِّيَّةَ الْحَرَارَةِ عَلَى الْكُتْلَهْ.'),
+    S(res(M('H = 336000 J/kg')),'النَّتِيجَةُ: ثَلَاثُمِئَةٍ وَسِتَّةٌ وَثَلَاثُونَ أَلْفَ جُولٍ لِكُلِّ كِيلُوجْرَامْ.')]}};
+CARDS['2-5']={
+  eq:{title:'الاتزان الحراري',sayT:'نَتَعَرَّفُ الْيَوْمَ عَلَى الِاتِّزَانِ الْحَرَارِيّْ.',steps:()=>[
+    S(pt(B('الاتزان الحراري')+': وصول جسمين في درجتي حرارة مختلفتين إلى درجة حرارة واحدة عند اتصالهما، بحيث تتساوى كمية الحرارة المفقودة مع كمية الحرارة المكتسبة.'),'الِاتِّزَانُ الْحَرَارِيُّ: وُصُولُ جِسْمَيْنِ فِي دَرَجَتَيْ حَرَارَةٍ مُخْتَلِفَتَيْنِ، إِلَى دَرَجَةِ حَرَارَةٍ وَاحِدَةٍ عِنْدَ اتِّصَالِهِمَا.'),
+    S(fig(hCal({}),'الفلز الساخن يفقد حرارة، والماء البارد يكتسبها، حتى درجة واحدة'),'لَاحِظِ الْمَشْهَدَ: الْفِلِزُّ السَّاخِنُ يَفْقِدُ حَرَارَةً، وَالْمَاءُ الْبَارِدُ يَكْتَسِبُهَا، حَتَّى يَصِلَا إِلَى دَرَجَةٍ وَاحِدَهْ.'),
+    LAWB('Q1 + Q2 = 0','وَالْقَانُونُ'),
+    S(pt('أي أن الحرارة المفقودة = الحرارة المكتسبة: '+M('m1 c1 (T1 − Tf) = m2 c2 (Tf − T2)')),'أَيْ أَنَّ الْحَرَارَةَ الْمَفْقُودَةَ تُسَاوِي الْحَرَارَةَ الْمُكْتَسَبَهْ.'),
+    S(pt(B('خطوات الحل')+': نحسب الحرارة المكتسبة للجسم البارد، ثم نساويها بالحرارة المفقودة من الساخن، ثم نحل المعادلة للمجهول.'),'وَخُطُوَاتُ الْحَلِّ: نَحْسُبُ الْحَرَارَةَ الْمُكْتَسَبَةَ، ثُمَّ نُسَاوِيهَا بِالْمَفْقُودَةِ، ثُمَّ نَحُلُّ الْمُعَادَلَهْ.')]},
+  tr:{title:'طرق انتقال الحرارة',sayT:'وَالْآنَ، كَيْفَ تَنْتَقِلُ الْحَرَارَهْ؟',steps:()=>[
+    S(pt(B('أولا: التوصيل')+': انتقال الحرارة خلال المادة من الجزء الساخن إلى الجزء البارد بالتلامس، دون انتقال جزيئات المادة من مكانها.'),'أَوَّلًا: التَّوْصِيلُ: انْتِقَالُ الْحَرَارَةِ خِلَالَ الْمَادَّةِ بِالتَّلَامُسِ، دُونَ انْتِقَالِ جُزَيْئَاتِهَا مِنْ مَكَانِهَا.'),
+    S(fig(hCond(),'التوصيل: الجزيئات المهتزة تنقل الطاقة إلى جاراتها'),'لَاحِظِ الْمَشْهَدَ: الطَّرَفُ السَّاخِنُ يَهْتَزُّ بِقُوَّةٍ، وَيَنْقُلُ الطَّاقَةَ عَلَى طُولِ السَّاقْ.'),
+    S(pt(B('ثانيا: الحمل')+': انتقال الحرارة في السوائل والغازات، فالمائع الساخن يتمدد وتقل كثافته فيرتفع، ويحل محله مائع بارد.'),'ثَانِيًا: الْحَمْلُ: يَحْدُثُ فِي السَّوَائِلِ وَالْغَازَاتِ، فَالْمَائِعُ السَّاخِنُ يَتَمَدَّدُ فَيَرْتَفِعُ، وَيَحُلُّ مَحَلَّهُ مَائِعٌ بَارِدْ.'),
+    S(fig(hConv(),'الحمل: تيارات دائرية في الماء عند تسخينه'),'لَاحِظِ الْمَشْهَدَ: الْمَاءُ السَّاخِنُ يَرْتَفِعُ، وَالْبَارِدُ يَهْبِطُ، فَتَتَكَوَّنُ تَيَّارَاتُ الْحَمْلْ.'),
+    S(pt(B('ثالثا: الإشعاع')+': انتقال الطاقة الحرارية على شكل موجات كهرومغناطيسية، ويمكن أن تنتقل في الهواء أو الفراغ.'),'ثَالِثًا: الْإِشْعَاعُ: انْتِقَالُ الطَّاقَةِ عَلَى شَكْلِ مَوْجَاتٍ كَهْرُومَغْنَاطِيسِيَّةٍ، تَنْتَقِلُ فِي الْهَوَاءِ أَوِ الْفَرَاغْ.'),
+    S(fig(hRad(),'الإشعاع: حرارة الشمس تصل إلى الأرض عبر الفراغ'),'لَاحِظِ الْمَشْهَدَ: حَرَارَةُ الشَّمْسِ تَصِلُ إِلَى الْأَرْضِ عَبْرَ الْفَرَاغِ، دُونَ وَسَطٍ مَادِّيّْ.')]},
+  ex1:{title:'مثال · صفحة 77',sayT:'وَالْآنَ لِنَنْتَقِلْ إِلَى مِثَالِ الْحَقِيبَةِ، مِنْ صَفْحَةِ 77.',steps:()=>[
+    S(q('سخنت قطعة من الألمنيوم كتلتها '+M('0.05 kg')+' إلى درجة حرارة غير معروفة، ثم ألقيت في وعاء يحتوي على '+M('0.15 kg')+' من الماء عند '+M('21 °C')+'، فوصلت درجة الحرارة إلى '+M('25 °C')+'. إذا كانت الحرارة النوعية للألمنيوم '+M('899 J/(kg·°C)')+' وللماء '+M('4186 J/(kg·°C)')+'، فما درجة الحرارة الابتدائية لقطعة الألمنيوم؟','المثال · صفحة 77'),''),
+    S(gr(['m1 = 0.05 kg · c1 = 899','m2 = 0.15 kg · c2 = 4186','T2 = 21 °C · Tf = 25 °C'],'درجة الألمنيوم الابتدائية '+M('T1')),'الْمُعْطَيَاتُ أَمَامَكَ عَلَى السَّبُّورَةِ، وَالْمَطْلُوبُ: دَرَجَةُ الْحَرَارَةِ الِابْتِدَائِيَّةُ لِلْأَلُمِنْيُومْ.'),
+    S(fig(hCal({T1:'T1 = ?',T2:'T2 = 21 °C',Tf:'Tf = 25 °C'}),'الألمنيوم الساخن في الماء حتى 25 °C'),'لِنَرْسُمِ الْأَلُمِنْيُومَ السَّاخِنَ فِي الْمَاءِ الْبَارِدْ.'),
+    S(st(1,M('Q2 = 0.15 × 4186 × (25 − 21) = 2511.6 J')),'أَوَّلًا: الْحَرَارَةُ الَّتِي اكْتَسَبَهَا الْمَاءُ.'),
+    S(st(2,M('0.05 × 899 × (T1 − 25) = 2511.6')),'ثَانِيًا: نُسَاوِيهَا بِالْحَرَارَةِ الَّتِي فَقَدَهَا الْأَلُمِنْيُومْ.'),
+    S(st(3,M('T1 − 25 = 2511.6 / 44.95 = 55.88')+'<span class="kDirOn"></span>'),'ثَالِثًا: نَقْسِمُ، ثُمَّ نُضِيفُ خَمْسَةً وَعِشْرِينْ.'),
+    S(res(M('T1 ≈ 80.9 °C')),'النَّتِيجَةُ: ثَمَانُونَ فَاصِلَةُ تِسْعَةٍ دَرَجَةً مِئَوِيَّهْ.')]}};
+const RU3={
+ '2-1':[[/^مقدمة الوحدة وأهدافها$/,['intro','goals']],[/^درجة الحرارة وكمية الحرارة$/,null],[/^ما ستتعلمه$/,null],[/^الحرارة \(كمية الحرارة\)$/,'heat'],[/^مصادر الطاقة الحرارية$/,null],[/^درجة الحرارة$/,'temp'],[/^المقاييس الثلاثة/,'scales'],[/^قوانين التحويل$/,'laws'],[/^أمثلة الحقيبة التدريبية محلولة$/,'ex1'],[/^مثال ٢: تحويل/,'ex2'],[/^مثال ٣: تحويل/,'ex3'],[/^سؤال ١: متى/,'q1'],[/^سؤال ٢: متى/,'q2']],
+ '2-3':[[/^الحرارة النوعية c$/,'sh'],[/^السعة الحرارية C$/,'cap'],[/^تنبيه$/,null],[/^الحرارة الكامنة للانصهار$/,'lat'],[/^أمثلة الحقيبة التدريبية محلولة$/,'ex1'],[/^مثال: السعة الحرارية/,'ex2'],[/^مثال: حساب الحرارة الكامنة/,'ex3']],
+ '2-5':[[/^الاتزان الحراري$/,'eq'],[/^خطوات الحل$/,null],[/^طرق انتقال الحرارة$/,'tr'],[/^أمثلة الحقيبة التدريبية محلولة$/,'ex1']]};
+const LIFE3={'2-1':'وَبَعْدَ أَنْ فَهِمْنَا الْحَرَارَةَ وَدَرَجَةَ الْحَرَارَةِ، لِنَرَ أَيْنَ نَجِدُهُمَا فِي حَيَاتِنَا.','2-3':'وَبَعْدَ أَنْ تَعَرَّفْنَا عَلَى الْحَرَارَةِ النَّوْعِيَّةِ وَالْكَامِنَةِ، لِنَرَ أَيْنَ نَجِدُهُمَا فِي حَيَاتِنَا.','2-5':'وَبَعْدَ أَنْ فَهِمْنَا الِاتِّزَانَ الْحَرَارِيَّ وَطُرُقَ انْتِقَالِ الْحَرَارَةِ، لِنَرَ أَيْنَ نَجِدُهَا فِي حَيَاتِنَا.'};
+function applyU3(out,K2){defs();const T=sl=>String(sl.title||''),base=t=>t.replace(/\s*\(تابع\)\s*$/,'');const seen={};
+  const R=(RU3[K2]||[]).map(([re,id,once])=>[re,sl=>{if(once){if(seen[id])return null;seen[id]=1}if(id===null)return null;return Array.isArray(id)?id.map(i=>card(K2,i)):card(K2,id)}]);
+  R.push([/^تمرين \d+ ·/,()=>null],[/^رسم توضيحي/,()=>null],[/^تطبيقات من الحياة$/,sl=>{sl.sayT=LIFE3[K2];return typeof appCards==='function'?appCards(sl):sl}]);
+  const res=[];let skip=null;
+  out.forEach(sl=>{const t=T(sl);if(skip&&base(t)===skip&&/\(تابع\)/.test(t))return;skip=null;
+    const m=R.find(([re])=>re.test(base(t)));if(!m||sl.type!=='c'){res.push(sl);return}
+    skip=base(t);const n=m[1](sl);if(Array.isArray(n))n.forEach(x=>x&&res.push(x));else if(n)res.push(n);if(n===sl)skip=null});
+  return res}
+
+function apply(out,K2){try{document.documentElement.dataset.kcu=String(K2).split('-')[0]}catch(e){}if(!CARDS[K2])return out;defs();if(K2==='0-1')return apply01(out);if(/^0-[2456]$/.test(K2))return applyU1(out,K2);if(/^1-[1235789]$/.test(K2))return applyU2(out,K2);if(/^2-[135]$/.test(K2))return applyU3(out,K2);if(K2==='4-1')return apply41(out);if(K2==='4-8')return apply48(out);if(K2==='4-5')return apply45(out);if(K2==='3-3')return V33(apply33(out));if(K2==='3-4')return apply34(out);if(K2==='3-5')return apply35(out);if(K2==='3-6')return apply36(out);
   const T=sl=>String(sl.title||''),base=t=>t.replace(/\s*\(تابع\)\s*$/,'');
   const R=[[/^تصنيف المواد حسب توصيلها للكهرباء$/,sl=>{if(K2!=='3-1')return sl;sl.sayT='بعد أن عرفنا أن الإلكترونات هي التي تنتقل بين الأجسام، لنتعرف الآن على تصنيف المواد حسب توصيلها للكهرباء.';
       sl.steps=sl.steps.concat([{html:fig(matScene(),'مشهد: حركة الإلكترونات في الموصل وشبه الموصل والعازل').html,say:'شاهد المشهد: فِي الْمُوَصِّلِ تَتَحَرَّكُ الْإِلِكْتِرُونَاتُ بِحُرِّيَّةٍ، وَفِي شِبْهِ الْمُوَصِّلِ حَرَكَتُهَا قَلِيلَةٌ، وَفِي الْعَازِلِ تَبْقَى مُقَيَّدَةً فِي مَكَانِهَا.'}]);return sl}],
@@ -2349,6 +3061,8 @@ html body .board .bTpc .bEnT{margin:0 12px 0 0!important}html body .board .bH .b
  .board .bContent:has(.kFig):not(:has(.bQ))>.bStep:has(.kFig)~.bStep:has(.kFig){grid-row:auto;position:static}
  .board .bContent.kMultiFig{display:block!important}.board .bContent.kMultiFig>.bStep{position:static!important}.board .bContent.kMultiFig .kFig{max-width:min(620px,60vh);margin-inline:auto}}
 @media (max-width:999px){.board .bContent:has(.kFig)>.bStep.in:has(.kFig):not(:has(.kAuto)){position:sticky;top:0;z-index:3;background:#fdfdfb;padding-bottom:6px}}
+/* المدرب 5 نوفمبر 07:17: الوحدات 1-3 المشهد في منتصف السبورة بعرضها تحت الفقرة على كل الشاشات */
+@media (min-width:1000px){html:is([data-kcu="0"],[data-kcu="1"],[data-kcu="2"]) .board .bContent:has(.kFig):not(:has(.bQ)){display:block!important}html:is([data-kcu="0"],[data-kcu="1"],[data-kcu="2"]) .board .bContent:has(.kFig)>.bStep{position:static!important}html:is([data-kcu="0"],[data-kcu="1"],[data-kcu="2"]) .board .bContent .kFig:has(.kScene){max-width:min(640px,100%,calc((100vh - 200px)*1.9))!important;margin:6px auto 12px}}
 @media (orientation:landscape) and (max-height:520px){.board .bContent>.bStep.in:has(.kFig){position:static!important}}
 @media (min-width:600px) and (max-width:999px){.board .bContent.kMultiFig>.bStep.in{position:static!important}.board .bContent.kMultiFig .kFig{max-width:min(560px,42vh);margin-inline:auto}}
 /* أسئلة المدرب الذكي بنفس طريقة العرض */
