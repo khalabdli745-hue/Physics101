@@ -1115,9 +1115,9 @@ document.querySelectorAll('.lgEye').forEach(b=>b.onclick=()=>{const i=b.parentNo
 <script src="gens.js?v=10281453"></script>
 <script src="art.js?v=10281453"></script>
 <script src="more.js?v=11041800"></script>
-<script src="labs.js?v=11041350"></script>
+<script src="labs.js?v=11051"></script>
 <script src="coach.js?v=11011115"></script>
-<script>/* 5 نوفمبر: الدروس النموذجية (kcards31) لكل المتدربين */(function(){var n=1;document.write('<script src="kcards'+(n?'31':'')+'.js?v=11021845"><\/script>')})()</script>
+<script>/* 5 نوفمبر: الدروس النموذجية (kcards31) لكل المتدربين */(function(){var n=1;document.write('<script src="kcards'+(n?'31':'')+'.js?v=11052"><\/script>')})()</script>
 <script>
 const UNITS=window.UNITS,STUDY=window.STUDY,EXTRA=window.EXTRA||{},FIGS=window.FIGS||{};
 window.PAGES=window.PAGES||{};
@@ -1761,7 +1761,7 @@ function openBoard(dry){const dryS=dry==='slides';dry=dry===true||dryS;
     const nt=t=>String(t||'').replace(/[`\s]/g,''),tt=sl=>sl.title||'',cont=sl=>/\(تابع\)/.test(tt(sl));
     const trs=[],exs=[];out.forEach((sl,i)=>{if(cont(sl))return;if(/^تمرين/.test(tt(sl)))trs.push(i);if(/^(مثال محلول|تمرين)/.test(tt(sl)))exs.push(i)});
     const smI=out.findIndex(sl=>tt(sl)==='ملخص الدرس'),end=smI>=0?smI:out.length,ins=[];
-    if(CQ.r)ins.push([1,mk('r',CQ.r,pos.u===0&&pos.l===0?'قبل أن نبدأ درسنا اليوم، دعنا نختبر معلوماتك السابقة.':((window.COACHINTRO||[]).includes(K2)?'قبل أن نبدأ وحدتنا الجديدة، دعنا نتذكر فكرة مهمة، من الوحدة السابقة.':'قبل أن نبدأ درسنا اليوم، دعنا نتذكر فكرة مهمة، من الدرس السابق.'))]);
+    if(CQ.r)ins.push([1,mk('r',CQ.r,pos.u===0&&pos.l<=1?'قبل أن نبدأ درسنا اليوم، دعنا نختبر معلوماتك السابقة.':((window.COACHINTRO||[]).includes(K2)?'قبل أن نبدأ وحدتنا الجديدة، دعنا نتذكر فكرة مهمة، من الوحدة السابقة.':'قبل أن نبدأ درسنا اليوم، دعنا نتذكر فكرة مهمة، من الدرس السابق.'))]);
     if(CQ.s){const L=nt(CQ.s.law);let at=out.findIndex((sl,i)=>i>0&&sl.type==='c'&&nt((sl.steps||[]).map(x=>(x.md||'')+(x.h||'')).join('')).includes(L));
       if(at>=0){while(at+1<out.length&&cont(out[at+1]))at++;at++}else at=exs.length?exs[0]:end;ins.push([at,mk('s',CQ.s,'دعنا نتأمل هذا القانون.')])}
     /* سؤال واحد في الأمثلة والتمارين قبل التمرين الأول، ونوعه حسب الدرس (CQ.x): req المطلوب، law القانون المستخدم، inf الاستنتاج */
@@ -1794,7 +1794,7 @@ function openBoard(dry){const dryS=dry==='slides';dry=dry===true||dryS;
   const render=()=>{const sl=out[cur];let h='';
     if(sl.type==='t')h=`<div class="bTitle"><small>الوحدة ${ORD[pos.u]} · ${esc(UNITS[pos.u].t)}</small><h1>${(window.COACHINTRO||[]).includes(K2)?'مقدمة الوحدة وأهدافها<br>':''}${esc(l.t)}</h1>${TOP?'<ol class="bTpc">'+TOP.map(g=>'<li><b>'+inl(g[0])+'</b>'+(g[3]?' <bdi class="bEnT" dir="ltr" style="font-weight:600;color:#64748b;margin-inline-start:6px">'+esc(g[3])+'</bdi>':'')+(g[1].length?'<ul class="bSub">'+g[1].map(x=>'<li>'+inl(x)+'</li>').join('')+'</ul>':'')+'</li>').join('')+'</ol>':heads.length?'<p class="bOut">مواضيع الدرس</p><ol>'+heads.map(x=>'<li>'+inl(x)+'</li>').join('')+'</ol>':''}</div>`;
     else if(sl.type==='e')h=`<div class="bTitle"><h1>✓ انتهى شرح الدرس</h1><p>${window.coachName&&coachName()?'شكرا لمتابعتك يا '+esc(coachName())+'. ':''}انتقل الآن إلى الأمثلة والتمارين التفاعلية، ثم اختبر نفسك${window.LABS&&LABS[K2]?'، ثم التجربة العملية':''}.</p></div>`;
-    else if(sl.type==='q'){const q=sl.q;if(q.ct){const LB={r:(window.COACHINTRO||[]).includes(K2)?'🔁 سؤال من الوحدة السابقة':'🔁 سؤال من الدرس السابق',s:'📐 سؤال عن القانون',g:'📝 سؤال عن التمرين',i:'💡 سؤال استنتاج',m:'🧾 سؤال الملخص'},LT='أبجد';
+    else if(sl.type==='q'){const q=sl.q;if(q.ct){const LB={r:K2==='0-1'?'🔁 سؤال عن معلوماتك السابقة':(window.COACHINTRO||[]).includes(K2)?'🔁 سؤال من الوحدة السابقة':'🔁 سؤال من الدرس السابق',s:'📐 سؤال عن القانون',g:'📝 سؤال عن التمرين',i:'💡 سؤال استنتاج',m:'🧾 سؤال الملخص'},LT='أبجد';
       h=`<div class="bQ cq${q.o.some(o=>String(o).length>60)?' long':''}"><div class="bQh">${LB[q.ct]||'🙋 سؤال للمتدرب'}</div><div class="bQcard"><p class="bQq">${inl(q.q)}</p></div><div class="bOpts">${q.o.map((o,j)=>`<button type="button" data-j="${j}"><b class="bL">${LT[j]||j+1}</b><span>${inl(o)}</span></button>`).join('')}</div><div class="bQf" aria-live="polite"></div></div>`}
       else h=`<div class="bQ"><div class="bQh">🙋 سؤال للمتدرب</div><p class="bQq">${inl(q.q)}</p><div class="bOpts">${q.o.map((o,j)=>`<button type="button" data-j="${j}">${inl(o)}</button>`).join('')}</div><div class="bQf" aria-live="polite"></div></div>`}
     else{const _en=sl.en||(window.KC&&KC.en?KC.en(K2,sl.title):'');h=(sl.title?`<h2 class="bH">${inl(sl.title)}${_en?'<bdi class="bEnH" dir="ltr">'+esc(_en)+'</bdi>':''}</h2>`:'')+sl.steps.map((x,j)=>`<div class="bStep${j<step?' in':''}">${x.html?x.html:x.h!==undefined?'<h3>'+inl(x.h)+'</h3>':md(x.md)}</div>`).join('')}
@@ -3875,5 +3875,5 @@ new MutationObserver(function(){var B=document.querySelector('.board');if(B&&B._
 setInterval(function(){var B=document.querySelector('.board');if(B&&B._p102&&!B._p103)setup(B)},500);
 })();
 </script>
-<script src="fixeddata.js?v=2"></script><script src="fixedai.js?v=6"></script></body>
+<script src="fixeddata.js?v=3"></script><script src="fixedai.js?v=6"></script></body>
 </html>
