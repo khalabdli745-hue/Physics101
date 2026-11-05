@@ -1914,6 +1914,12 @@ function apply48(out){defs();const K2='4-8',T=sl=>String(sl.title||''),base=t=>t
   return res}
 
 /* ===== الدرس النموذجي 0-1: الكميات الفيزيائية وأنظمة القياس (الحقيبة التدريبية صفحات 10-12) ===== */
+const kIM=(f,x,y,w,h,ex)=>`<image href="dv/${f}.webp" x="${f1(x)}" y="${f1(y)}" width="${f1(w)}" height="${f1(h)}" preserveAspectRatio="none"${ex||''}/>`;
+function kBench(top,fy,x0,x1){const ins=Math.min(26,(fy-top)*.7);let g=`<defs><linearGradient id="kc-wt" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#C08A50"/><stop offset="1" stop-color="#E4B97F"/></linearGradient><linearGradient id="kc-wf" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#9A6234"/><stop offset="1" stop-color="#6E4120"/></linearGradient></defs><path d="M${f1(x0+ins)},${f1(top)} L${f1(x1-ins)},${f1(top)} L${x1},${f1(fy)} L${x0},${f1(fy)}Z" fill="url(#kc-wt)" stroke="#7C4A1F" stroke-width=".8"/>`;
+  for(let k=1;k<5;k++){const f=k/5,yy=top+(fy-top)*f,a=x0+ins*(1-f)+5,b=x1-ins*(1-f)-5;g+=`<path d="M${f1(a)},${f1(yy)} Q${f1((a+b)/2)},${f1(yy+(k%2?1.5:-1.3))} ${f1(b)},${f1(yy)}" fill="none" stroke="#A8743F" stroke-width=".7" opacity=".5"/>`}
+  return g+`<rect x="${x0}" y="${f1(fy)}" width="${x1-x0}" height="12" fill="url(#kc-wf)" stroke="#5B3517" stroke-width=".8"/><line x1="${x0+1}" y1="${f1(fy+.8)}" x2="${x1-1}" y2="${f1(fy+.8)}" stroke="#F0CB95" stroke-width="1" opacity=".7"/>`}
+/* ظل واقعي: ضبابي، ملاصق للقاعدة، مائل قليلا بعيدا عن الضوء (طلب المدرب 05:46) */
+const kSh=(cx,cy,rx)=>`<defs><filter id="kc-shb" x="-50%" y="-300%" width="200%" height="700%"><feGaussianBlur stdDeviation="3"/></filter></defs><ellipse cx="${f1(cx+rx*.08)}" cy="${f1(cy-1)}" rx="${f1(rx*.86)}" ry="${f1(Math.min(6,Math.max(3,rx*.07)))}" fill="#2a1a0c" opacity=".45" filter="url(#kc-shb)"/>`;
 /* أيقونات صغيرة للكميات الأساسية */
 const qIco=k=>{const P={
   L:'<rect x="2" y="9" width="24" height="10" rx="2" fill="#fde68a" stroke="#b45309" stroke-width="1.6"/><path d="M6 9v4M10 9v6M14 9v4M18 9v6M22 9v4" stroke="#b45309" stroke-width="1.4"/>',
@@ -1924,48 +1930,34 @@ const qIco=k=>{const P={
   Iv:'<circle cx="14" cy="11" r="8" fill="#fef9c3" stroke="#ca8a04" stroke-width="1.6"/><rect x="10" y="19" width="8" height="5" rx="1.5" fill="#94a3b8"/><path d="M14 0v1.5M4 3l1.5 1.5M24 3l-1.5 1.5" stroke="#ca8a04" stroke-width="1.6" stroke-linecap="round"/>',
   n:'<path d="M10 3h8M12 3v7l-7 13a2 2 0 0 0 2 3h14a2 2 0 0 0 2-3l-7-13V3" fill="#dcfce7" stroke="#15803d" stroke-width="1.6" stroke-linejoin="round"/><circle cx="12" cy="20" r="1.8" fill="#15803d"/><circle cx="17" cy="22" r="1.4" fill="#15803d"/>'};
   return `<svg class="kQIco" viewBox="0 0 28 28" width="26" height="26" aria-hidden="true" style="vertical-align:middle;margin-inline-end:6px;flex:none">${P[k]||''}</svg>`};
-/* 1) مشهد الحركة: سيارة مجسمة واقعية تقطع مسافة على طريق بين نقطتين (طلب المدرب 04:57) */
-function car3d(x,y,o){o=o||{};const id=o.id||'a',c1=o.c1||'#93c5fd',c2=o.c2||'#2563eb',c3=o.c3||'#1e3a8a';
-  const wheel=cx=>`<g><ellipse cx="${cx}" cy="${y+44}" rx="19" ry="19" fill="url(#kc-cT${id})"/><ellipse cx="${cx}" cy="${y+44}" rx="11" ry="11" fill="url(#kc-cR${id})" stroke="#64748b" stroke-width="1"/>${[0,72,144,216,288].map(a=>`<line x1="${cx}" y1="${y+44}" x2="${f1(cx+9*Math.cos(a*Math.PI/180))}" y2="${f1(y+44+9*Math.sin(a*Math.PI/180))}" stroke="#94a3b8" stroke-width="2.2"/>`).join('')}<circle cx="${cx}" cy="${y+44}" r="3" fill="#475569"/></g>`;
-  return `<g><defs>
-  <linearGradient id="kc-cB${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c1}"/><stop offset=".45" stop-color="${c2}"/><stop offset="1" stop-color="${c3}"/></linearGradient>
-  <linearGradient id="kc-cG${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e0f2fe"/><stop offset=".55" stop-color="#7dd3fc"/><stop offset="1" stop-color="#0c4a6e"/></linearGradient>
-  <radialGradient id="kc-cT${id}" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#4b5563"/><stop offset="1" stop-color="#030712"/></radialGradient>
-  <radialGradient id="kc-cR${id}" cx="35%" cy="30%" r="80%"><stop offset="0" stop-color="#ffffff"/><stop offset=".5" stop-color="#cbd5e1"/><stop offset="1" stop-color="#64748b"/></radialGradient></defs>
-  <ellipse cx="${x+82}" cy="${y+64}" rx="92" ry="8" fill="#1e3a5f" opacity=".28"/>
-  <path d="M${x+14},${y+6} L${x+150},${y+6} L${x+164},${y-4} L${x+30},${y-4}Z" fill="${c3}" opacity=".9"/>
-  <path d="M${x+42},${y-4} L${x+62},${y-30} L${x+118},${y-30} L${x+142},${y-4}Z" fill="${c3}" opacity=".85"/>
-  <path d="M${x},${y+42} L${x},${y+16} Q${x},${y+6} ${x+12},${y+4} L${x+34},${y} L${x+54},${y-26} Q${x+58},${y-30} ${x+66},${y-30} L${x+108},${y-30} Q${x+116},${y-30} ${x+122},${y-24} L${x+142},${y} L${x+160},${y+4} Q${x+170},${y+8} ${x+170},${y+20} L${x+170},${y+42} Z" fill="url(#kc-cB${id})" stroke="${c3}" stroke-width="1.6"/>
-  <path d="M${x+42},${y+1} L${x+58},${y-22} Q${x+60},${y-24} ${x+64},${y-24} L${x+84},${y-24} L${x+84},${y+1}Z" fill="url(#kc-cG${id})"/>
-  <path d="M${x+90},${y+1} L${x+90},${y-24} L${x+106},${y-24} Q${x+112},${y-24} ${x+116},${y-19} L${x+134},${y+1}Z" fill="url(#kc-cG${id})"/>
-  <path d="M${x+6},${y+14} L${x+164},${y+14}" stroke="#ffffff" stroke-opacity=".55" stroke-width="2.5"/>
-  <line x1="${x+87}" y1="${y+4}" x2="${x+87}" y2="${y+40}" stroke="${c3}" stroke-width="1.4" opacity=".7"/>
-  <rect x="${x+96}" y="${y+18}" width="12" height="3" rx="1.5" fill="#e2e8f0"/><rect x="${x+56}" y="${y+18}" width="12" height="3" rx="1.5" fill="#e2e8f0"/>
-  <path d="M${x+158},${y+10} q10,2 11,10 l-11,0z" fill="#fde047" stroke="#ca8a04" stroke-width="1"/><rect x="${x}" y="${y+10}" width="7" height="9" rx="2" fill="#ef4444"/>
-  <rect x="${x-2}" y="${y+34}" width="174" height="8" rx="4" fill="#334155"/>
-  ${wheel(x+36)}${wheel(x+134)}</g>`}
-function qMotion(){const W=640,H=290,FY=210;let b=stage(W,H,FY);
-  b+=`<path d="M0,${FY-4} L${W},${FY-4} L${W},${FY+30} L0,${FY+30}Z" fill="#475569"/><line x1="0" y1="${FY+13}" x2="${W}" y2="${FY+13}" stroke="#f8fafc" stroke-width="3" stroke-dasharray="22 16"/>`;
-  const flag=(x,c,t)=>`<line x1="${x}" y1="${FY+8}" x2="${x}" y2="${FY-110}" stroke="#334155" stroke-width="3"/><polygon points="${x},${FY-110} ${x+30},${FY-100} ${x},${FY-90}" fill="${c}"/><text x="${x}" y="${FY-118}" text-anchor="middle" font-size="14" font-weight="900" fill="#1e3a5f">${t}</text>`;
-  b+=flag(194,'#16a34a','البداية')+flag(526,'#dc2626','النهاية');
-  b+=`<g opacity=".38">${car3d(18,FY-66,{id:'g'})}</g>`+`<g class="kAr" style="--d:.3s">${car3d(350,FY-66,{id:'m'})}</g>`;
-  b+=dim(194,526,FY+58,'x = 100 m');
-  b+=pill(250,48,'t = 10 s','#0369a1',.6)+pill(420,48,'v = 10 m/s','#7c3aed',.9);
-  return svg(W,H+30,b,'kAuto')}
+/* 1) مشهد الحركة: عربة المعمل الحقيقية على المسار (طلب المدرب 05:39) */
+function qMotion(){const W=640,H=300,FY=236;let b=`<rect width="${W}" height="${H}" fill="url(#kc-bg)"/>`+kBench(140,FY,10,630);
+  /* المسار والعربة الحقيقيان كما في تجربة السرعة 0-2، بلا عربة مكررة (طلب المدرب 05:43) */
+  const TW=600,TH=TW*141/900,TX=20,TY=FY-26-TH;b+=kSh(TX+TW/2,FY-22,TW*.48)+kIM('08-track-cart-tape',TX,TY,TW,TH);
+  const xs=TX+TW*236/900,xe=TX+TW*718/900;
+  b+=`<line x1="${f1(xs)}" y1="${f1(TY-14)}" x2="${f1(xs)}" y2="${f1(TY+TH*.62)}" stroke="#16a34a" stroke-width="3"/><line x1="${f1(xe)}" y1="${f1(TY-14)}" x2="${f1(xe)}" y2="${f1(TY+TH*.62)}" stroke="#dc2626" stroke-width="3"/><text x="${f1(xs)}" y="${f1(TY-20)}" text-anchor="middle" font-size="14" font-weight="900" fill="#15803d">البداية</text><text x="${f1(xe)}" y="${f1(TY-20)}" text-anchor="middle" font-size="14" font-weight="900" fill="#b91c1c">النهاية</text>`;
+  b+=`<g class="kAr" style="--d:.3s">${arrow(xs+30,xe-40,TY-44,'F',0,9)}</g><text x="${f1((xs+xe)/2)}" y="${f1(TY-60)}" text-anchor="middle" font-size="13" font-weight="800" fill="#b45309">اتجاه حركة العربة</text>`;
+  b+=kIM('06-stopwatch-analog',30,10,66,66*900/816)+pill(160,44,'t = 2 s','#0369a1',.6)+pill(520,44,'v = 0.5 m/s','#7c3aed',.9);
+  b+=dim(+f1(xs),+f1(xe),FY+32,'x = 1 m');
+  return svg(W,H+16,b,'kAuto')}
+
 /* 2) من الكميات الأساسية إلى المشتقة: الطول والزمن ينتجان السرعة */
-function qTypes(){const W=640,H=260,FY=196;let b=stage(W,H,FY);
-  const cube=(x,c1,c2,c3,t,u)=>`<g><polygon points="${x},104 ${x+120},104 ${x+148},84 ${x+28},84" fill="${c1}"/><polygon points="${x+120},104 ${x+148},84 ${x+148},166 ${x+120},186" fill="${c3}"/><rect x="${x}" y="104" width="120" height="82" fill="${c2}"/><text x="${x+60}" y="140" text-anchor="middle" font-size="17" font-weight="900" fill="#fff">${t}</text><text x="${x+60}" y="168" text-anchor="middle" font-size="16" font-weight="800" fill="#fff" direction="ltr">${u}</text></g>`;
-  b+=cube(28,'#93c5fd','#2563eb','#1e3a8a','الطول','m')+`<text x="196" y="152" text-anchor="middle" font-size="30" font-weight="900" fill="#1e3a5f">÷</text>`+cube(222,'#86efac','#16a34a','#14532d','الزمن','s');
-  b+=arrow(386,446,145,'F',.3,10)+cube(462,'#d8b4fe','#7c3aed','#4c1d95','السرعة','m/s');
-  b+=`<text x="160" y="56" text-anchor="middle" font-size="15" font-weight="900" fill="#1d4ed8">كميتان أساسيتان</text><text x="536" y="56" text-anchor="middle" font-size="15" font-weight="900" fill="#6d28d9">كمية مشتقة</text>`;
+function qTypes(){const W=640,H=250,FY=200;let b=`<rect width="${W}" height="${H}" fill="url(#kc-bg)"/>`+kBench(120,FY,10,630);
+  b+=kIM('92-meter-stick-h',24,FY-78,200,200*82/844)+`<text x="124" y="${FY-90}" text-anchor="middle" font-size="16" font-weight="900" fill="#1d4ed8">الطول  m</text>`;
+  b+=`<text x="244" y="${FY-46}" text-anchor="middle" font-size="34" font-weight="900" fill="#1e3a5f">÷</text>`;
+  b+=kSh(318,FY-22,40)+kIM('06-stopwatch-analog',276,FY-118,84,84*900/816)+`<text x="318" y="${FY-128}" text-anchor="middle" font-size="16" font-weight="900" fill="#15803d">الزمن  s</text>`;
+  b+=arrow(380,438,FY-60,'F',.3,10);
+  const tw=124,th=tw*784/900,tx=476,ty=FY-20-th;b+=kSh(tx+tw/2,FY-18,70)+kIM('19-digital-timer-front',tx,ty,tw,th)+`<text x="${f1(tx+tw/2)}" y="${f1(ty+th*.34)}" text-anchor="middle" font-size="14" font-weight="900" fill="#14532D" direction="ltr" font-family="Consolas,monospace">v = 0.5 m/s</text><text x="${f1(tx+tw/2)}" y="${f1(ty-10)}" text-anchor="middle" font-size="16" font-weight="900" fill="#6d28d9">السرعة  m/s</text>`;
+  b+=`<text x="170" y="30" text-anchor="middle" font-size="15" font-weight="900" fill="#1d4ed8">كميتان أساسيتان</text><text x="537" y="30" text-anchor="middle" font-size="15" font-weight="900" fill="#6d28d9">كمية مشتقة</text>`;
   return svg(W,H,b,'kAuto')}
+
 /* 3) المتر يساوي 100 سنتيمتر */
-function qMeter(o){o=o||{};const W=640,H=220,FY=170;let b=stage(W,H,FY);const x0=60,x1=580,y=96;
-  b+=`<defs><linearGradient id="kc-wd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fef3c7"/><stop offset=".5" stop-color="#fcd34d"/><stop offset="1" stop-color="#d97706"/></linearGradient></defs><ellipse cx="${(x0+x1)/2}" cy="${y+40}" rx="${(x1-x0)/2+10}" ry="7" fill="#1e3a5f" opacity=".22"/><polygon points="${x0-6},${y-30} ${x0+8},${y-42} ${x1+20},${y-42} ${x1+6},${y-30}" fill="#fef9c3" stroke="#b45309" stroke-width="1.4"/><polygon points="${x1+6},${y-30} ${x1+20},${y-42} ${x1+20},${y+10} ${x1+6},${y+22}" fill="#b45309"/><rect x="${x0-6}" y="${y-30}" width="${x1-x0+12}" height="52" fill="url(#kc-wd)" stroke="#92400e" stroke-width="1.6"/>`;
-  for(let i=0;i<=100;i++){const x=x0+(x1-x0)*i/100,h=i%10===0?24:i%5===0?16:9;b+=`<line x1="${f1(x)}" y1="${y-30}" x2="${f1(x)}" y2="${y-30+h}" stroke="#78350f" stroke-width="${i%10?1:1.8}"/>`;if(i%10===0)b+=`<text x="${f1(i===100?x-3:x)}" y="${y+12}" text-anchor="${i===100?'end':i===0?'start':'middle'}" font-size="13" font-weight="800" fill="#78350f" direction="ltr">${i}</text>`}
-  b+=dim(x0,x1,150,o.lab||'1 m = 100 cm');
-  b+=`<text x="${x1+2}" y="${y+40}" text-anchor="end" font-size="13" font-weight="800" fill="#78350f" direction="ltr">cm</text>`;
-  return svg(W,H,b,'kAuto')}
+function qMeter(o){o=o||{};const W=640,H=230,FY=170;let b=`<rect width="${W}" height="${H}" fill="url(#kc-bg)"/>`+kBench(70,FY,10,630);
+  const x0=40,L=560,h=L*82/844,y0=FY-50-h;b+=kSh(320,FY-46,290)+kIM('92-meter-stick-h',x0,y0,L,h);
+  const t0=x0+L*78/844,tk=L*72.2/844;for(let i=0;i<=10;i++)b+=`<text x="${f1(t0+i*tk)}" y="${f1(y0-6)}" text-anchor="middle" font-size="13" font-weight="800" fill="#78350f" direction="ltr">${i*10}</text>`;
+  b+=`<text x="${f1(t0+10*tk+26)}" y="${f1(y0-6)}" font-size="12" font-weight="800" fill="#78350f" direction="ltr">cm</text>`+dim(+f1(t0),+f1(t0+10*tk),FY+30,o.lab||'1 m = 100 cm');
+  return svg(W,H+10,b,'kAuto')}
+
 const U01=[['الطول','L','المتر','m','L'],['الزمن','t','الثانية','s','t'],['الكتلة','m','الكيلوجرام','kg','m'],['شدة التيار الكهربائي','I','الأمبير','A','I'],['درجة الحرارة','T','الكلفن','K','T'],['شدة الإضاءة','I_v','الشمعة (الكانديلا)','cd','Iv'],['كمية المادة','n','المول','mol','n']];
 const D01=[['المساحة','A','طول × طول','m²','المتر المربع'],['الحجم','V','طول × طول × طول','m³','المتر المكعب'],['السرعة','v','طول مقسوم على زمن','m/s','متر لكل ثانية'],['التسارع','a','سرعة مقسومة على زمن','m/s²','متر لكل ثانية تربيع'],['القوة','F','كتلة × تسارع','N = kg·m/s²','النيوتن'],['الشغل','W','قوة × مسافة','J = kg·m²/s²','الجول'],['الطاقة','E','مثل الشغل','J','الجول']];
 const SAYU01=['الطُّولُ رَمْزُهُ `L`، وَوَحْدَةُ قِيَاسِهِ الْمِتْرُ، وَرَمْزُهَا `m`.','الزَّمَنُ رَمْزُهُ `t`، وَوَحْدَةُ قِيَاسِهِ الثَّانِيَةُ، وَرَمْزُهَا `s`.','الْكُتْلَةُ رَمْزُهَا `m`، وَوَحْدَةُ قِيَاسِهَا الْكِيلُوجْرَامُ، وَرَمْزُهَا `kg`.','شِدَّةُ التَّيَّارِ الْكَهْرَبَائِيِّ رَمْزُهَا `I`، وَوَحْدَةُ قِيَاسِهَا الْأَمْبِيرُ، وَرَمْزُهَا `A`.','دَرَجَةُ الْحَرَارَةِ رَمْزُهَا `T`، وَوَحْدَةُ قِيَاسِهَا الْكِلْفِنُ، وَرَمْزُهَا `K`.','شِدَّةُ الْإِضَاءَةِ وَوَحْدَةُ قِيَاسِهَا الشَّمْعَةُ، أَوِ الْكَانْدِيلَا، وَرَمْزُهَا `cd`.','كَمِّيَّةُ الْمَادَّةِ رَمْزُهَا `n`، وَوَحْدَةُ قِيَاسِهَا الْمُولُ، وَرَمْزُهَا `mol`.'];
@@ -1973,7 +1965,7 @@ const SAYD01=['الْمِسَاحَةُ طُولٌ فِي طُولٍ، وَوَ�
 CARDS['0-1']={
   intro:{title:'الكمية الفيزيائية',sayT:'نَبْدَأُ وِحْدَتَنَا الْأُولَى بِتَعْرِيفِ الْكَمِّيَّةِ الْفِيزْيَائِيَّةِ.',steps:()=>[
     S(pt(B('الكمية الفيزيائية')+': صفة فيزيائية تصف ظاهرة طبيعية، يمكن قياسها أو حسابها.'),'الْكَمِّيَّةُ الْفِيزْيَائِيَّةُ: صِفَةٌ فِيزْيَائِيَّةٌ تَصِفُ ظَاهِرَةً طَبِيعِيَّةً، يُمْكِنُ قِيَاسُهَا أَوْ حِسَابُهَا.'),
-    S(fig(qMotion(),'في ظاهرة الحركة: المسافة والزمن والسرعة كميات فيزيائية'),'شَاهِدِ الْمَشْهَدَ: السَّيَّارَةُ تَتَحَرَّكُ بَيْنَ نُقْطَتَيْنِ، فَالْمَسَافَةُ الَّتِي تَقْطَعُهَا، وَالزَّمَنُ الَّذِي تَسْتَغْرِقُهُ، وَالسُّرْعَةُ الَّتِي تَسِيرُ بِهَا، كُلُّهَا كَمِّيَّاتٌ فِيزْيَائِيَّةٌ، لِأَنَّنَا نَقِيسُهَا بِأَرْقَامٍ وَوَحَدَاتْ.'),
+    S(fig(qMotion(),'في ظاهرة الحركة: المسافة والزمن والسرعة كميات فيزيائية'),'شَاهِدِ الْمَشْهَدَ: الْعَرَبَةُ تَتَحَرَّكُ عَلَى الْمَسَارِ بَيْنَ نُقْطَتَيْنِ، فَالْمَسَافَةُ الَّتِي تَقْطَعُهَا، وَالزَّمَنُ الَّذِي تَسْتَغْرِقُهُ، وَالسُّرْعَةُ الَّتِي تَسِيرُ بِهَا، كَمَا تَقِيسُهَا سَاعَةُ الْإِيقَافِ وَالْمِسْطَرَةُ، كُلُّهَا كَمِّيَّاتٌ فِيزْيَائِيَّةٌ، لِأَنَّنَا نَقِيسُهَا بِأَرْقَامٍ وَوَحَدَاتْ.'),
     S(pt('أما '+B('الحركة واللون والصوت والضوء والحرارة')+' فليست كميات فيزيائية، لأنها لا تقاس ولا تتحدد بمقدار.'),'أَمَّا الْحَرَكَةُ وَاللَّوْنُ وَالصَّوْتُ وَالضَّوْءُ وَالْحَرَارَةُ، فَلَيْسَتْ كَمِّيَّاتٍ فِيزْيَائِيَّةً، لِأَنَّهَا لَا تُقَاسُ وَلَا تَتَحَدَّدُ بِمِقْدَارْ.')]},
   goals:{title:'أهداف الوحدة',sayT:'وَالْآنَ، لِنَتَعَرَّفْ عَلَى أَهْدَافِ الْوِحْدَةِ.',steps:()=>[
     S({html:`<div class="kc kPt kKeep kcB">في نهاية هذه الوحدة يكون المتدرب قادرا على:</div>`},'فِي نِهَايَةِ هَذِهِ الْوِحْدَةِ، يَكُونُ الْمُتَدَرِّبُ قَادِرًا عَلَى:'),
@@ -1985,7 +1977,7 @@ CARDS['0-1']={
     S(pt('للكميات الفيزيائية نوعان:'),'لِلْكَمِّيَّاتِ الْفِيزْيَائِيَّةِ نَوْعَانِ:'),
     S(pt(B('1. الكميات الأساسية')+': كميات معرفة بذاتها، ولا تعرف بدلالة كميات فيزيائية أخرى، وعددها سبع.'),'الْأَوَّلُ: الْكَمِّيَّاتُ الْأَسَاسِيَّةُ، وَهِيَ كَمِّيَّاتٌ مُعَرَّفَةٌ بِذَاتِهَا، وَلَا تُعَرَّفُ بِدَلَالَةِ كَمِّيَّاتٍ فِيزْيَائِيَّةٍ أُخْرَى، وَعَدَدُهَا سَبْعْ.'),
     S(pt(B('2. الكميات المشتقة')+': كميات تشتق من الكميات الأساسية، وتعرف بدلالتها.'),'وَالثَّانِي: الْكَمِّيَّاتُ الْمُشْتَقَّةُ، وَهِيَ كَمِّيَّاتٌ تُشْتَقُّ مِنَ الْكَمِّيَّاتِ الْأَسَاسِيَّةِ، وَتُعَرَّفُ بِدَلَالَتِهَا.'),
-    S(fig(qTypes(),'نقسم الطول على الزمن فنحصل على السرعة، وهي كمية مشتقة'),'لَاحِظِ الرَّسْمَ: نَقْسِمُ الطُّولَ عَلَى الزَّمَنِ، فَنَحْصُلُ عَلَى السُّرْعَةِ، وَهِيَ كَمِّيَّةٌ مُشْتَقَّةٌ مِنْ كَمِّيَّتَيْنِ أَسَاسِيَّتَيْنِ.'),
+    S(fig(qTypes(),'نقسم الطول على الزمن فنحصل على السرعة، وهي كمية مشتقة'),'لَاحِظِ الصُّورَةَ: نَقْسِمُ الطُّولَ عَلَى الزَّمَنِ، فَنَحْصُلُ عَلَى السُّرْعَةِ، وَهِيَ كَمِّيَّةٌ مُشْتَقَّةٌ مِنْ كَمِّيَّتَيْنِ أَسَاسِيَّتَيْنِ.'),
     S(pt('وأي كمية غير الكميات الأساسية السبع تعد كمية مشتقة، مثل: المساحة والحجم والكثافة والسرعة والتسارع والقوة والطاقة والضغط.'),'وَأَيُّ كَمِّيَّةٍ غَيْرِ الْكَمِّيَّاتِ الْأَسَاسِيَّةِ السَّبْعِ تُعَدُّ كَمِّيَّةً مُشْتَقَّةً، مِثْلَ: الْمِسَاحَةِ، وَالْحَجْمِ، وَالْكَثَافَةِ، وَالسُّرْعَةِ، وَالتَّسَارُعِ، وَالْقُوَّةِ، وَالطَّاقَةِ، وَالضَّغْطِ.')]},
   base:{title:'الكميات الأساسية في النظام الدولي SI',sayT:'لِنَتَعَرَّفِ الْآنَ عَلَى الْكَمِّيَّاتِ الْأَسَاسِيَّةِ السَّبْعِ، وَوَحَدَاتِهَا فِي النِّظَامِ الدَّوْلِيِّ.',steps:()=>[
     S({html:`<div class="kc kUH"><span>الكمية</span><span>رمز الكمية</span><span>وحدة القياس</span><span>رمز الوحدة</span></div>`},'هَذَا جَدْوَلُ الْكَمِّيَّاتِ الْأَسَاسِيَّةِ، نَقْرَؤُهُ مَعًا.')].concat(U01.map(([n,sy,u,us,ic],i)=>S({html:`<div class="kc kUR"><span style="display:flex;align-items:center;gap:2px">${qIco(ic)}${n}</span><span>${M(sy==='I_v'?'I<sub>v</sub>':sy)}</span><span>${u}</span><span class="kUS">${M(us)}</span></div>`},SAYU01[i])))},
@@ -2017,7 +2009,227 @@ function apply01(out){defs();const K2='0-1',T=sl=>String(sl.title||''),base=t=>t
     const m=R.find(([re])=>re.test(base(t)));if(!m||sl.type!=='c'){res.push(sl);return}
     skip=base(t);const n=m[1](sl);if(Array.isArray(n))n.forEach(x=>x&&res.push(x));else if(n)res.push(n);if(n===sl)skip=null});
   return res}
-function apply(out,K2){if(!CARDS[K2])return out;defs();if(K2==='0-1')return apply01(out);if(K2==='4-1')return apply41(out);if(K2==='4-8')return apply48(out);if(K2==='4-5')return apply45(out);if(K2==='3-3')return V33(apply33(out));if(K2==='3-4')return apply34(out);if(K2==='3-5')return apply35(out);if(K2==='3-6')return apply36(out);
+/* ===== الدروس النموذجية للوحدة الأولى 0-2 و0-4 و0-5 و0-6 (الحقيبة التدريبية صفحات 13-23) — 5 نوفمبر ===== */
+/* سهم مجسم بأي اتجاه */
+function vArr(x1,y1,x2,y2,c,th,lab,lx,ly,dash){th=th||7;const dx=x2-x1,dy=y2-y1,L=Math.hypot(dx,dy)||1,ux=dx/L,uy=dy/L,nx=-uy,ny=ux,hl=Math.min(20,L*.4),hw=th*1.25,bx=x2-ux*hl,by=y2-uy*hl;
+  const P=(o)=>[[x1+nx*th/2,y1+ny*th/2],[bx+nx*th/2,by+ny*th/2],[bx+nx*hw,by+ny*hw],[x2,y2],[bx-nx*hw,by-ny*hw],[bx-nx*th/2,by-ny*th/2],[x1-nx*th/2,y1-ny*th/2]].map(([a,b])=>f1(a+o)+','+f1(b+o*1.5)).join(' ');
+  let g=dash?`<line x1="${f1(x1)}" y1="${f1(y1)}" x2="${f1(x2)}" y2="${f1(y2)}" stroke="${c}" stroke-width="2.4" stroke-dasharray="7 6"/>`:`<polygon points="${P(2)}" fill="#0f172a" opacity=".22"/><polygon points="${P(0)}" fill="${c}" stroke="rgba(255,255,255,.55)" stroke-width="1"/>`;
+  if(lab)g+=`<text x="${f1(lx)}" y="${f1(ly)}" text-anchor="middle" font-size="17" font-weight="900" fill="${c}" direction="ltr" style="paint-order:stroke;stroke:#fff;stroke-width:4px">${lab}</text>`;return g}
+const dg=a=>a*Math.PI/180;
+function arcA(cx,cy,r,a0,a1,c,lab){const p=a=>[cx+r*Math.cos(dg(a)),cy-r*Math.sin(dg(a))],[x0,y0]=p(a0),[x1,y1]=p(a1),m=p((a0+a1)/2),q=[cx+(r+16)*Math.cos(dg((a0+a1)/2)),cy-(r+16)*Math.sin(dg((a0+a1)/2))];
+  return `<path d="M${f1(x0)},${f1(y0)} A${r},${r} 0 ${a1-a0>180?1:0} 0 ${f1(x1)},${f1(y1)}" fill="none" stroke="${c||'#7c3aed'}" stroke-width="2.2"/><text x="${f1(q[0])}" y="${f1(q[1]+5)}" text-anchor="middle" font-size="15" font-weight="900" fill="${c||'#7c3aed'}" direction="ltr">${lab||''}</text>`}
+/* ورقة رسم بياني مجسمة على الطاولة */
+function gPaper(W,H){return `<rect x="22" y="18" width="${W-44}" height="${H-48}" rx="10" fill="#fffdf5" stroke="#d6b48a" stroke-width="3"/>`+Array.from({length:Math.floor((W-60)/24)},(_,i)=>`<line x1="${30+i*24}" y1="24" x2="${30+i*24}" y2="${H-36}" stroke="#e7dcc6" stroke-width="1"/>`).join('')+Array.from({length:Math.floor((H-60)/24)},(_,i)=>`<line x1="28" y1="${30+i*24}" x2="${W-28}" y2="${30+i*24}" stroke="#e7dcc6" stroke-width="1"/>`).join('')+`<rect x="22" y="${H-30}" width="${W-44}" height="10" rx="3" fill="#c49a6c"/>`}
+/* محصلة متجهين ذيلا على ذيل */
+function vRes(o){const W=640,H=300,ox=150,oy=230,s=o.s||22;let b=svg0(W,H)+gPaper(W,H);
+  const A=[ox+o.A*s,oy],t=dg(o.t),Bp=[ox+o.B*s*Math.cos(t),oy-o.B*s*Math.sin(t)],C=[A[0]+Bp[0]-ox,A[1]+Bp[1]-oy];
+  b+=vArr(A[0],A[1],C[0],C[1],'#94a3b8',2.5,'','','',1)+vArr(Bp[0],Bp[1],C[0],C[1],'#94a3b8',2.5,'','','',1);
+  b+=arcA(ox,oy,40,0,o.t,'#7c3aed','θ = '+o.t+'°');
+  b+=vArr(ox,oy,A[0],A[1],'#dc2626',8,'A = '+o.A,(ox+A[0])/2,oy+28)+vArr(ox,oy,Bp[0],Bp[1],'#2563eb',8,'B = '+o.B,(ox+Bp[0])/2-30,(oy+Bp[1])/2-6);
+  if(o.res!==false)b+=`<g class="kAr" style="--d:.6s">${vArr(ox,oy,C[0],C[1],'#16a34a',9,o.res||'C',(ox+C[0])/2+40,(oy+C[1])/2-10)}</g>`;
+  b+=`<circle cx="${ox}" cy="${oy}" r="5" fill="#0f172a"/>`;return b+'</svg>'}
+function svg0(W,H){return `<svg class="kSvg kAuto" viewBox="0 0 ${W} ${H}" role="img" aria-hidden="true"><rect width="${W}" height="${H}" fill="url(#kc-bg)"/>`}
+/* تحليل متجه إلى مركبتين */
+function vComp(o){const W=640,H=320,ox=170,oy=260,s=o.s||40;let b=svg0(W,H)+gPaper(W,H);
+  b+=vArr(ox-40,oy,W-60,oy,'#334155',2.5)+vArr(ox,oy+20,ox,40,'#334155',2.5)+`<text x="${W-52}" y="${oy+22}" font-size="16" font-weight="800" fill="#334155">x</text><text x="${ox+10}" y="48" font-size="16" font-weight="800" fill="#334155">y</text>`;
+  const t=dg(o.t),ax=ox+o.A*s*Math.cos(t),ay=oy-o.A*s*Math.sin(t);
+  b+=`<line x1="${f1(ax)}" y1="${f1(ay)}" x2="${f1(ax)}" y2="${oy}" stroke="#64748b" stroke-width="1.8" stroke-dasharray="6 5"/><line x1="${f1(ax)}" y1="${f1(ay)}" x2="${ox}" y2="${f1(ay)}" stroke="#64748b" stroke-width="1.8" stroke-dasharray="6 5"/>`;
+  b+=arcA(ox,oy,46,0,o.t,'#7c3aed','θ = '+o.t+'°');
+  b+=`<g class="kAr" style="--d:.5s">${vArr(ox,oy,ax,oy,'#dc2626',8,o.ax||'Aₓ',(ox+ax)/2,oy+30)}</g><g class="kAr" style="--d:.9s">${vArr(ox,oy,ox,ay,'#2563eb',8,o.ay||'Aᵧ',ox-48,(oy+ay)/2)}</g>`;
+  b+=vArr(ox,oy,ax,ay,'#16a34a',9,o.lab||'A',(ox+ax)/2+38,(oy+ay)/2-8)+`<circle cx="${ox}" cy="${oy}" r="5" fill="#0f172a"/>`;return b+'</svg>'}
+/* محاور ثلاثية الأبعاد ومتجهات الوحدة */
+function vUnit(){const W=640,H=300,ox=300,oy=190;let b=svg0(W,H)+gPaper(W,H);
+  b+=vArr(ox,oy,ox+230,oy,'#334155',2.5)+vArr(ox,oy,ox,30,'#334155',2.5)+vArr(ox,oy,ox-150,oy+80,'#334155',2.5);
+  b+=`<text x="${ox+238}" y="${oy+6}" font-size="17" font-weight="800" fill="#334155">x</text><text x="${ox-6}" y="26" font-size="17" font-weight="800" fill="#334155">y</text><text x="${ox-168}" y="${oy+96}" font-size="17" font-weight="800" fill="#334155">z</text>`;
+  b+=`<g class="kAr" style="--d:.3s">${vArr(ox,oy,ox+80,oy,'#dc2626',9,'î',ox+60,oy+30)}</g><g class="kAr" style="--d:.7s">${vArr(ox,oy,ox,oy-80,'#16a34a',9,'ĵ',ox+24,oy-58)}</g><g class="kAr" style="--d:1.1s">${vArr(ox,oy,ox-62,oy+33,'#2563eb',9,'k̂',ox-74,oy+20)}</g>`;
+  b+=`<circle cx="${ox}" cy="${oy}" r="5" fill="#0f172a"/><text x="470" y="64" text-anchor="middle" font-size="15" font-weight="900" fill="#1e3a5f">مقدار كل متجه وحدة = 1</text>`;return b+'</svg>'}
+/* الضرب القياسي: مسقط B على A */
+function vDot(){const W=640,H=280,ox=150,oy=220;let b=svg0(W,H)+gPaper(W,H);const t=dg(40),B=[ox+250*Math.cos(t),oy-250*Math.sin(t)],px=ox+250*Math.cos(t);
+  b+=`<line x1="${f1(B[0])}" y1="${f1(B[1])}" x2="${f1(px)}" y2="${oy}" stroke="#64748b" stroke-width="1.8" stroke-dasharray="6 5"/>`;
+  b+=arcA(ox,oy,50,0,40,'#7c3aed','θ');
+  b+=vArr(ox,oy,ox+380,oy,'#dc2626',8,'A',ox+380,oy+28)+vArr(ox,oy,B[0],B[1],'#2563eb',8,'B',B[0]+14,B[1]-8);
+  b+=`<line x1="${ox}" y1="${oy+14}" x2="${f1(px)}" y2="${oy+14}" stroke="#16a34a" stroke-width="5" stroke-linecap="round" class="kAr" style="--d:.6s"/><text x="${f1((ox+px)/2)}" y="${oy+36}" text-anchor="middle" font-size="15" font-weight="900" fill="#16a34a" direction="ltr">|B| cos θ</text>`;
+  b+=`<text x="470" y="62" text-anchor="middle" font-size="15" font-weight="900" fill="#1e3a5f">الناتج عدد (كمية قياسية)</text>`;return b+'</svg>'}
+/* الضرب الاتجاهي: الناتج عمودي على مستوى المتجهين */
+function vCross(){const W=640,H=300,ox=290,oy=210;let b=svg0(W,H)+gPaper(W,H);
+  b+=`<polygon points="${ox-170},${oy+40} ${ox+150},${oy+40} ${ox+230},${oy-40} ${ox-90},${oy-40}" fill="#dbeafe" fill-opacity=".7" stroke="#93c5fd" stroke-width="2"/>`;
+  b+=vArr(ox,oy,ox+190,oy+10,'#dc2626',8,'A',ox+200,oy+34)+vArr(ox,oy,ox+70,oy-34,'#2563eb',8,'B',ox+92,oy-40);
+  b+=arcA(ox,oy,44,-3,26,'#7c3aed','θ');
+  b+=`<g class="kAr" style="--d:.6s">${vArr(ox,oy,ox,40,'#16a34a',9,'A × B',ox-50,70)}</g><circle cx="${ox}" cy="${oy}" r="5" fill="#0f172a"/>`;
+  b+=`<text x="${ox-120}" y="${oy+66}" font-size="14" font-weight="800" fill="#1d4ed8">مستوى المتجهين</text>`;return b+'</svg>'}
+/* لوحة سرعة على الطريق */
+function speedSign(){const W=640,H=270,FY=210;let b=stage(W,H,FY);
+  b+=`<path d="M0,${FY-4} L${W},${FY-4} L${W},${FY+30} L0,${FY+30}Z" fill="#475569"/><line x1="0" y1="${FY+13}" x2="${W}" y2="${FY+13}" stroke="#f8fafc" stroke-width="3" stroke-dasharray="22 16"/>`;
+  b+=`<defs><radialGradient id="kc-sg" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#e2e8f0"/></radialGradient><linearGradient id="kc-pl" x1="0" x2="1"><stop offset="0" stop-color="#64748b"/><stop offset=".45" stop-color="#e2e8f0"/><stop offset="1" stop-color="#475569"/></linearGradient></defs>`;
+  b+=`<ellipse cx="170" cy="${FY-2}" rx="22" ry="5" fill="#1e3a5f" opacity=".3"/><rect x="164" y="80" width="12" height="${FY-80}" fill="url(#kc-pl)"/><circle cx="173" cy="78" r="58" fill="#7f1d1d"/><circle cx="170" cy="74" r="58" fill="#dc2626"/><circle cx="170" cy="74" r="44" fill="url(#kc-sg)"/><text x="170" y="86" text-anchor="middle" font-size="34" font-weight="900" fill="#0f172a">72</text><text x="170" y="104" text-anchor="middle" font-size="11" font-weight="800" fill="#334155" direction="ltr">km/h</text>`;
+  b+=`<g class="kAr" style="--d:.4s">${arrow(260,350,96,'F',0,10)}</g>`+pill(470,70,'72 km/h ÷ 3.6','#0369a1',.6)+pill(470,126,'= 20 m/s','#16a34a',1);
+  return svg(W,H+30,b,'kAuto')}
+/* الميزان: وحدتا طرفي القانون متساويتان */
+function unitBal(L,R){const W=640,H=280,FY=236;let b=`<rect width="${W}" height="${H}" fill="url(#kc-bg)"/>`+kBench(120,FY,10,630);
+  const sc=(x,t,c,lab)=>{const w=220,h=w*583/900,y=FY-14-h;return kSh(x+w/2,FY-12,w*.48)+kIM('73-balance-empty',x,y,w,h)+`<text x="${f1(x+w*.40)}" y="${f1(y+h*.806+8)}" font-size="${t.length>6?15:20}" font-weight="900" text-anchor="middle" fill="#14532D" direction="ltr" font-family="Consolas,monospace">${t}</text><text x="${f1(x+w/2)}" y="${f1(y-14)}" text-anchor="middle" font-size="15" font-weight="900" fill="${c}">${lab}</text>`};
+  b+=sc(370,L,'#b91c1c','الطرف الأيسر')+sc(50,R,'#1d4ed8','الطرف الأيمن')+`<text x="320" y="${FY-56}" text-anchor="middle" font-size="40" font-weight="900" fill="#15803d">=</text><text x="320" y="24" text-anchor="middle" font-size="16" font-weight="900" fill="#15803d">الوحدتان متساويتان ✓ القانون صحيح</text>`;
+  return svg(W,H,b,'kAuto')}
+
+function clBench0(top,fy,x0,x1){const ins=Math.min(26,(fy-top)*.7);let g=`<path d="M${x0+ins},${top} L${x1-ins},${top} L${x1},${fy} L${x0},${fy}Z" fill="#d9a86c" stroke="#7C4A1F" stroke-width=".8"/>`;g+=`<rect x="${x0}" y="${fy}" width="${x1-x0}" height="12" fill="#8a5a30" stroke="#5B3517" stroke-width=".8"/>`;return g}
+/* الكمية القياسية والمتجهة: صندوق كتلته 5 kg وقوة 10 N نحو اليمين */
+function sVsV(){const W=640,H=260,FY=210;let b=`<rect width="${W}" height="${H}" fill="url(#kc-bg)"/>`+kBench(110,FY,10,630);
+  /* جسمان متماثلان (أسطوانة الكتلة الحقيقية): الأول كتلته فقط، والثاني تؤثر فيه قوة باتجاه (طلب المدرب 05:43) */
+  const cw=96,ch=cw*900/649,cyl=(x)=>kSh(x+cw/2,FY-18,cw*.55)+kIM('26-cylinder-mass',x,FY-18-ch,cw,ch);
+  b+=cyl(90)+`<text x="${90+cw/2}" y="${f1(FY-18-ch*.45)}" text-anchor="middle" font-size="17" font-weight="900" fill="#fff" direction="ltr" style="paint-order:stroke;stroke:#1e3a8a;stroke-width:3px">m = 5 kg</text>`;
+  b+=cyl(360)+arrow(462,600,FY-18-ch*.5,'F',.3,12)+pill(530,FY-18-ch*.5-34,'F = 10 N','#b45309',.5);
+  b+=`<text x="138" y="30" text-anchor="middle" font-size="15" font-weight="900" fill="#b45309">قياسية: مقدار ووحدة</text><text x="470" y="30" text-anchor="middle" font-size="15" font-weight="900" fill="#1d4ed8">متجهة: مقدار ووحدة واتجاه</text>`;
+  return svg(W,H,b,'kAuto')}
+
+const RW=(t)=>pt('<b>'+t[0]+':</b> '+t[1]);
+CARDS['0-2']={
+  rule:{title:'قاعدة التحويل',sayT:'تَعَرَّفْنَا فِي الدَّرْسِ السَّابِقِ عَلَى قَوَاعِدِ التَّحْوِيلِ، وَالْيَوْمَ نُطَبِّقُهَا، ثُمَّ نَتَعَلَّمُ التَّحَقُّقَ مِنْ صِحَّةِ الْقَوَانِينْ.',steps:()=>[
+    S(pt('من وحدة '+B('كبيرة')+' إلى وحدة '+B('صغيرة')+' نضرب، ومن وحدة '+B('صغيرة')+' إلى وحدة '+B('كبيرة')+' نقسم.'),'مِنْ وَحْدَةٍ كَبِيرَةٍ إِلَى وَحْدَةٍ صَغِيرَةٍ نَضْرِبُ، وَمِنْ وَحْدَةٍ صَغِيرَةٍ إِلَى وَحْدَةٍ كَبِيرَةٍ نَقْسِمُ.'),
+    S(pt(M('1 kg = 1000 g')+' ، '+M('1 km = 1000 m')+' ، '+M('1 h = 3600 s')),'وَنَتَذَكَّرُ: الْكِيلُوجْرَامُ أَلْفُ جْرَامٍ، وَالْكِيلُومِتْرُ أَلْفُ مِتْرٍ، وَالسَّاعَةُ ثَلَاثَةُ آلَافٍ وَسِتُّ مِئَةِ ثَانِيَهْ.')]},
+  speed:{title:'تحويل السرعة',sayT:'وَمِنْ أَهَمِّ التَّحْوِيلَاتِ تَحْوِيلُ السُّرْعَةِ.',steps:()=>[
+    S(pt('من '+M('km/h')+' إلى '+M('m/s')+': نضرب في 1000 ونقسم على 3600، أي نقسم على '+M('3.6')+'.'),'مِنْ كِيلُومِتْرٍ لِكُلِّ سَاعَةٍ إِلَى مِتْرٍ لِكُلِّ ثَانِيَةٍ: نَضْرِبُ فِي أَلْفٍ، وَنَقْسِمُ عَلَى ثَلَاثَةِ آلَافٍ وَسِتِّ مِئَةٍ، أَيْ نَقْسِمُ عَلَى ثَلَاثَةٍ فَاصِلَةٍ سِتَّهْ.'),
+    S(pt('ومن '+M('m/s')+' إلى '+M('km/h')+': نضرب في '+M('3.6')+'.'),'وَمِنْ مِتْرٍ لِكُلِّ ثَانِيَةٍ إِلَى كِيلُومِتْرٍ لِكُلِّ سَاعَةٍ: نَضْرِبُ فِي ثَلَاثَةٍ فَاصِلَةٍ سِتَّهْ.'),
+    S(fig(speedSign(),'لوحة السرعة 72 km/h تساوي 20 m/s'),'لَاحِظْ لَوْحَةَ السُّرْعَةِ عَلَى الطَّرِيقِ: اثْنَانِ وَسَبْعُونَ كِيلُومِتْرًا لِكُلِّ سَاعَةٍ، نَقْسِمُهَا عَلَى ثَلَاثَةٍ فَاصِلَةٍ سِتَّةٍ، فَتُسَاوِي عِشْرِينَ مِتْرًا لِكُلِّ ثَانِيَهْ.')]},
+  prefix:{title:'البادئات الشائعة في النظام الدولي',sayT:'وَلِلتَّحْوِيلِ بَيْنَ أَجْزَاءِ الْوَحَدَاتِ وَمُضَاعَفَاتِهَا نَسْتَخْدِمُ الْبَادِئَاتِ.',steps:()=>{const P=[['جيجا','G','10⁹','جِيجَا، رَمْزُهَا G، وَتُسَاوِي عَشَرَةً أُسَّ تِسْعَهْ.'],['ميجا','M','10⁶','مِيجَا، رَمْزُهَا M، وَتُسَاوِي عَشَرَةً أُسَّ سِتَّهْ.'],['كيلو','k','10³','كِيلُو، رَمْزُهَا k، وَتُسَاوِي أَلْفَا.'],['سنتي','c','10⁻²','سَنْتِي، رَمْزُهَا c، وَتُسَاوِي عَشَرَةً أُسَّ سَالِبِ اثْنَيْنْ.'],['ملي','m','10⁻³','مِلِّي، رَمْزُهَا m، وَتُسَاوِي عَشَرَةً أُسَّ سَالِبِ ثَلَاثَهْ.'],['ميكرو','µ','10⁻⁶','مِيكْرُو، رَمْزُهَا مْيُو، وَتُسَاوِي عَشَرَةً أُسَّ سَالِبِ سِتَّهْ.'],['نانو','n','10⁻⁹','نَانُو، رَمْزُهَا n، وَتُسَاوِي عَشَرَةً أُسَّ سَالِبِ تِسْعَهْ.']];
+    return [S({html:`<div class="kc kUH"><span>البادئة</span><span>الرمز</span><span>القيمة</span><span>مثال</span></div>`},'هَذَا جَدْوَلُ الْبَادِئَاتِ الشَّائِعَةِ، مِنَ الْمَرَاجِعِ الْعِلْمِيَّةِ لِلنِّظَامِ الدَّوْلِيِّ.')].concat(P.map(([n,sy,v,sa])=>S({html:`<div class="kc kUR"><span>${n}</span><span>${M(sy)}</span><span>${M(v)}</span><span class="kUS">${M(sy+'m')}</span></div>`},sa))).concat([S(pt('<small>المصدر: المراجع العلمية للنظام الدولي للوحدات SI.</small>'),'')])}},
+  factors:{title:'عوامل تحويل مفيدة',sayT:'وَهَذِهِ عَوَامِلُ تَحْوِيلٍ نَحْتَاجُهَا كَثِيرَا.',steps:()=>{const F=[['km/h','m/s','÷ 3.6','مِنْ كِيلُومِتْرٍ لِكُلِّ سَاعَةٍ إِلَى مِتْرٍ لِكُلِّ ثَانِيَةٍ، نَقْسِمُ عَلَى ثَلَاثَةٍ فَاصِلَةٍ سِتَّهْ.'],['m/s','km/h','× 3.6','وَالْعَكْسُ نَضْرِبُ فِي ثَلَاثَةٍ فَاصِلَةٍ سِتَّهْ.'],['m','cm','× 100','مِنَ الْمِتْرِ إِلَى السَّنْتِيمِتْرِ، نَضْرِبُ فِي مِئَهْ.'],['kg','g','× 1000','مِنَ الْكِيلُوجْرَامِ إِلَى الْجْرَامِ، نَضْرِبُ فِي أَلْفْ.'],['h','s','× 3600','مِنَ السَّاعَةِ إِلَى الثَّانِيَةِ، نَضْرِبُ فِي ثَلَاثَةِ آلَافٍ وَسِتِّ مِئَهْ.'],['km²','m²','× 10⁶','مِنَ الْكِيلُومِتْرِ الْمُرَبَّعِ إِلَى الْمِتْرِ الْمُرَبَّعِ، نَضْرِبُ فِي عَشَرَةٍ أُسَّ سِتَّهْ.'],['g/cm³','kg/m³','× 1000','مِنْ جْرَامٍ لِكُلِّ سَنْتِيمِتْرٍ مُكَعَّبٍ، إِلَى كِيلُوجْرَامٍ لِكُلِّ مِتْرٍ مُكَعَّبٍ، نَضْرِبُ فِي أَلْفْ.'],['L','m³','× 10⁻³','وَمِنَ اللِّتْرِ إِلَى الْمِتْرِ الْمُكَعَّبِ، نَضْرِبُ فِي عَشَرَةٍ أُسَّ سَالِبِ ثَلَاثَهْ.']];
+    return [S({html:`<div class="kc kUH"><span>من</span><span>إلى</span><span>العملية</span></div>`},'نَقْرَأُ جَدْوَلَ عَوَامِلِ التَّحْوِيلِ.')].concat(F.map(([a,b,o,sa])=>S({html:`<div class="kc kUR"><span>${M(a)}</span><span>${M(b)}</span><span class="kUS">${M(o)}</span></div>`},sa))).concat([S(pt('عند تحويل المساحة أو الحجم نرفع عامل تحويل الطول إلى الأس 2 أو 3.'),'وَعِنْدَ تَحْوِيلِ الْمِسَاحَةِ أَوِ الْحَجْمِ، نَرْفَعُ عَامِلَ تَحْوِيلِ الطُّولِ إِلَى الْأُسِّ اثْنَيْنِ أَوْ ثَلَاثَهْ.'),S(pt('<small>المصدر: المراجع العلمية للنظام الدولي للوحدات SI.</small>'),'')])}},
+  check:{title:'التحقق من صحة القانون بالوحدات',sayT:'وَالْآنَ نَنْتَقِلُ إِلَى اسْتِخْدَامِ الْوَحَدَاتِ لِلتَّأَكُّدِ مِنْ صِحَّةِ الْقَوَانِينِ الْفِيزْيَائِيَّهْ.',steps:()=>[
+    S(pt(B('1.')+' نكتب وحدة كل رمز في القانون بوحدات النظام الدولي SI.'),'أَوَّلًا: نَكْتُبُ وَحْدَةَ كُلِّ رَمْزٍ فِي الْقَانُونِ بِوَحَدَاتِ النِّظَامِ الدَّوْلِيِّ.'),
+    S(pt(B('2.')+' نعوض الوحدات في الطرف الأيسر والطرف الأيمن كلا على حدة، ونبسطها.'),'ثَانِيًا: نُعَوِّضُ الْوَحَدَاتِ فِي الطَّرَفِ الْأَيْسَرِ وَالطَّرَفِ الْأَيْمَنِ، كُلًّا عَلَى حِدَةٍ، وَنُبَسِّطُهَا.'),
+    S(pt(B('3.')+' عند الجمع أو الطرح يجب أن تكون وحدات الحدود متساوية.'),'ثَالِثًا: عِنْدَ الْجَمْعِ أَوِ الطَّرْحِ، يَجِبُ أَنْ تَكُونَ وَحَدَاتُ الْحُدُودِ مُتَسَاوِيَةً.'),
+    S(pt(B('4.')+' إذا تساوت وحدتا الطرفين فالقانون '+B('صحيح')+'، وإذا اختلفتا فهو '+B('خاطئ')+'.'),'رَابِعًا: إِذَا تَسَاوَتْ وَحْدَتَا الطَّرَفَيْنِ فَالْقَانُونُ صَحِيحٌ، وَإِذَا اخْتَلَفَتَا فَهُوَ خَاطِئٌ.'),
+    S(fig(unitBal('N','kg·m/s²'),'مثل ميزانين يقرآن الوحدة نفسها'),'الْقَانُونُ صَحِيحٌ إِذَا قَرَأَ الطَّرَفَانِ الْوَحْدَةَ نَفْسَهَا، مِثْلَ مِيزَانَيْنِ يَقْرَآنِ الْقِرَاءَةَ نَفْسَهَا.')]},
+  ex2:{title:'مثال ٢ · صفحة 13',sayT:'وَالْآنَ لِنَنْتَقِلْ إِلَى حَلِّ أَمْثِلَةِ الْحَقِيبَةِ التَّدْرِيبِيَّةِ. لِنَأْخُذِ الْمِثَالَ الثَّانِي، مِنْ صَفْحَةِ 13.',steps:()=>[
+    S(q('حول '+M('2 kg')+' إلى الجرام.','المثال · صفحة 13'),'حَوِّلِ اثْنَيْنِ كِيلُوجْرَامٍ إِلَى الْجْرَامِ.'),
+    S(gr(['m = 2 kg'],'الكتلة بالجرام '+M('g')),'الْمُعْطَى أَمَامَكَ عَلَى السَّبُّورَةِ، وَالْمَطْلُوبُ: الْكُتْلَةُ بِالْجْرَامِ.'),
+    S(st(1,'القاعدة: '+M('1 kg = 1000 g')+'، ومن كبيرة إلى صغيرة نضرب.'),'الْكِيلُوجْرَامُ أَلْفُ جْرَامٍ، وَمِنْ وَحْدَةٍ كَبِيرَةٍ إِلَى صَغِيرَةٍ نَضْرِبُ.'),
+    S(st(2,'التعويض: '+M('2 × 1000')),'نَضْرِبُ اثْنَيْنِ فِي أَلْفٍ.'),
+    S(res(M('2 kg = 2000 g')),'النَّتِيجَةُ: أَلْفَا جْرَامْ.')]},
+  ex3:{title:'مثال ٣ · صفحة 13',sayT:'وَتَأَمَّلْ مَعِي الْمِثَالَ الثَّالِثَ، مِنْ صَفْحَةِ 13.',steps:()=>[
+    S(q('حول '+M('20 km/h')+' إلى '+M('m/s')+'.','المثال · صفحة 13'),'حَوِّلْ عِشْرِينَ كِيلُومِتْرًا لِكُلِّ سَاعَةٍ، إِلَى مِتْرٍ لِكُلِّ ثَانِيَهْ.'),
+    S(gr(['v = 20 km/h'],'السرعة بوحدة '+M('m/s')),'الْمُعْطَى أَمَامَكَ عَلَى السَّبُّورَةِ، وَالْمَطْلُوبُ: السُّرْعَةُ بِوَحْدَةِ مِتْرٍ لِكُلِّ ثَانِيَهْ.'),
+    S(st(1,'القاعدة: '+M('1 km = 1000 m')+' و '+M('1 h = 3600 s')),'نُحَوِّلُ الْكِيلُومِتْرَ إِلَى أَمْتَارٍ، وَالسَّاعَةَ إِلَى ثَوَانٍ.'),
+    S(st(2,'التعويض: '+M('(20 × 1000) ÷ 3600')),'نَضْرِبُ عِشْرِينَ فِي أَلْفٍ، وَنَقْسِمُ عَلَى ثَلَاثَةِ آلَافٍ وَسِتِّ مِئَهْ.'),
+    S(st(3,'الحساب: '+M('20000 ÷ 3600 ≈ 5.56')+'<span class="kDirOn"></span>'),'فَيَكُونُ النَّاتِجُ خَمْسَةً فَاصِلَةً سِتَّةً وَخَمْسِينَ تَقْرِيبَا.'),
+    S(res(M('20 km/h ≈ 5.56 m/s')),'النَّتِيجَةُ: خَمْسَةٌ فَاصِلَةٌ سِتَّةٌ وَخَمْسُونَ مِتْرًا لِكُلِّ ثَانِيَهْ.')]},
+  law1:{title:'مثال ١ · صفحة 14',sayT:'وَنَنْتَقِلُ إِلَى أَمْثِلَةِ التَّحَقُّقِ مِنْ صِحَّةِ الْقَوَانِينِ، مِنْ صَفْحَةِ 14.',steps:()=>[
+    S(q('تأكد من صحة القانون '+M('F = m a')+' باستخدام الوحدات، حيث F القوة، و m الكتلة، و a التسارع.','المثال · صفحة 14'),'تَأَكَّدْ مِنْ صِحَّةِ قَانُونِ الْقُوَّةِ بِاسْتِخْدَامِ الْوَحَدَاتْ.'),
+    S(st(1,'الطرف الأيسر: '+M('F → N = kg·m/s²')),'الطَّرَفُ الْأَيْسَرُ: الْقُوَّةُ وَحْدَتُهَا النِّيُوتُنُ، وَيُسَاوِي كِيلُوجْرَامًا فِي مِتْرٍ لِكُلِّ ثَانِيَةٍ تَرْبِيعْ.'),
+    S(st(2,'الطرف الأيمن: '+M('m a → kg × m/s² = kg·m/s²')),'الطَّرَفُ الْأَيْمَنُ: كِيلُوجْرَامٌ فِي مِتْرٍ لِكُلِّ ثَانِيَةٍ تَرْبِيعْ.'),
+    S(fig(unitBal('kg·m/s²','kg·m/s²'),'وحدتا الطرفين متساويتان'),'الْوَحْدَتَانِ مُتَسَاوِيَتَانِ فِي الطَّرَفَيْنْ.'),
+    S(res('الطرفان متساويان، إذن القانون '+B('صحيح')),'النَّتِيجَةُ: الطَّرَفَانِ مُتَسَاوِيَانِ، إِذَنِ الْقَانُونُ صَحِيحْ.')]},
+  law2:{title:'مثال ٢ · صفحة 14',sayT:'وَالْمِثَالُ الثَّانِي، مِنْ صَفْحَةِ 14.',steps:()=>[
+    S(q('تأكد من صحة القانون '+M('vf = vi + a t')+' باستخدام الوحدات.','المثال · صفحة 14'),'تَأَكَّدْ مِنْ صِحَّةِ قَانُونِ السُّرْعَةِ النِّهَائِيَّةِ بِاسْتِخْدَامِ الْوَحَدَاتْ.'),
+    S(st(1,'الطرف الأيسر: '+M('vf → m/s')),'الطَّرَفُ الْأَيْسَرُ: السُّرْعَةُ النِّهَائِيَّةُ وَحْدَتُهَا مِتْرٌ لِكُلِّ ثَانِيَهْ.'),
+    S(st(2,'الطرف الأيمن: '+M('vi → m/s')+' و '+M('a t → m/s² × s = m/s')),'الطَّرَفُ الْأَيْمَنُ: حَدَّانِ مَجْمُوعَانِ، وَحْدَةُ كُلٍّ مِنْهُمَا مِتْرٌ لِكُلِّ ثَانِيَةٍ، فَيَجُوزُ جَمْعُهُمَا.'),
+    S(res(M('m/s = m/s')+' ، إذن القانون '+B('صحيح')),'النَّتِيجَةُ: الطَّرَفَانِ مُتَسَاوِيَانِ، إِذَنِ الْقَانُونُ صَحِيحْ.')]},
+  law3:{title:'مثال ٣ · صفحة 14',sayT:'وَالْمِثَالُ الثَّالِثُ، مِنْ صَفْحَةِ 14.',steps:()=>[
+    S(q('تأكد من صحة القانون '+M('W = F x')+' باستخدام الوحدات، حيث W الشغل، و F القوة، و x الإزاحة.','المثال · صفحة 14'),'تَأَكَّدْ مِنْ صِحَّةِ قَانُونِ الشُّغْلِ بِاسْتِخْدَامِ الْوَحَدَاتْ.'),
+    S(st(1,'الطرف الأيسر: '+M('W → J = kg·m²/s²')),'الطَّرَفُ الْأَيْسَرُ: الشُّغْلُ وَحْدَتُهُ الْجُولُ، وَيُسَاوِي كِيلُوجْرَامًا فِي مِتْرٍ مُرَبَّعٍ لِكُلِّ ثَانِيَةٍ تَرْبِيعْ.'),
+    S(st(2,'الطرف الأيمن: '+M('F x → N × m = kg·m²/s²')),'الطَّرَفُ الْأَيْمَنُ: نِيُوتُنُ فِي مِتْرٍ، وَيُسَاوِي الْوَحْدَةَ نَفْسَهَا.'),
+    S(res('الطرفان متساويان، إذن القانون '+B('صحيح')),'النَّتِيجَةُ: الطَّرَفَانِ مُتَسَاوِيَانِ، إِذَنِ الْقَانُونُ صَحِيحْ.')]}};
+CARDS['0-4']={
+  types:{title:'الكمية القياسية والكمية المتجهة',sayT:'نَبْدَأُ الْفَصْلَ الثَّانِيَ مِنَ الْوِحْدَةِ: الْكَمِّيَّةُ الْقِيَاسِيَّةُ وَالْكَمِّيَّةُ الْمُتَّجِهَهْ.',steps:()=>[
+    S(pt(B('الكمية القياسية')+': تتحدد بالمقدار ووحدة القياس فقط، مثل: الكتلة والزمن ودرجة الحرارة والمسافة.'),'الْكَمِّيَّةُ الْقِيَاسِيَّةُ: تَتَحَدَّدُ بِالْمِقْدَارِ وَوَحْدَةِ الْقِيَاسِ فَقَطْ، مِثْلَ: الْكُتْلَةِ، وَالزَّمَنِ، وَدَرَجَةِ الْحَرَارَةِ، وَالْمَسَافَهْ.'),
+    S(pt(B('الكمية المتجهة')+': تتحدد بالمقدار ووحدة القياس والاتجاه، مثل: السرعة والتسارع والقوة والإزاحة.'),'الْكَمِّيَّةُ الْمُتَّجِهَةُ: تَتَحَدَّدُ بِالْمِقْدَارِ وَوَحْدَةِ الْقِيَاسِ وَالِاتِّجَاهِ، مِثْلَ: السُّرْعَةِ، وَالتَّسَارُعِ، وَالْقُوَّةِ، وَالْإِزَاحَهْ.'),
+    S(fig(sVsV(),'كتلة الجسم لا تحتاج اتجاها، أما القوة فلها اتجاه'),'لَاحِظِ الصُّورَةَ: كُتْلَةُ الْجِسْمِ الْأَوَّلِ خَمْسَةُ كِيلُوجْرَامَاتٍ، لَا تَحْتَاجُ اتِّجَاهَا، أَمَّا الْقُوَّةُ الْمُؤَثِّرَةُ فِي الْجِسْمِ الثَّانِي فَلَهَا مِقْدَارٌ وَاتِّجَاهٌ نَحْوَ الْيَمِينْ.')]},
+  cos:{title:'قانون جيب التمام',sayT:'وَلِإِيجَادِ مِقْدَارِ مُحَصِّلَةِ مُتَّجِهَيْنِ، نَسْتَخْدِمُ قَانُونَ جَيْبِ التَّمَامْ.',steps:()=>[
+    S(pt(B('الحالة الأولى')+': إذا كان المتجهان ذيلا على ذيل.'),'الْحَالَةُ الْأُولَى: إِذَا كَانَ الْمُتَّجِهَانِ ذَيْلًا عَلَى ذَيْلْ.'),
+    Object.assign(S(pt('<div class="kLaw">'+M('C² = A² + B² + 2AB cos θ')+'</div>'),'وَالْقَانُونُ: `C² = A² + B² + 2AB cos θ`'),{md:'`C² = A² + B² + 2AB cos θ`'}),
+    S(pt(B('الحالة الثانية')+': إذا كان رأس المتجه الأول عند ذيل الثاني: '+M('C² = A² + B² − 2AB cos θ')),'الْحَالَةُ الثَّانِيَةُ: إِذَا كَانَ رَأْسُ الْمُتَّجِهِ الْأَوَّلِ عِنْدَ ذَيْلِ الثَّانِي، تُصْبِحُ الْإِشَارَةُ سَالِبَهْ.'),
+    S(fig(vRes({A:4,B:6,t:60,res:'C'}),'متجهان ذيلا على ذيل، والمحصلة قطر متوازي الأضلاع'),'لَاحِظِ الرَّسْمَ: الْمُتَّجِهَانِ يَبْدَآنِ مِنْ نُقْطَةٍ وَاحِدَةٍ، وَالْمُحَصِّلَةُ بِالْأَخْضَرِ هِيَ قُطْرُ مُتَوَازِي الْأَضْلَاعْ.'),
+    S(pt(B('ملحوظة')+': في الحالة الأولى θ هي الزاوية بين المتجهين، وإشارة '+M('cos θ')+' تتغير وحدها: موجبة إذا كانت θ أصغر من '+M('90°')+'، وسالبة إذا كانت أكبر.'),'مُلَاحَظَةٌ: إِشَارَةُ جَيْبِ التَّمَامِ تَتَغَيَّرُ وَحْدَهَا: مُوجَبَةٌ إِذَا كَانَتِ الزَّاوِيَةُ أَصْغَرَ مِنْ تِسْعِينَ دَرَجَةٍ، وَسَالِبَةٌ إِذَا كَانَتْ أَكْبَرْ.')]},
+  ex1:{title:'مثال ١ · صفحة 19',sayT:'وَالْآنَ لِنَنْتَقِلْ إِلَى حَلِّ أَمْثِلَةِ الْحَقِيبَةِ التَّدْرِيبِيَّةِ. لِنَأْخُذِ الْمِثَالَ الْأَوَّلَ، مِنْ صَفْحَةِ 19.',steps:()=>[
+    S(q('باستخدام قانون جيب التمام أوجد محصلة المتجهين '+M('A = 4')+' و '+M('B = 6')+'، والزاوية بينهما '+M('θ = 60°')+'.','المثال · صفحة 19'),''),
+    S(gr(['A = 4','B = 6','θ = 60°'],'مقدار المحصلة '+M('C')),'الْمُعْطَيَاتُ أَمَامَكَ عَلَى السَّبُّورَةِ، وَالْمَطْلُوبُ: مِقْدَارُ الْمُحَصِّلَهْ.'),
+    S(fig(vRes({A:4,B:6,t:60,res:'C ≈ 8.7'}),'المتجهان ذيلا على ذيل بزاوية 60°'),'لِنَرْسُمِ الْمُتَّجِهَيْنِ ذَيْلًا عَلَى ذَيْلْ.'),
+    S(st(1,'القانون: '+M('C² = A² + B² + 2AB cos θ')),'نَسْتَخْدِمُ الْحَالَةَ الْأُولَى، لِأَنَّ الْمُتَّجِهَيْنِ ذَيْلٌ عَلَى ذَيْلْ.'),
+    S(st(2,'التعويض: '+M('C² = 4² + 6² + 2(4)(6) cos 60°')),'نُعَوِّضُ الْقِيَمَ فِي الْقَانُونْ.'),
+    S(st(3,'الحساب: '+M('C² = 52 + 24 = 76')+' ← '+M('C = √76 ≈ 8.7')+'<span class="kDirOn"></span>'),'اثْنَانِ وَخَمْسُونَ زَائِدَ أَرْبَعَةٍ وَعِشْرِينَ يُسَاوِي سِتَّةً وَسَبْعِينَ، وَجَذْرُهَا ثَمَانِيَةٌ فَاصِلَةٌ سَبْعَةٌ تَقْرِيبَا.'),
+    S(res(M('C ≈ 8.7')),'النَّتِيجَةُ: الْمُحَصِّلَةُ ثَمَانِيَةٌ فَاصِلَةٌ سَبْعَةٌ تَقْرِيبَا.')]},
+  ex2:{title:'مثال ٢ · صفحة 19',sayT:'وَتَأَمَّلْ مَعِي الْمِثَالَ الثَّانِيَ، مِنْ صَفْحَةِ 19.',steps:()=>[
+    S(q('باستخدام قانون جيب التمام أوجد محصلة المتجهين '+M('A = 6')+' و '+M('B = 9')+'، والزاوية بينهما '+M('θ = 120°')+'.','المثال · صفحة 19'),''),
+    S(gr(['A = 6','B = 9','θ = 120°'],'مقدار المحصلة '+M('C')),'الْمُعْطَيَاتُ أَمَامَكَ عَلَى السَّبُّورَةِ، وَالْمَطْلُوبُ: مِقْدَارُ الْمُحَصِّلَهْ.'),
+    S(fig(vRes({A:6,B:9,t:120,s:18,res:'C ≈ 7.9'}),'المتجهان ذيلا على ذيل بزاوية منفرجة 120°'),'لِنَرْسُمِ الْمُتَّجِهَيْنِ، وَالزَّاوِيَةُ بَيْنَهُمَا مُنْفَرِجَهْ.'),
+    S(st(1,'القانون: '+M('C² = A² + B² + 2AB cos θ')),'الْقَانُونُ نَفْسُهُ، وَإِشَارَةُ جَيْبِ التَّمَامِ هُنَا سَالِبَهْ.'),
+    S(st(2,'التعويض: '+M('C² = 6² + 9² + 2(6)(9) cos 120°')),'نُعَوِّضُ الْقِيَمَ فِي الْقَانُونْ.'),
+    S(st(3,'الحساب: '+M('C² = 117 − 54 = 63')+' ← '+M('C = √63 ≈ 7.9')+'<span class="kDirOn"></span>'),'مِئَةٌ وَسَبْعَةَ عَشَرَ نَاقِصَ أَرْبَعَةٍ وَخَمْسِينَ يُسَاوِي ثَلَاثَةً وَسِتِّينَ، وَجَذْرُهَا سَبْعَةٌ فَاصِلَةٌ تِسْعَةٌ تَقْرِيبَا.'),
+    S(res(M('C ≈ 7.9')),'النَّتِيجَةُ: الْمُحَصِّلَةُ سَبْعَةٌ فَاصِلَةٌ تِسْعَةٌ تَقْرِيبَا.')]}};
+CARDS['0-5']={
+  comp:{title:'مركبات المتجه (طريقة التحليل)',sayT:'نَتَعَلَّمُ الْيَوْمَ تَحْلِيلَ الْمُتَّجِهِ إِلَى مُرَكَّبَتَيْنْ.',steps:()=>[
+    S(pt('أي متجه في الإحداثيات x و y يمكن تحليله إلى '+B('مركبة سينية')+' في اتجاه المحور السيني، و'+B('مركبة صادية')+' في اتجاه المحور الصادي.'),'أَيُّ مُتَّجِهٍ فِي الْإِحْدَاثِيَّاتِ الْكَارْتِيزِيَّةِ، يُمْكِنُ تَحْلِيلُهُ إِلَى مُرَكَّبَةٍ سِينِيَّةٍ فِي اتِّجَاهِ الْمِحْوَرِ السِّينِيِّ، وَمُرَكَّبَةٍ صَادِيَّةٍ فِي اتِّجَاهِ الْمِحْوَرِ الصَّادِي.'),
+    S(fig(vComp({A:4,t:60}),'المتجه A ومركبتاه على المحورين'),'لَاحِظِ الرَّسْمَ: الْمُتَّجِهُ بِالْأَخْضَرِ، وَمُرَكَّبَتُهُ السِّينِيَّةُ بِالْأَحْمَرِ، وَمُرَكَّبَتُهُ الصَّادِيَّةُ بِالْأَزْرَقْ.'),
+    Object.assign(S(pt('<div class="kLaw">'+M('Aₓ = A cos θ')+'</div>'),'الْمُرَكَّبَةُ السِّينِيَّةُ: `Aₓ = A cos θ`'),{md:'`Aₓ = A cos θ`'}),
+    Object.assign(S(pt('<div class="kLaw">'+M('Aᵧ = A sin θ')+'</div>'),'وَالْمُرَكَّبَةُ الصَّادِيَّةُ: `Aᵧ = A sin θ`'),{md:'`Aᵧ = A sin θ`'}),
+    S(pt('ويحسب مقدار المتجه من مركبتيه: '+M('A = √(Aₓ² + Aᵧ²)')),'وَيُحْسَبُ مِقْدَارُ الْمُتَّجِهِ مِنْ مُرَكَّبَتَيْهِ، بِالْجَذْرِ التَّرْبِيعِيِّ لِمَجْمُوعِ مُرَبَّعَيْهِمَا.')]},
+  ex1:{title:'مثال ١ · صفحة 20',sayT:'وَالْآنَ لِنَنْتَقِلْ إِلَى حَلِّ مِثَالِ الْحَقِيبَةِ التَّدْرِيبِيَّةِ، مِنْ صَفْحَةِ 20.',steps:()=>[
+    S(q('أوجد المركبة السينية والمركبة الصادية للمتجه '+M('A = 4')+' الذي يصنع زاوية '+M('60°')+' مع المحور السيني.','المثال · صفحة 20'),''),
+    S(gr(['A = 4','θ = 60°'],'المركبتان '+M('Aₓ')+' و '+M('Aᵧ')),'الْمُعْطَيَاتُ أَمَامَكَ عَلَى السَّبُّورَةِ، وَالْمَطْلُوبُ: الْمُرَكَّبَتَانِ السِّينِيَّةُ وَالصَّادِيَّهْ.'),
+    S(fig(vComp({A:4,t:60,ax:'Aₓ = 2',ay:'Aᵧ ≈ 3.46'}),'تحليل المتجه A = 4 بزاوية 60°'),'لِنَرْسُمِ الْمُتَّجِهَ وَمُرَكَّبَتَيْهْ.'),
+    S(st(1,'السينية: '+M('Aₓ = 4 cos 60° = 4 × 0.5 = 2')),'الْمُرَكَّبَةُ السِّينِيَّةُ: أَرْبَعَةٌ فِي نِصْفٍ، تُسَاوِي اثْنَيْنْ.'),
+    S(st(2,'الصادية: '+M('Aᵧ = 4 sin 60° ≈ 3.46')+'<span class="kDirOn"></span>'),'الْمُرَكَّبَةُ الصَّادِيَّةُ: أَرْبَعَةٌ فِي جَيْبِ سِتِّينَ، تُسَاوِي ثَلَاثَةً فَاصِلَةً سِتَّةً وَأَرْبَعِينَ تَقْرِيبَا.'),
+    S(res(M('Aₓ = 2')+' · '+M('Aᵧ ≈ 3.46')),'')]},
+  tr:{title:'تمرين · صفحة 21',sayT:'وَتَأَمَّلْ مَعِي التَّمْرِينَ، مِنْ صَفْحَةِ 21.',steps:()=>[
+    S(q('أوجد المركبة السينية والمركبة الصادية للمتجه '+M('A = 6')+' الذي يصنع زاوية '+M('θ = 45°')+' مع المحور السيني.','التمرين · صفحة 21'),''),
+    S(gr(['A = 6','θ = 45°'],'المركبتان '+M('Aₓ')+' و '+M('Aᵧ')),'الْمُعْطَيَاتُ أَمَامَكَ عَلَى السَّبُّورَةِ، وَالْمَطْلُوبُ: الْمُرَكَّبَتَانِ.'),
+    S(fig(vComp({A:6,t:45,s:30,ax:'Aₓ ≈ 4.24',ay:'Aᵧ ≈ 4.24'}),'عند الزاوية 45° تتساوى المركبتان'),'عِنْدَ الزَّاوِيَةِ خَمْسٍ وَأَرْبَعِينَ تَتَسَاوَى الْمُرَكَّبَتَانْ.'),
+    S(st(1,'السينية: '+M('Aₓ = 6 cos 45° ≈ 4.24')),'الْمُرَكَّبَةُ السِّينِيَّةُ: سِتَّةٌ فِي جَيْبِ تَمَامِ خَمْسٍ وَأَرْبَعِينَ، تُسَاوِي أَرْبَعَةً فَاصِلَةً أَرْبَعَةً وَعِشْرِينَ تَقْرِيبَا.'),
+    S(st(2,'الصادية: '+M('Aᵧ = 6 sin 45° ≈ 4.24')+'<span class="kDirOn"></span>'),'وَالْمُرَكَّبَةُ الصَّادِيَّةُ تُسَاوِيهَا.'),
+    S(res(M('Aₓ ≈ 4.24')+' · '+M('Aᵧ ≈ 4.24')),'')]}};
+CARDS['0-6']={
+  unit:{title:'متجهات الوحدة',sayT:'نَبْدَأُ دَرْسَنَا بِمُتَّجِهَاتِ الْوِحْدَهْ.',steps:()=>[
+    S(pt(B('متجه الوحدة')+': متجه له اتجاه معين، ومقداره يساوي واحدا.'),'مُتَّجِهُ الْوَحْدَةِ: مُتَّجِهٌ لَهُ اتِّجَاهٌ مُعَيَّنٌ، وَمِقْدَارُهُ يُسَاوِي وَاحِدَا.'),
+    S(pt('تستخدم للتعبير عن الاتجاه، ورموزها للمحاور x و y و z: '+M('î , ĵ , k̂')+'.'),'تُسْتَخْدَمُ لِلتَّعْبِيرِ عَنِ الِاتِّجَاهِ، وَرُمُوزُهَا لِلْمَحَاوِرِ الثَّلَاثَةِ: آيْ، وَجَيْ، وَكَيْ.'),
+    S(fig(vUnit(),'متجهات الوحدة على المحاور الثلاثة'),'لَاحِظِ الرَّسْمَ: لِكُلِّ مِحْوَرٍ مُتَّجِهُ وَحْدَةٍ مِقْدَارُهُ وَاحِدْ.')]},
+  dot:{title:'الضرب القياسي',sayT:'وَلِلْمُتَّجِهَاتِ نَوْعَانِ مِنَ الضَّرْبِ، أَوَّلُهُمَا الضَّرْبُ الْقِيَاسِيُّ.',steps:()=>[
+    S(pt(B('الضرب القياسي')+': حاصل ضرب مقدار المتجه الأول في مقدار المتجه الثاني في جيب تمام الزاوية بينهما، والنتيجة '+B('كمية قياسية')+'.'),'الضَّرْبُ الْقِيَاسِيُّ: حَاصِلُ ضَرْبِ مِقْدَارِ الْمُتَّجِهِ الْأَوَّلِ، فِي مِقْدَارِ الْمُتَّجِهِ الثَّانِي، فِي جَيْبِ تَمَامِ الزَّاوِيَةِ بَيْنَهُمَا، وَالنَّتِيجَةُ كَمِّيَّةٌ قِيَاسِيَّهْ.'),
+    Object.assign(S(pt('<div class="kLaw">'+M('A · B = |A| |B| cos θ')+'</div>'),'وَالْقَانُونُ: `A · B = |A| |B| cos θ`'),{md:'`A · B = |A| |B| cos θ`'}),
+    S(fig(vDot(),'الضرب القياسي: A مضروبا في مسقط B عليه'),'لَاحِظِ الرَّسْمَ: نَضْرِبُ الْمُتَّجِهَ الْأَوَّلَ فِي مَسْقَطِ الثَّانِي عَلَيْهِ، فَيَكُونُ النَّاتِجُ عَدَدَا.'),
+    S(pt('ومتجهات الوحدة: '+M('î·î = ĵ·ĵ = k̂·k̂ = 1')+' و '+M('î·ĵ = ĵ·k̂ = k̂·î = 0')),'وَضَرْبُ مُتَّجِهِ الْوَحْدَةِ فِي نَفْسِهِ يُسَاوِي وَاحِدًا، وَفِي غَيْرِهِ يُسَاوِي صِفْرَا.')]},
+  cross:{title:'الضرب الاتجاهي',sayT:'وَالنَّوْعُ الثَّانِي: الضَّرْبُ الِاتِّجَاهِيُّ.',steps:()=>[
+    S(pt(B('الضرب الاتجاهي')+': نتيجته '+B('كمية متجهة')+'، اتجاهها عمودي على مستوى المتجهين.'),'الضَّرْبُ الِاتِّجَاهِيُّ: نَتِيجَتُهُ كَمِّيَّةٌ مُتَّجِهَةٌ، اتِّجَاهُهَا عَمُودِيٌّ عَلَى مُسْتَوَى الْمُتَّجِهَيْنْ.'),
+    Object.assign(S(pt('<div class="kLaw">'+M('|A × B| = |A| |B| sin θ')+'</div>'),'وَمِقْدَارُهَا: `|A × B| = |A| |B| sin θ`'),{md:'`|A × B| = |A| |B| sin θ`'}),
+    S(fig(vCross(),'ناتج الضرب الاتجاهي عمودي على مستوى المتجهين'),'لَاحِظِ الرَّسْمَ: النَّاتِجُ بِالْأَخْضَرِ عَمُودِيٌّ عَلَى الْمُسْتَوَى الَّذِي فِيهِ الْمُتَّجِهَانْ.'),
+    S(pt('ومتجهات الوحدة: '+M('î × ĵ = k̂')+' ، '+M('ĵ × k̂ = î')+' ، '+M('k̂ × î = ĵ')+' ، و '+M('î × î = 0')),'وَضَرْبُ مُتَّجِهِ الْوَحْدَةِ فِي نَفْسِهِ اتِّجَاهِيًّا يُسَاوِي صِفْرَا.')]},
+  ex1:{title:'مثال ١ · صفحة 22',sayT:'وَالْآنَ لِنَنْتَقِلْ إِلَى حَلِّ أَمْثِلَةِ الْحَقِيبَةِ التَّدْرِيبِيَّةِ. لِنَأْخُذِ الْمِثَالَ الْأَوَّلَ، مِنْ صَفْحَةِ 22.',steps:()=>[
+    S(q('لديك المتجهان '+M('A = 3î − 4ĵ')+' و '+M('B = −2î + 3k̂')+'. أوجد: '+M('|A|')+' ، '+M('|B|')+' ، '+M('A · B')+' ، والزاوية θ.','المثال · صفحة 22'),''),
+    S(st(1,M('|A| = √(3² + (−4)²) = 5')),'مِقْدَارُ الْمُتَّجِهِ الْأَوَّلِ: الْجَذْرُ التَّرْبِيعِيُّ لِتِسْعَةٍ زَائِدَ سِتَّةَ عَشَرَ، يُسَاوِي خَمْسَهْ.'),
+    S(st(2,M('|B| = √((−2)² + 3²) = √13 ≈ 3.6')),'مِقْدَارُ الْمُتَّجِهِ الثَّانِي: جَذْرُ ثَلَاثَةَ عَشَرَ، يُسَاوِي ثَلَاثَةً فَاصِلَةً سِتَّةً تَقْرِيبَا.'),
+    S(st(3,M('A · B = (3)(−2) + (−4)(0) + (0)(3) = −6')),'الضَّرْبُ الْقِيَاسِيُّ: نَضْرِبُ الْمُرَكَّبَاتِ الْمُتَنَاظِرَةَ وَنَجْمَعُهَا، فَيُسَاوِي سَالِبَ سِتَّهْ.'),
+    S(st(4,M('cos θ = −6 ÷ (5 × 3.6) ≈ −0.33')+' ← '+M('θ ≈ 109°')+'<span class="kDirOn"></span>'),'جَيْبُ تَمَامِ الزَّاوِيَةِ سَالِبُ صِفْرٍ فَاصِلَةٍ ثَلَاثَةٍ وَثَلَاثِينَ، فَالزَّاوِيَةُ مِئَةٌ وَتِسْعُ دَرَجَاتٍ تَقْرِيبَا.'),
+    S(res(M('|A| = 5')+' · '+M('|B| ≈ 3.6')+' · '+M('A · B = −6')+' · '+M('θ ≈ 109°')),'')]},
+  ex2:{title:'مثال ٢ · صفحة 23',sayT:'وَتَأَمَّلْ مَعِي الْمِثَالَ الثَّانِيَ، مِنْ صَفْحَةِ 23.',steps:()=>[
+    S(q('للمتجهين '+M('A = 3î − 4ĵ')+' و '+M('B = −2î + 3k̂')+'، أوجد حاصل الضرب الاتجاهي '+M('A × B')+'.','المثال · صفحة 23'),''),
+    S(st(1,M('A × B = (3î)×(−2î) + (3î)×(3k̂) + (−4ĵ)×(−2î) + (−4ĵ)×(3k̂)')),'نَضْرِبُ كُلَّ حَدٍّ فِي الْمُتَّجِهِ الْأَوَّلِ، فِي كُلِّ حَدٍّ فِي الثَّانِي.'),
+    S(st(2,M('= 0 − 9ĵ − 8k̂ − 12î')),'وَنَسْتَخْدِمُ قَوَاعِدَ ضَرْبِ مُتَّجِهَاتِ الْوَحْدَةِ.'),
+    S(res(M('A × B = −12î − 9ĵ − 8k̂')),'النَّتِيجَةُ: مُتَّجِهٌ مُرَكَّبَاتُهُ سَالِبُ اثْنَيْ عَشَرَ، وَسَالِبُ تِسْعَةٍ، وَسَالِبُ ثَمَانِيَهْ.')]},
+  ex3:{title:'مثال ٣ · صفحة 23',sayT:'وَالْمِثَالُ الثَّالِثُ، مِنْ صَفْحَةِ 23.',steps:()=>[
+    S(q('إذا كان مقدار المتجه '+M('A = 10')+' والمتجه '+M('B = 5')+' والزاوية بينهما '+M('60°')+'، أوجد حاصل الضرب القياسي، ومقدار حاصل الضرب الاتجاهي.','المثال · صفحة 23'),''),
+    S(gr(['A = 10','B = 5','θ = 60°'],M('A · B')+' و '+M('|A × B|')),'الْمُعْطَيَاتُ أَمَامَكَ عَلَى السَّبُّورَةِ.'),
+    S(st(1,M('A · B = (10)(5) cos 60° = 25')),'الضَّرْبُ الْقِيَاسِيُّ: عَشَرَةٌ فِي خَمْسَةٍ فِي نِصْفٍ، يُسَاوِي خَمْسَةً وَعِشْرِينْ.'),
+    S(st(2,M('|A × B| = (10)(5) sin 60° ≈ 43.3')+'<span class="kDirOn"></span>'),'وَمِقْدَارُ الضَّرْبِ الِاتِّجَاهِيِّ: خَمْسُونَ فِي جَيْبِ سِتِّينَ، يُسَاوِي ثَلَاثَةً وَأَرْبَعِينَ فَاصِلَةً ثَلَاثَةً تَقْرِيبَا.'),
+    S(res(M('A · B = 25')+' · '+M('|A × B| ≈ 43.3')),'')]}};
+function applyU1(out,K2){defs();const T=sl=>String(sl.title||''),base=t=>t.replace(/\s*\(تابع\)\s*$/,'');
+  const C=id=>()=>card(K2,id),X=()=>null,LIFE=s=>sl=>{sl.sayT=s;return typeof appCards==='function'?appCards(sl):sl};
+  const RR={
+   '0-2':[[/^قاعدة التحويل$/,C('rule')],[/^تحويل السرعة$/,C('speed')],[/^التحقق من صحة القانون بالوحدات$/,C('check')],[/^خطوات التحقق من صحة القانون/,X],
+     [/^أمثلة الحقيبة التدريبية محلولة$/,C('ex2')],[/^مثال ٣: تحويل السرعة/,C('ex3')],[/^مثال ١: تأكد من صحة القانون/,C('law1')],[/^مثال ٢: تأكد من صحة القانون/,C('law2')],[/^مثال ٣: تأكد من صحة القانون/,C('law3')],
+     [/^رسم توضيحي/,X],[/^البادئات الشائعة/,C('prefix')],[/^عوامل تحويل مفيدة/,C('factors')],[/^تمرين \d+ ·/,X],
+     [/^تطبيقات من الحياة$/,LIFE('وَبَعْدَ أَنْ تَدَرَّبْنَا عَلَى التَّحْوِيلِ وَالتَّحَقُّقِ مِنَ الْقَوَانِينِ، لِنَرَ أَيْنَ نَسْتَخْدِمُهُمَا فِي حَيَاتِنَا.')]],
+   '0-4':[[/^نوعان من الكميات$/,C('types')],[/^إيجاد المحصلة بقانون جيب التمام$/,C('cos')],[/^ملحوظة: إشارة/,X],[/^أمثلة الحقيبة التدريبية محلولة$/,C('ex1')],[/^مثال ٢: محصلة متجهين/,C('ex2')],
+     [/^رسم توضيحي/,X],[/^الكمية القياسية والكمية المتجهة$/,X],[/^تمرين \d+ ·/,X],
+     [/^تطبيقات من الحياة$/,LIFE('وَبَعْدَ أَنْ فَهِمْنَا الْمُتَّجِهَاتِ وَمُحَصِّلَتَهَا، لِنَرَ أَيْنَ نَجِدُهَا فِي حَيَاتِنَا.')]],
+   '0-5':[[/^تحليل متجه إلى مركبتين$/,C('comp')],[/^نصائح$/,X],[/^أمثلة الحقيبة التدريبية محلولة$/,C('ex1')],[/^تمرين: تمرين تحليل متجه/,C('tr')],[/^رسم توضيحي/,X],[/^تمرين \d+ ·/,X],
+     [/^تطبيقات من الحياة$/,LIFE('وَبَعْدَ أَنْ تَعَلَّمْنَا تَحْلِيلَ الْمُتَّجِهِ، لِنَرَ أَيْنَ نَسْتَخْدِمُهُ فِي حَيَاتِنَا.')]],
+   '0-6':[[/^متجهات الوحدة$/,C('unit')],[/^الضرب القياسي \(النقطي\)/,C('dot')],[/^أولا: الضرب القياسي/,X],[/^ثانيا: الضرب القياسي/,X],[/^الضرب الاتجاهي A×B/,C('cross')],[/^أولا: الضرب الاتجاهي/,X],[/^ثانيا: الضرب الاتجاهي/,X],
+     [/^مثال ١ \(صفحة 22\)$/,C('ex1')],[/^مثال ٢ \(صفحة 23\)$/,C('ex2')],[/^مثال ٣ \(صفحة 23\)$/,C('ex3')],[/^رسم توضيحي/,X],[/^الضرب القياسي والضرب الاتجاهي$/,X],[/^تمرين \d+/,X],
+     [/^تطبيقات من الحياة$/,LIFE('وَبَعْدَ أَنْ تَعَرَّفْنَا عَلَى ضَرْبِ الْمُتَّجِهَاتِ، لِنَرَ أَيْنَ نَسْتَخْدِمُهُ فِي حَيَاتِنَا.')]]};
+  const R=RR[K2]||[];const res=[];let skip=null;
+  out.forEach(sl=>{const t=T(sl);if(skip&&base(t)===skip&&/\(تابع\)/.test(t))return;skip=null;
+    const m=R.find(([re])=>re.test(base(t)));if(!m||sl.type!=='c'){res.push(sl);return}
+    skip=base(t);const n=m[1](sl);if(Array.isArray(n))n.forEach(x=>x&&res.push(x));else if(n)res.push(n);if(n===sl)skip=null});
+  return res}
+function apply(out,K2){if(!CARDS[K2])return out;defs();if(K2==='0-1')return apply01(out);if(/^0-[2456]$/.test(K2))return applyU1(out,K2);if(K2==='4-1')return apply41(out);if(K2==='4-8')return apply48(out);if(K2==='4-5')return apply45(out);if(K2==='3-3')return V33(apply33(out));if(K2==='3-4')return apply34(out);if(K2==='3-5')return apply35(out);if(K2==='3-6')return apply36(out);
   const T=sl=>String(sl.title||''),base=t=>t.replace(/\s*\(تابع\)\s*$/,'');
   const R=[[/^تصنيف المواد حسب توصيلها للكهرباء$/,sl=>{if(K2!=='3-1')return sl;sl.sayT='بعد أن عرفنا أن الإلكترونات هي التي تنتقل بين الأجسام، لنتعرف الآن على تصنيف المواد حسب توصيلها للكهرباء.';
       sl.steps=sl.steps.concat([{html:fig(matScene(),'مشهد: حركة الإلكترونات في الموصل وشبه الموصل والعازل').html,say:'شاهد المشهد: فِي الْمُوَصِّلِ تَتَحَرَّكُ الْإِلِكْتِرُونَاتُ بِحُرِّيَّةٍ، وَفِي شِبْهِ الْمُوَصِّلِ حَرَكَتُهَا قَلِيلَةٌ، وَفِي الْعَازِلِ تَبْقَى مُقَيَّدَةً فِي مَكَانِهَا.'}]);return sl}],
