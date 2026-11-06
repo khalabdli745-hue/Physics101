@@ -6809,7 +6809,7 @@ function DX(cfg){return function(){
     P.innerHTML=`<h4>${W?'🎬 شاهد التجربة خطوة خطوة':'⚡ تنفيذ التجربة'}</h4><div data-did="dmSW" class="dxW"><div data-did="dmS"></div><div data-did="dmV" class="dmView dmHide"></div><button data-did="dmBig" type="button" aria-label="تشغيل">▶ تشغيل</button></div><div class="dmBar" data-did="dmBar"></div><div class="tl"><button class="pri wPlay" data-did="dmPlay" type="button">▶ تشغيل</button><span data-did="dmTlT"></span><input type="range" data-did="dmTl" min="0" max="0" step="1" value="0"></div><div class="dmCap" data-did="dmCap"></div>${W?'':'<button type="button" data-did="dmRec" class="dmRecB" hidden>✓ سجل القراءة</button>'}<div class="dmBtns"><button data-did="dmNext" class="pri">التالي ←</button><button data-did="dmPrev">→ السابق</button>${W?'':'<button data-did="dmRe">↺ من البداية بقيم جديدة</button>'}</div>`;
     host(P);return run(mode,P)};
   function run(mode,P){const W=mode==='watch';
-    let play=false,manual=false;const psleep=async t=>{while(t>0){await sleep(100);if(window.__dmSkip){t=0;break}if(play||manual)t-=100}};
+    let play=false,manual=false;const psleep=async t=>{while(t>0){await sleep(100);if(window.__dmSkip){t=0;break}if((play||manual)&&(typeof view==='undefined'||view<0||view===k))t-=100}};
     const E=id=>P.querySelector('[data-did="'+id+'"]');
     const q=id=>/^dm/.test(id)&&E(id)?E(id):(box.querySelector('#'+id)||document.getElementById(id));
     const I={P,mode,reset:null,pause:null,k:()=>k};
@@ -6865,7 +6865,7 @@ function DX(cfg){return function(){
       const tl=E('dmTl');tl.max=Math.max(0,k+1);tl.value=i+1;E('dmTlT').innerHTML='الخطوة <b>'+(i+1)+'</b> من '+ST.length;
       const s=ST[k],wait=live()&&s&&!ok(s);const nb=E('dmNext');nb.disabled=wait||(!busy&&live()&&k>=ST.length-1);
       nb.textContent=busy&&live()?'التالي ←':wait?(play?'⏳ يستمر بعد تسجيل القراءة':'⏳ سجل القراءة أولا'):(live()&&k>=ST.length-1)?(W?'✓ انتهت المشاهدة':'✓ انتهت القياسات'):'التالي ←';E('dmPrev').disabled=i<=0};
-    const goView=i=>{view=(i>=k)?-1:i;ui()};
+    const goView=i=>{const was=view;view=(i>=k)?-1:i;ui();/* المدرب 6 نوفمبر: صوت الخطوة يطابق الخطوة المعروضة عند الرجوع والتقدم وسحب الشريط (يبدأ بعد 350 مللي ث من آخر تغيير) */try{if(view===was||!labVo.on())return;if(was<0&&view>=0&&busy){let tb=false;try{tb=TTS.busy()||labVo.pz}catch(e){}if(tb)I.vcut=1}labVo.stop();clearTimeout(I.vt);I.vt=0;let t='';if(view>=0)t=labVo.txt(ST[view],W);else if(I.vcut&&busy){I.vcut=0;t=labVo.txt(ST[k],W)}if(t){I.vrep=1;I.vt=setTimeout(()=>{I.vt=0;try{if(play||manual||true)labPlay(t,document.createElement('button'))}catch(e){}},350)}}catch(e){}};
     E('dmNext').onclick=async()=>{window.__labX=!W;if(!live()){goView(view+1);return}if(busy){window.__dmSkip=1;return}if(k<0)act();busy=true;window.__dmSkip=0;manual=!play;if(k<0&&!I.__intro&&ST.some(x=>x&&x.sp)){I.__intro=1;await labSayAw(labIO(W,0),psleep)}k++;const s=ST[k];show(s);ui();labPre(ST[k+1],W);
       const L=E('dmCap').textContent.length;E('dmCap').insertAdjacentHTML('beforeend','<div class="dmWait" style="font-size:12.5px;font-weight:800;color:var(--muted);margin-top:4px">📖 اقرأ الخطوة…</div>');
       const vo=labVo.on()&&labVo.txt(s,true);let np=null;
@@ -6884,7 +6884,7 @@ function DX(cfg){return function(){
       snap();if(w)w.remove();if(k>=ST.length-1&&!I.__outro&&ST.some(x=>x&&x.sp)){I.__outro=1;await labSayAw(labIO(W,1),psleep)}else if(play&&(W||!s.rec))await psleep(W?3500:4500);busy=false;ui();if(I.pendRe&&E('dmRe')){I.pendRe=0;E('dmRe').onclick();return}
       if(W&&k>=ST.length-1){play=false;E('dmPlay').textContent='▶ تشغيل';big();setTimeout(()=>labReset(),400)}};
     let ptm=null;const big=()=>{E('dmBig').hidden=play;E('dmBig').textContent=k<0?'▶ تشغيل':(W&&k>=ST.length-1)?'↺ شاهد من البداية':'▶ متابعة'};
-    const tick=()=>{clearTimeout(ptm);if(!play)return;ptm=setTimeout(async()=>{if(!play||busy)return tick();if(!live()){goView(view+1);return tick()}
+    const tick=()=>{clearTimeout(ptm);if(!play)return;ptm=setTimeout(async()=>{let vb=false;try{vb=!!I.vrep&&(!!I.vt||TTS.busy())}catch(e){}if(!vb)I.vrep=0;if(!play||vb)return tick();if(busy&&live())return tick();if(!live()){goView(view+1);return tick()}
       const s=ST[k];if(s&&!ok(s))return tick();if(k>=ST.length-1){play=false;E('dmPlay').textContent='▶ تشغيل';big();if(!W)E('dmBig').hidden=true;return}
       await E('dmNext').onclick();tick()},k<0?1000:600)};
     function labReset(){restore();const nw=box.querySelector('#nw');if(nw)ck(nw);DXI.forEach(o=>{if(o!==I&&o.mode!=='watch')o.reset(false)})}
@@ -6892,7 +6892,7 @@ function DX(cfg){return function(){
     I.reset=(lab,keepEmpty)=>{I.pause();labVo.stop();I.__intro=I.__outro=0;restore();if(lab){const nw=box.querySelector('#nw');if(nw)ck(nw)}if(!W){const t=LG();if(t)t.innerHTML=''}k=-1;view=-1;SN.length=0;E('dmS').innerHTML='';if(!W&&cfg.first!==false&&!keepEmpty)show(ST[0]);else {/* المدرب 1 نوفمبر: قبل التشغيل يظهر مشهد الخطوة الأولى ثابتا بدل الفراغ، فلا تقفز البطاقة عند التشغيل */const ph=()=>{const st0=stageOf(ST[0]);if(st0&&st0.querySelector('svg')&&k<0&&!E('dmS').querySelector('.stage:not(.dxSnap .stage)')){E('dmS').innerHTML='';E('dmS').appendChild(dxSnapOf(st0));return true}return false};
       if(!ph()){E('dmS').innerHTML='<div class="dxEmpty">'+(W?'🎬 اضغط «▶ تشغيل» لمشاهدة خطوات التجربة':'⚡ اضغط «▶ تشغيل» لتبدأ التنفيذ')+'</div>';setTimeout(ph,400);setTimeout(ph,1500)}}ui();big()};
     E('dmPlay').onclick=()=>{if(W&&k>=ST.length-1&&!play){I.reset(true)}play=!play;manual=false;E('dmPlay').textContent=play?'⏸ إيقاف':'▶ تشغيل';big();if(play){labVo.resume();if(k<0){act();labPre(ST[0],W)}tick()}else{clearTimeout(ptm);labVo.pause()}};labVo.btn(E('dmPlay'),ST);E('dmBig').onclick=()=>{if(!play)E('dmPlay').onclick()};
-    E('dmPrev').onclick=()=>{I.pause();labVo.stop();const i=live()?k:view;if(i>0)goView(i-1)};
+    E('dmPrev').onclick=()=>{let tb=false;try{tb=TTS.busy()||labVo.pz}catch(e){}I.pause();const i=live()?k:view;if(live()&&busy&&tb)I.vcut=1;labVo.stop();if(i>0)goView(i-1)};
     E('dmTl').oninput=()=>{const v=+E('dmTl').value-1;if(v<0)return;goView(Math.min(v,k))};
     if(E('dmRe'))E('dmRe').onclick=()=>{if(busy){if(I.abortRec){I.abortRec();busy=false}else{window.__dmSkip=1;I.pendRe=1;return}}I.pendRe=0;act();I.reset(true);setTimeout(()=>{if(!W&&cfg.first!==false){show(ST[0]);ui()}},120)};
     ui();big();DXI.push(I);return I}
