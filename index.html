@@ -3898,6 +3898,7 @@ window.lessonWelcome=function(){(function(){try{
   if(ob){ob.classList.add('sbHint');try{ob.scrollIntoView({block:'center',behavior:'smooth'})}catch(e){}
     var off=function(){ob.classList.remove('sbHint')};ob.addEventListener('click',off,{once:true});setTimeout(off,15000)}
 }catch(e){}})()};
+/* المدرب 6 نوفمبر (أ): إيقاف أي صوت عند مغادرة الصفحة (السحب للخروج أو إغلاق التبويب) */window.addEventListener('pagehide',function(){try{TTS.stop()}catch(x){}});
 document.addEventListener('click',function(e){try{var b=e.target&&e.target.closest&&e.target.closest('#tabs button[data-t="sum"]');if(b&&!document.body.classList.contains('boardOpen'))window.lessonWelcome()}catch(x){}});
 </script><style>@keyframes sbHintK{0%,100%{box-shadow:0 0 0 0 rgba(247,147,30,.85);transform:scale(1)}50%{box-shadow:0 0 0 14px rgba(247,147,30,0);transform:scale(1.06)}}.sbGo.sbHint{animation:sbHintK 1.2s ease-in-out infinite}</style><script>/* المدرب 5 نوفمبر: مشهد الخطوة على السبورة يبدأ حركته مع صوتها، ولا تنتقل الخطوة حتى تكتمل الحركة، ثم يثبت على مشهده الأخير فلا يتكرر بعد انتهاء الكلام */
 window.scSync=function(){const none={done:async()=>{}};try{const B=document.querySelector('.board');if(!B)return none;const st=[...B.querySelectorAll('.bContent .bStep.in')].pop();const sv=st&&st.querySelector('svg.kScene');if(!sv||sv.__scs)return none;sv.__scs=1;
