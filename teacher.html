@@ -836,19 +836,19 @@ async function drawAI(){
     $('#ttoff').onclick=async()=>{if(!confirm('إيقاف الصوت الطبيعي؟ سيعود المتدربون إلى صوت الجهاز.'))return;const x=await api({a:'tttskey',token:TOKEN,key:''});toast(x.ok?'تم الإيقاف':errText(x.error));drawAI()}}
   /* 6 نوفمبر: صوت Gemini (code.gs 43) */
   {const gm=(t,c)=>{$('#gmm').className='msg '+(c||'');$('#gmm').innerHTML=t};let G=null;
-    const fmtT=ms=>{try{return new Date(ms).toLocaleString('ar-SA-u-nu-latn',{timeZone:'Asia/Riyadh',hour:'2-digit',minute:'2-digit',day:'numeric',month:'numeric'})}catch(e){return ''}};
+    const fmtT=ms=>{try{return new Date(ms).toLocaleString('ar-SA-u-ca-gregory-nu-latn',{timeZone:'Asia/Riyadh',hour:'2-digit',minute:'2-digit',day:'numeric',month:'numeric'})}catch(e){return ''}};
     const st=async(o)=>{let x;try{x=await api(Object.assign({a:'tgem',token:TOKEN},o||{}))}catch(e){x={ok:false,error:'net'}}
       if(!$('#gmSt'))return x;
-      if(!x.ok){$('#gmSt').innerHTML=x.error==='unknown_action'?'<b style="color:var(--bad)">حدث كود الخادم code.gs إلى الإصدار 44 وانشر إصدارا جديدا.</b>':esc(errText(x.error));return x}
+      if(!x.ok){$('#gmSt').innerHTML=x.error==='unknown_action'?'<b style="color:var(--bad)">حدث كود الخادم code.gs إلى الإصدار 45 وانشر إصدارا جديدا.</b>':esc(errText(x.error));return x}
       G=x;$('#gmon').checked=!!(x.cfg.on&&x.cfg.keys.indexOf('3-1')>=0);
-      $('#gmSt').innerHTML='المفتاح: '+(x.key?'<b style="color:var(--good)">✓ محفوظ</b>':'<b style="color:var(--bad)">غير محفوظ</b>')+' · الصوت: '+(x.cfg.on?'<b style="color:var(--good)">مفعل</b> لـ '+AR(x.cfg.keys.length)+' درس':'غير مفعل')+' · تم توليد '+AR(x.made||0)+' جملة · المتبقي في التجهيز: '+AR(x.left||0)+(x.pause&&x.pause>Date.now()?' · <b>متوقف حتى '+fmtT(x.pause)+' (الحد اليومي المجاني)</b>':'')+(x.lastErr&&!(x.pause>Date.now())?' · آخر خطأ: '+esc(x.lastErr):'');return x};
+      $('#gmSt').innerHTML='المفتاح: '+(x.key?'<b style="color:var(--good)">✓ محفوظ</b>':'<b style="color:var(--bad)">غير محفوظ</b>')+' · الصوت: '+(x.cfg.on?'<b style="color:var(--good)">مفعل</b> لـ '+AR(x.cfg.keys.length)+' درس':'غير مفعل')+' · تم توليد '+AR(x.made||0)+' جملة · المتبقي في التجهيز: '+AR(x.left||0)+(x.pause&&x.pause>Date.now()?' · <b>متوقف حتى '+fmtT(x.pause)+' (انتهى الحد اليومي المجاني لكل النماذج)</b>':'')+(x.lastErr&&!(x.pause>Date.now())?' · آخر خطأ: '+esc(x.lastErr):'');return x};
     st();
     $('#gmr').onclick=()=>st();
     $('#gmsv').onclick=async()=>{const k=$('#gmk').value.trim();if(!k)return gm('الصق المفتاح أولا.','bad');gm('<span class="spin"></span> جار الحفظ…');const x=await st({key:k});if(x.ok){$('#gmk').value='';gm('✓ تم حفظ المفتاح.','good')}else gm(x.error==='bad_key'?'المفتاح غير صحيح الشكل: تأكد أنك نسخته كاملا بلا مسافات.':x.error==='gem_key'?'رفض Google هذا المفتاح. انسخه من جديد من aistudio.google.com/apikey.':esc(errText(x.error)),'bad')};
     $('#gmon').onchange=async e=>{const on=e.target.checked;gm('<span class="spin"></span> جار الحفظ…');const ks=((G&&G.cfg.keys)||[]).filter(k=>k!=='3-1');if(on)ks.push('3-1');const x=await st({on:on||ks.length>0,keys:ks});if(x.ok)gm(on?'✓ درس كولوم يستخدم صوت Gemini (وحامد لأي جملة لم تجهز بعد).':'✓ درس كولوم عاد إلى صوت حامد.','good');else e.target.checked=!on};
     $('#gmq').onclick=async()=>{gm('<span class="spin"></span> جار تجهيز قائمة الجمل…');let L=[];try{L=await (await fetch('gq/3-1.json?v='+Date.now())).json()}catch(e){return gm('تعذر تحميل قائمة جمل كولوم.','bad')}
       let x;try{x=await api({a:'tgemq',token:TOKEN,texts:L})}catch(e){x={ok:false,error:'net'}}
-      if(!x.ok)return gm(x.error==='unknown_action'?'حدث كود الخادم code.gs إلى الإصدار 44 أولا.':esc(errText(x.error)),'bad');
+      if(!x.ok)return gm(x.error==='unknown_action'?'حدث كود الخادم code.gs إلى الإصدار 45 أولا.':esc(errText(x.error)),'bad');
       gm('✓ جاهز مسبقا: '+AR(x.ready)+' جملة · أضيفت للتجهيز: '+AR(x.added)+' · سيكمل الخادم وحده في الخلفية (نحو 4 جمل كل 10 دقائق حتى الحد اليومي).','good');st()};
     let au=null;$('#gmt').onclick=async()=>{au=au||new Audio();gm('<span class="spin"></span> جار توليد عينة…');let x;try{x=await api({a:'gtts',token:TOKEN,text:'سنشاهد الآن تجربة قانون كولوم خطوة خطوة. لاحظ طريقة التنفيذ والقراءة في كل خطوة.'})}catch(e){x={ok:false,error:'net'}}
       if(!x.ok)return gm(x.error==='gem_day'?'وصل الحد اليومي المجاني، جرب غدا.':x.error==='gem_busy'?'الخادم مشغول بحد الدقيقة، جرب بعد دقيقة.':esc(errText(x.error)),'bad');au.src='data:audio/wav;base64,'+x.audio;au.play().then(()=>gm(x.cached?'✓ العينة محفوظة مسبقا.':'✓ تم توليد العينة وحفظها.','good')).catch(()=>gm('اضغط «تجربة الصوت» مرة أخرى للتشغيل.','bad'))};
