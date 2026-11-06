@@ -147,7 +147,8 @@ var rad=function(){var B=document.querySelector('.board');if(!B)return;var av=B.
 setInterval(rad,700);
 setInterval(function(){if(!L)return;var B=document.querySelector('.board');if(B&&(!B.classList.contains('noVoL')||B.dataset.vo==='z'||[].some.call(B.querySelectorAll('.vStrip'),function(x){return x.style.display!=='none'})))apply()},700);
 apply();
-try{if(typeof API!=='undefined'&&API)fetch(API,{redirect:'follow'}).then(function(r){return r.json()}).then(function(r){if(r&&r.ok&&'vlock' in r)set(r.vlock)}).catch(function(){})}catch(e){}
+/* 6 نوفمبر: صوت Gemini للدروس التي يختارها المدرب (code.gs 43: geng) */try{if(!window.GENG)window.GENG=JSON.parse(localStorage.getItem('p101-geng')||'null')}catch(e){}
+try{if(typeof API!=='undefined'&&API)fetch(API,{redirect:'follow'}).then(function(r){return r.json()}).then(function(r){if(r&&r.ok&&'vlock' in r)set(r.vlock);if(r&&r.ok){window.GENG=r.geng||null;try{localStorage.setItem('p101-geng',JSON.stringify(r.geng||null))}catch(e){}}}).catch(function(){})}catch(e){}
 })();
 
 /* 5 نوفمبر: توحيد الأرقام في العناوين إلى الإنجليزية (مثال ١ ← مثال 1) في الدروس والسبورة */

@@ -1441,7 +1441,19 @@ const SYAR={A:'إِيهْ',B:'بِي',C:'سِي',D:'دِي',E:'إِي',F:'إِف
       const PT=[[W('أهلا وسهلا بك يا'),'أَهْلًا وَسَهْلًا بِكَ يَا '],[W('شكرا لمتابعتك يا'),'شُكْرًا لِمُتَابَعَتِكَ يَا ']];
       for(const [re,cn] of PT){const m=f.t.match(new RegExp('^\\s*'+re+'\\s+(\\S+?)\\s*[،,.]\\s*'));if(m){const rest=f.t.slice(m[0].length).trim(),nmS=UN(m[1]),R1=[{l:'ar',t:cn+nmS+(/[اىآوي]$/.test(nmS)?'':'\u0652')+'.'}],c0=(rest?[{l:'ar',t:rest}]:[]).concat(R0[0].slice(1));return [R1].concat(c0.length?[c0]:[],R0.slice(1))}}}}catch(e){}
     return R0}
-  function getAz(segs,voiceName){const r=Math.round((rate-1)*100),k=voiceName+'|'+r+'|'+JSON.stringify(segs);
+  /* المدرب 6 نوفمبر: صوت Gemini (Iapetus) للدروس التي يختارها المدرب في لوحة المدرب؛ النص بلا تشكيل، والجملة غير المجهزة يقولها حامد */
+  window.GFIX=window.GFIX||function(t){return String(t).replace(/قانون،\s*كولوم/g,'قانون كولوم').replace(/(^|\s)خطن(?=\s|$|[،.:؟])/g,'$1خط')};
+  const GMISS=new Set();
+  function gemOn(){try{const g=window.GENG;return !!(g&&g.on&&Array.isArray(g.keys)&&typeof pos!=='undefined'&&g.keys.indexOf(key(pos.u,pos.l))>=0&&API&&tok())}catch(e){return false}}
+  function gtext(segs){return (window.GFIX?GFIX:(x=>x))(segs.map(x=>x.t).join(' ')).replace(/[ً-ْٰ]/g,'').replace(/\s+/g,' ').trim()}
+  window.GTEXT=gtext;
+  function getAz(segs,voiceName){if(gemOn()){const gt=gtext(segs),gk='G|'+gt;if(gt&&!GMISS.has(gt)){if(MEM.has(gk))return Promise.resolve(MEM.get(gk));if(PEND.has(gk))return PEND.get(gk);
+      const TOg=ms=>new Promise((_,j)=>setTimeout(()=>j({error:'timeout'}),ms));
+      const P=Promise.race([SYNC.post({a:'gtts',token:tok(),text:gt}),TOg(45000)]).then(x=>{if(!x||!x.ok||!x.audio)throw x||{};const bin=atob(x.audio),u8=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u8[i]=bin.charCodeAt(i);
+        const url=URL.createObjectURL(new Blob([u8],{type:x.mime||'audio/wav'}));MEM.set(gk,url);PEND.delete(gk);return url}).catch(()=>{GMISS.add(gt);PEND.delete(gk);return getAzA(segs,voiceName)});
+      PEND.set(gk,P);return P}}
+    return getAzA(segs,voiceName)}
+  function getAzA(segs,voiceName){const r=Math.round((rate-1)*100),k=voiceName+'|'+r+'|'+JSON.stringify(segs);
     if(MEM.has(k))return Promise.resolve(MEM.get(k));if(PEND.has(k))return PEND.get(k);
     /* المدرب 6 نوفمبر: مهلة لطلب الصوت (25 ثانية) ثم محاولة ثانية، حتى لا يتوقف الشرح إذا تأخر الخادم */const TO=(ms)=>new Promise((_,j)=>setTimeout(()=>j({error:'timeout'}),ms)),req=()=>Promise.race([SYNC.post({a:'tts',token:tok(),voice:voiceName,rate:r,segs}),TO(25000)]);
     const P=req().catch(e=>e&&e.error==='timeout'?req():Promise.reject(e)).then(x=>{if(!x||!x.ok)throw x||{};
@@ -3900,7 +3912,7 @@ new MutationObserver(function(){var B=document.querySelector('.board');if(B&&B._
 setInterval(function(){var B=document.querySelector('.board');if(B&&B._p102&&!B._p103)setup(B)},500);
 })();
 </script>
-<script src="fixeddata.js?v=7"></script><script src="fixedai.js?v=6"></script><script>/* المدرب 5 نوفمبر: عند فتح درس من الفهرس يرحب المدرب بالمتدرب بالصوت ويوجهه إلى زر «ابدأ الشرح» على السبورة، والزر يتوهج حتى يضغطه */
+<script src="fixeddata.js?v=7"></script><script src="fixedai.js?v=7"></script><script>/* المدرب 5 نوفمبر: عند فتح درس من الفهرس يرحب المدرب بالمتدرب بالصوت ويوجهه إلى زر «ابدأ الشرح» على السبورة، والزر يتوهج حتى يضغطه */
 /* المدرب 6 نوفمبر: الترحيب يبدأ فورا داخل ضغطة المتدرب (الفهرس أو تبويب «الدرس») حتى يسمح الجوال بالصوت */
 /* المدرب 6 نوفمبر: نص الترحيب في دالة واحدة، ويجهز صوته مسبقا (عند فتح الفهرس وعند عرض أي تبويب للدرس) فيبدأ فورا */
 window.welcomeText=function(L,ob){/* المدرب 6 نوفمبر (أ): ترحيب عام بلا اسم، يولد مرة واحدة لكل صفحة: «أهلا وسهلا بك. موضوعنا اليوم…» */var t=String((L&&(L.t||L.n))||'').replace(/[«»"]/g,'').trim();var u=0;try{u=pos.u;UNITS.forEach(function(U,ui){if(U.l&&U.l.indexOf(L)>=0)u=ui})}catch(e){}
