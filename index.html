@@ -1115,7 +1115,7 @@ document.querySelectorAll('.lgEye').forEach(b=>b.onclick=()=>{const i=b.parentNo
 <script src="gens.js?v=10281453"></script>
 <script src="art.js?v=10281453"></script>
 <script src="more.js?v=11041800"></script>
-<script src="labs.js?v=11157"></script>
+<script src="labs.js?v=11158"></script>
 <script src="coach.js?v=11061040"></script>
 <script>/* 5 نوفمبر: الدروس النموذجية (kcards31) لكل المتدربين */(function(){var n=1;document.write('<script src="kcards'+(n?'31':'')+'.js?v=11145"><\/script>')})()</script>
 <script>
@@ -1521,7 +1521,7 @@ function buildNav(){
     const b=document.createElement('button');b.setAttribute('aria-expanded',ui===pos.u);
     b.innerHTML=`<span class="num">${AR(ui+1)}</span><span class="ut"></span><span class="ue"></span>`;
     b.querySelector('.ut').textContent=u.t;b.querySelector('.ue').textContent=u.en;
-    b.onclick=()=>{d.classList.toggle('open');b.setAttribute('aria-expanded',d.classList.contains('open'))};
+    b.onclick=()=>{d.classList.toggle('open');b.setAttribute('aria-expanded',d.classList.contains('open'));/* المدرب 6 نوفمبر: تجهيز ترحيب دروس الوحدة عند فتحها في الفهرس */if(d.classList.contains('open'))try{u.l.forEach((l,li)=>{if(!HID(ui,li))welcomePf(l,true)})}catch(e){}};
     const ol=document.createElement('ol');
     u.l.forEach((l,li)=>{if(l.hide)return;
       const it=document.createElement('li');if(done.has(key(ui,li)))it.classList.add('done');
@@ -2069,7 +2069,7 @@ function renderSum(v){
   if(BOARD_PUBLIC||(typeof AUTH!=='undefined'&&AUTH&&AUTH.demo)||!API){if(!document.getElementById('sbFont')){const lk=document.createElement('link');lk.id='sbFont';lk.rel='stylesheet';lk.href='https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&display=swap';document.head.appendChild(lk)}
     const bc=document.createElement('div');bc.className='boardCard';try{bc.dataset.k=key(pos.u,pos.l)}catch(e){}
     bc.innerHTML='<div class="sbFrame"><div class="sbTop"><span class="sbCam" aria-hidden="true"></span></div><div class="sbSurface"><h2 class="sbH">شرح الدرس</h2><p class="sbP">على السبورة <span class="sbNo">مع <b>المدرب الذكي</b></span></p><div class="sbLaw" aria-hidden="true"></div><div class="sbRow"><span class="sbAv" aria-hidden="true">👨‍🏫</span></div></div><div class="sbTray" aria-hidden="true"><i style="--m:#1f2937"></i><i style="--m:#1d4ed8"></i><i style="--m:#dc2626"></i><i style="--m:#15803d"></i><b></b></div></div>';
-    const ob=document.createElement('button');ob.className='btn sbGo';ob.innerHTML='<span class="sbPl" aria-hidden="true"></span><span>ابدأ الشرح</span>';ob.onclick=()=>{openBoard();/* طلب المدرب 30 أكتوبر: «ابدأ الشرح» يفتح السبورة بملء الشاشة مباشرة في كل الأجهزة */try{const f=document.querySelector('.board .bFull');if(f&&!document.querySelector('.board.full'))f.click()}catch(e){}};setTimeout(()=>{try{let vo='h';try{vo=localStorage.getItem('p101-bvo')==='z'?'z':'h'}catch(e){}const L=(openBoard(true)||[]).slice(0,5);const nm=window.coachName&&coachName();if(L[0]&&nm)L[0]=L[0].replace(/^مرحبًا بك،/,'مرحبا بك يا '+nm+'،');L.forEach(t=>TTS.prefetch(t,vo==='z'?'ar-SA-ZariyahNeural':'ar-SA-HamedNeural'))}catch(e){}},800);bc.querySelector('.sbRow').prepend(ob);const du=document.createElement('span');du.className='sbDur';bc.querySelector('.sbRow').insertBefore(du,ob.nextSibling);DUR.badge(du,key(pos.u,pos.l));i.appendChild(bc)}
+    const ob=document.createElement('button');ob.className='btn sbGo';ob.innerHTML='<span class="sbPl" aria-hidden="true"></span><span>ابدأ الشرح</span>';ob.onclick=()=>{openBoard();/* طلب المدرب 30 أكتوبر: «ابدأ الشرح» يفتح السبورة بملء الشاشة مباشرة في كل الأجهزة */try{const f=document.querySelector('.board .bFull');if(f&&!document.querySelector('.board.full'))f.click()}catch(e){}};setTimeout(()=>{try{let vo='h';try{vo=localStorage.getItem('p101-bvo')==='z'?'z':'h'}catch(e){}const L=(openBoard(true)||[]).slice(0,5);const nm=window.coachName&&coachName();/* المدرب 6 نوفمبر: الاسم يدخل في جملة الترحيب المجهزة كما ستقال (كانت لا تطابق فيطلب صوتها عند البدء) */if(L[0]&&nm)L[0]=L[0].replace(/^(مرحبا|مرحبًا) بك،/,'$1 بك يا '+nm+'،').replace(/^أهلا وسهلا بك،/,'أهلا وسهلا بك يا '+nm+'،');L.forEach(t=>TTS.prefetch(t,vo==='z'?'ar-SA-ZariyahNeural':'ar-SA-HamedNeural'))}catch(e){}},800);bc.querySelector('.sbRow').prepend(ob);const du=document.createElement('span');du.className='sbDur';bc.querySelector('.sbRow').insertBefore(du,ob.nextSibling);DUR.badge(du,key(pos.u,pos.l));i.appendChild(bc)}
   /* المدرب 3 نوفمبر: حذف الدرس تحت السبورة وكل ما يرتبط به (استمع للدرس كاملا، لافتة الدرس، بطاقة الدرس، الجداول، تطبيقات من الحياة، ملخص الدرس، والمساعد الذكي في هذا التبويب). تبقى السبورة وزر «اسأل» والدرس التالي */
   /* المدرب 6 نوفمبر: حذف «الدرس التالي» نهائيا من صفحة تبويب الدرس (تفتح من الفهرس) */
 }
@@ -2703,7 +2703,7 @@ function renderRefs(v){
   s.insertAdjacentHTML('beforeend',`<div class="md"><ul><li><a href="https://phet.colorado.edu/ar/" target="_blank" rel="noopener">PhET — محاكاة فيزيائية تفاعلية بالعربية</a> (جامعة كولورادو)</li></ul></div>`);
   i.appendChild(s);
 }
-function go(u,l,p,t){const nw=u!==pos.u||l!==pos.l;pos={u,l,p,t:t||(nw&&pos.t==='lab'?'sum':pos.t)};if(GT(pos.t))pos.t='sum';buildNav();render()}
+function go(u,l,p,t){const nw=u!==pos.u||l!==pos.l;pos={u,l,p,t:t||(nw&&pos.t==='lab'?'sum':pos.t)};if(GT(pos.t))pos.t='sum';buildNav();render();/* المدرب 6 نوفمبر: تجهيز ترحيب الدرس الحالي للرجوع إلى تبويب «الدرس» */setTimeout(()=>{try{welcomePf(lesson(),document.querySelector('.boardCard')?!!document.querySelector('.boardCard .sbGo'):true)}catch(e){}},1500)}
 /* زر «رجوع للدرس» في التجربة يعيد إلى الصفحة الرئيسية للدرس */
 document.addEventListener('click',e=>{if(e.target&&e.target.closest&&e.target.closest('#fsBack'))setTimeout(()=>{try{document.body.classList.remove('labFS');go(pos.u,pos.l,undefined,'sum')}catch(_){}},0)});
 function setTab(t){pos.t=t;render()}
@@ -2716,7 +2716,7 @@ $('prevBtn').onclick=()=>{
   if(pos.l>0){let l=pos.l-1;while(l>0&&HID(pos.u,l))l--;return go(pos.u,l,UNITS[pos.u].l[l].p.length-1,'page')}
   if(pos.u>0){const pu=UNITS[pos.u-1];go(pos.u-1,pu.l.length-1,pu.l[pu.l.length-1].p.length-1,'page')}};
 $('doneBtn').onclick=()=>{const k=key(pos.u,pos.l);if(done.has(k))done.delete(k);else{done.add(k);SYNC.result('done',k,lesson().t,1,1)}store.set('p101-done',[...done]);buildNav();updateProgress();render()};
-function openNav(){const n=$('nav');try{const h=document.querySelector('header.top'),b=h&&h.offsetParent!==null?h.getBoundingClientRect().bottom:0;document.documentElement.style.setProperty('--navTop',Math.max(0,b)+'px')}catch(e){}n.classList.remove('navUp');n.classList.add('show');$('scrim').classList.add('show');$('menuBtn').setAttribute('aria-expanded','true')}
+function openNav(){/* المدرب 6 نوفمبر: تجهيز ترحيب دروس الوحدة المفتوحة */try{const U=UNITS[pos.u];U&&U.l.forEach((l,li)=>{if(!HID(pos.u,li))welcomePf(l,true)})}catch(e){}const n=$('nav');try{const h=document.querySelector('header.top'),b=h&&h.offsetParent!==null?h.getBoundingClientRect().bottom:0;document.documentElement.style.setProperty('--navTop',Math.max(0,b)+'px')}catch(e){}n.classList.remove('navUp');n.classList.add('show');$('scrim').classList.add('show');$('menuBtn').setAttribute('aria-expanded','true')}
 function closeNav(){const n=$('nav');$('scrim').classList.remove('show');try{$('menuBtn').setAttribute('aria-expanded','false')}catch(e){}n.classList.remove('show','navUp')}
 $('menuBtn').onclick=()=>{const n=$('nav');n.classList.contains('show')?closeNav():openNav()};$('scrim').onclick=closeNav;
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeNav();if(pos.t!=='page')return;if(e.key==='ArrowLeft')$('nextBtn').click();if(e.key==='ArrowRight')$('prevBtn').click()});
@@ -3886,6 +3886,10 @@ setInterval(function(){var B=document.querySelector('.board');if(B&&B._p102&&!B.
 </script>
 <script src="fixeddata.js?v=7"></script><script src="fixedai.js?v=6"></script><script>/* المدرب 5 نوفمبر: عند فتح درس من الفهرس يرحب المدرب بالمتدرب بالصوت ويوجهه إلى زر «ابدأ الشرح» على السبورة، والزر يتوهج حتى يضغطه */
 /* المدرب 6 نوفمبر: الترحيب يبدأ فورا داخل ضغطة المتدرب (الفهرس أو تبويب «الدرس») حتى يسمح الجوال بالصوت */
+/* المدرب 6 نوفمبر: نص الترحيب في دالة واحدة، ويجهز صوته مسبقا (عند فتح الفهرس وعند عرض أي تبويب للدرس) فيبدأ فورا */
+window.welcomeText=function(L,ob){var t=String((L&&(L.t||L.n))||'').replace(/[«»"]/g,'').trim();var nm='';try{nm=(window.coachName&&coachName())||''}catch(e){}
+  return 'أَهْلًا وَسَهْلًا بِكَ'+(nm?' يَا '+nm:'')+'. '+(t?'هٰذَا دَرْسُ: '+t+'. ':'')+(ob?'لِتَبْدَأَ الدَّرْس، اِضْغَطْ زِرَّ: اِبْدَأِ الشَّرْح، عَلَى السَّبُّورَة.':'')};
+window.welcomePf=function(L,ob){try{if(typeof TTS==='undefined'||!TTS.has()||!TTS.prefetch)return;var m=false;try{m=localStorage.getItem('p101-bmute')==='1'}catch(e){}if(m)return;var vo='h';try{vo=localStorage.getItem('p101-bvo')==='z'?'z':'h'}catch(e){}TTS.prefetch(welcomeText(L,ob!==false),vo==='z'?'ar-SA-ZariyahNeural':'ar-SA-HamedNeural')}catch(e){}};
 window.lessonWelcome=function(){(function(){try{
   if(typeof TTS==='undefined'||!TTS.has())return;var m=false;try{m=localStorage.getItem('p101-bmute')==='1'}catch(e){}if(m)return;
   var ob=document.querySelector('.boardCard .sbGo');var L=null;try{L=lesson()}catch(e){}
@@ -3893,7 +3897,7 @@ window.lessonWelcome=function(){(function(){try{
   var vo='h';try{vo=localStorage.getItem('p101-bvo')==='z'?'z':'h'}catch(e){}
   try{TTS.setOV(vo==='z'?'ar-SA-ZariyahNeural':'ar-SA-HamedNeural')}catch(e){}
   var nm='';try{nm=(window.coachName&&coachName())||''}catch(e){}
-  var txt='أَهْلًا وَسَهْلًا بِكَ'+(nm?' يَا '+nm:'')+'. '+(t?'هٰذَا دَرْسُ: '+t+'. ':'')+(ob?'لِتَبْدَأَ الدَّرْس، اِضْغَطْ زِرَّ: اِبْدَأِ الشَّرْح، عَلَى السَّبُّورَة.':'');
+  var txt=welcomeText(L,!!ob);
   var d=document.createElement('button');TTS.play(txt,d);
   if(ob){ob.classList.add('sbHint');try{ob.scrollIntoView({block:'center',behavior:'smooth'})}catch(e){}
     var off=function(){ob.classList.remove('sbHint')};ob.addEventListener('click',off,{once:true});setTimeout(off,15000)}

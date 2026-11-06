@@ -299,7 +299,6 @@ function calcInit(root){if(typeof makeCalc!=='function')return;const hs=[...root
 function measureLab(box){
   box.innerHTML=`
   <div class="intro"><small class="labKind">🧪 تجربة عملية تفاعلية</small><h3>1. اسم التجربة</h3><p class="labName">القياس بأداة القدمة ذات الورنية وأداة الميكرومتر</p></div>
-  <p class="sub">يتحكم المتدرب في متغيرات التجربة من لوحة التحكم، ويرى أثرها فورا على الحركة والقانون.</p>
   <div class="tags"><span class="tag">الجسم: <i>أسطوانة معدنية</i></span><span class="tag">الطول L: <i>أداة القدمة ذات الورنية</i> · 0.1 mm</span><span class="tag">القطر D: <i>أداة الميكرومتر</i> · 0.01 mm</span><span class="tag dv">الحجم V: <i>كمية مشتقة</i> · m³</span></div>
   
   <div class="intro goals"><h3>2. أهداف التجربة</h3><ol class="gl">
