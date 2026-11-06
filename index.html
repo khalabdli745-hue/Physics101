@@ -3891,6 +3891,7 @@ window.welcomeText=function(L,ob){var t=String((L&&(L.t||L.n))||'').replace(/[«
   return 'أَهْلًا وَسَهْلًا بِكَ'+(nm?' يَا '+nm:'')+'. '+(t?'هٰذَا دَرْسُ: '+t+'. ':'')+(ob?'لِتَبْدَأَ الدَّرْس، اِضْغَطْ زِرَّ: اِبْدَأِ الشَّرْح، عَلَى السَّبُّورَة.':'')};
 window.welcomePf=function(L,ob){try{if(typeof TTS==='undefined'||!TTS.has()||!TTS.prefetch)return;var m=false;try{m=localStorage.getItem('p101-bmute')==='1'}catch(e){}if(m)return;var vo='h';try{vo=localStorage.getItem('p101-bvo')==='z'?'z':'h'}catch(e){}TTS.prefetch(welcomeText(L,ob!==false),vo==='z'?'ar-SA-ZariyahNeural':'ar-SA-HamedNeural')}catch(e){}};
 window.lessonWelcome=function(){(function(){try{
+  /* المدرب 6 نوفمبر (أ): الترحيب مرة واحدة لكل درس في الجلسة، ولا يتكرر عند الرجوع إلى تبويب «الدرس» */var WK='';try{WK=key(pos.u,pos.l)}catch(e){}var WS={};try{WS=JSON.parse(sessionStorage.getItem('p101-welcSaid')||'{}')}catch(e){}if(WK&&WS[WK])return;
   if(typeof TTS==='undefined'||!TTS.has())return;var m=false;try{m=localStorage.getItem('p101-bmute')==='1'}catch(e){}if(m)return;
   var ob=document.querySelector('.boardCard .sbGo');var L=null;try{L=lesson()}catch(e){}
   var t=String((L&&(L.t||L.n))||'').replace(/[«»"]/g,'').trim();
@@ -3898,7 +3899,7 @@ window.lessonWelcome=function(){(function(){try{
   try{TTS.setOV(vo==='z'?'ar-SA-ZariyahNeural':'ar-SA-HamedNeural')}catch(e){}
   var nm='';try{nm=(window.coachName&&coachName())||''}catch(e){}
   var txt=welcomeText(L,!!ob);
-  var d=document.createElement('button');TTS.play(txt,d);
+  var d=document.createElement('button');TTS.play(txt,d);if(WK){WS[WK]=1;try{sessionStorage.setItem('p101-welcSaid',JSON.stringify(WS))}catch(e){}}
   if(ob){ob.classList.add('sbHint');try{ob.scrollIntoView({block:'center',behavior:'smooth'})}catch(e){}
     var off=function(){ob.classList.remove('sbHint')};ob.addEventListener('click',off,{once:true});setTimeout(off,15000)}
 }catch(e){}})()};
