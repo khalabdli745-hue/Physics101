@@ -3893,5 +3893,7 @@ window.scSync=function(){const none={done:async()=>{}};try{const B=document.quer
   let D=0;sv.querySelectorAll('animate,animateTransform,animateMotion').forEach(a=>{const d=parseFloat(a.getAttribute('dur'));if(d>D)D=d});D=Math.min(12,D);if(!D)return none;
   try{sv.setCurrentTime(0);sv.unpauseAnimations()}catch(e){}const t0=performance.now();setTimeout(()=>{try{if(sv.isConnected){sv.pauseAnimations();sv.setCurrentTime(Math.max(0,D-0.05))}}catch(e){}},D*1000);
   return {D,done:async ok=>{const left=D*1000-(performance.now()-t0);if(left>0&&ok()){const e=performance.now()+left;while(performance.now()<e&&ok())await new Promise(r=>setTimeout(r,100))}}}}catch(e){return none}};
-</script></body>
+</script><style id=nwEndCss>/* المدرب 6 نوفمبر: حذف «تجربة جديدة» من شاهد ونفذ، وزر أزرق في آخر بطاقة خطوات وتنفيذ التجربة */html body .lab .dxW>.vcNew,html body .lab .dmP [data-did=dmRe]{display:none!important}html body .lab .accB>.btns.nwEnd{display:block;margin:16px 0 4px!important}html body .lab .accB>.btns.nwEnd>#nw{display:block;width:100%;margin:0;padding:18px 14px;border:0;border-radius:14px;background:#1d4ed8;color:#fff;font-size:22px;font-weight:800;text-align:center;line-height:1.5;box-shadow:0 4px 14px rgba(29,78,216,.35);font-family:inherit;cursor:pointer}</style>
+<script>/* نقل زر التجربة الجديدة إلى آخر بطاقة التنفيذ */(function(){function mv(){document.querySelectorAll('.lab .accB>.btns:not(.nwEnd)').forEach(function(b){var n=b.querySelector('#nw');if(!n)return;b.classList.add('nwEnd');n.textContent='🔄 أعد التجربة بقيم جديدة';b.parentElement.appendChild(b)})}try{new MutationObserver(mv).observe(document.documentElement,{childList:true,subtree:true})}catch(e){}document.addEventListener('DOMContentLoaded',mv)})()</script>
+</body>
 </html>
