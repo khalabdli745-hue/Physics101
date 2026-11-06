@@ -1107,7 +1107,7 @@ document.querySelectorAll('.lgEye').forEach(b=>b.onclick=()=>{const i=b.parentNo
 <script src="data.js?v=10281453"></script>
 <script src="study.js?v=11041800"></script>
 <script src="quiz2.js?v=10281453"></script>
-<script src="extras.js?v=11061135"></script>
+<script src="extras.js?v=11061210"></script>
 <script src="figs.js?v=10281453"></script>
 <script src="figs2.js?v=11021530"></script>
 <script src="problems.js?v=11041800"></script>
@@ -2507,7 +2507,7 @@ function renderLab(v){
   /* تطبيقات من الحياة: تبقى في تبويب الدرس فقط، ولا تظهر في تبويب التجارب العملية */
   const r=card('مراجع للاستزادة','من قائمة المراجع العلمية، المناسبة لهذه الوحدة:');
   const ul=document.createElement('ul');ul.className='refs';
-  (window.REFS||[]).filter(f=>f.u.includes(pos.u)).forEach(f=>{const li=document.createElement('li');li.innerHTML=`<b></b><br><small></small>`;li.querySelector('b').textContent=f.t;li.querySelector('b').dir='auto';li.querySelector('small').textContent=f.a;if(!f.a){li.querySelector('br').remove();li.querySelector('small').remove();li.querySelector('b').style.fontWeight='600'}ul.appendChild(li)});
+  (window.REFS||[]).filter(f=>f.g!=='m'&&f.u.includes(pos.u)).forEach(f=>{const li=document.createElement('li');li.innerHTML=`<b></b><br><small></small>`;li.querySelector('b').textContent=f.t;li.querySelector('b').dir='auto';li.querySelector('small').textContent=f.a;if(!f.a){li.querySelector('br').remove();li.querySelector('small').remove();li.querySelector('b').style.fontWeight='600'}ul.appendChild(li)});
   r.appendChild(ul);i.appendChild(r);
 }
 /* ---------- الاختبارات التجريبية ---------- */
@@ -2691,14 +2691,14 @@ function examPaper(i){
 }
 function renderRefs(v){
   const i=wrap(v);
-  const c=card('قائمة المراجع','المراجع التي اعتمدت عليها المنصة. الأمثلة والتطبيقات في المنصة كتبت بأسلوب هذه المراجع.');/* المدرب 6 نوفمبر: لا يتكرر عنوان «قائمة المراجع» تحت رأس الصفحة (كان يختفي جزئيا تحت الرأس عند النزول) */{const h=c.querySelector('h2');if(h)h.remove()}
-  const ul=document.createElement('ol');ul.className='refs';
-  (window.REFS||[]).forEach(f=>{const li=document.createElement('li');li.innerHTML='<b></b><br><small></small>';li.querySelector('b').textContent=f.t;li.querySelector('b').dir='auto';li.querySelector('small').textContent=f.a;if(!f.a){li.querySelector('br').remove();li.querySelector('small').remove();li.querySelector('b').style.fontWeight='600'}ul.appendChild(li)});
-  c.appendChild(ul);i.appendChild(c);
+  /* المدرب 6 نوفمبر: أربعة أقسام بالترتيب: المراجع المعتمدة، مراجع التجارب العملية، مراجع للاستزادة، مصادر رقمية */
+  const refList=(g)=>{const ul=document.createElement('ol');ul.className='refs';(window.REFS||[]).filter(f=>(f.g||'x')===g).forEach(f=>{const li=document.createElement('li');li.innerHTML='<b></b><br><small></small>';li.querySelector('b').textContent=f.t;li.querySelector('b').dir='auto';li.querySelector('small').textContent=f.a;if(!f.a){li.querySelector('br').remove();li.querySelector('small').remove();li.querySelector('b').style.fontWeight='600'}ul.appendChild(li)});return ul};
+  const c=card('المراجع المعتمدة','الحقيبتان التدريبيتان اللتان بني عليهما محتوى المنصة: الشرح والأمثلة والتمارين.');c.appendChild(refList('m'));i.appendChild(c);
   if((window.LABREFS||[]).length){const c2=card('مراجع التجارب العملية','أدلة معامل جامعية ومصادر تعليمية بنيت عليها التجارب العملية التفاعلية في المنصة، مرتبة هجائيا. اضغط المرجع لفتحه، وتظهر مراجع كل تجربة أيضا في بطاقة «مراجع التجربة» داخلها.');
     const ol=document.createElement('ol');ol.className='refs lrefs';ol.dir='ltr';ol.style.cssText='text-align:left;padding-left:1.8em;font-size:.92em';
     window.LABREFS.forEach(f=>{const li=document.createElement('li');li.innerHTML='<a target="_blank" rel="noopener"></a><br><small></small>';const A=li.querySelector('a');A.href=f.u;A.textContent=f.t;const sm=li.querySelector('small');sm.dir='rtl';sm.style.cssText='display:block;text-align:right';sm.textContent=(f.l.length>1?'التجارب: ':'التجربة: ')+f.l.join('؛ ');ol.appendChild(li)});
     c2.appendChild(ol);i.appendChild(c2)}
+  {const c3=card('مراجع للاستزادة','من قائمة مراجع الحقيبة التدريبية، للمتدرب الذي يرغب في التوسع.');c3.appendChild(refList('x'));i.appendChild(c3)}
   const s=card('مصادر رقمية مجانية بالعربية');
   s.insertAdjacentHTML('beforeend',`<div class="md"><ul><li><a href="https://phet.colorado.edu/ar/" target="_blank" rel="noopener">PhET — محاكاة فيزيائية تفاعلية بالعربية</a> (جامعة كولورادو)</li></ul></div>`);
   i.appendChild(s);
