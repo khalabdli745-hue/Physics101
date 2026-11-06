@@ -1672,7 +1672,9 @@ function nextLessonBtn(i){
   const r=document.createElement('div');r.className='btnrow';
   const nx=nextLesson();
   
-  if(nx){const b=document.createElement('button');b.className='btn ghost';b.textContent='الدرس التالي ←';b.title='الدرس التالي: '+UNITS[nx[0]].l[nx[1]].t;b.onclick=()=>go(nx[0],nx[1],0,pos.t);r.appendChild(b)}
+  /* المدرب 6 نوفمبر (أ): في آخر درس من الوحدة زر «انتقل إلى الوحدة ...» بلا تهنئة، وآخر درس في المقرر بلا زر */
+  const UO=['الأولى','الثانية','الثالثة','الرابعة','الخامسة','السادسة','السابعة','الثامنة'];
+  if(nx){const b=document.createElement('button');b.className='btn ghost';const nu=nx[0]!==pos.u;b.textContent=nu?'انتقل إلى الوحدة '+(UO[nx[0]]||String(nx[0]+1))+' ←':'الدرس التالي ←';b.title=(nu?'الوحدة '+(UO[nx[0]]||'')+': '+UNITS[nx[0]].t+' · ':'الدرس التالي: ')+UNITS[nx[0]].l[nx[1]].t;b.onclick=()=>go(nx[0],nx[1],0,pos.t);r.appendChild(b)}
   i.appendChild(r);
 }
 function nextLesson(){let u=pos.u,l=pos.l;do{if(l<UNITS[u].l.length-1)l++;else if(u<UNITS.length-1){u++;l=0}else return null}while(HID(u,l));return[u,l]}
@@ -2488,13 +2490,13 @@ function renderQuiz(v){
   const r=document.createElement('div');r.className='btnrow';
   const rb=document.createElement('button');rb.className='btn';rb.textContent='أعد الاختبار';rb.hidden=true;rb.onclick=()=>render();
   r.appendChild(rb);i.appendChild(r);
-  nextLessonBtn(i);
+  /* المدرب 6 نوفمبر: إذا كان للدرس تجربة فالزر في آخر التجربة */try{if(!(window.LABS&&LABS[key(pos.u,pos.l)]))nextLessonBtn(i)}catch(e){nextLessonBtn(i)}
 }
 function renderLab(v){
   const i=wrap(v),x=extra();
   {const lt=(lesson()||{}).t||'',nm=/ورقة عمل|مراجعة وتمارين/.test(lt)?'هذا الدرس مخصص للتمارين والمراجعة، ولا توجد فيه تجارب عملية.':/^مقدمة الوحدة/.test(lt)?'هذا الدرس مخصص لمقدمة الوحدة وأهدافها، ولا توجد فيه تجارب عملية.':'';if(nm){const c=card('تجارب عملية تفاعلية');c.insertAdjacentHTML('beforeend','<p class="empty">'+nm+'</p>');i.appendChild(c);return}}
   const hasLab=window.renderLabCard?renderLabCard(i,pos.u,pos.l):false;
-  if(hasLab)return; /* الدرس الذي له تجربة معتمدة: تظهر التجربة ومراجعها فقط */
+  if(hasLab){/* المدرب 6 نوفمبر: «الدرس التالي» بعد نهاية التجربة (آخر خطوة في الدرس) */nextLessonBtn(i);return} /* الدرس الذي له تجربة معتمدة: تظهر التجربة ومراجعها فقط */
   const c=card('تجارب تفاعلية بالعربية','محاكاة مجانية من مشروع PhET بجامعة كولورادو، تعمل في المتصفح على الجوال والآيباد والكمبيوتر.');
   if(x.sim&&x.sim.length){const g=document.createElement('div');g.className='sims';
     x.sim.forEach(s=>{const a=document.createElement('a');a.className='sim';a.href=s.u;a.target='_blank';a.rel='noopener';
