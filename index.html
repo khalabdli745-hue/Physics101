@@ -1392,7 +1392,7 @@ const SYAR={A:'إِيهْ',B:'بِي',C:'سِي',D:'دِي',E:'إِي',F:'إِف
   /* ميو وحدها (خارج القانون) تُقرأ بالعربي؛ وداخل القانون تبقى بالإنجليزي */
   const MUAR={'':' مِيُو ','k':' مِيُو كيه ','s':' مِيُو إس '};
   const soloMu=t=>t.replace(/`\s*[μµ]([sk]?)\s*`/g,(m,y)=>MUAR[y]).replace(/(^|[\s\u0600-\u06FF(«])[μµ]([sk]?)(?=[\s\u0600-\u06FF)»،.:]|$)/g,(m,a,y)=>a+MUAR[y]);
-  function segments(raw){raw=String(raw);AIX=raw.charCodeAt(0)===0x2063;if(AIX)raw=aiPre(raw.slice(1));/* المراجعة اللغوية: تشكيل المنطوق للدرس الحالي فقط */try{const LK=typeof pos!=='undefined'?key(pos.u,pos.l):'',FM=(window.SAYFIXL||{})[LK],FP=(window.SAYPAIRL||{})[LK];raw=String(raw);if(FM&&FM[raw])raw=FM[raw];if(FP){raw=raw.replace(/\*\*/g,'');FP.forEach(([a,b])=>{raw=raw.split(a).join(b)})}}catch(e){}raw=arParen(String(raw).replace(/\s*·?\s*\(صفحة [0-9٠-٩]+\)/g,''));raw=raw.replace(/\[\[fig:[^\]]*\]\]/g,' ').replace(/\[\[img:[^|\]]*\|[^|\]]*\|([^\]]*)\]\]/g,'$1. ').replace(/https?:\/\/\S+/g,' ');raw=raw.replace(/\s*\\?`[A-Za-zµ]{1,3} → [A-Za-zµ]{1,3}\\?`/g,'');
+  function segments(raw){raw=String(raw);AIX=raw.charCodeAt(0)===0x2063;if(AIX)raw=aiPre(raw.slice(1));/* المراجعة اللغوية: تشكيل المنطوق للدرس الحالي فقط */try{const LK=typeof pos!=='undefined'?key(pos.u,pos.l):'',FM=(window.SAYFIXL||{})[LK],FP=(window.SAYPAIRL||{})[LK];raw=window.PGS?PGS(String(raw)):String(raw);if(FP&&!FP.__pg&&window.PGS){FP.__pg=1;FP.forEach(q=>{const m=q[0].match(/^(تمرين [0-9٠-٩]+) · [^\n]*\.$/);if(m){q[1]=q[1].split(/،| · /)[0].replace(/\.$/,'')+'.';q[0]=m[1]+'.'}else{q[0]=PGS(q[0]);q[1]=PGS(q[1])}})}if(FM&&FM[raw])raw=FM[raw];if(FP){raw=raw.replace(/\*\*/g,'');FP.forEach(([a,b])=>{raw=raw.split(a).join(b)})}if(window.BAGX)raw=BAGX(raw);}catch(e){}raw=arParen(String(raw).replace(/\s*·?\s*\(صفحة [0-9٠-٩]+\)/g,''));raw=raw.replace(/\[\[fig:[^\]]*\]\]/g,' ').replace(/\[\[img:[^|\]]*\|[^|\]]*\|([^\]]*)\]\]/g,'$1. ').replace(/https?:\/\/\S+/g,' ');raw=raw.replace(/\s*\\?`[A-Za-zµ]{1,3} → [A-Za-zµ]{1,3}\\?`/g,'');
     let t=markN(sepDot(soloMu(raw))).replace(/^#+\s*/gm,'').replace(/\*\*/g,'').replace(/`/g,'').replace(/^[-•]\s*/gm,'').replace(/[✓✗⚠️]/g,'').replace(/[✦⚗🔊■]/g,'');
     t=t.replace(/([^.:؟!،\n])[ \t]*\n+/g,'$1.\n').replace(/\n+/g,' ');
     /* نقسم النص إلى كلمات عربية وما بينها */
@@ -1435,7 +1435,12 @@ const SYAR={A:'إِيهْ',B:'بِي',C:'سِي',D:'دِي',E:'إِي',F:'إِف
     const out=[];let cur=[],n=0;
     for(const it of items){if(cur.length&&(n+it.t.length>900||cur.length>=30)){out.push(cur);cur=[];n=0}cur.push(it);n+=it.t.length}
     if(cur.length)out.push(cur);
-    return out.map(c=>c.reduce((m,x)=>{const L=m[m.length-1];if(L&&L.l===x.l)L.t+=' '+x.t;else m.push({l:x.l,t:x.t});return m},[]))}
+    const R0=out.map(c=>c.reduce((m,x)=>{const L=m[m.length-1];if(L&&L.l===x.l)L.t+=' '+x.t;else m.push({l:x.l,t:x.t});return m},[]));
+    /* المدرب 6 نوفمبر (أ): جملة اسم المتدرب مقطع صوتي مستقل بصيغة ثابتة، فتولد مرة واحدة لكل اسم ويبقى باقي الكلام عاما محفوظا للجميع */
+    try{const f=R0[0]&&R0[0][0];if(f&&f.l==='ar'){const D='[\u064B-\u0652\u0670]*',W=w=>w.split('').map(c=>c===' '?'\\s+':c+D).join(''),UN=x=>x.replace(/[\u064B-\u0652\u0670]/g,'');
+      const PT=[[W('أهلا وسهلا بك يا'),'أَهْلًا وَسَهْلًا بِكَ يَا '],[W('شكرا لمتابعتك يا'),'شُكْرًا لِمُتَابَعَتِكَ يَا ']];
+      for(const [re,cn] of PT){const m=f.t.match(new RegExp('^\\s*'+re+'\\s+(\\S+?)\\s*[،,.]\\s*'));if(m){const rest=f.t.slice(m[0].length).trim(),nmS=UN(m[1]),R1=[{l:'ar',t:cn+nmS+(/[اىآوي]$/.test(nmS)?'':'\u0652')+'.'}],c0=(rest?[{l:'ar',t:rest}]:[]).concat(R0[0].slice(1));return [R1].concat(c0.length?[c0]:[],R0.slice(1))}}}}catch(e){}
+    return R0}
   function getAz(segs,voiceName){const r=Math.round((rate-1)*100),k=voiceName+'|'+r+'|'+JSON.stringify(segs);
     if(MEM.has(k))return Promise.resolve(MEM.get(k));if(PEND.has(k))return PEND.get(k);
     /* المدرب 6 نوفمبر: مهلة لطلب الصوت (25 ثانية) ثم محاولة ثانية، حتى لا يتوقف الشرح إذا تأخر الخادم */const TO=(ms)=>new Promise((_,j)=>setTimeout(()=>j({error:'timeout'}),ms)),req=()=>Promise.race([SYNC.post({a:'tts',token:tok(),voice:voiceName,rate:r,segs}),TO(25000)]);
@@ -1681,6 +1686,17 @@ function nextLesson(){let u=pos.u,l=pos.l;do{if(l<UNITS[u].l.length-1)l++;else i
 /* ---------- شرح الدرس: سبورة ذكية يشرح عليها المدرب الذكي خطوة بخطوة ---------- */
 const BOARD_PUBLIC=true;
 function KC_ORD(k){return window.KC&&KC.has(k)?['سابعا','ثامنا','تاسعا','عاشرا','حادي عشر']:[]}
+/* المدرب 6 نوفمبر: حذف أرقام صفحات الحقيبة (المحذوفة من المنصة) ومصدر التمرين من عناوين السبورة المعروضة ومن النطق، والعناوين الداخلية كما هي (تعتمد عليها البطاقات) */
+window.PGS=function(t){const D='[ً-ْٰ]*',S='ص'+D+'ف'+D+'ح'+D+'ة'+D,M='م'+D+'ن'+D,N='\\s*[0-9٠-٩]+';t=String(t);
+  const W='و'+D+'ر'+D+'ق'+D+'ة'+D;return t.replace(new RegExp('،\\s*'+M+'\\s+'+W+'[^.؟\\n]*','g'),'').replace(new RegExp('،\\s*'+S+N,'g'),'').replace(new RegExp('\\s*[·\\-–]\\s*'+S+N,'g'),'').replace(new RegExp('\\s*\\(\\s*(?:'+M+'\\s*)?'+S+N+'\\s*\\)','g'),'').replace(new RegExp('،?\\s*'+M+'\\s+'+S+N,'g'),'')};
+window.BTD=t=>PGS(String(t||'').replace(/^(تمرين [0-9٠-٩]+) · .*?((?:\s*\(تابع\))?)$/,'$1$2'));
+/* المدرب 6 نوفمبر (أ): «أمثلة الحقيبة التدريبية» في النطق تصير «أمثلة وتمارين الدرس» */
+window.BAGX=function(t){const D='[ً-ْٰ]*',R=w=>w.split('').map(c=>c===' '?'\\s+':c==='ة'?'[ةه]'+D:c+D).join('');t=String(t);
+  return t.replace(new RegExp(R('والآن لننتقل إلى أمثلة الحقيبة')+'،\\s*'+R('المثال الأول')+'\\.?','g'),'وَالْآنَ لِنَنْتَقِلْ إِلَى حَلِّ أَمْثِلَةِ وَتَمَارِينِ الدَّرْسِ. لِنَأْخُذِ الْمِثَالَ الْأَوَّلَ.')
+   .replace(new RegExp(R('لننتقل إلى حل أمثلة الحقيبة التدريبية'),'g'),'لِنَنْتَقِلْ إِلَى حَلِّ أَمْثِلَةِ وَتَمَارِينِ الدَّرْسِ')
+   .replace(new RegExp(R('لننتقل إلى حل مثال الحقيبة التدريبية'),'g'),'لِنَنْتَقِلْ إِلَى حَلِّ مِثَالِ وَتَمَارِينِ الدَّرْسِ')
+   .replace(new RegExp(R('مثال الحقيبة التدريبية'),'g'),'مِثَالَ الدَّرْسِ').replace(new RegExp(R('مثال من الحقيبة')+':','g'),'مِثَالٌ:')};
+window.ORDM=n=>{n=String(n).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d));return ['','الأول','الثاني','الثالث','الرابع','الخامس','السادس','السابع','الثامن','التاسع','العاشر'][+n]||n};
 function openBoard(dry){const dryS=dry==='slides';dry=dry===true||dryS;
   const s=study(),l=lesson();if(!s||!l)return;
   const K='p101-board-'+key(pos.u,pos.l);
@@ -1805,7 +1821,7 @@ function openBoard(dry){const dryS=dry==='slides';dry=dry===true||dryS;
     else if(sl.type==='q'){const q=sl.q;if(q.ct){const LB={r:K2==='0-1'?'🔁 سؤال عن معلوماتك السابقة':(window.COACHINTRO||[]).includes(K2)?'🔁 سؤال من الوحدة السابقة':'🔁 سؤال من الدرس السابق',s:'📐 سؤال عن القانون',g:'📝 سؤال عن التمرين',i:'💡 سؤال استنتاج',m:'🧾 سؤال الملخص'},LT='أبجد';
       h=`<div class="bQ cq${q.o.some(o=>String(o).length>60)?' long':''}"><div class="bQh">${LB[q.ct]||'🙋 سؤال للمتدرب'}</div><div class="bQcard"><p class="bQq">${inl(q.q)}</p></div><div class="bOpts">${q.o.map((o,j)=>`<button type="button" data-j="${j}"><b class="bL">${LT[j]||j+1}</b><span>${inl(o)}</span></button>`).join('')}</div><div class="bQf" aria-live="polite"></div></div>`}
       else h=`<div class="bQ"><div class="bQh">🙋 سؤال للمتدرب</div><p class="bQq">${inl(q.q)}</p><div class="bOpts">${q.o.map((o,j)=>`<button type="button" data-j="${j}">${inl(o)}</button>`).join('')}</div><div class="bQf" aria-live="polite"></div></div>`}
-    else{const _en=sl.en||(window.KC&&KC.en?KC.en(K2,sl.title):'');h=(sl.title?`<h2 class="bH">${inl(sl.title)}${_en?'<bdi class="bEnH" dir="ltr">'+esc(_en)+'</bdi>':''}</h2>`:'')+sl.steps.map((x,j)=>`<div class="bStep${j<step?' in':''}">${x.html?x.html:x.h!==undefined?'<h3>'+inl(x.h)+'</h3>':md(x.md)}</div>`).join('')}
+    else{const _en=sl.en||(window.KC&&KC.en?KC.en(K2,sl.title):'');h=(sl.title?`<h2 class="bH">${inl(BTD(sl.title))}${_en?'<bdi class="bEnH" dir="ltr">'+esc(_en)+'</bdi>':''}</h2>`:'')+sl.steps.map((x,j)=>`<div class="bStep${j<step?' in':''}">${x.html?x.html:x.h!==undefined?'<h3>'+inl(PGS(x.h))+'</h3>':md(x.md)}</div>`).join('')}
     ct.innerHTML=h;if(window.KC&&KC.paint){try{KC.paint(ct,K2,sl)}catch(e){}}if(sl.type==='q'&&sl.q&&sl.q.ct&&window.KC&&KC.decorQ){try{KC.decorQ(ct,K2,sl.q.ct)}catch(e){}}
     /* شريحة العنوان: محاور الدرس كلها تظهر في الشاشة دون تمرير (تصغير تدريجي وعمودان عند الحاجة) */
     if(sl.type==='t'){const T=ct.querySelector('.bTitle'),H=T&&T.querySelector('h1'),O=T&&T.querySelector('ol');
@@ -1830,7 +1846,7 @@ function openBoard(dry){const dryS=dry==='slides';dry=dry===true||dryS;
         else if(q.ct)fb('hint','فكر مرة أخرى. '+(q.h||HINT[q.ct]));
         else{f.className='bQf bad';f.textContent='ليست هذه، فكر مرة أخرى.'}}})}
     upd()};
-  const syncCap=()=>{try{if(auto||!cap||!N31)return;let t=plain(narrAt(cur,step));if(!t&&out[cur].type==='c'&&step===0)t=plain(out[cur].title||'');if(!t)return;cap.innerHTML=inl(t.replace(/^[-•]\s*/,''));if(/^(3-[13-6]|4-[158])$/.test(K2))cap.innerHTML=cap.innerHTML.replace(/[\u064B-\u0652\u0670]/g,'')}catch(e){}};
+  const syncCap=()=>{try{if(auto||!cap||!N31)return;let t=plain(narrAt(cur,step));if(!t&&out[cur].type==='c'&&step===0)t=plain(BTD(out[cur].title||''));if(!t)return;cap.innerHTML=inl(t.replace(/^[-•]\s*/,''));if(/^(3-[13-6]|4-[158])$/.test(K2))cap.innerHTML=cap.innerHTML.replace(/[\u064B-\u0652\u0670]/g,'')}catch(e){}};
   const upd=()=>{const sl=out[cur],n=nSteps(sl);syncCap();
     ct.querySelectorAll('.bStep').forEach((e,j)=>e.classList.toggle('in',j<step));
     const last=ct.querySelectorAll('.bStep.in');if(last.length){const e=last[last.length-1];setTimeout(()=>{/* الخطوة الأطول من الشاشة (جدول كبير) تظهر من أولها */const tall=e.offsetHeight>slideEl.clientHeight-40;slideEl.scrollTo({top:Math.max(0,tall?e.offsetTop-8:e.offsetTop+e.offsetHeight-slideEl.clientHeight+30),behavior:'smooth'})},30)}
@@ -1902,21 +1918,21 @@ function openBoard(dry){const dryS=dry==='slides';dry=dry===true||dryS;
     return pre+b};
   const narr=()=>narrAt(cur,step);
   const narrAt=(cur,step)=>{const sl=out[cur];
-    if(sl.type==='t')return (/^(3-[13-6]|4-[158])$/.test(K2)&&N31?'أهلا وسهلا بك'+((!dry&&window.coachName&&coachName())?' يا '+coachName():'')+'، ومرحبا بك في هذا الدرس. يسعدني أن أكون معك اليوم. ':'مرحبا بك'+((!dry&&window.coachName&&coachName())?' يا '+coachName():'')+'، يسعدني أن أكون معك اليوم. ')+(VO==='z'?'أنا مدربتك الذكية':'أنا مدربك الذكي')+'، وسأشرح لك '+((window.COACHINTRO||[]).includes(K2)?'مقدمة الوحدة '+['الأولى','الثانية','الثالثة','الرابعة','الخامسة'][+K2.split('-')[0]]+' وأهدافها ثم درس: ':'درس: ')+l.t+'. '+(TOP?'ومواضيع الدرس كالتالي: '+topSay()+'. ركز معي، وهيا نبدأ.':heads.length?'سنتعلم في هذا الدرس: '+heads.join('، ')+'. ركز معي، وهيا نبدأ.':'ركز معي، وهيا نبدأ.');
-    if(sl.type==='e'){const n=!dry&&window.coachName&&coachName(),lab=!!(window.LABS&&LABS[K2]);return 'شكرا لمتابعتك'+(n?' يا '+n:'')+'. انتهينا من شرح الدرس، والآن حل الأمثلة والتمارين التفاعلية، ثم اختبر نفسك'+(lab?'، وبعدها انتقل إلى التجربة العملية لترى ما تعلمته يتحقق أمامك.':'.')+(/^(3-[13-6]|4-[158])$/.test(K2)&&N31?' أتمنى لك التوفيق.':'')}
+    if(sl.type==='t')return (true?/* المدرب 6 نوفمبر: الاسم ينطق عند فتح الدرس فقط */'أهلا وسهلا بك، ومرحبا بك في هذا الدرس. يسعدني أن أكون معك اليوم. ':'مرحبا بك'+((!dry&&window.coachName&&coachName())?' يا '+coachName():'')+'، يسعدني أن أكون معك اليوم. ')+(VO==='z'?'أنا مدربتك الذكية':'أنا مدربك الذكي')+'، وسأشرح لك '+((window.COACHINTRO||[]).includes(K2)?'مقدمة الوحدة '+['الأولى','الثانية','الثالثة','الرابعة','الخامسة'][+K2.split('-')[0]]+' وأهدافها ثم درس: ':'درس: ')+l.t+'. '+(TOP?'ومواضيع الدرس كالتالي: '+topSay()+'. ركز معي، وهيا نبدأ.':heads.length?'سنتعلم في هذا الدرس: '+heads.join('، ')+'. ركز معي، وهيا نبدأ.':'ركز معي، وهيا نبدأ.');
+    if(sl.type==='e'){const n='',lab=!!(window.LABS&&LABS[K2]);return 'شكرا لمتابعتك'+(n?' يا '+n:'')+'. انتهينا من شرح الدرس، والآن حل الأمثلة والتمارين التفاعلية، ثم اختبر نفسك'+(lab?'، وبعدها انتقل إلى التجربة العملية لترى ما تعلمته يتحقق أمامك.':'.')+(/^(3-[13-6]|4-[158])$/.test(K2)&&N31?' أتمنى لك التوفيق.':'')}
     if(sl.type==='q')return window.CQQ||'والآن حان دورك، توقف لحظة وأجب عن هذا السؤال.';
     if(step===0){if(!sl.title)return '';if(sl.sayT)return sl.sayT;if(/\(تابع\)$/.test(sl.title))return sl.s4?'':'نكمل معا.';
       if(sl.title==='ملخص الدرس')return 'والآن، لنستعرض خلاصة ما تعلمناه في هذا الدرس.';
-      if(sl.s4&&/^تمرين/.test(sl.title))return 'والآن '+sl.title+'.';
-      if(/^تمرين/.test(sl.title))return pick(['والآن لنحل معا ','هيا نطبق ما تعلمناه في '],cur)+sl.title+'.';
+      if(sl.s4&&/^تمرين/.test(sl.title))return 'والآن '+BTD(sl.title)+'.';
+      if(/^تمرين/.test(sl.title))return pick(['والآن لنحل معا ','هيا نطبق ما تعلمناه في '],cur)+BTD(sl.title)+'.';
       if(sl.title==='مثال محلول')return sl.s4?'والآن مثال محلول.':'لنحل معا هذا المثال خطوة بخطوة.';
       if(/^رسم توضيحي/.test(sl.title))return '';
-      if(/^مثال/.test(sl.title))return pick(['لنأخذ مثالا يوضح الفكرة. ','والآن مثال: ','حتى تتضح الصورة، تأمل معي هذا المثال. '],cur)+sl.title.replace(/^مثال\s*[\d٠-٩]*\s*:?\s*/,'')+'.';
+      if(/^مثال/.test(sl.title)){const T0=BTD(sl.title),rs=T0.replace(/^مثال\s*[\d٠-٩]*\s*:?\s*/,'');if(!rs){const nn=(T0.match(/[\d٠-٩]+/)||[''])[0];return nn?pick(['لنأخذ المثال ','والآن المثال ','حتى تتضح الصورة، تأمل معي المثال '],cur)+ORDM(nn)+'.':'والآن مثال.'}return pick(['لنأخذ مثالا يوضح الفكرة. ','والآن مثال: ','حتى تتضح الصورة، تأمل معي هذا المثال. '],cur)+rs+'.'}
       if(/^أمثلة الحقيبة التدريبية/.test(sl.title))return 'والآن لننتقل إلى حل أمثلة الحقيبة التدريبية.';
       if(sl.title==='مقدمة الوحدة وأهدافها')return 'والآن، ننتقل إلى مقدمة الوحدة وأهدافها.';return pick(['ننتقل الآن إلى: ','والآن دعنا نتعرف على: ','الفكرة التالية هي: ','حسنا، لنتحدث عن: '],cur)+sl.title+'.'}
     const x=sl.steps[step-1];
     if(x.html)return x.say||'';
-    if(x.h!==undefined)return /^مثال/.test(x.h)?'لنأخذ مثالا: '+x.h.replace(/^مثال\s*[\d٠-٩]*\s*:?\s*/,'')+'.':pick(['والآن: ','ننتقل إلى: '],step)+x.h+'.';
+    if(x.h!==undefined)return /^مثال/.test(x.h)?(PGS(x.h).replace(/^مثال\s*[\d٠-٩]*\s*:?\s*/,'')?'لنأخذ مثالا: '+PGS(x.h).replace(/^مثال\s*[\d٠-٩]*\s*:?\s*/,'')+'.':'لنأخذ المثال '+ORDM((x.h.match(/[\d٠-٩]+/)||[''])[0])+'.'):pick(['والآن: ','ننتقل إلى: '],step)+x.h+'.';
     const isB=y=>!!y.md&&/^[-•]/.test(y.md)&&!/^[-•]\s*`[^`=\s]{1,3}`\s/.test(y.md)&&!/^[-•]\s*\*\*/.test(y.md)&&!/^[-•]\s*`[^`]+`[.،]?$/.test(y.md);
     const nb=sl.bn!=null?sl.bn:sl.steps.filter(isB).length,idx=(sl.b0||0)+sl.steps.slice(0,step-1).filter(isB).length;
     if(sl.s4&&x.md){const m4=x.md.match(/^\*\*((?:أولا|ثانيا|ثالثا|رابعا):[^*]+)\*\*\s*(.*)$/);
@@ -2069,7 +2085,7 @@ function renderSum(v){
   if(BOARD_PUBLIC||(typeof AUTH!=='undefined'&&AUTH&&AUTH.demo)||!API){if(!document.getElementById('sbFont')){const lk=document.createElement('link');lk.id='sbFont';lk.rel='stylesheet';lk.href='https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&display=swap';document.head.appendChild(lk)}
     const bc=document.createElement('div');bc.className='boardCard';try{bc.dataset.k=key(pos.u,pos.l)}catch(e){}
     bc.innerHTML='<div class="sbFrame"><div class="sbTop"><span class="sbCam" aria-hidden="true"></span></div><div class="sbSurface"><h2 class="sbH">شرح الدرس</h2><p class="sbP">على السبورة <span class="sbNo">مع <b>المدرب الذكي</b></span></p><div class="sbLaw" aria-hidden="true"></div><div class="sbRow"><span class="sbAv" aria-hidden="true">👨‍🏫</span></div></div><div class="sbTray" aria-hidden="true"><i style="--m:#1f2937"></i><i style="--m:#1d4ed8"></i><i style="--m:#dc2626"></i><i style="--m:#15803d"></i><b></b></div></div>';
-    const ob=document.createElement('button');ob.className='btn sbGo';ob.innerHTML='<span class="sbPl" aria-hidden="true"></span><span>ابدأ الشرح</span>';ob.onclick=()=>{openBoard();/* طلب المدرب 30 أكتوبر: «ابدأ الشرح» يفتح السبورة بملء الشاشة مباشرة في كل الأجهزة */try{const f=document.querySelector('.board .bFull');if(f&&!document.querySelector('.board.full'))f.click()}catch(e){}};setTimeout(()=>{try{let vo='h';try{vo=localStorage.getItem('p101-bvo')==='z'?'z':'h'}catch(e){}const L=(openBoard(true)||[]).slice(0,5);const nm=window.coachName&&coachName();/* المدرب 6 نوفمبر: الاسم يدخل في جملة الترحيب المجهزة كما ستقال (كانت لا تطابق فيطلب صوتها عند البدء) */if(L[0]&&nm)L[0]=L[0].replace(/^(مرحبا|مرحبًا) بك،/,'$1 بك يا '+nm+'،').replace(/^أهلا وسهلا بك،/,'أهلا وسهلا بك يا '+nm+'،');L.forEach(t=>TTS.prefetch(t,vo==='z'?'ar-SA-ZariyahNeural':'ar-SA-HamedNeural'))}catch(e){}},800);bc.querySelector('.sbRow').prepend(ob);const du=document.createElement('span');du.className='sbDur';bc.querySelector('.sbRow').insertBefore(du,ob.nextSibling);DUR.badge(du,key(pos.u,pos.l));i.appendChild(bc)}
+    const ob=document.createElement('button');ob.className='btn sbGo';ob.innerHTML='<span class="sbPl" aria-hidden="true"></span><span>ابدأ الشرح</span>';ob.onclick=()=>{openBoard();/* طلب المدرب 30 أكتوبر: «ابدأ الشرح» يفتح السبورة بملء الشاشة مباشرة في كل الأجهزة */try{const f=document.querySelector('.board .bFull');if(f&&!document.querySelector('.board.full'))f.click()}catch(e){}};setTimeout(()=>{try{let vo='h';try{vo=localStorage.getItem('p101-bvo')==='z'?'z':'h'}catch(e){}const L=(openBoard(true)||[]).slice(0,5);const nm=window.coachName&&coachName();/* المدرب 6 نوفمبر: الاسم يدخل في جملة الترحيب المجهزة كما ستقال (كانت لا تطابق فيطلب صوتها عند البدء) *//* الاسم لا ينطق في السبورة */L.forEach(t=>TTS.prefetch(t,vo==='z'?'ar-SA-ZariyahNeural':'ar-SA-HamedNeural'))}catch(e){}},800);bc.querySelector('.sbRow').prepend(ob);const du=document.createElement('span');du.className='sbDur';bc.querySelector('.sbRow').insertBefore(du,ob.nextSibling);DUR.badge(du,key(pos.u,pos.l));i.appendChild(bc)}
   /* المدرب 3 نوفمبر: حذف الدرس تحت السبورة وكل ما يرتبط به (استمع للدرس كاملا، لافتة الدرس، بطاقة الدرس، الجداول، تطبيقات من الحياة، ملخص الدرس، والمساعد الذكي في هذا التبويب). تبقى السبورة وزر «اسأل» والدرس التالي */
   /* المدرب 6 نوفمبر: حذف «الدرس التالي» نهائيا من صفحة تبويب الدرس (تفتح من الفهرس) */
 }
@@ -2420,7 +2436,7 @@ function renderEx(v){
     const prog=document.createElement('div');prog.className='score';head.appendChild(prog);i.appendChild(head);
     let fin=0,pts=0;const max=probs.length*5;
     const upd=()=>{prog.textContent=fin?`أنجزت ${AR(fin)} من ${AR(probs.length)} — الخطوات الصحيحة من أول محاولة: ${AR(pts)} من ${AR(max)}`:''};
-    probs.forEach((p,n)=>i.appendChild(problemCard(p,(n===0?'مثال تفاعلي':(p.kind?'تمرين ':'تمرين حسابي ')+AR(n))+(p.src?' · '+p.src:''),(sc,det)=>{fin++;pts+=sc;upd();SYNC.result('prob',k+'.'+n,lesson().t,sc,5,det);if(fin===probs.length){const b=best['p'+k];if(b==null||pts>b){best['p'+k]=pts;store.set('p101-best',best)}rslot.appendChild(rateLink())}})));
+    probs.forEach((p,n)=>i.appendChild(problemCard(p,(n===0?'مثال 1':'تمرين '+AR(n)),(sc,det)=>{fin++;pts+=sc;upd();SYNC.result('prob',k+'.'+n,lesson().t,sc,5,det);if(fin===probs.length){const b=best['p'+k];if(b==null||pts>b){best['p'+k]=pts;store.set('p101-best',best)}rslot.appendChild(rateLink())}})));
     const rslot=document.createElement('div');i.appendChild(rslot);
     /* «مثال محلول للمراجعة» حذف من هذا التبويب لأنه معروض على السبورة */
   }else if(th){i.appendChild(theoryCard(th,s&&s.ex))}
@@ -2703,7 +2719,7 @@ function renderRefs(v){
   s.insertAdjacentHTML('beforeend',`<div class="md"><ul><li><a href="https://phet.colorado.edu/ar/" target="_blank" rel="noopener">PhET — محاكاة فيزيائية تفاعلية بالعربية</a> (جامعة كولورادو)</li></ul></div>`);
   i.appendChild(s);
 }
-function go(u,l,p,t){const nw=u!==pos.u||l!==pos.l;pos={u,l,p,t:t||(nw&&pos.t==='lab'?'sum':pos.t)};if(GT(pos.t))pos.t='sum';buildNav();render();/* المدرب 6 نوفمبر: تجهيز ترحيب الدرس الحالي للرجوع إلى تبويب «الدرس» */setTimeout(()=>{try{welcomePf(lesson(),document.querySelector('.boardCard')?!!document.querySelector('.boardCard .sbGo'):true)}catch(e){}},1500)}
+function go(u,l,p,t){const nw=u!==pos.u||l!==pos.l;pos={u,l,p,t:t||(nw&&pos.t==='lab'?'sum':pos.t)};if(GT(pos.t))pos.t='sum';buildNav();render();/* المدرب 6 نوفمبر: تجهيز ترحيب الدرس الحالي للرجوع إلى تبويب «الدرس» */setTimeout(()=>{try{tabVoPf()}catch(e){}try{welcomePf(lesson(),document.querySelector('.boardCard')?!!document.querySelector('.boardCard .sbGo'):true)}catch(e){}},1500)}
 /* زر «رجوع للدرس» في التجربة يعيد إلى الصفحة الرئيسية للدرس */
 document.addEventListener('click',e=>{if(e.target&&e.target.closest&&e.target.closest('#fsBack'))setTimeout(()=>{try{document.body.classList.remove('labFS');go(pos.u,pos.l,undefined,'sum')}catch(_){}},0)});
 function setTab(t){pos.t=t;render()}
@@ -3887,8 +3903,12 @@ setInterval(function(){var B=document.querySelector('.board');if(B&&B._p102&&!B.
 <script src="fixeddata.js?v=7"></script><script src="fixedai.js?v=6"></script><script>/* المدرب 5 نوفمبر: عند فتح درس من الفهرس يرحب المدرب بالمتدرب بالصوت ويوجهه إلى زر «ابدأ الشرح» على السبورة، والزر يتوهج حتى يضغطه */
 /* المدرب 6 نوفمبر: الترحيب يبدأ فورا داخل ضغطة المتدرب (الفهرس أو تبويب «الدرس») حتى يسمح الجوال بالصوت */
 /* المدرب 6 نوفمبر: نص الترحيب في دالة واحدة، ويجهز صوته مسبقا (عند فتح الفهرس وعند عرض أي تبويب للدرس) فيبدأ فورا */
-window.welcomeText=function(L,ob){var t=String((L&&(L.t||L.n))||'').replace(/[«»"]/g,'').trim();var nm='';try{nm=(window.coachName&&coachName())||''}catch(e){}
-  return 'أَهْلًا وَسَهْلًا بِكَ'+(nm?' يَا '+nm:'')+'. '+(t?'هٰذَا دَرْسُ: '+t+'. ':'')+(ob?'لِتَبْدَأَ الدَّرْس، اِضْغَطْ زِرَّ: اِبْدَأِ الشَّرْح، عَلَى السَّبُّورَة.':'')};
+window.welcomeText=function(L,ob){/* المدرب 6 نوفمبر (أ): ترحيب عام بلا اسم، يولد مرة واحدة لكل صفحة: «أهلا وسهلا بك. موضوعنا اليوم…» */var t=String((L&&(L.t||L.n))||'').replace(/[«»"]/g,'').trim();var u=0;try{u=pos.u;UNITS.forEach(function(U,ui){if(U.l&&U.l.indexOf(L)>=0)u=ui})}catch(e){}
+  var UO=['الْأُولَى','الثَّانِيَةِ','الثَّالِثَةِ','الرَّابِعَةِ','الْخَامِسَةِ'][u]||'',m=t.match(/^ورقة عمل\s*(?:\(([١٢12])\))?/),s='';
+  if(m)s=m[1]?'مَوْضُوعُنَا الْيَوْمَ، فِي الْوِحْدَةِ '+UO+'، حَلُّ وَرَقَةِ الْعَمَلِ '+(/[١1]/.test(m[1])?'الْأُولَى':'الثَّانِيَةِ')+'.':'مَوْضُوعُنَا الْيَوْمَ، فِي الْوِحْدَةِ '+UO+'، حَلُّ وَرَقَةِ الْعَمَلِ.';
+  else if(/^مراجعة/.test(t))s='مَوْضُوعُنَا الْيَوْمَ مُرَاجَعَةُ الْوِحْدَةِ '+UO+' وَحَلُّ تَمَارِينِهَا.';
+  else if(t)s='مَوْضُوعُنَا الْيَوْمَ عَنْ '+t+'.';
+  return 'أَهْلًا وَسَهْلًا بِكَ. '+s};
 window.welcomePf=function(L,ob){try{if(typeof TTS==='undefined'||!TTS.has()||!TTS.prefetch)return;var m=false;try{m=localStorage.getItem('p101-bmute')==='1'}catch(e){}if(m)return;var vo='h';try{vo=localStorage.getItem('p101-bvo')==='z'?'z':'h'}catch(e){}TTS.prefetch(welcomeText(L,ob!==false),vo==='z'?'ar-SA-ZariyahNeural':'ar-SA-HamedNeural')}catch(e){}};
 window.lessonWelcome=function(){(function(){try{
   /* المدرب 6 نوفمبر (أ): الترحيب مرة واحدة لكل درس في الجلسة، ولا يتكرر عند الرجوع إلى تبويب «الدرس» */var WK='';try{WK=key(pos.u,pos.l)}catch(e){}var WS={};try{WS=JSON.parse(sessionStorage.getItem('p101-welcSaid')||'{}')}catch(e){}if(WK&&WS[WK])return;
@@ -3904,6 +3924,11 @@ window.lessonWelcome=function(){(function(){try{
     var off=function(){ob.classList.remove('sbHint')};ob.addEventListener('click',off,{once:true});setTimeout(off,15000)}
 }catch(e){}})()};
 /* المدرب 6 نوفمبر (أ): إيقاف أي صوت عند مغادرة الصفحة (السحب للخروج أو إغلاق التبويب) */window.addEventListener('pagehide',function(){try{TTS.stop()}catch(x){}});
+/* المدرب 6 نوفمبر: جملة صوتية قصيرة عند فتح تبويبي الأمثلة واختبر نفسك (درسا كولوم وأوم أولا)، مرة واحدة لكل درس في الجلسة، ومجهزة مسبقا */
+window.TABVO={keys:['3-1','4-5'],ex:'أَهْلًا بِكَ فِي الْأَمْثِلَةِ وَالتَّمَارِينِ التَّفَاعُلِيَّةِ. ابْدَأْ بِالْمِثَالِ أَوَّلًا لِتَتَعَرَّفَ عَلَى طَرِيقَةِ الْحَلِّ، ثُمَّ طَبِّقْهَا فِي التَّمَارِينِ، وَاسْتَعِنْ بِالْآلَةِ الْحَاسِبَةِ، وَتَحَقَّقْ مِنْ إِجَابَتِك.',quiz:'حَانَ وَقْتُ اخْتِبَارِ نَفْسِك. اقْرَأْ كُلَّ سُؤَالٍ بِتَمَعُّنٍ، ثُمَّ اخْتَرِ الْإِجَابَةَ الصَّحِيحَةَ. بِالتَّوْفِيق.'};
+window.tabVoOk=function(){try{if(typeof TTS==='undefined'||!TTS.has()||!TTS.playAr)return false;if(localStorage.getItem('p101-bmute')==='1')return false;return TABVO.keys.indexOf(key(pos.u,pos.l))>=0}catch(e){return false}};
+window.tabVoPf=function(){try{if(!tabVoOk()||!TTS.prefetchAr)return;var vo=localStorage.getItem('p101-bvo')==='z'?'ar-SA-ZariyahNeural':'ar-SA-HamedNeural';TTS.prefetchAr(TABVO.ex,vo);TTS.prefetchAr(TABVO.quiz,vo)}catch(e){}};
+document.addEventListener('click',function(e){try{var b=e.target&&e.target.closest&&e.target.closest('#tabs button[data-t="ex"],#tabs button[data-t="quiz"]');if(!b||document.body.classList.contains('boardOpen')||!tabVoOk())return;var t=b.getAttribute('data-t'),K=key(pos.u,pos.l)+':'+t,S={};try{S=JSON.parse(sessionStorage.getItem('p101-tabSaid')||'{}')}catch(x){}if(S[K])return;var vo='h';try{vo=localStorage.getItem('p101-bvo')==='z'?'z':'h'}catch(x){}TTS.setOV(vo==='z'?'ar-SA-ZariyahNeural':'ar-SA-HamedNeural');TTS.playAr(TABVO[t],document.createElement('button'));S[K]=1;try{sessionStorage.setItem('p101-tabSaid',JSON.stringify(S))}catch(x){}}catch(x){}});
 document.addEventListener('click',function(e){try{var b=e.target&&e.target.closest&&e.target.closest('#tabs button[data-t="sum"]');if(b&&!document.body.classList.contains('boardOpen'))window.lessonWelcome()}catch(x){}});
 </script><style>@keyframes sbHintK{0%,100%{box-shadow:0 0 0 0 rgba(247,147,30,.85);transform:scale(1)}50%{box-shadow:0 0 0 14px rgba(247,147,30,0);transform:scale(1.06)}}.sbGo.sbHint{animation:sbHintK 1.2s ease-in-out infinite}</style><script>/* المدرب 5 نوفمبر: مشهد الخطوة على السبورة يبدأ حركته مع صوتها، ولا تنتقل الخطوة حتى تكتمل الحركة، ثم يثبت على مشهده الأخير فلا يتكرر بعد انتهاء الكلام */
 window.scSync=function(){const none={done:async()=>{}};try{const B=document.querySelector('.board');if(!B)return none;const st=[...B.querySelectorAll('.bContent .bStep.in')].pop();const sv=st&&st.querySelector('svg.kScene');if(!sv||sv.__scs)return none;sv.__scs=1;
