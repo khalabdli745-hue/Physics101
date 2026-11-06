@@ -1115,7 +1115,7 @@ document.querySelectorAll('.lgEye').forEach(b=>b.onclick=()=>{const i=b.parentNo
 <script src="gens.js?v=10281453"></script>
 <script src="art.js?v=10281453"></script>
 <script src="more.js?v=11041800"></script>
-<script src="labs.js?v=11123"></script>
+<script src="labs.js?v=11150"></script>
 <script src="coach.js?v=11011115"></script>
 <script>/* 5 نوفمبر: الدروس النموذجية (kcards31) لكل المتدربين */(function(){var n=1;document.write('<script src="kcards'+(n?'31':'')+'.js?v=11145"><\/script>')})()</script>
 <script>
@@ -3895,5 +3895,6 @@ window.scSync=function(){const none={done:async()=>{}};try{const B=document.quer
   return {D,done:async ok=>{const left=D*1000-(performance.now()-t0);if(left>0&&ok()){const e=performance.now()+left;while(performance.now()<e&&ok())await new Promise(r=>setTimeout(r,100))}}}}catch(e){return none}};
 </script><style id=nwEndCss>/* المدرب 6 نوفمبر: حذف «تجربة جديدة» من شاهد ونفذ، وزر أزرق في آخر بطاقة خطوات وتنفيذ التجربة */html body .lab .dxW>.vcNew,html body .lab .dmP [data-did=dmRe]{display:none!important}html body .lab .accB>.btns.nwEnd{display:block;margin:16px 0 4px!important}html body .lab .accB>.btns.nwEnd>#nw{display:block;width:100%;margin:0;padding:18px 14px;border:0;border-radius:14px;background:#1d4ed8;color:#fff;font-size:22px;font-weight:800;text-align:center;line-height:1.5;box-shadow:0 4px 14px rgba(29,78,216,.35);font-family:inherit;cursor:pointer}</style>
 <script>/* نقل زر التجربة الجديدة إلى آخر بطاقة التنفيذ */(function(){function mv(){document.querySelectorAll('.lab .accB>.btns:not(.nwEnd)').forEach(function(b){var n=b.querySelector('#nw');if(!n)return;b.classList.add('nwEnd');n.textContent='🔄 أعد التجربة بقيم جديدة';b.parentElement.appendChild(b)})}try{new MutationObserver(mv).observe(document.documentElement,{childList:true,subtree:true})}catch(e){}document.addEventListener('DOMContentLoaded',mv)})()</script>
+<style id=sbHintRed>/* المدرب 6 نوفمبر: هالة نبض زر «ابدأ الشرح» حمراء بلون الزر (حلقة مستقلة لأن ظل الزر ثابت) */@keyframes sbHintR{0%{opacity:.85;transform:scale(1)}100%{opacity:0;transform:scale(1.16,1.38)}}@keyframes sbHintS{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}html body .boardCard .sbRow .btn.sbGo.sbHint{position:relative;overflow:visible!important;animation:sbHintS 1.2s ease-in-out infinite!important}html body .boardCard .sbRow .btn.sbGo.sbHint::after{content:'';position:absolute;inset:-3px;border-radius:inherit;border:5px solid #DC2626;pointer-events:none;animation:sbHintR 1.2s ease-out infinite}</style>
 </body>
 </html>
