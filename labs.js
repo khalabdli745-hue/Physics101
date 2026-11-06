@@ -6788,7 +6788,9 @@ async function labNarr(s,W,psleep,fb){const t=labVo.txt(s,W);if(!t||!labVo.on())
 function dxSnapOf(st){const c=st.cloneNode(true);/* 6 نوفمبر: الصورة الثابتة لا تحمل id الأصل (كان يكرر id مثل aF فيضبط التنفيذ نسخة الصورة بدل الجهاز) */c.removeAttribute('id');c.querySelectorAll('img.handH,.hud').forEach(e=>e.remove());const sfx='z'+(window.__dxZ=(window.__dxZ||0)+1)+'_';const M=new Map();
   c.querySelectorAll('[id]').forEach(e=>{if(e.closest('defs')||/^(linearGradient|radialGradient|clipPath|mask|filter|marker|pattern|symbol)$/i.test(e.tagName)){M.set(e.id,sfx+e.id);e.id=sfx+e.id}else e.removeAttribute('id')});
   if(M.size)c.querySelectorAll('*').forEach(x=>{for(const a of ['fill','stroke','filter','clip-path','mask','href']){const v=x.getAttribute(a);if(!v||v.indexOf('#')<0)continue;const w=v.replace(/url\(#([^)]+)\)/g,(m,k)=>M.has(k)?'url(#'+M.get(k)+')':m).replace(/^#(.+)$/,(m,k)=>M.has(k)?'#'+M.get(k):m);if(w!==v)x.setAttribute(a,w)}});
-  const d=document.createElement('div');d.className='dxSnap';d.setAttribute('aria-hidden','true');d.appendChild(c);return d}
+  const d=document.createElement('div');d.className='dxSnap';d.setAttribute('aria-hidden','true');d.appendChild(c);dvRepaint(c);return d}
+/* المدرب 6 نوفمبر: سفاري لا يرسم صورة SVG (image) أدرجت قبل اكتمال تحميلها (اختفى جهاز مصدر الجهد في الصورة الثابتة)؛ نعيد ضبط الرابط بعد التحميل فيرسمها */
+function dvRepaint(root){try{root.querySelectorAll('image').forEach(im=>{const u=im.getAttribute('href')||im.getAttribute('xlink:href');if(!u||/^data:/.test(u))return;const I=new Image();const re=()=>{try{im.setAttribute('href','');im.setAttribute('href',u)}catch(e){}};I.onload=()=>{re();setTimeout(re,300)};I.src=u;if(I.complete)setTimeout(re,0)})}catch(e){}}
 function dxTake(st,into){if(!st||st.parentElement===into)return;const from=st.parentElement;
   if(from&&from.matches&&from.matches('[data-did=dmS]')&&from!==into){try{from.appendChild(dxSnapOf(st))}catch(e){}}
   if(!DXHOME.has(st)){const ph=document.createComment('dx');st.before(ph);DXHOME.set(st,ph)}into.querySelectorAll(':scope>.dxSnap').forEach(e=>e.remove());into.appendChild(st)}
@@ -6798,6 +6800,7 @@ function DX(cfg){return function(){
   const c52=box.querySelector('.ctl.lx52');if(!c52)return;const c51=box.querySelector('.ctl.lx51');
   if(!document.getElementById('dmCssO')){const st=document.createElement('style');st.id='dmCssO';st.textContent=CSS+'#dmS p,#dmS .row,#dmS .chk,#dmS .msg,#dmS .wsc>h4{display:none!important}';document.head.appendChild(st)}
   if(!document.getElementById('dxCss')){const st=document.createElement('style');st.id='dxCss';st.textContent=DXCSS;document.head.appendChild(st)}
+  try{dvRepaint(box)}catch(e){}
   try{if(!window.__dvDec){window.__dvDec=new Set()}box.querySelectorAll('image[href^="dv/"],img[src^="dv/"]').forEach(e=>{const u=e.getAttribute('href')||e.getAttribute('src');if(window.__dvDec.has(u))return;window.__dvDec.add(u);const im=new Image();im.src=u;if(im.decode)im.decode().catch(()=>{});(window.__dvKeep=window.__dvKeep||[]).push(im)});['dv/95-hand-point.webp'].forEach(u=>{if(!window.__dvDec.has(u)){window.__dvDec.add(u);const im=new Image();im.src=u;(window.__dvKeep=window.__dvKeep||[]).push(im)}})}catch(e){}
   DXI=DXI.filter(x=>x.P.isConnected);DXHOME.forEach((ph,st)=>{if(!ph.isConnected)DXHOME.delete(st)});
   [...c52.querySelectorAll(':scope>.lxM')].forEach(m=>m.classList.add('dmHide'));
