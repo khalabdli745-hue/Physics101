@@ -2069,7 +2069,7 @@ function renderSum(v){
     bc.innerHTML='<div class="sbFrame"><div class="sbTop"><span class="sbCam" aria-hidden="true"></span></div><div class="sbSurface"><h2 class="sbH">شرح الدرس</h2><p class="sbP">على السبورة <span class="sbNo">مع <b>المدرب الذكي</b></span></p><div class="sbLaw" aria-hidden="true"></div><div class="sbRow"><span class="sbAv" aria-hidden="true">👨‍🏫</span></div></div><div class="sbTray" aria-hidden="true"><i style="--m:#1f2937"></i><i style="--m:#1d4ed8"></i><i style="--m:#dc2626"></i><i style="--m:#15803d"></i><b></b></div></div>';
     const ob=document.createElement('button');ob.className='btn sbGo';ob.innerHTML='<span class="sbPl" aria-hidden="true"></span><span>ابدأ الشرح</span>';ob.onclick=()=>{openBoard();/* طلب المدرب 30 أكتوبر: «ابدأ الشرح» يفتح السبورة بملء الشاشة مباشرة في كل الأجهزة */try{const f=document.querySelector('.board .bFull');if(f&&!document.querySelector('.board.full'))f.click()}catch(e){}};setTimeout(()=>{try{let vo='h';try{vo=localStorage.getItem('p101-bvo')==='z'?'z':'h'}catch(e){}const L=(openBoard(true)||[]).slice(0,5);const nm=window.coachName&&coachName();if(L[0]&&nm)L[0]=L[0].replace(/^مرحبًا بك،/,'مرحبا بك يا '+nm+'،');L.forEach(t=>TTS.prefetch(t,vo==='z'?'ar-SA-ZariyahNeural':'ar-SA-HamedNeural'))}catch(e){}},800);bc.querySelector('.sbRow').prepend(ob);const du=document.createElement('span');du.className='sbDur';bc.querySelector('.sbRow').insertBefore(du,ob.nextSibling);DUR.badge(du,key(pos.u,pos.l));i.appendChild(bc)}
   /* المدرب 3 نوفمبر: حذف الدرس تحت السبورة وكل ما يرتبط به (استمع للدرس كاملا، لافتة الدرس، بطاقة الدرس، الجداول، تطبيقات من الحياة، ملخص الدرس، والمساعد الذكي في هذا التبويب). تبقى السبورة وزر «اسأل» والدرس التالي */
-  nextLessonBtn(i);
+  /* المدرب 6 نوفمبر: حذف «الدرس التالي» نهائيا من صفحة تبويب الدرس (تفتح من الفهرس) */
 }
 function renderPage(v){
   const i=wrap(v),l=lesson(),p=l.p[pos.p];
@@ -2435,7 +2435,7 @@ function renderEx(v){
     const r=document.createElement('div');r.className='btnrow';r.appendChild(b);i.appendChild(r);
   }
   /* المدرب 3 نوفمبر: المساعد الذكي لا يظهر إلا بعد الإجابة الخاطئة (aiFix) */
-  nextLessonBtn(i);
+  /* المدرب 6 نوفمبر (أ): «الدرس التالي» في آخر «اختبر نفسك» فقط */
 }
 /* المدرب 3 نوفمبر: لا زر تلميح قبل الإجابة؛ التلميح يظهر فقط بعد الإجابة الخاطئة (انظر aiFix في آخر الملف) */
 function hintBtn(c,p){return document.createDocumentFragment()}
