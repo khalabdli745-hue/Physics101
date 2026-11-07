@@ -815,8 +815,13 @@ async function drawAI(){
    <p class="sub" id="gmSt">جار التحميل…</p>
    <ol class="sub" style="padding-inline-start:1.2em"><li>من <b>aistudio.google.com/apikey</b> انسخ مفتاح Gemini بزر النسخ والصقه هنا.</li><li>فعل الصوت لدرس كولوم، ثم اضغط «تجهيز صوت كولوم». يكمل الخادم وحده، ويتوقف عند الحد اليومي المجاني ويكمل في اليوم التالي.</li></ol>
    <div class="row"><input type="password" id="gmk" placeholder="مفتاح Gemini" style="flex:1;min-width:180px;direction:ltr" autocomplete="off"><button class="btn" id="gmsv">حفظ المفتاح</button></div>
-   <div class="row" style="margin-top:8px;align-items:center"><label class="sub" style="margin:0;display:flex;gap:6px;align-items:center"><input type="checkbox" id="gmon"> تفعيل صوت Gemini لدرس «الشحنات الكهربائية وقانون كولوم» وتجربته</label></div>
+   <p class="sub" style="margin-top:10px">مدفوع (اختياري): مفتاح <b>OpenRouter</b> برصيد مسبق، يستخدمه الخادم بالصوت نفسه بعد انتهاء الحد المجاني، وأسرع (نحو 15 جملة كل 10 دقائق). ويتوقف وحده عند انتهاء الرصيد.</p>
+   <div class="row"><input type="password" id="gork" placeholder="مفتاح OpenRouter" style="flex:1;min-width:180px;direction:ltr" autocomplete="off"><button class="btn" id="gorsv">حفظ مفتاح OpenRouter</button></div>
+   <div class="row" style="margin-top:8px;align-items:center;gap:14px;flex-wrap:wrap"><span class="sub" style="margin:0">تفعيل صوت Gemini (مع التجربة):</span><label class="sub" style="margin:0;display:flex;gap:6px;align-items:center"><input type="checkbox" id="gmon"> كولوم</label><label class="sub" style="margin:0;display:flex;gap:6px;align-items:center"><input type="checkbox" id="gmon45"> أوم</label><label class="sub" style="margin:0;display:flex;gap:6px;align-items:center"><input type="checkbox" id="gmonAll"> كل الدروس</label></div>
    <div class="row" style="margin-top:8px"><button class="btn" id="gmq">⚙ تجهيز صوت كولوم</button><button class="btn ghost" id="gmt">▶ تجربة الصوت</button><button class="btn ghost" id="gmr">↻ تحديث الحالة</button></div>
+   <div class="row" style="margin-top:10px;align-items:center;flex-wrap:wrap"><span class="sub" style="margin:0">⚡ تجهيز سريع (OpenRouter، والصفحة مفتوحة):</span><select id="gfS"><option value="3-1">كولوم</option><option value="4-5">أوم</option><option value="3-1,4-5">كولوم وأوم</option><option value="all">المنصة كاملة</option></select><button class="btn" id="gfGo">⚡ تجهيز سريع</button><button class="btn danger" id="gfStop" hidden>⏹ إيقاف</button></div>
+   <div id="gfBar" hidden style="margin-top:8px;height:10px;border-radius:6px;background:var(--line);overflow:hidden"><div id="gfFill" style="height:100%;width:0;background:var(--good);transition:width .3s"></div></div>
+   <p class="sub" id="gfMsg" style="margin-top:6px"></p>
    <p class="msg" id="gmm"></p>
   </div>
   </div><div class="aiQ">
@@ -835,21 +840,46 @@ async function drawAI(){
       if(!x.ok)return tm(esc(errText(x.error)),'bad');tm(x.cached?'✓ الصوت محفوظ مسبقا.':'✓ تم توليد الصوت وحفظه.','good');au.src='data:audio/mpeg;base64,'+x.audio;au.play().catch(()=>tm('اضغط «تجربة الصوت» مرة أخرى للتشغيل.','bad'))};
     $('#ttoff').onclick=async()=>{if(!confirm('إيقاف الصوت الطبيعي؟ سيعود المتدربون إلى صوت الجهاز.'))return;const x=await api({a:'tttskey',token:TOKEN,key:''});toast(x.ok?'تم الإيقاف':errText(x.error));drawAI()}}
   /* 6 نوفمبر: صوت Gemini (code.gs 43) */
-  {const gm=(t,c)=>{$('#gmm').className='msg '+(c||'');$('#gmm').innerHTML=t};let G=null;
+  {const gm=(t,c)=>{$('#gmm').className='msg '+(c||'');$('#gmm').innerHTML=t};let G=null;const GALL=["0-1", "0-2", "0-3", "0-4", "0-5", "0-6", "0-7", "0-8", "1-1", "1-2", "1-3", "1-5", "1-6", "1-7", "1-8", "1-9", "1-10", "1-11", "2-1", "2-3", "2-5", "2-7", "2-8", "3-1", "3-3", "3-4", "3-5", "3-6", "3-8", "3-9", "4-1", "4-5", "4-8", "4-9", "4-10"];
     const fmtT=ms=>{try{return new Date(ms).toLocaleString('ar-SA-u-ca-gregory-nu-latn',{timeZone:'Asia/Riyadh',hour:'2-digit',minute:'2-digit',day:'numeric',month:'numeric'})}catch(e){return ''}};
     const st=async(o)=>{let x;try{x=await api(Object.assign({a:'tgem',token:TOKEN},o||{}))}catch(e){x={ok:false,error:'net'}}
       if(!$('#gmSt'))return x;
-      if(!x.ok){$('#gmSt').innerHTML=x.error==='unknown_action'?'<b style="color:var(--bad)">حدث كود الخادم code.gs إلى الإصدار 45 وانشر إصدارا جديدا.</b>':esc(errText(x.error));return x}
-      G=x;$('#gmon').checked=!!(x.cfg.on&&x.cfg.keys.indexOf('3-1')>=0);
-      $('#gmSt').innerHTML='المفتاح: '+(x.key?'<b style="color:var(--good)">✓ محفوظ</b>':'<b style="color:var(--bad)">غير محفوظ</b>')+' · الصوت: '+(x.cfg.on?'<b style="color:var(--good)">مفعل</b> لـ '+AR(x.cfg.keys.length)+' درس':'غير مفعل')+' · تم توليد '+AR(x.made||0)+' جملة · المتبقي في التجهيز: '+AR(x.left||0)+(x.pause&&x.pause>Date.now()?' · <b>متوقف حتى '+fmtT(x.pause)+' (انتهى الحد اليومي المجاني لكل النماذج)</b>':'')+(x.lastErr&&!(x.pause>Date.now())?' · آخر خطأ: '+esc(x.lastErr):'');return x};
+      if(!x.ok){$('#gmSt').innerHTML=x.error==='unknown_action'?'<b style="color:var(--bad)">حدث كود الخادم code.gs إلى الإصدار 46 وانشر إصدارا جديدا.</b>':esc(errText(x.error));return x}
+      G=x;const ks=x.cfg.keys||[],onK=k=>!!(x.cfg.on&&ks.indexOf(k)>=0);$('#gmon').checked=onK('3-1');$('#gmon45').checked=onK('4-5');$('#gmonAll').checked=!!(x.cfg.on&&GALL.every(k=>ks.indexOf(k)>=0));
+      $('#gmSt').innerHTML='المفتاح: '+(x.key?'<b style="color:var(--good)">✓ محفوظ</b>':'<b style="color:var(--bad)">غير محفوظ</b>')+' · الصوت: '+(x.cfg.on?'<b style="color:var(--good)">مفعل</b> لـ '+AR(x.cfg.keys.length)+' درس':'غير مفعل')+' · تم توليد '+AR(x.made||0)+' جملة · المتبقي في التجهيز: '+AR(x.left||0)+(x.pause&&x.pause>Date.now()?' · <b>متوقف حتى '+fmtT(x.pause)+' (انتهى الحد اليومي المجاني لكل النماذج)</b>':'')+(x.lastErr&&!(x.pause>Date.now())?' · آخر خطأ: '+esc(x.lastErr):'')+(x.or===undefined?' · <b style="color:var(--bad)">لاستخدام OpenRouter حدث code.gs إلى الإصدار 46</b>':' · OpenRouter: '+(x.or?(x.orOn?'<b style="color:var(--good)">✓ مفعل</b>':(x.lastErr==='or_credit'?'<b style="color:var(--bad)">انتهى الرصيد</b>':'<b style="color:var(--bad)">متوقف</b>'))+' (ولد '+AR(x.orMade||0)+' جملة، نحو '+AR(x.orChars||0)+' حرف)':'غير محفوظ'));return x};
     st();
     $('#gmr').onclick=()=>st();
     $('#gmsv').onclick=async()=>{const k=$('#gmk').value.trim();if(!k)return gm('الصق المفتاح أولا.','bad');gm('<span class="spin"></span> جار الحفظ…');const x=await st({key:k});if(x.ok){$('#gmk').value='';gm('✓ تم حفظ المفتاح.','good')}else gm(x.error==='bad_key'?'المفتاح غير صحيح الشكل: تأكد أنك نسخته كاملا بلا مسافات.':x.error==='gem_key'?'رفض Google هذا المفتاح. انسخه من جديد من aistudio.google.com/apikey.':esc(errText(x.error)),'bad')};
-    $('#gmon').onchange=async e=>{const on=e.target.checked;gm('<span class="spin"></span> جار الحفظ…');const ks=((G&&G.cfg.keys)||[]).filter(k=>k!=='3-1');if(on)ks.push('3-1');const x=await st({on:on||ks.length>0,keys:ks});if(x.ok)gm(on?'✓ درس كولوم يستخدم صوت Gemini (وحامد لأي جملة لم تجهز بعد).':'✓ درس كولوم عاد إلى صوت حامد.','good');else e.target.checked=!on};
+    $('#gorsv').onclick=async()=>{const k=$('#gork').value.trim();if(!k)return gm('الصق مفتاح OpenRouter أولا.','bad');gm('<span class="spin"></span> جار التحقق من المفتاح…');const x=await st({orkey:k});if(x.ok){$('#gork').value='';gm('✓ تم حفظ مفتاح OpenRouter. يكمل الخادم التجهيز بالرصيد بعد انتهاء الحد المجاني.','good')}else gm(x.error==='unknown_action'?'حدث كود الخادم code.gs إلى الإصدار 46 أولا.':x.error==='bad_key'?'المفتاح غير صحيح الشكل: انسخه كاملا بلا مسافات.':x.error==='or_key'?'رفض OpenRouter هذا المفتاح. أنشئ مفتاحا جديدا من openrouter.ai/keys.':esc(errText(x.error)),'bad')};
+    const setK=async(add,rem,msg)=>{gm('<span class="spin"></span> جار الحفظ…');let ks=((G&&G.cfg.keys)||[]).filter(k=>rem.indexOf(k)<0);add.forEach(k=>{if(ks.indexOf(k)<0)ks.push(k)});const x=await st({on:ks.length>0,keys:ks});if(x.ok)gm(msg,'good');else st();return x};
+    $('#gmon').onchange=e=>setK(e.target.checked?['3-1']:[],e.target.checked?[]:['3-1'],e.target.checked?'✓ درس كولوم يستخدم صوت Gemini (وحامد لأي جملة لم تجهز بعد).':'✓ درس كولوم عاد إلى صوت حامد.');
+    $('#gmon45').onchange=e=>setK(e.target.checked?['4-5']:[],e.target.checked?[]:['4-5'],e.target.checked?'✓ درس أوم يستخدم صوت Gemini (وحامد لأي جملة لم تجهز بعد).':'✓ درس أوم عاد إلى صوت حامد.');
+    $('#gmonAll').onchange=e=>setK(e.target.checked?GALL:[],e.target.checked?[]:GALL,e.target.checked?'✓ كل الدروس تستخدم صوت Gemini (وحامد لأي جملة لم تجهز بعد).':'✓ كل الدروس عادت إلى صوت حامد.');
+    /* 7 نوفمبر: تجهيز سريع من الصفحة (code.gs 47): دفعات من 10 جمل، 3 دفعات متوازية، حتى تنتهي القائمة */
+    let gfRun=false;const gfm=(t,c)=>{$('#gfMsg').className='sub '+(c||'');$('#gfMsg').innerHTML=t};
+    $('#gfStop').onclick=()=>{gfRun=false;gfm('جار الإيقاف بعد الدفعات الحالية…')};
+    $('#gfGo').onclick=async()=>{if(gfRun)return;const sc=$('#gfS').value,keys=sc==='all'?GALL:sc.split(',');
+      gfm('<span class="spin"></span> جار تحميل قوائم الجمل…');let T=[],seen={},miss=[];
+      for(const k of keys){try{const r=await fetch('gq/'+k+'.json?v='+Date.now());if(!r.ok){miss.push(k);continue}(await r.json()).forEach(t=>{t=String(t||'').trim();if(t&&!seen[t]){seen[t]=1;T.push(t)}})}catch(e){miss.push(k)}}
+      if(!T.length)return gfm('تعذر تحميل قوائم الجمل.','bad');
+      let wl=null;try{wl=await navigator.wakeLock.request('screen')}catch(e){}
+      gfRun=true;$('#gfStop').hidden=false;$('#gfGo').disabled=true;$('#gfBar').hidden=false;
+      let made=0,have=0,fail=0,stop='',err='',chars=0,pass=0;const s0=await st();const chars0=(s0&&s0.orChars)||0;const N=T.length;
+      const show=()=>{const d=Math.min(N,made+have);$('#gfFill').style.width=(d/N*100).toFixed(1)+'%';const usd=chars*0.0000175;gfm('الجمل: '+AR(d)+' من '+AR(N)+' · ولد الآن '+AR(made)+' · جاهز مسبقا '+AR(have)+(fail?' · أعيد لاحقا '+AR(fail):'')+' · التكلفة التقريبية لهذه الجلسة: '+usd.toFixed(2)+' $'+(pass>1?' · الدورة '+AR(pass):''))};
+      let Q=T.slice();for(pass=1;pass<=3&&gfRun&&!stop&&!err&&Q.length;pass++){const B=[];for(let i=0;i<Q.length;i+=10)B.push(Q.slice(i,i+10));let bi=0;fail=0;const R=[];
+        const worker=async()=>{while(gfRun&&!stop&&!err&&bi<B.length){const b=B[bi++];let x;try{x=await api({a:'gfast',token:TOKEN,texts:b})}catch(e){x={ok:false,error:'net'}}
+          if(!x.ok){if(x.error==='net'){fail+=b.length;R.push(...b);show();continue}err=x.error;break}
+          made+=x.made;have+=x.have;fail+=x.fail;if(Array.isArray(x.failT))R.push(...x.failT);chars=Math.max(chars,(x.orChars||0)-chars0);if(x.stop)stop=x.stop;show()}};
+        await Promise.all([worker(),worker(),worker()]);Q=R;if(Q.length&&gfRun&&!stop&&!err)await new Promise(z=>setTimeout(z,3000))}
+      pass=Math.max(1,pass-1);      gfRun=false;$('#gfStop').hidden=true;$('#gfGo').disabled=false;try{wl&&wl.release()}catch(e){}
+      if(err)gfm(err==='unknown_action'?'حدث كود الخادم code.gs إلى الإصدار 47 أولا.':err==='or_off'?'احفظ مفتاح OpenRouter أولا.':err==='or_credit'?'انتهى رصيد OpenRouter. اشحن الرصيد ثم احفظ المفتاح من جديد.':err==='or_key'?'رفض OpenRouter المفتاح. احفظ مفتاحا جديدا.':esc(errText(err)),'bad');
+      else if(stop)gfm('توقف: '+(stop==='or_credit'?'انتهى رصيد OpenRouter. اشحن الرصيد ثم احفظ المفتاح من جديد.':'رفض OpenRouter المفتاح.')+' · تم: '+AR(made+have)+' من '+AR(N),'bad');
+      else{show();gfm($('#gfMsg').innerHTML+(made+have>=N?' · <b style="color:var(--good)">✓ اكتمل التجهيز</b>':' · توقف قبل الاكتمال، اضغط «تجهيز سريع» مرة أخرى للباقي'));}
+      if(miss.length)gfm($('#gfMsg').innerHTML+' · لا توجد قائمة لـ: '+miss.join('، '));st()};
     $('#gmq').onclick=async()=>{gm('<span class="spin"></span> جار تجهيز قائمة الجمل…');let L=[];try{L=await (await fetch('gq/3-1.json?v='+Date.now())).json()}catch(e){return gm('تعذر تحميل قائمة جمل كولوم.','bad')}
       let x;try{x=await api({a:'tgemq',token:TOKEN,texts:L})}catch(e){x={ok:false,error:'net'}}
       if(!x.ok)return gm(x.error==='unknown_action'?'حدث كود الخادم code.gs إلى الإصدار 45 أولا.':esc(errText(x.error)),'bad');
-      gm('✓ جاهز مسبقا: '+AR(x.ready)+' جملة · أضيفت للتجهيز: '+AR(x.added)+' · سيكمل الخادم وحده في الخلفية (نحو 4 جمل كل 10 دقائق حتى الحد اليومي).','good');st()};
+      gm('✓ جاهز مسبقا: '+AR(x.ready)+' جملة · أضيفت للتجهيز: '+AR(x.added)+' · سيكمل الخادم وحده في الخلفية (نحو 4 جمل كل 10 دقائق في المجاني، ونحو 15 مع رصيد OpenRouter).','good');st()};
     let au=null;$('#gmt').onclick=async()=>{au=au||new Audio();gm('<span class="spin"></span> جار توليد عينة…');let x;try{x=await api({a:'gtts',token:TOKEN,text:'سنشاهد الآن تجربة قانون كولوم خطوة خطوة. لاحظ طريقة التنفيذ والقراءة في كل خطوة.'})}catch(e){x={ok:false,error:'net'}}
       if(!x.ok)return gm(x.error==='gem_day'?'وصل الحد اليومي المجاني، جرب غدا.':x.error==='gem_busy'?'الخادم مشغول بحد الدقيقة، جرب بعد دقيقة.':esc(errText(x.error)),'bad');au.src='data:audio/wav;base64,'+x.audio;au.play().then(()=>gm(x.cached?'✓ العينة محفوظة مسبقا.':'✓ تم توليد العينة وحفظها.','good')).catch(()=>gm('اضغط «تجربة الصوت» مرة أخرى للتشغيل.','bad'))};
   }
