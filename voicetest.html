@@ -48,6 +48,8 @@ h1{font-size:21px;margin:0}
  </div>
 
  <div class="card"><div style="font-weight:800;margin-bottom:6px">2) الجمل</div><div id="list"></div></div>
+<!-- المدرب 7 نوفمبر: تجربة صيغ نطق حامد لكلمات كولوم قبل اعتمادها -->
+<div class="card"><div style="font-weight:800;margin-bottom:6px">3) تجربة نطق كلمات (حامد)</div><div class="leg">استمع لكل صيغة واختر الأوضح، ثم أخبر المدرب الذكي برقمها.</div><div id="tlist"></div></div>
 </div>
 
 <script>
@@ -97,6 +99,21 @@ function render(){list.textContent='';S.forEach((s,i)=>{const d=document.createE
  d.querySelector('button').onclick=()=>one(i);list.appendChild(d)})}
 document.getElementById('pa').onclick=all;
 document.getElementById('st').onclick=()=>{stop=true;try{AUD.pause()}catch(e){}say('توقف.')};
+/* المدرب 7 نوفمبر: صيغ نطق للتجربة */
+const PRE='هَلْ شَعَرْتَ يَوْمًا بِشَرَارَةٍ صَغِيرَةٍ عِنْدَمَا لَمَسْتَ ',KP='وَتَنْشَأُ بَيْنَهَا قُوَّةٌ ',KS=' تَجْعَلُهَا تَتَجَاذَبُ أَوْ تَتَنَافَرُ.';
+const TW=[['مقبض الباب 1 (الحالي)',PRE+'مِقْبَضَ الْبَابِ؟ أَوْ بَعْدَ الْمَشْيِ عَلَى السَّجَّادِ؟'],
+['مقبض الباب 2 (سكون قبل علامة السؤال)',PRE+'مِقْبَضَ الْبَابْ؟ أَوْ بَعْدَ الْمَشْيِ عَلَى السَّجَّادْ؟'],
+['مقبض الباب 3 (آخر الكلمة بلا تشكيل)',PRE+'مِقْبَضَ الباب؟ أَوْ بَعْدَ الْمَشْيِ عَلَى السجاد؟'],
+['مقبض الباب 4 (الضاد بلا فتحة)',PRE+'مِقْبَض الْبَابْ؟ أَوْ بَعْدَ الْمَشْيِ عَلَى السَّجَّادْ؟'],
+['مقبض الباب 5 (الضاد ساكنة ووصل مباشر)',PRE+'مِقْبَضْ لْبَابْ؟ أَوْ بَعْدَ الْمَشْيِ عَلَى السَّجَّادْ؟'],
+['كهروستاتيكية 1 (الحالي)',KP+'كَهْرُوسْتَاتِيكِيْيَةٌ'+KS],
+['كهروستاتيكية 2 (شدة على الياء)',KP+'كَهْرُوسْتَاتِيكِيَّةٌ'+KS],
+['كهروستاتيكية 3 (مد مضاعف)',KP+'كَهْرُوسْتَااتِيكِيَّةٌ'+KS],
+['كهروستاتيكية 4 (كهرو منفصلة)',KP+'كَهْرُو سْتَاتِيكِيَّةٌ'+KS],
+['كهروستاتيكية 5 (بلا تشكيل)',KP+'كهروستاتيكية'+KS]];
+const HV='ar-SA-HamedNeural',TM=new Map();
+async function tone(i){stop=false;const t=TW[i][1];try{say('جار تجهيز الصيغة '+(i+1)+'…');let u=TM.get(t);if(!u){const r=await fetch(API,{method:'POST',body:JSON.stringify({a:'tts',token:tok,voice:HV,rate:0,segs:segs(t)}),redirect:'follow'}).then(x=>x.json());if(!r||!r.ok)throw r||{};const bin=atob(r.audio),u8=new Uint8Array(bin.length);for(let j=0;j<bin.length;j++)u8[j]=bin.charCodeAt(j);u=URL.createObjectURL(new Blob([u8],{type:r.mime||'audio/mpeg'}));TM.set(t,u)}say('حامد · '+TW[i][0]);await play(u)}catch(e){say(ERR[e&&e.error]||('تعذر التشغيل: '+((e&&e.error)||'خطأ')),true)}}
+(()=>{const tl=document.getElementById('tlist');TW.forEach((w,i)=>{const d=document.createElement('div');d.className='card s';d.innerHTML='<span class="n">'+(i+1)+'</span><div class="tx"><b></b><small></small></div><button class="btn" type="button">▶</button>';d.querySelector('b').textContent=w[0];d.querySelector('small').textContent=w[1];d.querySelector('button').onclick=()=>tone(i);tl.appendChild(d)})})();
 render();
 if(!API)say('لم يُعثر على رابط الخادم (config.js).',true);else if(!tok)say(ERR.auth,true);
 </script>

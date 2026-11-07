@@ -270,7 +270,7 @@ body.boardOpen{overflow:hidden}
 .board{position:fixed;inset:0;z-index:1000;display:flex;flex-direction:column;background:#26313f;color:#1f2937}
 .board .bTop{display:flex;align-items:center;gap:10px;padding:8px 12px;padding-top:max(8px,env(safe-area-inset-top));background:var(--accent);color:var(--accent-ink)}
 .board .bTop b{flex:1;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.board .bNum{font-size:13px;opacity:.9;direction:rtl}
+.board .bNum{font-size:13px;opacity:.9;direction:ltr;unicode-bidi:isolate}/* المدرب 7 نوفمبر: العداد يقرأ 3 / 20 لا 20 / 3 *//* المدرب 7 نوفمبر: زر المساعد البرتقالي بحجم صورة المدرب وعلى نفس ارتفاعها في الجوال الأفقي */@media (orientation:landscape) and (max-height:600px){html body .board.board.board.board .bTeach>.bAskMini.coIc{top:16px!important;left:4px!important;width:64px!important;height:64px!important;border-radius:16px!important}}
 .board .bX{background:none;border:0;color:inherit;font-size:22px;cursor:pointer;padding:0 4px}
 .board .bStage{flex:1;display:flex;flex-direction:column;padding:10px;min-height:0}
 .board .bSlide{flex:1;overflow:auto;-webkit-overflow-scrolling:touch;background:#fff;border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.35);position:relative;max-width:1000px;width:100%;margin:0 auto}
@@ -1117,7 +1117,7 @@ document.querySelectorAll('.lgEye').forEach(b=>b.onclick=()=>{const i=b.parentNo
 <script src="more.js?v=11070600"></script>
 <script src="labs.js?v=11168"></script><script src="labvo.js?v=11070800"></script><script src="azfix.js?v=11071000"></script>
 <script src="coach.js?v=11070600"></script>
-<script>/* 5 نوفمبر: الدروس النموذجية (kcards31) لكل المتدربين */(function(){var n=1;document.write('<script src="kcards'+(n?'31':'')+'.js?v=11147"><\/script>')})()</script>
+<script>/* 5 نوفمبر: الدروس النموذجية (kcards31) لكل المتدربين */(function(){var n=1;document.write('<script src="kcards'+(n?'31':'')+'.js?v=11148"><\/script>')})()</script>
 <script>
 const UNITS=window.UNITS,STUDY=window.STUDY,EXTRA=window.EXTRA||{},FIGS=window.FIGS||{};
 window.PAGES=window.PAGES||{};
