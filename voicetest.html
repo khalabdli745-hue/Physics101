@@ -36,7 +36,7 @@ h1{font-size:21px;margin:0}
 </head>
 <body>
 <div class="w">
- <h1>تجربة نطق حامد · درس كولوم</h1>
+ <h1>فحص انقطاع صوت حامد · درس كولوم</h1>
  <div class="sub">صفحة تجربة للمدرب فقط، بصوت حامد. اضغط ▶ أمام كل صيغة واستمع، ثم أرسل رقم الأوضح. يُولد صوت كل صيغة مرة واحدة ويُحفظ.</div>
 
  <!-- المدرب 7 نوفمبر: الصفحة لحامد وتجربة كولوم فقط، فأخفيت اختيار الأصوات والجمل القديمة -->
@@ -114,7 +114,31 @@ const TW=[['مقبض الباب 1 (الحالي)',PRE+'مِقْبَضَ الْب
 ['كهروستاتيكية 5 (بلا تشكيل)',KP+'كهروستاتيكية'+KS]];
 const HV='ar-SA-HamedNeural',TM=new Map();
 async function tone(i){stop=false;const t=TW[i][1];try{say('جار تجهيز الصيغة '+(i+1)+'…');let u=TM.get(t);if(!u){const r=await fetch(API,{method:'POST',body:JSON.stringify({a:'tts',token:tok,voice:HV,rate:0,segs:segs(t)}),redirect:'follow'}).then(x=>x.json());if(!r||!r.ok)throw r||{};const bin=atob(r.audio),u8=new Uint8Array(bin.length);for(let j=0;j<bin.length;j++)u8[j]=bin.charCodeAt(j);u=URL.createObjectURL(new Blob([u8],{type:r.mime||'audio/mpeg'}));TM.set(t,u)}say('حامد · '+TW[i][0]);await play(u)}catch(e){say(ERR[e&&e.error]||('تعذر التشغيل: '+((e&&e.error)||'خطأ')),true)}}
-(()=>{const tl=document.getElementById('tlist');TW.forEach((w,i)=>{const d=document.createElement('div');d.className='card s';d.innerHTML='<span class="n">'+(i+1)+'</span><div class="tx"><b></b><small></small></div><button class="btn" type="button">▶</button>';d.querySelector('b').textContent=w[0];d.querySelector('small').textContent=w[1];d.querySelector('button').onclick=()=>tone(i);tl.appendChild(d)})})();
+/* المدرب 7 نوفمبر 21:47: فحص الانقطاع في «تقسم المواد» وقبل «المادة»: كل صيغة تشغل وحدها، والأخيرة جملتان متتاليتان مثل السبورة؛ تعرض بدل الصيغ السابقة */
+const A37='تَأَمَّلْ هَذِهِ الذَّرَّةَ: فِي وَسَطِهَا النَّوَاةُ، وَفِيهَا الْبُرُوتُونَاتُ الْمُوجَبَةُ وَالنْيُوتِرُونَاتُ الْمُتَعَادِلَةُ، وَحَوْلَهَا تَدُورُ الْإِلِكْتِرُونَاتُ السَّالِبَهْ.',QS=' حَسَبَ قُدْرَتِهَا عَلَى تَوْصِيلِ الشُّحْنَاتِ الْكَهْرَبَائِيَّةِ إِلَى ثَلَاثَةِ أَنْوَاعٍ هِيَ:',MS=' مُتَعَادِلَةٌ طَبِيعِيًّا: عَدَدُ الْبُرُوتُونَاتِ الْمُوجَبَةِ يُسَاوِي عَدَدَ الْإِلِكْتِرُونَاتِ السَّالِبَهْ';
+const TV=[['تقسم المواد 1 (الحالي في الدرس)','تُقَسَّمُ الْمَوَادْدُ'+QS],
+['تقسم المواد 2 (تنقسم بلا شدة)','تَنْقَسِمُ الْمَوَادْدُ'+QS],
+['تقسم المواد 3 (المواد بشدة عادية)','تُقَسَّمُ الْمَوَادُّ'+QS],
+['تقسم المواد 4 (تنقسم + المواد بشدة عادية)','تَنْقَسِمُ الْمَوَادُّ'+QS],
+['المادة 5 (الحالي في الدرس، وحدها)','أَلْمَادَّةُ'+MS],
+['المادة 6 (الْمادة الأصلية، وحدها)','الْمَادَّةُ'+MS],
+['المادة 7 (والمادة)','وَالْمَادَّةُ'+MS],
+['الانتقال 8 (جملة الذرة ثم المادة، مثل السبورة)',[A37,'أَلْمَادَّةُ'+MS]]];
+async function tget(t){let u=TM.get(t);if(u)return u;const r=await fetch(API,{method:'POST',body:JSON.stringify({a:'tts',token:tok,voice:HV,rate:0,segs:segs(t)}),redirect:'follow'}).then(x=>x.json());if(!r||!r.ok)throw r||{};const bin=atob(r.audio),u8=new Uint8Array(bin.length);for(let j=0;j<bin.length;j++)u8[j]=bin.charCodeAt(j);u=URL.createObjectURL(new Blob([u8],{type:r.mime||'audio/mpeg'}));TM.set(t,u);return u}
+async function tone2(i){stop=false;const T=[].concat(TV[i][1]);try{say('جار تجهيز الصيغة '+(i+1)+'…');const U=[];for(const t of T)U.push(await tget(t));say('حامد · '+TV[i][0]);for(const u of U){if(stop)break;await play(u);await new Promise(r=>setTimeout(r,300))}}catch(e){say(ERR[e&&e.error]||('تعذر التشغيل: '+((e&&e.error)||'خطأ')),true)}}
+/* المدرب 7 نوفمبر 21:56: تحليل هندسي لملف الصوت: فك الملف ورسم الموجة وكشف الفجوات الصامتة والانقطاعات الحادة والطقطقة */
+async function anz(i,box){box.innerHTML='جار التحليل…';try{const T=[].concat(TV[i][1]);let html='',first=true;for(const t of T){const u=await tget(t);const ab=await (await fetch(u)).arrayBuffer();const oc=new OfflineAudioContext(1,48000,48000);const buf=await oc.decodeAudioData(ab);const d=buf.getChannelData(0),sr=buf.sampleRate,W=Math.round(sr*.01),n=Math.floor(d.length/W),db=new Float32Array(n);
+let clk=[];for(let k=0;k<n;k++){let e=0;for(let j=k*W;j<(k+1)*W;j++)e+=d[j]*d[j];db[k]=10*Math.log10(e/W+1e-12)}
+for(let j=1;j<d.length;j++){if(Math.abs(d[j]-d[j-1])>.35)clk.push((j/sr).toFixed(2))}
+let a=0;while(a<n&&db[a]<-45)a++;let b=n-1;while(b>0&&db[b]<-45)b--;
+const gaps=[],cuts=[];let k=a;while(k<=b){if(db[k]<-45){let m=k;while(m<=b&&db[m]<-45)m++;const L=(m-k)*10;if(L>=40)gaps.push([(k/100).toFixed(2),L]);
+const pre=Math.max(...Array.from(db.slice(Math.max(a,k-3),k))),post=m<=b?Math.max(...Array.from(db.slice(m,Math.min(n,m+3)))):-99;if(pre>-28&&post>-28&&L<=150)cuts.push([(k/100).toFixed(2),L]);k=m}else k++}
+const cv=document.createElement('canvas');cv.width=600;cv.height=90;cv.style.cssText='width:100%;height:70px;border:1px solid #ddd;border-radius:8px';const g=cv.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,600,90);g.fillStyle='#0E7C70';for(let x=0;x<600;x++){const v=Math.max(0,(db[Math.floor(x*n/600)]+70)/70);g.fillRect(x,45-v*42,1,v*84)}
+g.fillStyle='rgba(220,38,38,.55)';cuts.forEach(c=>{g.fillRect(Math.floor(+c[0]*100*600/n),0,Math.max(3,c[1]/10*600/n),90)});
+if(first){box.innerHTML='';first=false}html='<div style="margin:6px 0;direction:ltr;text-align:left;font:12px system-ui">dur '+buf.duration.toFixed(2)+'s · lead '+(a*10)+'ms · tail '+((n-1-b)*10)+'ms<br>gaps≥40ms: '+(gaps.map(x=>x[0]+'s/'+x[1]+'ms').join(', ')||'0')+'<br><b style="color:#b91c1c">sharp cuts: '+(cuts.map(x=>x[0]+'s/'+x[1]+'ms').join(', ')||'0')+'</b> · clicks: '+(clk.slice(0,8).join(', ')||'0')+'</div>';
+const w=document.createElement('div');w.innerHTML=html;box.appendChild(w);box.appendChild(cv)}}catch(e){box.textContent='تعذر التحليل: '+((e&&e.error)||e&&e.message||'خطأ')}}
+(()=>{const tl=document.getElementById('tlist');TV.forEach((w,i)=>{const d=document.createElement('div');d.className='card s';d.innerHTML='<span class="n">'+(i+1)+'</span><div class="tx"><b></b><small></small></div><button class="btn" type="button">▶</button>';d.querySelector('b').textContent=w[0];d.querySelector('small').textContent=[].concat(w[1]).join(' ثم ');d.querySelector('button').onclick=()=>tone2(i);const z=document.createElement('button');z.className='btn g';z.type='button';z.textContent='🔬';z.title='تحليل الصوت';const bx=document.createElement('div');bx.style.cssText='margin:-4px 0 12px;overflow:hidden';z.onclick=()=>anz(i,bx);d.appendChild(z);tl.appendChild(d);tl.appendChild(bx)})})();
+(()=>{const tl=document.getElementById('tlist');if(TV)return;TW.forEach((w,i)=>{const d=document.createElement('div');d.className='card s';d.innerHTML='<span class="n">'+(i+1)+'</span><div class="tx"><b></b><small></small></div><button class="btn" type="button">▶</button>';d.querySelector('b').textContent=w[0];d.querySelector('small').textContent=w[1];d.querySelector('button').onclick=()=>tone(i);tl.appendChild(d)})})();
 render();
 if(!API)say('لم يُعثر على رابط الخادم (config.js).',true);else if(!tok)say(ERR.auth,true);
 </script>
