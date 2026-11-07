@@ -476,12 +476,13 @@ const KIMG={TOR:'k-tor.webp?v=1',LIFE:'k-life.webp?v=1'};
 const kimgFill=()=>document.querySelectorAll('img[data-kimg]:not([src])').forEach(i=>{i.src=KIMG[i.dataset.kimg]||''});
 /* 3-1: قانون كولوم والتعويض بشكل كسر (بسط ومقام) في كل أقسام الدرس (طلب المدرب 17:26) */
 const kEsc=t=>String(t).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
-const kFrac=()=>{let K='';try{K=key(pos.u,pos.l)}catch(e){}try{document.documentElement.classList.toggle('L31',K==='3-1')}catch(e){}if(!/^3-[13-6]$/.test(K))return;
+const kFrac=()=>{let K='';try{K=key(pos.u,pos.l)}catch(e){}try{document.documentElement.classList.toggle('L31',!!K)/* 7 نوفمبر: عرض كولوم المضغوط لكل الدروس */}catch(e){}if(!/^3-[13-6]$/.test(K))return;
   document.querySelectorAll('code,bdi,.kM,.eq').forEach(el=>{if(el.dataset.fr||el.children.length)return;if(K!=='3-1'&&el.closest('.lab'))return;const t=el.textContent.trim(),m=t.match(/^([FE][₀-₉]*\s*=\s*)(.+)\s\/\s*([0-9.]+ × 10[⁰-⁹⁻]+|[^\s=]+)(\s*(?:[=≈][\s\S]*)?)$/);if(!m||!(K==='3-3'?/q|10⁻|k|F|V|[0-9]/:/q|10⁻|k/).test(m[2]))return;
     let pre='',num=m[2];const k=num.match(/^(k|[0-9.]+ [×/] [0-9.]+[⁰-⁹⁻]+|[0-9.]+[⁰-⁹⁻]+)\s*[·×]\s*/);if(k){pre=k[1]+' × ';num=num.slice(k[0].length)}
     el.dataset.fr=1;el.innerHTML=kEsc(m[1])+kEsc(pre)+'<span class="kFr"><span>'+kEsc(num.replace(/\s*·\s*/g,' × '))+'</span><span>'+kEsc(m[3].replace(/^\((.*)\)(²?)$/,'$1$2'))+'</span></span>'+kEsc(m[4])})};
 const kMulti=()=>document.querySelectorAll('.board .bContent').forEach(c=>{const m=c.querySelectorAll('.bStep .kFig').length>1;if(c.classList.contains('kMultiFig')!==m)c.classList.toggle('kMultiFig',m)});
-try{new MutationObserver(()=>{kimgFill();kMulti();kFrac()}).observe(document.documentElement,{childList:true,subtree:true})}catch(e){}
+/* 7 نوفمبر: التعويض في سطر واحد لكل الدروس، ويصغر خطه تلقائيا إذا كان أعرض من الشاشة */const kFit=()=>document.querySelectorAll('.board .kc.kSt .kM').forEach(m=>{const p=m.parentElement;if(!p||!m.offsetWidth)return;const W=p.clientWidth-8;if(m.dataset.fw==W&&m.dataset.ft==m.textContent.length)return;m.style.fontSize='';const w=m.scrollWidth;if(w>W){const f=parseFloat(getComputedStyle(m).fontSize);m.style.setProperty('font-size',Math.max(9,f*W/w-0.3).toFixed(1)+'px','important')}m.dataset.fw=W;m.dataset.ft=m.textContent.length});
+try{new MutationObserver(()=>{kimgFill();kMulti();kFrac();try{kFit()}catch(e){}}).observe(document.documentElement,{childList:true,subtree:true})}catch(e){}
 const imf=(src,cap,ref)=>({html:`<div class="kc kFig"><img data-kimg="${src}" loading="lazy" decoding="async" alt="${cap}" style="display:block;width:100%;max-width:640px;margin:0 auto;border-radius:12px;background:#fff"><div class="kCap">${cap}</div></div>`});
 const pt=(t)=>({html:`<div class="kc kPt">${t}</div>`});
 function S(o,say){o.say=say;return o}

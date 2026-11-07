@@ -3809,7 +3809,7 @@ function clLab(box){
     <p><b>الحامل والساقان العازلتان:</b> حامل معدني بقاعدة وعمود وماسك يثبت مجس القوة، والكرتان على ساقين عازلتين تمنعان تسرب الشحنة منهما.</p></div>
   <h3 class="secH">4. القوانين المستخدمة</h3>
   <div class="ctl">
-    <div class="law ftl"><div class="ln lw"><b>قانون كولوم: القوة بين شحنتين نقطيتين</b><span>F = k·|q₁|·|q₂| / r²</span></div>
+    <div class="law ftl"><div class="ln lw"><b>قانون كولوم: القوة بين شحنتين نقطيتين</b><span>F = k·q₁·q₂ / r²</span></div>
       <div class="ln lw"><b>الكرتان مشحونتان بشحنتين متساويتين <bdi dir="ltr">q₁ = q₂ = q</bdi></b><span>F = k·q² / r²</span></div>
       <div class="ln lw"><b>عند ثبات الشحنة، النسبة بين قوتين عند مسافتين</b><span>F₁ / F₂ = (r₂ / r₁)²</span></div>
       <p class="slh" style="margin:2px 0 8px">ℹ️ حيث <bdi dir="ltr">F</bdi> قوة التنافر المقاسة بمجس القوة الرقمي.</p>
