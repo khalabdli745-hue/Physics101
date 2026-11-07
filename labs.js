@@ -7300,7 +7300,7 @@ const agFlash=(H,i,d)=>setTimeout(()=>{const tr=H.box.querySelectorAll('#logB tb
   {st:'tS',c:'<b>الخطوة 11: قياس زمن مرور التيار.</b> التيار نفسه ما زال يمر في الجهاز. تضغط اليد زر <b dir="ltr">START/STOP</b> في ساعة الإيقاف الرقمية فيبدأ العد، ثم تتوقف تلقائيا. تعرض الشاشة الدقائق ثم «:» ثم الثواني، فحول القراءة إلى ثوان (كل دقيقة <b dir="ltr">60 s</b>).<br>👀 <b>اقرأ الزمن t بالثانية، ثم اضغط «سجل القراءة».</b>',
    f:async H=>{await H.slide('tR','max',agAt(H.q('tS').querySelector('svg'),246,44))},rec:{in:'tIn',ck:'tInCk',name:'الزمن t',unit:'s',val:H=>{agFlash(H,3);return H.box.__ans.tIn()}}},
   {st:'tS',c:'✅ <b>اكتملت القراءات.</b> افتح بطاقة <b>الحسابات</b>: احسب الشحنة المارة <b dir="ltr">q = I × t</b>، ثم عدد الإلكترونات <b dir="ltr">n = q / e</b> حيث <b dir="ltr">e = 1.6 × 10⁻¹⁹ C</b>.',f:async H=>{await H.psleep(600)}}]});
- DIR['4-1']=function(){const b=document.querySelector('.card.lab .labBody');if(b){b.classList.add('agGx');b.dataset.recY='0.72'}agCss();run()}}
+ DIR['4-1']=function(){const b=document.querySelector('.card.lab .labBody');if(b){b.classList.add('agGx');b.dataset.recY='0.72';/* المدرب 7 نوفمبر: «شاهد التجربة» بنفس مشغل التنفيذ مثل أوم */b.querySelectorAll('.ctl').forEach(c=>{const h=c.querySelector(':scope>h3');if(h&&/شاهد التجربة/.test(h.textContent))c.classList.add('lx51')})}agCss();run()}}
 WCFG['4-1']={PL:[[['k']],[['m']],[['p','R1'],['p','R2']],[['d']],[['k'],['m']],[['jp']],[['p','A'],['p','B']],[['k']],[['w']]],XY:{k:[129,195],m:[271,201],jp:[212,30],d:[276,159],w:[92,222]}};
 
 }catch(e){console.error("cfg cfg_4-1.js",e)}
@@ -7374,7 +7374,7 @@ WCFG['4-8']={PL:[[['k'],['m']],[['j',0]],[['p',0],['p',1]],[['j',0],['j',1],['p'
    rec:{in:'vIn',ck:'vInCk',fb:'vInFb',name:`الجهد ${VL[i]} على ${VN[i]}`,unit:'V',say:'اقرأ الشاشة، ثم اضغط «سجل القراءة»',val:H=>H.box.__ans.vIn()}}));
  steps.push({st:CARD,c:'✅ <b>اكتملت القياسات.</b> التيار واحد قبل المقاومات الثلاث، ومجموع الجهود يساوي الجهد الكلي. انتقل إلى بطاقة <b>الحسابات</b>.',f:async H=>{tag(H);await zoom(H);await H.psleep(600)}});
  const run=DX({steps});
- DIR['4-8']=function(){const b=document.querySelector('.card.lab .labBody');if(b){b.classList.add('agGx');b.dataset.recY='0.72'}agCss();run()}}
+ DIR['4-8']=function(){const b=document.querySelector('.card.lab .labBody');if(b){b.classList.add('agGx');b.dataset.recY='0.72';/* المدرب 7 نوفمبر: «شاهد التجربة» بنفس مشغل التنفيذ مثل أوم */b.querySelectorAll('.ctl').forEach(c=>{const h=c.querySelector(':scope>h3');if(h&&/شاهد التجربة/.test(h.textContent))c.classList.add('lx51')})}agCss();run()}}
 
 }catch(e){console.error("cfg cfg_4-8.js",e)}
 
