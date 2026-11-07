@@ -1882,7 +1882,7 @@ function openBoard(dry){const dryS=dry==='slides';dry=dry===true||dryS;
       const tail=q.say?' '+inl(q.say):'',mark=(b,t)=>{const L=b.querySelector('.bL');if(L)L.textContent=t};
       bs.forEach(b=>b.onclick=()=>{if(O.dataset.done)return;const j=+b.dataset.j;
       if(j===q.a){b.classList.add('ok');mark(b,'✓');O.dataset.done=1;O.classList.add('done');try{window.__bqAns&&__bqAns(cur,tries?0.5:1,out.filter(x=>x.type==='q').length)}catch(e){}
-        if(q.ct){window.__cqN=(window.__cqN||0)+1;const n=nm();fb('good','✓ '+(window.__cqN%2===0&&n?'أحسنت يا '+esc(n)+'، إجابة صحيحة.':'ممتاز، إجابة صحيحة.')+tail)}
+        if(q.ct){window.__cqN=(window.__cqN||0)+1;const n=nm();fb('good','✓ '+(n?'أحسنت يا '+esc(n)+'، إجابة صحيحة.':'أحسنت، إجابة صحيحة.')/* المدرب 7 نوفمبر: «أحسنت» دائما مثل المنطوق، والاسم مكتوب فقط ولا ينطق */+tail)}
         else{f.className='bQf good';f.innerHTML='✓ إجابة صحيحة! '+(q.w?inl(q.w):'')}step=1}
       else{tries++;b.classList.add('no');mark(b,'✗');b.disabled=true;
         if(tries>=2){O.dataset.done=1;O.classList.add('done');try{window.__bqAns&&__bqAns(cur,0,out.filter(x=>x.type==='q').length)}catch(e){}bs[q.a].classList.add('ok');mark(bs[q.a],'✓');
