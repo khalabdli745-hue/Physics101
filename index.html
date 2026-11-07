@@ -1107,7 +1107,7 @@ document.querySelectorAll('.lgEye').forEach(b=>b.onclick=()=>{const i=b.parentNo
 <script src="data.js?v=10281453"></script>
 <script src="study.js?v=11041800"></script>
 <script src="quiz2.js?v=10281453"></script>
-<script src="extras.js?v=11061210"></script>
+<script src="extras.js?v=11070330"></script>
 <script src="figs.js?v=10281453"></script>
 <script src="figs2.js?v=11021530"></script>
 <script src="problems.js?v=11041800"></script>
@@ -1231,7 +1231,7 @@ const TTS=(()=>{
     ['°C','درجة مئوية'],['°F','درجة فهرنهايت'],['kWh','كيلوواط ساعة'],['mAh','مللي أمبير ساعة'],['mm²','مليمتر مربع'],['cm²','سنتيمتر مربع'],['km²','كيلومتر مربع'],['m²','متر مربع'],['m³','متر مكعب'],
     ['µF','ميكروفاراد'],['µC','ميكروكولوم'],['µm','ميكرومتر'],['nC','نانوكولوم'],['nm','نانومتر'],['pF','بيكوفاراد'],['nF','نانوفاراد'],['mJ','مللي جول'],['kJ','كيلو جول'],['kW','كيلوواط'],['kg','كيلوجرام'],['km','كيلومتر'],['cm','سنتيمتر'],['mm','مليمتر'],['mg','مليجرام'],['Gg','جيجا جرام'],['Hz','هيرتز'],['Ω','أوم'],['cal','سُعر']];
   const AFTER_NUM={m:'متر',s:'ثانية',h:'ساعة',g:'جرام',N:'نيوتن',J:'جول',W:'واط',V:'فولت',A:'أمبير',C:'كولوم',F:'فاراد',K:'كلفن',L:'لتر'};
-  const ACR={KE:'الطاقة الحركية',PE:'طاقة الوضع',ME:'الطاقة الميكانيكية',SI:'النظام الدولي',DC:'دي سي',AC:'إيه سي',LED:'إل إي دي',GPS:'جي بي إس',PhET:'فيت',SA:''};
+  const ACR={KE:'الطاقة الحركية',PE:'طاقة الوضع',ME:'الطاقة الميكانيكية',SI:'النظام الدولي',DC:'دي سي',AC:'إيه سي',LED:'إل إي دي',GPS:'جي بي إس',SA:''};
   const LET={a:'إيه',b:'بي',c:'سي',d:'دي',e:'إي',f:'إف',g:'جي',h:'إتش',i:'آي',j:'جيه',k:'كيه',l:'إل',m:'إم',n:'إن',o:'أو',p:'بي',q:'كيو',r:'آر',s:'إس',t:'تي',u:'يو',v:'فِي',w:'دبليو',x:'إكس',y:'واي',z:'زد'};
   /* تشكيل كلمات المنصة (voc.js) حتى تُنطق بمعناها الصحيح */
   const DIA=/[\u064B-\u0652]/g;
@@ -1310,7 +1310,7 @@ const TTS=(()=>{
     t=t.replace(/\)\s*\(/g,')×(').replace(/(\d)\(/g,'$1×(');
     for(const[u,w]of UNIT)t=u==='mg'?t.replace(/(\d\s*)mg(?![A-Za-z])/g,'$1 '+w+' '):t.split(u).join(' '+w+' ');
     t=t.replace(/(\d)\s+([mshgNJWVACFKL])(?![A-Za-z])/g,(m,d,u)=>d+' '+AFTER_NUM[u]);
-    t=t.replace(/\b(KE|PE|ME|SI|DC|AC|LED|GPS|PhET)\b/g,m=>' '+ACR[m]+' ');
+    t=t.replace(/\b(KE|PE|ME|SI|DC|AC|LED|GPS)\b/g,m=>' '+ACR[m]+' ');
     t=t.replace(/\bcos\b/g,' جتا ').replace(/\bsin\b/g,' جا ').replace(/\btan\b/g,' ظا ');
     t=t.replace(/\s·\s/g,'، ').replace(/\s[—–]\s/g,'، ');
     t=parens(t);
@@ -1338,7 +1338,7 @@ const TTS=(()=>{
   const EN_LET={a:'A',b:'B',c:'C',d:'D',e:'E',f:'F',g:'G',h:'H',i:'I',j:'J',k:'K',l:'L',m:'M',n:'N',o:'O',p:'P',q:'Q',r:'R',s:'S',t:'T',u:'U',v:'V',w:'W',x:'X',y:'Y',z:'Z'};
   const EN_SUP={'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9'};
   const EN_SUB={'₀':' naught','₁':' one','₂':' two','₃':' three','ₓ':' x','ᵧ':' y'};
-  const EN_WORD={KE:'kinetic energy',PE:'potential energy',ME:'mechanical energy',SI:'S I',DC:'D C',AC:'A C',LED:'L E D',GPS:'G P S',PhET:'fet',cos:'cosine',sin:'sine',tan:'tangent',max:'maximum',min:'minimum',total:'total',known:'known'};
+  const EN_WORD={KE:'kinetic energy',PE:'potential energy',ME:'mechanical energy',SI:'S I',DC:'D C',AC:'A C',LED:'L E D',GPS:'G P S',cos:'cosine',sin:'sine',tan:'tangent',max:'maximum',min:'minimum',total:'total',known:'known'};
   function enParens(t){let prev;do{prev=t;t=t.replace(/\(([^()]*)\)/g,(m,inner)=>/[+×÷*\/·]|\s[−-]\s/.test(inner)?' open bracket, '+inner+', close bracket, ':' '+inner+' ')}while(t!==prev);return t}
   /* N وحدةً (نيوتن) لا رمزًا للقوة العمودية */
   function markN(t){t=t.replace(/((?:النيوتن|بالنيوتن|نيوتن)[\s:]*)`?\(?\s*N\s*\)?`?(?!\s*[A-Za-z0-9·\/=_²³])/g,'$1').replace(/\(\s*N\s*\)/g,'(Ｎ)').replace(/((?:وحدة|وحدته|وحدتها|بوحدة|الوحدة|النيوتن|بالنيوتن|نيوتن)[\s`:«»]*)N(?![A-Za-z0-9·\/=_])/g,'$1Ｎ').replace(/(^|[\s`])N(\s*=\s*kg)/g,'$1Ｎ$2').replace(/((?:^|[^ء-ي])[وفب]?(?:ال)?وحد(?:ة|ته|تها|تهما|اتها|اته)(?:\s+(?:قياس|قياسه|قياسها|قياسهما|القياس))?[\s`:«»]*)([msJWVACFKLhgN])(?![A-Za-z0-9·\/=_²³⁻¹̂])(?!\s*[=·×\/+−-])/g,(m,a,u)=>a+String.fromCharCode(0xE100+'msJWVACFKLhgN'.indexOf(u)+1));
@@ -1364,7 +1364,7 @@ const SYAR={A:'إِيهْ',B:'بِي',C:'سِي',D:'دِي',E:'إِي',F:'إِف
     t=t.replace(/=\s*F\/m\b/g,'= F'+ph('over')+'\u2060m');
     for(const[u,w]of EN_UNIT)t=t.split(u).join(ph(w));
     t=t.replace(/(\d\s+|\u0002\s*)([mshgNJWVACFKL])(?![A-Za-z])/g,(m,d,u)=>d+ph(EN_ONE[u]));
-    t=t.replace(/\b(KE|PE|ME|SI|DC|AC|LED|GPS|PhET|cos|sin|tan|max|min|total|known)\b/g,m=>ph(EN_WORD[m]));
+    t=t.replace(/\b(KE|PE|ME|SI|DC|AC|LED|GPS|cos|sin|tan|max|min|total|known)\b/g,m=>ph(EN_WORD[m]));
     t=t.replace(/\s;\s/g,', ').replace(/…/g,ph(', and so on')).replace(/(\d)\s*\(/g,'$1×(').replace(/\)\s*\(/g,')×(');
     let prev;do{prev=t;t=t.replace(/\(([^()]*)\)/g,(m,inner)=>/[+×÷*\/·]|\s[−-]\s/.test(inner)?ph('open bracket,')+inner+ph(', close bracket,'):' '+inner+' ')}while(t!==prev);
     t=t.replace(/[()]/g,' ');
@@ -2526,13 +2526,8 @@ function renderLab(v){
   {const lt=(lesson()||{}).t||'',nm=/ورقة عمل|مراجعة وتمارين/.test(lt)?'هذا الدرس مخصص للتمارين والمراجعة، ولا توجد فيه تجارب عملية.':/^مقدمة الوحدة/.test(lt)?'هذا الدرس مخصص لمقدمة الوحدة وأهدافها، ولا توجد فيه تجارب عملية.':'';if(nm){const c=card('تجارب عملية تفاعلية');c.insertAdjacentHTML('beforeend','<p class="empty">'+nm+'</p>');i.appendChild(c);return}}
   const hasLab=window.renderLabCard?renderLabCard(i,pos.u,pos.l):false;
   if(hasLab){/* المدرب 6 نوفمبر: «الدرس التالي» بعد نهاية التجربة (آخر خطوة في الدرس)، داخل بطاقة التجربة تحت «مراجع التجربة» وبلون أرقام البطاقات */nextLessonBtn(i);try{const r=i.lastElementChild,cd=i.querySelector('.card.lab');if(cd&&r&&r.classList.contains('btnrow')&&r.firstChild){r.classList.add('labNx');cd.appendChild(r)}else if(r&&r.classList.contains('btnrow')&&!r.firstChild)r.remove()}catch(e){}return} /* الدرس الذي له تجربة معتمدة: تظهر التجربة ومراجعها فقط */
-  const c=card('تجارب تفاعلية بالعربية','محاكاة مجانية من مشروع PhET بجامعة كولورادو، تعمل في المتصفح على الجوال والآيباد والكمبيوتر.');
-  if(x.sim&&x.sim.length){const g=document.createElement('div');g.className='sims';
-    x.sim.forEach(s=>{const a=document.createElement('a');a.className='sim';a.href=s.u;a.target='_blank';a.rel='noopener';
-      a.innerHTML=`<span class="ic">⚗</span><span><b></b><small>افتح التجربة في نافذة جديدة</small></span>`;a.querySelector('b').textContent=s.t;g.appendChild(a)});
-    c.appendChild(g)}
-  else if(!hasLab)c.insertAdjacentHTML('beforeend','<p class="empty">لا توجد تجربة تفاعلية مخصصة لهذا الدرس. جرب تجارب الدروس الأخرى في الوحدة.</p>');
-  if(!hasLab||(x.sim&&x.sim.length))i.appendChild(c);
+  /* المدرب 7 نوفمبر: حذف روابط المحاكاة الخارجية؛ الدرس بلا تجربة يعرض رسالة فقط */
+  if(!hasLab){const c=card('تجارب عملية تفاعلية');c.insertAdjacentHTML('beforeend','<p class="empty">لا توجد تجربة تفاعلية مخصصة لهذا الدرس. جرب تجارب الدروس الأخرى في الوحدة.</p>');i.appendChild(c)}
   /* تطبيقات من الحياة: تبقى في تبويب الدرس فقط، ولا تظهر في تبويب التجارب العملية */
   const r=card('مراجع للاستزادة','من قائمة المراجع العلمية، المناسبة لهذه الوحدة:');
   const ul=document.createElement('ul');ul.className='refs';
@@ -2720,7 +2715,7 @@ function examPaper(i){
 }
 function renderRefs(v){
   const i=wrap(v);
-  /* المدرب 6 نوفمبر: أربعة أقسام بالترتيب: المراجع المعتمدة، مراجع التجارب العملية، مراجع للاستزادة، مصادر رقمية */
+  /* المدرب 6 نوفمبر: الأقسام بالترتيب: المراجع المعتمدة، مراجع التجارب العملية، مراجع للاستزادة (المصادر الرقمية حذفت 7 نوفمبر) */
   const refList=(g)=>{const ul=document.createElement('ol');ul.className='refs';(window.REFS||[]).filter(f=>(f.g||'x')===g).forEach(f=>{const li=document.createElement('li');li.innerHTML='<b></b><br><small></small>';li.querySelector('b').textContent=f.t;li.querySelector('b').dir='auto';li.querySelector('small').textContent=f.a;if(!f.a){li.querySelector('br').remove();li.querySelector('small').remove();li.querySelector('b').style.fontWeight='600'}ul.appendChild(li)});return ul};
   const c=card('المراجع المعتمدة','الحقيبتان التدريبيتان اللتان بني عليهما محتوى المنصة: الشرح والأمثلة والتمارين.');c.appendChild(refList('m'));i.appendChild(c);
   if((window.LABREFS||[]).length){const c2=card('مراجع التجارب العملية','أدلة معامل جامعية ومصادر تعليمية بنيت عليها التجارب العملية التفاعلية في المنصة، مرتبة هجائيا. اضغط المرجع لفتحه، وتظهر مراجع كل تجربة أيضا في بطاقة «مراجع التجربة» داخلها.');
@@ -2728,9 +2723,7 @@ function renderRefs(v){
     window.LABREFS.forEach(f=>{const li=document.createElement('li');li.innerHTML='<a target="_blank" rel="noopener"></a><br><small></small>';const A=li.querySelector('a');A.href=f.u;A.textContent=f.t;const sm=li.querySelector('small');sm.dir='rtl';sm.style.cssText='display:block;text-align:right';sm.textContent=(f.l.length>1?'التجارب: ':'التجربة: ')+f.l.join('؛ ');ol.appendChild(li)});
     c2.appendChild(ol);i.appendChild(c2)}
   {const c3=card('مراجع للاستزادة','من قائمة مراجع الحقيبة التدريبية، للمتدرب الذي يرغب في التوسع.');c3.appendChild(refList('x'));i.appendChild(c3)}
-  const s=card('مصادر رقمية مجانية بالعربية');
-  s.insertAdjacentHTML('beforeend',`<div class="md"><ul><li><a href="https://phet.colorado.edu/ar/" target="_blank" rel="noopener">PhET — محاكاة فيزيائية تفاعلية بالعربية</a> (جامعة كولورادو)</li></ul></div>`);
-  i.appendChild(s);
+  /* المدرب 7 نوفمبر: حذف قسم المصادر الرقمية */
 }
 function go(u,l,p,t){const nw=u!==pos.u||l!==pos.l;pos={u,l,p,t:t||(nw&&pos.t==='lab'?'sum':pos.t)};if(GT(pos.t))pos.t='sum';buildNav();render();/* المدرب 6 نوفمبر: تجهيز ترحيب الدرس الحالي للرجوع إلى تبويب «الدرس» */setTimeout(()=>{try{tabVoPf()}catch(e){}try{welcomePf(lesson(),document.querySelector('.boardCard')?!!document.querySelector('.boardCard .sbGo'):true)}catch(e){}},1500)}
 /* زر «رجوع للدرس» في التجربة يعيد إلى الصفحة الرئيسية للدرس */

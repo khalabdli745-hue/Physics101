@@ -952,7 +952,7 @@ async function drawReports(){
 }
 
 /* ---------- إنجاز المدرب ---------- */
-const CONTENT={lessons:50,quiz:540,probs:194,gens:40,examples:51,figs:51,tables:29,sims:53,pages:123,apps:40,theory:11};
+const CONTENT={lessons:50,quiz:540,probs:194,gens:40,examples:51,figs:51,tables:29,sims:23,pages:123,apps:40,theory:11};
 const METHODS=['محاضرة','تطبيق عملي','مراجعة','اختبار قصير','تطبيق على المنصة','حل تمارين'];
 let TLOG=null;
 async function drawTrainer(m,ctl,st,sec,secLabel,today,n,logged){
@@ -973,7 +973,7 @@ async function drawTrainer(m,ctl,st,sec,secLabel,today,n,logged){
   const html=`<div class="rp-hero"><small>تقرير إنجاز المدرب — ${esc(P.course||'الفيزياء العامة 101')}${P.term?' · '+esc(P.term):''}</small><h2>${esc(P.name||'المدرب')}</h2><div class="meta">${[P.college,P.dept].filter(Boolean).map(esc).join(' · ')}${P.college||P.dept?' · ':''}${esc(secLabel)} · ${today}</div></div>
   <div class="card rp-edit"><h2>بيانات التقرير</h2><p class="sub">تظهر في رأس التقرير المطبوع. تحفظ مرة واحدة.</p><div class="rp-form">${field('name','اسم المدرب')}${field('college','المنشأة','اسم المنشأة')}${field('dept','القسم','العلوم العامة')}${field('course','المقرر')}${field('term','الفصل التدريبي','الأول 1448هـ')}${field('head','رئيس القسم')}</div><div class="row" style="margin-top:8px"><button class="btn sm" id="pfs">حفظ البيانات</button></div></div>
   <h3 style="margin:4px 0 8px">📦 المحتوى الذي أعده المدرب على المنصة</h3>
-  <div class="rp-kpis">${kpi('📘','دروس تفاعلية',AR(TEACH_N),'إضافة إلى '+LES_NOTE())}${kpi('📝','أسئلة اختبارات',AR(CONTENT.quiz),'اختيار من متعدد')}${kpi('🧮','مسائل حسابية تفاعلية',AR(CONTENT.probs),'بأربع خطوات')}${kpi('🎲','مولدات تمارين متجددة',AR(CONTENT.gens),'تمارين لا تنتهي')}${kpi('💡','أمثلة محلولة',AR(CONTENT.examples))}${kpi('🖼️','رسوم توضيحية',AR(CONTENT.figs))}${kpi('📋','جداول تعليمية',AR(CONTENT.tables))}${kpi('🔬','تجارب ومحاكاة',AR(CONTENT.sims),'PhET بالعربية')}</div>
+  <div class="rp-kpis">${kpi('📘','دروس تفاعلية',AR(TEACH_N),'إضافة إلى '+LES_NOTE())}${kpi('📝','أسئلة اختبارات',AR(CONTENT.quiz),'اختيار من متعدد')}${kpi('🧮','مسائل حسابية تفاعلية',AR(CONTENT.probs),'بأربع خطوات')}${kpi('🎲','مولدات تمارين متجددة',AR(CONTENT.gens),'تمارين لا تنتهي')}${kpi('💡','أمثلة محلولة',AR(CONTENT.examples))}${kpi('🖼️','رسوم توضيحية',AR(CONTENT.figs))}${kpi('📋','جداول تعليمية',AR(CONTENT.tables))}${kpi('🔬','تجارب عملية تفاعلية',AR(CONTENT.sims),'معمل افتراضي')}</div>
   <h3 style="margin:4px 0 8px">👥 أثر المنصة على المتدربين</h3>
   <div class="rp-kpis">${kpi('🎓','متدربون مستفيدون',AR(n),AR(logged)+' دخلوا المنصة')}${kpi('🔑','مرات الدخول',AR(T.logins||0))}${kpi('✍️','محاولات حل',AR(T.results||0))}${kpi('🤖','أسئلة أجاب عنها المساعد',AR(T.questions||0))}${kpi('🎯','متوسط معدل المتدربين',avgOv==null?'—':AR(Math.round(avgOv))+'%',avgOv==null?'':band(avgOv))}${kpi('✅','نسبة الإتقان في اختبر نفسك (60% فأكثر)',passR==null?'—':AR(passR)+'%')}${kpi('📚','إنجاز الدروس',AR(compl)+'%')}</div>
   <h3 style="margin:4px 0 8px">🗓️ تقارير إنجاز المدرب</h3>
@@ -993,7 +993,7 @@ async function drawTrainer(m,ctl,st,sec,secLabel,today,n,logged){
     $('#rpr').onclick=async()=>{STATS=null;TLOG=null;await load()};
     $('#rpp').onclick=printReport;
     $('#rpx').onclick=()=>{if(!TLOG)return;saveBook([
-      ['إنجاز المدرب',[['البند','القيمة'],['المدرب',P.name||''],['المنشأة',P.college||''],['القسم',P.dept||''],['المقرر',P.course||''],['الفصل',P.term||''],['الشعبة',secLabel],['دروس تفاعلية',TEACH_N],['أوراق العمل',N_WS],['مراجعات نهاية الوحدات',N_REV],['أسئلة اختبارات',CONTENT.quiz],['مسائل تفاعلية',CONTENT.probs],['مولدات تمارين',CONTENT.gens],['رسوم توضيحية',CONTENT.figs],['جداول تعليمية',CONTENT.tables],['تجارب ومحاكاة',CONTENT.sims],['متدربون مستفيدون',n],['دخلوا المنصة',logged],['مرات الدخول',T.logins||0],['محاولات الحل',T.results||0],['أسئلة المساعد',T.questions||0],['متوسط المعدل %',avgOv==null?'':Math.round(avgOv)],['إنجاز الدروس %',compl],['الدروس المنفذة في التدريب',covered.size],['تغطية المقرر %',cov],['عدد اللقاءات',log.length],['الساعات التدريبية',hrs]],[26,34]],
+      ['إنجاز المدرب',[['البند','القيمة'],['المدرب',P.name||''],['المنشأة',P.college||''],['القسم',P.dept||''],['المقرر',P.course||''],['الفصل',P.term||''],['الشعبة',secLabel],['دروس تفاعلية',TEACH_N],['أوراق العمل',N_WS],['مراجعات نهاية الوحدات',N_REV],['أسئلة اختبارات',CONTENT.quiz],['مسائل تفاعلية',CONTENT.probs],['مولدات تمارين',CONTENT.gens],['رسوم توضيحية',CONTENT.figs],['جداول تعليمية',CONTENT.tables],['تجارب عملية تفاعلية',CONTENT.sims],['متدربون مستفيدون',n],['دخلوا المنصة',logged],['مرات الدخول',T.logins||0],['محاولات الحل',T.results||0],['أسئلة المساعد',T.questions||0],['متوسط المعدل %',avgOv==null?'':Math.round(avgOv)],['إنجاز الدروس %',compl],['الدروس المنفذة في التدريب',covered.size],['تغطية المقرر %',cov],['عدد اللقاءات',log.length],['الساعات التدريبية',hrs]],[26,34]],
       ['سجل اللقاءات',[['التاريخ','الوحدة','الدرس','الشعبة','الساعات','التنفيذ','ملاحظات'],...log.map(x=>[x.date,'الوحدة '+(ORD[+x.lessonKey.split('-')[0]]||''),LT[x.lessonKey]||x.lessonKey,x.sectionId?secName(x.sectionId):'',x.hours,x.method,x.notes])],[12,14,34,14,8,16,40]]
     ],'تقرير-إنجاز-المدرب.xlsx')}}
 }
