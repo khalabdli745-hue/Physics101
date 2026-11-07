@@ -1115,7 +1115,7 @@ document.querySelectorAll('.lgEye').forEach(b=>b.onclick=()=>{const i=b.parentNo
 <script src="gens.js?v=11070600"></script>
 <script src="art.js?v=10281453"></script>
 <script src="more.js?v=11070600"></script>
-<script src="labs.js?v=11163"></script>
+<script src="labs.js?v=11164"></script><script src="labvo.js?v=11070800"></script><script src="azfix.js?v=11071000"></script>
 <script src="coach.js?v=11070600"></script>
 <script>/* 5 نوفمبر: الدروس النموذجية (kcards31) لكل المتدربين */(function(){var n=1;document.write('<script src="kcards'+(n?'31':'')+'.js?v=11147"><\/script>')})()</script>
 <script>
@@ -1454,8 +1454,36 @@ const SYAR={A:'إِيهْ',B:'بِي',C:'سِي',D:'دِي',E:'إِي',F:'إِف
         const url=URL.createObjectURL(new Blob([u8],{type:x.mime||'audio/wav'}));MEM.set(gk,url);PEND.delete(gk);return url}).catch(()=>{GMISS.add(gt);PEND.delete(gk);return getAzA(segs,voiceName)});
       PEND.set(gk,P);return P}}
     return getAzA(segs,voiceName)}
+  /* 7 نوفمبر: مراجعة نطق حامد وزارية لكل الدروس (غير كولوم): إعراب وتنوين وتشكيل ورموز */function HFX(segs){try{if(typeof pos==='undefined')return segs;const K=key(pos.u,pos.l);if(K!=='4-5')return segs;/* 7 نوفمبر: أوم فقط الآن، وبقية الدروس الشهر القادم */
+const D='[ً-ْٰ]',NOD='(?!'+D+')';
+const W={'دبليو':'دَبْلْيُو','إيه':'إِيهْ','جيه':'جِيهْ','بزيادتها':'بِزِيَادَتِهَا','أيونات':'أَيُونَاتُ','بمواصفات':'بِمُوَاصَفَاتِ','انحراف':'انْحِرَافُ','شعاع':'شُعَاعُ','التلفزيون':'التِّلْفِزْيُونِ','الكاثود':'الْكَاثُودِ','والتخلص':'وَالتَّخَلُّصُ','المشتركة':'الْمُشْتَرَكَةُ','أعدادا':'أَعْدَادًا','هائلة':'هَائِلَةً','نصف':'نِصْفُ','الموصولة':'الْمَوْصُولَةُ','السادس':'السَّادِسُ','الصوديوم':'الصُّودْيُومِ','والكلور':'وَالْكْلُورِ','الأمبير':'الْأَمْبِيرِ','الواط':'الْوَاطِ','المقاومتين':'الْمُقَاوَمَتَيْنِ','تعبر':'تَعْبُرُ'};
+const NOTAN=/^(?:هَ?ذَ?ا|إِ?ذَ?ا|لِ?ذَ?ا|كَ?ذَ?ا|مَ?اذَ?ا|أَ?نَ?ا|هُ?نَ?ا|لَ?نَ?ا|بِ?نَ?ا|مَ?عَ?نَ?ا|عَ?لَ?يْ?نَ?ا|فِ?ي?نَ?ا|إِ?لَّ?ا|كِ?لَ?ا|حِ?ي?نَ?ئِ?ذٍ?ا)$/;
+const FX=((window.AZFIX||{})[K])||[];/* 7 نوفمبر: تصحيحات يدوية جملة جملة لكل درس (azfix.js) */
+const fix=t=>{FX.forEach(p=>{if(p[2]!=='en'&&t.indexOf(p[0])>=0)t=t.split(p[0]).join(p[1])});t=t.replace(/[ء-ي]+/g,w=>W[w]||w);
+ t=t.replace(/المُعْطَيات أَمَامَكَ/g,'الْمُعْطَيَاتُ أَمَامَكَ').replace(/وَالمَطْلُوب:/g,'وَالْمَطْلُوبُ:');
+ t=t.replace(/ومَرْحَبا بِكَ/g,'وَمَرْحَبًا بِكَ').replace(/يُسعِدُني أن أكونَ معكَ/g,'يُسْعِدُنِي أَنْ أَكُونَ مَعَكَ').replace(/هَذا الدَّرْسْ/g,'هَذَا الدَّرْسِ');
+ if(K==='4-5'){t=t.replace(/مِثْلَ 103 أَيْ/g,'مِثْلَ: وَاحِدٌ صِفْرٌ ثَلَاثَةٌ، أَيْ')}
+ t=t.replace(/([،.:؛])\s*\1/g,'$1').replace(/:\s*،/g,':');
+ t=t.replace(/الْمَوَادُّ/g,'الْمَوَادْدُ').replace(/الْمَوَادِّ/g,'الْمَوَادْدِ').replace(/بِأَمَانْ/g,'بِأَمَانٍ').replace(/خَطٍّ وَاحِدٍ/g,'خَطْ وَاحِدْ');
+ t=t.replace(/(^|\s)جْرَام/g,'$1جِرَام').replace(/(^|\s)غْرَام/g,'$1غِرَام');
+ /* بعد «عن:» مجرور، وبعد «في التمرين» مجرور مع صفته */
+ t=t.replace(/(عَنْ:\s*)((?:[وفبلك][\u064B-\u0652]?)?ال\S+?)ُ((?:\s+ال\S+?ُ)+)(?=[\s،.]|$)/g,(m,a1,b1,c1)=>a1+b1+'ِ'+c1.replace(/ُ(?=\s|$)/g,'ِ'));
+ t=t.replace(/(عَنْ:\s*)(\S+?)ُ(?=[\s،.]|$)/g,'$1$2ِ').replace(/(عَنْ:\s*)(\S+?)ٌ(?=[\s،.]|$)/g,'$1$2ٍ');
+ t=t.replace(/فِي التَّمْرِينُ (\S+?)ُ(?=[\s،.]|$)/g,'فِي التَّمْرِينِ $1ِ').replace(/فِي التَّمْرِينُ/g,'فِي التَّمْرِينِ');
+ /* تنوين الفتح المفقود قبل الوقف: سَابِعا، مَعا. شُكْرا */
+ t=t.replace(/(\S+?)([ء-ي])ا(?=\s*[،.:؛!؟]|\s*$)/g,(m,a,b)=>{const w=a+b+'ا';if(/^(?:[وفبلك][\u064B-\u0652]?)?ال/.test(w)||/ه[\u064B-\u0652]*(?:م[\u064B-\u0652]*)?ا$/.test(w)||/ن[\u064B-\u0652]*ا$/.test(w)||/^(?:[وفبلك][\u064B-\u0652]?)?(?:كَ?مَ?ا|لَ?مَّ?ا|مَ?ا|جِيجَ?ا|مِيجَ?ا|كِيلُ?و)$/.test(w)||NOTAN.test(w.replace(/^[وَفَ]+/,''))||/[ً-ْٰ]$/.test(a+b)&&!/[ء-ي]$/.test(a+b))return m;return a+b+'ًا'});
+ /* (أزيلت قاعدة التاء المربوطة الآلية: الإعراب يصحح يدويا جملة جملة) */
+ t=t.replace(/(^|[\s،])((?!(?:[وفبلك][\u064B-\u0652]?)?ال)[ء-يً-ْ]+?)ة([ُُ])(?=\s*[،.؛])/g,'$1$2ةٌ').replace(/(^|[\s،])((?!(?:[وفبلك][\u064B-\u0652]?)?ال)[ء-يً-ْ]+?)ةَ(?=\s*[،.؛])/g,'$1$2ةً');
+ return t};
+const R=[].concat(...segs.map(x=>{if(!x)return [x];if(x.l==='en'){let t=String(x.t);FX.forEach(p=>{if(p[2]==='en'&&t.indexOf(p[0])>=0)t=t.split(p[0]).join(p[1])});t=t.replace(/\b(\d+(?:\.\d+)?) W\b/g,'$1 watts').replace(/(\d+ watts) (\d)/g,'$1 and $2').replace(/ – /g,' to ');if(K==='4-5'&&/minus \d+ \d/.test(t)){const m=t.match(/^(.*minus \d+) (\d.*)$/);if(m)return [Object.assign({},x,{t:m[1]}),{l:'ar',t:'، وَمُعَامِلُهَا الْحَرَارِيُّ'},Object.assign({},x,{t:m[2]})]}return [Object.assign({},x,{t})]}
+ if(typeof x.t!=='string')return [x];let t=fix(x.t);
+ /* رمز الجهد V بالإنجليزي بدل «فِي»، ورمز الشحنة Q بدل «كْيُو» */
+ const o=[];t.split(/((?:حَيْثُ:|مُنْحَنَى) فِي (?=\S)|كْيُو(?:\s+(?:وَاحِدْ|اثْنَيْنْ|ثَلَاثَهْ|ثَلَاثَة))?)/).forEach(p=>{if(!p)return;if(/^(حَيْثُ:|مُنْحَنَى) فِي /.test(p)){o.push(Object.assign({},x,{t:p.replace(/ فِي $/,'').trim()}));o.push({l:'en',t:'V'});return}
+  if(/^كْيُو/.test(p)){const w=p.split(/\s+/)[1];o.push({l:'en',t:({'وَاحِدْ':'Q one','اثْنَيْنْ':'Q two','ثَلَاثَهْ':'Q three','ثَلَاثَة':'Q three'})[w]||'Q'});return}
+  if(p.trim())o.push(Object.assign({},x,{t:p.trim()}))});return o}));
+return R}catch(e){return segs}}
   /* المدرب 6 نوفمبر: تصحيح نطق حامد في درس كولوم (كلمة كلمة) */function HF31(segs){try{if(typeof pos==='undefined'||key(pos.u,pos.l)!=='3-1')return segs;const R=[].concat(...segs.map(x=>x&&x.l==='ar'&&typeof x.t==='string'?Object.assign({},x,{t:x.t.replace(/بَيْنَ قَانُونْ،\s*كُولوم[َْ]?/g,'بَيْنَ قَانُونِ كُولُوم').replace(/قَانُونْ،\s*كُولوم[َْ]?(?=\s*[.،:؛]|\s*$)/g,'قَانُونْ كُولُومْ').replace(/قَانُونْ،\s*كُولوم[َْ]?(?=\s)/g,'قَانُونْ كُولُوم').replace(/كُولومَ/g,'كُولُوم').replace(/الْمَوَادُّ/g,'الْمَوَادْدُ').replace(/الْمَوَادِّ/g,'الْمَوَادْدِ').replace(/شُحْنَتُهُ 0،/g,'شُحْنَتُهُ صِفْرْ،').replace(/شُكْرا(?=\s)/g,'شُكْرًا').replace(/ومَرْحَبا بِكَ/g,'وَمَرْحَبًا بِكَ').replace(/يُسعِدُني أن أكونَ معكَ/g,'يُسْعِدُنِي أَنْ أَكُونَ مَعَكَ').replace(/هَذا الدَّرْسْ/g,'هَذَا الدَّرْسْ').replace(/سَابِعا،/g,'سَابِعَا،').replace(/ثَامِنا،/g,'ثَامِنَا،').replace(/تَاسِعا،/g,'تَاسِعَا،').replace(/عَاشِرا،/g,'عَاشِرَا،').replace(/كْيُو ثَلَاثَة(?![\u064B-\u0652])/g,'كْيُو ثَلَاثَهْ').replace(/عَنْ الشُّحْنَات الكَهْرَبائِيَّة/g,'عَنِ الشُّحْنَاتِ الْكَهْرَبَائِيَّةِ').replace(/كْيُو/g,'كِيُو').replace(/كِيهْ/g,'كَيْ').replace(/خَطٍّ وَاحِدٍ/g,'خَطْ وَاحِدْ').replace(/تَاتِيكِيَّ/g,'تَاتِيكِيْيَ').replace(/تَاتِيكِيِّ/g,'تَاتِيكِيْيِ').replace(/بِأَمَانْ/g,'بِأَمَانٍ').replace(/(أَوَّل|ثَانِي|ثَالِث|رَابِع|خَامِس|سَادِس|سَابِع|ثَامِن|تَاسِع|عَاشِر)َ?ا،/g,'$1ًا،').replace(/(مُوجَب|سَالِب)َ?ا(?=\s*[.،:؛]|\s*$)/g,'$1ًا').replace(/مُوجَبَةَ،/g,'مُوجَبَةً،').replace(/حَوِّلِ/g,'حَوْوِلِ').replace(/شَارْلِ? كُولُومْ/g,'شَارْلْ كُولُومْ')}):x).map(x=>{if(!x||x.l!=='ar'||!/كِيُو/.test(x.t))return [x];const o=[],N={'وَاحِدْ':'Q one','اثْنَيْنْ':'Q two','ثَلَاثَهْ':'Q three'};x.t.split(/(كِيُو(?:\s+(?:وَاحِدْ|اثْنَيْنْ|ثَلَاثَهْ))?)/).forEach(p=>{if(/^كِيُو/.test(p)){const w=p.split(/\s+/)[1];o.push({l:'en',t:N[w]||'Q'})}else if(p.trim())o.push(Object.assign({},x,{t:p.trim()}))});return o}));return R}catch(e){return segs}}
-  function getAzA(segs,voiceName){segs=HF31(segs);const r=Math.round((rate-1)*100),k=voiceName+'|'+r+'|'+JSON.stringify(segs);
+  function getAzA(segs,voiceName){segs=HFX(HF31(segs));const r=Math.round((rate-1)*100),k=voiceName+'|'+r+'|'+JSON.stringify(segs);
     if(MEM.has(k))return Promise.resolve(MEM.get(k));if(PEND.has(k))return PEND.get(k);
     /* المدرب 6 نوفمبر: مهلة لطلب الصوت (25 ثانية) ثم محاولة ثانية، حتى لا يتوقف الشرح إذا تأخر الخادم */const TO=(ms)=>new Promise((_,j)=>setTimeout(()=>j({error:'timeout'}),ms)),req=()=>Promise.race([SYNC.post({a:'tts',token:tok(),voice:voiceName,rate:r,segs}),TO(25000)]);
     const P=req().catch(e=>e&&e.error==='timeout'?req():Promise.reject(e)).then(x=>{if(!x||!x.ok)throw x||{};
@@ -3932,8 +3960,8 @@ window.lessonWelcome=function(){(function(){try{
 }catch(e){}})()};
 /* المدرب 6 نوفمبر (أ): إيقاف أي صوت عند مغادرة الصفحة (السحب للخروج أو إغلاق التبويب) */window.addEventListener('pagehide',function(){try{TTS.stop()}catch(x){}});
 /* المدرب 6 نوفمبر: جملة صوتية قصيرة عند فتح تبويبي الأمثلة واختبر نفسك (درسا كولوم وأوم أولا)، مرة واحدة لكل درس في الجلسة، ومجهزة مسبقا */
-window.TABVO={keys:['3-1','4-5'],ex:'أَهْلًا بِكَ فِي الْأَمْثِلَةِ وَالتَّمَارِينِ التَّفَاعُلِيَّةِ. ابْدَأْ بِالْمِثَالِ أَوَّلًا لِتَتَعَرَّفَ عَلَى طَرِيقَةِ الْحَلِّ، ثُمَّ طَبِّقْهَا فِي التَّمَارِينِ، وَاسْتَعِنْ بِالْآلَةِ الْحَاسِبَةِ، وَتَحَقَّقْ مِنْ إِجَابَتِك.',quiz:'أَهْلًا بِكَ، حَانَ دَوْرُكَ الْآنَ لِتَخْتَبِرَ نَفْسَكَ. اقْرَأْ كُلَّ سُؤَالٍ بِتَمَعُّنٍ، ثُمَّ اخْتَرِ الْإِجَابَةَ الصَّحِيحَةَ. بِالتَّوْفِيقِ.'}/* المدرب 6 نوفمبر 14:34: صياغة «اختبر نفسك» معتمدة من المدرب */;
-window.tabVoOk=function(){try{if(typeof TTS==='undefined'||!TTS.has()||!TTS.playAr)return false;if(localStorage.getItem('p101-bmute')==='1')return false;return TABVO.keys.indexOf(key(pos.u,pos.l))>=0}catch(e){return false}};
+window.TABVO={keys:'all',ex:'أَهْلًا بِكَ فِي الْأَمْثِلَةِ وَالتَّمَارِينِ التَّفَاعُلِيَّةِ. ابْدَأْ بِالْمِثَالِ أَوَّلًا لِتَتَعَرَّفَ عَلَى طَرِيقَةِ الْحَلِّ، ثُمَّ طَبِّقْهَا فِي التَّمَارِينِ، وَاسْتَعِنْ بِالْآلَةِ الْحَاسِبَةِ، وَتَحَقَّقْ مِنْ إِجَابَتِك.',quiz:'أَهْلًا بِكَ، حَانَ دَوْرُكَ الْآنَ لِتَخْتَبِرَ نَفْسَكَ. اقْرَأْ كُلَّ سُؤَالٍ بِتَمَعُّنٍ، ثُمَّ اخْتَرِ الْإِجَابَةَ الصَّحِيحَةَ. بِالتَّوْفِيقِ.'}/* المدرب 6 نوفمبر 14:34: صياغة «اختبر نفسك» معتمدة من المدرب */;
+window.tabVoOk=function(){try{if(typeof TTS==='undefined'||!TTS.has()||!TTS.playAr)return false;if(localStorage.getItem('p101-bmute')==='1')return false;/* 7 نوفمبر: جملة التبويبين لكل الدروس */return TABVO.keys==='all'||TABVO.keys.indexOf(key(pos.u,pos.l))>=0}catch(e){return false}};
 window.tabVoPf=function(){try{if(!tabVoOk()||!TTS.prefetchAr)return;var vo=localStorage.getItem('p101-bvo')==='z'?'ar-SA-ZariyahNeural':'ar-SA-HamedNeural';TTS.prefetchAr(TABVO.ex,vo);if(TABVO.quiz)TTS.prefetchAr(TABVO.quiz,vo)}catch(e){}};
 document.addEventListener('click',function(e){try{var b=e.target&&e.target.closest&&e.target.closest('#tabs button[data-t="ex"],#tabs button[data-t="quiz"]');if(!b||document.body.classList.contains('boardOpen')||!tabVoOk())return;var t=b.getAttribute('data-t');if(!TABVO[t])return;var K=key(pos.u,pos.l)+':'+t,S={};try{S=JSON.parse(sessionStorage.getItem('p101-tabSaid')||'{}')}catch(x){}if(S[K])return;var vo='h';try{vo=localStorage.getItem('p101-bvo')==='z'?'z':'h'}catch(x){}TTS.setOV(vo==='z'?'ar-SA-ZariyahNeural':'ar-SA-HamedNeural');TTS.playAr(TABVO[t],document.createElement('button'));S[K]=1;try{sessionStorage.setItem('p101-tabSaid',JSON.stringify(S))}catch(x){}}catch(x){}});
 document.addEventListener('click',function(e){try{var b=e.target&&e.target.closest&&e.target.closest('#tabs button[data-t="sum"]');if(b&&!document.body.classList.contains('boardOpen'))window.lessonWelcome()}catch(x){}});
