@@ -36,20 +36,21 @@ h1{font-size:21px;margin:0}
 </head>
 <body>
 <div class="w">
- <h1>تجربة أصوات مقطع قانون كولوم</h1>
- <div class="sub">صفحة تجربة للمدرب فقط. اختر الصوت ثم استمع لكل جملة أو للمقطع كاملا. يُولد صوت كل جملة مرة واحدة ويُحفظ، فإعادة الاستماع لا تستهلك من الرصيد.</div>
+ <h1>تجربة نطق حامد · درس كولوم</h1>
+ <div class="sub">صفحة تجربة للمدرب فقط، بصوت حامد. اضغط ▶ أمام كل صيغة واستمع، ثم أرسل رقم الأوضح. يُولد صوت كل صيغة مرة واحدة ويُحفظ.</div>
 
+ <!-- المدرب 7 نوفمبر: الصفحة لحامد وتجربة كولوم فقط، فأخفيت اختيار الأصوات والجمل القديمة -->
  <div class="card">
-  <div style="font-weight:800;margin-bottom:6px">1) اختر الصوت</div>
-  <div class="vs" id="vs"></div>
-  <div class="leg" style="margin-top:8px">حامد وزارية: الصوتان الحاليان في المنصة. ذات الإطار البنفسجي: أصوات Microsoft الحديثة متعددة اللغات. كلها تُجرب بدون تشكيل.</div>
-  <div class="all"><button class="btn" id="pa">▶ المقطع كاملا بهذا الصوت</button><button class="btn g" id="st">⏹ إيقاف</button></div>
+  <div style="font-weight:800;margin-bottom:6px;display:none">1) اختر الصوت</div>
+  <div class="vs" id="vs" style="display:none"></div>
+  <div class="leg" style="margin-top:8px;display:none">حامد وزارية: الصوتان الحاليان في المنصة. ذات الإطار البنفسجي: أصوات Microsoft الحديثة متعددة اللغات. كلها تُجرب بدون تشكيل.</div>
+  <div class="all"><button class="btn" id="pa" style="display:none">▶ المقطع كاملا بهذا الصوت</button><button class="btn g" id="st">⏹ إيقاف</button></div>
   <div class="msg" id="msg"></div>
  </div>
 
- <div class="card"><div style="font-weight:800;margin-bottom:6px">2) الجمل</div><div id="list"></div></div>
+ <div class="card" style="display:none"><div style="font-weight:800;margin-bottom:6px">2) الجمل</div><div id="list"></div></div>
 <!-- المدرب 7 نوفمبر: تجربة صيغ نطق حامد لكلمات كولوم قبل اعتمادها -->
-<div class="card"><div style="font-weight:800;margin-bottom:6px">3) تجربة نطق كلمات (حامد)</div><div class="leg">استمع لكل صيغة واختر الأوضح، ثم أخبر المدرب الذكي برقمها.</div><div id="tlist"></div></div>
+<div class="card"><div style="font-weight:800;margin-bottom:6px">صيغ النطق (حامد)</div><div class="leg">استمع لكل صيغة واختر الأوضح، ثم أخبر المدرب الذكي برقمها.</div><div id="tlist"></div></div>
 </div>
 
 <script>
