@@ -1501,9 +1501,10 @@ return R}catch(e){return segs}}
     /* المدرب 6 نوفمبر: حارس التشغيل: إذا لم يتقدم المقطع 12 ثانية (وهو غير موقوف) أو تجاوز مدته بـ 5 ثوان يكمل الشرح */
     let last=-1,still=0,done=false;const fin=f=>{if(done)return;done=true;clearInterval(wd);f()};
     const wd=setInterval(()=>{if(g!==GEN)return fin(res);if(PZ)return;const t=AUD.currentTime||0,d=AUD.duration;if(t>last+.05){last=t;still=0}else still++;if(still>=12||(isFinite(d)&&d>0&&t===last&&still>=5&&t>=d-.3))fin(res)},1000);
-    AUD.onended=()=>fin(()=>setTimeout(res,300));AUD.onerror=()=>fin(()=>rej({error:'audio'}));AUD.muted=false;AUD.src=url;const p=AUD.play();if(p&&p.catch)p.catch(e=>fin(()=>rej(e)))})}
+    /* المدرب 7 نوفمبر 22:17: إن كان المشغل موصولا بالمكسب وسياق الصوت متوقف (مكالمة أو خلفية) نبدله بمشغل عادي حتى لا يصمت */try{const G=window.__AG;if(G&&G.el===AUD&&G.cx.state!=='running'){G.cx.resume&&G.cx.resume().catch(()=>{});try{AUD.pause()}catch(e){}AUD=new Audio();AUD.preload='auto'}}catch(e){}AUD.onended=()=>fin(()=>setTimeout(res,300));AUD.onerror=()=>fin(()=>rej({error:'audio'}));AUD.muted=false;AUD.src=url;const p=AUD.play();if(p&&p.catch)p.catch(e=>fin(()=>rej(e)))})}
   async function playAz(text,b,raw){const g=GEN;
     if(!AUD){AUD=new Audio();AUD.preload='auto'}
+    /* المدرب 7 نوفمبر 22:17: خفض صوت المشغل 40% عبر مكسب (Gain) لمنع تشبع حرف السين (انقطاع «تقسم» وقبل «المادة»، تأكد بزر 🔉)؛ مشغل واحد، ويرجع للتشغيل العادي إن لم يكن سياق الصوت شغالا */try{const C=window.AudioContext||window.webkitAudioContext;if(C&&!window.__AG){const cx=new C(),g=cx.createGain();g.gain.value=.6;g.connect(cx.destination);window.__AG={cx,g,el:null}}const G=window.__AG;if(G){if(G.cx.state!=='running'&&G.cx.resume)G.cx.resume().catch(()=>{});if(G.el!==AUD&&G.cx.state==='running'){G.cx.createMediaElementSource(AUD).connect(G.g);G.el=AUD}}}catch(e){}
     /* المدرب 7 نوفمبر: صوت خفيف غريب عند الانتقال بين الجمل، فالمقطع الصامت يشغل مكتوما */AUD.muted=true;AUD.src=SILENT;try{const p=AUD.play();if(p&&p.catch)p.catch(()=>{})}catch(e){}
     const chunks=raw?(Array.isArray(raw[0])?raw:[raw]):chunksAz(text);if(!chunks.length)return stop();
     let i=0;
