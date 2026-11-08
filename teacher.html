@@ -499,17 +499,17 @@ function drawStudents2(){
   if(GM==='all'){
     mHead=['الشعبة','المتدربون','دخلوا','لم يدخلوا','متوسط مهام الدروس','متوسط الوقت','متوسط إنهاء الدروس'];mx=[mHead];
     const row=(nm,L,b)=>{const lg=L.filter(s=>s.loginCount>0),tv=L.length?L.reduce((a,s)=>a+(+s.totalSec||0),0)/L.length:0,dn=avgK(L,'doneN');
-      const c=[nm,AR(L.length),AR(lg.length),AR(L.length-lg.length),n(avgK(L,'cw')),fmtTime(tv),dn==null?'—':AR(Math.round(dn))+' / '+AR(TEACH_N)];
+      const c=[nm,AR(L.length),AR(lg.length),AR(L.length-lg.length),n(avgK(L,'cw')),fmtTime(tv),dn==null?'—':'<bdi dir="ltr">'+AR(Math.round(dn))+' / '+AR(TEACH_N)+'</bdi>'];/* المدرب 8 نوفمبر: العدادات «س / ص» بترتيب صحيح */
       mx.push([nm,L.length,lg.length,L.length-lg.length,avgK(L,'cw'),Math.round(tv/60),dn]);
       return `<tr class="${b?'lsTot':''}">${c.map((x,j)=>`<td class="${j?'':'ln'}">${b&&!j?'<b>'+x+'</b>':x}</td>`).join('')}</tr>`};
     secs.forEach(sec=>{mRows+=row(secName(sec.id),real.filter(s=>s.sectionId===sec.id))});mRows+=row('الكل',real,1);
   }else{
     mHead=['#','الاسم','مرات الدخول','وقت الاستخدام','إنهاء الدروس','آخر دخول','الحالة'];mx=[mHead.slice(1)];
     const L=real.filter(s=>s.sectionId===GM).sort(by);
-    L.forEach((s,i)=>{mRows+=`<tr data-id="${esc(s.id)}"><td class="no">${AR(i+1)}</td><td class="ln"><a>${esc(s.name)}</a></td><td>${AR(s.loginCount||0)}</td><td>${fmtTime(s.totalSec)}</td><td>${AR(s.doneN||0)} / ${AR(TEACH_N)}</td><td>${lastD(s)}</td><td>${s.loginCount>0?'<span class="ok">دخل</span>':'<span class="md">لم يدخل</span>'}</td></tr>`;
+    L.forEach((s,i)=>{mRows+=`<tr data-id="${esc(s.id)}"><td class="no">${AR(i+1)}</td><td class="ln"><a>${esc(s.name)}</a></td><td>${AR(s.loginCount||0)}</td><td>${fmtTime(s.totalSec)}</td><td><bdi dir="ltr">${AR(s.doneN||0)} / ${AR(TEACH_N)}</bdi></td><td>${lastD(s)}</td><td>${s.loginCount>0?'<span class="ok">دخل</span>':'<span class="md">لم يدخل</span>'}</td></tr>`;
       mx.push([s.name,s.loginCount||0,Math.round((+s.totalSec||0)/60),s.doneN||0,lastD(s),s.loginCount>0?'دخل':'لم يدخل'])});
     const lc=avgK(L,'loginCount'),tv=L.length?L.reduce((a,s)=>a+(+s.totalSec||0),0)/L.length:0,dn=avgK(L,'doneN');
-    mRows+=`<tr class="lsTot"><td></td><td class="ln"><b>متوسط الشعبة</b></td><td>${n(lc)}</td><td>${fmtTime(tv)}</td><td>${dn==null?'—':AR(Math.round(dn))+' / '+AR(TEACH_N)}</td><td></td><td>${AR(L.filter(s=>s.loginCount>0).length)} من ${AR(L.length)}</td></tr>`;
+    mRows+=`<tr class="lsTot"><td></td><td class="ln"><b>متوسط الشعبة</b></td><td>${n(lc)}</td><td>${fmtTime(tv)}</td><td>${dn==null?'—':'<bdi dir="ltr">'+AR(Math.round(dn))+' / '+AR(TEACH_N)+'</bdi>'}</td><td></td><td>${AR(L.filter(s=>s.loginCount>0).length)} من ${AR(L.length)}</td></tr>`;
   }
   const ML=GM==='all'?real:real.filter(s=>s.sectionId===GM);
   const FU=[['لم يدخلوا المنصة',ML.filter(s=>!(s.loginCount>0))],['نقاطهم أقل من 60% من متوسط الشعبة',ML.filter(s=>s.loginCount>0&&col(s,'cw')==='md')]];
@@ -642,7 +642,7 @@ async function openStudent(id){
   const AWd=(()=>{try{return autoWork(s.id)}catch(e){return null}})(),gU=(v,w)=>v==null?'—':AR(Math.round(v/100*w*100)/100);
   const units=UNITS.map((u,ui)=>{const ks=u.l.map((_,li)=>ui+'-'+li).filter((_,li)=>!u.l[li].hide);const dn=ks.filter(k=>s.done.includes(k)).length;const U=(AWd&&AWd.units||[]).find(x=>x.u===ui)||{};
     return `<div><b>الوحدة ${ORD[ui]}</b>الأمثلة والتمارين ${gU(U.p,+WKW[1]||0)} من ${AR(+WKW[1]||0)}<br>اختبر نفسك ${gU(U.q,+WKW[0]||0)} من ${AR(+WKW[0]||0)}<br>التجارب العملية ${gU(U.b,+WKW[2]||0)} من ${AR(+WKW[2]||0)}<br>${(+WKW[3]||0)?'أسئلة المشاركة '+gU(U.x,+WKW[3])+' من '+AR(+WKW[3])+'<br>':''}<b style="display:inline">المجموع ${U.m==null?'—':AR(Math.round(U.m*100)/100)} من ${AR(WK_UNIT)}</b></div>`}).join('');
-  b.innerHTML=`<div class="stats"><div class="stat"><small>مرات الدخول</small><b>${AR(s.loginCount)}</b></div><div class="stat"><small>مجموع الوقت</small><b style="font-size:18px">${fmtTime(s.totalSec)}</b></div><div class="stat"><small>إنهاء الدرس</small><b>${AR(s.doneN)} / ${AR(TOTAL)}</b></div><div class="stat"><small>مهام الدروس</small><b>${(()=>{let a=null;try{a=autoWork(s.id)}catch(e){}return a?AR(Math.round(a.w*100)/100)+' من 20':'—'})()}</b></div></div>
+  b.innerHTML=`<div class="stats"><div class="stat"><small>مرات الدخول</small><b>${AR(s.loginCount)}</b></div><div class="stat"><small>مجموع الوقت</small><b style="font-size:18px">${fmtTime(s.totalSec)}</b></div><div class="stat"><small>إنهاء الدرس</small><b><bdi dir="ltr">${AR(s.doneN)} / ${AR(TOTAL)}</bdi></b></div><div class="stat"><small>مهام الدروس</small><b>${(()=>{let a=null;try{a=autoWork(s.id)}catch(e){}return a?AR(Math.round(a.w*100)/100)+' من 20':'—'})()}</b></div></div>
   <div class="card"><h2>بيانات الدخول</h2><p class="sub">أول دخول: ${fmtDate(s.firstLogin)} · آخر دخول: ${fmtDate(s.lastLogin)} · آخر نشاط: ${fmtDate(s.lastSeen)}</p>
   <p class="sub" style="margin:0">تعديل الاسم والنقل والحذف من الإعدادات ← إدارة المتدربين.</p></div>
   <div class="card"><h2>نقاط مهام الدروس حسب الوحدة</h2><div class="unitGrid">${units}</div></div>
@@ -1038,7 +1038,7 @@ function ppT(x){return esc(String(x==null?'':x)).replace(/`([^`]*)`/g,(m,y)=>`<s
 function ppPaper(row,name,sec,withAns){const L='أبجد',STP=['المعطيات','المطلوب','القانون'],p=row.paper||[],a=row.answers||[];
   const op=(o,c,me)=>o.map((x,k)=>`<span class="ppO${withAns&&k===c?' ok':''}${withAns&&me===k&&k!==c?' bad':''}">${L[k]}) ${ppT(x)}</span>`).join('');
   const t=x=>x?new Date(x).toLocaleTimeString('ar-SA-u-nu-latn',{hour:'2-digit',minute:'2-digit'}):'';
-  let h=`<section class="ppS"><div class="ppH"><div><b>${esc(name)}</b><div class="sub">الرقم ${esc(row.studentId)} · ${esc(sec)}${withAns?' · بدأ '+t(row.startedAt)+(row.submittedAt?' · سلم '+t(row.submittedAt):''):''}</div></div>${withAns?(row.submittedAt&&row.score!=null?`<span class="ppSc">${AR(row.score)} / ${AR(row.max)}</span>`:'<span class="ppSc wip">لم يسلم بعد</span>'):''}</div>`;
+  let h=`<section class="ppS"><div class="ppH"><div><b>${esc(name)}</b><div class="sub">الرقم ${esc(row.studentId)} · ${esc(sec)}${withAns?' · بدأ '+t(row.startedAt)+(row.submittedAt?' · سلم '+t(row.submittedAt):''):''}</div></div>${withAns?(row.submittedAt&&row.score!=null?`<span class="ppSc"><bdi dir="ltr">${AR(row.score)} / ${AR(row.max)}</bdi></span>`:'<span class="ppSc wip">لم يسلم بعد</span>'):''}</div>`;
   const nT=p.filter(q=>!q.n).length;
   p.forEach((q,i)=>{const me=a[i];if(i===0&&nT)h+=`<h4>أولا: الأسئلة النظرية</h4>`;if(i===nT)h+=`<h4>ثانيا: المسائل الحسابية (نقطتان لكل مسألة)</h4>`;
     if(!q.n){const mk=!withAns?'':me==null?(row.submittedAt?' <span class="bad">لم يجب</span>':''):me===q.c?' <span class="ok">✓</span>':' <span class="bad">✗</span>';
@@ -1445,7 +1445,7 @@ async function readFile(f){
   <div class="tableWrap" style="max-height:320px;overflow:auto"><table><thead><tr><th>الرقم التدريبي</th><th>الاسم</th><th>الشعبة</th></tr></thead><tbody>${good.slice(0,200).map(x=>`<tr><td class="num">${esc(x.id)}</td><td>${esc(x.name)}</td><td>${esc(x.section||'—')}</td></tr>`).join('')}</tbody></table></div>
   <div class="row" style="margin-top:12px"><button class="btn" id="up" ${good.length?'':'disabled'}>رفع ${AR(good.length)} متدربا</button><span class="msg" id="upm"></span></div></div>`;
   $('#up').onclick=async()=>{const b=$('#up');b.disabled=true;let a=0,u=0;
-    for(let i=0;i<good.length;i+=150){$('#upm').innerHTML=`<span class="spin"></span> ${AR(Math.min(i+150,good.length))} / ${AR(good.length)}`;
+    for(let i=0;i<good.length;i+=150){$('#upm').innerHTML=`<span class="spin"></span> <bdi dir="ltr">${AR(Math.min(i+150,good.length))} / ${AR(good.length)}</bdi>`;
       const r=await api({a:'tstudents',token:TOKEN,op:'import',rows:good.slice(i,i+150)});if(!r.ok){$('#upm').className='msg bad';$('#upm').textContent=errText(r.error);b.disabled=false;return}a+=r.added;u+=r.updated}
     $('#upm').className='msg good';$('#upm').textContent=`تم: أضيف ${AR(a)} وحُدِّث ${AR(u)}.`;toast('تم الاستيراد');await load()};
 }

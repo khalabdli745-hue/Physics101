@@ -1466,6 +1466,7 @@ const SYAR={A:'إِيهْ',B:'بِي',C:'سِي',D:'دِي',E:'إِي',F:'إِف
  /* المدرب 8 نوفمبر 06:09: حامد ينطق «فتهرُب» بفتح الراء رغم الضمة، فالبديل «فتنتقل» لحامد في كولوم */R31.push(['فَتَهْرُبُ الْإِلِكْتِرُونَاتُ إِلَيْهَا','فَتَنْتَقِلُ الْإِلِكْتِرُونَاتُ إِلَيْهَا']);
  /* المدرب 8 نوفمبر 06:18: اختار الصيغة 11 لـ«الصوف»: بلا ألف ولا لام موصولة بما قبلها (مِنَصُّوفِ) لحامد في كولوم */R31.push([' ٱلصُّوف','صُّوف'],['بِٱلصُّوف','بِصُّوف'],['وَٱلصُّوف','وَصُّوف']);
  /* المدرب 8 نوفمبر 08:56 (أ): «على خطٍّ واحد» بالشدة والتنوين لحامد (كان ينطقها خطي) */R31.push(['عَلَى خَطْ وَاحِدْ','عَلَى خَطٍّ وَاحِدْ']);
+ /* المدرب 8 نوفمبر 09:19: «خطٍّ» لم تنجح (ما زال يقول خطي)، فالبديل «على استقامة واحدة» لحامد */R31.push(['عَلَى خَطٍّ وَاحِدْ','عَلَى اسْتِقَامَةٍ وَاحِدَهْ']);
  const L=RG.concat(K==='3-1'?R31:[],K==='4-5'?R45:[]);
  segs=segs.map(x=>{if(!x||x.l!=='ar'||typeof x.t!=='string')return x;let t=x.t;L.forEach(p=>{if(t.indexOf(p[0])>=0)t=t.split(p[0]).join(p[1])});t=t.replace(/(^|\s)عَلَى(\s*)$/,'$1عَلَا$2');return t===x.t?x:Object.assign({},x,{t})})}if(K!=='4-5')return segs;/* 7 نوفمبر: أوم فقط الآن، وبقية الدروس الشهر القادم */
 const D='[ً-ْٰ]',NOD='(?!'+D+')';
@@ -1925,7 +1926,7 @@ function openBoard(dry){const dryS=dry==='slides';dry=dry===true||dryS;
       const show=x=>{const r=P.getBoundingClientRect();const f=Math.min(1,Math.max(0,(r.right-x)/r.width));const pos=f*out.length;const s=Math.min(out.length-1,Math.floor(pos));
         const sl=out[s],ns=sl.type==='c'?sl.steps.length:0;const stp=ns?Math.min(ns,Math.round((pos-s)*ns)):0;
         const d=f*r.width;P.querySelector('b').style.right=d+'px';P.querySelector('i').style.width=d+'px';
-        if(!tip){tip=document.createElement('em');P.appendChild(tip)}tip.innerHTML=esc(name(s))+'<small>'+AR(s+1)+' / '+AR(out.length)+'</small>';const h=tip.offsetWidth/2+4;tip.style.right=Math.min(Math.max(d,h),r.width-h)+'px';
+        if(!tip){tip=document.createElement('em');P.appendChild(tip)}tip.innerHTML=esc(name(s))+'<small><bdi dir="ltr">'+AR(s+1)+' / '+AR(out.length)+'</bdi></small>'/* المدرب 8 نوفمبر: العداد «15 / 20» بترتيب صحيح لا «20 / 15» */;const h=tip.offsetWidth/2+4;tip.style.right=Math.min(Math.max(d,h),r.width-h)+'px';
         if(s!==cur){cur=s;step=stp;TTS.stop();slideEl.scrollTop=0;render()}else if(stp!==step){step=stp;upd()}};
       const move=x=>{lx=x;if(!raf)raf=requestAnimationFrame(()=>{raf=0;show(lx)})};
       const end=()=>{if(!drag)return;drag=false;P.classList.remove('drag');if(tip){tip.remove();tip=null}upd();if(was)startAuto()};
