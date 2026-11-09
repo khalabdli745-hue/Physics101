@@ -284,9 +284,9 @@ function ionScene(){const W=640,H=360,D=13,cx=320,cy=180,OR=96;let b=`<rect widt
   const el=(x,y)=>kEl(x,y,'-');
   let orb=el(OR*Math.cos(2.094),OR*Math.sin(2.094))+el(OR*Math.cos(4.189),OR*Math.sin(4.189));
   /* الإلكترون الذي يغادر ثم يعود */
-  orb+=scMove(D,[[4,OR,0],[5.3,330,0],[8,330,0],[8.01,330,0],[9.3,OR,0]],el(0,0));
+  /*ionIn: المدرب 9 نوفمبر: الإلكترون المغادر والداخل يبقيان داخل المشهد*/orb+=scMove(D,[[4,OR,0],[5.3,124,0],[8,124,0],[8.01,124,0],[9.3,OR,0]],el(0,0));
   /* إلكترون جديد يدخل */
-  orb+=scShow(D,8,12.8,scMove(D,[[8,-330,0],[9.3,-OR,0]],el(0,0)));
+  orb+=scShow(D,8,12.8,scMove(D,[[8,-124,0],[9.3,-OR,0]],el(0,0)));
   b+=`<g transform="translate(${cx} ${cy})"><g><animateTransform attributeName="transform" type="rotate" dur="9s" repeatCount="indefinite" values="0;360"/>${orb}</g></g>`;
   const tag=(t,c)=>`<rect x="${W/2-170}" y="11" width="340" height="34" rx="17" fill="#fff" stroke="${c}" stroke-width="2"/><text x="${W/2}" y="34" text-anchor="middle" font-size="16" font-weight="900" fill="${c}">${t}</text>`;
   b+=scShow(D,0,4,tag('3 بروتونات و3 إلكترونات: متعادلة 0','#475569'),true)+scShow(D,5.3,8,tag('3 بروتونات وإلكترونان: موجبة +','#b91c1c'),true)+scShow(D,9.3,12.8,tag('3 بروتونات و4 إلكترونات: سالبة −','#1d4ed8'),true);
