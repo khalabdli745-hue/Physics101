@@ -4316,6 +4316,14 @@ html:not(.lgWide) body div.loginWrap form.loginBox.loginBox[data-pg="f"] #lgPf #
 html:not(.lgWide) body div.loginWrap form.loginBox.loginBox[data-pg="f"] .credit{margin-top:10px!important;padding:6px 14px 7px!important}
 html:not(.lgWide) body div.loginWrap form.loginBox.loginBox[data-pg="f"] .credit b{font-size:18px!important}
 html:not(.lgWide) body div.loginWrap form.loginBox.loginBox[data-pg="f"]{padding-bottom:calc(env(safe-area-inset-bottom) + 16px)!important}
+html.lgWide body div.loginWrap form.loginBox.loginBox[data-pg="f"] #lgPf{padding:12px 16px!important;gap:4px!important}
+html.lgWide body div.loginWrap form.loginBox.loginBox[data-pg="f"] #lgPf #lgHd{width:auto!important;min-width:150px!important;height:auto!important;flex-direction:row!important;gap:10px!important;padding:8px 16px 8px 14px!important;margin:0 auto 10px!important;border-radius:16px!important}
+html.lgWide body div.loginWrap form.loginBox.loginBox[data-pg="f"] #lgPf #lgHd>i{width:38px!important;height:38px!important;min-width:38px!important;border-radius:11px!important}
+html.lgWide body div.loginWrap form.loginBox.loginBox[data-pg="f"] #lgPf .lgF{margin-bottom:6px!important}
+html.lgWide body div.loginWrap form.loginBox.loginBox[data-pg="f"] #lgPf #lgFg:not([hidden]){margin:0 0 2px!important}
+html.lgWide body div.loginWrap form.loginBox.loginBox[data-pg="f"] #lgPf #lgOkL{margin:2px auto 4px!important}
+html.lgWide body div.loginWrap form.loginBox.loginBox[data-pg="f"] .credit{margin-top:8px!important;padding:5px 14px 6px!important}
+html.lgWide body div.loginWrap form.loginBox.loginBox[data-pg="f"] .credit b{font-size:17px!important}
 }
 </style>
 <script id="lgOrb">/* المدرب 9 نوفمبر: مركز مدارات شعار الدخول في الجوال والايباد */(function(){function f(){var B=document.querySelector('.loginWrap:not([hidden]) .loginBox'),L=B&&B.querySelector('.lgLogo');if(!B||!L)return;var b=B.getBoundingClientRect(),l=L.getBoundingClientRect();if(!b.width||!B.offsetWidth)return;var k=b.width/B.offsetWidth;B.style.setProperty('--ox',((l.left+l.width/2-b.left)/k)+'px');B.style.setProperty('--oy',((l.top+l.height/2-b.top)/k+(B.scrollTop||0))+'px')}var t;function q(){clearTimeout(t);t=setTimeout(f,120)}addEventListener('resize',q);addEventListener('load',q);var w=document.getElementById('loginWrap');if(w)new MutationObserver(q).observe(w,{subtree:true,childList:true,attributes:true,attributeFilter:['hidden','data-pg']});q();setTimeout(f,900)})();</script>
