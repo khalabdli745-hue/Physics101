@@ -166,7 +166,7 @@ const scTag=(x,y,t,c,w)=>{const k=TS;w=(w||t.length*9+28)*k;return `<rect x="${f
 /* 1) الشحن باللمس (التوصيل) */
 function touchScene(){const W=640,H=436,D=10,T=60;
   const Q=(x,y,c)=>`<g transform="translate(${x} ${y})"><circle r="8.5" fill="${c=='+'?'#dc2626':'#2563eb'}" stroke="#fff" stroke-width="1.8"/><path d="${c=='+'?'M-4.5 0H4.5M0 -4.5V4.5':'M-4.5 0H4.5'}" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></g>`;
-  const pill=(x,y,t,c,w)=>`<rect x="${x-w/2}" y="${y-16}" width="${w}" height="32" rx="16" fill="${c}" fill-opacity=".94"/><text x="${x}" y="${y+6}" text-anchor="middle" font-size="15.5" font-weight="800" fill="#fff">${t}</text>`;
+  /*touchTxt2*/const pill=(x,y,t,c,w)=>{w=Math.min(W-24,w);const fs=Math.min(21,Math.floor((w-24)/(t.length*.54)));return `<rect x="${Math.max(12,Math.min(W-12-w,x-w/2))}" y="${y-20}" width="${w}" height="40" rx="13" fill="#fff" stroke="${c}" stroke-width="2.5"/><text x="${Math.max(12+w/2,Math.min(W-12-w/2,x))}" y="${y+7}" text-anchor="middle" font-size="${fs}" font-weight="800" fill="${c}">${t}</text>`};
   /* تفتيح الكرات المعدنية حتى تتضح الشحنات عليها */
   const lite=(x,y,r)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="url(#kt-lite)"/>`;
   let b=`<defs><radialGradient id="kt-lite" cx=".42" cy=".38" r=".62"><stop offset="0" stop-color="#fff" stop-opacity=".78"/><stop offset=".75" stop-color="#f1f5f9" stop-opacity=".62"/><stop offset="1" stop-color="#e2e8f0" stop-opacity=".35"/></radialGradient></defs>`;
@@ -193,7 +193,7 @@ function touchScene(){const W=640,H=436,D=10,T=60;
 /* 2) الشحن بالحث (التأثير) */
 function inductScene(){const W=640,H=436,D=14,T=60;
   const Q=(x,y,c)=>`<g transform="translate(${x} ${y})"><circle r="8.5" fill="${c=='+'?'#dc2626':'#2563eb'}" stroke="#fff" stroke-width="1.8"/><path d="${c=='+'?'M-4.5 0H4.5M0 -4.5V4.5':'M-4.5 0H4.5'}" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></g>`;
-  const pill=(x,y,t,c,w)=>`<rect x="${x-w/2}" y="${y-16}" width="${w}" height="32" rx="16" fill="${c}"/><text x="${x}" y="${y+6}" text-anchor="middle" font-size="15.5" font-weight="800" fill="#fff">${t}</text>`;
+  /*touchTxt: المدرب 9 نوفمبر: أشرطة مشهدي اللمس والحث بشكل البطاقات*/const pill=(x,y,t,c,w)=>{w=Math.min(W-24,w);const fs=Math.min(21,Math.floor((w-24)/(t.length*.54)));return `<rect x="${Math.max(12,Math.min(W-12-w,x-w/2))}" y="${y-20}" width="${w}" height="40" rx="13" fill="#fff" stroke="${c}" stroke-width="2.5"/><text x="${Math.max(12+w/2,Math.min(W-12-w/2,x))}" y="${y+7}" text-anchor="middle" font-size="${fs}" font-weight="800" fill="${c}">${t}</text>`};
   const lite=(x,y,r)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="url(#ki-lite)"/>`;
   const vis=(K,V)=>`<animate attributeName="opacity" dur="${D}s" repeatCount="indefinite" keyTimes="${scK(D,K)}" values="${V}"/>`;
   /* ثلاث لقطات واقعية: الموصل وحده، تقريب الجسم السالب، التوصيل بالأرض */
