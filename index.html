@@ -2569,7 +2569,8 @@ function shuffle(a){a=a.slice();for(let k=a.length-1;k>0;k--){const j=Math.floor
 function renderQuiz(v){
   const i=wrap(v),s=study();
   if(!s||!s.qz){i.innerHTML='<p class="empty">لا يوجد اختبار لهذا الدرس.</p>';return}
-  const k=key(pos.u,pos.l),qs=s.qz;
+  const k=key(pos.u,pos.l),QSEL=/* qz31six: المدرب 9 نوفمبر (أ): «اختبر نفسك» في درس كولوم ستة أسئلة */{'3-1':['الشحنات المختلفة','يصبح الجسم موجب الشحنة','أي مما يلي مادة عازلة','شحن جسم متعادل دون ملامسته','مقدار القوة بينهما:','إذا تضاعفت المسافة بين شحنتين']}[k],qs=QSEL?QSEL.map(t=>s.qz.find(q=>q.q.indexOf(t)>=0)).filter(Boolean):s.qz;
+  if(best[k]!=null&&best[k]>qs.length)best[k]=null;/* qzBestFix: النتيجة القديمة من 24 لا تعرض بعد التقليل */
   const c=card('اختبر نفسك',`${AR(qs.length)} أسئلة · `+(best[k]!=null?`أفضل نتيجة سابقة: ${AR(best[k])} من ${AR(qs.length)}`:'لم تختبر هذا الدرس بعد'));
   i.appendChild(c);
   let answered=0,right=0;const chosen=[];
@@ -4330,6 +4331,16 @@ html body #view .calc .cfn .ck{min-height:0!important;height:24px!important;font
 html body #view .calc .cnum{gap:4px!important}
 html body #view .calc .cnum .ck{min-height:0!important;height:27px!important;font-size:14.5px!important;padding:0!important}
 html body #view .calc .cuse{min-height:28px!important;padding:3px!important;font-size:13px!important}html body #view .calc .calcLaw .eq{font-size:11.5px!important;letter-spacing:0!important}html body #view .calc .calcLaw b{font-size:12px!important;min-width:0!important;white-space:nowrap}html body #view .calc .calcLaw{padding:6px 10px!important}html body #view .calc .cnav>.ck{font-size:13px!important}html body #view .calc .cfn .ck small{font-size:7.5px!important}
+}
+</style><style id="qzFix">/*qzFix: المدرب 9 نوفمبر: «اختبر نفسك» على اللابتوب: الخيارات في عمودين وأقصر، فيظهر السؤال وخياراته كاملا في الشاشة */
+html body #view .qcard .qq .eq{background:none!important;border:0!important;padding:0!important;margin:0!important;font:inherit!important;color:inherit!important}
+@media (min-width:1000px) and (hover:hover) and (pointer:fine){
+html body #view .inner>.card:first-child:has(+.qcard){padding:10px 18px!important}
+html body #view .inner>.card:first-child:has(+.qcard) h2{margin:0 0 4px!important}
+html body #view .qcard{padding:12px 18px!important;margin-bottom:12px!important}
+html body #view .qcard .qq{margin:4px 0 10px!important}
+html body #view .qcard .opts{display:grid!important;grid-template-columns:1fr 1fr!important;gap:8px!important}
+html body #view .qcard .opts>button{margin:0!important;min-height:44px!important;padding:8px 14px!important}
 }
 </style></body>
 </html>
