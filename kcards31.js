@@ -262,20 +262,20 @@ function lawScene(){const W=640,H=362,D=15,Y=150,R=30,X1=230;let b=stage(W,H,Y+R
   b+=`<text x="${W/2}" y="35" text-anchor="middle" font-size="18" font-weight="800" fill="#0B7A70" direction="ltr">F = k·q₁·q₂ / r²</text>`;
   return svg(W,H,b,'kLawS kScene')}
 /* 5) التنافر والتجاذب: الكرات تتحرك فعلا مع أسهم القوة */
-function chargeScene(){const W=640,H=446,D=8,R=24;let b=`<rect width="${W}" height="${H}" fill="url(#kc-bg)"/>`+kBand(W,56,386)+`<text x="${W/2}" y="35" text-anchor="middle" font-size="17" font-weight="800" fill="#334155">الشحنات المتشابهة تتنافر، والمختلفة تتجاذب</text>`+kPill(D,W/2,416,'لاحظ الأسهم: في التنافر تبتعدان، وفي التجاذب تقتربان','#475569',470,0,D)+'<g transform="translate(0 62)">';
+function chargeScene(){const W=640,H=446,D=8,R=24;let b=`<rect width="${W}" height="${H}" fill="url(#kc-bg)"/>`+kBand(W,56,386)+`<rect x="40" y="6" width="560" height="44" rx="14" fill="#fff" stroke="#334155" stroke-width="2.5"/><text x="${W/2}" y="36" text-anchor="middle" font-size="22" font-weight="800" fill="#334155">الشحنات المتشابهة تتنافر، والمختلفة تتجاذب</text>`+kPill(D,W/2,416,'لاحظ الأسهم: في التنافر تبتعدان، وفي التجاذب تقتربان','#475569',470,0,D)+'<g transform="translate(0 62)">';
   const ar=(dir,col)=>`<g transform="scale(${dir} 1)"><polygon points="0,-5 46,-5 46,-11 64,0 46,11 46,5 0,5" fill="${col}" stroke="#78350f" stroke-width="1.1"/></g>`;
   const ball=(s,dirA)=>sphere(0,0,R,s,R+4).replace(/<ellipse[^>]*kc-sh[^>]*\/>/,'')+`<g transform="translate(${dirA*(R+4)} 0)">${ar(dirA,'#f59e0b')}</g>`;
   const row=(y,s1,s2,t)=>{const rep=s1===s2;
     const A=rep?[[0,250],[1,250],[3,190],[7.2,190],[7.8,250]]:[[0,170],[1,170],[3,225],[7.2,225],[7.8,170]];
     const Bx=rep?[[0,390],[1,390],[3,450],[7.2,450],[7.8,390]]:[[0,470],[1,470],[3,415],[7.2,415],[7.8,470]];
     let g=scMove(D,A.map(([tt,x])=>[tt,x,y]),ball(s1,rep?-1:1))+scMove(D,Bx.map(([tt,x])=>[tt,x,y]),ball(s2,rep?1:-1));
-    return g+`<text x="${W/2}" y="${y-R-12}" text-anchor="middle" font-size="15.5" font-weight="800" fill="${rep?'#b91c1c':'#1d4ed8'}">${t}</text>`};
+    return g+`<text x="${W/2}" y="${y-R-10}" text-anchor="middle" font-size="21" font-weight="800" fill="${rep?'#b91c1c':'#1d4ed8'}">${t}</text>`};
   b+=row(72,'+','+','متشابهتان موجبتان: تنافر، فتبتعدان')+row(172,'-','-','متشابهتان سالبتان: تنافر، فتبتعدان')+row(272,'+','-','مختلفتان: تجاذب، فتقتربان');
   b+='</g>';return svg(W,H,b,'kChg kScene')}
 
 /* 6) الذرة تفقد إلكترونا فتصبح موجبة، وتكتسب إلكترونا فتصبح سالبة */
 const kBand=(W,y0,y1)=>`<rect x="0" y="0" width="${W}" height="${y0}" fill="#f8fafc"/><line x1="0" y1="${y0}" x2="${W}" y2="${y0}" stroke="#cbd5e1"/><rect x="0" y="${y1}" width="${W}" height="60" fill="#f8fafc"/><line x1="0" y1="${y1}" x2="${W}" y2="${y1}" stroke="#cbd5e1"/>`;
-const kPill=(D,x,y,t,c,w,t0,t1)=>scShow(D,t0,t1,`<rect x="${x-w/2}" y="${y-16}" width="${w}" height="32" rx="16" fill="${c}"/><text x="${x}" y="${y+6}" text-anchor="middle" font-size="15.5" font-weight="800" fill="#fff">${t}</text>`,true);
+/*scTxt: المدرب 9 نوفمبر: كتابة المشاهد أكبر وأشرطتها بشكل البطاقات (أبيض بإطار ملون)*/const kPill=(D,x,y,t,c,w,t0,t1)=>{w=Math.max(w,616);const fs=Math.min(22,Math.floor((w-36)/(String(t).length*.54)));return scShow(D,t0,t1,`<rect x="${x-w/2}" y="${y-21}" width="${w}" height="42" rx="14" fill="#fff" stroke="${c}" stroke-width="2.5"/><text x="${x}" y="${y+7}" text-anchor="middle" font-size="${fs}" font-weight="800" fill="${c}">${t}</text>`,true)};
 function ionScene(){const W=640,H=360,D=13,cx=320,cy=180,OR=96;let b=`<rect width="${W}" height="${H}" fill="url(#kc-bg)"/>`+kBand(W,56,304);
   b+=kPill(D,W/2,332,'1. ذرة متعادلة: البروتونات = الإلكترونات','#475569',470,0,4)+kPill(D,W/2,332,'2. تفقد إلكترونا: تصبح موجبة','#b91c1c',470,4,8)+kPill(D,W/2,332,'3. تكتسب إلكترونا: تصبح سالبة','#1d4ed8',470,8,12.8);
   b+=`<circle cx="${cx}" cy="${cy}" r="${OR}" fill="none" stroke="#93c5fd" stroke-width="2" stroke-dasharray="6 5" opacity=".9"/>`;
@@ -288,7 +288,7 @@ function ionScene(){const W=640,H=360,D=13,cx=320,cy=180,OR=96;let b=`<rect widt
   /* إلكترون جديد يدخل */
   orb+=scShow(D,8,12.8,scMove(D,[[8,-124,0],[9.3,-OR,0]],el(0,0)));
   b+=`<g transform="translate(${cx} ${cy})"><g><animateTransform attributeName="transform" type="rotate" dur="9s" repeatCount="indefinite" values="0;360"/>${orb}</g></g>`;
-  const tag=(t,c)=>`<rect x="${W/2-170}" y="11" width="340" height="34" rx="17" fill="#fff" stroke="${c}" stroke-width="2"/><text x="${W/2}" y="34" text-anchor="middle" font-size="16" font-weight="900" fill="${c}">${t}</text>`;
+  const tag=(t,c)=>`<rect x="${W/2-260}" y="6" width="520" height="44" rx="14" fill="#fff" stroke="${c}" stroke-width="2.5"/><text x="${W/2}" y="36" text-anchor="middle" font-size="22" font-weight="900" fill="${c}">${t}</text>`;
   b+=scShow(D,0,4,tag('3 بروتونات و3 إلكترونات: متعادلة 0','#475569'),true)+scShow(D,5.3,8,tag('3 بروتونات وإلكترونان: موجبة +','#b91c1c'),true)+scShow(D,9.3,12.8,tag('3 بروتونات و4 إلكترونات: سالبة −','#1d4ed8'),true);
   return svg(W,H,b,'kIon kScene')}
 
