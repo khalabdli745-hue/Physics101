@@ -444,7 +444,7 @@ function probFig(K2,p){const L=PFIG[K2];if(!L)return null;const m=L.find(([re])=
 function probDone(el){if(!el)return;el.classList.add('kOn');const c=el.querySelector('.kCap');if(c)c.textContent=el.dataset.cap||''}
 
 /* حرارة: جسم ساخن وجسم بارد يتلامسان (سؤال الربط بالدرس السابق) */
-function heat(){const W=640,H=260,FY=190;let b=stage(W,H,FY);
+function heat(){/*heatFloor: المدرب 9 نوفمبر: المكعبان على الأرضية لا معلقان*/const W=640,H=260,FY=140;let b=stage(W,H,FY)+'<ellipse cx="296" cy="193" rx="170" ry="9" fill="#0f172a" opacity=".22"/>';
   const cube=(x,c1,c2,c3,t)=>`<g><polygon points="${x},110 ${x+110},110 ${x+140},88 ${x+30},88" fill="${c1}"/><polygon points="${x+110},110 ${x+140},88 ${x+140},168 ${x+110},190" fill="${c3}"/><rect x="${x}" y="110" width="110" height="80" fill="${c2}"/><text x="${x+55}" y="158" text-anchor="middle" font-size="17" font-weight="900" fill="#fff">${t}</text></g>`;
   b+=cube(150,'#fca5a5','#dc2626','#991b1b','ساخن')+cube(262,'#93c5fd','#2563eb','#1e3a8a','بارد');
   b+=arrow(215,375,70,'F',.1,10)+`<text x="300" y="52" text-anchor="middle" font-size="14" font-weight="800" fill="#b45309">الحرارة تنتقل من الجسم الساخن إلى البارد</text>`;
