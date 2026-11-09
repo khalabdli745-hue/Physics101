@@ -1,6 +1,45 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
+<script id="zFit">/* المدرب 9 نوفمبر: الشاشات الأكبر من اللابتوب تكبر تصميم اللابتوب المعتمد بنفس النسبة (عرض 1280 مرجع)، والجوال والايباد كما هي */(function(){
+var RW=1280,RH=529,mq=matchMedia('(min-width:1000px) and (hover:hover) and (pointer:fine)');
+var D=Object.getOwnPropertyDescriptor,W=window,iw=D(W,'innerWidth')||D(Window.prototype,'innerWidth'),ih=D(W,'innerHeight')||D(Window.prototype,'innerHeight');
+function rW(){return iw.get.call(W)}function rH(){return ih.get.call(W)}
+function calc(){if(!mq.matches)return 1;var z=Math.min(rW()/RW,rH()/RH);return z>1.02?Math.floor(z*1000)/1000:1}
+var Z=calc();W.__zf=function(){return Z};
+if(Z===1&&!mq.matches)return;
+var de=document.documentElement;
+function apply(){de.style.zoom=Z===1?'':String(Z);de.style.setProperty('--zvh',(rH()/Z/100)+'px');de.style.setProperty('--zvw',(rW()/Z/100)+'px')}
+apply();
+/* القياسات بوحدات التصميم */
+Object.defineProperty(W,'innerWidth',{configurable:true,get:function(){return rW()/Z}});
+Object.defineProperty(W,'innerHeight',{configurable:true,get:function(){return rH()/Z}});
+function sc(r){return Z===1?r:new DOMRect(r.x/Z,r.y/Z,r.width/Z,r.height/Z)}
+var gb=Element.prototype.getBoundingClientRect;Element.prototype.getBoundingClientRect=function(){return sc(gb.call(this))};
+var rb=Range.prototype.getBoundingClientRect;Range.prototype.getBoundingClientRect=function(){return sc(rb.call(this))};
+var gc=Element.prototype.getClientRects;Element.prototype.getClientRects=function(){var l=gc.call(this);if(Z===1)return l;var a=[];for(var i=0;i<l.length;i++)a.push(sc(l[i]));a.item=function(i){return a[i]};return a};
+['clientX','clientY','pageX','pageY','x','y'].forEach(function(k){var d=D(MouseEvent.prototype,k);if(d&&d.get)Object.defineProperty(MouseEvent.prototype,k,{configurable:true,get:function(){return d.get.call(this)/Z}})});
+if(W.Touch)['clientX','clientY','pageX','pageY'].forEach(function(k){var d=D(Touch.prototype,k);if(d&&d.get)Object.defineProperty(Touch.prototype,k,{configurable:true,get:function(){return d.get.call(this)/Z}})});
+if(W.SVGGraphicsElement){var sm=SVGGraphicsElement.prototype.getScreenCTM;SVGGraphicsElement.prototype.getScreenCTM=function(){var m=sm.call(this);return(!m||Z===1)?m:new DOMMatrix([1/Z,0,0,1/Z,0,0]).multiply(m)}}
+var ef=Document.prototype.elementFromPoint,es=Document.prototype.elementsFromPoint;
+Document.prototype.elementFromPoint=function(x,y){return ef.call(this,x*Z,y*Z)};Document.prototype.elementsFromPoint=function(x,y){return es.call(this,x*Z,y*Z)};
+if(W.VisualViewport){['width','height'].forEach(function(k){var d=D(VisualViewport.prototype,k);if(d&&d.get)Object.defineProperty(VisualViewport.prototype,k,{configurable:true,get:function(){return d.get.call(this)/Z}})})}
+/* استعلامات الوسائط تقاس على مساحة التصميم */
+function mtxt(t){return Z===1?t:t.replace(/((?:min-|max-)?(?:device-)?(?:width|height)\s*:\s*)([\d.]+)px/g,function(m,a,n){return a+(parseFloat(n)*Z)+'px'})}
+var mm=W.matchMedia;W.matchMedia=function(q){return mm.call(W,mtxt(String(q)))};
+var orig=new WeakMap();
+function vfix(v){return v.replace(/(-?[\d.]+)(d|s|l)?(vh|vw)\b/g,function(m,n,p,u){return 'calc('+n+' * var(--z'+u+'))'})}
+function walk(rules){for(var i=0;i<rules.length;i++){var r=rules[i];
+ if(r.media&&r.cssRules&&r.media.mediaText!==undefined){if(!orig.has(r))orig.set(r,r.media.mediaText);var o=orig.get(r);if(/(width|height)\s*:/.test(o))r.media.mediaText=mtxt(o)}
+ if(r.style){var s=r.style;for(var j=0;j<s.length;j++){var p=s[j],v=s.getPropertyValue(p);if(/[\d.](d|s|l)?v[hw]\b/.test(v)&&v.indexOf('--z')<0)s.setProperty(p,vfix(v),s.getPropertyPriority(p))}}
+ if(r.cssRules)walk(r.cssRules)}}
+function all(){for(var i=0;i<document.styleSheets.length;i++){try{walk(document.styleSheets[i].cssRules)}catch(e){}}}
+W.__zAll=all;
+var t=0;function soon(){clearTimeout(t);t=setTimeout(function(){all();W.dispatchEvent(new Event('resize'))},30)}
+new MutationObserver(function(ms){for(var i=0;i<ms.length;i++){var m=ms[i],n=m.target;if(m.type==='characterData'?(n.parentNode&&n.parentNode.tagName==='STYLE'):(n&&n.tagName==='STYLE')){soon();return}for(var k=0;k<m.addedNodes.length;k++){var a=m.addedNodes[k];if(a.tagName==='STYLE'||a.tagName==='LINK'){soon();return}}}}).observe(de,{childList:true,subtree:true,characterData:true});
+document.addEventListener('DOMContentLoaded',function(){all()});addEventListener('load',soon);
+addEventListener('resize',function(){var z=calc();if(z!==Z){Z=z;apply();all();}},true);
+})();</script>
 <script>/* المدرب 3 نوفمبر: لا تظهر واجهة المنصة لحظة قبل صفحة الدخول */try{if(!localStorage.getItem('p101-auth')&&!localStorage.getItem('p101-tauth'))document.documentElement.classList.add('preL')}catch(e){}addEventListener('load',()=>{const w=document.getElementById('loginWrap');if(!w||w.hidden)document.documentElement.classList.remove('preL')})</script><style>html.preL #app{visibility:hidden}html{overscroll-behavior-x:none}#tabs{overscroll-behavior-x:contain;touch-action:pan-x}html.preL body{background:#60a5fa}</style>
 <meta charset="utf-8">
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
@@ -2633,7 +2672,7 @@ function exCalcFit(sh){try{if(!sh.isConnected)return;const v=sh.closest('.view')
   sh.style.zoom='';const vv=window.visualViewport,visBot=vv?vv.offsetTop+vv.height:innerHeight,vr=v.getBoundingClientRect(),top=Math.max(vr.top,0),
   bot=Math.min(vr.bottom,visBot)-12,avail=bot-top-8,h=sh.getBoundingClientRect().height;
   if(h>avail&&avail>200){const z=Math.max(.72,avail/h);sh.style.zoom=z}
-  const r=sh.getBoundingClientRect();let d=0;if(r.bottom>bot)d=r.bottom-bot;if(r.top-d<top)d=r.top-top;if(d)v.scrollTop+=d/(parseFloat(document.documentElement.style.zoom)||1)}catch(e){}}
+  const r=sh.getBoundingClientRect();let d=0;if(r.bottom>bot)d=r.bottom-bot;if(r.top-d<top)d=r.top-top;if(d)v.scrollTop+=d/((window.__zf&&__zf()>1?1:parseFloat(document.documentElement.style.zoom))||1)}catch(e){}}
 /* عند تدوير الآيباد أو تغير مساحة الشاشة يعاد ضبط الآلة المفتوحة */
 (window.visualViewport||window).addEventListener('resize',()=>{clearTimeout(window.__exFitT);window.__exFitT=setTimeout(()=>{const sh=document.querySelector('.exSheet.exInline');if(sh)exCalcFit(sh)},200)});
 function calcSheet(law,giv,onRes,opt){opt=opt||{};document.querySelectorAll('.exSheet').forEach(x=>x.remove());document.body.classList.remove('exSheetOn');
@@ -3620,8 +3659,8 @@ window.CQS=function(el){const c=(el&&el.className)||'';return /good/.test(c)?CQP
   if(on&&!pushed){try{history.pushState({board:1},'');pushed=true}catch(e){}}
   else if(!on&&pushed){pushed=false;try{if(history.state&&history.state.board)history.back()}catch(e){}}}).observe(document.body,{attributes:true,attributeFilter:['class']});
  addEventListener('popstate',()=>{if(pushed&&document.body.classList.contains('boardOpen')){pushed=false;const x=document.querySelector('.board .bX');if(x)x.click()}});
-})();</script><style id="softDay">/* اعتمد المدرب 30 أكتوبر: ألوان الوحدات في النهاري «أهدأ قليلا» (الليلي بلا تغيير) */:root:not([data-theme="dark"]) body .app[data-unit="0"]{--accent:#2763C1!important;--u2:#4E7DC6!important}:root:not([data-theme="dark"]) .unit[data-u="0"],:root:not([data-theme="dark"]) .unit[data-u="0"] .num{--c:#2763C1!important}:root:not([data-theme="dark"]) body .app[data-unit="1"]{--accent:#8253CC!important;--u2:#9065D7!important}:root:not([data-theme="dark"]) .unit[data-u="1"],:root:not([data-theme="dark"]) .unit[data-u="1"] .num{--c:#8253CC!important}:root:not([data-theme="dark"]) body .app[data-unit="2"]{--accent:#BA3C35!important;--u2:#C45F58!important}:root:not([data-theme="dark"]) .unit[data-u="2"],:root:not([data-theme="dark"]) .unit[data-u="2"] .num{--c:#BA3C35!important}:root:not([data-theme="dark"]) body .app[data-unit="3"]{--accent:#318686!important;--u2:#43A4A2!important}:root:not([data-theme="dark"]) .unit[data-u="3"],:root:not([data-theme="dark"]) .unit[data-u="3"] .num{--c:#318686!important}:root:not([data-theme="dark"]) body .app[data-unit="4"]{--accent:#965B3F!important;--u2:#AD7355!important}:root:not([data-theme="dark"]) .unit[data-u="4"],:root:not([data-theme="dark"]) .unit[data-u="4"] .num{--c:#965B3F!important}</style><script>/* طلب المدرب 30 أكتوبر: الشاشات الجدارية الكبيرة (2K و4K) تعرض المنصة بنفس شكل شاشة الكمبيوتر العادية مكبرة، بدل أن تظهر صغيرة ومتفرقة */(function(){const f=()=>{try{const z=Math.min(innerWidth/1920,innerHeight/1080);const q=z>=1.2?Math.round(z*20)/20:0,h=document.documentElement;h.style.zoom=q?String(q):'';h.classList.toggle('bigZ',!!q);h.style.setProperty('--zf',q||1)}catch(e){}};f();addEventListener('resize',f)})();</script><script>/* طلب المدرب 30 أكتوبر: عند فتح شرح الدرس تظهر السبورة كاملة في الشاشة على كل جهاز ووضع (تصغر إذا لم تتسع، ثم تمرر الصفحة إليها) */(function(){let last=null;
-function fit(bc,scroll){try{const FSW=document.documentElement.classList.contains('wFS');if(!bc||!bc.isConnected||(document.fullscreenElement&&!FSW)||document.querySelector('.board.fs,.labFS'))return;const z=parseFloat(document.documentElement.style.zoom)||1;const hd=document.querySelector('header');const vw0=bc.closest('.view');const hb=Math.max(0,hd?hd.getBoundingClientRect().bottom:0,vw0?vw0.getBoundingClientRect().top:0);const vv=window.visualViewport;let vh=vv?vv.height:innerHeight;/* المدرب 1 نوفمبر: ارتفاع ثابت لكل عرض، فلا يتغير حجم السبورة مع ظهور شريط سفاري واختفائه أثناء السحب */{const w0=Math.round(innerWidth),c=window.__bfVH;if(c&&c.w===w0)vh=c.h;else window.__bfVH={w:w0,h:vh}}if(scroll){const nw=Date.now();if(window.__bfS&&nw-window.__bfS<1500)scroll=false;else window.__bfS=nw}
+})();</script><style id="softDay">/* اعتمد المدرب 30 أكتوبر: ألوان الوحدات في النهاري «أهدأ قليلا» (الليلي بلا تغيير) */:root:not([data-theme="dark"]) body .app[data-unit="0"]{--accent:#2763C1!important;--u2:#4E7DC6!important}:root:not([data-theme="dark"]) .unit[data-u="0"],:root:not([data-theme="dark"]) .unit[data-u="0"] .num{--c:#2763C1!important}:root:not([data-theme="dark"]) body .app[data-unit="1"]{--accent:#8253CC!important;--u2:#9065D7!important}:root:not([data-theme="dark"]) .unit[data-u="1"],:root:not([data-theme="dark"]) .unit[data-u="1"] .num{--c:#8253CC!important}:root:not([data-theme="dark"]) body .app[data-unit="2"]{--accent:#BA3C35!important;--u2:#C45F58!important}:root:not([data-theme="dark"]) .unit[data-u="2"],:root:not([data-theme="dark"]) .unit[data-u="2"] .num{--c:#BA3C35!important}:root:not([data-theme="dark"]) body .app[data-unit="3"]{--accent:#318686!important;--u2:#43A4A2!important}:root:not([data-theme="dark"]) .unit[data-u="3"],:root:not([data-theme="dark"]) .unit[data-u="3"] .num{--c:#318686!important}:root:not([data-theme="dark"]) body .app[data-unit="4"]{--accent:#965B3F!important;--u2:#AD7355!important}:root:not([data-theme="dark"]) .unit[data-u="4"],:root:not([data-theme="dark"]) .unit[data-u="4"] .num{--c:#965B3F!important}</style><script>/* طلب المدرب 30 أكتوبر: الشاشات الجدارية الكبيرة (2K و4K) تعرض المنصة بنفس شكل شاشة الكمبيوتر العادية مكبرة، بدل أن تظهر صغيرة ومتفرقة */(function(){const f=()=>{try{if(window.__zf&&__zf()>1){document.documentElement.classList.remove('bigZ');document.documentElement.style.setProperty('--zf',1);return}const z=Math.min(innerWidth/1920,innerHeight/1080);const q=z>=1.2?Math.round(z*20)/20:0,h=document.documentElement;h.style.zoom=q?String(q):'';h.classList.toggle('bigZ',!!q);h.style.setProperty('--zf',q||1)}catch(e){}};f();addEventListener('resize',f)})();</script><script>/* طلب المدرب 30 أكتوبر: عند فتح شرح الدرس تظهر السبورة كاملة في الشاشة على كل جهاز ووضع (تصغر إذا لم تتسع، ثم تمرر الصفحة إليها) */(function(){let last=null;
+function fit(bc,scroll){try{const FSW=document.documentElement.classList.contains('wFS');if(!bc||!bc.isConnected||(document.fullscreenElement&&!FSW)||document.querySelector('.board.fs,.labFS'))return;const z=(window.__zf&&__zf()>1?1:parseFloat(document.documentElement.style.zoom))||1;const hd=document.querySelector('header');const vw0=bc.closest('.view');const hb=Math.max(0,hd?hd.getBoundingClientRect().bottom:0,vw0?vw0.getBoundingClientRect().top:0);const vv=window.visualViewport;let vh=vv?vv.height:innerHeight;/* المدرب 1 نوفمبر: ارتفاع ثابت لكل عرض، فلا يتغير حجم السبورة مع ظهور شريط سفاري واختفائه أثناء السحب */{const w0=Math.round(innerWidth),c=window.__bfVH;if(c&&c.w===w0)vh=c.h;else window.__bfVH={w:w0,h:vh}}if(scroll){const nw=Date.now();if(window.__bfS&&nw-window.__bfS<1500)scroll=false;else window.__bfS=nw}
 if(matchMedia('(orientation:landscape) and (max-height:520px)').matches)document.body.classList.add('lhMini');
 /* طلب المدرب 30 أكتوبر: جدار أبيض يملأ كل مساحة التبويب (عرضا وارتفاعا) بهامش بسيط، والسبورة والمدرب بأكبر حجم يتسع فيه، والأرضية بعرض الجدار */
 let W=bc.parentElement;if(!W.classList.contains('bcWall')){W=document.createElement('div');W.className='bcWall';bc.before(W);W.appendChild(bc);const fl=document.createElement('div');fl.className='bcFloor';W.appendChild(fl)}
