@@ -56,8 +56,8 @@ function arrow(x1,x2,y,kind,delay,th){th=th||13;const dir=x2>x1?1:-1,L=Math.abs(
   return `<g class="kAr" style="--d:${delay||0}s;transform-origin:${x1}px ${y}px"><polygon points="${pts(3,5)}" fill="${dk}" opacity=".85"/><polygon points="${pts(0,0)}" fill="${g}" stroke="rgba(255,255,255,.35)" stroke-width="1"/></g>`}
 /* المدرب 2 نوفمبر: TS يكبر الكتابة في رسوم أمثلة المكثفات فقط (3-5 و3-6) */
 let TS=1;
-function pill(x,y,t,c,delay,cls){const k=TS,w=(t.length*10.2+26)*k;
-  return `<g class="kPl ${cls||''}" style="--d:${delay||0}s"><rect x="${f1(x-w/2)}" y="${f1(y-17*k)}" width="${f1(w)}" height="${f1(30*k)}" rx="${f1(15*k)}" fill="#ffffff" stroke="${c}" stroke-width="2" filter="drop-shadow(0 2px 3px rgba(30,58,95,.18))"/><text x="${x}" y="${f1(y+4.5*k)}" text-anchor="middle" font-size="${f1(17*k)}" font-weight="800" fill="${c}" direction="ltr">${t}</text></g>`}
+/*scPill: المدرب 9 نوفمبر: بطاقات المشاهد بنفس أسلوب البطاقات (أبيض بإطار ملون وزوايا مستديرة وخط أكبر)*/function pill(x,y,t,c,delay,cls){const k=TS,w=(t.length*11.4+30)*k;
+  return `<g class="kPl ${cls||''}" style="--d:${delay||0}s"><rect x="${f1(x-w/2)}" y="${f1(y-19*k)}" width="${f1(w)}" height="${f1(34*k)}" rx="${f1(11*k)}" fill="#ffffff" stroke="${c}" stroke-width="2.5" filter="drop-shadow(0 2px 3px rgba(30,58,95,.18))"/><text x="${x}" y="${f1(y+5.5*k)}" text-anchor="middle" font-size="${f1(19*k)}" font-weight="800" fill="${c}" direction="ltr">${t}</text></g>`}
 function lbl(x,y,t,c,s){return `<text x="${x}" y="${y}" text-anchor="middle" font-size="${f1((s||14.5)*TS)}" font-weight="800" fill="${c||'#1e3a5f'}" direction="ltr">${t}</text>`}
 function dim(x1,x2,y,t,px){px=px==null?(x1+x2)/2:px;return `<g class="kDim"><line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="#0369a1" stroke-width="1.6" stroke-dasharray="5 4"/><line x1="${x1}" y1="${y-7}" x2="${x1}" y2="${y+7}" stroke="#0369a1" stroke-width="1.6"/><line x1="${x2}" y1="${y-7}" x2="${x2}" y2="${y+7}" stroke="#0369a1" stroke-width="1.6"/>`+pill(px,y,t,'#0369a1',0,'kOn0')+`</g>`}
 function flow(x1,x2,y,rep){return `<line class="kFlow ${rep?'kRep':'kAtt'}" x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="${rep?'#dc2626':'#2563eb'}" stroke-width="2" stroke-dasharray="4 9" opacity=".55"/>`}
@@ -73,7 +73,7 @@ function pair(o){const W=640,H=300,FY=196,y=128,R=34,x1=170,x2=470,rep=o.s1===o.
   else{b+=arrow(x1+R+6,x1+R+6+L*.8,y,'F',.1)+arrow(x2-R-6,x2-R-6-L*.8,y,'F',.35);b+=pill(x1+R+44,y+36,'F₁','#b45309',.2)+pill(x2-R-44,y+36,'F₂','#b45309',.45)}
   if(o.r)b+=dim(x1,x2,FY+44,o.r);
   if(o.F)b+=pill(W/2,40,o.F,'#b45309',.7);
-  b+=`<g class="kPl" style="--d:.8s"><rect x="${W/2-46}" y="${o.F?62:30}" width="92" height="26" rx="13" fill="${rep?'#7f1d1d':'#1e3a8a'}" opacity=".9"/><text x="${W/2}" y="${o.F?80:48}" text-anchor="middle" font-size="15" font-weight="800" fill="#fff">${rep?'تنافر':'تجاذب'}</text></g>`;
+  b+=`<g class="kPl" style="--d:.8s"><rect x="${W/2-50}" y="${o.F?64:28}" width="100" height="34" rx="11" fill="#fff" stroke="${rep?'#b91c1c':'#1d4ed8'}" stroke-width="2.5" filter="drop-shadow(0 2px 3px rgba(30,58,95,.18))"/><text x="${W/2}" y="${o.F?87:51}" text-anchor="middle" font-size="18" font-weight="800" fill="${rep?'#b91c1c':'#1d4ed8'}">${rep?'تنافر':'تجاذب'}</text></g>`;
   return svg(W,H,b,o.cls)}
 /* ثلاث شحنات على خط واحد: القوى على q₂ والقوة الكلية */
 function three(){const W=700,H=380,FY=200,y=122,R=30,X1=80,X2=280,X3=680-80;
