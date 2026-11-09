@@ -4239,5 +4239,20 @@ html body div.loginWrap form.loginBox.loginBox[data-pg="f"] .credit b{font-size:
 }
 </style>
 <script id="lgShort">/* المدرب 9 نوفمبر: في شاشات الدخول على اللابتوب «الاختبارات» بدل «الاختبارات التجريبية» */(function(){var M=matchMedia('(min-width:1000px) and (max-height:820px) and (hover:hover) and (pointer:fine)');function f(){var w=document.getElementById('loginWrap');if(!w||!M.matches)return;var t=document.createTreeWalker(w,NodeFilter.SHOW_TEXT),n;while(n=t.nextNode()){if(n.nodeValue.indexOf('الاختبارات التجريبية')>=0)n.nodeValue=n.nodeValue.replace(/الاختبارات التجريبية/g,'الاختبارات')}}var w=document.getElementById('loginWrap');var lastR=null;document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('.lgTl');if(t)lastR=t;},true);function hd(){var H=document.getElementById('lgHd');if(!H||!M.matches||!lastR)return;var ti=lastR.querySelector('i'),hi=H.querySelector('i');if(!ti||!hi)return;var cs=getComputedStyle(ti),bc=getComputedStyle(lastR);if(cs.backgroundImage&&cs.backgroundImage!=='none'){hi.style.setProperty('background-image',cs.backgroundImage,'important');H.classList.add('hdImg')}H.style.setProperty('--c1',bc.getPropertyValue('--c1'));H.style.setProperty('--c2',bc.getPropertyValue('--c2'))}var g=f;f=function(){g();hd()};if(w)new MutationObserver(f).observe(w,{subtree:true,childList:true,characterData:true});f();})();</script>
+<script id="coachBar">/* المدرب 9 نوفمبر (أ): صورة المدرب الذكي و✨ داخل شريط الفيديو في نهايته اليمنى، والسبورة بعرضها كاملا، والشريط أعلى قليلا لتكبر الصورتان */(function(){
+function I(e,o){for(var k in o)e.style.setProperty(k,o[k],'important')}
+function one(B){var P=B.querySelector('.bProgWrap'),T=B.querySelector('.bTeach');if(!P||!T)return;var S=T.parentElement,A=T.querySelector('.bAv'),Q=T.querySelector('.bAskMini'),SL=S.querySelector('.bSlide');
+ if(!P.getClientRects().length)return;
+ B.classList.add('tInBar');I(S,{'position':'relative','grid-template-columns':'1fr'});var LM=matchMedia('(min-width:1000px) and (max-height:820px) and (hover:hover) and (pointer:fine)').matches;[SL,P].forEach(function(e){e&&I(e,LM?{'grid-column':'1/-1','margin-left':'0','margin-right':'0'}:{'grid-column':'1/-1'})});
+ P.style.removeProperty('padding-right');P.style.removeProperty('min-height');
+ var h0=P.getBoundingClientRect().height;if(!h0)return;var s=Math.round(Math.max(36,Math.min(48,h0)));I(P,{'min-height':(s+12)+'px','box-sizing':'border-box'});
+ var gap=8,tw=2*s+gap;I(P,{'padding-right':(parseFloat(getComputedStyle(P).paddingRight)+tw+12)+'px'});
+ I(T,{'position':'absolute','display':'flex','flex-direction':'row','align-items':'center','gap':gap+'px','padding':'0','margin':'0','width':tw+'px','height':s+'px','max-width':'none','min-width':'0','z-index':'30','transform':'none','grid-column':'auto','grid-row':'auto','overflow':'visible'});
+ [A,Q].forEach(function(e){e&&I(e,{'position':'relative','width':s+'px','height':s+'px','min-width':'0','min-height':'0','margin':'0','flex':'0 0 '+s+'px','border-radius':Math.round(s*.28)+'px','transform':'none','inset':'auto'})});
+ var p2=P.getBoundingClientRect(),op=(T.offsetParent||S).getBoundingClientRect();
+ I(T,{'left':(p2.right-op.left-12-tw)+'px','top':(p2.top-op.top+(p2.height-s)/2)+'px','right':'auto','bottom':'auto'})}
+var q=0;function run(){q=0;try{document.querySelectorAll('.board').forEach(one)}catch(e){}}function sch(){if(!q)q=requestAnimationFrame(run)}
+new MutationObserver(sch).observe(document.documentElement,{childList:true,subtree:true,attributes:true,attributeFilter:['class']});addEventListener('resize',function(){setTimeout(sch,60)});document.addEventListener('fullscreenchange',function(){setTimeout(sch,80)});
+})();</script>
 </body>
 </html>
