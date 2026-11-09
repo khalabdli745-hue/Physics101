@@ -127,12 +127,12 @@ function rubScene(){const W=640,H=436,D=10,T=60,KT=(a)=>a.map(x=>(x/D).toFixed(3
   b+=`<clipPath id="kr-clip"><rect width="${W}" height="320"/></clipPath><g clip-path="url(#kr-clip)" opacity="0"><animate attributeName="opacity" dur="${D}s" repeatCount="indefinite" keyTimes="${KT([0,1.4,1.8,6.0,6.4,D])}" values="0;0;1;1;0;0"/>`+
      `<g><animateTransform attributeName="transform" type="translate" dur="0.5s" repeatCount="indefinite" values="0 0;-4 1;0 0;4 -1;0 0"/><image href="k-rub1.webp?v=1" x="-6" y="0" width="${W+12}" height="320" preserveAspectRatio="xMidYMid slice"/></g></g>`;
   /* العناوين الثلاثة */
-  const cap=(t,c,t0,t1)=>`<g opacity="0">${fade(t0,t1)}<rect x="${W/2-235}" y="332" width="470" height="34" rx="17" fill="${c}"/><text x="${W/2}" y="355" text-anchor="middle" font-size="16.5" font-weight="800" fill="#fff">${t}</text></g>`;
+  /*rubTxt: المدرب 9 نوفمبر: أشرطة مشهد الدلك بشكل البطاقات وكتابة أكبر*/const cap=(t,c,t0,t1)=>`<g opacity="0">${fade(t0,t1)}<rect x="12" y="328" width="${W-24}" height="44" rx="14" fill="#fff" stroke="${c}" stroke-width="2.5"/><text x="${W/2}" y="358" text-anchor="middle" font-size="${Math.min(23,Math.floor(580/(t.length*.54)))}" font-weight="800" fill="${c}">${t}</text></g>`;
   b+=cap('1. قبل الدلك: الجسمان متعادلان','#475569',0,1.6)+cap('2. الدلك: تنتقل الإلكترونات من الصوف','#b45309',1.6,6.2)+cap('3. بعد الدلك: الصوف موجب، والبلاستيك سالب','#7e22ce',6.2,9.7);
   /* قبل الدلك: أزواج متعادلة على البلاستيك والصوف */
   const rodP=[[225,136],[270,102],[315,68]],woolP=[[425,130],[445,190],[420,245]];const PR=(x,y)=>Q(x-10,y+7.5,'+')+Q(x+10,y-7.5,'-');
   let n='';rodP.forEach(([x,y])=>{n+=PR(x,y)});woolP.forEach(([x,y])=>{n+=Q(x-12,y,'+')+Q(x+12,y,'-')});
-  const pill=(x,y,t,c,w)=>`<rect x="${x-w/2}" y="${y-16}" width="${w}" height="32" rx="16" fill="${c}"/><text x="${x}" y="${y+6}" text-anchor="middle" font-size="15.5" font-weight="800" fill="#fff">${t}</text>`;
+  const pill=(x,y,t,c,w)=>{w=Math.min(W-24,w*1.3);const fs=Math.min(20,Math.floor((w-24)/(t.length*.54)));return `<rect x="${Math.max(12,Math.min(W-12-w,x-w/2))}" y="${y-20}" width="${w}" height="40" rx="13" fill="#fff" stroke="${c}" stroke-width="2.5"/><text x="${Math.max(12+w/2,Math.min(W-12-w/2,x))}" y="${y+7}" text-anchor="middle" font-size="${fs}" font-weight="800" fill="${c}">${t}</text>`};
   b+=show(0.1,1.5,n+pill(215,30-T,'البلاستيك: متعادل','#475569',160)+pill(450,30-T,'الصوف: متعادل','#475569',140));
   /* أثناء الدلك: إلكترونات تنتقل من الصوف إلى البلاستيك */
   [[2.4,[335,128],[292,174]],[3.4,[338,172],[262,186]],[4.4,[470,120],[545,70]]].forEach(([t,[x0,y0],[x1,y1]])=>{
