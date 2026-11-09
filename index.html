@@ -3048,7 +3048,7 @@ if(document.body)start();else document.addEventListener('DOMContentLoaded',start
   function need(z){apply(z);tw();var K=kids(B);if(!K.length)return 0;var cs=getComputedStyle(B),pt=parseFloat(cs.paddingTop)||0,pb=parseFloat(cs.paddingBottom)||0,bt=B.getBoundingClientRect().top;
    var top=wide?K[0].getBoundingClientRect().top:bt,bot=K[K.length-1].getBoundingClientRect().bottom;
    var n=(bot-top)/z+pb+(wide?pt:0);return wide?Math.max(n,380):n}
-  var zb=wide?Math.min(H/560,W*0.58/520,1.9):Math.min(W/400,H/720,1.9);zb=Math.max(0.6,Math.floor(zb*100)/100);
+  var zb=wide?Math.min(H/560,W*0.58/520,1.9):Math.min(W/400,H/720,1.9);zb=Math.max(0.6,Math.floor(zb*100)/100);/* المدرب 9 نوفمبر: تصميم الدخول الجديد للابتوب بنفس الأبعاد في كل الشاشات */if(wide&&matchMedia('(min-width:1000px) and (max-height:820px) and (hover:hover) and (pointer:fine)').matches)zb=Math.max(0.6,Math.floor(Math.min(W/1361,H/563)*100)/100);
   function solve(){var z=zb,i,n;for(i=0;i<4;i++){n=need(z);if(!n||n*z<=H*(wide?0.96:0.985))break;z=Math.max(0.6,Math.min(z,Math.floor(H*(wide?0.95:0.98)/n*100)/100))}return z}
   var z=solve();
   var ck=(wide?'L':'P')+W;window._lgZ=window._lgZ||{};if(window._lgZ[ck]&&window._lgZ[ck]<z)z=window._lgZ[ck];else window._lgZ[ck]=z;
@@ -4106,5 +4106,83 @@ addEventListener('resize',()=>setTimeout(kick,150));addEventListener('load',kick
 (function(){const M=matchMedia('(min-width:1000px) and (max-height:820px) and (hover:hover) and (pointer:fine)');
 function fill(){const n=document.querySelector('nav.course');if(!n)return;if(!M.matches){n.style.removeProperty('--nvp');return}if(!n.offsetHeight)return;n.style.setProperty('--nvp','2px');const items=[...n.querySelectorAll('.unit>button,.navfoot>*')].filter(e=>e.offsetHeight);const k=items.length;if(!k)return;const lastB=Math.max(...items.map(e=>e.getBoundingClientRect().bottom));const used=lastB-n.getBoundingClientRect().top+n.scrollTop+6;const free=n.clientHeight-used;const p=Math.max(2,Math.min(16,2+free/(2*k)));n.style.setProperty('--nvp',p.toFixed(2)+'px')}
 let t;const kick=()=>{clearTimeout(t);t=setTimeout(fill,60)};addEventListener('resize',kick);document.addEventListener('click',()=>setTimeout(kick,350),true);new MutationObserver(kick).observe(document.documentElement,{attributes:true,attributeFilter:['class']});setTimeout(kick,800);window.__navFill=fill})();
-</script></body>
+</script><style id="lgLux">/* المدرب 9 نوفمبر: شاشات الدخول (البداية وبطاقات المدرب والمتدرب وصفحات الدخول) بتصميم كحلي وذهبي مثل دليل الاستخدام، للابتوب والشاشات الكبيرة فقط؛ الجوال والايباد بلا تغيير، والرجوع من زر المتصفح */@media (min-width:1000px) and (max-height:820px) and (hover:hover) and (pointer:fine){
+html body div.loginWrap{background:#081426!important}
+html body div.loginWrap form.loginBox.loginBox{color:#e9eef7!important;align-content:center!important;padding-top:26px!important;padding-bottom:26px!important;min-height:100%!important;box-sizing:border-box!important;background:
+ radial-gradient(700px 420px at 72% 18%,rgba(56,120,210,.28),transparent 65%),
+ radial-gradient(520px 360px at 92% 100%,rgba(232,160,72,.16),transparent 70%),
+ linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px) 0 0/28px 28px,
+ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px) 0 0/28px 28px,
+ linear-gradient(160deg,#0b1d36,#081426 70%)!important;border:0!important;box-shadow:none!important;border-radius:0!important}
+html body div.loginWrap form.loginBox.loginBox::before{background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22640%22%20height%3D%22640%22%20viewBox%3D%220%200%20640%20640%22%3E%3Cdefs%3E%3CradialGradient%20id%3D%22h%22%20cx%3D%2250%25%22%20cy%3D%2250%25%22%20r%3D%2250%25%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%234da3ff%22%20stop-opacity%3D%22.35%22/%3E%3Cstop%20offset%3D%22.45%22%20stop-color%3D%22%234da3ff%22%20stop-opacity%3D%22.08%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%234da3ff%22%20stop-opacity%3D%220%22/%3E%3C/radialGradient%3E%3C/defs%3E%3Ccircle%20cx%3D%22320%22%20cy%3D%22320%22%20r%3D%22300%22%20fill%3D%22url%28%23h%29%22/%3E%3Cg%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%3E%3Cellipse%20cx%3D%22320%22%20cy%3D%22320%22%20rx%3D%22250%22%20ry%3D%2292%22%20transform%3D%22rotate%28-24%20320%20320%29%22%20stroke%3D%22%23f2c27a%22%20stroke-opacity%3D%22.38%22%20stroke-width%3D%221.4%22/%3E%3Cellipse%20cx%3D%22320%22%20cy%3D%22320%22%20rx%3D%22250%22%20ry%3D%2292%22%20transform%3D%22rotate%2836%20320%20320%29%22%20stroke%3D%22%237cc4ff%22%20stroke-opacity%3D%22.30%22%20stroke-width%3D%221.2%22/%3E%3Cellipse%20cx%3D%22320%22%20cy%3D%22320%22%20rx%3D%22250%22%20ry%3D%2292%22%20transform%3D%22rotate%2896%20320%20320%29%22%20stroke%3D%22%23f2c27a%22%20stroke-opacity%3D%22.22%22%20stroke-width%3D%221.2%22/%3E%3Ccircle%20cx%3D%22320%22%20cy%3D%22320%22%20r%3D%22175%22%20stroke%3D%22%23ffffff%22%20stroke-opacity%3D%22.07%22%20stroke-dasharray%3D%222%209%22/%3E%3Ccircle%20cx%3D%22320%22%20cy%3D%22320%22%20r%3D%22292%22%20stroke%3D%22%23ffffff%22%20stroke-opacity%3D%22.05%22%20stroke-dasharray%3D%221%207%22/%3E%3C/g%3E%3Cg%3E%3Ccircle%20cx%3D%22548%22%20cy%3D%22218%22%20r%3D%225%22%20fill%3D%22%23f2c27a%22/%3E%3Ccircle%20cx%3D%22548%22%20cy%3D%22218%22%20r%3D%2213%22%20fill%3D%22%23f2c27a%22%20fill-opacity%3D%22.18%22/%3E%3Ccircle%20cx%3D%22262%22%20cy%3D%2278%22%20r%3D%223.5%22%20fill%3D%22%23f2c27a%22%20fill-opacity%3D%22.85%22/%3E%3C/g%3E%3C/svg%3E") 187px 33px/400px 400px no-repeat,url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22640%22%20height%3D%22560%22%20viewBox%3D%220%200%20640%20560%22%3E%3Cg%20fill%3D%22%23e8eefc%22%20fill-opacity%3D%22.07%22%20font-family%3D%22Georgia%2Cserif%22%20font-style%3D%22italic%22%3E%3Ctext%20x%3D%2230%22%20y%3D%22535%22%20font-size%3D%2226%22%3EF%20%3D%20k%20q%E2%82%81q%E2%82%82%20/%20r%C2%B2%3C/text%3E%3Ctext%20x%3D%22430%22%20y%3D%22540%22%20font-size%3D%2222%22%3EE%20%3D%20mc%C2%B2%3C/text%3E%3C/g%3E%3C/svg%3E") 0 100%/640px auto no-repeat,linear-gradient(90deg,rgba(16,41,77,.85) 0%,rgba(16,41,77,.55) 55%,rgba(16,41,77,0) 100%)!important;box-shadow:none!important;border:0!important;opacity:1!important}
+html body div.loginWrap form.loginBox.loginBox .lgLogo{transform:translate(91px,40px)}html body div.loginWrap form.loginBox.loginBox .lgApp,html body div.loginWrap form.loginBox.loginBox h1.tJ{transform:translate(91px,112px)}
+html body div.loginWrap form.loginBox.loginBox .lgLogo{filter:drop-shadow(0 0 26px rgba(77,163,255,.55)) drop-shadow(0 18px 24px rgba(0,0,0,.45))!important;border-radius:30px}
+html body div.loginWrap form.loginBox.loginBox .lgApp{color:#f2c27a!important;letter-spacing:.06em;font-weight:700!important}
+html body div.loginWrap form.loginBox.loginBox h1.tJ{color:#ffffff!important;text-shadow:0 4px 18px rgba(0,0,0,.45)}
+html body div.loginWrap form.loginBox.loginBox h1.tJ .n101{background:linear-gradient(180deg,#ffe3ad,#e8a048);-webkit-background-clip:text;background-clip:text;color:transparent!important}
+html body div.loginWrap form.loginBox.loginBox .lgBack{background:rgba(255,255,255,.08)!important;color:#f2c27a!important;border:1px solid rgba(242,194,122,.45)!important;backdrop-filter:blur(8px);box-shadow:none!important}
+html body div.loginWrap form.loginBox.loginBox .lgTls{grid-template-columns:repeat(2,172px)!important;justify-content:center!important;gap:20px!important}
+html body div.loginWrap form.loginBox.loginBox #lgPt .lgTls{grid-template-columns:repeat(3,172px)!important}
+html body div.loginWrap form.loginBox.loginBox .lgTls>.lgTl{--c1:#3b8fe0;--c2:#7cc4ff;position:relative!important;overflow:hidden!important;width:172px!important;height:176px!important;min-width:172px!important;max-width:none!important;min-height:0!important;flex:none!important;grid-column:auto!important;justify-self:center!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:6px!important;padding:14px 10px!important;border-radius:22px!important;color:#fff!important;font-size:17.5px!important;font-weight:800!important;line-height:1.25!important;text-align:center!important;
+ background:radial-gradient(120px 90px at 50% 30%,color-mix(in srgb,var(--c1) 38%,transparent),transparent 75%),linear-gradient(165deg,rgba(255,255,255,.11),rgba(255,255,255,.03))!important;border:1px solid rgba(255,255,255,.14)!important;backdrop-filter:blur(10px);box-shadow:0 18px 40px -18px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.12)!important;transition:transform .25s,border-color .25s,box-shadow .25s!important}
+html body div.loginWrap form.loginBox.loginBox .lgTls>.lgTl::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:linear-gradient(90deg,var(--c1),var(--c2));opacity:.95}
+html body div.loginWrap form.loginBox.loginBox .lgTls>.lgTl::after{display:block;font-size:11.5px;font-weight:600;color:#a9b9d0;line-height:1.35;margin-top:1px}
+html body div.loginWrap form.loginBox.loginBox .lgTls>.lgTl:hover{transform:translateY(-6px);border-color:rgba(242,194,122,.7)!important;box-shadow:0 26px 50px -18px rgba(0,0,0,.85),0 0 0 1px rgba(242,194,122,.35),0 0 34px -6px color-mix(in srgb,var(--c1) 60%,transparent)!important}
+html body div.loginWrap form.loginBox.loginBox .lgTls>.lgTl>i{width:76px!important;height:76px!important;min-width:76px!important;border-radius:20px!important;margin-bottom:8px!important;box-shadow:0 10px 26px -8px color-mix(in srgb,var(--c1) 85%,transparent),0 0 0 3px rgba(255,255,255,.08)!important}
+html body div.loginWrap form.loginBox.loginBox .lgTl[data-r="G-t"],html body div.loginWrap form.loginBox.loginBox .lgTl[data-r="t"]{--c1:#3b8fe0;--c2:#7cc4ff}
+html body div.loginWrap form.loginBox.loginBox .lgTl[data-r="G-s"],html body div.loginWrap form.loginBox.loginBox .lgTl[data-r="s"]{--c1:#17a58f;--c2:#5fe0c4}
+html body div.loginWrap form.loginBox.loginBox .lgTl[data-r="e"],html body div.loginWrap form.loginBox.loginBox .lgTl[data-r="te"]{--c1:#8b5cf6;--c2:#c4a5ff}
+html body div.loginWrap form.loginBox.loginBox .lgTl[data-r="g"]{--c1:#e8a048;--c2:#ffd896}
+html body div.loginWrap form.loginBox.loginBox .lgTl[data-r="G-t"]::after{content:"لوحة المتابعة والإدارة"}
+html body div.loginWrap form.loginBox.loginBox .lgTl[data-r="G-s"]::after{content:"الدروس والتجارب"}
+html body div.loginWrap form.loginBox.loginBox .lgTl[data-r="t"]::after{content:"الشعب والدرجات والتقارير"}
+html body div.loginWrap form.loginBox.loginBox .lgTl[data-r="te"]::after,html body div.loginWrap form.loginBox.loginBox .lgTl[data-r="e"]::after{content:"قياس المستوى"}
+html body div.loginWrap form.loginBox.loginBox .lgTl[data-r="g"]::after{content:"المنصة كما يراها المتدرب"}
+html body div.loginWrap form.loginBox.loginBox .lgTl[data-r="s"]::after{content:"الدخول برقمك التدريبي"}
+html body div.loginWrap form.loginBox.loginBox .credit{position:relative;justify-self:center!important;padding:12px 34px 14px!important;border-radius:18px!important;background:linear-gradient(135deg,rgba(242,194,122,.13),rgba(232,160,72,.04))!important;border:1px solid rgba(242,194,122,.5)!important;box-shadow:0 18px 40px -22px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,255,255,.08)!important;color:#fff!important}
+html body div.loginWrap form.loginBox.loginBox .credit .crL{color:#cdb88f!important;font-size:13.5px!important;letter-spacing:.08em}
+html body div.loginWrap form.loginBox.loginBox .credit b{background:linear-gradient(180deg,#ffe7b8,#e8a048);-webkit-background-clip:text;background-clip:text;color:transparent!important;font-size:24px!important;white-space:nowrap!important}
+html body div.loginWrap form.loginBox.loginBox hr,html body div.loginWrap form.loginBox.loginBox [class*="about"],html body div.loginWrap form.loginBox.loginBox .lgAbout{border-color:rgba(255,255,255,.12)!important}
+html body div.loginWrap form.loginBox.loginBox p,html body div.loginWrap form.loginBox.loginBox div{color:#b9c7db!important}html body div.loginWrap form.loginBox.loginBox h2,html body div.loginWrap form.loginBox.loginBox h3,html body div.loginWrap form.loginBox.loginBox b:not(.credit b),html body div.loginWrap form.loginBox.loginBox strong{color:#ffffff!important}
+html body div.loginWrap form.loginBox.loginBox a,html body div.loginWrap form.loginBox.loginBox summary{color:#f2c27a!important}
+}
+@media (min-width:1000px) and (max-height:820px) and (hover:hover) and (pointer:fine){
+html body div.loginWrap form.loginBox.loginBox #lgP0 .lgTls{grid-template-columns:repeat(2,148px)!important;gap:16px!important}
+html body div.loginWrap form.loginBox.loginBox #lgP0 .lgTls>.lgTl{width:148px!important;min-width:148px!important;height:148px!important;font-size:16px!important;padding:10px 8px!important;border-radius:20px!important}
+html body div.loginWrap form.loginBox.loginBox #lgP0 .lgTls>.lgTl>i{width:62px!important;height:62px!important;min-width:62px!important;border-radius:16px!important;margin-bottom:6px!important}
+html body div.loginWrap form.loginBox.loginBox #lgP0 .lgTls>.lgTl::after{font-size:10.5px!important}
+html body div.loginWrap form.loginBox.loginBox .credit{padding:8px 26px 10px!important;border-radius:16px!important;width:max-content!important;min-width:312px!important;max-width:100%!important}
+html body div.loginWrap form.loginBox.loginBox .credit .crL{font-size:12px!important}
+html body div.loginWrap form.loginBox.loginBox .credit b{font-size:20px!important}
+html body div.loginWrap form.loginBox.loginBox .credit~*{font-size:13px!important;line-height:1.75!important}
+html body div.loginWrap form.loginBox.loginBox .credit~* *{font-size:inherit!important}
+html body div.loginWrap form.loginBox.loginBox .credit~* :is(h2,h3,b,strong,summary){font-size:15px!important}
+}
+@media (min-width:1000px) and (max-height:820px) and (hover:hover) and (pointer:fine){html body div.loginWrap form.loginBox.loginBox{padding-left:46.95%!important;padding-right:16.3%!important}}
+
+@media (min-width:1000px) and (max-height:820px) and (hover:hover) and (pointer:fine){html body div.loginWrap form.loginBox.loginBox #lgPt .lgTls{grid-template-columns:repeat(3,158px)!important;gap:14px!important}html body div.loginWrap form.loginBox.loginBox #lgPt .lgTls>.lgTl{width:158px!important;min-width:158px!important;height:168px!important;font-size:16.5px!important}html body div.loginWrap form.loginBox.loginBox #lgPt .lgTls>.lgTl>i{width:66px!important;height:66px!important;min-width:66px!important}}
+
+@media (min-width:1000px) and (max-height:820px) and (hover:hover) and (pointer:fine){html body div.loginWrap form.loginBox.loginBox .lgBack{display:none!important}}
+@media (min-width:1000px) and (max-height:820px) and (hover:hover) and (pointer:fine){
+html body div.loginWrap form.loginBox.loginBox #lgPs .lgTls{grid-template-columns:repeat(2,148px)!important;gap:16px!important}
+html body div.loginWrap form.loginBox.loginBox #lgPs .lgTls>.lgTl{width:148px!important;min-width:148px!important;height:148px!important;font-size:16px!important;padding:10px 8px!important;border-radius:20px!important}
+html body div.loginWrap form.loginBox.loginBox #lgPs .lgTls>.lgTl>i{width:62px!important;height:62px!important;min-width:62px!important;border-radius:16px!important;margin-bottom:6px!important}
+html body div.loginWrap form.loginBox.loginBox #lgPs .lgTls>.lgTl::after{font-size:10.5px!important}
+html body div.loginWrap form.loginBox.loginBox #lgPf input:not([type=checkbox]){background:rgba(255,255,255,.07)!important;border:1px solid rgba(255,255,255,.18)!important;color:#fff!important;height:40px!important;min-height:0!important;border-radius:12px!important;box-shadow:none!important}
+html body div.loginWrap form.loginBox.loginBox #lgPf input:not([type=checkbox])::placeholder{color:#9fb0c8!important}
+html body div.loginWrap form.loginBox.loginBox #lgPf input:not([type=checkbox]):focus{border-color:#f2c27a!important;box-shadow:0 0 0 3px rgba(242,194,122,.18)!important}
+html body div.loginWrap form.loginBox.loginBox #lgPf label,html body div.loginWrap form.loginBox.loginBox #lgPf .lgL{color:#c9d6ea!important}
+html body div.loginWrap form.loginBox.loginBox #lgPf button[type=submit],html body div.loginWrap form.loginBox.loginBox #lgPf .lgBtn{background:linear-gradient(180deg,#f6cf8c,#e39a3e)!important;color:#291a04!important;border:0!important;height:42px!important;min-height:0!important;border-radius:12px!important;box-shadow:0 12px 26px -12px rgba(232,160,72,.8)!important;font-weight:800!important}
+html body div.loginWrap form.loginBox.loginBox #lgPf .lgBtn *{color:#291a04!important;fill:currentColor}
+html body div.loginWrap form.loginBox.loginBox #lgPf{gap:8px!important}
+html body div.loginWrap form.loginBox.loginBox #lgPf p,html body div.loginWrap form.loginBox.loginBox #lgPf small{font-size:12px!important;line-height:1.55!important;margin-top:2px!important;margin-bottom:2px!important}
+html body div.loginWrap form.loginBox.loginBox #lgPf .lgHd span{color:#fff!important}
+html body div.loginWrap form.loginBox.loginBox #lgPf .lgHd i{background:linear-gradient(180deg,#f6cf8c,#e39a3e)!important}
+html body div.loginWrap form.loginBox.loginBox[data-pg="f"] .credit{padding:5px 22px 7px!important}
+html body div.loginWrap form.loginBox.loginBox[data-pg="f"] .credit .crL{font-size:11px!important}
+html body div.loginWrap form.loginBox.loginBox[data-pg="f"] .credit b{font-size:17px!important}
+html body div.loginWrap form.loginBox.loginBox[data-pg="f"]{padding-top:14px!important;padding-bottom:14px!important}
+}
+</style>
+</body>
 </html>
