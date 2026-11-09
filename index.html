@@ -1109,7 +1109,7 @@ header.top .brand span{color:#DCE8F7}header.top .progress{color:#E6EEF9}
     <button type="button" class="lgBack" id="lgBack" hidden>→ رجوع</button>
     <div class="lgPg" id="lgP0" style="margin-top:14px"><div class="lgTls"><button type="button" class="lgTl" data-r="G-t"><i><svg viewBox="0 0 24 24"><circle cx="7" cy="8" r="3.5"/><path d="M1 20c0-4 3-6 6-6s6 2 6 6z"/><path d="M11 3h12v12H13v-2h8V5h-8z"/><path d="M14 9l2 2 4-4" fill="none" stroke="currentColor" stroke-width="2"/></svg></i>المدرب</button><button type="button" class="lgTl" data-r="G-s"><i><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="4.5"/><path d="M3 21c0-5 4-8 9-8s9 3 9 8z"/></svg></i>المتدرب</button></div></div>
     <div class="lgPg" id="lgPs" hidden style="margin-top:14px"><div class="lgTls"><button type="button" class="lgTl" data-r="s"><i><svg viewBox="0 0 24 24"><path d="M2 5c3-1.5 6-1.5 9 .5v15c-3-2-6-2-9-.5zM22 5c-3-1.5-6-1.5-9 .5v15c3-2 6-2 9-.5z"/></svg></i>المنصة</button><button type="button" class="lgTl" data-r="e"><i><svg viewBox="0 0 24 24"><path d="M8 2h8v3H8z"/><path d="M5 4h2v3h10V4h2v18H5z" fill-opacity=".85"/><path d="M8 12l2 2 4-4M8 17h8" fill="none" stroke="#1565c8" stroke-width="1.8"/></svg></i>الاختبارات التجريبية</button></div></div>
-    <div class="lgPg" id="lgPt" hidden style="margin-top:14px"><div class="lgTls"><button type="button" class="lgTl" data-r="t"><i><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M6 13v-3M10 13V7M14 13v-4M18 13V6" stroke="#1565c8" stroke-width="2"/><path d="M8 21h8v-2H8z"/></svg></i>لوحة المدرب</button><button type="button" class="lgTl" data-r="te"><i><svg viewBox="0 0 24 24"><path d="M8 2h8v3H8z"/><path d="M5 4h2v3h10V4h2v18H5z" fill-opacity=".85"/><path d="M8 12l2 2 4-4M8 17h8" fill="none" stroke="#1565c8" stroke-width="1.8"/></svg></i>الاختبارات التجريبية</button><button type="button" class="lgTl" data-r="g"><i><svg viewBox="0 0 24 24"><path d="M12 5C6 5 2 12 2 12s4 7 10 7 10-7 10-7-4-7-10-7z"/><circle cx="12" cy="12" r="3.5" fill="#1565c8"/></svg></i>المعاينة</button></div></div>
+    <div class="lgPg" id="lgPt" hidden style="margin-top:14px"><div class="lgTls"><button type="button" class="lgTl" data-r="t"><i><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M6 13v-3M10 13V7M14 13v-4M18 13V6" stroke="#1565c8" stroke-width="2"/><path d="M8 21h8v-2H8z"/></svg></i>لوحة المدرب</button><button type="button" class="lgTl" data-r="te"><i><svg viewBox="0 0 24 24"><path d="M8 2h8v3H8z"/><path d="M5 4h2v3h10V4h2v18H5z" fill-opacity=".85"/><path d="M8 12l2 2 4-4M8 17h8" fill="none" stroke="#1565c8" stroke-width="1.8"/></svg></i>الاختبارات التجريبية</button><button type="button" class="lgTl" data-r="g"><i></i>تجربة المنصة</button></div></div>
     <div class="lgPg" id="lgPf" hidden>
     <div class="lgHd" id="lgHd"><i></i><span></span></div>
     <p class="lgSub" id="lgSub">سجل دخولك برقمك التدريبي</p>
@@ -2543,7 +2543,8 @@ function renderEx(v){
     const prog=document.createElement('div');prog.className='score';head.appendChild(prog);i.appendChild(head);
     let fin=0,pts=0;const max=probs.length*5;
     const upd=()=>{prog.textContent=fin?`أنجزت ${AR(fin)} من ${AR(probs.length)} — الخطوات الصحيحة من أول محاولة: ${AR(pts)} من ${AR(max)}`:''};
-    probs.forEach((p,n)=>i.appendChild(problemCard(p,(n===0?'مثال 1':'تمرين '+AR(n)),(sc,det)=>{fin++;pts+=sc;upd();SYNC.result('prob',k+'.'+n,lesson().t,sc,5,det);if(fin===probs.length){const b=best['p'+k];if(b==null||pts>b){best['p'+k]=pts;store.set('p101-best',best)}rslot.appendChild(rateLink())}})));
+    const EXL=/* exLbl31: المدرب 9 نوفمبر (أ): عناوين أمثلة درس كولوم مثل السبورة */{'3-1':['مثال ١ · صفحة 92','مثال ٢ · صفحة 93','تمرين ١ · ورقة العمل · سؤال ٤ (صفحة 105)']}[k];
+    probs.forEach((p,n)=>i.appendChild(problemCard(p,(EXL&&EXL[n])||(n===0?'مثال 1':'تمرين '+AR(n)),(sc,det)=>{fin++;pts+=sc;upd();SYNC.result('prob',k+'.'+n,lesson().t,sc,5,det);if(fin===probs.length){const b=best['p'+k];if(b==null||pts>b){best['p'+k]=pts;store.set('p101-best',best)}rslot.appendChild(rateLink())}})));
     const rslot=document.createElement('div');i.appendChild(rslot);
     /* «مثال محلول للمراجعة» حذف من هذا التبويب لأنه معروض على السبورة */
   }else if(th){i.appendChild(theoryCard(th,s&&s.ex))}
@@ -2557,7 +2558,7 @@ function renderEx(v){
     b.onclick=()=>{const p=GENS.make(k);if(!p)return;cnt++;const pc=problemCard(p,'تمرين متجدد '+AR(cnt),(sc,det)=>{if(det&&det.correct)ok++;st.textContent=`حللت ${AR(ok)} من ${AR(cnt)} بشكل صحيح`;SYNC.result('prob',k+'.g',lesson().t,sc,5,det)});
       holder.appendChild(pc);b.textContent='🎲 تمرين آخر';pc.scrollIntoView({behavior:'smooth',block:'start'})};
     g.append(st);i.appendChild(g);i.appendChild(holder);
-    const r=document.createElement('div');r.className='btnrow';r.appendChild(b);i.appendChild(r);
+    const r=document.createElement('div');r.className='btnrow';r.appendChild(b);/*genIn: المدرب 9 نوفمبر: زر تمرين جديد داخل بطاقة التمارين المتجددة*/g.appendChild(r);
   }
   /* المدرب 3 نوفمبر: المساعد الذكي لا يظهر إلا بعد الإجابة الخاطئة (aiFix) */
   /* المدرب 6 نوفمبر (أ): «الدرس التالي» في آخر «اختبر نفسك» فقط */
@@ -2859,10 +2860,10 @@ function showLogin(){
   const ROLES={s:{sub:'سجل دخولك برقمك التدريبي',lab:'الرقم التدريبي',im:'numeric',hint:'أول مرة تدخل؟ اكتب رقمك التدريبي واترك كلمة المرور فارغة، وجهز رمز التسجيل من المدرب.',val:''},
     t:{sub:'دخول المدرب إلى لوحة المتابعة',lab:'اسم المستخدم',im:'text',hint:'أول مرة؟ أنشئ حساب المدرب من <a href="teacher.html">هنا</a>.',val:''},
     e:{sub:'دخول الاختبارات التجريبية',lab:'الرقم التدريبي',im:'numeric',hint:'إذا كنت مسجلا في المنصة فكلمة المرور نفسها. وفي أول دخول اترك كلمة المرور فارغة، وجهز رمز التسجيل من المدرب.',val:''},
-    d:{sub:'معاينة المنصة كما يراها المتدرب',lab:'اسم المستخدم',im:'text',hint:'باسم المستخدم وكلمة المرور الخاصة بلوحة المدرب.',val:''},
-    g:{sub:'معاينة المنصة كما يراها المتدرب',lab:'اسم المستخدم',im:'text',hint:'ادخل ببيانات حساب المعاينة التي أعطاك إياها المدرب.',val:'demo'},
+    d:{sub:'تجربة المنصة كما يراها المتدرب',lab:'اسم المستخدم',im:'text',hint:'باسم المستخدم وكلمة المرور الخاصة بلوحة المدرب.',val:''},
+    g:{sub:'تجربة المنصة كما يراها المتدرب',lab:'اسم المستخدم',im:'text',hint:'ادخل ببيانات تجربة المنصة التي أعطاك إياها المدرب.',val:'demo'},
     te:{sub:'تجربة الاختبار التجريبي كما يراه المتدرب',lab:'اسم المستخدم',im:'text',hint:'باسم المستخدم وكلمة المرور الخاصة بلوحة المدرب، ولا تدخل نتيجتك في النتائج.',val:''}};
-  const LGI={"s": "<svg viewBox=\"0 0 24 24\"><path d=\"M2 5c3-1.5 6-1.5 9 .5v15c-3-2-6-2-9-.5zM22 5c-3-1.5-6-1.5-9 .5v15c3-2 6-2 9-.5z\"/></svg>", "e": "<svg viewBox=\"0 0 24 24\"><path d=\"M8 2h8v3H8z\"/><path d=\"M5 4h2v3h10V4h2v18H5z\" fill-opacity=\".85\"/><path d=\"M8 12l2 2 4-4M8 17h8\" fill=\"none\" stroke=\"#1565c8\" stroke-width=\"1.8\"/></svg>", "t": "<svg viewBox=\"0 0 24 24\"><rect x=\"2\" y=\"3\" width=\"20\" height=\"14\" rx=\"2\"/><path d=\"M6 13v-3M10 13V7M14 13v-4M18 13V6\" stroke=\"#1565c8\" stroke-width=\"2\"/><path d=\"M8 21h8v-2H8z\"/></svg>", "d": "<svg viewBox=\"0 0 24 24\"><path d=\"M12 5C6 5 2 12 2 12s4 7 10 7 10-7 10-7-4-7-10-7z\"/><circle cx=\"12\" cy=\"12\" r=\"3.5\" fill=\"#1565c8\"/></svg>", "te": "<svg viewBox=\"0 0 24 24\"><path d=\"M8 2h8v3H8z\"/><path d=\"M5 4h2v3h10V4h2v18H5z\" fill-opacity=\".85\"/><path d=\"M8 12l2 2 4-4M8 17h8\" fill=\"none\" stroke=\"#1565c8\" stroke-width=\"1.8\"/></svg>"},LGT={s:"المنصة",e:"الاختبارات التجريبية",t:"لوحة المدرب",d:"معاينة المدرب",te:"الاختبارات التجريبية",g:"المعاينة"};LGI.g=LGI.d;
+  const LGI={"s": "<svg viewBox=\"0 0 24 24\"><path d=\"M2 5c3-1.5 6-1.5 9 .5v15c-3-2-6-2-9-.5zM22 5c-3-1.5-6-1.5-9 .5v15c3-2 6-2 9-.5z\"/></svg>", "e": "<svg viewBox=\"0 0 24 24\"><path d=\"M8 2h8v3H8z\"/><path d=\"M5 4h2v3h10V4h2v18H5z\" fill-opacity=\".85\"/><path d=\"M8 12l2 2 4-4M8 17h8\" fill=\"none\" stroke=\"#1565c8\" stroke-width=\"1.8\"/></svg>", "t": "<svg viewBox=\"0 0 24 24\"><rect x=\"2\" y=\"3\" width=\"20\" height=\"14\" rx=\"2\"/><path d=\"M6 13v-3M10 13V7M14 13v-4M18 13V6\" stroke=\"#1565c8\" stroke-width=\"2\"/><path d=\"M8 21h8v-2H8z\"/></svg>", "d": "<svg viewBox=\"0 0 24 24\"><path d=\"M12 5C6 5 2 12 2 12s4 7 10 7 10-7 10-7-4-7-10-7z\"/><circle cx=\"12\" cy=\"12\" r=\"3.5\" fill=\"#1565c8\"/></svg>", "te": "<svg viewBox=\"0 0 24 24\"><path d=\"M8 2h8v3H8z\"/><path d=\"M5 4h2v3h10V4h2v18H5z\" fill-opacity=\".85\"/><path d=\"M8 12l2 2 4-4M8 17h8\" fill=\"none\" stroke=\"#1565c8\" stroke-width=\"1.8\"/></svg>"},LGT={s:"المنصة",e:"الاختبارات التجريبية",t:"لوحة المدرب",d:"تجربة المنصة",te:"الاختبارات التجريبية",g:"تجربة المنصة"};LGI.d=LGI.g='';
   let pg='0',grp='s',hD=0;const show=(p,pop)=>{const up=(pg==='0'&&p!=='0')||(pg!=='f'&&p==='f');if(!pop&&up){try{history.pushState({lg:p},'');hD++}catch(e){}}pg=p;$('loginForm').dataset.pg=p;['0','s','t','f'].forEach(x=>$('lgP'+x).hidden=x!==p);$('lgBack').hidden=p==='0';$('lgAbout').hidden=p!=='0';scrollTo(0,0);$('loginWrap').scrollTop=0};
   $('lgBack').onclick=()=>{if(hD>0)history.back();else show(pg==='f'?grp:'0',true)};
   window.addEventListener('popstate',()=>{if($('loginWrap').hidden||hD<=0)return;hD--;show(pg==='f'?grp:'0',true)});
@@ -2914,7 +2915,7 @@ function showLogin(){
     if(isT())return SYNC.post({a:'tlogin',user:id,pw:oldPw}).then(r=>{if(r.ok&&r.needChange){b.disabled=false;return toStep2('change',r)}
         if(!r.ok){b.disabled=false;return msg(tErr(r),1)}return afterT(r.token)}).catch(fail);
     SYNC.post({a:role==='e'?'exlogin':'login',id,pw:oldPw,device:SYNC.dev}).then(r=>{b.disabled=false;
-      if(r.firstTime){if(mode==='g')return msg('لم تعين كلمة مرور حساب المعاينة بعد. عينها من لوحة المدرب ← تبويب «حساب المعاينة».',1);return toStep2('first',r)}
+      if(r.firstTime){if(mode==='g')return msg('لم تعين كلمة مرور تجربة المنصة بعد. عينها من لوحة المدرب ← تبويب «تجربة المنصة».',1);return toStep2('first',r)}
       if(r.ok&&r.needChange)return toStep2('change',r);
       if(r.ok&&r.token)return ok(r);
       msg(errMsg(r),1)}).catch(fail)};
@@ -2937,8 +2938,8 @@ else{
       w.querySelector('#pgOut').onclick=()=>SYNC.logout()}}
   if(API&&AUTH){
     if(AUTH.exam){document.body.classList.add('examOnly');pos.t='exam'}else if(pos.t==='exam')pos.t='sum';
-    const u=$('userChip');u.hidden=false;u.textContent=(AUTH.exam?'📝 ':AUTH.demo?'👁 ':'👤 ')+(AUTH.demo&&!AUTH.exam?'معاينة المدرب':(AUTH.name||AUTH.id).split(' ')[0])+(AUTH.exam?' · خروج':'');u.title='خروج';
-    u.onclick=()=>{if(AUTH.demo){if(confirm('الخروج من حساب المعاينة والعودة إلى لوحة المدرب؟')){try{localStorage.removeItem('p101-auth')}catch(e){}location.replace('teacher.html')}return}
+    const u=$('userChip');u.hidden=false;u.textContent=(AUTH.exam?'📝 ':AUTH.demo?/*noEye: المدرب 9 نوفمبر حذف العين*/'':'👤 ')+(AUTH.demo&&!AUTH.exam?/*demoName: المدرب 9 نوفمبر (ب)*/'تجربة المنصة':(AUTH.name||AUTH.id).split(' ')[0])+(AUTH.exam?' · خروج':'');u.title='خروج';
+    u.onclick=()=>{if(AUTH.demo){if(confirm('الخروج من تجربة المنصة والعودة إلى لوحة المدرب؟')){try{localStorage.removeItem('p101-auth')}catch(e){}location.replace('teacher.html')}return}
       if(confirm('تسجيل الخروج من حساب '+(AUTH.name||AUTH.id)+'؟'))SYNC.logout()};
     if(!AUTH.exam)SYNC.post({a:'me',token:AUTH.token}).then(r=>{
       if(r.error==='auth')return SYNC.logout(true);
@@ -4304,5 +4305,31 @@ html body nav.course .unit ol li>button{margin:5px 10px!important;padding:7px 12
 html body nav.course .unit ol li>button .lpre{display:table!important;margin:0 0 4px!important;padding:2px 9px!important;border-radius:8px!important;font-size:10.5px!important;font-weight:700!important;line-height:1.5!important;opacity:1!important;background:color-mix(in srgb,var(--accent) 14%,transparent)!important;color:var(--accent)!important}
 html body nav.course .unit ol li>button[aria-current="true"] .lpre{background:rgba(255,255,255,.22)!important;color:#fff!important}
 html body header.top #menuBtn,html body nav.course::before{background:linear-gradient(160deg,#F7931E,#E07B0A)!important;color:#fff!important;border-color:transparent!important;box-shadow:0 6px 14px -6px rgba(224,123,10,.6)!important}
+</style><style id="exFix31">/*exFix31: المدرب 9 نوفمبر (أ): تبويب الأمثلة والتمارين: القيم في نص السؤال بنفس خط السؤال بلا مربعات، والمشهد أصغر على اللابتوب ليظهر السؤال والمشهد والخطوة معا */
+html body #view .card.prob p.pq .eq{background:none!important;border:0!important;padding:0!important;margin:0!important;font:inherit!important;color:inherit!important;border-radius:0!important}
+@media (min-width:1000px) and (hover:hover) and (pointer:fine){html body #view .card.prob:has(>.kProb){display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:18px;align-items:start}html body #view .card.prob:has(>.kProb)>*{grid-column:1/-1}html body #view .card.prob>.pstep{grid-column:1!important}html body #view .card.prob>.kc.kFig.kProb{grid-column:2!important;grid-row:3/span 8;position:sticky;top:8px;margin:0!important;align-self:start}html body #view .card.prob>.kc.kFig.kProb>svg{width:100%!important;height:auto!important;max-height:250px!important}}
+</style><style id="calcFix">/*calcFix: المدرب 9 نوفمبر: الآلة الحاسبة: قانون وتعويض أوضح، أزرار الدوال مميزة عن الخلفية، لوحة الأسهم داخل صفها بلا تداخل، وحجم أصغر على اللابتوب */
+html body .calc .calcLaw{background:#fff!important;color:#0b2a5b!important;border:2px solid #0E7C70!important;border-radius:12px!important;padding:8px 12px!important;display:grid!important;gap:6px!important}
+html body .calc .calcLaw>div{display:flex!important;align-items:center!important;gap:8px!important;flex-wrap:wrap}
+html body .calc .calcLaw b{font-size:14px!important;font-weight:800!important;color:#0E7C70!important;min-width:56px}
+html body .calc .calcLaw .eq{font-family:"Readex Pro","Noto Sans",Tahoma,sans-serif!important;font-size:15px!important;font-weight:700!important;color:#0b2a5b!important;background:none!important;padding:0!important;letter-spacing:.2px}
+html body .calc .calcLaw .kFr>span:first-child{border-bottom:2px solid #0b2a5b!important;padding:0 4px 2px!important}
+html body .calc .calcLaw .kFr>span:last-child{padding-top:2px!important}
+html body .calc .cfn .ck{background:linear-gradient(180deg,#6b7a93,#55657d)!important;color:#fff!important;border:0!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 2px 0 #2a3445!important}
+html body .calc .cfn .ck small{color:#ffd27a!important}
+@media (min-width:1000px) and (hover:hover) and (pointer:fine){
+html body .calc .cnav{align-items:center!important}
+html body .calc .cnav .cpad{transform:none!important;height:100%!important;box-sizing:border-box;grid-template-rows:1fr 1fr 1fr!important;gap:1px 3px!important;padding:2px 8px!important;overflow:hidden;background:#3c4a60!important;box-shadow:inset 0 0 0 2px #6b7a93!important}
+html body .calc .cnav .cpad .ck{min-height:0!important;height:100%!important;font-size:9px!important;line-height:1!important;background:#6b7a93!important;color:#fff!important;box-shadow:none!important;padding:0 6px!important}
+html body .calc .calcLaw .eq{white-space:nowrap!important}html body #view .calc .calcLaw>div{flex-wrap:nowrap!important;gap:6px!important}
+html body #view .calc{max-width:318px!important;margin-inline:auto!important;padding:8px!important}
+html body #view .calc .cscr{min-height:0!important;height:auto!important;max-height:44px!important;margin-bottom:6px!important}html body #view .calc .calcLaw{margin-bottom:6px!important}html body #view .calc .cnav{margin-bottom:6px!important}html body #view .calc .cfn{margin-bottom:6px!important}
+html body #view .calc .cnav>*{height:30px!important}
+html body #view .calc .cfn{gap:4px!important}
+html body #view .calc .cfn .ck{min-height:0!important;height:24px!important;font-size:11px!important;padding:0!important}
+html body #view .calc .cnum{gap:4px!important}
+html body #view .calc .cnum .ck{min-height:0!important;height:27px!important;font-size:14.5px!important;padding:0!important}
+html body #view .calc .cuse{min-height:28px!important;padding:3px!important;font-size:13px!important}html body #view .calc .calcLaw .eq{font-size:11.5px!important;letter-spacing:0!important}html body #view .calc .calcLaw b{font-size:12px!important;min-width:0!important;white-space:nowrap}html body #view .calc .calcLaw{padding:6px 10px!important}html body #view .calc .cnav>.ck{font-size:13px!important}html body #view .calc .cfn .ck small{font-size:7.5px!important}
+}
 </style></body>
 </html>
