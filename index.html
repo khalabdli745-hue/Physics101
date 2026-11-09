@@ -4304,6 +4304,18 @@ html:is(.lgTall,.lgWide,*) body div.loginWrap form.loginBox.loginBox::after{disp
 html:is(.lgTall,.lgWide,*) body div.loginWrap form.loginBox.loginBox[data-pg="f"] #lgPf{padding:14px 16px 14px!important}
 html:is(.lgTall,.lgWide,*) body div.loginWrap form.loginBox.loginBox[data-pg="f"] #lgPf #lgHd{width:124px!important;height:112px!important;margin-bottom:10px!important}
 html:is(.lgTall,.lgWide,*) body div.loginWrap form.loginBox.loginBox[data-pg="f"] #lgPf #lgHd>i{width:46px!important;height:46px!important;min-width:46px!important}
+html:not(.lgWide) body div.loginWrap form.loginBox.loginBox[data-pg="f"] .lgLogo{width:84px!important;height:84px!important;margin-top:calc(max(env(safe-area-inset-top),16px) + 6px)!important;margin-bottom:2px!important}
+html:not(.lgWide) body div.loginWrap form.loginBox.loginBox[data-pg="f"] .lgApp{display:none!important}
+html:not(.lgWide) body div.loginWrap form.loginBox.loginBox[data-pg="f"] h1.tJ{font-size:20px!important;margin:4px 0 10px!important}
+html:not(.lgWide) body div.loginWrap form.loginBox.loginBox[data-pg="f"] #lgPf{padding:12px 14px!important;gap:4px!important}
+html:not(.lgWide) body div.loginWrap form.loginBox.loginBox[data-pg="f"] #lgPf #lgHd{width:112px!important;height:96px!important;margin-bottom:8px!important;gap:6px!important}
+html:not(.lgWide) body div.loginWrap form.loginBox.loginBox[data-pg="f"] #lgPf #lgHd>i{width:42px!important;height:42px!important;min-width:42px!important}
+html:not(.lgWide) body div.loginWrap form.loginBox.loginBox[data-pg="f"] #lgPf .lgF{margin-bottom:8px!important}
+html:not(.lgWide) body div.loginWrap form.loginBox.loginBox[data-pg="f"] #lgPf .lgF input{height:46px!important}
+html:not(.lgWide) body div.loginWrap form.loginBox.loginBox[data-pg="f"] #lgPf #lgBtn{height:48px!important}
+html:not(.lgWide) body div.loginWrap form.loginBox.loginBox[data-pg="f"] .credit{margin-top:10px!important;padding:6px 14px 7px!important}
+html:not(.lgWide) body div.loginWrap form.loginBox.loginBox[data-pg="f"] .credit b{font-size:18px!important}
+html:not(.lgWide) body div.loginWrap form.loginBox.loginBox[data-pg="f"]{padding-bottom:calc(env(safe-area-inset-bottom) + 16px)!important}
 }
 </style>
 <script id="lgOrb">/* المدرب 9 نوفمبر: مركز مدارات شعار الدخول في الجوال والايباد */(function(){function f(){var B=document.querySelector('.loginWrap:not([hidden]) .loginBox'),L=B&&B.querySelector('.lgLogo');if(!B||!L)return;var b=B.getBoundingClientRect(),l=L.getBoundingClientRect();if(!b.width||!B.offsetWidth)return;var k=b.width/B.offsetWidth;B.style.setProperty('--ox',((l.left+l.width/2-b.left)/k)+'px');B.style.setProperty('--oy',((l.top+l.height/2-b.top)/k+(B.scrollTop||0))+'px')}var t;function q(){clearTimeout(t);t=setTimeout(f,120)}addEventListener('resize',q);addEventListener('load',q);var w=document.getElementById('loginWrap');if(w)new MutationObserver(q).observe(w,{subtree:true,childList:true,attributes:true,attributeFilter:['hidden','data-pg']});q();setTimeout(f,900)})();</script>
