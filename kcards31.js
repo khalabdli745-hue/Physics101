@@ -161,7 +161,7 @@ const scArrow=(D,x,y,dir,T,L,col)=>{col=col||'#f59e0b';const th=11,hl=20;
   const shape=`<polygon points="0,${-th/2} 80,${-th/2} 80,${-th} 100,0 80,${th} 80,${th/2} 0,${th/2}" fill="${col}" stroke="#78350f" stroke-width="1.2"/>`;
   const TT=[0].concat(T).concat([D]),LL=[L[0]].concat(L).concat([L[L.length-1]]);
   return `<g transform="translate(${x} ${y}) scale(${dir} 1)"><g><animateTransform attributeName="transform" type="scale" dur="${D}s" repeatCount="indefinite" keyTimes="${scK(D,TT)}" values="${LL.map(l=>(l/100).toFixed(3)+' 1').join(';')}"/>${shape}</g></g>`};
-const scTag=(x,y,t,c,w)=>{const k=TS;w=(w||t.length*9+28)*k;return `<rect x="${f1(x-w/2)}" y="${f1(y-15*k)}" width="${f1(w)}" height="${f1(30*k)}" rx="${f1(15*k)}" fill="${c}"/><text x="${x}" y="${f1(y+6*k)}" text-anchor="middle" font-size="${f1(15*k)}" font-weight="800" fill="#fff" direction="ltr">${t}</text>`};
+/*scTagCard: المدرب 9 نوفمبر: وسوم المشاهد بأسلوب البطاقات*/const scTag=(x,y,t,c,w)=>{const k=TS;w=(w||t.length*9+28)*k+6;return `<rect x="${f1(x-w/2)}" y="${f1(y-17*k)}" width="${f1(w)}" height="${f1(34*k)}" rx="${f1(11*k)}" fill="#fff" stroke="${c}" stroke-width="2.5" filter="drop-shadow(0 2px 3px rgba(30,58,95,.18))"/><text x="${x}" y="${f1(y+6.5*k)}" text-anchor="middle" font-size="${f1(18*k)}" font-weight="800" fill="${c}" direction="ltr">${t}</text>`};
 
 /* 1) الشحن باللمس (التوصيل) */
 function touchScene(){const W=640,H=436,D=10,T=60;
@@ -259,8 +259,8 @@ function lawScene(){const W=640,H=362,D=15,Y=150,R=30,X1=230;let b=stage(W,H,Y+R
   /* أسماء الشحنات والقوة */
   b+=scShow(D,0,8.8,lbl(X1,Y-R-14,'q','#b91c1c',19),true)+scShow(D,8.8,14.7,lbl(X1,Y-R-22,'2q','#b91c1c',20),true);
   b+=scShow(D,0,3.4,scTag(W/2,78,'F','#b45309',60),true)+scShow(D,4.8,7.4,scTag(W/2,78,'F ÷ 4','#b45309',90),true)+scShow(D,9.8,14.7,scTag(W/2,78,'2F','#7e22ce',70),true);
-  b+=`<text x="${W/2}" y="35" text-anchor="middle" font-size="18" font-weight="800" fill="#0B7A70" direction="ltr">F = k·q₁·q₂ / r²</text>`;
-  return svg(W,H,b,'kLawS kScene')}
+  /*lawNoF: المدرب 9 نوفمبر: حذف القانون من أعلى المشهد (موجود في بطاقة القانون) وقص الفراغ فوقه*/
+  return svg(W,H,b,'kLawS kScene').replace('viewBox="0 0 640 362"','viewBox="0 48 640 314"')}
 /* 5) التنافر والتجاذب: الكرات تتحرك فعلا مع أسهم القوة */
 function chargeScene(){const W=640,H=446,D=8,R=24;let b=`<rect width="${W}" height="${H}" fill="url(#kc-bg)"/>`+kBand(W,56,386)+`<rect x="40" y="6" width="560" height="44" rx="14" fill="#fff" stroke="#334155" stroke-width="2.5"/><text x="${W/2}" y="36" text-anchor="middle" font-size="22" font-weight="800" fill="#334155">الشحنات المتشابهة تتنافر، والمختلفة تتجاذب</text>`+kPill(D,W/2,416,'لاحظ الأسهم: في التنافر تبتعدان، وفي التجاذب تقتربان','#475569',470,0,D)+'<g transform="translate(0 62)">';
   const ar=(dir,col)=>`<g transform="scale(${dir} 1)"><polygon points="0,-5 46,-5 46,-11 64,0 46,11 46,5 0,5" fill="${col}" stroke="#78350f" stroke-width="1.1"/></g>`;
