@@ -373,6 +373,7 @@ function boot(){
   load();
 }
 async function authScreen(){
+  /*tLoginNew: المدرب 10 نوفمبر: الخروج من لوحة المدرب أو انتهاء الجلسة يفتح صفحة الدخول الجديدة في المنصة، وتبقى هذه الصفحة للاستعادة والإعداد فقط */if(!/^#(forgot|setup)/.test(location.hash)){location.replace('index.html');return}
   const root=$('#root');
   root.innerHTML=`<div class="loginWrap"><form id="af" class="loginBox"><img class="lgLogo" src="logo-atom.png" alt="فيزياء 101"><p class="lgApp">فيزياء 101</p><h1 class="tJ">لوحة المدرب<span class="tJ2">منصة الفيزياء العامة <span class="n101">101</span></span></h1><p class="sub lgSub" id="asub" style="text-align:center"><span class="spin"></span></p>
     <label class="lgF lgFu"><span class="lgL">اسم المستخدم</span><input placeholder="اسم المستخدم" type="text" id="u1" autocomplete="username" autocapitalize="off" autocorrect="off" spellcheck="false" required></label>
