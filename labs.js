@@ -6207,18 +6207,20 @@ details.wsDet{border:2px solid #F7931E;border-radius:14px;padding:4px 10px;margi
 /* العقد على الخط الموجب: n0 قبل J1، n1 بين J1 وR1، n2 بين R1 وJ2، n3 بين J2 وR2، n4 بين R2 وJ3، n5 بين J3 وR3، n6 بعد R3 */
 /* المدرب 2 نوفمبر: سلك العودة داخل ثقوب اللوحة وبعيد عن المقاومة (من 386 على الخط الأحمر إلى 372 على الخط السالب)، ونقطة المجس الأخيرة بين المقاومة وسلك العودة عند 377، وقلمها يميل لليسار بعيدا عن سلك العودة */
 const NX=[101,135,193,227,285,319,377],Y=38;
+/*wide48: المدرب 10 نوفمبر: على اللابتوب والشاشات الكبيرة والبروجكتور فقط مشهد عريض مثل كولوم: مصدر الجهد يسار لوحة التوصيل والملتيميتر يمينها، والجوال كما هو حرفيا */
+const WD=(()=>{try{return matchMedia('(min-width:1000px) and (hover:hover) and (pointer:fine)').matches}catch(e){return false}})(),PX=WD?-180:0,PY=WD?-40:0,MX=WD?200:0,MY=WD?-40:0,VBW=WD?[-160,-14,710,278]:[-12,-14,446,350.1];window.__L48={WD,PX,PY,MX,MY,VB:VBW};
 /* المدرب 2 نوفمبر: مقاومات أكبر (المسافة بين ساقيها 46 بدل 34) */
 const GAP=[[107,129],[199,221],[291,313]],RES=[[141,187],[233,279],[325,371]],SEG=[[94,110],[126,144],[184,202],[218,236],[276,294],[310,328],[368,389]];
-const JK={A:[247.5,237],C:[272.3,237],V:[296.2,237]},BX=[230,322];
+const JK={A:[247.5+MX,237+MY],C:[272.3+MX,237+MY],V:[296.2+MX,237+MY]},BX=[230+MX,322+MX];
 const NAME={r:'المجس الأحمر',b:'المجس الأسود'};
 const NN=['قبل J₁','بين J₁ وR₁','بين R₁ وJ₂','بين J₂ وR₂','بين R₂ وJ₃','بين J₃ وR₃','بعد R₃'];
 const SUB='₁₂₃';
 function holes(){let h='';for(let x=106;x<=382;x+=12){h+=`<rect x="${x-2}" y="100" width="4" height="4" rx="1" fill="#94A3B8"/>`}
   for(let y=60;y<=88;y+=7)for(let x=106;x<=382;x+=12)h+=`<rect x="${x-1.5}" y="${y-1.5}" width="3" height="3" rx=".8" fill="#CBD5E1"/>`;return h}
 function svg(p){const seg=SEG;
-  return `<svg viewBox="0 -14 400 314" aria-label="ثلاث مقاومات على التوالي على لوحة التوصيل"><rect x="0" y="-14" width="400" height="314" fill="none" pointer-events="none"/>
+  return `<svg viewBox="${WD?VBW.join(' '):'0 -14 400 314'}" aria-label="ثلاث مقاومات على التوالي على لوحة التوصيل"><rect x="${WD?VBW[0]:0}" y="-14" width="${WD?VBW[2]:400}" height="${WD?VBW[3]:314}" fill="none" pointer-events="none"/>
 <defs><linearGradient id="${p}Rg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#F5DEB3"/><stop offset="1" stop-color="#D2B48C"/></linearGradient></defs>
-${'<rect x="-12" y="-14" width="446" height="12" fill="#EEF2F7"/>'+efWood(-2,323.1,-12,434)+efSh(240,97,178,4.5,.35)+efSh(114,246,76,3.4,.42)+efSh(276,262,42,3,.42)}
+${(WD?'<rect x="-500" y="-14" width="1500" height="12" fill="#EEF2F7"/>'+efWood(-2,250,-500,1000):'<rect x="-12" y="-14" width="446" height="12" fill="#EEF2F7"/>'+efWood(-2,323.1,-12,434))+efSh(240,97,178,4.5,.35)+efSh(114+PX,246+PY,76,3.4,.42)+efSh(276+MX,262+MY,42,3,.42)}
 <image href="dv/67-breadboard-clean.webp" x="58.8" y="0.0" width="363" height="95" preserveAspectRatio="none"/>
 
 
@@ -6228,10 +6230,10 @@ ${seg.map(([a,b])=>`<path d="M${a} ${Y} H${b}" stroke="#DC2626" stroke-width="2.
 <text x="350" y="77" font-size="8" font-weight="800" fill="#2563EB" stroke="#F3F6FA" stroke-width="3" paint-order="stroke" text-anchor="end">سلك العودة</text>
 ${RES.map(([a,b],k)=>`<ellipse cx="${a}" cy="${Y}" rx="3.2" ry="2.4" fill="#0F172A"/><ellipse cx="${b}" cy="${Y}" rx="3.2" ry="2.4" fill="#0F172A"/><path d="M${a} ${Y+1} V${Y-13} H${a+5} M${b} ${Y+1} V${Y-13} H${b-5}" fill="none" stroke="#1E293B" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/><path d="M${a} ${Y+1} V${Y-13} H${a+5} M${b} ${Y+1} V${Y-13} H${b-5}" fill="none" stroke="#B6C0CC" stroke-width="1.9" stroke-linejoin="round" stroke-linecap="round"/><image href="dv/70-resistor-hb.webp" x="${a+4}" y="${(Y-13-(b-a-8)/7.72).toFixed(1)}" width="${b-a-8}" height="${((b-a-8)/3.86).toFixed(1)}" preserveAspectRatio="none"/><text id="${p}Rl${k}" x="${(a+b)/2}" y="-4" text-anchor="middle" font-size="9.5" font-weight="800" fill="currentColor" direction="ltr">R${SUB[k]}</text>`).join('')}
 ${GAP.map(([a,b],k)=>`<text x="${(a+b)/2}" y="70" text-anchor="middle" font-size="9" font-weight="800" fill="#C2410C" direction="ltr">J${SUB[k]}</text>`).join('')}
-<g transform="translate(22 0)"><image href="dv/47-dc-power-supply.webp" x="10" y="148" width="160" height="96.2" preserveAspectRatio="none"/><rect x="26.8" y="180.2" width="59.2" height="20.2" rx="2" fill="#DCE8CC" stroke="#111827" stroke-width="1.2"/><text id="${p}PS" direction="ltr" unicode-bidi="embed" x="56.4" y="196.6" text-anchor="middle" fill="#7C8A6E" font-size="14" font-weight="800" font-family="monospace">0.0 V</text><circle id="${p}Led" cx="138.0" cy="172.1" r="3" fill="#475569"/></g><g id="${p}Wires"><path d="M105.6 223.0 V250.2 Q105.6 256.2 99.6 256.2 H16 Q10 256.2 10 250.2 V46 Q10 38 18 38 H94" stroke-linejoin="round" stroke="#DC2626" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M81.6 223.0 V244.2 Q81.6 250.2 75.6 250.2 H24 Q18 250.2 18 244.2 V91.0 Q18 83.0 26 83.0 H64" stroke-linejoin="round" stroke="#111827" stroke-width="3" fill="none" stroke-linecap="round"/></g><rect x="101.0" y="218.5" width="9.2" height="14" rx="2.6" fill="#DC2626" stroke="#0F172A" stroke-width=".8"/><rect x="102.5" y="219.6" width="2" height="11" rx="1" fill="#fff" opacity=".35"/><rect x="77.0" y="218.5" width="9.2" height="14" rx="2.6" fill="#1F2937" stroke="#0F172A" stroke-width=".8"/><rect x="78.5" y="219.6" width="2" height="11" rx="1" fill="#fff" opacity=".35"/>
+<g transform="translate(${22+PX} ${PY})"><image href="dv/47-dc-power-supply.webp" x="10" y="148" width="160" height="96.2" preserveAspectRatio="none"/><rect x="26.8" y="180.2" width="59.2" height="20.2" rx="2" fill="#DCE8CC" stroke="#111827" stroke-width="1.2"/><text id="${p}PS" direction="ltr" unicode-bidi="embed" x="56.4" y="196.6" text-anchor="middle" fill="#7C8A6E" font-size="14" font-weight="800" font-family="monospace">0.0 V</text><circle id="${p}Led" cx="138.0" cy="172.1" r="3" fill="#475569"/></g><g id="${p}Wires"><path d="${WD?'M-74.4 183 V46 Q-74.4 38 -66.4 38 H94':'M105.6 223.0 V250.2 Q105.6 256.2 99.6 256.2 H16 Q10 256.2 10 250.2 V46 Q10 38 18 38 H94'}" stroke-linejoin="round" stroke="#DC2626" stroke-width="3" fill="none" stroke-linecap="round"/><path d="${WD?'M-98.4 183 V210 Q-98.4 216 -92.4 216 H34 Q40 216 40 210 V91 Q40 83 48 83 H64':'M81.6 223.0 V244.2 Q81.6 250.2 75.6 250.2 H24 Q18 250.2 18 244.2 V91.0 Q18 83.0 26 83.0 H64'}" stroke-linejoin="round" stroke="#111827" stroke-width="3" fill="none" stroke-linecap="round"/></g><g transform="translate(${PX} ${PY})"><rect x="101.0" y="218.5" width="9.2" height="14" rx="2.6" fill="#DC2626" stroke="#0F172A" stroke-width=".8"/><rect x="102.5" y="219.6" width="2" height="11" rx="1" fill="#fff" opacity=".35"/><rect x="77.0" y="218.5" width="9.2" height="14" rx="2.6" fill="#1F2937" stroke="#0F172A" stroke-width=".8"/><rect x="78.5" y="219.6" width="2" height="11" rx="1" fill="#fff" opacity=".35"/></g>
 ${GAP.map(([a,b],k)=>`<g class="jmp" data-g="${k}" id="${p}J${k}" style="cursor:pointer"><circle cx="${a}" cy="${Y}" r="2.8" fill="#0F172A"/><circle cx="${b}" cy="${Y}" r="2.8" fill="#0F172A"/><image href="dv/54-jumper-wire.webp" x="${a-0.068*(b-a)/0.864}" y="${Y-15}" width="${(b-a)/0.864}" height="15.5" preserveAspectRatio="none"/><rect x="${a-6}" y="${Y-26}" width="${b-a+12}" height="30" fill="transparent"/></g>`).join('')}
 <circle cx="90" cy="38" r="6" fill="#DC2626" stroke="#0F172A" stroke-width="1"/><text x="90" y="42" text-anchor="middle" font-size="10" font-weight="900" fill="#fff">+</text><circle cx="70" cy="83.0" r="6" fill="#2563EB" stroke="#0F172A" stroke-width="1"/><text x="70" y="87.0" text-anchor="middle" font-size="10" font-weight="900" fill="#fff">−</text>
-<g><image href="dv/49-digital-multimeter.webp" x="230" y="128" width="92" height="132.3" preserveAspectRatio="none"/><text id="${p}D" direction="ltr" x="276.0" y="159.1" text-anchor="middle" fill="#111827" font-weight="800" font-size="15" font-family="monospace">0.00</text><rect id="${p}Mb" x="287.0" y="172.3" width="30" height="14" rx="7" fill="#334155"/><text id="${p}Mt" x="302.0" y="182.8" text-anchor="middle" font-size="9.5" font-weight="900" fill="#fff" direction="ltr">OFF</text></g>
+<g transform="translate(${MX} ${MY})"><image href="dv/49-digital-multimeter.webp" x="230" y="128" width="92" height="132.3" preserveAspectRatio="none"/><text id="${p}D" direction="ltr" x="276.0" y="159.1" text-anchor="middle" fill="#111827" font-weight="800" font-size="15" font-family="monospace">0.00</text><rect id="${p}Mb" x="287.0" y="172.3" width="30" height="14" rx="7" fill="#334155"/><text id="${p}Mt" x="302.0" y="182.8" text-anchor="middle" font-size="9.5" font-weight="900" fill="#fff" direction="ltr">OFF</text></g>
 <g id="${p}Leads"></g><g id="${p}Dots"></g>
 ${NX.map((x,k)=>`<g class="pt" data-p="${k}"><circle class="h" cx="${x}" cy="${Y}" r="10" style="opacity:0"/><circle cx="${x}" cy="${Y}" r="4.6" fill="none" stroke="#F7931E" stroke-width="1.8"/></g>`).join('')}
 </svg>`}
@@ -6242,14 +6244,14 @@ const penEnd=(red,n)=>{const a=ang(red,n)*Math.PI/180;return [NX[n]+Math.sin(a)*
 const pen=(red,n)=>{const c=red?'#DC2626':'#1F2937';return `<g transform="translate(${NX[n]} ${Y-1}) rotate(${ang(red,n)})"><line x1="0" y1="0" x2="0" y2="-9" stroke="#E2E8F0" stroke-width="1.8" stroke-linecap="round"/><line x1="0" y1="0" x2="0" y2="-9" stroke="#64748B" stroke-width=".6"/><path d="M-2.4 -9 L2.4 -9 L3.4 -15 L-3.4 -15 Z" fill="${c}" stroke="#0F172A" stroke-width=".6"/><rect x="-4.8" y="-17.6" width="9.6" height="2.8" rx="1.2" fill="${c}" stroke="#0F172A" stroke-width=".6"/><rect x="-3.5" y="-${PL}" width="7" height="${PL-17}" rx="2.6" fill="${c}" stroke="#0F172A" stroke-width=".7"/><rect x="-2.2" y="-${PL-2}" width="1.6" height="${PL-21}" rx=".8" fill="#fff" opacity=".35"/></g>`};
 const route=(red,jk,n)=>{const [x1,y1]=JK[jk],tx=NX[n],[ex,ey]=penEnd(red,n);
   /* المدرب 2 نوفمبر: السلك يخرج من منفذه بقابس ظاهر، ويبقى على سطح الطاولة. عند قياس الجهد يخرج الأحمر من المنفذ V يمين الجهاز فوق الأسود، فلا يتقاطعان */
-  const rr=red&&jk==='V';let sx=rr?BX[1]+9:red?Math.min(BX[0]-9,ex-4):Math.min(397,Math.max(BX[1]+18,ex+(n===6?0:4)));const yb=red?272:280,dx=sx>x1?6:-6;
+  const rr=red&&jk==='V'&&!WD;let sx=rr?BX[1]+9:red?Math.min(BX[0]-9,ex-4):WD?Math.min(BX[0]-18,ex+(n===6?0:4)):Math.min(397,Math.max(BX[1]+18,ex+(n===6?0:4)));const yb=(red?272:280)+MY,dx=sx>x1?6:-6;
   return `M${x1} ${y1} V${yb-6} Q${x1} ${yb} ${x1+dx} ${yb} H${sx-dx} Q${sx} ${yb} ${sx} ${yb-6} V${(ey+30).toFixed(1)} C${sx} ${(ey+14).toFixed(1)} ${ex.toFixed(1)} ${(ey+18).toFixed(1)} ${ex.toFixed(1)} ${ey.toFixed(1)}`};
 const lead=(red,jk,n)=>{const d=route(red,jk,n),[x1,y1]=JK[jk],PC=red?'#DC2626':'#1F2937';
   return `<g data-j="${red?'r':'b'}"><path class="lead" stroke="#fff" style="stroke-width:${red?6.5:8};stroke-linejoin:round" d="${d}"/><path class="lead" stroke="${red?'#DC2626':'#111827'}" style="stroke-width:${red?3.6:4.2};stroke-linejoin:round" d="${d}"/>${pen(red,n)}<rect x="${(x1-4.2).toFixed(1)}" y="${(y1-4).toFixed(1)}" width="8.4" height="13" rx="2.4" fill="${PC}" stroke="#0F172A" stroke-width=".8"/><rect x="${(x1-2.8).toFixed(1)}" y="${(y1-3).toFixed(1)}" width="1.8" height="10" rx=".9" fill="#fff" opacity=".35"/></g>`};
 /* مسار التيار: عبر الوصلات، أو عبر الأميتر مكان الوصلة المرفوعة k */
-function pathFor(k){let d='M105.6 223 V250.2 Q105.6 256.2 99.6 256.2 H16 Q10 256.2 10 250.2 V46 Q10 38 18 38 H94 ';
-  GAP.forEach(([a,b],i)=>{if(i===k){const [xa,ya]=JK.A,[xb]=JK.C;{const [ra,rb]=penEnd(true,2*i),[ba,bb]=penEnd(false,2*i+1);d+=`H${NX[2*i]} L${ra.toFixed(1)} ${rb.toFixed(1)} V272 H${xa} V${ya} H${xb} V280 H${ba.toFixed(1)} V${bb.toFixed(1)} L${NX[2*i+1]} ${Y} H${b} `}}else d+=`H${b} `});
-  return d+'H386 C388 52 378 70 372 83.0 H26 Q18 83.0 18 91.0 V244.2 Q18 250.2 24 250.2 H75.6 Q81.6 250.2 81.6 244.2 V223'}
+function pathFor(k){let d=WD?'M-74.4 183 V46 Q-74.4 38 -66.4 38 H94 ':'M105.6 223 V250.2 Q105.6 256.2 99.6 256.2 H16 Q10 256.2 10 250.2 V46 Q10 38 18 38 H94 ';
+  GAP.forEach(([a,b],i)=>{if(i===k){const [xa,ya]=JK.A,[xb]=JK.C;{const [ra,rb]=penEnd(true,2*i),[ba,bb]=penEnd(false,2*i+1);d+=`H${NX[2*i]} L${ra.toFixed(1)} ${rb.toFixed(1)} V${272+MY} H${xa} V${ya} H${xb} V${280+MY} H${ba.toFixed(1)} V${bb.toFixed(1)} L${NX[2*i+1]} ${Y} H${b} `}}else d+=`H${b} `});
+  return d+(WD?'H386 C388 52 378 70 372 83.0 H48 Q40 83 40 91 V210 Q40 216 34 216 H-92.4 Q-98.4 216 -98.4 210 V183':'H386 C388 52 378 70 372 83.0 H26 Q18 83.0 18 91.0 V244.2 Q18 250.2 24 250.2 H75.6 Q81.6 250.2 81.6 244.2 V223')}
 function mount(host,opts){opts=opts||{};const WH=opts.watchHost||host;
   WH.insertAdjacentHTML('beforeend',`<style>${CSS}</style><div class="wsc"><h4 style="margin:2px 0 6px">🎬 شاهد: تركيب الأجهزة وطريقة القياس</h4>
    ${svg('ss')}<div class="pb">${'<i></i>'.repeat(9)}</div><div class="cap" id="ssCap">اضغط «▶ شاهد» لترى قياس التيار قبل كل مقاومة، ثم الجهد على كل مقاومة، خطوة خطوة.</div>
@@ -6452,7 +6454,7 @@ function serLab(box){
     W.setR(Rv);phase='a';$('wTi').appendChild(card);W.phase('a');W.mode('');['nZ','vZ'].forEach(k=>$(k).innerHTML='');
     $('rVals').innerHTML='قيم المقاومات المكتوبة عليها: '+Rv.map((r,k)=>`<span dir="ltr">R${'₁₂₃'[k]} = <b class="cQ">${r}</b> Ω</span>`).join(' · ');
     faces();draw();sub();results();
-    {const l=box.querySelector('#stLeads'),sv=l&&l.ownerSVGElement;if(sv){sv.dataset.cam='1';sv.setAttribute('viewBox','-12 -14 446 350.1');sv.querySelectorAll('g.mTag').forEach(e=>e.remove())}}}
+    {const l=box.querySelector('#stLeads'),sv=l&&l.ownerSVGElement;if(sv){sv.dataset.cam='1';sv.setAttribute('viewBox',((window.__L48&&window.__L48.VB)||[-12,-14,446,350.1]).join(' '));sv.querySelectorAll('g.mTag').forEach(e=>e.remove())}}}
   function sub(){const c=(cl,x)=>`<b class="${cl}">${x}</b>`;
     $('sbS').html=[0,1,2].every(i=>rec.has(i))?'V₁ + V₂ + V₃\n'+E(`${c('cV',fx(Vk[0],2))} + ${c('cV',fx(Vk[1],2))} + ${c('cV',fx(Vk[2],2))}`):'V₁ + V₂ + V₃';
     $('sbA').html=recI.size===3&&rec.has(3)?'R = V / I\n'+E(`R = ${c('cV',fx(Vk[3],2))} / ${c('cI',fx(I,3))}`):'R = V / I';
@@ -7345,25 +7347,26 @@ try{
 /* المدرب 2 نوفمبر: تجربة المقاومات على التوالي بالقالب المعتمد (مشغل DX مثل 4-5) */
 const agCss=()=>{if(document.getElementById('agGcss'))return;const st=document.createElement('style');st.id='agGcss';st.textContent='.agGx #dmS .amLog,.agGx #dmV .amLog,.agGx #dmS .pdAns,.agGx #dmV .pdAns,.agGx #dmS .btns,.agGx #dmV .btns,.agGx #dmS .fb2,.agGx #dmV .fb2,.agGx #dmV p,.agGx #dmV .row,.agGx #dmV .msg,.agGx #dmV .wsc>h4{display:none!important}';document.head.appendChild(st)};
 const agAt=(svg,x,y)=>{const p=svg.createSVGPoint();p.x=x;p.y=y;const q=p.matrixTransform(svg.getScreenCTM()),S=document.getElementById('dmSW'),b=S.getBoundingClientRect();return [(q.x-b.left)/S.clientWidth,(q.y-b.top)/S.clientHeight]};
-WCFG['4-8']={PL:[[['k'],['m']],[['j',0]],[['p',0],['p',1]],[['j',0],['j',1],['p',2],['p',3]],[['j',1],['j',2],['p',4],['p',5]],[['j',2],['m'],['p',1],['p',2]],[['p',3],['p',4]],[['p',5],['p',6]],[['p',1],['p',6]]],XY:{k:[124,205],m:[276,207]}};
+const L48=window.__L48||{PX:0,PY:0,MX:0,MY:0,VB:[-12,-14,446,350.1]};
+WCFG['4-8']={PL:[[['k'],['m']],[['j',0]],[['p',0],['p',1]],[['j',0],['j',1],['p',2],['p',3]],[['j',1],['j',2],['p',4],['p',5]],[['j',2],['m'],['p',1],['p',2]],[['p',3],['p',4]],[['p',5],['p',6]],[['p',1],['p',6]]],XY:{k:[124+L48.PX,205+L48.PY],m:[276+L48.MX,207+L48.MY]}};
 {const CARD=()=>{const l=document.getElementById('stLeads');return l&&l.closest('.wsc').parentElement};
  const SV=H=>H.q('dmS').querySelector('svg'),Y=38,GX=[118,210,302],RX=[164,256,348],SB='₁₂₃';
  const probe=async(H,j,n)=>{ck(H.q('dmS').querySelector('#stBtns button[data-j="'+j+'"]'));await H.click(H.q('dmS').querySelector('.pt[data-p="'+n+'"] circle:last-child'))};
  const meter=async(H,m,mode,port)=>{await H.click(H.q(m+'F').querySelector('[data-k="mode"][data-v="'+mode+'"]'));await H.psleep(500);await H.click(H.q(m+'F').querySelector('[data-k="port"][data-v="'+port+'"]'))};
  const jmp=async(H,g)=>{const s=SV(H);await H.hand(agAt(s,GX[g],Y-8));await H.psleep(300);ck(H.q('dmS').querySelector('#stJs button[data-jg="'+g+'"]'));await H.psleep(700)};
- const VB0=[-12,-14,446,350.1];
+ const VB0=L48.VB;
  const zoom=async(H,r,d)=>{const sv=SV(H);if(!sv)return;const c=(sv.getAttribute('viewBox')||VB0.join(' ')).split(/\s+/).map(Number),t=r?[r[0],r[1],r[2],r[2]*314/400]:VB0;d=window.__dmSkip?0:(d||900);let e=0;
    while(e<d){await sleep(30);e+=30;const k=Math.min(1,e/d),q=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;sv.setAttribute('viewBox',c.map((v,i)=>(v+(t[i]-v)*q).toFixed(1)).join(' '))}sv.setAttribute('viewBox',t.map(v=>v.toFixed(1)).join(' '));await sleep(80)};
  /* بطاقة القراءة فوق الجهاز داخل المشهد */
- const tag=(H,t,c)=>{const sv=SV(H);if(!sv)return;sv.querySelectorAll('g.mTag').forEach(e=>e.remove());if(!t)return;const x=276,y=116;
+ const tag=(H,t,c)=>{const sv=SV(H);if(!sv)return;sv.querySelectorAll('g.mTag').forEach(e=>e.remove());if(!t)return;const x=276+L48.MX,y=116+L48.MY;
    sv.insertAdjacentHTML('beforeend',`<g class="mTag"><rect x="${x-40}" y="${y-11}" width="80" height="19" rx="9.5" fill="#fff" stroke="${c}" stroke-width="1.6"/><text x="${x}" y="${y+3.6}" text-anchor="middle" direction="ltr" font-size="10.5" font-weight="900" fill="${c}">${t}</text></g>`)};
  /* مربع التكبير يبقى داخل حدود المشهد، حتى لا يقصه القص التلقائي */
- const CL=(x,w)=>[Math.max(-12,Math.min(434-w,x)),-14,w],ZG=g=>CL(GX[g]-85,170),ZV=i=>i<3?CL(RX[i]-95,190):[80,-14,320],ZM=[186,92,180];
+ const CL=(x,w)=>[Math.max(VB0[0],Math.min(VB0[0]+VB0[2]-w,x)),-14,w],ZG=g=>CL(GX[g]-85,170),ZV=i=>i<3?CL(RX[i]-95,190):[80,-14,320],ZM=L48.WD?[376,58,200]:[186,92,180];
  const VP=[[1,2],[3,4],[5,6],[1,6]],VN=['R₁','R₂','R₃','المقاومات الثلاث معا'],VL=['V₁','V₂','V₃','V'];
  const read=async(H,t,c)=>{/* المدرب 3 نوفمبر: لقطة كاملة للدائرة والجهاز موصول قبل تكبير الشاشة */await zoom(H,null,800);await H.psleep(1800);await zoom(H,ZM);tag(H,t,c);await H.psleep(400);await H.hand('g.mTag');await H.psleep(1200)};
  const steps=[
   {st:CARD,c:'<b>الخطوة 1: ضبط جهد المصدر.</b> تدير اليد مقبض جهاز مصدر الجهد المستمر حتى يتوقف عند <b dir="ltr">9 V</b>. الوصلات الثلاث في أماكنها، فيخرج التيار من القطب الموجب، ويمر في <b>R₁ ثم R₂ ثم R₃</b>، ويعود في سلك العودة إلى القطب السالب.',
-   f:async H=>{tag(H);await zoom(H);await H.slide('nR','max',agAt(SV(H),123.7,204.6))}},
+   f:async H=>{tag(H);await zoom(H);await H.slide('nR','max',agAt(SV(H),123.7+L48.PX,204.6+L48.PY))}},
   {st:'aF',c:'<b>الخطوة 2: إعداد جهاز الملتيميتر لقياس التيار.</b> التيار المتوقع أقل من <b dir="ltr">1 A</b>، فيدار مفتاح الوضع إلى تدريج <b style="color:#2563EB" dir="ltr">A⎓</b> مدى <b dir="ltr">2 A</b> (المدى الأصغر الذي يزيد على القيمة المتوقعة)، ثم يوضع المجس الأحمر في المنفذ <b dir="ltr">A</b>، والمجس الأسود في <b dir="ltr">COM</b>.',f:async H=>{await meter(H,'a','a2','a')}}];
  [0,1,2].forEach(g=>{
   steps.push({st:CARD,c:`<b>الخطوة 0: رفع الوصلة J${SB[g]}.</b> ${g?`تعاد الوصلة <b>J${SB[g-1]}</b> إلى مكانها، ثم `:''}ترفع اليد وصلة التوصيل <b>J${SB[g]}</b> قبل <b>R${SB[g]}</b>، فتنفتح الدائرة حتى يوضع الأميتر مكانها.`,
