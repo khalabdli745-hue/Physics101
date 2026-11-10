@@ -4533,7 +4533,7 @@ html body .card.lab:has(#sbS) .accC .intro.amIdea:has(>.law.ftl)>.law.ftl>.ln{gr
 html body .card.lab:has(#sbS) .accC .intro.amIdea:has(>.law.ftl)>.law.ftl>.sym{grid-column:2;grid-row:1/span 4;margin:0!important;font-size:12.5px!important}
 html body .card.lab:has(#sbS) .accC .intro.amIdea:has(>.law.ftl)>.stage{grid-column:2;grid-row:2/span 2;align-self:center;background:#fff;border:1.5px solid #f3c49a;border-radius:12px;padding:6px!important}
 html body .card.lab:has(#sbS) .accC .intro.amIdea:has(>.law.ftl)>.stage svg{width:100%!important;height:auto!important;max-height:380px}
-html body .card.lab:has(#sbS) .accC .intro>.tool:first-of-type>.stage{background:none!important;padding:0!important;border:0!important}html body .card.lab:has(#sbS) .accC .intro>.tool:first-of-type>.stage svg{max-height:none!important;width:100%!important;height:auto!important}
+html body .card.lab:has(#sbS) .accC .intro>.tool:first-of-type>.stage{background:none!important;padding:0!important;border:0!important}html body .card.lab:has(#sbS) .accC .intro>.tool:first-of-type{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;align-items:stretch!important}html body .card.lab:has(#sbS) .accC .intro>.tool:first-of-type>.stage svg{max-height:280px!important;width:100%!important;height:auto!important}html body .card.lab:has(#sbS) .accC .intro>.tool:first-of-type>p{align-self:center;font-size:14.5px!important;line-height:2!important}
 html body .card.lab:has(#sbS) .accC .intro:has(>.tool)>.tool:nth-of-type(2){grid-column:1/-1!important;grid-row:auto!important;display:block!important;column-count:2;column-gap:14px}
 html body .card.lab:has(#sbS) .accC .intro:has(>.tool)>.tool:nth-of-type(2)>*{break-inside:avoid;margin:0 0 8px!important}
 html body .card.lab:has(#sbS) .accC .intro:has(>.tool)>.tool:nth-of-type(2)>p{font-size:13px!important;line-height:1.7!important}
@@ -4542,6 +4542,19 @@ html body .card.lab:has(#sbS) .accC .intro:has(>.tool)>.tool:nth-of-type(2)>.amR
 }
 
 @media (min-width:1000px) and (hover:hover) and (pointer:fine) and (max-height:600px){html body .card.lab:has(#sbS) .accB:not(.lfs) :is(.lx51,.lx52) .nmLeft>.dmCap{font-size:12.5px!important;line-height:1.6!important}}
+@media (min-width:1000px) and (hover:hover) and (pointer:fine){
+/*calc48b: المدرب 10 نوفمبر: الحسابات مثل كولوم: سجل القراءات يمينا، وشريط المراحل والملاحظة وخطوات الحساب يسارا بلا فراغات */
+html body #view .card.lab .accC.open>.accB:has(#sbS){grid-template-columns:minmax(0,1fr) minmax(0,1.2fr)!important;row-gap:8px!important}
+html body #view .card.lab .accC.open>.accB:has(#sbS)>.accLog{grid-column:1!important;grid-row:1/span 12!important;align-self:start;position:sticky!important;top:70px}
+html body #view .card.lab .accC.open>.accB:has(#sbS)>.ctl{display:contents!important}
+html body #view .card.lab .accC.open>.accB:has(#sbS)>.ctl>*{grid-column:2;margin:0!important}
+/*res48: النتائج مثل كولوم: الجدول يمينا، والملاحظة ونتيجتك يسارا */
+html body #view .card.lab:has(#sbS) .accC.open>.accB>.ctl.res{display:grid!important;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);column-gap:16px;row-gap:10px;align-items:start}
+html body #view .card.lab:has(#sbS) .accC.open>.accB>.ctl.res>*{margin:0!important}
+html body #view .card.lab:has(#sbS) .accC.open>.accB>.ctl.res>.tw{grid-column:1;grid-row:1/span 3}
+html body #view .card.lab:has(#sbS) .accC.open>.accB>.ctl.res>#rNote{grid-column:2;grid-row:1}
+html body #view .card.lab:has(#sbS) .accC.open>.accB>.ctl.res>.labScore{grid-column:2;grid-row:2}
+}
 </style>
 <style>@media (hover:hover) and (pointer:fine){/*sceneFit: المدرب 10 نوفمبر: مشهد التجربة لا يتجاوز عرض إطاره (شاشات LED والبروجكتور): الارتفاع = الأصغر بين ارتفاع الشاشة وعرض الإطار × نسبة المشهد *//*sceneFit: المدرب 10 نوفمبر: مشهد التجربة لا يتجاوز عرض إطاره على الشاشات الكبيرة فقط (عرض 1600 فأكثر مثل شاشات LED)، واللابتوب كما كان حرفيا: الارتفاع = الأصغر بين ارتفاع الشاشة وعرض الإطار × نسبة المشهد */html.bigScr body .card.lab .accB:not(.lfs) :is(.lx51,.lx52) .dmP>.dxW .stage:has(>div[data-nofit]>svg){container-type:inline-size}html.bigScr body .card.lab .accB:not(.lfs) :is(.lx51,.lx52) .dmP>.dxW .stage>div[data-nofit]>svg[style*="--ar"]{height:min(calc(100vh - 290px),calc(100cqw * var(--ar)))!important}}</style>
 <script>/*sceneFit: نسبة كل مشهد من viewBox */(()=>{/*الشاشة الكبيرة = عرض الشاشة نفسها 1600 فأكثر (لا يتأثر بتكبير الصفحة)، فلابتوب 1920 بتكبير ويندوز 150% عرضه 1280 ولا يتغير */try{const bs=()=>document.documentElement.classList.toggle('bigScr',(screen.width||0)>=1600);bs();addEventListener('resize',bs)}catch(e){}const f=()=>document.querySelectorAll('.card.lab .dxW .stage>div[data-nofit]>svg').forEach(v=>{if(v.style.getPropertyValue('--ar'))return;const b=v.viewBox&&v.viewBox.baseVal;if(b&&b.width&&b.height)v.style.setProperty('--ar',String(b.height/b.width))});let t=0;new MutationObserver(()=>{if(t)return;t=setTimeout(()=>{t=0;f()},150)}).observe(document.documentElement,{childList:true,subtree:true});addEventListener('load',f)})();</script>
