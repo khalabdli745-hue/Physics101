@@ -1154,9 +1154,9 @@ document.querySelectorAll('.lgEye').forEach(b=>b.onclick=()=>{const i=b.parentNo
 <script src="gens.js?v=11070600"></script>
 <script src="art.js?v=10281453"></script>
 <script src="more.js?v=11070600"></script>
-<!-- المدرب 8 نوفمبر 12:05: زر سجل القراءة في شاهد التجربة --><!-- المدرب 8 نوفمبر 13:23: يد التجربة الأصلية في شاهد ونفذ --><script src="labs.js?v=11101205"></script><script src="labvo.js?v=11070800"></script><script src="azfix.js?v=11071000"></script>
+<!-- المدرب 8 نوفمبر 12:05: زر سجل القراءة في شاهد التجربة --><!-- المدرب 8 نوفمبر 13:23: يد التجربة الأصلية في شاهد ونفذ --><script src="labs.js?v=11102330"></script><script src="labvo.js?v=11070800"></script><script src="azfix.js?v=11071000"></script>
 <script src="coach.js?v=11070600"></script>
-<script>/* 5 نوفمبر: الدروس النموذجية (kcards31) لكل المتدربين */(function(){var n=1;document.write('<script src="kcards'+(n?'31':'')+'.js?v=11164"><\/script>')})()</script>
+<script>/* 5 نوفمبر: الدروس النموذجية (kcards31) لكل المتدربين */(function(){var n=1;document.write('<script src="kcards'+(n?'31':'')+'.js?v=11165"><\/script>')})()</script>
 <script>
 const UNITS=window.UNITS,STUDY=window.STUDY,EXTRA=window.EXTRA||{},FIGS=window.FIGS||{};
 window.PAGES=window.PAGES||{};
@@ -2544,7 +2544,7 @@ function renderEx(v){
     const prog=document.createElement('div');prog.className='score';head.appendChild(prog);i.appendChild(head);
     let fin=0,pts=0;const max=probs.length*5;
     const upd=()=>{prog.textContent=fin?`أنجزت ${AR(fin)} من ${AR(probs.length)} — الخطوات الصحيحة من أول محاولة: ${AR(pts)} من ${AR(max)}`:''};
-    const EXL=/* exLbl31: المدرب 9 نوفمبر (أ): عناوين أمثلة درس كولوم مثل السبورة */{'3-1':['مثال ١ · صفحة 92','مثال ٢ · صفحة 93','تمرين ١ · ورقة العمل · سؤال ٤ (صفحة 105)']}[k];
+    const EXL=/* exLbl31: المدرب 9 نوفمبر (أ): عناوين أمثلة درس كولوم مثل السبورة */{'3-1':['مثال ١ · صفحة 92','مثال ٢ · صفحة 93','تمرين ١ · ورقة العمل · سؤال ٤ (صفحة 105)'],/*exLbl45: المدرب 10 نوفمبر: عناوين أمثلة درسي التيار والمقاومة مثل السبورة*/'4-1':['مثال ١ · صفحة 118','تمرين ١ · ورقة العمل · سؤال ٣ (صفحة 128)','تمرين ٢ · ورقة العمل · سؤال ٣ (صفحة 128)','مثال ٢ · صفحة 119','مثال ٣ (أ) · صفحة 119','مثال ٣ (ب) · صفحة 119','تمرين ٣ · ورقة العمل · سؤال ٤ (صفحة 128)','مثال ٤ · صفحة 120'],'4-5':['مثال ١ · صفحة 124','مثال ٢ · صفحة 124','مثال ٣ · صفحة 124','مثال ٤ · صفحة 124','تمرين ١ · ورقة العمل · سؤال ٥ (صفحة 129)','تمرين ٢ · ورقة العمل · سؤال ٦ (صفحة 129)','مثال ٥ (أ) · صفحة 125','مثال ٥ (ب) · صفحة 125','تمرين ٣ · ورقة العمل · سؤال ٧ (صفحة 130)','تمرين ٤ · ورقة العمل · سؤال ٧ (صفحة 130)'],/*exLbl48: المدرب 10 نوفمبر: عناوين أمثلة درس توصيل المقاومات مثل السبورة*/'4-8':['مثال ١ (أ) · صفحة 126','مثال ١ (ب) · صفحة 126','مثال ٢ (أ) · صفحة 127','مثال ٢ (ب) · صفحة 127','تمرين ١ · ورقة العمل · سؤال ٨ (صفحة 130)','تمرين ٢ · ورقة العمل · سؤال ٨ (صفحة 130)','تمرين ٣ · ورقة العمل · سؤال ٩ (صفحة 131)','تمرين ٤ · ورقة العمل · سؤال ٩ (صفحة 131)','تمرين ٥ · ورقة العمل · سؤال ٩ (صفحة 131)','تمرين ٦ · ورقة العمل · سؤال ١٠ (صفحة 131)']}[k];
     probs.forEach((p,n)=>i.appendChild(problemCard(p,(EXL&&EXL[n])||(n===0?'مثال 1':'تمرين '+AR(n)),(sc,det)=>{fin++;pts+=sc;upd();SYNC.result('prob',k+'.'+n,lesson().t,sc,5,det);if(fin===probs.length){const b=best['p'+k];if(b==null||pts>b){best['p'+k]=pts;store.set('p101-best',best)}rslot.appendChild(rateLink())}})));
     const rslot=document.createElement('div');i.appendChild(rslot);
     /* «مثال محلول للمراجعة» حذف من هذا التبويب لأنه معروض على السبورة */
@@ -2570,7 +2570,7 @@ function shuffle(a){a=a.slice();for(let k=a.length-1;k>0;k--){const j=Math.floor
 function renderQuiz(v){
   const i=wrap(v),s=study();
   if(!s||!s.qz){i.innerHTML='<p class="empty">لا يوجد اختبار لهذا الدرس.</p>';return}
-  const k=key(pos.u,pos.l),QSEL=/* qz31six: المدرب 9 نوفمبر (أ): «اختبر نفسك» في درس كولوم ستة أسئلة */{'3-1':['الشحنات المختلفة','يصبح الجسم موجب الشحنة','أي مما يلي مادة عازلة','شحن جسم متعادل دون ملامسته','مقدار القوة بينهما:','إذا تضاعفت المسافة بين شحنتين']}[k],qs=QSEL?QSEL.map(t=>s.qz.find(q=>q.q.indexOf(t)>=0)).filter(Boolean):s.qz;
+  const k=key(pos.u,pos.l),QSEL=/* qz31six: المدرب 9 نوفمبر (أ): «اختبر نفسك» في درس كولوم ستة أسئلة */{'3-1':['الشحنات المختلفة','يصبح الجسم موجب الشحنة','أي مما يلي مادة عازلة','شحن جسم متعادل دون ملامسته','مقدار القوة بينهما:','إذا تضاعفت المسافة بين شحنتين'],/*qz45six: المدرب 10 نوفمبر: «اختبر نفسك» في درسي التيار والمقاومة ستة أسئلة أساسية مثل كولوم*/'4-1':['تمر في سلك خلال','تُعرّف شدة التيار الكهربائي بأنها','الاتجاه الاصطلاحي للتيار الكهربائي','موصل مساحة مقطعه','قانون سرعة الانجراف','يتميز التيار المستمر DC'],'4-5':['سخان على','ينص قانون أوم','وحدة المقاومة في SI','إذا تضاعف طول السلك','سلك نحاس مقاومته','قدرته:'],/*qz48six: المدرب 10 نوفمبر: «اختبر نفسك» في درس توصيل المقاومات ستة أسئلة أساسية مثل كولوم*/'4-8':['في التوصيل على التوالي يكون متساويًا','مقاومتان `9 Ω` و `5 Ω` على التوالي، المقاومة الكلية','في التوصيل على التوازي تكون الكمية المتساوية','المقاومة المكافئة لمقاومات على التوازي','مقاومتان `6 Ω` و `3 Ω` على التوازي','لماذا تُوصل الأجهزة المنزلية']}[k],qs=QSEL?QSEL.map(t=>s.qz.find(q=>q.q.indexOf(t)>=0)).filter(Boolean):s.qz;
   if(best[k]!=null&&best[k]>qs.length)best[k]=null;/* qzBestFix: النتيجة القديمة من 24 لا تعرض بعد التقليل */
   const c=card('اختبر نفسك',`${AR(qs.length)} أسئلة · `+(best[k]!=null?`أفضل نتيجة سابقة: ${AR(best[k])} من ${AR(qs.length)}`:'لم تختبر هذا الدرس بعد'));
   i.appendChild(c);
@@ -4489,7 +4489,119 @@ document.addEventListener('click',e=>{const t=e.target;if(!t.closest)return;if(t
 document.addEventListener('input',e=>{const t=e.target;if(t&&t.closest&&t.closest('#view .card.lab [data-did=dmTl]')){pend=null;rsm=false;try{TTS.stop()}catch(_){}}},true);const stopAll=()=>{hold=true;pend=null;clearInterval(rt);try{document.querySelectorAll('#view .card.lab [data-did=dmPlay]').forEach(b=>{if(/إيقاف/.test(b.textContent))b.click()})}catch(e){}try{TTS.stop()}catch(e){}hold=false};
 document.addEventListener('click',e=>{const t=e.target;if(!t.closest)return;const h=t.closest('#view .card.lab .accC.open>.accH');if(h&&h.parentElement.querySelector('[data-did=dmPlay]')){stopAll();return}if(t.closest('#tabs button')&&!t.closest('#tabs button[data-t=lab][aria-selected=true]'))stopAll();if(t.closest('nav.course .unit ol li>button'))stopAll()},true);
 const seen=new WeakSet();new MutationObserver(()=>{document.querySelectorAll('#view .card.lab .dmRecB').forEach(r=>{const vis=!r.hidden&&r.getBoundingClientRect().height>0;if(!vis){seen.delete(r);return}if(seen.has(r))return;seen.add(r);if(document.body.classList.contains('lfsOn'))return;setTimeout(()=>{const v=document.getElementById('view');if(!v)return;const q=r.getBoundingClientRect(),vr=v.getBoundingClientRect();if(q.top<vr.top+4||q.bottom>vr.bottom-4){const P=r.closest('.dmP')||r;const pr=P.getBoundingClientRect();v.scrollTo({top:v.scrollTop+pr.top-vr.top-6,behavior:'smooth'})}},120)})}).observe(document.getElementById('view')||document.body,{attributes:true,attributeFilter:['hidden','style','class'],subtree:true,childList:true});
-})();</script><style>@media (hover:hover) and (pointer:fine){/*sceneFit: المدرب 10 نوفمبر: مشهد التجربة لا يتجاوز عرض إطاره (شاشات LED والبروجكتور): الارتفاع = الأصغر بين ارتفاع الشاشة وعرض الإطار × نسبة المشهد *//*sceneFit: المدرب 10 نوفمبر: مشهد التجربة لا يتجاوز عرض إطاره على الشاشات الكبيرة فقط (عرض 1600 فأكثر مثل شاشات LED)، واللابتوب كما كان حرفيا: الارتفاع = الأصغر بين ارتفاع الشاشة وعرض الإطار × نسبة المشهد */html.bigScr body .card.lab .accB:not(.lfs) :is(.lx51,.lx52) .dmP>.dxW .stage:has(>div[data-nofit]>svg){container-type:inline-size}html.bigScr body .card.lab .accB:not(.lfs) :is(.lx51,.lx52) .dmP>.dxW .stage>div[data-nofit]>svg[style*="--ar"]{height:min(calc(100vh - 290px),calc(100cqw * var(--ar)))!important}}</style>
+})();</script><style id="calc48">/*calc48: المدرب 10 نوفمبر: حسابات تجربة توصيل المقاومات في عمودين على اللابتوب والشاشات الكبيرة والبروجكتور (سجل القراءات يمين، والخطوات يسار) مثل كولوم، والقسم يقفل بزر − لأن القاعدة على القسم المفتوح فقط */
+@media (min-width:1000px) and (hover:hover) and (pointer:fine){
+html body #view .card.lab .accC.open>.accB:has(>.accLog+.ctl):has(#sbS){display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);column-gap:16px;align-items:start}
+html body #view .card.lab .accC.open>.accB:has(#sbS)>.accLog{grid-column:1;margin:0!important;position:sticky;top:70px}
+html body #view .card.lab .accC.open>.accB:has(#sbS)>.accLog .amTbl :is(td,th){padding:6px 8px!important}
+html body #view .card.lab .accC.open>.accB:has(#sbS)>.ctl{grid-column:2;margin:0!important;padding:10px 12px!important}
+html body #view .card.lab .accC.open>.accB:has(#sbS)>.ctl>*{margin-top:4px!important;margin-bottom:4px!important}
+html body #view .card.lab .accC.open>.accB:has(#sbS)>.ctl>h4.sbh{margin-top:10px!important}
+html body #view .card.lab .accC.open>.accB:has(#sbS) .cstep{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-auto-flow:dense;gap:6px 10px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:8px 10px!important;background:var(--panel,#fff)}
+html body #view .card.lab .accC.open>.accB:has(#sbS) .cstep>*{margin:0!important}
+html body #view .card.lab .accC.open>.accB:has(#sbS) .cstep>.law{grid-column:1;grid-row:1/span 2;padding:6px 10px!important;align-self:stretch}
+html body #view .card.lab .accC.open>.accB:has(#sbS) .cstep>.law .ln{padding:4px 8px!important;min-height:0!important}
+html body #view .card.lab .accC.open>.accB:has(#sbS) .cstep>p.slh{display:none}
+html body #view .card.lab .accC.open>.accB:has(#sbS) .cstep>.labCalc{grid-column:2;justify-self:start}html body #view .card.lab .accC.open>.accB:has(#sbS) .cstep>.labCalc .calcbtn{padding:6px 12px!important;min-height:0!important}
+html body #view .card.lab .accC.open>.accB:has(#sbS) .cstep>.ans{grid-column:2;min-width:0;display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;max-width:none!important;padding:4px 8px!important}
+html body #view .card.lab .accC.open>.accB:has(#sbS) .cstep>.ans>label{margin:0!important;flex:1 1 100%;font-size:13px}
+html body #view .card.lab .accC.open>.accB:has(#sbS) .cstep>.ans>input{flex:1 1 60px;width:auto!important;min-width:0;height:40px!important}html body #view .card.lab .accC.open>.accB:has(#sbS) .cstep>.ans>button{flex:none;margin:0!important}
+html body #view .card.lab .accC.open>.accB:has(#sbS) .cstep>.fb2{grid-column:1/-1}
+}
+/*lab48: المدرب 10 نوفمبر: أقسام تجربة توصيل المقاومات على اللابتوب والشاشات الكبيرة والبروجكتور مثل كولوم: النظرية (النص والقوانين يمينا والرسم يسارا)، الأدوات في عمودين، «طريقة العمل» مخفية، والمشهد بحجم الشاشة بجانب بطاقة الشرح وسجل القراءات بلا سجل مكرر داخل المشهد */
+@media (min-width:1000px) and (hover:hover) and (pointer:fine){
+html body .card.lab:has(#sbS) .accB>.intro.amIdea:has(>ol.amFlow){display:none!important}
+html body .card.lab:has(#sbS) .accB:not(.lfs) :is(.lx51,.lx52) .dmP{grid-template-columns:360px minmax(0,calc(max(240px,100vh - 290px) * 2.554))!important;justify-content:center!important}
+html body .card.lab:has(#sbS) .accB:not(.lfs) :is(.lx51,.lx52) .dmP>.dxW{width:auto!important;max-width:none!important;min-width:0}
+/*log48: سجل القراءات بجانب المشهد في عمودين (التيار يمينا والجهد يسارا) فيظهر كاملا، وبطاقة الشرح بلا شريط تمرير */
+html body .card.lab:has(#sbS) .accB:not(.lfs) :is(.lx51,.lx52) .nmLeft>.dmCap{font-size:13px!important;line-height:1.65!important;padding:8px 10px!important}html body .card.lab:has(#sbS) .accB:not(.lfs) :is(.lx51,.lx52) .nmLeft>.nmRes{flex:none!important;max-height:none!important}html body .card.lab:has(#sbS) .accB:not(.lfs) :is(.lx51,.lx52) .nmLeft .amLog{padding:6px 8px!important;margin:0!important}html body .card.lab:has(#sbS) .accB:not(.lfs) :is(.lx51,.lx52) .nmLeft .amLog>h5{margin:0 0 4px!important;font-size:13px!important}html body .card.lab:has(#sbS) .accB:not(.lfs) :is(.lx51,.lx52) .nmLeft .amTbl td{padding:3px 4px!important}
+html body .card.lab:has(#sbS) .accB:not(.lfs) :is(.lx51,.lx52) .nmLeft .amTbl thead{display:none}
+html body .card.lab:has(#sbS) .accB:not(.lfs) :is(.lx51,.lx52) .nmLeft .amTbl tbody{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(4,auto);grid-auto-flow:column;column-gap:6px}
+html body .card.lab:has(#sbS) .accB:not(.lfs) :is(.lx51,.lx52) .nmLeft .amTbl tr:nth-child(1){grid-column:1;grid-row:1}html body .card.lab:has(#sbS) .accB:not(.lfs) :is(.lx51,.lx52) .nmLeft .amTbl tr:nth-child(2){grid-column:1;grid-row:2}html body .card.lab:has(#sbS) .accB:not(.lfs) :is(.lx51,.lx52) .nmLeft .amTbl tr:nth-child(3){grid-column:1;grid-row:3}html body .card.lab:has(#sbS) .accB:not(.lfs) :is(.lx51,.lx52) .nmLeft .amTbl tr:nth-child(4){grid-column:2;grid-row:1}html body .card.lab:has(#sbS) .accB:not(.lfs) :is(.lx51,.lx52) .nmLeft .amTbl tr:nth-child(5){grid-column:2;grid-row:2}html body .card.lab:has(#sbS) .accB:not(.lfs) :is(.lx51,.lx52) .nmLeft .amTbl tr:nth-child(6){grid-column:2;grid-row:3}html body .card.lab:has(#sbS) .accB:not(.lfs) :is(.lx51,.lx52) .nmLeft .amTbl tr:nth-child(7){grid-column:2;grid-row:4}
+html body .card.lab:has(#sbS) .accB:not(.lfs) :is(.lx51,.lx52) .nmLeft .amTbl tr{display:flex;justify-content:space-between;align-items:center;gap:4px;border-bottom:1px solid var(--line)}
+html body .card.lab:has(#sbS) .accB:not(.lfs) :is(.lx51,.lx52) .nmLeft .amTbl td{border:0!important;font-size:12px!important;white-space:nowrap}
+html body .card.lab:has(#sbS) .accB:not(.lfs) :is(.lx51,.lx52) .dxW .wsc{padding:0!important;margin:0!important;border:0!important;box-shadow:none!important}
+html body .card.lab:has(#sbS) .accB:not(.lfs) :is(.lx51,.lx52) .dxW .wsc>h4{display:none!important}
+html body .card.lab:has(#sbS) .accB:not(.lfs) :is(.lx51,.lx52) .dxW .wsc>svg{width:100%!important;height:auto!important;aspect-ratio:710/278;display:block}
+html body .card.lab:has(#sbS) .accB:not(.lfs) :is(.lx51,.lx52) .dxW .amLog{display:none!important}
+html body .card.lab:has(#sbS) .accC .intro.amIdea:has(>.law.ftl){display:grid!important;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);column-gap:14px;row-gap:8px;align-items:start}
+html body .card.lab:has(#sbS) .accC .intro.amIdea:has(>.law.ftl)>*{grid-column:1/-1;margin:0!important}
+html body .card.lab:has(#sbS) .accC .intro.amIdea:has(>.law.ftl)>p:first-of-type{font-size:14px!important;line-height:1.75!important}
+html body .card.lab:has(#sbS) .accC .intro.amIdea:has(>.law.ftl)>.amTwo{grid-column:1;grid-row:2}
+html body .card.lab:has(#sbS) .accC .intro.amIdea:has(>.law.ftl)>.law.ftl{grid-column:1;grid-row:3;display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:10px;row-gap:6px;padding:10px!important;align-items:start}
+html body .card.lab:has(#sbS) .accC .intro.amIdea:has(>.law.ftl)>.law.ftl>.ln{grid-column:1;margin:0!important;padding:5px 8px!important}
+html body .card.lab:has(#sbS) .accC .intro.amIdea:has(>.law.ftl)>.law.ftl>.sym{grid-column:2;grid-row:1/span 4;margin:0!important;font-size:12.5px!important}
+html body .card.lab:has(#sbS) .accC .intro.amIdea:has(>.law.ftl)>.stage{grid-column:2;grid-row:2/span 2;align-self:center;background:#fff;border:1.5px solid #f3c49a;border-radius:12px;padding:6px!important}
+html body .card.lab:has(#sbS) .accC .intro.amIdea:has(>.law.ftl)>.stage svg{width:100%!important;height:auto!important;max-height:380px}
+html body .card.lab:has(#sbS) .accC .intro>.tool:first-of-type>.stage{background:none!important;padding:0!important;border:0!important}html body .card.lab:has(#sbS) .accC .intro>.tool:first-of-type{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;align-items:stretch!important}html body .card.lab:has(#sbS) .accC .intro>.tool:first-of-type>.stage svg{max-height:280px!important;width:100%!important;height:auto!important}html body .card.lab:has(#sbS) .accC .intro>.tool:first-of-type>p{align-self:center;font-size:14.5px!important;line-height:2!important}
+html body .card.lab:has(#sbS) .accC .intro:has(>.tool)>.tool:nth-of-type(2){grid-column:1/-1!important;grid-row:auto!important;display:block!important;column-count:2;column-gap:14px}
+html body .card.lab:has(#sbS) .accC .intro:has(>.tool)>.tool:nth-of-type(2)>*{break-inside:avoid;margin:0 0 8px!important}
+html body .card.lab:has(#sbS) .accC .intro:has(>.tool)>.tool:nth-of-type(2)>p{font-size:13px!important;line-height:1.7!important}
+html body .card.lab:has(#sbS) .accC .intro:has(>.tool)>.tool:nth-of-type(2)>.stage svg{max-height:150px!important;width:100%!important;height:auto!important}
+html body .card.lab:has(#sbS) .accC .intro:has(>.tool)>.tool:nth-of-type(2)>.amRef svg{max-height:190px!important}
+}
+
+@media (min-width:1000px) and (hover:hover) and (pointer:fine) and (max-height:600px){html body .card.lab:has(#sbS) .accB:not(.lfs) :is(.lx51,.lx52) .nmLeft>.dmCap{font-size:12.5px!important;line-height:1.6!important}}
+@media (min-width:1000px) and (hover:hover) and (pointer:fine){
+/*calc48b: المدرب 10 نوفمبر: الحسابات مثل كولوم: سجل القراءات يمينا، وشريط المراحل والملاحظة وخطوات الحساب يسارا بلا فراغات */
+html body #view .card.lab .accC.open>.accB:has(#sbS){grid-template-columns:minmax(0,1fr) minmax(0,1.2fr)!important;row-gap:8px!important}
+html body #view .card.lab .accC.open>.accB:has(#sbS)>.accLog{grid-column:1!important;grid-row:1/span 12!important;align-self:start;position:sticky!important;top:70px}
+html body #view .card.lab .accC.open>.accB:has(#sbS)>.ctl{display:contents!important}
+html body #view .card.lab .accC.open>.accB:has(#sbS)>.ctl>*{grid-column:2;margin:0!important}
+/*res48: النتائج مثل كولوم: الجدول يمينا، والملاحظة ونتيجتك يسارا */
+html body #view .card.lab:has(#sbS) .accC.open>.accB>.ctl.res{display:grid!important;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);column-gap:16px;row-gap:10px;align-items:start}
+html body #view .card.lab:has(#sbS) .accC.open>.accB>.ctl.res>*{margin:0!important}
+html body #view .card.lab:has(#sbS) .accC.open>.accB>.ctl.res>.tw{grid-column:1;grid-row:1/span 3}
+html body #view .card.lab:has(#sbS) .accC.open>.accB>.ctl.res>#rNote{grid-column:2;grid-row:1}
+html body #view .card.lab:has(#sbS) .accC.open>.accB>.ctl.res>.labScore{grid-column:2;grid-row:2}
+}
+
+/*lab45: المدرب 10 نوفمبر: تجربتا التيار الكهربائي (4-1) وقانون أوم (4-5) على اللابتوب والشاشات الكبيرة والبروجكتور مثل كولوم: إخفاء «طريقة العمل»، المشهد بحجم الشاشة بجانب بطاقة الشرح وسجل القراءات، النظرية والأدوات في عمودين، والحسابات والنتائج مثل كولوم */
+@media (min-width:1000px) and (hover:hover) and (pointer:fine){
+html body .card.lab:is(:has(#sbQ),:has(#sbR)) .accB>.intro.amIdea:has(>ol.amFlow){display:none!important}
+html body .card.lab:is(:has(#sbQ),:has(#sbR)) .accB:not(.lfs) :is(.lx51,.lx52) .dmP{grid-template-columns:360px minmax(0,calc(max(240px,100vh - 290px) * var(--ar48,1.274)))!important;justify-content:center!important}
+html body .card.lab:has(#sbR) .accB:not(.lfs) :is(.lx51,.lx52) .dmP{--ar48:2.554}
+html body .card.lab:has(#sbR) .accB:not(.lfs) :is(.lx51,.lx52) .dxW .wsc>svg{aspect-ratio:710/278}
+/*face48: واجهة جهاز الملتيميتر في خطوات الضبط تدخل إطار المشهد كاملة بدل أن تكبر وتقص */
+html body .card.lab:is(:has(#sbS),:has(#sbQ),:has(#sbR)) .accB:not(.lfs) :is(.lx51,.lx52) .dxW svg.dmmF{height:calc(max(240px,100vh - 290px) * .92)!important;width:auto!important;max-width:100%!important;display:block!important;margin:0 auto!important}
+html body .card.lab:has(#sbQ) .accB:not(.lfs) :is(.lx51,.lx52) .dmP{--ar48:2.554}
+html body .card.lab:has(#sbQ) .accB:not(.lfs) :is(.lx51,.lx52) .dxW .wsc>svg{aspect-ratio:710/278}
+html body .card.lab:is(:has(#sbQ),:has(#sbR)) .accB:not(.lfs) :is(.lx51,.lx52) .dmP>.dxW{width:auto!important;max-width:none!important;min-width:0}
+html body .card.lab:is(:has(#sbQ),:has(#sbR)) .accB:not(.lfs) :is(.lx51,.lx52) .dxW .wsc{padding:0!important;margin:0!important;border:0!important;box-shadow:none!important}
+html body .card.lab:is(:has(#sbQ),:has(#sbR)) .accB:not(.lfs) :is(.lx51,.lx52) .dxW .wsc>h4{display:none!important}
+html body .card.lab:is(:has(#sbQ),:has(#sbR)) .accB:not(.lfs) :is(.lx51,.lx52) .dxW .amLog{display:none!important}
+html body .card.lab:is(:has(#sbQ),:has(#sbR)) .accB:not(.lfs) :is(.lx51,.lx52) .dxW svg{width:100%!important;height:auto!important;max-height:none!important;display:block}
+html body .card.lab:is(:has(#sbQ),:has(#sbR)) .accB:not(.lfs) :is(.lx51,.lx52) .nmLeft>.dmCap{font-size:13px!important;line-height:1.65!important;padding:8px 10px!important}
+html body .card.lab:is(:has(#sbQ),:has(#sbR)) .accB:not(.lfs) :is(.lx51,.lx52) .nmLeft>.nmRes{flex:none!important;max-height:none!important}
+html body .card.lab:is(:has(#sbQ),:has(#sbR)) .accB:not(.lfs) :is(.lx51,.lx52) .nmLeft .amLog{padding:6px 8px!important;margin:0!important}
+html body .card.lab:is(:has(#sbQ),:has(#sbR)) .accB:not(.lfs) :is(.lx51,.lx52) .nmLeft .amLog>h5{margin:0 0 4px!important;font-size:13px!important}
+html body .card.lab:is(:has(#sbQ),:has(#sbR)) .accB:not(.lfs) :is(.lx51,.lx52) .nmLeft .amTbl :is(td,th){padding:3px 5px!important;font-size:12px!important}
+html body .card.lab:has(#sbR) .accC .intro.amIdea:has(>.law.ftl){display:grid!important;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);column-gap:14px;row-gap:8px;align-items:start}
+html body .card.lab:has(#sbR) .accC .intro.amIdea:has(>.law.ftl)>*{grid-column:1/-1;margin:0!important}
+html body .card.lab:has(#sbR) .accC .intro.amIdea:has(>.law.ftl)>.amTwo{grid-column:1;grid-row:2}
+html body .card.lab:has(#sbR) .accC .intro.amIdea:has(>.law.ftl)>.law.ftl{grid-column:1;grid-row:3;display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:10px;row-gap:6px;padding:10px!important;align-items:start}
+html body .card.lab:has(#sbR) .accC .intro.amIdea:has(>.law.ftl)>.law.ftl>.ln{grid-column:1;margin:0!important;padding:5px 8px!important}
+html body .card.lab:has(#sbR) .accC .intro.amIdea:has(>.law.ftl)>.law.ftl>.sym{grid-column:2;grid-row:1/span 4;margin:0!important;font-size:12.5px!important}
+html body .card.lab:has(#sbR) .accC .intro.amIdea:has(>.law.ftl)>.stage{grid-column:2;grid-row:2/span 2;align-self:center;background:#fff;border:1.5px solid #f3c49a;border-radius:12px;padding:6px!important}
+html body .card.lab:has(#sbR) .accC .intro.amIdea:has(>.law.ftl)>.stage svg{width:100%!important;height:auto!important;max-height:340px}
+html body .card.lab:is(:has(#sbQ),:has(#sbR)) .accC .intro:has(>.tool)>.tool:first-of-type{display:block!important;text-align:center}
+html body .card.lab:is(:has(#sbQ),:has(#sbR)) .accC .intro:has(>.tool)>.tool:first-of-type>.stage svg{max-height:320px!important;width:auto!important;max-width:100%!important;height:auto!important}
+html body .card.lab:is(:has(#sbQ),:has(#sbR)) .accC .intro:has(>.tool)>.tool:nth-of-type(2){grid-column:1/-1!important;grid-row:auto!important;display:block!important;column-count:2;column-gap:14px}
+html body .card.lab:is(:has(#sbQ),:has(#sbR)) .accC .intro:has(>.tool)>.tool:nth-of-type(2)>*{break-inside:avoid;margin:0 0 8px!important}
+html body .card.lab:is(:has(#sbQ),:has(#sbR)) .accC .intro:has(>.tool)>.tool:nth-of-type(2)>p{font-size:13px!important;line-height:1.7!important}
+html body .card.lab:is(:has(#sbQ),:has(#sbR)) .accC .intro:has(>.tool)>.tool:nth-of-type(2) .stage svg{max-height:170px!important;width:100%!important;height:auto!important}
+html body #view .card.lab .accC.open>.accB:is(:has(#sbQ),:has(#sbR)):has(>.accLog+.ctl){display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr)!important;column-gap:16px;row-gap:8px;align-items:start}
+html body #view .card.lab .accC.open>.accB:is(:has(#sbQ),:has(#sbR))>.accLog{grid-column:1!important;grid-row:1/span 14!important;align-self:start;position:sticky!important;top:70px;margin:0!important}
+html body #view .card.lab .accC.open>.accB:is(:has(#sbQ),:has(#sbR))>.ctl{display:contents!important}
+html body #view .card.lab .accC.open>.accB:is(:has(#sbQ),:has(#sbR))>.ctl>*{grid-column:2;margin:0!important}
+html body #view .card.lab:is(:has(#sbQ),:has(#sbR)) .accC.open>.accB>.ctl.res{display:grid!important;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);column-gap:16px;row-gap:10px;align-items:start}
+html body #view .card.lab:is(:has(#sbQ),:has(#sbR)) .accC.open>.accB>.ctl.res>*{margin:0!important}
+html body #view .card.lab:is(:has(#sbQ),:has(#sbR)) .accC.open>.accB>.ctl.res>.tw{grid-column:1;grid-row:1/span 3}
+html body #view .card.lab:is(:has(#sbQ),:has(#sbR)) .accC.open>.accB>.ctl.res>#rNote{grid-column:2;grid-row:1}
+html body #view .card.lab:is(:has(#sbQ),:has(#sbR)) .accC.open>.accB>.ctl.res>.labScore{grid-column:2;grid-row:2}
+}
+</style>
+<style>@media (hover:hover) and (pointer:fine){/*sceneFit: المدرب 10 نوفمبر: مشهد التجربة لا يتجاوز عرض إطاره (شاشات LED والبروجكتور): الارتفاع = الأصغر بين ارتفاع الشاشة وعرض الإطار × نسبة المشهد *//*sceneFit: المدرب 10 نوفمبر: مشهد التجربة لا يتجاوز عرض إطاره على الشاشات الكبيرة فقط (عرض 1600 فأكثر مثل شاشات LED)، واللابتوب كما كان حرفيا: الارتفاع = الأصغر بين ارتفاع الشاشة وعرض الإطار × نسبة المشهد */html.bigScr body .card.lab .accB:not(.lfs) :is(.lx51,.lx52) .dmP>.dxW .stage:has(>div[data-nofit]>svg){container-type:inline-size}html.bigScr body .card.lab .accB:not(.lfs) :is(.lx51,.lx52) .dmP>.dxW .stage>div[data-nofit]>svg[style*="--ar"]{height:min(calc(100vh - 290px),calc(100cqw * var(--ar)))!important}}</style>
 <script>/*sceneFit: نسبة كل مشهد من viewBox */(()=>{/*الشاشة الكبيرة = عرض الشاشة نفسها 1600 فأكثر (لا يتأثر بتكبير الصفحة)، فلابتوب 1920 بتكبير ويندوز 150% عرضه 1280 ولا يتغير */try{const bs=()=>document.documentElement.classList.toggle('bigScr',(screen.width||0)>=1600);bs();addEventListener('resize',bs)}catch(e){}const f=()=>document.querySelectorAll('.card.lab .dxW .stage>div[data-nofit]>svg').forEach(v=>{if(v.style.getPropertyValue('--ar'))return;const b=v.viewBox&&v.viewBox.baseVal;if(b&&b.width&&b.height)v.style.setProperty('--ar',String(b.height/b.width))});let t=0;new MutationObserver(()=>{if(t)return;t=setTimeout(()=>{t=0;f()},150)}).observe(document.documentElement,{childList:true,subtree:true});addEventListener('load',f)})();</script>
 </body>
 </html>
