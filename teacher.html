@@ -239,6 +239,7 @@ html body #main .exStats .exStat h4{margin:0;font-size:14px}
 /*fuTbl*/@media (max-width:760px){html body #main .lsSec.fuSec table.lsT.fuTb{table-layout:auto!important;min-width:780px}html body #main .lsSec.fuSec table.lsT.fuTb td.ln{white-space:nowrap!important}html body #main .lsSec.fuSec .tableWrap{overflow-x:auto}}html body #main .lsSec.lsL.fuSec:not(.lsOne) table.lsT thead th{white-space:normal!important;font-size:12px;line-height:1.25}html body #main .lsSec.lsL.fuSec:not(.lsOne) table.lsT th:nth-child(4){width:auto!important}html body #main .lsSec.fuSec:not(.lsOne) table.lsT th:nth-child(2){width:9%!important}html body #main .lsSec.fuSec:not(.lsOne) table.lsT th:last-child{width:9%!important}html body #main table.lsT.fuTb td bdi{font-size:15px}html body #main .lsSec.fuSec:not(.lsOne) table.lsT th:nth-child(3){width:20%!important}html body #main .lsSec.fuSec table.lsT td.ok bdi,html body #main .lsSec.fuSec table.lsT td.md bdi,html body #main .lsSec.fuSec table.lsT td.gy bdi{min-width:0;padding:2px 8px}
 /*fuCards2: المدرب 10 نوفمبر: الدروس صف كامل دائما، والدخول والنقاط صف واحد بحسب عدد بطاقاتهما */.fuGs{display:flex;flex-wrap:wrap;gap:10px 14px;margin-top:12px}.fuGs>.fuG{flex:var(--n) 1 0;min-width:0}.fuGs>.fuG.fuGL{flex:1 1 100%}.fuG{margin:0}.fuG h4{margin:0 0 6px;font-size:14px;color:var(--accent)}.fuGrid{display:grid;grid-template-columns:repeat(var(--n,4),minmax(0,1fr));gap:8px}.fuK{border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:8px 10px}.fuK summary{list-style:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;text-align:center;gap:2px}.fuK summary::-webkit-details-marker{display:none}.fuK b{font-size:22px;white-space:nowrap}.fuK b small{font-size:12px;color:var(--muted);font-weight:600}.fuK span{font-size:12.5px;font-weight:700}.fuK.md{border-color:color-mix(in srgb,var(--mid) 45%,var(--line))}.fuK.md b{color:#b45309}.fuK.ok b{color:var(--good)}.fuK.na{opacity:.6;display:flex;flex-direction:column;align-items:center;text-align:center}.fuK[open]{border-color:var(--accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 35%,transparent)}.fuK>.fuList{display:none!important}.fuPanel{margin-top:8px;border:1px solid var(--accent);border-radius:12px;padding:8px 10px;background:color-mix(in srgb,var(--accent) 5%,var(--panel))}.fuPanel h5{margin:0 0 6px;font-size:13.5px;color:var(--accent)}.fuK .fuList{margin-top:8px}@media (max-width:640px){.fuGs{grid-template-columns:1fr}.fuGrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 /*tblUni: المدرب 10 نوفمبر: كل جداول اللوحة بشكل جدول «نقاط مهام الدروس» بلا تمرير داخلي */html body #main .lsSec.lsAuto table.lsT{table-layout:auto!important}html body #main .lsSec.lsAuto table.lsT thead th{white-space:normal!important}html body #main .lsSec.lsAuto .tableWrap{max-height:none!important;overflow:visible}@media (max-width:760px){html body #main .lsSec.lsAuto .tableWrap{overflow-x:auto}}html body #main .lsSec.lsAuto{margin-top:8px}
+/*durSel*/.durF select{flex:1 1 0;min-width:0}.durF{margin:6px 0 4px}a.durU{cursor:pointer;font-weight:800;color:var(--accent)}
 </style>
 <style>
 /* 65: لوحة المدرب بنفس هوية المنصة: شريط أزرق، بطاقات مستطيلة بدرجتين، أيقونات مجسمة */
@@ -884,6 +885,7 @@ const rbar=(lab,val,max,cls,txt)=>`<div class="bar"><span class="lab" title="${e
 let RT=null;
 /* مدة شرح الدروس على السبورة: المدد المحفوظة في الخادم من ملفات الصوت (نفس رقم السبورة) */
 let DURV='ar-SA-HamedNeural';
+let DURU='all',DURL='all';
 async function drawDur(){
   const m=$('#durHost')||$('#main');m.innerHTML='<p class="empty"><span class="spin"></span></p>';
   let r;try{r=await api({a:'durget'})}catch(e){m.innerHTML='<p class="empty">تعذر الاتصال بالخادم.</p>';return}
@@ -893,19 +895,28 @@ async function drawDur(){
   const fm=s=>s==null?'<span style="color:var(--muted)">لم يحسب بعد</span>':Math.max(1,Math.round(s/60))+' '+(Math.round(s/60)>=3&&Math.round(s/60)<=10?'دقائق':'دقيقة');
   const hm=s=>{const t=Math.round(s/60),h=Math.floor(t/60),mm=t%60;const hs=h===1?'ساعة':h===2?'ساعتان':h+(h<=10?' ساعات':' ساعة');return (h?hs+(mm?' و'+mm+' دقيقة':''):mm+' دقيقة')};
   const dt=k=>{const e=D[k+'|'+DURV];if(!e||!e.t)return '';const d=new Date(e.t);return d.toLocaleDateString('ar-SA-u-ca-gregory-nu-latn',{day:'numeric',month:'numeric'})};
-  let rows='',tot=0,miss=0,rows2='',tot2=0;
-  UNITS.forEach((u,ui)=>{let ut=0;const ls=LESSONS.filter(l=>l.u===ui);
-    ls.filter(l=>!NONLES.test(l.raw||l.t)).forEach(l=>{const s=secOf(l.k);if(s==null)miss++;else{ut+=s;tot+=s}rows+=`<tr><td style="white-space:normal">${esc(l.t)}</td><td><b>${fm(s)}</b></td></tr>`});
-    rows+=`<tr style="background:var(--soft)"><td><b>مجموع الوحدة ${ORD[ui]||ui+1}</b></td><td><b>${hm(ut)}</b></td></tr>`;
-    ls.filter(l=>NONLES.test(l.raw||l.t)).forEach(l=>{const s=secOf(l.k);if(s!=null)tot2+=s;rows2+=`<tr><td style="white-space:normal">الوحدة ${ORD[ui]||ui+1}: ${esc(l.t)}</td><td><b>${fm(s)}</b></td></tr>`})});
+  /*durSel: المدرب 10 نوفمبر: مدة الشرح بقائمتين مثل نقاط مهام الدروس: الوحدة (الكل أو وحدة) والدرس (الكل أو درس)، والكل ملخص بالوحدات */
+  let tot=0,miss=0,tot2=0;const isRev=l=>/مراجعة/.test(l.raw||l.t),isWs=l=>NONLES.test(l.raw||l.t)&&!isRev(l),typ=l=>isRev(l)?'مراجعة':isWs(l)?'ورقة عمل':'درس';
+  const U=UNITS.map((u,ui)=>{const ls=LESSONS.filter(l=>l.u===ui);const o={ui,t:u.t,ls,les:0,ws:0,rev:0,nl:0,nm:0};ls.forEach(l=>{const s2=secOf(l.k);if(!NONLES.test(l.raw||l.t)){o.nl++;if(s2==null){miss++;o.nm++}else{o.les+=s2;tot+=s2}}else if(s2!=null){tot2+=s2;if(isRev(l))o.rev+=s2;else o.ws+=s2}});o.all=o.les+o.ws+o.rev;return o}).filter(o=>o.ls.length);
   window.__DURS={tot,miss,n:TEACH_N,tot2,hm};
+  if(DURU!=='all'&&!U.some(o=>String(o.ui)===DURU))DURU='all';const UU=DURU==='all'?null:U.find(o=>String(o.ui)===DURU);if(!UU)DURL='all';else if(DURL!=='all'&&!UU.ls.some(l=>l.k===DURL))DURL='all';
+  const hmz=x=>x?hm(x):'—';
+  const uo=`<option value="all">☑ كل الوحدات</option>`+U.map(o=>`<option value="${o.ui}" ${DURU===String(o.ui)?'selected':''}>${esc('الوحدة '+(ORD[o.ui]||o.ui+1)+': '+o.t)}</option>`).join('');
+  const lo=UU?`<option value="all">☑ كل دروس الوحدة</option>`+UU.ls.map(l=>`<option value="${l.k}" ${DURL===l.k?'selected':''}>${esc((isWs(l)||isRev(l)?typ(l)+': ':'')+l.t)}</option>`).join(''):'<option value="all">☑ كل الدروس</option>';
+  let head,body;
+  if(!UU){head='<th>الوحدة</th><th>الدروس</th><th>أوراق العمل</th><th>المراجعة</th><th>المجموع</th>';
+    body=U.map(o=>`<tr><td class="ln"><a class="durU" data-u="${o.ui}">${esc('الوحدة '+(ORD[o.ui]||o.ui+1)+': '+o.t)}</a><small style="display:block;color:var(--muted)">${o.nl} دروس${o.nm?' · '+o.nm+' لم تحسب':''}</small></td><td><b>${hmz(o.les)}</b></td><td>${hmz(o.ws)}</td><td>${hmz(o.rev)}</td><td><b>${hmz(o.all)}</b></td></tr>`).join('')+`<tr class="lsTot"><td class="ln"><b>المجموع</b></td><td><b>${hmz(tot)}</b></td><td><b>${hmz(U.reduce((a,o)=>a+o.ws,0))}</b></td><td><b>${hmz(U.reduce((a,o)=>a+o.rev,0))}</b></td><td><b>${hmz(tot+tot2)}</b></td></tr>`}
+  else{head='<th>الدرس</th><th>النوع</th><th>مدة الشرح</th><th>آخر حساب</th>';const L=DURL==='all'?UU.ls:UU.ls.filter(l=>l.k===DURL);
+    body=L.map(l=>`<tr><td class="ln">${esc(l.t)}</td><td>${typ(l)}</td><td><b>${fm(secOf(l.k))}</b></td><td>${dt(l.k)||'—'}</td></tr>`).join('')+(DURL==='all'?`<tr class="lsTot"><td class="ln"><b>مجموع الوحدة ${ORD[UU.ui]||UU.ui+1}</b></td><td></td><td><b>${hmz(UU.all)}</b></td><td></td></tr>`:'')}
   m.innerHTML=`<div class="card"><h2>⏱ مدة شرح الدروس على السبورة</h2>
   <p style="color:var(--muted);margin:0 0 10px">المدة الدقيقة نفسها الظاهرة على السبورة، محسوبة من ملفات الصوت المحفوظة بالسرعة العادية. بعد تعديل محتوى أي درس أو دمج الدروس اضغط «⚙️ حساب مدة كل الدروس» لتحديث المدد كلها، ثم «↻ تحديث».</p>
   <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px"><select id="durv"><option value="ar-SA-HamedNeural" ${DURV==='ar-SA-HamedNeural'?'selected':''}>صوت حامد</option><option value="ar-SA-ZariyahNeural" ${DURV==='ar-SA-ZariyahNeural'?'selected':''}>صوت زارية</option></select><button class="btn ghost" id="durr">↻ تحديث</button><a class="btn" href="index.html?durall=1" target="_blank" rel="noopener">⚙️ حساب مدة كل الدروس</a></div>
-  <div class="stats"><div class="stat"><small>مجموع شرح الدروس (${TEACH_N} درسا)</small><b>${hm(tot)}</b></div><div class="stat"><small>متوسط الدرس</small><b>${TEACH_N-miss?Math.round(tot/60/(TEACH_N-miss))+' دقيقة':'—'}</b></div>${miss?`<div class="stat"><small>دروس لم تحسب بعد</small><b>${miss}</b></div>`:''}</div>
-  <div class="lsSec lsL lsOne lsAuto"><div class="tableWrap"><table class="lsT lsS"><thead><tr><th>الدرس</th><th>مدة الشرح</th></tr></thead><tbody>${rows}</tbody></table></div></div>
-  <h2 style="margin-top:18px">أوراق العمل المحلولة والمراجعات</h2><div class="lsSec lsL lsOne lsAuto"><div class="tableWrap"><table class="lsT lsS"><thead><tr><th>القسم</th><th>مدة الشرح</th></tr></thead><tbody>${rows2}</tbody></table></div></div>
-  <p style="color:var(--muted)">مجموعها: ${hm(tot2)}</p></div>`;
+  <div class="stats"><div class="stat"><small>مجموع شرح الدروس (${TEACH_N} درسا)</small><b>${hm(tot)}</b></div><div class="stat"><small>أوراق العمل والمراجعات</small><b>${hmz(tot2)}</b></div><div class="stat"><small>متوسط الدرس</small><b>${TEACH_N-miss?Math.round(tot/60/(TEACH_N-miss))+' دقيقة':'—'}</b></div>${miss?`<div class="stat"><small>دروس لم تحسب بعد</small><b>${miss}</b></div>`:''}</div>
+  <div class="lsF durF"><select id="durU">${uo}</select><select id="durL" ${UU?'':'disabled'}>${lo}</select></div>
+  <div class="lsSec lsL lsOne lsAuto"><div class="tableWrap"><table class="lsT lsS"><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div></div>
+  ${UU?'':'<p class="sub" style="margin-top:6px">اضغط اسم الوحدة لعرض دروسها وأوراقها.</p>'}</div>`;
+  $('#durU').onchange=e=>{DURU=e.target.value;DURL='all';drawDur()};$('#durL').onchange=e=>{DURL=e.target.value;drawDur()};
+  m.querySelectorAll('.durU').forEach(a=>a.onclick=()=>{DURU=a.dataset.u;DURL='all';drawDur()});
   $('#durv').onchange=e=>{DURV=e.target.value;drawDur()};$('#durr').onclick=drawDur;
   if(window.__durFill)window.__durFill();
 }
