@@ -4444,6 +4444,25 @@ html body #view:has(.card.rate>.r3)>.inner{padding-bottom:8px!important;min-heig
 /*logFit: سجل القراءات بجانب المشهد يظهر كاملا بارتفاع محتواه، وبطاقة الخطوات تأخذ الباقي */
 html body .card.lab .accB:not(.lfs) .nmLeft>.nmRes{flex:0 1 auto!important;max-height:70%}
 }
+@media (min-width:1000px) and (hover:hover) and (pointer:fine){
+/*calc2col: المدرب 10 نوفمبر: حسابات تجربة كولوم في عمودين للابتوب: يمين سجل القراءات والسؤال والتلميح، ويسار بطاقة الحل (التعويض والآلة الحاسبة والجواب) بلا تمرير */
+html body #view .card.lab .accB:has(>.accLog+.ctl):has(#sbFR){display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-auto-rows:auto;column-gap:16px;row-gap:8px;align-items:start}
+html body #view .card.lab .accB:has(>.accLog+.ctl):has(#sbFR)>.accLog{grid-column:1;grid-row:1;margin:0!important}
+html body #view .card.lab .accB:has(>.accLog+.ctl):has(#sbFR)>.accLog .amLog{margin:0!important}
+html body #view .card.lab .accB:has(>.accLog+.ctl):has(#sbFR)>.accLog .amTbl :is(td,th){padding:7px 10px!important}
+html body #view .card.lab .accB:has(>.accLog+.ctl):has(#sbFR)>.ctl{display:contents}
+html body #view .card.lab .accB:has(>.accLog+.ctl):has(#sbFR)>.ctl>*{grid-column:1;margin:0!important}
+html body #view .card.lab .accB:has(>.accLog+.ctl):has(#sbFR)>.ctl>p.slh{padding:6px 12px!important}
+html body #view .card.lab .accB:has(>.accLog+.ctl):has(#sbFR)>.ctl>h4.sbh{padding:4px 2px 0!important}
+html body #view .card.lab .accB:has(>.accLog+.ctl):has(#sbFR)>.ctl>.cstep{grid-column:2;grid-row:1/span 4;align-self:stretch;display:flex;flex-direction:column;gap:10px;padding:14px!important;border:1px solid var(--line);border-radius:14px;background:var(--panel,#fff)}
+html body #view .card.lab .accB:has(>.accLog+.ctl):has(#sbFR) .cstep>*{margin:0!important}
+html body #view .card.lab .accB:has(>.accLog+.ctl):has(#sbFR) .cstep>.law{padding:8px 12px!important}
+html body #view .card.lab .accB:has(>.accLog+.ctl):has(#sbFR) .cstep>.law .ln{padding:6px 10px!important;min-height:0!important}
+html body #view .card.lab .accB:has(>.accLog+.ctl):has(#sbFR) .cstep>.labCalc{align-self:center}
+html body #view .card.lab .accB:has(>.accLog+.ctl):has(#sbFR) .cstep>.labCalc .calcbtn{padding:6px 16px!important;min-height:0!important}
+html body #view .card.lab .accB:has(>.accLog+.ctl):has(#sbFR) .cstep>.ans{max-width:none!important;margin-top:auto!important;padding:10px 12px!important}
+html body #view .card.lab .accB:has(>.accLog+.ctl):has(#sbFR) .cstep>.ans>input{height:42px!important}
+}
 </style><script>/*nmRes: المدرب 9 نوفمبر (أ): على اللابتوب في الوضع العادي «سجل القراءات» تحت بطاقة الخطوة بجانب المشهد (للتجربة التي يشغلها المتدرب) */(function(){const mq=matchMedia('(min-width:1000px) and (hover:hover) and (pointer:fine)');let st=null,lastP=null;
 const off=()=>{if(!st)return;const {w,cap,res,ph}=st;if(w.isConnected){w.before(cap);ph.before(res)}ph.remove();w.remove();res.classList.remove('nmRes');st=null};
 const on=()=>{if(!mq.matches||document.body.classList.contains('lfsOn')){off();return}const card=document.querySelector('#view .card.lab .accC.open>.accB:not(.lfs)');if(!card){off();return}const Ps=[...card.querySelectorAll(':scope>.ctl .dmP')].filter(p=>p.querySelector(':scope>.dmCap,:scope>.nmLeft'));let P=(lastP&&card.contains(lastP))?lastP:Ps[0];if(!P)return;if(st&&st.P===P&&st.w.isConnected)return;off();const cap=P.querySelector(':scope>.dmCap');const ctl=P.closest('.ctl');const res=[...card.children].find(e=>e.classList.contains('ctl')&&e!==ctl&&/نتائج القياس|سجل القراءات/.test(e.textContent.slice(0,80)));if(!cap||!res)return;const w=document.createElement('div');w.className='nmLeft';const ph=document.createElement('i');ph.hidden=true;res.before(ph);cap.before(w);w.append(cap,res);res.classList.add('nmRes');st={w,cap,res,ph,P}};
