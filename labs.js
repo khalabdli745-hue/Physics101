@@ -6871,7 +6871,7 @@ function DX(cfg){return function(){
       const L=E('dmCap').textContent.length;E('dmCap').insertAdjacentHTML('beforeend','<div class="dmWait" style="font-size:12.5px;font-weight:800;color:var(--muted);margin-top:4px">📖 اقرأ الخطوة…</div>');
       const vo=labVo.on()&&labVo.txt(s,true);let np=null;
       if(vo){/* المدرب 5 نوفمبر: الصوت والحركة معا: يبدأ المدرب بعنوان الخطوة، ثم تتحرك اليد وتنفذ الخطوة أثناء الشرح، ولا تنتقل الخطوة حتى ينتهي الاثنان */
-        np=labNarr(s,true,psleep,0);const t1=String(labVo.txt(s,true)).split(/[.:]/)[0].length;await psleep(Math.min(3800,600+t1*70))}
+        np=labNarr(s,true,psleep,0);/*recSync: المدرب 10 نوفمبر: اليد تضغط عند «زر التسجيل» كما كانت عند «سجل القراءة» (النص الجديد بلا نقطتين) */const tx0=String(labVo.txt(s,true)),zi=tx0.indexOf('زِرَّ'),t1=zi>0?zi:tx0.split(/[.:]/)[0].length;await psleep(Math.min(3800,600+t1*70))}
       else await labNarr(s,W,psleep,Math.min(9000,2500+L*55));
       const w=E('dmCap').querySelector('.dmWait');if(w)w.textContent='🎬 تنفيذ الخطوة…';
       try{if(s.f)await s.f(H);else if(s.sl)for(const [id,t,hd] of s.sl)await slide(id,t==null?'hit':t,hd)}catch(e){console.error(e)}
