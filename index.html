@@ -2544,7 +2544,7 @@ function renderEx(v){
     const prog=document.createElement('div');prog.className='score';head.appendChild(prog);i.appendChild(head);
     let fin=0,pts=0;const max=probs.length*5;
     const upd=()=>{prog.textContent=fin?`أنجزت ${AR(fin)} من ${AR(probs.length)} — الخطوات الصحيحة من أول محاولة: ${AR(pts)} من ${AR(max)}`:''};
-    const EXL=/* exLbl31: المدرب 9 نوفمبر (أ): عناوين أمثلة درس كولوم مثل السبورة */{'3-1':['مثال ١ · صفحة 92','مثال ٢ · صفحة 93','تمرين ١ · ورقة العمل · سؤال ٤ (صفحة 105)'],/*exLbl48: المدرب 10 نوفمبر: عناوين أمثلة درس توصيل المقاومات مثل السبورة*/'4-8':['مثال ١ (أ) · صفحة 126','مثال ١ (ب) · صفحة 126','مثال ٢ (أ) · صفحة 127','مثال ٢ (ب) · صفحة 127','تمرين ١ · ورقة العمل · سؤال ٨ (صفحة 130)','تمرين ٢ · ورقة العمل · سؤال ٨ (صفحة 130)','تمرين ٣ · ورقة العمل · سؤال ٩ (صفحة 131)','تمرين ٤ · ورقة العمل · سؤال ٩ (صفحة 131)','تمرين ٥ · ورقة العمل · سؤال ٩ (صفحة 131)','تمرين ٦ · ورقة العمل · سؤال ١٠ (صفحة 131)']}[k];
+    const EXL=/* exLbl31: المدرب 9 نوفمبر (أ): عناوين أمثلة درس كولوم مثل السبورة */{'3-1':['مثال ١ · صفحة 92','مثال ٢ · صفحة 93','تمرين ١ · ورقة العمل · سؤال ٤ (صفحة 105)'],/*exLbl45: المدرب 10 نوفمبر: عناوين أمثلة درسي التيار والمقاومة مثل السبورة*/'4-1':['مثال ١ · صفحة 118','تمرين ١ · ورقة العمل · سؤال ٣ (صفحة 128)','تمرين ٢ · ورقة العمل · سؤال ٣ (صفحة 128)','مثال ٢ · صفحة 119','مثال ٣ (أ) · صفحة 119','مثال ٣ (ب) · صفحة 119','تمرين ٣ · ورقة العمل · سؤال ٤ (صفحة 128)','مثال ٤ · صفحة 120'],'4-5':['مثال ١ · صفحة 124','مثال ٢ · صفحة 124','مثال ٣ · صفحة 124','مثال ٤ · صفحة 124','تمرين ١ · ورقة العمل · سؤال ٥ (صفحة 129)','تمرين ٢ · ورقة العمل · سؤال ٦ (صفحة 129)','مثال ٥ (أ) · صفحة 125','مثال ٥ (ب) · صفحة 125','تمرين ٣ · ورقة العمل · سؤال ٧ (صفحة 130)','تمرين ٤ · ورقة العمل · سؤال ٧ (صفحة 130)'],/*exLbl48: المدرب 10 نوفمبر: عناوين أمثلة درس توصيل المقاومات مثل السبورة*/'4-8':['مثال ١ (أ) · صفحة 126','مثال ١ (ب) · صفحة 126','مثال ٢ (أ) · صفحة 127','مثال ٢ (ب) · صفحة 127','تمرين ١ · ورقة العمل · سؤال ٨ (صفحة 130)','تمرين ٢ · ورقة العمل · سؤال ٨ (صفحة 130)','تمرين ٣ · ورقة العمل · سؤال ٩ (صفحة 131)','تمرين ٤ · ورقة العمل · سؤال ٩ (صفحة 131)','تمرين ٥ · ورقة العمل · سؤال ٩ (صفحة 131)','تمرين ٦ · ورقة العمل · سؤال ١٠ (صفحة 131)']}[k];
     probs.forEach((p,n)=>i.appendChild(problemCard(p,(EXL&&EXL[n])||(n===0?'مثال 1':'تمرين '+AR(n)),(sc,det)=>{fin++;pts+=sc;upd();SYNC.result('prob',k+'.'+n,lesson().t,sc,5,det);if(fin===probs.length){const b=best['p'+k];if(b==null||pts>b){best['p'+k]=pts;store.set('p101-best',best)}rslot.appendChild(rateLink())}})));
     const rslot=document.createElement('div');i.appendChild(rslot);
     /* «مثال محلول للمراجعة» حذف من هذا التبويب لأنه معروض على السبورة */
@@ -2570,7 +2570,7 @@ function shuffle(a){a=a.slice();for(let k=a.length-1;k>0;k--){const j=Math.floor
 function renderQuiz(v){
   const i=wrap(v),s=study();
   if(!s||!s.qz){i.innerHTML='<p class="empty">لا يوجد اختبار لهذا الدرس.</p>';return}
-  const k=key(pos.u,pos.l),QSEL=/* qz31six: المدرب 9 نوفمبر (أ): «اختبر نفسك» في درس كولوم ستة أسئلة */{'3-1':['الشحنات المختلفة','يصبح الجسم موجب الشحنة','أي مما يلي مادة عازلة','شحن جسم متعادل دون ملامسته','مقدار القوة بينهما:','إذا تضاعفت المسافة بين شحنتين'],/*qz48six: المدرب 10 نوفمبر: «اختبر نفسك» في درس توصيل المقاومات ستة أسئلة أساسية مثل كولوم*/'4-8':['في التوصيل على التوالي يكون متساويًا','مقاومتان `9 Ω` و `5 Ω` على التوالي، المقاومة الكلية','في التوصيل على التوازي تكون الكمية المتساوية','المقاومة المكافئة لمقاومات على التوازي','مقاومتان `6 Ω` و `3 Ω` على التوازي','لماذا تُوصل الأجهزة المنزلية']}[k],qs=QSEL?QSEL.map(t=>s.qz.find(q=>q.q.indexOf(t)>=0)).filter(Boolean):s.qz;
+  const k=key(pos.u,pos.l),QSEL=/* qz31six: المدرب 9 نوفمبر (أ): «اختبر نفسك» في درس كولوم ستة أسئلة */{'3-1':['الشحنات المختلفة','يصبح الجسم موجب الشحنة','أي مما يلي مادة عازلة','شحن جسم متعادل دون ملامسته','مقدار القوة بينهما:','إذا تضاعفت المسافة بين شحنتين'],/*qz45six: المدرب 10 نوفمبر: «اختبر نفسك» في درسي التيار والمقاومة ستة أسئلة أساسية مثل كولوم*/'4-1':['تمر في سلك خلال','تُعرّف شدة التيار الكهربائي بأنها','الاتجاه الاصطلاحي للتيار الكهربائي','موصل مساحة مقطعه','قانون سرعة الانجراف','يتميز التيار المستمر DC'],'4-5':['سخان على','ينص قانون أوم','وحدة المقاومة في SI','إذا تضاعف طول السلك','سلك نحاس مقاومته','قدرته:'],/*qz48six: المدرب 10 نوفمبر: «اختبر نفسك» في درس توصيل المقاومات ستة أسئلة أساسية مثل كولوم*/'4-8':['في التوصيل على التوالي يكون متساويًا','مقاومتان `9 Ω` و `5 Ω` على التوالي، المقاومة الكلية','في التوصيل على التوازي تكون الكمية المتساوية','المقاومة المكافئة لمقاومات على التوازي','مقاومتان `6 Ω` و `3 Ω` على التوازي','لماذا تُوصل الأجهزة المنزلية']}[k],qs=QSEL?QSEL.map(t=>s.qz.find(q=>q.q.indexOf(t)>=0)).filter(Boolean):s.qz;
   if(best[k]!=null&&best[k]>qs.length)best[k]=null;/* qzBestFix: النتيجة القديمة من 24 لا تعرض بعد التقليل */
   const c=card('اختبر نفسك',`${AR(qs.length)} أسئلة · `+(best[k]!=null?`أفضل نتيجة سابقة: ${AR(best[k])} من ${AR(qs.length)}`:'لم تختبر هذا الدرس بعد'));
   i.appendChild(c);
@@ -4554,6 +4554,48 @@ html body #view .card.lab:has(#sbS) .accC.open>.accB>.ctl.res>*{margin:0!importa
 html body #view .card.lab:has(#sbS) .accC.open>.accB>.ctl.res>.tw{grid-column:1;grid-row:1/span 3}
 html body #view .card.lab:has(#sbS) .accC.open>.accB>.ctl.res>#rNote{grid-column:2;grid-row:1}
 html body #view .card.lab:has(#sbS) .accC.open>.accB>.ctl.res>.labScore{grid-column:2;grid-row:2}
+}
+
+/*lab45: المدرب 10 نوفمبر: تجربتا التيار الكهربائي (4-1) وقانون أوم (4-5) على اللابتوب والشاشات الكبيرة والبروجكتور مثل كولوم: إخفاء «طريقة العمل»، المشهد بحجم الشاشة بجانب بطاقة الشرح وسجل القراءات، النظرية والأدوات في عمودين، والحسابات والنتائج مثل كولوم */
+@media (min-width:1000px) and (hover:hover) and (pointer:fine){
+html body .card.lab:is(:has(#sbQ),:has(#sbR)) .accB>.intro.amIdea:has(>ol.amFlow){display:none!important}
+html body .card.lab:is(:has(#sbQ),:has(#sbR)) .accB:not(.lfs) :is(.lx51,.lx52) .dmP{grid-template-columns:360px minmax(0,calc(max(240px,100vh - 290px) * var(--ar48,1.274)))!important;justify-content:center!important}
+html body .card.lab:has(#sbR) .accB:not(.lfs) :is(.lx51,.lx52) .dmP{--ar48:.909}
+html body .card.lab:has(#sbQ) .accB:not(.lfs) :is(.lx51,.lx52) .dmP{--ar48:1.42}
+html body .card.lab:has(#sbQ) .accB:not(.lfs) :is(.lx51,.lx52) .dxW svg{aspect-ratio:1.42}
+html body .card.lab:is(:has(#sbQ),:has(#sbR)) .accB:not(.lfs) :is(.lx51,.lx52) .dmP>.dxW{width:auto!important;max-width:none!important;min-width:0}
+html body .card.lab:is(:has(#sbQ),:has(#sbR)) .accB:not(.lfs) :is(.lx51,.lx52) .dxW .wsc{padding:0!important;margin:0!important;border:0!important;box-shadow:none!important}
+html body .card.lab:is(:has(#sbQ),:has(#sbR)) .accB:not(.lfs) :is(.lx51,.lx52) .dxW .wsc>h4{display:none!important}
+html body .card.lab:is(:has(#sbQ),:has(#sbR)) .accB:not(.lfs) :is(.lx51,.lx52) .dxW .amLog{display:none!important}
+html body .card.lab:is(:has(#sbQ),:has(#sbR)) .accB:not(.lfs) :is(.lx51,.lx52) .dxW svg{width:100%!important;height:auto!important;max-height:none!important;display:block}
+html body .card.lab:is(:has(#sbQ),:has(#sbR)) .accB:not(.lfs) :is(.lx51,.lx52) .nmLeft>.dmCap{font-size:13px!important;line-height:1.65!important;padding:8px 10px!important}
+html body .card.lab:is(:has(#sbQ),:has(#sbR)) .accB:not(.lfs) :is(.lx51,.lx52) .nmLeft>.nmRes{flex:none!important;max-height:none!important}
+html body .card.lab:is(:has(#sbQ),:has(#sbR)) .accB:not(.lfs) :is(.lx51,.lx52) .nmLeft .amLog{padding:6px 8px!important;margin:0!important}
+html body .card.lab:is(:has(#sbQ),:has(#sbR)) .accB:not(.lfs) :is(.lx51,.lx52) .nmLeft .amLog>h5{margin:0 0 4px!important;font-size:13px!important}
+html body .card.lab:is(:has(#sbQ),:has(#sbR)) .accB:not(.lfs) :is(.lx51,.lx52) .nmLeft .amTbl :is(td,th){padding:3px 5px!important;font-size:12px!important}
+html body .card.lab:has(#sbR) .accC .intro.amIdea:has(>.law.ftl){display:grid!important;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);column-gap:14px;row-gap:8px;align-items:start}
+html body .card.lab:has(#sbR) .accC .intro.amIdea:has(>.law.ftl)>*{grid-column:1/-1;margin:0!important}
+html body .card.lab:has(#sbR) .accC .intro.amIdea:has(>.law.ftl)>.amTwo{grid-column:1;grid-row:2}
+html body .card.lab:has(#sbR) .accC .intro.amIdea:has(>.law.ftl)>.law.ftl{grid-column:1;grid-row:3;display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:10px;row-gap:6px;padding:10px!important;align-items:start}
+html body .card.lab:has(#sbR) .accC .intro.amIdea:has(>.law.ftl)>.law.ftl>.ln{grid-column:1;margin:0!important;padding:5px 8px!important}
+html body .card.lab:has(#sbR) .accC .intro.amIdea:has(>.law.ftl)>.law.ftl>.sym{grid-column:2;grid-row:1/span 4;margin:0!important;font-size:12.5px!important}
+html body .card.lab:has(#sbR) .accC .intro.amIdea:has(>.law.ftl)>.stage{grid-column:2;grid-row:2/span 2;align-self:center;background:#fff;border:1.5px solid #f3c49a;border-radius:12px;padding:6px!important}
+html body .card.lab:has(#sbR) .accC .intro.amIdea:has(>.law.ftl)>.stage svg{width:100%!important;height:auto!important;max-height:340px}
+html body .card.lab:is(:has(#sbQ),:has(#sbR)) .accC .intro:has(>.tool)>.tool:first-of-type{display:block!important;text-align:center}
+html body .card.lab:is(:has(#sbQ),:has(#sbR)) .accC .intro:has(>.tool)>.tool:first-of-type>.stage svg{max-height:320px!important;width:auto!important;max-width:100%!important;height:auto!important}
+html body .card.lab:is(:has(#sbQ),:has(#sbR)) .accC .intro:has(>.tool)>.tool:nth-of-type(2){grid-column:1/-1!important;grid-row:auto!important;display:block!important;column-count:2;column-gap:14px}
+html body .card.lab:is(:has(#sbQ),:has(#sbR)) .accC .intro:has(>.tool)>.tool:nth-of-type(2)>*{break-inside:avoid;margin:0 0 8px!important}
+html body .card.lab:is(:has(#sbQ),:has(#sbR)) .accC .intro:has(>.tool)>.tool:nth-of-type(2)>p{font-size:13px!important;line-height:1.7!important}
+html body .card.lab:is(:has(#sbQ),:has(#sbR)) .accC .intro:has(>.tool)>.tool:nth-of-type(2) .stage svg{max-height:170px!important;width:100%!important;height:auto!important}
+html body #view .card.lab .accC.open>.accB:is(:has(#sbQ),:has(#sbR)):has(>.accLog+.ctl){display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr)!important;column-gap:16px;row-gap:8px;align-items:start}
+html body #view .card.lab .accC.open>.accB:is(:has(#sbQ),:has(#sbR))>.accLog{grid-column:1!important;grid-row:1/span 14!important;align-self:start;position:sticky!important;top:70px;margin:0!important}
+html body #view .card.lab .accC.open>.accB:is(:has(#sbQ),:has(#sbR))>.ctl{display:contents!important}
+html body #view .card.lab .accC.open>.accB:is(:has(#sbQ),:has(#sbR))>.ctl>*{grid-column:2;margin:0!important}
+html body #view .card.lab:is(:has(#sbQ),:has(#sbR)) .accC.open>.accB>.ctl.res{display:grid!important;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);column-gap:16px;row-gap:10px;align-items:start}
+html body #view .card.lab:is(:has(#sbQ),:has(#sbR)) .accC.open>.accB>.ctl.res>*{margin:0!important}
+html body #view .card.lab:is(:has(#sbQ),:has(#sbR)) .accC.open>.accB>.ctl.res>.tw{grid-column:1;grid-row:1/span 3}
+html body #view .card.lab:is(:has(#sbQ),:has(#sbR)) .accC.open>.accB>.ctl.res>#rNote{grid-column:2;grid-row:1}
+html body #view .card.lab:is(:has(#sbQ),:has(#sbR)) .accC.open>.accB>.ctl.res>.labScore{grid-column:2;grid-row:2}
 }
 </style>
 <style>@media (hover:hover) and (pointer:fine){/*sceneFit: المدرب 10 نوفمبر: مشهد التجربة لا يتجاوز عرض إطاره (شاشات LED والبروجكتور): الارتفاع = الأصغر بين ارتفاع الشاشة وعرض الإطار × نسبة المشهد *//*sceneFit: المدرب 10 نوفمبر: مشهد التجربة لا يتجاوز عرض إطاره على الشاشات الكبيرة فقط (عرض 1600 فأكثر مثل شاشات LED)، واللابتوب كما كان حرفيا: الارتفاع = الأصغر بين ارتفاع الشاشة وعرض الإطار × نسبة المشهد */html.bigScr body .card.lab .accB:not(.lfs) :is(.lx51,.lx52) .dmP>.dxW .stage:has(>div[data-nofit]>svg){container-type:inline-size}html.bigScr body .card.lab .accB:not(.lfs) :is(.lx51,.lx52) .dmP>.dxW .stage>div[data-nofit]>svg[style*="--ar"]{height:min(calc(100vh - 290px),calc(100cqw * var(--ar)))!important}}</style>
