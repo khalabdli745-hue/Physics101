@@ -4508,6 +4508,30 @@ html body #view .card.lab .accC.open>.accB:has(#sbS) .cstep>.ans>label{margin:0!
 html body #view .card.lab .accC.open>.accB:has(#sbS) .cstep>.ans>input{flex:1 1 60px;width:auto!important;min-width:0;height:40px!important}html body #view .card.lab .accC.open>.accB:has(#sbS) .cstep>.ans>button{flex:none;margin:0!important}
 html body #view .card.lab .accC.open>.accB:has(#sbS) .cstep>.fb2{grid-column:1/-1}
 }
+/*lab48: المدرب 10 نوفمبر: أقسام تجربة توصيل المقاومات على اللابتوب والشاشات الكبيرة والبروجكتور مثل كولوم: النظرية (النص والقوانين يمينا والرسم يسارا)، الأدوات في عمودين، «طريقة العمل» مخفية، والمشهد بحجم الشاشة بجانب بطاقة الشرح وسجل القراءات بلا سجل مكرر داخل المشهد */
+@media (min-width:1000px) and (hover:hover) and (pointer:fine){
+html body .card.lab:has(#sbS) .accB>.intro.amIdea:has(>ol.amFlow){display:none!important}
+html body .card.lab:has(#sbS) .accB:not(.lfs) :is(.lx51,.lx52) .dmP{grid-template-columns:300px auto!important;justify-content:center!important}
+html body .card.lab:has(#sbS) .accB:not(.lfs) :is(.lx51,.lx52) .dmP>.dxW{width:calc(max(240px,100vh - 290px) * 1.274)!important;max-width:calc(100vw - 400px)}
+html body .card.lab:has(#sbS) .accB:not(.lfs) :is(.lx51,.lx52) .dxW .wsc{padding:0!important;margin:0!important;border:0!important;box-shadow:none!important}
+html body .card.lab:has(#sbS) .accB:not(.lfs) :is(.lx51,.lx52) .dxW .wsc>h4{display:none!important}
+html body .card.lab:has(#sbS) .accB:not(.lfs) :is(.lx51,.lx52) .dxW .wsc>svg{width:100%!important;height:auto!important;display:block}
+html body .card.lab:has(#sbS) .accB:not(.lfs) :is(.lx51,.lx52) .dxW .amLog{display:none!important}
+html body .card.lab:has(#sbS) .accC .intro.amIdea:has(>.law.ftl){display:grid!important;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);column-gap:14px;row-gap:8px;align-items:start}
+html body .card.lab:has(#sbS) .accC .intro.amIdea:has(>.law.ftl)>*{grid-column:1/-1;margin:0!important}
+html body .card.lab:has(#sbS) .accC .intro.amIdea:has(>.law.ftl)>p:first-of-type{font-size:14px!important;line-height:1.75!important}
+html body .card.lab:has(#sbS) .accC .intro.amIdea:has(>.law.ftl)>.amTwo{grid-column:1;grid-row:2}
+html body .card.lab:has(#sbS) .accC .intro.amIdea:has(>.law.ftl)>.law.ftl{grid-column:1;grid-row:3;display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:10px;row-gap:6px;padding:10px!important;align-items:start}
+html body .card.lab:has(#sbS) .accC .intro.amIdea:has(>.law.ftl)>.law.ftl>.ln{grid-column:1;margin:0!important;padding:5px 8px!important}
+html body .card.lab:has(#sbS) .accC .intro.amIdea:has(>.law.ftl)>.law.ftl>.sym{grid-column:2;grid-row:1/span 4;margin:0!important;font-size:12.5px!important}
+html body .card.lab:has(#sbS) .accC .intro.amIdea:has(>.law.ftl)>.stage{grid-column:2;grid-row:2/span 2;align-self:center;background:#fff;border:1.5px solid #f3c49a;border-radius:12px;padding:6px!important}
+html body .card.lab:has(#sbS) .accC .intro.amIdea:has(>.law.ftl)>.stage svg{width:100%!important;height:auto!important;max-height:380px}
+html body .card.lab:has(#sbS) .accC .intro:has(>.tool)>.tool:nth-of-type(2){grid-column:1/-1!important;grid-row:auto!important;display:block!important;column-count:2;column-gap:14px}
+html body .card.lab:has(#sbS) .accC .intro:has(>.tool)>.tool:nth-of-type(2)>*{break-inside:avoid;margin:0 0 8px!important}
+html body .card.lab:has(#sbS) .accC .intro:has(>.tool)>.tool:nth-of-type(2)>p{font-size:13px!important;line-height:1.7!important}
+html body .card.lab:has(#sbS) .accC .intro:has(>.tool)>.tool:nth-of-type(2)>.stage svg{max-height:150px!important;width:100%!important;height:auto!important}
+html body .card.lab:has(#sbS) .accC .intro:has(>.tool)>.tool:nth-of-type(2)>.amRef svg{max-height:190px!important}
+}
 </style>
 <style>@media (hover:hover) and (pointer:fine){/*sceneFit: المدرب 10 نوفمبر: مشهد التجربة لا يتجاوز عرض إطاره (شاشات LED والبروجكتور): الارتفاع = الأصغر بين ارتفاع الشاشة وعرض الإطار × نسبة المشهد *//*sceneFit: المدرب 10 نوفمبر: مشهد التجربة لا يتجاوز عرض إطاره على الشاشات الكبيرة فقط (عرض 1600 فأكثر مثل شاشات LED)، واللابتوب كما كان حرفيا: الارتفاع = الأصغر بين ارتفاع الشاشة وعرض الإطار × نسبة المشهد */html.bigScr body .card.lab .accB:not(.lfs) :is(.lx51,.lx52) .dmP>.dxW .stage:has(>div[data-nofit]>svg){container-type:inline-size}html.bigScr body .card.lab .accB:not(.lfs) :is(.lx51,.lx52) .dmP>.dxW .stage>div[data-nofit]>svg[style*="--ar"]{height:min(calc(100vh - 290px),calc(100cqw * var(--ar)))!important}}</style>
 <script>/*sceneFit: نسبة كل مشهد من viewBox */(()=>{/*الشاشة الكبيرة = عرض الشاشة نفسها 1600 فأكثر (لا يتأثر بتكبير الصفحة)، فلابتوب 1920 بتكبير ويندوز 150% عرضه 1280 ولا يتغير */try{const bs=()=>document.documentElement.classList.toggle('bigScr',(screen.width||0)>=1600);bs();addEventListener('resize',bs)}catch(e){}const f=()=>document.querySelectorAll('.card.lab .dxW .stage>div[data-nofit]>svg').forEach(v=>{if(v.style.getPropertyValue('--ar'))return;const b=v.viewBox&&v.viewBox.baseVal;if(b&&b.width&&b.height)v.style.setProperty('--ar',String(b.height/b.width))});let t=0;new MutationObserver(()=>{if(t)return;t=setTimeout(()=>{t=0;f()},150)}).observe(document.documentElement,{childList:true,subtree:true});addEventListener('load',f)})();</script>
