@@ -589,13 +589,13 @@ function drawStudents2(){
       return `<tr class="${b?'lsTot':''}">${c.map((x,j)=>`<td class="${j?'':'ln'}">${b&&!j?'<b>'+x+'</b>':x}</td>`).join('')}</tr>`};
     secs.forEach(sec=>{mRows+=row(secName(sec.id),real.filter(s=>s.sectionId===sec.id))});mRows+=row('الكل',real,1);
   }else{
-    mHead=['#','الاسم','مرات الدخول','وقت الاستخدام','إنهاء الدروس','آخر دخول','الحالة'];mx=[mHead.slice(1)];
+    mHead=['م','الرقم التدريبي','الاسم','مرات الدخول','وقت الاستخدام','إنهاء الدروس','آخر دخول','الحالة'];mx=[mHead.slice(1)];
     const L=real.filter(s=>s.sectionId===GM).sort(by);
-    L.forEach((s,i)=>{mRows+=`<tr data-id="${esc(s.id)}"><td class="no">${AR(i+1)}</td><td class="ln"><a>${esc(s.name)}</a></td><td>${AR(s.loginCount||0)}</td><td>${fmtTime(s.totalSec)}</td><td><bdi dir="ltr">${AR(s.doneN||0)} / ${AR(TEACH_N)}</bdi></td><td>${lastD(s)}</td><td>${s.loginCount>0?'<span class="ok">دخل</span>':'<span class="md">لم يدخل</span>'}</td></tr>`;
-      mx.push([s.name,s.loginCount||0,Math.round((+s.totalSec||0)/60),s.doneN||0,lastD(s),s.loginCount>0?'دخل':'لم يدخل'])});
-    /*barTbl*/(DATA.barredSt||[]).filter(s=>s.sectionId===GM).sort(by).forEach(s=>{mRows+=`<tr class="barR" data-id="${esc(s.id)}"><td class="no">⛔</td><td class="ln">${esc(s.name)} <span class="barT">⛔ محروم</span></td><td>—</td><td>—</td><td>—</td><td>—</td><td><span class="barT">محروم</span></td></tr>`;mx.push([s.name,'','','','','محروم'])});
+    L.forEach((s,i)=>{mRows+=`<tr data-id="${esc(s.id)}"><td class="no">${AR(i+1)}</td><td class="tid" dir="ltr">${esc(s.id)}</td><td class="ln"><a>${esc(s.name)}</a></td><td>${AR(s.loginCount||0)}</td><td>${fmtTime(s.totalSec)}</td><td><bdi dir="ltr">${AR(s.doneN||0)} / ${AR(TEACH_N)}</bdi></td><td>${lastD(s)}</td><td>${s.loginCount>0?'<span class="ok">دخل</span>':'<span class="md">لم يدخل</span>'}</td></tr>`;
+      mx.push([s.id,s.name,s.loginCount||0,Math.round((+s.totalSec||0)/60),s.doneN||0,lastD(s),s.loginCount>0?'دخل':'لم يدخل'])});
+    /*barTbl*/(DATA.barredSt||[]).filter(s=>s.sectionId===GM).sort(by).forEach(s=>{mRows+=`<tr class="barR" data-id="${esc(s.id)}"><td class="no">⛔</td><td class="tid" dir="ltr">${esc(s.id)}</td><td class="ln">${esc(s.name)} <span class="barT">⛔ محروم</span></td><td>—</td><td>—</td><td>—</td><td>—</td><td><span class="barT">محروم</span></td></tr>`;mx.push([s.id,s.name,'','','','','محروم'])});
     const lc=avgK(L,'loginCount'),tv=L.length?L.reduce((a,s)=>a+(+s.totalSec||0),0)/L.length:0,dn=avgK(L,'doneN');
-    mRows+=`<tr class="lsTot"><td></td><td class="ln"><b>متوسط الشعبة</b></td><td>${n(lc)}</td><td>${fmtTime(tv)}</td><td>${dn==null?'—':'<bdi dir="ltr">'+AR(Math.round(dn))+' / '+AR(TEACH_N)+'</bdi>'}</td><td></td><td>${AR(L.filter(s=>s.loginCount>0).length)} من ${AR(L.length)}</td></tr>`;
+    mRows+=`<tr class="lsTot"><td></td><td></td><td class="ln"><b>متوسط الشعبة</b></td><td>${n(lc)}</td><td>${fmtTime(tv)}</td><td>${dn==null?'—':'<bdi dir="ltr">'+AR(Math.round(dn))+' / '+AR(TEACH_N)+'</bdi>'}</td><td></td><td>${AR(L.filter(s=>s.loginCount>0).length)} من ${AR(L.length)}</td></tr>`;
   }
   const ML=GM==='all'?real:real.filter(s=>s.sectionId===GM);
   const FU=[['لم يدخلوا المنصة',ML.filter(s=>!(s.loginCount>0))],['نقاطهم أقل من 60% من متوسط الشعبة',ML.filter(s=>s.loginCount>0&&col(s,'cw')==='md')]];
@@ -613,7 +613,7 @@ function drawStudents2(){
 </div>
   <div class="card"><h2>📈 مؤشرات المتدربين</h2><p class="sub">${GM==='all'?'صف لكل شعبة، وفي الآخر المجموع.':'صف لكل متدرب في الشعبة، وفي الآخر متوسطها.'}</p>
    <div class="lsF"><select id="gmS">${opt(GM)}</select></div>${sum}
-   <div class="tableWrap"><table class="lsT"><thead><tr>${mHead.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${mRows}</tbody></table></div>
+   ${(()=>{/*mxSec: المدرب 10 نوفمبر: جدول مؤشرات المتدربين بشكل جدول «نقاط مهام الدروس»: عنوان الشعبة وعددها وشريط من دخل */const ML0=GM==='all'?real:real.filter(s=>s.sectionId===GM),lg=ML0.filter(s=>s.loginCount>0).length;return `<div class="lsSec lsL ${GM==='all'?'lsOne':''}"><div class="lsSecH"><b>${GM==='all'?'كل الشعب':'شعبة '+esc(secName(GM))}</b><span>${AR(ML0.length)} متدربين</span><span class="lsPr">دخلوا المنصة <bdi dir="ltr">${AR(lg)} / ${AR(ML0.length)}</bdi><i class="secBar a"><i style="width:${ML0.length?lg/ML0.length*100:0}%"></i></i></span></div><div class="tableWrap"><table class="lsT"><thead><tr>${mHead.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${mRows}</tbody></table></div></div>`})()}
    <div class="row" style="margin-top:10px"><button class="btn ghost sm" id="mX">⬇ تصدير Excel</button></div></div>
   <div class="card" id="fuC"></div>`;fuDraw();
   $('#gsS').onchange=e=>{GS=e.target.value;ls.set('p101-gss',GS);drawStudents2()};
