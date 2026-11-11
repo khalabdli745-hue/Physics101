@@ -4604,5 +4604,48 @@ html body #view .card.lab:is(:has(#sbQ),:has(#sbR)) .accC.open>.accB>.ctl.res>.l
 <style>@media (hover:hover) and (pointer:fine){/*sceneFit: المدرب 10 نوفمبر: مشهد التجربة لا يتجاوز عرض إطاره (شاشات LED والبروجكتور): الارتفاع = الأصغر بين ارتفاع الشاشة وعرض الإطار × نسبة المشهد *//*sceneFit: المدرب 10 نوفمبر: مشهد التجربة لا يتجاوز عرض إطاره على الشاشات الكبيرة فقط (عرض 1600 فأكثر مثل شاشات LED)، واللابتوب كما كان حرفيا: الارتفاع = الأصغر بين ارتفاع الشاشة وعرض الإطار × نسبة المشهد */html.bigScr body .card.lab .accB:not(.lfs) :is(.lx51,.lx52) .dmP>.dxW .stage:has(>div[data-nofit]>svg){container-type:inline-size}html.bigScr body .card.lab .accB:not(.lfs) :is(.lx51,.lx52) .dmP>.dxW .stage>div[data-nofit]>svg[style*="--ar"]{height:min(calc(100vh - 290px),calc(100cqw * var(--ar)))!important}}</style>
 <script>/*sceneFit: نسبة كل مشهد من viewBox */(()=>{/*الشاشة الكبيرة = عرض الشاشة نفسها 1600 فأكثر (لا يتأثر بتكبير الصفحة)، فلابتوب 1920 بتكبير ويندوز 150% عرضه 1280 ولا يتغير */try{const bs=()=>document.documentElement.classList.toggle('bigScr',(screen.width||0)>=1600);bs();addEventListener('resize',bs)}catch(e){}const f=()=>document.querySelectorAll('.card.lab .dxW .stage>div[data-nofit]>svg').forEach(v=>{if(v.style.getPropertyValue('--ar'))return;const b=v.viewBox&&v.viewBox.baseVal;if(b&&b.width&&b.height)v.style.setProperty('--ar',String(b.height/b.width))});let t=0;new MutationObserver(()=>{if(t)return;t=setTimeout(()=>{t=0;f()},150)}).observe(document.documentElement,{childList:true,subtree:true});addEventListener('load',f)})();</script>
 <style id="crTeam">/*crTeam: المدرب 11 نوفمبر: على اللابتوب والشاشات الكبيرة فقط بطاقة «فكرة وإعداد وتطوير» بثلاثة أسطر: العنوان، ثم أ/ خليل المالكي، ثم أ/ عاصم الناصر و أ/ أحمد الأسمري جنبا إلى جنب، والأسماء الثلاثة بحجم خط واحد. الجوال كما كان حرفيا */html body .credit .crD,html body .credit .crT{display:none!important}@media (min-width:1000px) and (hover:hover) and (pointer:fine){html body .credit .crM{display:none!important}html body .credit .crD{display:inline!important}html body .credit .crT{display:flex!important;justify-content:center;align-items:center;gap:4px 26px;flex-wrap:wrap;margin-top:2px}html body .credit .crT>i{font-style:normal;font-weight:800;white-space:nowrap;background:linear-gradient(180deg,#ffe7b8,#e8a048);-webkit-background-clip:text;background-clip:text;color:transparent!important}html body div.loginWrap form.loginBox.loginBox .credit>b,html body .credit .crT>i{font-size:18px!important;line-height:1.5!important;margin-top:2px!important}html body div.loginWrap form.loginBox.loginBox[data-pg="f"] .credit>b,html body div.loginWrap form.loginBox.loginBox[data-pg="f"] .credit .crT>i{font-size:15px!important}}</style>
+<style id="lgPhone">/*lgPhone: المدرب 11 نوفمبر: واجهات الدخول على الجوال بألوان اللابتوب (كحلي وذهبي) بنفس قالب الجوال؛ والمحتوى بين النوتش في الأعلى وشريط المتصفح في الأسفل، وما فوقهما وتحتهما خلفية فارغة؛ و«عن المنصة» و«اقرأ المزيد» و«سياسة الخصوصية» أسفل الصفحة فوق الشريط؛ وبطاقة «تجربة المنصة» مربعة بحجم البطاقتين */
+@media (max-width:600px),(hover:none) and (max-height:600px){
+html body div#loginWrap.loginWrap{background:#081426!important;background-image:none!important}
+html body div#loginWrap.loginWrap form.loginBox.loginBox{color:#e9eef7!important;background:radial-gradient(520px 360px at 80% 8%,rgba(56,120,210,.30),transparent 65%),radial-gradient(420px 320px at 10% 100%,rgba(232,160,72,.14),transparent 70%),linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px) 0 0/28px 28px,linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px) 0 0/28px 28px,linear-gradient(170deg,#0b1d36,#081426 70%)!important;border-color:transparent!important;box-shadow:none!important}
+html body div#loginWrap.loginWrap form.loginBox.loginBox::before,html body div#loginWrap.loginWrap form.loginBox.loginBox::after{background-color:transparent!important;opacity:.0!important}
+html body div#loginWrap.loginWrap form.loginBox.loginBox .lgLogo{filter:drop-shadow(0 0 22px rgba(77,163,255,.5)) drop-shadow(0 14px 20px rgba(0,0,0,.45))!important}
+html body div#loginWrap.loginWrap form.loginBox.loginBox .lgApp{color:#f2c27a!important}
+html body div#loginWrap.loginWrap form.loginBox.loginBox h1.tJ{color:#fff!important}
+html body div#loginWrap.loginWrap form.loginBox.loginBox h1.tJ .n101{background:linear-gradient(180deg,#ffe3ad,#e8a048);-webkit-background-clip:text;background-clip:text;color:transparent!important}
+html body div#loginWrap.loginWrap form.loginBox.loginBox .lgBack{background:rgba(255,255,255,.08)!important;color:#f2c27a!important;border-color:rgba(242,194,122,.45)!important;box-shadow:none!important}
+html body div#loginWrap.loginWrap form.loginBox.loginBox .lgTl{--c1:#3b8fe0;--c2:#7cc4ff;background:radial-gradient(90px 70px at 50% 30%,color-mix(in srgb,var(--c1) 38%,transparent),transparent 75%),linear-gradient(165deg,rgba(255,255,255,.11),rgba(255,255,255,.03))!important;border-color:rgba(255,255,255,.14)!important;color:#fff!important;box-shadow:0 14px 30px -16px rgba(0,0,0,.8),inset 0 3px 0 var(--c1)!important}
+html body div#loginWrap.loginWrap form.loginBox.loginBox .lgTl *{color:#fff!important}
+html body div#loginWrap.loginWrap form.loginBox.loginBox .lgTl:is([data-r="G-t"],[data-r="t"]){--c1:#3b8fe0}
+html body div#loginWrap.loginWrap form.loginBox.loginBox .lgTl:is([data-r="G-s"],[data-r="s"]){--c1:#17a58f}
+html body div#loginWrap.loginWrap form.loginBox.loginBox .lgTl:is([data-r="e"],[data-r="te"]){--c1:#8b5cf6}
+html body div#loginWrap.loginWrap form.loginBox.loginBox .lgTl[data-r="g"]{--c1:#e8a048}
+html body div#loginWrap.loginWrap form.loginBox.loginBox .credit{background:linear-gradient(135deg,rgba(242,194,122,.13),rgba(232,160,72,.04))!important;border-color:rgba(242,194,122,.45)!important;box-shadow:0 12px 26px -16px rgba(0,0,0,.8)!important}
+html body div#loginWrap.loginWrap form.loginBox.loginBox .credit .crL{color:#cdb88f!important}
+html body div#loginWrap.loginWrap form.loginBox.loginBox .credit b{background:linear-gradient(180deg,#ffe7b8,#e8a048);-webkit-background-clip:text;background-clip:text;color:transparent!important}
+html body div#loginWrap.loginWrap form.loginBox.loginBox :is(p,div,small,label,.lgL){color:#b9c7db!important}
+html body div#loginWrap.loginWrap form.loginBox.loginBox :is(h2,h3,strong,summary,.lgHd span){color:#fff!important}
+html body div#loginWrap.loginWrap form.loginBox.loginBox a,html body div#loginWrap.loginWrap form.loginBox.loginBox summary,html body div#loginWrap.loginWrap form.loginBox.loginBox .linkBtn{color:#f2c27a!important}
+html body div#loginWrap.loginWrap form.loginBox.loginBox hr,html body div#loginWrap.loginWrap form.loginBox.loginBox .lgAbout{border-color:rgba(255,255,255,.12)!important}
+html body div#loginWrap.loginWrap form.loginBox.loginBox input:not([type=checkbox]){background:rgba(255,255,255,.07)!important;border-color:rgba(255,255,255,.18)!important;color:#fff!important;box-shadow:none!important}
+html body div#loginWrap.loginWrap form.loginBox.loginBox input:not([type=checkbox])::placeholder{color:#9fb0c8!important}
+html body div#loginWrap.loginWrap form.loginBox.loginBox input:not([type=checkbox]):focus{border-color:#f2c27a!important}
+html body div#loginWrap.loginWrap form.loginBox.loginBox input[type=checkbox]{accent-color:#e8a048!important}
+html body div#loginWrap.loginWrap form.loginBox.loginBox :is(button[type=submit],.lgBtn,#lgBtn){background:linear-gradient(180deg,#f6cf8c,#e39a3e)!important;color:#291a04!important;border:0!important}
+html body div#loginWrap.loginWrap form.loginBox.loginBox :is(button[type=submit],.lgBtn,#lgBtn) *{color:#291a04!important}
+html body div#loginWrap.loginWrap form.loginBox.loginBox .lgHd i{background-color:#fff!important}
+html body div#loginWrap.loginWrap form.loginBox.loginBox svg{color:inherit}
+}
+@media (max-width:600px) and (orientation:portrait){
+html body div#loginWrap.loginWrap form.loginBox.loginBox{padding-top:calc((var(--sat,env(safe-area-inset-top,0px)) + 10px) / var(--lgz,1))!important;padding-bottom:calc(max(calc(var(--sab,env(safe-area-inset-bottom,0px)) + 64px),92px) / var(--lgz,1))!important;box-sizing:border-box!important;display:flex!important;flex-direction:column!important;align-items:stretch!important}
+html body div#loginWrap.loginWrap form.loginBox.loginBox>*{flex:none!important}
+html body div#loginWrap.loginWrap form.loginBox.loginBox>.lgAbout{margin-top:auto!important}
+html body div#loginWrap.loginWrap form.loginBox.loginBox>.credit{margin-bottom:10px!important}
+}
+@media (max-width:600px) and (orientation:portrait){
+html body div#loginWrap.loginWrap form.loginBox.loginBox #lgPt .lgTls>.lgTl:nth-child(3){width:var(--tw)!important;min-width:0!important;max-width:none!important;justify-self:center!important;margin-inline:auto!important}
+}
+</style>
+<script id="lgPhoneJs">/*lgPhone: عند فتح صفحة دخول جديدة على الجوال يعاد ضبط الحجم (كانت خانة الإدخال المركزة تمنع إعادة الضبط فتنزل البطاقة تحت الشريط) */(function(){var R=document.documentElement,B=document.querySelector('#loginWrap .loginBox');if(!B)return;new MutationObserver(function(){if(innerWidth<=600)R.style.removeProperty('--lgz')}).observe(B,{attributes:true,attributeFilter:['data-pg']});})();</script>
 </body>
 </html>
