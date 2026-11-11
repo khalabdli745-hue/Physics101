@@ -241,6 +241,17 @@ html body #main .exStats .exStat h4{margin:0;font-size:14px}
 /*tblUni: المدرب 10 نوفمبر: كل جداول اللوحة بشكل جدول «نقاط مهام الدروس» بلا تمرير داخلي */html body #main .lsSec.lsAuto table.lsT{table-layout:auto!important}html body #main .lsSec.lsAuto table.lsT thead th{white-space:normal!important}html body #main .lsSec.lsAuto .tableWrap{max-height:none!important;overflow:visible}@media (max-width:760px){html body #main .lsSec.lsAuto .tableWrap{overflow-x:auto}}html body #main .lsSec.lsAuto{margin-top:8px}
 /*durSel*/.durF select{flex:1 1 0;min-width:0}.durF{margin:6px 0 4px}a.durU{cursor:pointer;font-weight:800;color:var(--accent)}
 /* cpcGap11: المدرب 11 نوفمبر: في الجوال مسافة بين زر «حفظ» وخانة رمز التأكيد */@media (max-width:600px){#cpcR{margin-top:12px}}
+</style><style id="tTiles12">/* tTiles12: المدرب 12 نوفمبر: بطاقات لوحة المدرب في الجوال والآيباد: خط مناسب للبطاقة، بلا قص ولا تداخل (اللابتوب كما هو) */
+@media not all and (min-width:1000px) and (hover:hover) and (pointer:fine){
+#setTiles{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}
+#setTiles>button{min-height:0!important;height:auto!important;padding:14px 14px!important;gap:10px!important;justify-content:flex-start!important;overflow:hidden}
+#setTiles>button>b{font-size:16px!important;line-height:1.45!important;white-space:normal!important;overflow-wrap:anywhere}
+#setTiles .stL{gap:8px!important;overflow:visible!important}
+#setTiles .stL i{font-style:normal!important;flex:0 0 auto!important;height:auto!important;min-height:0!important;padding:8px 10px!important;display:flex!important;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:2px 8px}
+#setTiles .stL i b{font-size:14px!important;white-space:normal!important;font-style:normal!important}
+#setTiles .stL i em{font-size:13px!important;line-height:1.4!important;white-space:normal!important;font-style:normal!important;text-align:start!important;margin-inline-start:auto;color:color-mix(in srgb,var(--ink) 62%,transparent)!important}
+}
+@media (max-width:600px){#setTiles{grid-template-columns:1fr!important}#setTiles>button>b{font-size:17px!important}#setTiles .stL i b{font-size:15px!important}#setTiles .stL i em{font-size:14px!important}}
 </style>
 <style>
 /* 65: لوحة المدرب بنفس هوية المنصة: شريط أزرق، بطاقات مستطيلة بدرجتين، أيقونات مجسمة */
