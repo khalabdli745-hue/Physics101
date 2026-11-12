@@ -6550,6 +6550,7 @@ function labDarkWires(c){let t=0;const go=()=>{t=0;labHalo(c)};go();
   try{new MutationObserver(()=>{if(!t)t=requestAnimationFrame(go)}).observe(c,{childList:true,subtree:true})}catch(e){}}
 /* مشهد «شاهد» تلقائي للتجارب التي ليس لها مشهد: يأخذ صورة كل خطوة قياس من رسمها نفسه بعد تحريك مؤشرها إلى النهاية، ثم يعيد المؤشرات كما كانت */
 /*sweep02: يجد أول قيمة يتحقق عندها الشرط: يقفز بخطوات كبيرة (حتى 400 قفزة) ثم يرجع بالخطوة الدقيقة داخل آخر قفزة، والنتيجة نفسها */function sweepHit(r,mn,mx,sp,ok,fire){const set=v=>{r.value=v;fire(r)};const n=Math.round((mx-mn)/sp);if(n<=400){for(let i=0;i<=n;i++){const v=+(mn+i*sp).toFixed(6);set(v);if(ok())return v}return null}const K=Math.ceil(n/400);let prev=0;for(let i=0;i<=n+K;i+=K){const j=Math.min(i,n),v=+(mn+j*sp).toFixed(6);set(v);if(ok()){for(let q=prev;q<=j;q++){const w=+(mn+q*sp).toFixed(6);set(w);if(ok())return w}return v}prev=j+1;if(j===n)break}return null}
+/*sweepG13: المدرب 12 نوفمبر: الدالة متاحة لمشغل «نفذ» أيضا (كانت تعطل تجربة التحويل بين الوحدات عند تحريك المؤشر تلقائيا)*/try{window.sweepHit=sweepHit}catch(e){}
 function autoWatch(body){if(!body||body.querySelector('details.wsDet'))return;
   const ctls=[...body.querySelectorAll('.ctl')].filter(c=>!c.classList.contains('res')&&!/الحسابات/.test((c.querySelector('h3')||{}).textContent||'')&&c.querySelector('input[type=range]'));if(!ctls.length)return;
   const steps=[];ctls.forEach(c=>{let head=(c.querySelector('h3')||{}).textContent||'',cur=null;
@@ -6845,7 +6846,7 @@ function DX(cfg){return function(){
     const fire=r=>{r.dispatchEvent(new Event('input',{bubbles:true}));r.dispatchEvent(new Event('change',{bubbles:true}))};
     const hudT=()=>{const h=cur&&cur.querySelector('.hud');return h?h.textContent.trim():''};
     const hitOf=(r,t)=>{if(typeof t==='number')return t;if(t==='max')return +(r.max||100);const v0=r.value,mn=+(r.min||0),mx=+(r.max||100),sp=+(r.step||1)||1;let hit=null;
-      hit=sweepHit(r,mn,mx,sp,()=>(typeof t==='function'?t():/^✓/.test(hudT())),fire);r.value=v0;fire(r);return hit==null?mx:hit};
+      hit=window.sweepHit(r,mn,mx,sp,()=>(typeof t==='function'?t():/^✓/.test(hudT())),fire);r.value=v0;fire(r);return hit==null?mx:hit};
     const frame=async()=>{await new Promise(z=>requestAnimationFrame(z));await sleep(60)};
     const mvEls=()=>[...E('dmS').querySelectorAll('*')].filter(e=>!e.closest('defs,marker,clipPath,mask,.hud,.dxEmpty')&&!/^(g|svg|tspan|title|stop|linearGradient|radialGradient|DIV|SPAN|B|BR|P|SMALL|I|BUTTON|INPUT|LABEL)$/i.test(e.tagName));
     const mvPos=()=>{const b=SW.getBoundingClientRect();return mvEls().map(e=>{const r=e.getBoundingClientRect();return [e.tagName,r.left-b.left+r.width/2,r.top-b.top+r.height/2,r.width,r.height]})};
