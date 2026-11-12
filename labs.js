@@ -4831,7 +4831,7 @@ function svg(p){let g='';
   g+=`<image href="dv/49-digital-multimeter.webp" x="404" y="276" width="74" height="106.4" preserveAspectRatio="none"/><text id="${p}D" x="441.0" y="306.0" font-size="14" font-weight="800" text-anchor="middle" fill="#111827" font-family="Consolas,monospace" direction="ltr">0.00</text><rect id="${p}Mb" x="449.9" y="311.6" width="24" height="11" rx="5.5" fill="#334155"/><text id="${p}Mt" x="461.9" y="319.9" font-size="7.5" font-weight="900" text-anchor="middle" fill="#fff" direction="ltr">OFF</text>`;
   g+=`<g id="${p}Leads"></g><g id="${p}Tags"></g>`;
   g+=[0,1,2,3,4,5].map(n=>{const [x,y]=PT(n);return `<g class="pt" data-p="${n}"><circle class="h" cx="${F3(x)}" cy="${F3(y)}" r="10" style="opacity:0"/><circle cx="${F3(x)}" cy="${F3(y)}" r="4.6" fill="none" stroke="#F7931E" stroke-width="1.8"/></g>`}).join('');
-  return `<svg viewBox="-112 150 655 300" aria-label="ثلاثة مكثفات على التوازي في لوحة التوصيل، ومصدر الجهد المستمر وجهاز الملتيميتر الرقمي">${g}</svg>`}
+  return `<svg data-nofit="1" viewBox="-112 150 655 300" aria-label="ثلاثة مكثفات على التوازي في لوحة التوصيل، ومصدر الجهد المستمر وجهاز الملتيميتر الرقمي">${g}</svg>`}
 /* المجس يلمس الساق، وسلكه منحن إلى منفذ الجهاز */
 const lead=(red,jk,n)=>{const tip=PT(n),j=JK[jk],ax=red?14:-10,ay=-46,L=Math.hypot(ax,ay),ux=ax/L,uy=ay/L,nx=-uy,ny=ux,A=(s,w)=>[tip[0]+ux*s+nx*w,tip[1]+uy*s+ny*w];
   const seg=(s0,w0,s1,w1,f)=>`<polygon points="${P3(A(s0,-w0),A(s1,-w1),A(s1,w1),A(s0,w0))}" fill="${f}" stroke="#1F2937" stroke-width=".7" stroke-linejoin="round"/>`,c=red?'#DC2626':'#111827',top=A(52,0);
@@ -7223,7 +7223,7 @@ DIR['3-3']=DX({steps:[
 try{
 /* 3-4 قياس فرق الجهد في مجال كهربائي منتظم (pdLab) */
 const agCss=()=>{if(document.getElementById('agGcss'))return;const st=document.createElement('style');st.id='agGcss';st.textContent='.agGx #dmS .amLog,.agGx #dmV .amLog,.agGx #dmS .pdAns,.agGx #dmV .pdAns,.agGx #dmS .btns,.agGx #dmV .btns,.agGx #dmS .fb2,.agGx #dmV .fb2,.agGx #dmV p,.agGx #dmV .row,.agGx #dmV .msg,.agGx #dmV .wsc>h4{display:none!important}';document.head.appendChild(st)};
-const agAt=(svg,x,y)=>{const p=svg.createSVGPoint();p.x=x;p.y=y;const q=p.matrixTransform(svg.getScreenCTM()),S=document.getElementById('dmSW'),b=S.getBoundingClientRect();return [(q.x-b.left)/S.clientWidth,(q.y-b.top)/S.clientHeight]};
+/*agPt12: المدرب 12 نوفمبر: نقطة DOMPoint لأن تكبير اللابتوب يعيد DOMMatrix فيتعطل ضبط جهد المصدر*/const agAt=(svg,x,y)=>{const q=new DOMPoint(x,y).matrixTransform(svg.getScreenCTM()),S=document.getElementById('dmSW'),b=S.getBoundingClientRect();return [(q.x-b.left)/S.clientWidth,(q.y-b.top)/S.clientHeight]};
 const agFlash=(H,i)=>setTimeout(()=>{const tr=H.box.querySelectorAll('#logB tbody tr')[i];if(!tr)return;const td=[...tr.querySelectorAll('td')];td.forEach(c=>c.style.cssText='background:#F7931E;color:#fff;font-weight:900;animation:dmBl .45s 3');setTimeout(()=>td.forEach(c=>c.style.cssText=''),1800)},1250);
 LXD['3-4']={aim:'الهدف من التجربة قياس الجهد عند نقاط مختلفة بين قطبين متوازيين على ورقة موصلة بجهاز الملتيميتر الرقمي، وحساب شدة المجال الكهربائي المنتظم من العلاقة <span dir="ltr">E = ΔV / d</span>، وتحديد خط تساوي الجهد.'};
 {const CARD=()=>{const l=document.getElementById('ptLead');return l&&l.closest('.wsc').parentElement};
@@ -7264,7 +7264,7 @@ DIR['3-5']=DX({steps:[
 try{
 /* 3-6 السعة المكافئة لمكثفات على التوازي (parLab) */
 const agCss=()=>{if(document.getElementById('agGcss'))return;const st=document.createElement('style');st.id='agGcss';st.textContent='.agGx #dmS .amLog,.agGx #dmV .amLog,.agGx #dmS .pdAns,.agGx #dmV .pdAns,.agGx #dmS .btns,.agGx #dmV .btns,.agGx #dmS .fb2,.agGx #dmV .fb2,.agGx #dmV p,.agGx #dmV .row,.agGx #dmV .msg,.agGx #dmV .wsc>h4{display:none!important}';document.head.appendChild(st)};
-const agAt=(svg,x,y)=>{const p=svg.createSVGPoint();p.x=x;p.y=y;const q=p.matrixTransform(svg.getScreenCTM()),S=document.getElementById('dmSW'),b=S.getBoundingClientRect();return [(q.x-b.left)/S.clientWidth,(q.y-b.top)/S.clientHeight]};
+/*agPt12: المدرب 12 نوفمبر: نقطة DOMPoint لأن تكبير اللابتوب يعيد DOMMatrix فيتعطل ضبط جهد المصدر*/const agAt=(svg,x,y)=>{const q=new DOMPoint(x,y).matrixTransform(svg.getScreenCTM()),S=document.getElementById('dmSW'),b=S.getBoundingClientRect();return [(q.x-b.left)/S.clientWidth,(q.y-b.top)/S.clientHeight]};
 const agFlash=(H,i)=>setTimeout(()=>{const tr=H.box.querySelectorAll('#logB tbody tr')[i];if(!tr)return;const td=[...tr.querySelectorAll('td')];td.forEach(c=>c.style.cssText='background:#F7931E;color:#fff;font-weight:900;animation:dmBl .45s 3');setTimeout(()=>td.forEach(c=>c.style.cssText=''),1800)},1250);
 LXD['3-6']={aim:'الهدف من التجربة قياس الجهد على كل مكثف من ثلاثة مكثفات موصلة على التوازي بجهاز الملتيميتر الرقمي، ثم حساب شحنة كل مكثف والشحنة الكلية والسعة المكافئة، ومقارنتها بمجموع السعات <span dir="ltr">C = C₁ + C₂ + C₃</span>.'};
 {const CARD=()=>{const l=document.getElementById('ctLeads');return l&&l.closest('.wsc').parentElement};
