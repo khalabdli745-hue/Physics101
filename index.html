@@ -3724,7 +3724,7 @@ function gbtn(){let g=document.getElementById('gBar');const st=gst(),on=st==='1'
  const bx=g.querySelector('.gBx');if(bx)bx.onclick=()=>{try{sessionStorage.removeItem('p101-pguide')}catch(e){}gbtn()}}
 setInterval(gbtn,1500);
 function close(){all=false;const d=document.getElementById('pendDlg');if(d)d.hidden=true}
-window.pendUI=function(){chip();try{if(typeof AUTH==='undefined'||!AUTH||AUTH.exam)return;/* المدرب 7 نوفمبر: بطاقات الترحيب والتذكير والتشجيع والشكر للمتدربين فقط، لا للحساب التجريبي ولا لدخول المدرب */if(AUTH.demo||(typeof TAUTH!=='undefined'&&TAUTH))return;const id=AUTH.id||'',day=new Date().toDateString()+'|'+id,LS=localStorage;
+window.pendUI=function(){chip();try{if(typeof AUTH==='undefined'||!AUTH||AUTH.exam)return;/* المدرب 7 نوفمبر: بطاقات الترحيب والتذكير والتشجيع والشكر للمتدربين فقط، لا للحساب التجريبي ولا لدخول المدرب *//*dWelc12: المدرب 12 نوفمبر: حساب التجربة يرى بطاقة الترحيب الزرقاء فقط، مرة في كل دخول جديد*/if(AUTH.demo){try{if(localStorage.getItem('p101-dwelc')!==String(AUTH.token)){localStorage.setItem('p101-dwelc',String(AUTH.token));setTimeout(()=>open('w'),600)}}catch(e){}return}if(AUTH.demo||(typeof TAUTH!=='undefined'&&TAUTH))return;const id=AUTH.id||'',day=new Date().toDateString()+'|'+id,LS=localStorage;
  const fresh=(typeof done==='undefined'||!done.size)&&!Object.keys(window.__BEST||{}).length;
  if(fresh&&!LS.getItem('p101-welc|'+id)){LS.setItem('p101-welc|'+id,'1');LS.setItem('p101-pendday',day);return setTimeout(()=>open('w'),600)}
  if(cnt()){if(LS.getItem('p101-pendday')===day)return;LS.setItem('p101-pendday',day);return setTimeout(()=>open(kind()),600)}
