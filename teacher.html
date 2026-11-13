@@ -374,7 +374,17 @@ tbody tr:hover{background:none}
 .loginWrap #prl{color:#64748b}
 
 </style>
-<style>/* 75: خط Readex Pro */body,button,input,select,textarea,table,th,td{font-family:'Readex Pro',Tahoma,'Segoe UI',Arial,sans-serif}</style></head>
+<style>/* 75: خط Readex Pro */body,button,input,select,textarea,table,th,td{font-family:'Readex Pro',Tahoma,'Segoe UI',Arial,sans-serif}</style><script>/*bigScr13: المدرب 13 نوفمبر: الشاشة العريضة بلا فأرة (لابتوب لمس، تلفزيون، شاشة القاعة) تأخذ تنسيق اللابتوب المعتمد. الجوال والآيباد والتابلت كما هم، واللابتوب العادي لا يتغير*/(function(){try{var ua=navigator.userAgent||'',mt=navigator.maxTouchPoints||0;
+var tab=/iPad|iPhone|iPod/.test(ua)||(/Macintosh/.test(ua)&&mt>0)||(/Android/.test(ua)&&mt>0&&!/\bTV\b|AFT|BRAVIA|SmartTV|SMART-TV|GoogleTV/i.test(ua))||/Mobile/.test(ua);
+if(tab||window.matchMedia('(hover:hover) and (pointer:fine)').matches)return;
+window.__BIG=1;document.documentElement.classList.add('bigScr');
+var fix=function(q){return String(q).replace(/\(\s*hover\s*:\s*hover\s*\)/g,'(min-width: 0px)').replace(/\(\s*pointer\s*:\s*fine\s*\)/g,'(min-width: 0px)').replace(/\(\s*hover\s*:\s*none\s*\)/g,'(max-width: 0px)').replace(/\(\s*pointer\s*:\s*coarse\s*\)/g,'(max-width: 0px)')};
+var mm=window.matchMedia.bind(window);window.matchMedia=function(q){return mm(fix(q))};
+var done=new WeakSet();var walk=function(rs){for(var i=0;i<rs.length;i++){var r=rs[i];if(r.media&&r.cssRules){var t=r.media.mediaText,n=fix(t);if(n!==t){try{r.media.mediaText=n}catch(e){}}}if(r.cssRules)walk(r.cssRules)}};
+var run=function(){for(var i=0;i<document.styleSheets.length;i++){var s=document.styleSheets[i];if(done.has(s))continue;try{walk(s.cssRules);done.add(s)}catch(e){}}};
+run();document.addEventListener('DOMContentLoaded',run);window.addEventListener('load',run);
+new MutationObserver(function(ms){for(var i=0;i<ms.length;i++){var a=ms[i].addedNodes;for(var j=0;j<a.length;j++){var n=a[j];if(n.nodeName==='STYLE'||n.nodeName==='LINK'){setTimeout(run,0);return}}}}).observe(document.documentElement,{childList:true,subtree:true});
+}catch(e){}})();</script><style id="tabs13">/*tabs13: المدرب 13 نوفمبر: تبويبات لوحة المدرب الست في سطر واحد على الآيباد الطولي (كانت خمسة وواحد في سطر ثان)*/@media (min-width:601px) and (max-width:999px){html body .tabs{grid-template-columns:repeat(6,minmax(0,1fr))!important}}</style></head>
 <body>
 <div id="root"></div>
 <script>/* جلسة المدرب تنتهي بعد ساعة بلا استخدام */(function(){try{var K='p101-tlast',n=Date.now(),l=+localStorage.getItem(K)||0;if(localStorage.getItem('p101-tauth')&&l&&n-l>36e5)localStorage.removeItem('p101-tauth');localStorage.setItem(K,n)}catch(e){}})();</script>
