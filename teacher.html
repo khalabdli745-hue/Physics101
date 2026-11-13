@@ -900,8 +900,8 @@ async function drawStats(){
 
 
 /* ---------- تقييم المتدربين للمنصة ---------- */
-const SV_ITEMS=['محتوى الدروس واضح ومنظم','الشرح على السبورة مع المدرب الذكي ساعدني على الفهم','الصوت ونطق المصطلحات واضح','المراجع العلمية في المنصة مفيدة','الأمثلة المحلولة واضحة ومفيدة','خطوات الحل ساعدتني على حل المسائل','الآلة الحاسبة العلمية سهلة الاستخدام','التمارين التفاعلية مناسبة لمستواي','أسئلة الاختبارات مرتبطة بمحتوى الدروس','مستوى صعوبة الاختبارات مناسب','التصحيح الفوري وشرح الإجابة مفيد','المنصة سهلة الاستخدام على الجوال','المنصة ساعدتني على فهم مقرر الفيزياء','أنصح زملائي باستخدام المنصة'];
-const SV_GROUPS=[['الدروس والشرح',0,4],['الأمثلة والتمارين',4,8],['الاختبارات',8,11],['المنصة بشكل عام',11,14]];
+const SV_ITEMS=['محتوى الدروس واضح ومنظم','الشرح على السبورة مع المدرب الذكي ساعدني على الفهم','الصوت ونطق المصطلحات واضح','المراجع العلمية في المنصة مفيدة','الأمثلة المحلولة واضحة ومفيدة','خطوات الحل ساعدتني على حل المسائل','الآلة الحاسبة العلمية سهلة الاستخدام','التمارين التفاعلية مناسبة لمستواي','أسئلة الاختبارات مرتبطة بمحتوى الدروس','مستوى صعوبة الاختبارات مناسب','التصحيح الفوري وشرح الإجابة مفيد','المنصة سهلة الاستخدام على الجوال','المنصة ساعدتني على فهم مقرر الفيزياء','أنصح زملائي باستخدام المنصة',/*svLab13: محور التجارب في آخر الاستبانة*/'التجارب ساعدتني على فهم الدرس','شاهد التجربة وضح خطوات التنفيذ','تنفيذ التجربة وتسجيل القراءات سهل','أجهزة التجارب ورسومها واضحة وواقعية'];
+const SV_GROUPS=[['الدروس والشرح',0,4],['الأمثلة والتمارين',4,8],['الاختبارات',8,11],['المنصة بشكل عام',11,14],['التجارب العملية التفاعلية',14,18]];
 const RT_STAGE={board:'شرح الدرس',ex:'الأمثلة والتمارين',quiz:'الدرس كاملا (بعد الاختبار)',lab:'التجارب العملية التفاعلية'};
 const P5=v=>v==null?null:Math.round(v/5*100);
 const rbar=(lab,val,max,cls,txt)=>`<div class="bar"><span class="lab" title="${esc(lab)}">${esc(lab)}</span><span class="trk"><span class="fil ${cls||''}" style="width:${max?Math.max(1,val/max*100):0}%;display:block"></span></span><span class="val">${txt!=null?txt:val}</span></div>`;
@@ -955,7 +955,7 @@ async function drawRatings(){
     if(x.level){L.lv++;if(/صعب/.test(x.level))L.hard++}String(x.tags||'').split('،').map(t=>t.trim()).filter(Boolean).forEach(t=>L.tags[t]=(L.tags[t]||0)+1);if(x.note)L.notes.push(x)});
   const lessons=Object.values(byL).map(L=>({...L,pb:P5(avg(L.board)),pe:P5(avg(L.ex)),pq:P5(avg(L.quiz)),pl:P5(avg(L.lab)),pa:P5(avg([...L.board,...L.ex,...L.quiz,...L.lab])),n:L.board.length+L.ex.length+L.quiz.length+L.lab.length})).sort((a,b)=>a.pa-b.pa);
   const low=lessons.filter(L=>L.pa!=null&&L.pa<60);
-  const items=SV_ITEMS.map((t,i)=>({t,p:P5(avg(S.map(x=>x.answers[i]).filter(v=>v>0))),agree:S.length?Math.round(S.filter(x=>x.answers[i]>=4).length/S.length*100):null}));
+  const items=SV_ITEMS.map((t,i)=>({t,p:P5(avg(S.map(x=>x.answers[i]).filter(v=>v>0))),agree:(()=>{/*svLab13b: نسبة الموافقين من الذين أجابوا العبارة فقط (الاستبانات القديمة بلا محور التجارب)*/const A=S.filter(x=>x.answers[i]>0);return A.length?Math.round(A.filter(x=>x.answers[i]>=4).length/A.length*100):null})()}));
   const gp=SV_GROUPS.map(([g,a,b])=>({g,p:P5(avg(S.flatMap(x=>x.answers.slice(a,b)).filter(v=>v>0)))}));
   const notes=R.filter(x=>x.note).sort((a,b)=>b.time.localeCompare(a.time));
   m.innerHTML=`<div class="rp-ctl" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px"><select id="rtf">${opts}</select><button class="btn ghost" id="rtr">↻ تحديث</button><button class="btn" id="rtx">⬇️ تصدير Excel</button></div>
