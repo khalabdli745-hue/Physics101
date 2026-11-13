@@ -13,3 +13,11 @@ o[o.length-1]=Object.assign({},prev,{t:pt+' '+w+' '+nx.t});i++;
 // سلسلة: إن كان بعدها رابط آخر ثم إنجليزي يكمل الدمج في الدورة التالية
 }else o.push(x)}
 return o}catch(e){return segs}};
+/*nisba13: المدرب 13 نوفمبر: طريقة كولوم لكل الدروس (كولوم لا يمس): ياء النسب المشددة في آخر الجملة «يَّهْ» تكتب لحامد ياءين صريحتين «يْيَهْ» (مثل الكهروستاتيكيْيَة)، و«الجَاوْسِي» ← «الجَاوِسِي» حتى لا يختصر الألف. لحامد فقط والمكتوب كما هو*/
+window.NB13=function(segs){try{if(typeof pos==='undefined'||!Array.isArray(segs))return segs;if(key(pos.u,pos.l)==='3-1')return segs;
+return segs.map(x=>{if(!x||x.l!=='ar'||typeof x.t!=='string')return x;const t=x.t.replace(/يَّهْ/g,'يْيَهْ').replace(/جَاوْسِيُّ،\s*وَالْبِرِيطَانِيِّ/g,'جَاوِسِيِّ، وَالْبِرِيطَانِيِّ').replace(/جَاوْسِ/g,'جَاوِسِ').replace(/هَايْت/g,'هَايِت').replace(/(^|\s)(فِي|عَنْ|عَنِ|عَلَى|عَلَا|مِنْ|مِنَ|إِلَى):/g,'$1$2');return t===x.t?x:Object.assign({},x,{t})})}catch(e){return segs}};
+/*tbl13: المدرب 13 نوفمبر: الجداول بطريقة كولوم في كل الدروس والأجهزة: حامد لا يقرأ صفوف الجدول، يقول جملة واحدة كما في 3-6 و4-8، والجدول يبقى مكتوبا كاملا على السبورة*/
+window.TB13=function(segs){try{if(typeof pos==='undefined'||!Array.isArray(segs)||!segs.length)return segs;if(key(pos.u,pos.l)==='3-1')return segs;const a=segs[0];if(!a||a.l!=='ar')return segs;const d=String(a.t).replace(/[ً-ْٰ]/g,'');if(/^\s*لننظر إلى هذا الجدول ونقرأه معا/.test(d))return [Object.assign({},a,{l:'ar',t:'لِنَنْظُرْ إِلَى هَذَا الْجَدْوَلِ، وَتَأَمَّلْ صُفُوفَهُ مَعِي.'})];return segs}catch(e){return segs}};
+
+/*enJoin13b: المدرب 13 نوفمبر 13:48: دمج كلمات الربط بالإنجليزي في كل الدروس (كولوم مستثنى داخل EJ13)، والنقطتان بعد حرف الجر القصير وفهرنهايت في NB13*/
+window.EJ13ON['*']=1;
