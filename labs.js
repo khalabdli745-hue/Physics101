@@ -7304,7 +7304,7 @@ const agFlash=(H,i,d)=>setTimeout(()=>{const tr=H.box.querySelectorAll('#logB tb
  const SV=H=>H.q('dmS').querySelector('svg');
  /* المدرب 2 نوفمبر: تكبير الجزء المهم في كل خطوة، وبطاقة القراءة على الجهاز داخل المشهد (مثل 4-5 و4-8) */
  const L41=window.__L41||{WD:false,PX:0,PY:0,MX:0,MY:0,VB:[0,-14,400,314]},VB0=L41.VB;
- const zoom=async(H,r,d)=>{const sv=SV(H);if(!sv)return;const c=(sv.getAttribute('viewBox')||VB0.join(' ')).split(/\s+/).map(Number),t=r?[r[0],r[1],r[2],r[2]*314/400]:VB0;d=window.__dmSkip?0:(d||900);let e=0;
+ const zoom=async(H,r,d)=>{const sv=SV(H);if(!sv)return;/*noZoom13: المدرب 14 نوفمبر: إلغاء التكبير في كل الشاشات، المشهد كامل دائما*/r=null;const c=(sv.getAttribute('viewBox')||VB0.join(' ')).split(/\s+/).map(Number),t=r?[r[0],r[1],r[2],r[2]*314/400]:VB0;d=window.__dmSkip?0:(d||900);let e=0;
    while(e<d){await sleep(30);e+=30;const k=Math.min(1,e/d),q=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;sv.setAttribute('viewBox',c.map((v,i)=>(v+(t[i]-v)*q).toFixed(1)).join(' '))}sv.setAttribute('viewBox',t.map(v=>v.toFixed(1)).join(' '));await sleep(80)};
  const tag=(H,t,c)=>{const sv=SV(H);if(!sv||sv.closest('[data-did=dmS]')==null)return;sv.querySelectorAll('g.mTag').forEach(e=>e.remove());if(!t)return;const x=276+L41.MX,y=116+L41.MY;
    sv.insertAdjacentHTML('beforeend',`<g class="mTag"><rect x="${x-40}" y="${y-11}" width="80" height="19" rx="9.5" fill="#fff" stroke="${c}" stroke-width="1.6"/><text x="${x}" y="${y+3.6}" text-anchor="middle" direction="ltr" font-size="10.5" font-weight="900" fill="${c}">${t}</text></g>`)};
@@ -7348,7 +7348,7 @@ WCFG['4-5']={PL:[[['m'],['m2']],[['j',0]],[['p','A'],['p','B']],[['p','R1'],['p'
  const flash=(H,i)=>setTimeout(()=>{const tr=H.box.querySelectorAll('#logB tbody tr')[i];if(!tr)return;const td=[...tr.querySelectorAll('td')].slice(2,4);td.forEach(c=>c.style.cssText='background:#F7931E;color:#fff;font-weight:900;animation:dmBl .45s 3');setTimeout(()=>td.forEach(c=>c.style.cssText=''),1800)},1250);
  /* المدرب 2 نوفمبر (أ): تكبير الجزء المهم في كل خطوة، وبطاقات القراءة على الجهازين */
  const VB0=L45.VB;
- const zoom=async(H,r,d)=>{const sv=SV(H);if(!sv)return;const c=(sv.getAttribute('viewBox')||VB0.join(' ')).split(/\s+/).map(Number),t=r?[r[0],r[1],r[2],r[2]*314/400]:VB0;d=window.__dmSkip?0:(d||900);let e=0;
+ const zoom=async(H,r,d)=>{const sv=SV(H);if(!sv)return;/*noZoom13: المدرب 14 نوفمبر: إلغاء التكبير في كل الشاشات، المشهد كامل دائما*/r=null;const c=(sv.getAttribute('viewBox')||VB0.join(' ')).split(/\s+/).map(Number),t=r?[r[0],r[1],r[2],r[2]*314/400]:VB0;d=window.__dmSkip?0:(d||900);let e=0;
    while(e<d){await sleep(30);e+=30;const k=Math.min(1,e/d),q=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;sv.setAttribute('viewBox',c.map((v,i)=>(v+(t[i]-v)*q).toFixed(1)).join(' '))}sv.setAttribute('viewBox',t.map(v=>v.toFixed(1)).join(' '));await sleep(80)};
  const tags=(H,vv,ii)=>{const sv=SV(H);if(!sv)return;sv.querySelectorAll('g.aTag,g.vTag').forEach(e=>e.remove());if(vv==null)return;
    const tg=(cl,x,y,t,c)=>`<g class="${cl}"><rect x="${x-37}" y="${y-11}" width="74" height="19" rx="9.5" fill="#fff" stroke="${c}" stroke-width="1.6"/><text x="${x}" y="${y+3.6}" text-anchor="middle" direction="ltr" font-size="10.5" font-weight="900" fill="${c}">${t}</text></g>`;
@@ -7383,7 +7383,7 @@ WCFG['4-8']={PL:[[['k'],['m']],[['j',0]],[['p',0],['p',1]],[['j',0],['j',1],['p'
  const meter=async(H,m,mode,port)=>{await H.click(H.q(m+'F').querySelector('[data-k="mode"][data-v="'+mode+'"]'));await H.psleep(500);await H.click(H.q(m+'F').querySelector('[data-k="port"][data-v="'+port+'"]'))};
  const jmp=async(H,g)=>{const s=SV(H);await H.hand(agAt(s,GX[g],Y-8));await H.psleep(300);ck(H.q('dmS').querySelector('#stJs button[data-jg="'+g+'"]'));await H.psleep(700)};
  const VB0=L48.VB;
- const zoom=async(H,r,d)=>{const sv=SV(H);if(!sv)return;const c=(sv.getAttribute('viewBox')||VB0.join(' ')).split(/\s+/).map(Number),t=r?[r[0],r[1],r[2],r[2]*314/400]:VB0;d=window.__dmSkip?0:(d||900);let e=0;
+ const zoom=async(H,r,d)=>{const sv=SV(H);if(!sv)return;/*noZoom13: المدرب 14 نوفمبر: إلغاء التكبير في كل الشاشات، المشهد كامل دائما*/r=null;const c=(sv.getAttribute('viewBox')||VB0.join(' ')).split(/\s+/).map(Number),t=r?[r[0],r[1],r[2],r[2]*314/400]:VB0;d=window.__dmSkip?0:(d||900);let e=0;
    while(e<d){await sleep(30);e+=30;const k=Math.min(1,e/d),q=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;sv.setAttribute('viewBox',c.map((v,i)=>(v+(t[i]-v)*q).toFixed(1)).join(' '))}sv.setAttribute('viewBox',t.map(v=>v.toFixed(1)).join(' '));await sleep(80)};
  /* بطاقة القراءة فوق الجهاز داخل المشهد */
  const tag=(H,t,c)=>{const sv=SV(H);if(!sv)return;sv.querySelectorAll('g.mTag').forEach(e=>e.remove());if(!t)return;const x=276+L48.MX,y=116+L48.MY;
