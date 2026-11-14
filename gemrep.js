@@ -92,6 +92,10 @@ window.GREPON=on;
 if(typeof TTS==='undefined'||!TTS)return;
 var O={play:TTS.play,playAr:TTS.playAr,playRaw:TTS.playRaw,prefetch:TTS.prefetch,prefetchAr:TTS.prefetchAr,stop:TTS.stop,busy:TTS.busy,pause:TTS.pause,resume:TTS.resume};
 var CACHE={},PEND={},A=null,playing=false,paused=false,gen=0,btn=null,btnH='';
+/* unlock61: Safari على الآيفون يمنع تشغيل الصوت بعد انتظار التوليد إن لم يفتح المشغل بلمسة؛ نفتحه مرة عند أول لمسة */
+var SIL='data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YQAAAAA=',UNL=false;
+function unlock(){if(UNL)return;try{if(!A){A=new Audio();A.preload='auto'}if(playing)return;A.src=SIL;var p=A.play();UNL=true;if(p&&p.then)p.then(function(){try{if(!playing)A.pause()}catch(e){}}).catch(function(){UNL=false})}catch(e){}}
+['touchend','click','keydown'].forEach(function(ev){document.addEventListener(ev,unlock,true)});
 function fetchUrl(text){if(CACHE[text])return Promise.resolve(CACHE[text]);if(PEND[text])return PEND[text];
   var P=fetch(API,{method:'POST',body:JSON.stringify({a:'rtts',token:teacherTok(),text:text}),redirect:'follow'}).then(function(r){return r.json()}).then(function(x){
     if(!x||!x.ok||!x.audio)throw x||{};var b=atob(x.audio),u=new Uint8Array(b.length);for(var i=0;i<b.length;i++)u[i]=b.charCodeAt(i);
@@ -106,8 +110,9 @@ function gplay(text,b,fallback){var same=b&&btn===b;O.stop();myStop();if(same)re
     if(b)try{b.innerHTML='■ إيقاف'}catch(e){}
     A.onended=function(){setTimeout(function(){if(g===gen){playing=false;rst()}},300)};
     A.onerror=function(){if(g===gen){playing=false;rst()}};
-    A.src=url;var p=A.play();if(p&&p.catch)p.catch(function(){if(g===gen){playing=false;rst()}});
-  }).catch(function(e){if(g!==gen)return;playing=false;rst();try{console.warn('gemrep',e&&e.error)}catch(_){}fallback()})}
+    A.src=url;var p=A.play();if(p&&p.catch)p.catch(function(er){if(g===gen){playing=false;rst();badge('تعذر التشغيل: '+((er&&er.name)||'audio'));UNL=false;/* إن منع المتصفح التشغيل لا تبقى الخطوة بلا صوت فتسرع اليد: يقولها حامد */try{fallback()}catch(_){}}});
+  }).catch(function(e){if(g!==gen)return;playing=false;rst();var why=(e&&e.error)||'net';try{console.warn('gemrep',why)}catch(_){}badge('حامد ← '+why);fallback()})}
+/* diag61: علامة صغيرة للمدرب فقط عند التحول لحامد وسببه */function badge(m){try{var e=document.getElementById('grepdg');if(!e){e=document.createElement('div');e.id='grepdg';e.style.cssText='position:fixed;left:8px;bottom:8px;z-index:2147483646;max-width:70vw;background:#7f1d1d;color:#fff;font:700 12px/1.4 system-ui,sans-serif;padding:6px 10px;border-radius:8px;opacity:.92;pointer-events:none;direction:rtl';document.body.appendChild(e)}e.textContent=m;clearTimeout(e._t);e._t=setTimeout(function(){e.remove()},8000)}catch(_){}}
 TTS.play=function(text,b,raw){if(!on()||raw)return O.play.apply(TTS,arguments);var a=arguments;return gplay(text,b||document.createElement('button'),function(){O.play.apply(TTS,a)})};
 TTS.playAr=function(text,b){if(!on())return O.playAr.apply(TTS,arguments);var a=arguments;return gplay(text,b||document.createElement('button'),function(){O.playAr.apply(TTS,a)})};
 /* سطور قراءة الجداول تجهزها السبورة مسبقا لكنها لا تنطق (يقول المدرب عبارة الجدول بدلها)، فلا نولدها حتى لا تهدر الرصيد */var NOPF=/^(هذا جدول|نقرأ جدول)|رمزه|رمزها/;
