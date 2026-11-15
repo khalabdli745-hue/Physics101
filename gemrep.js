@@ -130,7 +130,7 @@ function convert(t){
   t=t.replace(/(^|[^\d.])(\d{1,3})\s?(?=(آي|جيه|كيه) هات)/g,function(m,a,n){return a+en(n)+' '});
   var KEEP={TC:1,TF:1,TK:1,AC:1,DC:1};
   function spell(w){return w.split('').map(function(c){var l=c.toLowerCase();return has(LET,c)?LET[c]:has(LET,l)?LET[l]:c}).join(' ')}
-  t=t.replace(/[A-Za-zα-ωΑ-ΩΔ]{2,}/g,function(w){if(KEEP[w])return spell(w);var ns=w.match(/Δ[A-Za-zα-ω]|μ[ks]|[A-ZΑ-Ω][xyzifks0]?|[fv][ikfs]|[a-zα-ω]/g)||[w];if(ns.join('')!==w)return spell(w);return ns.map(spell).join(' ')});
+  t=t.replace(/([A-Za-z]{3,})['’]s\b/g,'$1s');t=t.replace(/[A-Za-zα-ωΑ-ΩΔ]{2,}/g,function(w){if(KEEP[w])return spell(w);/* enW16: المدرب 15 نوفمبر: الكلمة الإنجليزية الحقيقية (4 حروف فأكثر) تقرأ كاملة بالإنجليزية لا حرفا حرفا (Length، Force، Electric Charges) */if((/^[A-Za-z][a-z]{3,}$/.test(w)||/^[Ll]aw$/.test(w))&&/[aeiouy]/.test(w)&&!/(max|min)$/.test(w)&&!has(UNIT,w))return ' '+w+' ';var ns=w.match(/Δ[A-Za-zα-ω]|μ[ks]|[A-ZΑ-Ω][xyzifks0]?|[fv][ikfs]|[a-zα-ω]/g)||[w];if(ns.join('')!==w)return spell(w);return ns.map(spell).join(' ')});
   t=t.replace(/(^|[^A-Za-z])([A-Za-zρθΔμΩπλεαβφστηγωΘΣΦ])(?![A-Za-z])/g,function(m0,l,c){return l+sym(c)});
   t=t.replace(new RegExp('([\\w'+AR+')])\\s*/\\s*(?=[\\w'+AR+'(])','g'),'$1 / ');
   t=t.replace(/\s\/\s/g,' ÷ ');
@@ -154,9 +154,12 @@ function convert(t){
 /* تصحيحات نطق الكلمات التي يسمعها المدرب (كل الدروس) */
 var GFIX=[['ذكر وحدات','ذِكْرُ وحدات'],['الجاوسي','الجَاوْسِيّ']];
 function prep(t){t=String(t||'').replace(D,'').replace(/µ/g,'μ').replace(/‖/g,' ').replace(/`/g,'').replace(/\*\*/g,'').replace(/\s+/g,' ').trim();if(!t)return '';
+  /* sym16: المدرب 15 نوفمبر: الأرقام العربية الهندية تقرأ رقما كاملا (١٠ عشرة لا «واحد٠»)، و½ نصف، و∝ يتناسب مع، وعلامتا ✓✗ لا تقرآن، والخط فوق الرمز «بار»، وأس الحروف الصغيرة */
+  t=t.replace(/[٠-٩]/g,function(d){return String('٠١٢٣٤٥٦٧٨٩'.indexOf(d))}).replace(/∝/g,' يتناسب مع ').replace(/[✓✗✔✘]/g,'').replace(/ᵃ⁻ᵇ/g,' أس إيه ناقص بي ').replace(/ᵃ⁺ᵇ/g,' أس إيه زائد بي ').replace(/ᵃ/g,' أس إيه ').replace(/ᵇ/g,' أس بي ');
   t=t.replace(/ ÷ /g,' / ').replace(/÷/g,'/');try{t=convert(t)}catch(e){}
-  GFIX.forEach(function(f){t=t.split(f[0]).join(f[1])});/* uDup16: المدرب 15 نوفمبر: رمز الوحدة بعد اسمها لا يقرأ مرتين («ووحدتها الواط W» = «الواط» لا «الواط واط»، و«كولوم (C)» = «كولوم») */try{t=t.replace(UDUP,function(m,a){return a})}catch(e){}return t}
-var UDUP=(function(){var U=['كيلو واط ساعة','ميكروفاراد','بيكوفاراد','نانوفاراد','فاراد','واط','نيوتن','جول','متر','ثانية','كيلوجرام','جرام','أمبير','فولت','كولوم','أوم','كلفن','باسكال','لتر','هيرتز','مول','تسلا','سعر','كيلو سعر','درجة','كانديلا','وات'].sort(function(a,b){return b.length-a.length}).join('|');return new RegExp('((?:^|[\\s(:،,])(?:وب|فب|وال|بال|فال|كال|لل|ال|و|ب|ف)?('+U+'))\\s+(?:\\(\\s*\\2\\s*\\)|\\2)(?=$|[\\s.،,؟!:)])','g')})();
+  t=t.replace(/\u0304/g,' بار ').replace(/\s{2,}/g,' ');
+  GFIX.forEach(function(f){t=t.split(f[0]).join(f[1])});/* uDup16: المدرب 15 نوفمبر: رمز الوحدة بعد اسمها لا يقرأ مرتين («ووحدتها الواط W» = «الواط» لا «الواط واط»، و«كولوم (C)» = «كولوم») */try{t=t.replace(UDUP,function(m,a){return a})}catch(e){}t=t.replace(/½/g,' نصف ').replace(/\s{2,}/g,' ').trim();return t}
+var UDUP=(function(){var U=['كيلو واط ساعة','نانومتر','ميكرومتر','مليمتر','ملليمتر','سنتيمتر','كيلومتر','كيلوجرام','ميكروثانية','ملي ثانية','نانوكولوم','ميكروكولوم','كيلو أوم','ملي أمبير','ميكروفاراد','بيكوفاراد','نانوفاراد','فاراد','واط','نيوتن','جول','متر','ثانية','كيلوجرام','جرام','أمبير','فولت','كولوم','أوم','كلفن','باسكال','لتر','هيرتز','مول','تسلا','سعر','كيلو سعر','درجة','كانديلا','وات'].sort(function(a,b){return b.length-a.length}).join('|');return new RegExp('((?:^|[\\s(:،,])(?:وب|فب|وال|بال|فال|كال|لل|ال|و|ب|ف)?('+U+'))\\s+(?:\\(\\s*\\2\\s*\\)|\\2)(?=$|[\\s.،,؟!:)])','g')})();
 window.GEMPREP=prep;
 /* ---------- التشغيل ---------- */
 function teacherTok(){try{if(typeof AUTH!=='undefined'&&AUTH&&!AUTH.demo)return '';var T=(typeof TAUTH!=='undefined')?TAUTH:null;if(!T)return '';return T.token||(typeof T==='string'?T:'')}catch(e){return ''}}
