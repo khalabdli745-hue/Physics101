@@ -998,6 +998,7 @@ async function drawAI(){
    <div class="row" style="margin-top:8px">${tOn?'<img class="ttF" id="ttvoI" src="coach-face.jpg" alt=""><select id="ttvo"><option value="ar-SA-HamedNeural">حامد</option><option value="ar-SA-ZariyahNeural">زارية</option></select><button class="btn ghost" id="ttst">▶ تجربة الصوت</button><button class="btn danger" id="ttoff">إيقاف</button><span class="sub" style="margin:0">تجربة الصوت (للمدرب فقط)</span>':''}</div>${tOn?'<div class="row" style="margin-top:8px;align-items:center"><span class="sub" style="margin:0">صوت المتدربين (يطبق على كل المتدربين)</span><img class="ttF" src="coach-face.jpg" alt=""><img class="ttF" id="ttlkF" src="coach-face-f.jpg" alt="" hidden><select id="ttlk"><option value="1">حامد فقط</option><option value="0">حامد أو زارية (يختار المتدرب)</option></select></div>':''}<p class="msg" id="ttm"></p>
   </div>
   <div class="card" id="gmCard"><h2>🎙 صوت Gemini للدروس (Iapetus)</h2>
+   <div id="gaBx" style="border:2px solid #1D4ED8;border-radius:12px;padding:10px 12px;margin:6px 0 12px;background:color-mix(in srgb,#1D4ED8 7%,transparent)"><h3 style="margin:0 0 4px">صوت المدرب في الدروس (المتدربون وحساب تجربة المنصة)</h3><p class="sub" id="gaS2" style="margin:2px 0 8px">جار التحميل…</p><div class="row"><button class="btn" id="gaG">🎙 Gemini للجميع</button><button class="btn ghost" id="gaH">حامد للجميع</button></div><p class="sub" style="margin:6px 0 0">يتغير الصوت عند المتدربين فورا عند فتحهم الدرس التالي. الجمل التي لم تولد بعد بصوت Gemini تتولد عند أول طلب.</p></div>
    <p class="sub">صوت عربي فصيح يقرأ النص بفهم السياق. يولد مرة واحدة في الخلفية ويحفظ في Drive، ثم يسمعه كل المتدربين بلا تكلفة. أي جملة لم تجهز بعد يقولها حامد تلقائيا.</p>
    <p class="sub" id="gmSt">جار التحميل…</p>
    <ol class="sub" style="padding-inline-start:1.2em"><li>من <b>aistudio.google.com/apikey</b> انسخ مفتاح Gemini بزر النسخ والصقه هنا.</li><li>فعل الصوت لدرس كولوم، ثم اضغط «تجهيز صوت كولوم». يكمل الخادم وحده، ويتوقف عند الحد اليومي المجاني ويكمل في اليوم التالي.</li></ol>
@@ -1016,6 +1017,13 @@ async function drawAI(){
   ${top.length?`<div class="card"><h2>أكثر الدروس سؤالا</h2><div class="bars">${top.map(([k,v])=>`<div class="bar"><span class="lab" title="${esc(k)}">${esc(k)}</span><span class="trk"><span class="fil" style="width:${v/mx*100}%;display:block"></span></span><span class="val">${v}</span></div>`).join('')}</div></div>`:''}
   <div class="card"><h2>أسئلة المتدربين</h2>${r.questions.length?r.questions.map(q=>`<details class="res"><summary><b>${esc(nm[q.studentId]||q.studentId)}</b> <span class="tag">${esc(LT[q.lessonKey]||q.lessonTitle||'')}</span> ${esc(q.question.slice(0,90))}${q.question.length>90?'…':''}<span class="when">${fmtDate(q.time)}</span></summary><div class="det"><p style="white-space:pre-wrap;margin:6px 0"><b>السؤال:</b> ${esc(q.question)}</p><p style="white-space:pre-wrap;margin:6px 0;color:var(--muted)"><b>إجابة المساعد:</b> ${esc(q.answer)}</p></div></details>`).join(''):'<p class="empty">لم يسأل أحد بعد.</p>'}</div></div>`;
   $('#aqs').onchange=e=>{secFilter=e.target.value;ls.set('p101-tsec',secFilter);drawAI()};
+  /* gaSet المدرب 15 نوفمبر (أ): مفتاح صوت المتدربين (Gemini أو حامد) داخل لوحة المدرب، نفس مفتاح صفحة التوليد (tgall) */
+  {const gs=async o=>{const e=$('#gaS2');if(!e)return;e.innerHTML='<span class="spin"></span>';let x;try{x=await api(Object.assign({a:'tgall',token:TOKEN},o||{}))}catch(_){x={ok:false,error:'net'}}
+     if(!$('#gaS2'))return;if(!x.ok){e.innerHTML='<b style="color:var(--bad)">'+(x.error==='unknown_action'?'يحتاج code.gs الإصدار 62 أو أحدث.':esc(errText(x.error)))+'</b>';return}
+     const on=!!x.stat.gall,n=(+x.stat.done||0)+(+x.stat.skip||0);
+     e.innerHTML='الصوت الآن: '+(on?'<b style="color:var(--good)">● Gemini للجميع</b>':'<b style="color:var(--bad)">● حامد للجميع</b>')+(n?' · الجمل الجاهزة بصوت Gemini: '+AR(n):'');
+     $('#gaG').className=on?'btn':'btn ghost';$('#gaH').className=on?'btn ghost':'btn';if(o)toast(on?'تم: Gemini للجميع':'تم: حامد للجميع')};
+   if($('#gaG')){$('#gaG').onclick=()=>gs({on:1});$('#gaH').onclick=()=>gs({on:0});gs()}}
   const tm=(t,c)=>{$('#ttm').className='msg '+(c||'');$('#ttm').innerHTML=t};
   /* المدرب 8 نوفمبر 15:02: صورة المدرب الذكي من المنصة بدل الرمز: حامد coach-face وزارية coach-face-f */{const f=()=>{const v=$('#ttvo'),i=$('#ttvoI');if(v&&i)i.src=/Zariyah/.test(v.value)?'coach-face-f.jpg':'coach-face.jpg';const l=$('#ttlk'),j=$('#ttlkF');if(l&&j)j.hidden=l.value==='1'};if($('#ttvo'))$('#ttvo').addEventListener('change',f);if($('#ttlk'))$('#ttlk').addEventListener('change',f);setTimeout(f,0)}
   if($('#ttlk')){$('#ttlk').value=ti.vlock?'1':'0';$('#ttlk').onchange=async e=>{const lk=e.target.value==='1';tm('<span class="spin"></span> جار الحفظ…');let x;try{x=await api({a:'tvlock',token:TOKEN,lock:lk})}catch(er){x={ok:false,error:'net'}}
@@ -1688,7 +1696,7 @@ function drawExport(){
   const m=$(tab==='students'?'#expBox':'#main');if(!m)return;
   m.innerHTML=`<div class="card"><h2>تصدير إلى Excel</h2><p class="sub">اختر الشعبة ثم نوع التقرير. يحفظ الملف في «الملفات» على الجوال أو «التنزيلات» على الكمبيوتر.</p>
   <div class="row" style="margin-bottom:12px"><select id="es"><option value="all">كل الشعب</option>${DATA.sections.map(s=>`<option value="${esc(s.id)}">${esc(s.name)}</option>`).join('')}</select></div>
-  <div class="row"><button class="btn" id="e1">⬇ ملخص النقاط والحضور</button><button class="btn ghost" id="e2">⬇ نقاط كل درس (جدول تفصيلي)</button><button class="btn ghost" id="e3">⬇ سجل كل المحاولات</button><button class="btn ghost" id="e4">⬇ قائمة المتدربين فقط</button></div><p class="msg" id="em"></p></div>`;
+  <div class="row"><button class="btn" id="e1">⬇ ملخص النقاط والحضور</button><button class="btn ghost" id="e2">⬇ نقاط كل درس (جدول تفصيلي)</button><button class="btn ghost" id="e3">⬇ سجل كل المحاولات</button><button class="btn ghost" id="e4">⬇ قائمة المتدربين فقط</button><button class="btn" id="e5">📅 كشف الحضور</button></div><p class="msg" id="em"></p><div id="wkAtt"></div></div>`;
   const sel=()=>$('#es').value,stu=()=>DATA.students.filter(s=>sel()==='all'||s.sectionId===sel()),tag=()=>sel()==='all'?'كل-الشعب':secName(sel());
   const r0=v=>v==null?'':Math.round(v);
   $('#e1').onclick=()=>saveBook([['الملخص',[['الرقم التدريبي','الاسم','الشعبة','مرات الدخول','أول دخول','آخر دخول','مجموع الوقت (دقيقة)','متوسط الاختبارات %','متوسط التمارين %','المعدل %','الدروس المكتملة','نسبة التقدم %'],
@@ -1698,8 +1706,54 @@ function drawExport(){
   $('#e3').onclick=async()=>{$('#em').innerHTML='<span class="spin"></span> جار جلب السجل…';const r=await api({a:'tresults',token:TOKEN,sectionId:sel()==='all'?'':sel()});if(!r.ok){$('#em').textContent=errText(r.error);return}
     const nm=Object.fromEntries(DATA.students.map(s=>[s.id,s.name]));
     await saveBook([['المحاولات',[['التاريخ','الرقم التدريبي','الاسم','الشعبة','النوع','الدرس','النقاط','من','النسبة %'],...r.results.map(x=>[xd(x.time),x.studentId,nm[x.studentId]||'',secName(x.sectionId),x.kind==='quiz'?'اختبار':'تمرين',LT[String(x.lessonKey).split('.')[0]]||x.lessonTitle,x.score,x.max,x.percent])],[20,16,26,16,10,34,8,6,10]]],`سجل-المحاولات-${tag()}.xlsx`);$('#em').textContent=''};
+  /* att63 المدرب 15 نوفمبر: كشف الحضور ليوم التدريب من بداية المنصة */
+  $('#e5').onclick=()=>attWeek(sel,stu,tag);
   $('#e4').onclick=()=>saveBook([['المتدربون',[['الرقم التدريبي','الاسم','الشعبة'],...stu().map(s=>[s.id,s.name,secName(s.sectionId)])],[16,26,16]]],`المتدربون-${tag()}.xlsx`);
 }
+/* att63 المدرب 15 نوفمبر (أ): كشف الحضور من بداية المنصة ليوم التدريب المختار (الافتراضي الاثنين): ✓ مع وقت أول دخول، أو ✗، لكل أسبوع، ثم تفاصيل كل يوم دخل فيه */
+const AWD=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+const AWH=['الرقم التدريبي','الاسم','الشعبة','اليوم','التاريخ','أول نشاط','مرات الدخول','أوقات الدخول والأجهزة','الدقائق','اختبارات','تمارين','تجارب','السبورة','أسئلة المشاركة','دروس مكتملة'];
+function attWeek(sel,stu,tag){
+  if(!document.getElementById('awCss'))document.head.insertAdjacentHTML('beforeend','<style id="awCss">.awTb th,.awTb td{padding:7px 6px!important;font-size:13px!important;white-space:nowrap}.awTb td:first-child,.awTb th:first-child{position:sticky;right:0;z-index:1;background:var(--panel,#fff);text-align:right!important;max-width:150px;white-space:normal}.awTb th:first-child{background:var(--accent,#1D4ED8)}.awW2{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;border:1px solid var(--line);border-radius:12px}</style>');
+  const box=$('#wkAtt'),p2=n=>String(n).padStart(2,'0'),DY=864e5;
+  const ymd=d=>d.getUTCFullYear()+'-'+p2(d.getUTCMonth()+1)+'-'+p2(d.getUTCDate()),dm=k=>(+k.slice(8))+'/'+(+k.slice(5,7));
+  const td=new Date(new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Riyadh'})+'T12:00:00Z'),tk=ymd(td);
+  const sun0=new Date(td.getTime()-td.getUTCDay()*DY);
+  const fl=DATA.students.map(s=>s.firstLogin).filter(Boolean).sort()[0];
+  const W=fl?Math.min(32,Math.max(1,Math.floor((sun0-new Date(fl))/(7*DY))+2)):1;
+  const start=new Date(sun0.getTime()-(W-1)*7*DY);
+  let wd=+ls.get('p101-awd',1);if(!(wd>=0&&wd<=4))wd=1;
+  box.innerHTML=`<div class="card" style="margin-top:12px"><h2>📅 كشف الحضور</h2><p class="sub">من بداية المنصة إلى اليوم، ليوم التدريب الذي تختاره. ✓ = دخل المنصة أو حل أو نشط في ذلك اليوم، ومعه وقت أول دخول. ✗ = لم يدخل. الدقائق تحسب من 15 نوفمبر 2026.</p>
+    <div class="row" style="margin-bottom:10px;align-items:center"><label>يوم التدريب: <select id="awD">${AWD.slice(0,5).map((d,i)=>`<option value="${i}"${i===wd?' selected':''}>${d}</option>`).join('')}</select></label><button class="btn" id="awX">⬇ تنزيل Excel</button></div><div id="awT"><span class="spin"></span> جار جلب الحضور…</div></div>`;
+  let R=null,cur=null;
+  const draw=()=>{if(!R)return;
+    const keys=[];for(let w=0;w<W;w++){const k=ymd(new Date(start.getTime()+(w*7+wd)*DY));if(k<=tk)keys.push(k)}
+    const L=stu().slice().sort((a,b)=>String(a.name).localeCompare(String(b.name),'ar'));
+    const rows=L.map(s=>{const D=R.days[s.id]||{},on=k=>{const x=D[k];return !!x&&(x.l>0||x.r>0||x.s>0)};
+      const tm=k=>{const x=D[k]||{};return (x.f||'')+(x.s?(x.f?' · ':'')+Math.round(x.s/60)+' د':'')};
+      const cells=keys.map(k=>on(k)?'✓':'✗'),n=cells.filter(v=>v==='✓').length;
+      return {s,cells,tms:keys.map(tm),n,pct:keys.length?Math.round(n/keys.length*100):0,det:keys.filter(on).map(k=>Object.assign({},D[k],{date:k}))}});
+    cur={keys,rows};
+    const c=v=>v==='✓'?'<b style="color:#15803D">✓</b>':'<b style="color:#B91C1C">✗</b>';
+    if(!keys.length){$('#awT').innerHTML='<p class="sub">لم يأت يوم '+AWD[wd]+' بعد.</p>';return}
+    const det=awRows(rows);
+    $('#awT').innerHTML=`<div class="awW2"><table class="awTb" style="width:auto;min-width:100%"><thead><tr><th>الاسم</th>${keys.map((k,i)=>`<th>الأسبوع ${AR(Math.round((new Date(k+'T12:00:00Z')-start)/(7*DY))+1)}<br><small>${AWD[wd]} ${dm(k)}</small></th>`).join('')}<th>حضر</th><th>النسبة</th></tr></thead><tbody>
+      ${rows.map(x=>`<tr><td>${esc(x.s.name)}<br><small class="num">${esc(x.s.id)}</small></td>${x.cells.map((v,i)=>`<td>${c(v)}${v==='✓'&&x.tms[i]?`<br><small dir="ltr" style="color:var(--muted,#64748b)">${esc(x.tms[i])}</small>`:''}</td>`).join('')}<td>${AR(x.n)} من ${AR(keys.length)}</td><td><b style="color:${x.pct>=75?'#15803D':x.pct>=50?'#B45309':'#B91C1C'}">${AR(x.pct)}%</b></td></tr>`).join('')}
+      <tr><td><b>الحاضرون</b></td>${keys.map((k,i)=>`<td><b>${AR(rows.filter(x=>x.cells[i]==='✓').length)} من ${AR(rows.length)}</b></td>`).join('')}<td></td><td></td></tr></tbody></table></div>
+      <details style="margin-top:14px" open><summary style="cursor:pointer;font-weight:700;font-size:16px">تفاصيل كل يوم ${AWD[wd]} دخل فيه المتدرب (اضغط للإخفاء أو الإظهار)</summary>${awDet(det)}</details>`};
+  const load=async()=>{let r;try{r=await api({a:'tweek',token:TOKEN,from:ymd(start),n:W*7,sectionId:sel()==='all'?'':sel()})}catch(e){r={ok:false,error:'net'}}
+    if(!r.ok){$('#awT').textContent=r.error==='unknown_action'?'يحتاج نشر code.gs الإصدار 63.':errText(r.error);return}R=r;draw()};
+  $('#awD').onchange=e=>{wd=+e.target.value;ls.set('p101-awd',wd);draw()};
+  $('#awX').onclick=()=>{if(!cur||!cur.keys.length)return toast('انتظر حتى يظهر الكشف');
+    const head=['الرقم التدريبي','الاسم','الشعبة',...cur.keys.map((k,i)=>'الأسبوع '+(Math.round((new Date(k+'T12:00:00Z')-start)/(7*DY))+1)+' '+AWD[wd]+' '+dm(k)),'حضر','النسبة %'];
+    saveBook([['كشف الحضور',[head,...cur.rows.map(x=>[x.s.id,x.s.name,secName(x.s.sectionId),...x.cells.map((v,i)=>v==='✓'&&x.tms[i]?v+' '+x.tms[i]:v),x.n+' من '+cur.keys.length,x.pct])],[16,26,16,...cur.keys.map(()=>18),10,10]],['تفاصيل الأيام',[AWH,...awRows(cur.rows)],[16,26,16,10,10,10,10,44,10,9,9,9,9,9,9]]],`الحضور-${AWD[wd]}-${tag()}.xlsx`)};
+  load();box.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function awRows(rows){const o=[];rows.forEach(x=>x.det.forEach(d=>{const K=d.k||{},dt=d.date;
+  o.push([x.s.id,x.s.name,secName(x.s.sectionId),AWD[new Date(dt+'T12:00:00Z').getUTCDay()],(+dt.slice(8))+'/'+(+dt.slice(5,7)),d.f||'',d.l||0,(d.lt||[]).join(' ، '),d.s?Math.round(d.s/60):'',K.quiz||0,K.prob||0,K.lab||0,K.board||0,K.bq||0,K.done||0])}));return o}
+function awDet(L){if(!L.length)return '<p class="sub">لا يوجد دخول في هذه الأيام.</p>';
+  return `<div class="awW2"><table class="awTb" style="width:auto;min-width:100%"><thead><tr>${['الاسم','اليوم','أول نشاط','مرات الدخول','أوقات الدخول والأجهزة','الدقائق','اختبارات','تمارين','تجارب','السبورة','أسئلة المشاركة','دروس مكتملة'].map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>
+  ${L.map(x=>`<tr><td>${esc(x[1])}</td><td>${x[3]}<br><small>${x[4]}</small></td><td dir="ltr">${esc(x[5])}</td><td>${x[6]}</td><td style="white-space:normal;min-width:180px;text-align:right" dir="ltr">${esc(x[7])||'—'}</td><td>${x[8]===''?'—':x[8]}</td>${x.slice(9).map(v=>`<td>${v||'—'}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`}
 function drawDemo(){/* المدرب 8 نوفمبر 15:25: تبويب حساب المعاينة صار داخل بطاقة بيانات الدخول في الإعدادات، والتبويبات 10 */tab='settings';ls.set('p101-ttab',tab);draw()}
 
 /* المدرب 8 نوفمبر 18:49: توزيع نقاط مهام الدروس نقل من الإعدادات إلى تبويب «نقاط مهام الدروس» بطاقة خامسة (خيار أ)، ورابط المتدربين صار داخل بيانات الدخول */
