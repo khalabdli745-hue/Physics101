@@ -21,7 +21,7 @@ var TN={2:'عشرون',3:'ثلاثون',4:'أربعون',5:'خمسون',6:'ست�
 function cnt(n,fem){if(n<=10)return n>=3?(fem?F1:M1)[n]:null;if(n===11)return fem?'إحدى عشرة':'أحد عشر';if(n===12)return fem?'اثنتا عشرة':'اثنا عشر';if(n<20)return (fem?F1:M1)[n-10]+(fem?' عشرة':' عشر');var t=Math.floor(n/10),o=n%10;if(!o)return TN[t];var oo=o===1?(fem?'إحدى':'واحد'):o===2?(fem?'اثنتان':'اثنان'):(fem?F1:M1)[o];return oo+' و'+TN[t]}
 function big(n){var th=Math.floor(n/1000),r=n%1000,h=Math.floor(r/100),r2=r%100,p=[];if(th)p.push(th===1?'ألف':th===2?'ألفان':(th<=10?M1[th]+' آلاف':th+' ألف'));if(h)p.push(HUN[h]);return [p,r2]}
 function sayN(n,unit,adj){var U=AU[unit],s=U[0],pl=U[1],acc=U[2],du=U[3],fem=U[4],A=ADJ[adj||''];
-  if(n===0)return 'صفر '+s+(A?' '+A[0]:'');if(n===1)return s+(A?' '+A[0]:'')+' '+(fem?'واحدة':'واحد');if(n===2)return du+(A?' '+A[3]:'');
+  if(n===0)return 'صفر '+s+(A?' '+A[0]:'');if(n===1)return s+(A?' '+A[0]:'')+' '+(fem?'واحدة':'واحد');if(n===2)return fem?du+(A?' '+A[3]:''):'اثنان '+s+(A?' '+A[0]:'');/*g16: المدرب 15 نوفمبر (أ): 2 مع الوحدة المذكرة «اثنان أمبير»، والمؤنثة تبقى مثنى «ثانيتان»*/
   var p=[],r=n;if(n>=100){var b=big(n);p=b[0];r=b[1]}
   if(r===0){p=p.slice(0,-1).concat([p[p.length-1].replace('مئتان','مئتا').replace('ألفان','ألفا')]);return p.join(' و')+' '+s+(A?' '+A[0]:'')}
   if(r===1&&p.length)return p.join(' و')+' '+s+(A?' '+A[0]:'')+' و'+(fem?'واحدة':'واحد');
@@ -102,7 +102,7 @@ function convert(t){
   t=t.replace(/°C\b/g,' درجة سيلزيوس ').replace(/°F\b/g,' درجة فهرنهايت ').replace(/°/g,' درجة ');
   t=t.replace(/(\d+(?:\.\d+)?)\s?%/g,'$1 بالمئة');
   t=t.replace(/√\s*\(([^)]*)\)/g,' الجذر التربيعي لـ@ $1 ').replace(/√\s*([A-Za-z0-9.α-ωΔ]+)/g,' الجذر التربيعي لـ@ $1 ');
-  t=t.replace(new RegExp('(^|[^'+AR+'])((?:ال)?(?!هذا)['+AR+']{2,}[^هن\\s]ا)\\s+(?=\\d)','g'),'$1$2 مقداره ');
+  t=t.replace(new RegExp('(^|[^'+AR+'])((?:ال)?(?!هذا)['+AR+']{2,}[^هن\\s]ا)\\s+(?=\\d)','g'),'$1$2 مقداره ').replace(/هما مقداره /g,'هما ');/*g16: لا «مقداره» بعد مقدارهما وبينهما وفيهما*/
   var OBL=/^(?:في|إلى|من|على|عن|لمدة|بمقدار|تحويل|تقطع|تعبئة|بعد|قبل|حول)$/;
   var t0=t;
   t=t.replace(new RegExp('(\\d+(?:\\.\\d+)?)\\s?('+U+')(?![A-Za-z\\d])','g'),function(m0,n,u,off){var out=nu(m0,n,u);var before=t0.slice(0,off).replace(/\s+$/,'');var pre=before?before.split(' ').pop():'';if(out!==m0&&OBL.test(pre||'-'))out=obl(out);return out});
