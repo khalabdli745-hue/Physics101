@@ -155,7 +155,8 @@ function convert(t){
 var GFIX=[['ذكر وحدات','ذِكْرُ وحدات'],['الجاوسي','الجَاوْسِيّ']];
 function prep(t){t=String(t||'').replace(D,'').replace(/µ/g,'μ').replace(/‖/g,' ').replace(/`/g,'').replace(/\*\*/g,'').replace(/\s+/g,' ').trim();if(!t)return '';
   t=t.replace(/ ÷ /g,' / ').replace(/÷/g,'/');try{t=convert(t)}catch(e){}
-  GFIX.forEach(function(f){t=t.split(f[0]).join(f[1])});return t}
+  GFIX.forEach(function(f){t=t.split(f[0]).join(f[1])});/* uDup16: المدرب 15 نوفمبر: رمز الوحدة بعد اسمها لا يقرأ مرتين («ووحدتها الواط W» = «الواط» لا «الواط واط»، و«كولوم (C)» = «كولوم») */try{t=t.replace(UDUP,function(m,a){return a})}catch(e){}return t}
+var UDUP=(function(){var U=['كيلو واط ساعة','ميكروفاراد','بيكوفاراد','نانوفاراد','فاراد','واط','نيوتن','جول','متر','ثانية','كيلوجرام','جرام','أمبير','فولت','كولوم','أوم','كلفن','باسكال','لتر','هيرتز','مول','تسلا','سعر','كيلو سعر','درجة','كانديلا','وات'].sort(function(a,b){return b.length-a.length}).join('|');return new RegExp('((?:^|[\\s(:،,])(?:وب|فب|وال|بال|فال|كال|لل|ال|و|ب|ف)?('+U+'))\\s+(?:\\(\\s*\\2\\s*\\)|\\2)(?=$|[\\s.،,؟!:)])','g')})();
 window.GEMPREP=prep;
 /* ---------- التشغيل ---------- */
 function teacherTok(){try{if(typeof AUTH!=='undefined'&&AUTH&&!AUTH.demo)return '';var T=(typeof TAUTH!=='undefined')?TAUTH:null;if(!T)return '';return T.token||(typeof T==='string'?T:'')}catch(e){return ''}}
