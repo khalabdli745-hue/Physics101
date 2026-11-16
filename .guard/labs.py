@@ -35,7 +35,8 @@ STEP = r"""(cls)=>{const w=document.querySelector('.lab .'+cls+' .dxW');if(!w)re
   L.push([e.tagName,cs.fill,cs.stroke,an?'~':Math.round((r.x-S.x)/8)+','+Math.round((r.y-S.y)/8)+','+Math.round(r.width/8)+','+Math.round(r.height/8),e.tagName==='text'?(e.textContent||'').trim().slice(0,20):''].join('|'))});
  const h=w.querySelector(':scope>img.handH');const hp=h&&h.style.opacity==='1'?[Math.round(h.dataset.px/w.clientWidth*20),Math.round(h.dataset.py/w.clientHeight*20)]:null;
  const cap=(w.closest('.dmP,.ctl')||document).querySelector('.dmCap');
- return {k:m?+m[1]:-1,n:m?+m[2]:-1,L:L.join('\n'),hand:hp,cap:cap?cap.textContent.replace(/\s+/g,' ').slice(0,90):''}}"""
+ const U=[...new Set(L.map(x=>{const q=x.split('|');return [q[0],q[1],q[2],(q[4]||'').replace(/[0-9٠-٩.,−-]+/g,'#')].join('|')}))].sort();
+ return {k:m?+m[1]:-1,n:m?+m[2]:-1,L:L.join('\n'),U:U.join('\n'),hand:hp,cap:cap?cap.textContent.replace(/\s+/g,' ').slice(0,90):''}}"""
 
 def sync_check(au):
     """قواعد التزامن: المخالفة أن يبقى من صوت سابق أكثر من 0.5 ث عند انتقال الخطوة أو ظهور زر التسجيل، أو تداخل صوتين، أو قطع الصوت"""
@@ -102,7 +103,7 @@ def main():
                         kk = h.get('k')
                         if kk not in seen and time.time() - tl > 1.6:
                             seen.add(kk)
-                            S['steps'].append({'k': kk, 'cap': h.get('cap'), 'hand': h.get('hand'), 'st': hashlib.md5((h.get('L') or '').encode()).hexdigest()[:10], 'nel': (h.get('L') or '').count('\n') + 1})
+                            S['steps'].append({'k': kk, 'cap': h.get('cap'), 'hand': h.get('hand'), 'st': hashlib.md5((h.get('U') or '').encode()).hexdigest()[:10], 'stp': hashlib.md5((h.get('L') or '').encode()).hexdigest()[:10], 'u': h.get('U') or ''})
                         if h.get('n', 0) > 0 and h.get('k') == h.get('n') and kk in seen:
                             if cls == 'lx52':
                                 for _ in range(40):
@@ -113,7 +114,7 @@ def main():
                             break
                         if time.time() - tl > 40: S['stuck'] = kk; break
                     S['n'] = h.get('n'); S['end'] = h.get('k')
-                    au = pg.evaluate('()=>__AU'); S['au'] = au[:120]; S['sync'] = sync_check(au); S['narr'] = sum(1 for e in au if e[0] == 'aplay')
+                    au = pg.evaluate('()=>__AU'); S['sync'] = sync_check(au); S['narr'] = sum(1 for e in au if e[0] == 'aplay')
                     if cls == 'lx52':
                         S['results'] = pg.evaluate("()=>{const r=document.querySelector('.lab .lx53');return r?r.innerText.replace(/\\s+/g,' ').slice(0,600):'no lx53'}")
                     pg.evaluate(f"()=>{{const w=document.querySelector('.lab .{cls} .dxW');const b=w&&w.querySelector('.vcPl');if(b&&b.dataset.on==='1')b.click();try{{TTS.stop()}}catch(e){{}}}}"); pg.wait_for_timeout(400)

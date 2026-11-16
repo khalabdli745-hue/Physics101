@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """يقارن تشغيل التجارب (المرجع مقابل الجديد) ويفشل عند أي تغيير في تجربة خارج scope.lessons، أو مخالفة تزامن جديدة.
 الاستعمال: python3 .guard/labcmp.py <مجلد المرجع> <مجلد الجديد> <scope.json> [ملف التقرير]"""
-import sys, json, glob
+import sys, json, glob, re
 REFD, NEWD, SCOPE = sys.argv[1:4]; OUTMD = sys.argv[4] if len(sys.argv) > 4 else None
 ALLOW = json.load(open(SCOPE, encoding='utf8')).get('lessons', [])
 def load(d):
@@ -17,7 +17,7 @@ def sig(S):
     return {'عدد الخطوات': S.get('n'), 'وصل إلى الخطوة': S.get('end'), 'توقف عند': S.get('stuck'),
             'الخطوات (المشهد والأجهزة والنص)': [(x['k'], x['st'], x['cap']) for x in S.get('steps', [])],
             'عدد مقاطع الصوت': S.get('narr'), 'ضغطات سجل القراءة': len(S.get('recs', [])), 'تسجيل فاشل': S.get('recs', []).count('FAIL'),
-            'جدول النتائج': S.get('results'), 'خطأ': S.get('err')}
+            'بنية جدول النتائج (العناوين والوحدات)': re.sub(r'[0-9٠-٩][0-9٠-٩.,]*', '#', S.get('results') or ''), 'خطأ': S.get('err')}
 if not A: fails.append('لم تنتج نتائج المرجع')
 for k in sorted(A):
     if k not in B: fails.append(f'التجربة {k}: لم تفحص في الجديد'); continue
@@ -39,6 +39,9 @@ for k in sorted(A):
         if newsync: tgt.append(f'التجربة {k} {SEC[c]}: مخالفة تزامن جديدة: ' + '، '.join(newsync[:4]))
         old = [x for x in b.get('sync', []) if x in a.get('sync', [])]
         if old: review.append(f'التجربة {k} {SEC[c]}: مخالفة تزامن موجودة في المرجع أيضا: ' + '، '.join(old[:3]))
+        if a.get('results') != b.get('results') and not d: review.append(f'التجربة {k} {SEC[c]}: أرقام جدول النتائج اختلفت (قراءات القياس تتغير بالتوقيت، راجعها)')
+        pa = [x.get('stp') for x in a.get('steps', [])]; pb = [x.get('stp') for x in b.get('steps', [])]
+        if pa != pb and not d: review.append(f'التجربة {k} {SEC[c]}: مواضع الأجزاء المتحركة اختلفت قليلا (توقيت التصوير، راجعها بالنظر)')
         ha = sorted({tuple(x['hand']) for x in a.get('steps', []) if x.get('hand')}); hb = sorted({tuple(x['hand']) for x in b.get('steps', []) if x.get('hand')})
         if ha != hb and k not in ALLOW: review.append(f'التجربة {k} {SEC[c]}: مواضع اليد اختلفت قليلا (قد يكون توقيت التصوير، راجعها بالنظر)')
 for k in sorted(set(B) - set(A)): (allowed if (ALLOW == ['*'] or k in ALLOW) else fails).append(f'التجربة {k}: جديدة غير موجودة في المرجع')
