@@ -685,21 +685,32 @@ function draw(){if(!DATA)return;({exams:drawExams,bank:drawBank,students:drawStu
 
 /* ---------- بنك الأسئلة (للاطلاع والتصدير إلى Word فقط؛ الأسئلة تولدها المنصة) ---------- */
 let BANK=null,BKQ='',BKT=ls.get('p101-bkt','theory');
+/* bkRng64: المدرب 16 نوفمبر: مدى دروس لكل اختبار (الفصلي الأول والثاني والنهائي) في بنك الأسئلة، يحفظ في الخادم (code.gs 64) وعلى الجهاز، ويمكن تغييره */
+const BKLES=[['0-1','الكميات الفيزيائية وأنظمة القياس'],['0-2','التحويل بين الوحدات والتحقق من صحة القوانين'],['0-4','الكميات القياسية والمتجهة وجمع المتجهات'],['0-5','تحليل المتجهات'],['0-6','متجهات الوحدة وضرب المتجهات'],['1-1','المسافة والإزاحة والسرعة والتسارع'],['1-2','معادلات الحركة بتسارع ثابت'],['1-3','القوة وقوانين نيوتن للحركة'],['1-5','الاحتكاك'],['1-7','الشغل'],['1-8','الطاقة الحركية وطاقة الوضع'],['1-9','حفظ الطاقة'],['2-1','الحرارة ودرجة الحرارة ومقاييسها'],['2-3','الحرارة النوعية والحرارة الكامنة'],['2-5','الاتزان الحراري وطرق انتقال الحرارة'],['3-1','الشحنات الكهربائية وقانون كولوم'],['3-3','المجال الكهربائي وخطوطه'],['3-4','الجهد الكهربائي'],['3-5','السعة الكهربائية والمكثفات'],['3-6','توصيل المكثفات والطاقة المختزنة فيها'],['4-1','التيار الكهربائي'],['4-5','المقاومة وقانون أوم والقدرة الكهربائية'],['4-8','توصيل المقاومات على التوالي والتوازي']];
+const BKMAP={Q:['0-1'],U:['0-2'],V:['0-4'],R:['0-4','0-5'],P:['0-6'],M:['1-1','1-2'],N:['1-3'],F:['1-5'],W:['1-7','1-8','1-9'],H:['2-1','2-3','2-5'],E:['3-1','3-3','3-4'],K:['3-5','3-6'],C:['4-1','4-5','4-8']};
+const BKEX=[['all','الكل'],['f1','الفصلي الأول'],['f2','الفصلي الثاني'],['fin','النهائي']];
+let BKX=ls.get('p101-bkx','all'),BKR=(()=>{try{return JSON.parse(ls.get('p101-bkr','')||'null')||{}}catch(e){return {}}})();
+const bkIdx=k=>BKLES.findIndex(x=>x[0]===k),bkRange=x=>{const r=BKR[x];if(!r)return null;const a=bkIdx(r.a),b=bkIdx(r.b);return a<0||b<0?null:[Math.min(a,b),Math.max(a,b)]};
+const bkIn=(gk,x)=>{if(x==='all')return true;const r=bkRange(x);if(!r)return true;return (BKMAP[gk]||[]).some(l=>{const i=bkIdx(l);return i>=r[0]&&i<=r[1]})};
 const bkMath=s=>esc(String(s==null?'':s)).replace(/`([^`]*)`/g,'<span dir="ltr" class="bkM">$1</span>');
 const STEPN=['المعطيات','المطلوب','القانون المستخدم'];
 async function drawBank(force){const m=$('#main');
   if(!BANK||force){m.innerHTML='<p class="empty"><span class="spin"></span> جار تحميل بنك الأسئلة…</p>';let r;try{r=await apiR({a:'tbank',token:TOKEN})}catch(e){m.innerHTML='<p class="empty">تعذر الاتصال بالخادم. اضغط «تحديث».</p>';return}
-    if(!r.ok){m.innerHTML=`<p class="empty">${r.error==='unknown_action'?'انسخ ملف code.gs الجديد إلى Google Apps Script وانشر إصدارا جديدا حتى يعمل بنك الأسئلة.':esc(errText(r.error))}</p>`;return}BANK=r}
+    if(!r.ok){m.innerHTML=`<p class="empty">${r.error==='unknown_action'?'انسخ ملف code.gs الجديد إلى Google Apps Script وانشر إصدارا جديدا حتى يعمل بنك الأسئلة.':esc(errText(r.error))}</p>`;return}BANK=r;if(r.rng&&typeof r.rng==='object'){BKR=r.rng;ls.set('p101-bkr',JSON.stringify(BKR))}}
   if(tab!=='bank')return;
   const nT=BANK.theory.reduce((a,g)=>a+g.qs.length,0),nN=BANK.num.reduce((a,g)=>a+g.items.length,0),isT=BKT==='theory';
   const hit=s=>!BKQ||String(s).includes(BKQ);
   const groups=isT?BANK.theory.map(g=>Object.assign({},g,{list:g.qs.filter(x=>hit(x.q)||hit(x.c)||x.o.some(hit))})):BANK.num.map(g=>Object.assign({},g,{list:g.items.filter(x=>hit(x.b)||hit(x.q))}));
+  groups.forEach(g=>{if(!bkIn(g.k,BKX))g.list=[]});const exT=(BKEX.find(x=>x[0]===BKX)||BKEX[0])[1],rg=bkRange(BKX);
+  const nSel=groups.reduce((a,g)=>a+g.list.length,0);
+  const opt=v=>BKLES.map(x=>`<option value="${x[0]}"${x[0]===v?' selected':''}>${esc(x[1])}</option>`).join('');
+  const exRow=`<div class="row" style="flex-wrap:wrap;gap:6px;margin-top:8px">${BKEX.map(x=>`<button class="btn ${BKX===x[0]?'':'ghost'} sm" data-bkx="${x[0]}">${x[0]==='all'?'📚':'📝'} ${x[1]}</button>`).join('')}</div>`+(BKX==='all'?'':`<div class="row" style="flex-wrap:wrap;gap:6px;margin-top:8px;align-items:center"><b>${esc(exT)}:</b> من <select id="bkA" style="max-width:260px">${opt((BKR[BKX]||{}).a||BKLES[0][0])}</select> إلى <select id="bkB" style="max-width:260px">${opt((BKR[BKX]||{}).b||BKLES[BKLES.length-1][0])}</select> <button class="btn sm" id="bkSv">💾 حفظ المدى</button></div><p class="sub" style="margin-top:4px">${rg?'المعروض أسئلة دروس هذا المدى فقط: '+AR(nSel)+(isT?' سؤالا':' نموذجا'):'لم يحدد المدى بعد: اختر أول درس وآخر درس ثم اضغط «حفظ المدى».'}</p>`);
   const L='أبجد';
   const body=groups.filter(g=>g.list.length).map(g=>`<details class="bkG"${BKQ?' open':''}><summary><b>${esc(g.t)}</b> <span class="tag">${AR(g.list.length)}${isT?' سؤالا':' نموذجا'}</span>${g.uses.length?`<small class="sub"> · يستخدم في: ${esc(g.uses.join('، '))}</small>`:''}</summary>
     ${g.list.map((x,i)=>isT?`<div class="bkQ"><div class="bkN">${AR(i+1)}. ${bkMath(x.q)}</div><ol class="bkO">${[x.c].concat(x.o).map((o,j)=>`<li class="${j?'':'ok'}">${L[j]}) ${bkMath(o)}${j?'':' ✓'}</li>`).join('')}</ol></div>`
       :`<div class="bkQ"><div class="bkB">📌 ${bkMath(x.b)}</div>${x.err?'<p class="sub">تعذر توليد مثال</p>':`<div class="bkN">مثال مولد: ${bkMath(x.q)}</div><ul class="bkO">${x.st.map((s,j)=>`<li><b>${STEPN[j]}:</b> ${bkMath(s)}</li>`).join('')}<li class="ok"><b>النتيجة:</b> <span dir="ltr">${AR(x.v)} ${esc(x.u||'')}</span></li></ul>`}</div>`).join('')}</details>`).join('');
   m.innerHTML=`<div class="card"><h2>🗂 بنك الأسئلة</h2><p class="sub">أسئلة الاختبارات التجريبية كما تولدها المنصة. لكل متدرب أسئلة مختلفة تسحب عشوائيا من هذه المجموعات، وخيارات كل سؤال بترتيب عشوائي، وأرقام المسائل الحسابية تتغير لكل متدرب. للاطلاع والتصدير فقط.</p>
-   <div class="row" style="flex-wrap:wrap;gap:6px"><button class="btn ${isT?'':'ghost'} sm" id="bkT">📝 النظرية (${AR(nT)})</button><button class="btn ${isT?'ghost':''} sm" id="bkN">🧮 الحسابية (${AR(nN)} نموذجا)</button></div>
+   <div class="row" style="flex-wrap:wrap;gap:6px"><button class="btn ${isT?'':'ghost'} sm" id="bkT">📝 النظرية (${AR(nT)})</button><button class="btn ${isT?'ghost':''} sm" id="bkN">🧮 الحسابية (${AR(nN)} نموذجا)</button></div>${exRow}
    <div class="row" style="flex-wrap:wrap;gap:6px;margin-top:8px"><input type="search" id="bkS" placeholder="بحث في الأسئلة" value="${esc(BKQ)}" style="flex:1;min-width:160px">
    <button class="btn ghost sm" id="bkW">⬇ تصدير Word</button>${isT?'':'<button class="btn ghost sm" id="bkR">🔄 أمثلة جديدة</button>'}</div>
    ${isT?'':'<p class="sub" style="margin-top:6px">كل نموذج يولد مسألة بأرقام مختلفة لكل متدرب؛ المعروض مثال واحد، واضغط «أمثلة جديدة» لتوليد غيره.</p>'}</div>
@@ -712,6 +723,9 @@ async function drawBank(force){const m=$('#main');
   $('#bkT').onclick=()=>{BKT='theory';ls.set('p101-bkt',BKT);drawBank()};$('#bkN').onclick=()=>{BKT='num';ls.set('p101-bkt',BKT);drawBank()};
   let st;$('#bkS').oninput=e=>{clearTimeout(st);st=setTimeout(()=>{BKQ=e.target.value.trim();drawBank();const s=$('#bkS');s.focus();s.setSelectionRange(s.value.length,s.value.length)},350)};
   if($('#bkR'))$('#bkR').onclick=()=>drawBank(true);
+  m.querySelectorAll('[data-bkx]').forEach(b=>b.onclick=()=>{BKX=b.dataset.bkx;ls.set('p101-bkx',BKX);drawBank()});
+  if($('#bkSv'))$('#bkSv').onclick=async()=>{const a=$('#bkA').value,b=$('#bkB').value;BKR[BKX]={a:bkIdx(a)<=bkIdx(b)?a:b,b:bkIdx(a)<=bkIdx(b)?b:a};ls.set('p101-bkr',JSON.stringify(BKR));const bt=$('#bkSv');bt.disabled=true;bt.textContent='… جار الحفظ';let r=null;try{r=await apiR({a:'tbank',token:TOKEN,rng:JSON.stringify(BKR)})}catch(e){}
+    if(r&&r.ok){BANK=r;if(r.rng&&typeof r.rng==='object')BKR=r.rng}drawBank();setTimeout(()=>{const n=$('#bkSv');if(n){n.textContent=r&&r.ok&&r.rng?'✓ حفظ في الخادم':'✓ حفظ على هذا الجهاز';setTimeout(()=>{const k=$('#bkSv');if(k)k.textContent='💾 حفظ المدى'},2500)}},30)};
   $('#bkW').onclick=async()=>{const withA=await new Promise(res=>{const ok=confirm('تصدير مع الإجابات الصحيحة؟\n«موافق» = مع الإجابات، «إلغاء» = بدون إجابات');res(ok)});bankWord(groups.filter(g=>g.list.length),isT,withA)}}
 function bankWord(groups,isT,withA){
   const mm=s=>esc(String(s==null?'':s)).replace(/`([^`]*)`/g,'<span dir="ltr" style="font-family:Calibri">$1</span>'),L='أبجد';
