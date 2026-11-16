@@ -76,7 +76,7 @@ function convert(t){
   t=t.replace(/([A-Za-zα-ωΑ-Ω])_([A-Za-z]+)/g,function(m,a,w){return ' '+sym(a)+' '+(UW[w.toLowerCase()]||w.split('').map(function(c){var l=c.toLowerCase();return has(LET,l)?LET[l]:c}).join(' '))+' '});
   t=t.replace(/\b(KE|PE|ME)([if])?\b/g,function(m,w,x){return ' '+({KE:'Kinetic Energy',PE:'Potential Energy',ME:'Mechanical Energy'})/*keEn16: المدرب 16 نوفمبر: بالإنجليزية*/[w]+(x?' '+LET[x]:'')+' '});
   /* elEn16: المدرب 16 نوفمبر: Electric تبقى إنجليزية وتقرأ كلمة كاملة مثل بقية المصطلحات */
-  t=t.replace(/(^|[^A-Za-z])μ([sk])(?=\s*(?:[=<>≤≥]|[·×]\s*N))/g,'$1 ميو $2 ');
+  t=t.replace(/(^|[^A-Za-z])μ([sk])(?=\s*(?:[=<>≤≥]|[·×]\s*N|N\b))/g,function(m,a,c){return a+' ميو '+(c==='s'?'إس':'كيه')+' '});/*muN16: μs N معامل الاحتكاك لا ميكروثانية*/
   t=t.replace(/(\d+(?:\.\d+)?)\s?°\s?C\b/g,function(m,n){return n+' °C'});
   t=t.replace(/(\d+(?:\.\d+)?)\s?°\s?F\b/g,function(m,n){return n+' °F'});
   t=t.replace(/≈/g,' ≈ ');
