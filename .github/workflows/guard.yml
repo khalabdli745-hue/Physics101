@@ -1,0 +1,86 @@
+# حارس منصة الفيزياء 101: يقارن كل تعديل بأحدث فرع معتمد approved-NNN
+# ويفشل عند أي تغيير خارج النطاق المكتوب في .guard/scope.json
+name: guard
+on:
+  push:
+    branches: [edits, guard-test]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: guard-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  static:
+    name: الفحوص الثابتة
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - name: المرجع والفحص
+        run: |
+          REF=$(.guard/ref.sh); echo "المرجع: $REF"
+          git worktree add -q --detach /tmp/ref "$REF"
+          python3 .guard/static.py "$PWD" /tmp/ref "$REF" "$GITHUB_STEP_SUMMARY"
+
+  shape:
+    name: بصمة ${{ matrix.side }} ${{ matrix.mode }} ${{ matrix.part }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        side: [ref, new]
+        mode: [lap, mob]
+        part: [0, 1, 2]
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - name: Playwright
+        run: |
+          pip install -q playwright==1.63.0
+          python3 -m playwright install --with-deps chromium > /dev/null
+      - name: البصمة
+        run: |
+          if [ "${{ matrix.side }}" = ref ]; then REF=$(.guard/ref.sh); git worktree add -q --detach /tmp/site "$REF"; ROOT=/tmp/site; else ROOT="$PWD"; fi
+          mkdir -p out
+          SITE_ROOT="$ROOT" python3 .guard/shape.py ${{ matrix.mode }} out/${{ matrix.mode }}_${{ matrix.part }}.json ${{ matrix.part }} 3
+      - uses: actions/upload-artifact@v4
+        with:
+          name: shape-${{ matrix.side }}-${{ matrix.mode }}-${{ matrix.part }}
+          path: out/
+
+  compare:
+    name: مقارنة البصمات
+    needs: shape
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with: { path: art }
+      - name: المقارنة
+        run: |
+          mkdir -p r n
+          for d in art/shape-ref-*; do cp "$d"/*.json r/ 2>/dev/null || true; done
+          for d in art/shape-new-*; do cp "$d"/*.json n/ 2>/dev/null || true; done
+          python3 .guard/shapecmp.py r n .guard/scope.json "$GITHUB_STEP_SUMMARY"
+
+  guard:
+    name: guard
+    needs: [static, compare]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: النتيجة النهائية
+        run: |
+          echo "الفحوص الثابتة: ${{ needs.static.result }} · مقارنة البصمات: ${{ needs.compare.result }}"
+          test "${{ needs.static.result }}" = success && test "${{ needs.compare.result }}" = success
