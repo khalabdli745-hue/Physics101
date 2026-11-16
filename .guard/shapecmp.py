@@ -33,7 +33,20 @@ for m in ('lap', 'mob'):
             fails.append(f'{name[m]} {k}: لم يفحص في النسخة الجديدة'); continue
         a, b = norm(A[k]), norm(B[k])
         if a != b:
-            d = '; '.join(f'{x}: {a.get(x)} → {b.get(x)}' for x in sorted(set(a) | set(b)) if a.get(x) != b.get(x))
+            NM = {'board': 'السبورة', 't_board': 'نص شرائح السبورة', 'ex': 'عدد بطاقات الأمثلة', 'quiz': 'عدد بطاقات اختبر نفسك', 'lab': 'أقسام التجربة',
+                  'v_sum': 'شكل بطاقة الملخص', 'v_ex': 'شكل الأمثلة والتمارين', 'v_quiz': 'شكل اختبر نفسك', 'v_lab': 'شكل بطاقة التجربة',
+                  'a_ex': 'تفاعل الأمثلة والتمارين (الضغط على الأزرار)', 'a_quiz': 'تفاعل اختبر نفسك'}
+            def dd(x):
+                u, w = a.get(x), b.get(x)
+                if isinstance(u, list) and isinstance(w, list):
+                    idx = [i + 1 for i in range(max(len(u), len(w))) if (u[i] if i < len(u) else None) != (w[i] if i < len(w) else None)]
+                    return f'{NM.get(x, x)}: البطاقات {idx[:12]} من {len(u)}→{len(w)}'
+                if x.startswith('a_'):
+                    us, ws = (u or '').split(), (w or '').split()
+                    i = next((i for i in range(max(len(us), len(ws))) if (us[i:i+1] != ws[i:i+1])), 0)
+                    return f'{NM.get(x, x)}: يختلف من الضغطة {i + 1}'
+                return f'{NM.get(x, x)}: {str(u)[:80]} → {str(w)[:80]}'
+            d = '; '.join(dd(x) for x in sorted(set(a) | set(b)) if a.get(x) != b.get(x))
             (allowed_changes if (ALLOW == ['*'] or k in ALLOW) else fails).append(f'{name[m]} {k}: {d}')
     for k in sorted(set(B) - set(A)):
         (allowed_changes if (ALLOW == ['*'] or k in ALLOW) else fails).append(f'{name[m]} {k}: درس جديد غير موجود في المرجع')
