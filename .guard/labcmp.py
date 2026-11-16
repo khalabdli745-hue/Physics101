@@ -33,6 +33,11 @@ for k in sorted(A):
                 if x.startswith('الخطوات'):
                     i = next((i for i, (p, q) in enumerate(zip(sa[x], sb[x])) if p != q), min(len(sa[x]), len(sb[x])))
                     det.append(f'{x}: يختلف من الخطوة {i + 1}')
+                    st_a, st_b = a.get('steps', []), b.get('steps', [])
+                    if i < len(st_a) and i < len(st_b):
+                        ua, ub = set(st_a[i].get('u', '').split('\n')), set(st_b[i].get('u', '').split('\n'))
+                        print(f'DIAG {k} {c} step {st_a[i]["k"]}/{st_b[i]["k"]} cap_eq={st_a[i]["cap"] == st_b[i]["cap"]} onlyRef={sorted(ua - ub)[:4]} onlyNew={sorted(ub - ua)[:4]}', file=sys.stderr)
+                    print(f'DIAG {k} {c} kseq ref={[z[0] for z in sa[x]]} new={[z[0] for z in sb[x]]}', file=sys.stderr)
                 else: det.append(f'{x}: {str(sa[x])[:60]} → {str(sb[x])[:60]}')
             tgt.append(f'التجربة {k} {SEC[c]}: ' + '؛ '.join(det))
         newsync = [x for x in b.get('sync', []) if x not in a.get('sync', [])]
