@@ -57,9 +57,35 @@ jobs:
           name: shape-${{ matrix.side }}-${{ matrix.mode }}-${{ matrix.part }}
           path: out/
 
+  labs:
+    name: تجارب ${{ matrix.side }} ${{ matrix.part }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    strategy:
+      fail-fast: false
+      matrix:
+        side: [ref, new]
+        part: [0, 1, 2, 3, 4, 5]
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - name: Playwright
+        run: |
+          pip install -q playwright==1.63.0
+          python3 -m playwright install --with-deps chromium > /dev/null
+      - name: تشغيل التجارب
+        run: |
+          if [ "${{ matrix.side }}" = ref ]; then REF=$(.guard/ref.sh); git worktree add -q --detach /tmp/site "$REF"; ROOT=/tmp/site; else ROOT="$PWD"; fi
+          mkdir -p out
+          SITE_ROOT="$ROOT" python3 .guard/labs.py out/labs_${{ matrix.part }}.json ${{ matrix.part }} 6
+      - uses: actions/upload-artifact@v4
+        with:
+          name: labs-${{ matrix.side }}-${{ matrix.part }}
+          path: out/
+
   compare:
-    name: مقارنة البصمات
-    needs: shape
+    name: مقارنة الدروس والتجارب
+    needs: [shape, labs]
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -72,7 +98,12 @@ jobs:
           mkdir -p r n
           for d in art/shape-ref-*; do cp "$d"/*.json r/ 2>/dev/null || true; done
           for d in art/shape-new-*; do cp "$d"/*.json n/ 2>/dev/null || true; done
-          python3 .guard/shapecmp.py r n .guard/scope.json "$GITHUB_STEP_SUMMARY"
+          for d in art/labs-ref-*; do cp "$d"/*.json r/ 2>/dev/null || true; done
+          for d in art/labs-new-*; do cp "$d"/*.json n/ 2>/dev/null || true; done
+          rc=0
+          python3 .guard/shapecmp.py r n .guard/scope.json "$GITHUB_STEP_SUMMARY" || rc=1
+          python3 .guard/labcmp.py r n .guard/scope.json "$GITHUB_STEP_SUMMARY" || rc=1
+          exit $rc
 
   guard:
     name: guard
@@ -82,5 +113,5 @@ jobs:
     steps:
       - name: النتيجة النهائية
         run: |
-          echo "الفحوص الثابتة: ${{ needs.static.result }} · مقارنة البصمات: ${{ needs.compare.result }}"
+          echo "الفحوص الثابتة: ${{ needs.static.result }} · مقارنة الدروس والتجارب: ${{ needs.compare.result }}"
           test "${{ needs.static.result }}" = success && test "${{ needs.compare.result }}" = success

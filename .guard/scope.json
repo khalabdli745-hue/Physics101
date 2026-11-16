@@ -1,5 +1,5 @@
 {
- "note": "إعداد نظام الحماية (المرحلتان 1 و2) وإضافة data-les",
+ "note": "إعداد نظام الحماية (المراحل 1 و2 و3) وإضافة data-les",
  "files": [".guard/*", ".github/*", "index.html"],
  "lessons": [],
  "shared": true,
