@@ -21,7 +21,7 @@ import hashlib
 # المرحلة 2: بصمة بصرية لكل بطاقة (الشكل والألوان والأحجام والمواقع داخل البطاقة والنص) وبصمة تفاعلية (نتيجة الضغط على أزرار البطاقات)
 VIS="""()=>{try{document.getAnimations().forEach(a=>{try{a.pause();a.currentTime=0}catch(e){}})}catch(e){}document.querySelectorAll('svg').forEach(g=>{try{g.pauseAnimations();g.setCurrentTime(0)}catch(e){}});
  const v=document.querySelector('#view');if(!v)return [];const cards=[...v.querySelectorAll('.inner > *')].filter(c=>c.offsetParent);
- return cards.map(cd=>{const R=cd.getBoundingClientRect();const o=[Math.round(R.width/3),Math.round(R.height/3),(cd.innerText||'').replace(/\\s+/g,' ')].join('|');const L=[o];let n=0;
+ return cards.map(cd=>{const R=cd.getBoundingClientRect();const o=[Math.round(R.width/3),Math.round(R.height/3),(cd.innerText||'').replace(/\\s+/g,' ')].join('|');const C0=getComputedStyle(cd);const L=[o,['CARD',C0.color,C0.backgroundColor,C0.backgroundImage.slice(0,80),C0.borderTopColor,C0.borderTopWidth,C0.borderRadius,C0.boxShadow.slice(0,60),C0.fontSize,C0.opacity,C0.paddingTop].join('|')];let n=0;
   for(const e of cd.querySelectorAll('*')){const r=e.getBoundingClientRect();if(r.width<2||r.height<2)continue;const c=getComputedStyle(e);if(c.visibility==='hidden'||c.display==='none')continue;
    const cl=(e.className&&e.className.baseVal!==undefined)?e.className.baseVal:(e.className||'');
    L.push([e.tagName,cl,Math.round((r.x-R.x)/3),Math.round((r.y-R.y)/3),Math.round(r.width/3),Math.round(r.height/3),c.color,c.backgroundColor,c.fontSize,c.fontWeight,c.borderTopColor,c.borderTopWidth,c.opacity].join('|'));if(++n>3000)break}
