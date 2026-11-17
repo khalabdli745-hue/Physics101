@@ -6804,7 +6804,7 @@ window.labVo=labVo;function labPre(s,W){try{if(!s||!s.sp||!labVo.on())return;con
 async function labVoicePrep(ST,W,cap){try{const K=(typeof key==='function'&&typeof pos!=='undefined')?key(pos.u,pos.l):'';window.__labGemOff='';if(!labVo.on())return;
   const T=[];const add=x=>{x=String(x||'').trim();if(x&&T.indexOf(x)<0)T.push(x)};add(labIO(W,0));add(labIO(W,1));
   ST.forEach(s=>{if(!s||!s.sp)return;const p=String((!W&&s.sx)||s.sp).split('‖');add(p[0]);if(!W&&p[1])add(p[1])});
-  const G=window.GEMQ;if(!G||!G.on()){T.forEach(labPf);return}
+  const G=(window.GEMQ2&&GEMQ2.on())?GEMQ2:window.GEMQ;if(!G||!G.on()){T.forEach(labPf);return}
   const fb0=G.fb();T.forEach(labPf);const w=document.createElement('div');w.className='dmWait';w.style.cssText='font-size:12.5px;font-weight:800;color:var(--muted);margin-top:4px';w.textContent='🔊 جار تجهيز صوت التجربة…';if(cap)cap.appendChild(w);
   const t0=Date.now();while(Date.now()-t0<7000&&G.pend()>0)await new Promise(r=>setTimeout(r,200));w.remove();
   if(G.pend()>0||G.fb()>fb0){window.__labGemOff=K;T.forEach(labPf)}}catch(e){}}
