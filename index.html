@@ -1690,6 +1690,7 @@ function voiceTest(){if(!/voicetest/i.test(location.hash+location.search)||docum
 addEventListener('hashchange',voiceTest);
 function render(){if(typeof pos!=='undefined'&&pos&&pos.t==='page'&&!(Date.now()-(window.__bagPgT||0)<2000))pos.t='sum';
   $('app').dataset.unit=GT(pos.t)?'0':String(pos.u);
+  /* المدرب 17 نوفمبر (data-les): رقم الدرس الحالي على الصفحة كلها لعزل تعديلات كل درس وربطه بفحص النطاق، وفارغ في الصفحات العامة */try{document.body.dataset.les=GT(pos.t)?'':key(pos.u,pos.l)}catch(e){}
   /* المدرب 13:44: العلامة المائية = قانون الدرس نفسه */try{const LW={"0-1": "SI : m · kg · s", "0-2": "1 km/h = 1000 m / 3600 s", "0-4": "R = A + B", "0-5": "Ax = A cos θ", "0-6": "A · B = AB cos θ", "1-1": "a = Δv / Δt", "1-2": "v = v₀ + a t", "1-3": "F = m a", "1-5": "f = μ N", "1-7": "W = F d cos θ", "1-8": "KE = ½ m v²", "1-9": "KE + PE = const", "2-1": "T = t + 273", "2-3": "Q = m c ΔT", "2-5": "Q₁ + Q₂ = 0", "3-1": "F = k q₁ q₂ / r²", "3-3": "E = F / q₀", "3-4": "V = k q / r", "3-5": "C = q / V", "3-6": "C = C₁ + C₂", "4-1": "I = Δq / Δt", "4-5": "V = I R", "4-8": "R = R₁ + R₂"},lk=pos.u+'-'+pos.l,lw=LW[lk];if(lw&&!GT(pos.t))$('app').style.setProperty('--law',JSON.stringify(lw));else $('app').style.removeProperty('--law')}catch(e){}
   TTS.stop();
   const u=UNITS[pos.u],l=lesson();
@@ -2870,7 +2871,18 @@ const SYNC=(()=>{
   function flush(){if(!API||!AUTH||sending)return;const q=queue();if(!q.length)return;sending=true;
     const item=q[0];post(Object.assign({a:'result',token:AUTH.token},item)).then(r=>{if(r.ok||r.error!=='auth'){const q2=queue();q2.shift();store.set('p101-queue',q2)}if(r.error==='auth')logout(true)}).catch(()=>{}).finally(()=>{sending=false;if(queue().length)setTimeout(flush,800)})}
   function result(kind,lessonKey,lessonTitle,score,max,detail){if(!API||!AUTH)return;const q=queue();q.push({kind,lessonKey,lessonTitle,score,max,detail:detail||''});store.set('p101-queue',q.slice(-200));flush()}
-  function beat(final){if(!API||!AUTH)return;const sec=Math.round(active);if(sec<5&&!final)return;active=0;post({a:'hb',token:AUTH.token,sec:Math.min(sec,180)},final).catch(()=>{})}
+  /* demoSess66: طلب المدرب 17 نوفمبر: لحساب التجربة فقط ترسل مع نبضة النشاط معرف الجلسة (لكل فتح للصفحة) ووصف الجهاز بالتفصيل والوقت منذ فتح الصفحة */
+  const DSID=Math.random().toString(36).slice(2,10)+Date.now().toString(36),DT0=Date.now();let DEVX='';
+  try{(function(){const ua=navigator.userAgent||'';let os='',dv='',br='';const HW={NOH:'Mate 40 Pro',OCE:'Mate 40',LIO:'Mate 30 Pro',TAS:'Mate 30',ELS:'P40 Pro',ANA:'P40',JAD:'P50 Pro',ALN:'Mate 60 Pro',BRA:'Mate 60'};
+    const nm=m=>{m=String(m||'').trim();if(!m||m==='K')return '';const h=m.replace(/^HUAWEI\s*/i,'').match(/^([A-Z]{3})-/);if(h&&HW[h[1]])return 'هواوي '+HW[h[1]]+' ('+m.replace(/^HUAWEI\s*/i,'')+')';if(/^SM-/.test(m))return 'سامسونج '+m;return m};
+    if(/iPad/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1)){dv='iPad';const v=ua.match(/OS (\d+)[_.]/)||ua.match(/Version\/(\d+)/);os='iPadOS'+(v?' '+v[1]:'')}
+    else if(/iPhone/.test(ua)){dv='iPhone';const v=ua.match(/OS (\d+)[_.]/);os='iOS'+(v?' '+v[1]:'')}
+    else if(/Android/.test(ua)){const v=ua.match(/Android (\d+)/);os='أندرويد'+(v?' '+v[1]:'');const m=ua.match(/Android[^;)]*;\s*([^;)]+?)(?:\s+Build|;|\))/);dv=m?m[1]:''}
+    else if(/CrOS/.test(ua))os='Chromebook';else if(/Windows/.test(ua))os='Windows';else if(/Macintosh|Mac OS/.test(ua))os='Mac';else if(/Linux/.test(ua))os='Linux (كمبيوتر)';
+    br=/Edg\//.test(ua)?'Edge':/OPR\//.test(ua)?'Opera':/SamsungBrowser/.test(ua)?'Samsung Internet':/HuaweiBrowser/.test(ua)?'Huawei Browser':/Firefox|FxiOS/.test(ua)?'Firefox':/CriOS|Chrome/.test(ua)?'Chrome':/Safari/.test(ua)?'Safari':'';
+    const fin=()=>{DEVX=[nm(dv),os,br].filter(Boolean).join(' · ').slice(0,90)};fin();
+    if(navigator.userAgentData&&navigator.userAgentData.getHighEntropyValues)navigator.userAgentData.getHighEntropyValues(['model','platformVersion']).then(h=>{if(h.model)dv=h.model;if(os==='Windows'&&h.platformVersion)os=+h.platformVersion.split('.')[0]>=13?'Windows 11':'Windows 10';fin()}).catch(()=>{})})()}catch(e){}
+  function beat(final){if(!API||!AUTH)return;const sec=Math.round(active);if(sec<5&&!final)return;active=0;post(Object.assign({a:'hb',token:AUTH.token,sec:Math.min(sec,180)},AUTH.demo?{sid:DSID,devx:DEVX,el:Math.round((Date.now()-DT0)/1000)}:{}),final).catch(()=>{})}
   ['pointerdown','keydown','scroll','touchstart'].forEach(e=>addEventListener(e,()=>{lastAct=Date.now()},{passive:true,capture:true}));
   setInterval(()=>{if(document.visibilityState==='visible'&&(Date.now()-lastAct<5*60e3||TTS.busy()))active+=1},1000);
   setInterval(()=>{beat();flush()},60e3);

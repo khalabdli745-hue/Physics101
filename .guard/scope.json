@@ -1,0 +1,14 @@
+{
+ "note": "نظام الحماية (المراحل 1-3) وdata-les، وجلسات حساب التجربة demoSess66 (نبضة النشاط فقط، لا يمس الدروس)",
+ "files": [
+  ".guard/*",
+  ".github/*",
+  "index.html"
+ ],
+ "lessons": [],
+ "shared": true,
+ "voice": false,
+ "gone_ok": {},
+ "rm_ok": [],
+ "restore_ok": []
+}
