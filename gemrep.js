@@ -168,9 +168,9 @@ function teacherTok(){try{if(typeof AUTH!=='undefined'&&AUTH&&!AUTH.demo)return 
 function stuTok(){try{return (typeof AUTH!=='undefined'&&AUTH&&AUTH.token)||''}catch(e){return ''}}
 function gall(){try{return localStorage.getItem('p101-gall')==='1'}catch(e){return false}}
 function tok(){var t=teacherTok();if(t&&(function(){try{return localStorage.getItem('p101-grep')==='1'}catch(e){return false}})())return t;return gall()?(t||stuTok()):''}
-function on(){try{return typeof API!=='undefined'&&!!API&&!!tok()}catch(e){return false}}
+function on(){try{/*labVo68: المدرب 17 نوفمبر: تجربة لم تجهز كل أصوات Gemini لها تقال كلها بصوت حامد (لا خلط ولا انتظار)*/if(window.__labGemOff&&document.querySelector('.card.lab')){var k='';try{k=key(pos.u,pos.l)}catch(_){}if(k&&window.__labGemOff===k)return false}return typeof API!=='undefined'&&!!API&&!!tok()}catch(e){return false}}
 try{if(typeof API!=='undefined'&&API)fetch(API,{redirect:'follow'}).then(function(r){return r.json()}).then(function(j){if(!j||!j.ok)return;try{localStorage.setItem('p101-gall',j.grepAll?'1':'0')}catch(e){}if(j.grepAll&&typeof TTS!=='undefined'&&TTS){try{TTS.has=function(){return true}}catch(e){}}}).catch(function(){})}catch(e){}
-window.GREPON=on;
+window.GREPON=on;window.GEMQ2={on:function(){return on()},pend:function(){return Object.keys(PEND).length},fb:function(){return window.__gemFb||0}};
 if(typeof TTS==='undefined'||!TTS)return;
 var O={play:TTS.play,playAr:TTS.playAr,playRaw:TTS.playRaw,prefetch:TTS.prefetch,prefetchAr:TTS.prefetchAr,stop:TTS.stop,busy:TTS.busy,pause:TTS.pause,resume:TTS.resume};
 var CACHE={},PEND={},A=null,playing=false,paused=false,gen=0,btn=null,btnH='';
@@ -181,7 +181,7 @@ function unlock(){if(UNL)return;try{if(!A){A=new Audio();A.preload='auto'}if(pla
 function fetchUrl(text){if(CACHE[text])return Promise.resolve(CACHE[text]);if(PEND[text])return PEND[text];
   var P=fetch(API,{method:'POST',body:JSON.stringify({a:'rtts',token:tok(),text:text}),redirect:'follow'}).then(function(r){return r.json()}).then(function(x){
     if(!x||!x.ok||!x.audio)throw x||{};var b=atob(x.audio),u=new Uint8Array(b.length);for(var i=0;i<b.length;i++)u[i]=b.charCodeAt(i);
-    var url=URL.createObjectURL(new Blob([u],{type:x.mime||'audio/wav'}));CACHE[text]=url;delete PEND[text];return url}).catch(function(e){delete PEND[text];throw e});
+    var url=URL.createObjectURL(new Blob([u],{type:x.mime||'audio/wav'}));CACHE[text]=url;delete PEND[text];return url}).catch(function(e){delete PEND[text];window.__gemFb=(window.__gemFb||0)+1;throw e});
   PEND[text]=P;return P}
 function rst(){if(btn){try{btn.innerHTML=btnH;btn.classList.remove('on')}catch(e){}}btn=null}
 function myStop(){gen++;playing=false;paused=false;if(A){A.onended=A.onerror=null;try{A.pause()}catch(e){}}rst()}
@@ -193,7 +193,7 @@ function gplay(text,b,fallback){var same=b&&btn===b;O.stop();myStop();if(same)re
     A.onended=function(){setTimeout(function(){if(g===gen){playing=false;rst()}},300)};
     A.onerror=function(){if(g===gen){playing=false;rst()}};
     A.src=url;var p=A.play();if(p&&p.catch)p.catch(function(er){if(g===gen){playing=false;rst();badge('تعذر التشغيل: '+((er&&er.name)||'audio'));UNL=false;/* إن منع المتصفح التشغيل لا تبقى الخطوة بلا صوت فتسرع اليد: يقولها حامد */try{fallback()}catch(_){}}});
-  }).catch(function(e){if(g!==gen)return;playing=false;rst();var why=(e&&e.error)||'net';try{console.warn('gemrep',why)}catch(_){}badge('حامد ← '+why);fallback()})}
+  }).catch(function(e){if(g!==gen)return;playing=false;rst();var why=(e&&e.error)||'net';try{console.warn('gemrep',why)}catch(_){}badge('حامد ← '+why);window.__gemFb=(window.__gemFb||0)+1;fallback()})}
 /* diag61: علامة صغيرة للمدرب فقط عند التحول لحامد وسببه */function badge(m){try{if(!teacherTok())return;var e=document.getElementById('grepdg');if(!e){e=document.createElement('div');e.id='grepdg';e.style.cssText='position:fixed;left:8px;bottom:8px;z-index:2147483646;max-width:70vw;background:#7f1d1d;color:#fff;font:700 12px/1.4 system-ui,sans-serif;padding:6px 10px;border-radius:8px;opacity:.92;pointer-events:none;direction:rtl';document.body.appendChild(e)}e.textContent=m;clearTimeout(e._t);e._t=setTimeout(function(){e.remove()},8000)}catch(_){}}
 TTS.play=function(text,b,raw){if(!on()||raw)return O.play.apply(TTS,arguments);var a=arguments;return gplay(text,b||document.createElement('button'),function(){O.play.apply(TTS,a)})};
 TTS.playAr=function(text,b){if(!on())return O.playAr.apply(TTS,arguments);var a=arguments;return gplay(text,b||document.createElement('button'),function(){O.playAr.apply(TTS,a)})};
