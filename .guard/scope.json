@@ -1,10 +1,10 @@
 {
- "note": "حذف شعبة اختبارات كاملة من لوحة المدرب (secPurge67، teacher.html فقط، يحتاج code.gs 67)، مع ما سبق: نظام الحماية وdata-les وجلسات حساب التجربة demoSess66",
+ "note": "labVo68: صوت التجارب: تجهيز أصوات كل الخطوات قبل البدء، وصوت واحد للتجربة (جيميناي إن جهزت كل جملها وإلا حامد)، وانتظار الصوت محدود بطول النص فلا توقف (labs.js وindex.html)",
  "files": [
   ".guard/*",
   ".github/*",
   "index.html",
-  "teacher.html"
+  "labs.js"
  ],
  "lessons": [],
  "shared": true,
