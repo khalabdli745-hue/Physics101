@@ -1,9 +1,10 @@
 {
- "note": "نظام الحماية (المراحل 1-3) وdata-les، وجلسات حساب التجربة demoSess66 (نبضة النشاط فقط، لا يمس الدروس)",
+ "note": "حذف شعبة اختبارات كاملة من لوحة المدرب (secPurge67، teacher.html فقط، يحتاج code.gs 67)، مع ما سبق: نظام الحماية وdata-les وجلسات حساب التجربة demoSess66",
  "files": [
   ".guard/*",
   ".github/*",
-  "index.html"
+  "index.html",
+  "teacher.html"
  ],
  "lessons": [],
  "shared": true,
