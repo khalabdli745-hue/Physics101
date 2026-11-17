@@ -2871,7 +2871,18 @@ const SYNC=(()=>{
   function flush(){if(!API||!AUTH||sending)return;const q=queue();if(!q.length)return;sending=true;
     const item=q[0];post(Object.assign({a:'result',token:AUTH.token},item)).then(r=>{if(r.ok||r.error!=='auth'){const q2=queue();q2.shift();store.set('p101-queue',q2)}if(r.error==='auth')logout(true)}).catch(()=>{}).finally(()=>{sending=false;if(queue().length)setTimeout(flush,800)})}
   function result(kind,lessonKey,lessonTitle,score,max,detail){if(!API||!AUTH)return;const q=queue();q.push({kind,lessonKey,lessonTitle,score,max,detail:detail||''});store.set('p101-queue',q.slice(-200));flush()}
-  function beat(final){if(!API||!AUTH)return;const sec=Math.round(active);if(sec<5&&!final)return;active=0;post({a:'hb',token:AUTH.token,sec:Math.min(sec,180)},final).catch(()=>{})}
+  /* demoSess66: طلب المدرب 17 نوفمبر: لحساب التجربة فقط ترسل مع نبضة النشاط معرف الجلسة (لكل فتح للصفحة) ووصف الجهاز بالتفصيل والوقت منذ فتح الصفحة */
+  const DSID=Math.random().toString(36).slice(2,10)+Date.now().toString(36),DT0=Date.now();let DEVX='';
+  try{(function(){const ua=navigator.userAgent||'';let os='',dv='',br='';const HW={NOH:'Mate 40 Pro',OCE:'Mate 40',LIO:'Mate 30 Pro',TAS:'Mate 30',ELS:'P40 Pro',ANA:'P40',JAD:'P50 Pro',ALN:'Mate 60 Pro',BRA:'Mate 60'};
+    const nm=m=>{m=String(m||'').trim();if(!m||m==='K')return '';const h=m.replace(/^HUAWEI\s*/i,'').match(/^([A-Z]{3})-/);if(h&&HW[h[1]])return 'هواوي '+HW[h[1]]+' ('+m.replace(/^HUAWEI\s*/i,'')+')';if(/^SM-/.test(m))return 'سامسونج '+m;return m};
+    if(/iPad/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1)){dv='iPad';const v=ua.match(/OS (\d+)[_.]/)||ua.match(/Version\/(\d+)/);os='iPadOS'+(v?' '+v[1]:'')}
+    else if(/iPhone/.test(ua)){dv='iPhone';const v=ua.match(/OS (\d+)[_.]/);os='iOS'+(v?' '+v[1]:'')}
+    else if(/Android/.test(ua)){const v=ua.match(/Android (\d+)/);os='أندرويد'+(v?' '+v[1]:'');const m=ua.match(/Android[^;)]*;\s*([^;)]+?)(?:\s+Build|;|\))/);dv=m?m[1]:''}
+    else if(/CrOS/.test(ua))os='Chromebook';else if(/Windows/.test(ua))os='Windows';else if(/Macintosh|Mac OS/.test(ua))os='Mac';else if(/Linux/.test(ua))os='Linux (كمبيوتر)';
+    br=/Edg\//.test(ua)?'Edge':/OPR\//.test(ua)?'Opera':/SamsungBrowser/.test(ua)?'Samsung Internet':/HuaweiBrowser/.test(ua)?'Huawei Browser':/Firefox|FxiOS/.test(ua)?'Firefox':/CriOS|Chrome/.test(ua)?'Chrome':/Safari/.test(ua)?'Safari':'';
+    const fin=()=>{DEVX=[nm(dv),os,br].filter(Boolean).join(' · ').slice(0,90)};fin();
+    if(navigator.userAgentData&&navigator.userAgentData.getHighEntropyValues)navigator.userAgentData.getHighEntropyValues(['model','platformVersion']).then(h=>{if(h.model)dv=h.model;if(os==='Windows'&&h.platformVersion)os=+h.platformVersion.split('.')[0]>=13?'Windows 11':'Windows 10';fin()}).catch(()=>{})})()}catch(e){}
+  function beat(final){if(!API||!AUTH)return;const sec=Math.round(active);if(sec<5&&!final)return;active=0;post(Object.assign({a:'hb',token:AUTH.token,sec:Math.min(sec,180)},AUTH.demo?{sid:DSID,devx:DEVX,el:Math.round((Date.now()-DT0)/1000)}:{}),final).catch(()=>{})}
   ['pointerdown','keydown','scroll','touchstart'].forEach(e=>addEventListener(e,()=>{lastAct=Date.now()},{passive:true,capture:true}));
   setInterval(()=>{if(document.visibilityState==='visible'&&(Date.now()-lastAct<5*60e3||TTS.busy()))active+=1},1000);
   setInterval(()=>{beat();flush()},60e3);

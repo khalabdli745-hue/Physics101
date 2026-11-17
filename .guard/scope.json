@@ -1,6 +1,10 @@
 {
- "note": "إعداد نظام الحماية (المراحل 1 و2 و3) وإضافة data-les",
- "files": [".guard/*", ".github/*", "index.html"],
+ "note": "نظام الحماية (المراحل 1-3) وdata-les، وجلسات حساب التجربة demoSess66 (نبضة النشاط فقط، لا يمس الدروس)",
+ "files": [
+  ".guard/*",
+  ".github/*",
+  "index.html"
+ ],
  "lessons": [],
  "shared": true,
  "voice": false,

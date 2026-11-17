@@ -105,8 +105,10 @@ def main():
                         if kk is not None and kk >= 0:
                             cur = next((x for x in S['steps'] if x['k'] == kk), None)
                             if cur is None:
-                                cur = {'k': kk, 'cap': '', 'hand': None, 'stp': '', 'uu': set()}; S['steps'].append(cur)
-                            cur['uu'].update(z for z in (h.get('U') or '').split('\n') if z)
+                                cur = {'k': kk, 'cap': '', 'hand': None, 'stp': '', 'uu': {}, 'caps': set()}; S['steps'].append(cur)
+                            for z in (h.get('U') or '').split('\n'):
+                                if z: cur['uu'][z] = cur['uu'].get(z, 0) + 1
+                            if h.get('cap'): cur['caps'].add(h.get('cap'))
                             if h.get('cap') and not cur['cap']: cur['cap'] = h.get('cap')
                             if h.get('hand'): cur['hand'] = h.get('hand')
                             if time.time() - tl > 1.6 and kk not in seen:
@@ -124,7 +126,7 @@ def main():
                         if time.time() - tl > 40: S['stuck'] = kk; break
                     S['n'] = h.get('n'); S['end'] = h.get('k')
                     for x in S['steps']:
-                        x['u'] = '\n'.join(sorted(x.pop('uu'))); x['st'] = hashlib.md5(x['u'].encode()).hexdigest()[:10]
+                        uu = x.pop('uu'); x['uc'] = uu; x['u'] = '\n'.join(sorted(uu)); x['st'] = hashlib.md5(x['u'].encode()).hexdigest()[:10]; x['caps'] = sorted(x['caps'])
                     au = pg.evaluate('()=>__AU'); S['sync'] = sync_check(au); S['narr'] = sum(1 for e in au if e[0] == 'aplay')
                     if cls == 'lx52':
                         S['results'] = pg.evaluate("()=>{const r=document.querySelector('.lab .lx53');return r?r.innerText.replace(/\\s+/g,' ').slice(0,600):'no lx53'}")

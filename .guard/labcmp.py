@@ -15,12 +15,29 @@ SEC = {'lx51': '«شاهد»', 'lx52': '«نفذ»'}
 fails, allowed, review, oks = [], [], [], []; moving = set()
 D = lambda t: re.sub(r'[0-9٠-٩][0-9٠-٩.,]*', '#', t or '')
 U = lambda z: re.sub(r'url\("?#[^)"]*"?\)', 'url', z)  # أسماء التدرجات اللونية تولد تلقائيا في كل تشغيل
+def inv(S):
+    """عدد مرات ظهور كل عنصر (جهاز/شكل/لون/نص) في كل عينات التشغيل"""
+    c = {}
+    for x in S.get('steps', []):
+        for z, n in (x.get('uc') or {z: 1 for z in (x.get('u') or '').split('\n') if z}).items():
+            z = U(z); c[z] = c.get(z, 0) + n
+    return c
 def sig(S):
     return {'عدد الخطوات': S.get('n'), 'وصل إلى الخطوة': S.get('end'), 'توقف عند': S.get('stuck'),
-            'الخطوات ونصها': [(x['k'], D(x['cap'])) for x in S.get('steps', [])],
-            'أجهزة المشهد وأشكالها وألوانها ونصوصها (كل الخطوات)': sorted({U(z) for x in S.get('steps', []) for z in (x.get('u') or '').split('\n') if z}),
             'عدد مقاطع الصوت': S.get('narr'), 'ضغطات سجل القراءة': len(S.get('recs', [])), 'تسجيل فاشل': S.get('recs', []).count('FAIL'),
             'بنية جدول النتائج (العناوين والوحدات)': re.sub(r'[0-9٠-٩][0-9٠-٩.,]*', '#', S.get('results') or ''), 'خطأ': S.get('err')}
+def cmp_extra(a, b):
+    """فرق حقيقي فقط: عنصر ظهر 6 مرات فأكثر في تشغيل وغاب تماما في الآخر، أو نص خطوة لا يتقاطع مع أي نص ظهر في نفس الخطوة"""
+    out = []
+    ia, ib = inv(a), inv(b)
+    gone = [z for z, n in ia.items() if n >= 6 and z not in ib]; new = [z for z, n in ib.items() if n >= 6 and z not in ia]
+    if gone or new: out.append(f'أجهزة المشهد وأشكالها وألوانها ونصوصها: اختفى {gone[:3]} وظهر {new[:3]}')
+    sa = {x['k']: {D(c) for c in (x.get('caps') or [x.get('cap')]) if c} for x in a.get('steps', [])}
+    sb = {x['k']: {D(c) for c in (x.get('caps') or [x.get('cap')]) if c} for x in b.get('steps', [])}
+    bad = [k for k in sa if k in sb and sa[k] and sb[k] and not (sa[k] & sb[k])]
+    if bad: out.append(f'نص الخطوة تغير في الخطوات {bad[:6]}')
+    if sorted(sa) != sorted(sb): out.append(f'تسلسل الخطوات تغير {sorted(sa)} → {sorted(sb)}')
+    return out
 if not A: fails.append('لم تنتج نتائج المرجع')
 for k in sorted(A):
     if k not in B: fails.append(f'التجربة {k}: لم تفحص في الجديد'); continue
@@ -30,7 +47,8 @@ for k in sorted(A):
         a, b = A[k].get(c) or {}, B[k].get(c) or {}
         sa, sb = sig(a), sig(b)
         d = [x for x in sa if sa[x] != sb[x]]
-        if d:
+        ex = cmp_extra(a, b)
+        if d or ex:
             det = []
             for x in d:
                 if x.startswith('أجهزة'):
@@ -39,7 +57,7 @@ for k in sorted(A):
                     i = next((i for i, (p, q) in enumerate(zip(sa[x], sb[x])) if p != q), min(len(sa[x]), len(sb[x])))
                     det.append(f'{x}: يختلف من الخطوة {i + 1}')
                 else: det.append(f'{x}: {str(sa[x])[:60]} → {str(sb[x])[:60]}')
-            tgt.append(f'التجربة {k} {SEC[c]}: ' + '؛ '.join(det))
+            tgt.append(f'التجربة {k} {SEC[c]}: ' + '؛ '.join(det + ex))
         newsync = [x for x in b.get('sync', []) if x not in a.get('sync', [])]
         if newsync: tgt.append(f'التجربة {k} {SEC[c]}: مخالفة تزامن جديدة: ' + '، '.join(newsync[:4]))
         old = [x for x in b.get('sync', []) if x in a.get('sync', [])]
