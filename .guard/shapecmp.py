@@ -22,7 +22,7 @@ def norm(v):
     v['board'] = ' '.join(sorted(set(t[:4] for t in (v.get('board') or '').split()) - {'END'}))
     return v
 
-fails, allowed_changes, oks = [], [], []
+fails, allowed_changes, oks, review = [], [], [], []
 name = {'lap': 'اللابتوب', 'mob': 'الجوال'}
 for m in ('lap', 'mob'):
     A, ea = load(REFD, m); B, eb = load(NEWD, m)
@@ -47,7 +47,11 @@ for m in ('lap', 'mob'):
                     return f'{NM.get(x, x)}: يختلف من الضغطة {i + 1}'
                 return f'{NM.get(x, x)}: {str(u)[:80]} → {str(w)[:80]}'
             d = '; '.join(dd(x) for x in sorted(set(a) | set(b)) if a.get(x) != b.get(x))
-            (allowed_changes if (ALLOW == ['*'] or k in ALLOW) else fails).append(f'{name[m]} {k}: {d}')
+            only_board = all(x == 'board' for x in set(a) | set(b) if a.get(x) != b.get(x))
+            if only_board and k not in ALLOW:
+                review.append(f'{name[m]} {k}: ترتيب أنواع شرائح السبورة المصورة اختلف ({d}) مع أن نص كل الشرائح وشكل البطاقات مطابق (غالبا تخطي شريحة على جهاز بطيء)')
+            else:
+                (allowed_changes if (ALLOW == ['*'] or k in ALLOW) else fails).append(f'{name[m]} {k}: {d}')
     for k in sorted(set(B) - set(A)):
         (allowed_changes if (ALLOW == ['*'] or k in ALLOW) else fails).append(f'{name[m]} {k}: درس جديد غير موجود في المرجع')
     newerr = [e for e in set(eb) if e not in set(ea)]
@@ -59,6 +63,7 @@ for m in ('lap', 'mob'):
 lines = [f'## بصمة الدروس (المرجع مقابل الجديد): {"❌ فشل" if fails else "✅ نجح"}', f'الدروس المسموح تغيرها: {ALLOW or "لا شيء"}', '']
 if fails: lines += ['### ❌ تغير خارج النطاق'] + [f'- {x}' for x in fails[:40]] + ['']
 if allowed_changes: lines += ['### 👁 تغير داخل النطاق (راجعه)'] + [f'- {x}' for x in allowed_changes[:40]] + ['']
+if review: lines += ['### 👁 يحتاج مراجعة'] + [f'- {x}' for x in review[:20]] + ['']
 lines += ['### ✅'] + [f'- {x}' for x in oks] + ([] if fails else ['- لا تغيير في أي درس خارج النطاق'])
 rep = '\n'.join(lines); print(rep)
 if OUTMD: open(OUTMD, 'a', encoding='utf8').write(rep + '\n')

@@ -101,9 +101,18 @@ def main():
                         h = pg.evaluate(STEP, cls) or {}
                         if h.get('k') != last: last = h.get('k'); tl = time.time()
                         kk = h.get('k')
-                        if kk not in seen and time.time() - tl > 1.6:
-                            seen.add(kk)
-                            S['steps'].append({'k': kk, 'cap': h.get('cap'), 'hand': h.get('hand'), 'st': hashlib.md5((h.get('U') or '').encode()).hexdigest()[:10], 'stp': hashlib.md5((h.get('L') or '').encode()).hexdigest()[:10], 'u': h.get('U') or ''})
+                        # كل عينة أثناء الخطوة تضاف لاتحاد عناصرها، ونص الخطوة الأخير هو المعتمد
+                        if kk is not None and kk >= 0:
+                            cur = next((x for x in S['steps'] if x['k'] == kk), None)
+                            if cur is None:
+                                cur = {'k': kk, 'cap': '', 'hand': None, 'stp': '', 'uu': set()}; S['steps'].append(cur)
+                            cur['uu'].update(z for z in (h.get('U') or '').split('\n') if z)
+                            if h.get('cap') and not cur['cap']: cur['cap'] = h.get('cap')
+                            if h.get('hand'): cur['hand'] = h.get('hand')
+                            if time.time() - tl > 1.6 and kk not in seen:
+                                # نص الخطوة يؤخذ في لحظة الاستقرار (بعد 1.6 ث من بدايتها)، لا قبلها ولا عند الانتقال للتالية
+                                seen.add(kk); cur['stp'] = hashlib.md5((h.get('L') or '').encode()).hexdigest()[:10]
+                                if h.get('cap'): cur['cap'] = h.get('cap')
                         if h.get('n', 0) > 0 and h.get('k') == h.get('n') and kk in seen:
                             if cls == 'lx52':
                                 for _ in range(40):
@@ -114,6 +123,8 @@ def main():
                             break
                         if time.time() - tl > 40: S['stuck'] = kk; break
                     S['n'] = h.get('n'); S['end'] = h.get('k')
+                    for x in S['steps']:
+                        x['u'] = '\n'.join(sorted(x.pop('uu'))); x['st'] = hashlib.md5(x['u'].encode()).hexdigest()[:10]
                     au = pg.evaluate('()=>__AU'); S['sync'] = sync_check(au); S['narr'] = sum(1 for e in au if e[0] == 'aplay')
                     if cls == 'lx52':
                         S['results'] = pg.evaluate("()=>{const r=document.querySelector('.lab .lx53');return r?r.innerText.replace(/\\s+/g,' ').slice(0,600):'no lx53'}")

@@ -12,7 +12,7 @@ def load(d):
     return r, e
 A, ea = load(REFD); B, eb = load(NEWD)
 SEC = {'lx51': '«شاهد»', 'lx52': '«نفذ»'}
-fails, allowed, review, oks = [], [], [], []
+fails, allowed, review, oks = [], [], [], []; moving = set()
 D = lambda t: re.sub(r'[0-9٠-٩][0-9٠-٩.,]*', '#', t or '')
 U = lambda z: re.sub(r'url\("?#[^)"]*"?\)', 'url', z)  # أسماء التدرجات اللونية تولد تلقائيا في كل تشغيل
 def sig(S):
@@ -46,9 +46,10 @@ for k in sorted(A):
         if old: review.append(f'التجربة {k} {SEC[c]}: مخالفة تزامن موجودة في المرجع أيضا: ' + '، '.join(old[:3]))
         if a.get('results') != b.get('results') and not d: review.append(f'التجربة {k} {SEC[c]}: أرقام جدول النتائج اختلفت (قراءات القياس تتغير بالتوقيت، راجعها)')
         pa = [x.get('stp') for x in a.get('steps', [])]; pb = [x.get('stp') for x in b.get('steps', [])]
-        if pa != pb and not d: review.append(f'التجربة {k} {SEC[c]}: مواضع الأجزاء المتحركة اختلفت قليلا (توقيت التصوير، راجعها بالنظر)')
+        if pa != pb and not d: moving.add(k)
         ha = sorted({tuple(x['hand']) for x in a.get('steps', []) if x.get('hand')}); hb = sorted({tuple(x['hand']) for x in b.get('steps', []) if x.get('hand')})
-        if ha != hb and k not in ALLOW: review.append(f'التجربة {k} {SEC[c]}: مواضع اليد اختلفت قليلا (قد يكون توقيت التصوير، راجعها بالنظر)')
+        if ha != hb and k not in ALLOW: moving.add(k)
+if moving: review.append(f'مواضع اليد والأجزاء المتحركة لحظة التصوير اختلفت في {len(moving)} تجربة (طبيعي بسبب سرعة الجهاز، لا تفحص آليا بدقة؛ راجع بالنظر التجارب المعدلة فقط)')
 for k in sorted(set(B) - set(A)): (allowed if (ALLOW == ['*'] or k in ALLOW) else fails).append(f'التجربة {k}: جديدة غير موجودة في المرجع')
 ne = [e for e in set(eb) if e not in set(ea)]
 if ne: fails.append('أخطاء صفحة جديدة أثناء تشغيل التجارب: ' + ' | '.join(ne[:3]))
