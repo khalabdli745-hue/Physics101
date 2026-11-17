@@ -13,9 +13,12 @@ def load(d):
 A, ea = load(REFD); B, eb = load(NEWD)
 SEC = {'lx51': '«شاهد»', 'lx52': '«نفذ»'}
 fails, allowed, review, oks = [], [], [], []
+D = lambda t: re.sub(r'[0-9٠-٩][0-9٠-٩.,]*', '#', t or '')
+U = lambda z: re.sub(r'url\("?#[^)"]*"?\)', 'url', z)  # أسماء التدرجات اللونية تولد تلقائيا في كل تشغيل
 def sig(S):
     return {'عدد الخطوات': S.get('n'), 'وصل إلى الخطوة': S.get('end'), 'توقف عند': S.get('stuck'),
-            'الخطوات (المشهد والأجهزة والنص)': [(x['k'], x['st'], x['cap']) for x in S.get('steps', [])],
+            'الخطوات ونصها': [(x['k'], D(x['cap'])) for x in S.get('steps', [])],
+            'أجهزة المشهد وأشكالها وألوانها ونصوصها (كل الخطوات)': sorted({U(z) for x in S.get('steps', []) for z in (x.get('u') or '').split('\n') if z}),
             'عدد مقاطع الصوت': S.get('narr'), 'ضغطات سجل القراءة': len(S.get('recs', [])), 'تسجيل فاشل': S.get('recs', []).count('FAIL'),
             'بنية جدول النتائج (العناوين والوحدات)': re.sub(r'[0-9٠-٩][0-9٠-٩.,]*', '#', S.get('results') or ''), 'خطأ': S.get('err')}
 if not A: fails.append('لم تنتج نتائج المرجع')
@@ -30,14 +33,11 @@ for k in sorted(A):
         if d:
             det = []
             for x in d:
-                if x.startswith('الخطوات'):
+                if x.startswith('أجهزة'):
+                    det.append(f'{x}: اختفى {[z for z in sa[x] if z not in sb[x]][:3]} وظهر {[z for z in sb[x] if z not in sa[x]][:3]}')
+                elif x.startswith('الخطوات'):
                     i = next((i for i, (p, q) in enumerate(zip(sa[x], sb[x])) if p != q), min(len(sa[x]), len(sb[x])))
                     det.append(f'{x}: يختلف من الخطوة {i + 1}')
-                    st_a, st_b = a.get('steps', []), b.get('steps', [])
-                    if i < len(st_a) and i < len(st_b):
-                        ua, ub = set(st_a[i].get('u', '').split('\n')), set(st_b[i].get('u', '').split('\n'))
-                        print(f'DIAG {k} {c} step {st_a[i]["k"]}/{st_b[i]["k"]} cap_eq={st_a[i]["cap"] == st_b[i]["cap"]} onlyRef={sorted(ua - ub)[:4]} onlyNew={sorted(ub - ua)[:4]}', file=sys.stderr)
-                    print(f'DIAG {k} {c} kseq ref={[z[0] for z in sa[x]]} new={[z[0] for z in sb[x]]}', file=sys.stderr)
                 else: det.append(f'{x}: {str(sa[x])[:60]} → {str(sb[x])[:60]}')
             tgt.append(f'التجربة {k} {SEC[c]}: ' + '؛ '.join(det))
         newsync = [x for x in b.get('sync', []) if x not in a.get('sync', [])]
