@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
 """يقارن تشغيل التجارب (المرجع مقابل الجديد) ويفشل عند أي تغيير في تجربة خارج scope.lessons، أو مخالفة تزامن جديدة.
-الاستعمال: python3 .guard/labcmp.py <مجلد المرجع> <مجلد الجديد> <scope.json> [ملف التقرير]"""
-import sys, json, glob, re
+الاستعمال: python3 .guard/labcmp.py <مجلد المرجع> <مجلد الجديد> <scope.json> [ملف التقرير]
+FAILKEYS=<ملف>: يكتب التجارب التي فشلت وسبب فشلها (لإعادة تشغيلها مرة واحدة).
+RETRIED=<ملف>: نتائج الإعادة محملة؛ التجربة التي اختلفت أولا ثم تطابقت تكتب في المراجعة ولا تفشل."""
+import sys, json, glob, re, os
 REFD, NEWD, SCOPE = sys.argv[1:4]; OUTMD = sys.argv[4] if len(sys.argv) > 4 else None
 ALLOW = json.load(open(SCOPE, encoding='utf8')).get('lessons', [])
 def load(d):
     r, e = {}, []
-    for f in glob.glob(f'{d}/**/labs_*.json', recursive=True):
+    for f in sorted(glob.glob(f'{d}/**/labs_*.json', recursive=True)):  # labs_zretry يأتي أخيرا فيحل محل التشغيل الأول
         try: j = json.load(open(f, encoding='utf8')); r.update(j['res']); e += j.get('errs', [])
         except Exception: pass
     return r, e
 A, ea = load(REFD); B, eb = load(NEWD)
 SEC = {'lx51': '«شاهد»', 'lx52': '«نفذ»'}
-fails, allowed, review, oks = [], [], [], []; moving = set()
+fails, allowed, review, oks = [], [], [], []; moving = set(); fk = {}
 D = lambda t: re.sub(r'[0-9٠-٩][0-9٠-٩.,]*', '#', t or '')
 U = lambda z: re.sub(r'url\("?#[^)"]*"?\)', 'url', z)  # أسماء التدرجات اللونية تولد تلقائيا في كل تشغيل
 def inv(S):
@@ -72,6 +74,16 @@ for k in sorted(A):
         if pa != pb and not d: moving.add(k)
         ha = sorted({tuple(x['hand']) for x in a.get('steps', []) if x.get('hand')}); hb = sorted({tuple(x['hand']) for x in b.get('steps', []) if x.get('hand')})
         if ha != hb and k not in ALLOW: moving.add(k)
+for x in fails:
+    m = re.match(r'التجربة (\d+-\d+)', x)
+    if m: fk.setdefault(m.group(1), []).append(x)
+if os.environ.get('FAILKEYS'): json.dump(fk, open(os.environ['FAILKEYS'], 'w', encoding='utf8'), ensure_ascii=False)
+if os.environ.get('RETRIED') and os.path.exists(os.environ['RETRIED']):
+    for k, msgs in json.load(open(os.environ['RETRIED'], encoding='utf8')).items():
+        if k not in fk:
+            review.append(f'التجربة {k}: اختلفت في التشغيل الأول ثم تطابقت عند الإعادة، راجعها بالنظر (الاختلاف الأول: {msgs[0][:160]})')
+        else:
+            fails.append(f'التجربة {k}: تكرر الاختلاف عند الإعادة، فهو تغيير حقيقي')
 if moving: review.append(f'مواضع اليد والأجزاء المتحركة لحظة التصوير اختلفت في {len(moving)} تجربة (طبيعي بسبب سرعة الجهاز، لا تفحص آليا بدقة؛ راجع بالنظر التجارب المعدلة فقط)')
 for k in sorted(set(B) - set(A)): (allowed if (ALLOW == ['*'] or k in ALLOW) else fails).append(f'التجربة {k}: جديدة غير موجودة في المرجع')
 ne = [e for e in set(eb) if e not in set(ea)]

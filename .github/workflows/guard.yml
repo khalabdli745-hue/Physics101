@@ -88,9 +88,10 @@ jobs:
     needs: [shape, labs]
     if: always()
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
       - uses: actions/download-artifact@v4
         with: { path: art }
       - name: المقارنة
@@ -102,7 +103,25 @@ jobs:
           for d in art/labs-new-*; do cp "$d"/*.json n/ 2>/dev/null || true; done
           rc=0
           python3 .guard/shapecmp.py r n .guard/scope.json "$GITHUB_STEP_SUMMARY" || rc=1
-          python3 .guard/labcmp.py r n .guard/scope.json "$GITHUB_STEP_SUMMARY" || rc=1
+          # التجارب: إذا اختلفت تجربة (4 تجارب فأقل) تعاد مرة واحدة للمرجع والجديد معا، ولا تفشل إلا إذا تكرر الاختلاف
+          if FAILKEYS=fk.json python3 .guard/labcmp.py r n .guard/scope.json > first.txt; then
+            cat first.txt; cat first.txt >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "== التشغيل الأول للتجارب =="; cat first.txt
+            KEYS=$(python3 -c "import json;k=list(json.load(open('fk.json')));print(','.join(k) if 0<len(k)<=4 else '')")
+            if [ -n "$KEYS" ]; then
+              echo "إعادة التجارب مرة واحدة: $KEYS"
+              pip install -q playwright==1.63.0
+              python3 -m playwright install --with-deps chromium > /dev/null
+              REF=$(.guard/ref.sh); git worktree add -q --detach /tmp/site "$REF"
+              SITE_ROOT=/tmp/site KEYS="$KEYS" python3 .guard/labs.py r/labs_zretry.json 0 1 & P1=$!
+              SITE_ROOT="$PWD" KEYS="$KEYS" python3 .guard/labs.py n/labs_zretry.json 0 1 & P2=$!
+              wait $P1; wait $P2
+              RETRIED=fk.json python3 .guard/labcmp.py r n .guard/scope.json "$GITHUB_STEP_SUMMARY" || rc=1
+            else
+              cat first.txt >> "$GITHUB_STEP_SUMMARY"; rc=1
+            fi
+          fi
           exit $rc
 
   guard:
