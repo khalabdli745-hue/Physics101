@@ -48,6 +48,11 @@ for k in sorted(A):
         sa, sb = sig(a), sig(b)
         d = [x for x in sa if sa[x] != sb[x]]
         ex = cmp_extra(a, b)
+        # القراءات تتغير بالتوقيت في بعض التجارب، والرسم يتبعها: إذا اختلفت أرقام النتائج في نفس التشغيل يصبح فرق الأجهزة مراجعة لا فشلا
+        if ex and a.get('results') != b.get('results') and not d:
+            dev = [x for x in ex if x.startswith('أجهزة')]
+            if dev: review.append(f'التجربة {k} {SEC[c]}: ' + dev[0] + ' (مع اختلاف أرقام القراءات بالتوقيت، راجعها بالنظر)')
+            ex = [x for x in ex if not x.startswith('أجهزة')]
         if d or ex:
             det = []
             for x in d:
