@@ -25,7 +25,8 @@ h1{font-size:20px;color:#3a63e0;margin:0 0 4px}.m{color:#5b6478;font-size:13px}
 <button id="gaOff" style="background:#fff;color:#B91C1C;border:2px solid #B91C1C;border-radius:10px;padding:6px 12px;font:700 15px system-ui">إيقاف والرجوع لحامد</button>
 <button id="gaGen" style="background:#1D4ED8;color:#fff;border:0;border-radius:10px;padding:8px 14px;font:700 15px system-ui">⚡ توليد كل المنصة بالتوازي</button>
 <button id="gaPause" style="background:#fff;color:#1D4ED8;border:2px solid #1D4ED8;border-radius:10px;padding:6px 12px;font:700 15px system-ui">⏸ إيقاف التوليد</button>
-<button id="gaRetry" style="background:#fff;color:#9A3412;border:2px solid #9A3412;border-radius:10px;padding:6px 12px;font:700 15px system-ui">↻ إعادة الفاشلة</button></div>
+<button id="gaRetry" style="background:#fff;color:#9A3412;border:2px solid #9A3412;border-radius:10px;padding:6px 12px;font:700 15px system-ui">↻ إعادة الفاشلة</button>
+<button id="gaClean" style="background:#fff;color:#15803D;border:2px solid #15803D;border-radius:10px;padding:6px 12px;font:700 15px system-ui">🧹 تنظيف القائمة والتوليد للجمل الحالية فقط</button></div>
 <div style="height:14px;background:#DBEAFE;border-radius:8px;overflow:hidden"><div id="gaBar" style="height:100%;width:0;background:#1D4ED8;transition:width .4s"></div></div>
 <div class="m" id="gaNote" style="margin-top:4px">أبق هذه الصفحة مفتوحة على اللابتوب وموصولا بالشاحن أثناء التوليد. المتدرب يسمع Gemini فور التفعيل، وأي جملة لم تجهز تتولد عند طلبها.</div></div>
 <div id="L"></div>
@@ -68,11 +69,15 @@ $('gaRetry').onclick=async()=>{const x=await call({a:'rqctl',op:'retry'});show(x
 async function worker(){W++;let last=null;while(running){const x=await call({a:'rqrun',n:8});if(!x.ok){last=x;await new Promise(r=>setTimeout(r,4000));if(x.error==='auth'||x.error==='demo_locked'){running=false;break}continue}
     show(x.stat);if(x.error){show(x.stat,err(x));running=false;break}if(x.stopped||x.stat.next>=x.stat.total)break}
   W--;if(!W){running=false;stat()}}
-$('gaGen').onclick=async()=>{if(running)return;$('gaGen').disabled=true;
-  try{const s0=await call({a:'tgall'});if(!s0.ok){alert(err(s0));return}
+$('gaGen').onclick=()=>gen(false);
+/*gqClean68: المدرب 18 نوفمبر: تنظيف الطابور من النسخ القديمة والمكرر، ووضع القائمة الحالية فقط؛ المولد سابقا يتخطى مجانا*/
+$('gaClean').onclick=()=>{if(running){alert('أوقف التوليد أولا (⏸) وانتظر حتى يختفي «يعمل بـ … خطوط»، ثم اضغط التنظيف.');return}
+  if(!confirm('تنظيف الطابور: يمسح القائمة القديمة والمكرر، ويضع جمل المنصة الحالية فقط، ثم يبدأ التوليد. المولد سابقا يتخطى مجانا. متابعة؟'))return;gen(true)};
+async function gen(clean){if(running)return;$('gaGen').disabled=true;$('gaClean').disabled=true;
+  try{const s0=await call({a:'tgall'});if(!s0.ok){alert(err(s0));return}if(clean)s0.stat.total=0;
     /*gq68: المدرب 17 نوفمبر: القائمة تضاف في كل مرة (الجديد فقط يدخل التوليد)، والبدء من جديد إذا كانت القائمة فارغة*/{const fresh=!s0.stat.total;$('gaSt').textContent='تحميل قائمة جمل المنصة…';const L=await fetch('gqall.json?v=11172210').then(r=>r.json());
       for(let i=0;i<L.length;i+=700){const x=await call({a:'rqadd',reset:(fresh&&i===0)?1:0,texts:L.slice(i,i+700)});if(!x.ok){alert(err(x));return}show(x.stat,'تحميل القائمة '+Math.min(L.length,i+700)+' من '+L.length)}}
     await call({a:'rqctl',op:'go'});running=true;for(let k=0;k<5;k++){worker();await new Promise(r=>setTimeout(r,1500))}}
-  finally{$('gaGen').disabled=false}};
+  finally{$('gaGen').disabled=false;$('gaClean').disabled=false}}
 if(TOK&&API)stat();else $('gaSt').textContent='ادخل لوحة المدرب في هذا المتصفح أولا، ثم ارجع لهذه الصفحة.';
 setInterval(()=>{if(!running&&TOK&&API)stat()},30000)})();</script></body></html>
