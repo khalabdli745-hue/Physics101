@@ -70,8 +70,8 @@ async function worker(){W++;let last=null;while(running){const x=await call({a:'
   W--;if(!W){running=false;stat()}}
 $('gaGen').onclick=async()=>{if(running)return;$('gaGen').disabled=true;
   try{const s0=await call({a:'tgall'});if(!s0.ok){alert(err(s0));return}
-    if(!s0.stat.total){$('gaSt').textContent='تحميل قائمة جمل المنصة…';const L=await fetch('gqall.json?v=11150720').then(r=>r.json());
-      for(let i=0;i<L.length;i+=700){const x=await call({a:'rqadd',reset:i===0?1:0,texts:L.slice(i,i+700)});if(!x.ok){alert(err(x));return}show(x.stat,'تحميل القائمة '+Math.min(L.length,i+700)+' من '+L.length)}}
+    /*gq68: المدرب 17 نوفمبر: القائمة تضاف في كل مرة (الجديد فقط يدخل التوليد)، والبدء من جديد إذا كانت القائمة فارغة*/{const fresh=!s0.stat.total;$('gaSt').textContent='تحميل قائمة جمل المنصة…';const L=await fetch('gqall.json?v=11172210').then(r=>r.json());
+      for(let i=0;i<L.length;i+=700){const x=await call({a:'rqadd',reset:(fresh&&i===0)?1:0,texts:L.slice(i,i+700)});if(!x.ok){alert(err(x));return}show(x.stat,'تحميل القائمة '+Math.min(L.length,i+700)+' من '+L.length)}}
     await call({a:'rqctl',op:'go'});running=true;for(let k=0;k<5;k++){worker();await new Promise(r=>setTimeout(r,1500))}}
   finally{$('gaGen').disabled=false}};
 if(TOK&&API)stat();else $('gaSt').textContent='ادخل لوحة المدرب في هذا المتصفح أولا، ثم ارجع لهذه الصفحة.';
