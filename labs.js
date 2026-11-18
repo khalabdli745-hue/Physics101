@@ -6850,9 +6850,9 @@ function DX(cfg){return function(){
       const a=Object.assign({},s);delete a.rec;a.c=String(s.c).replace(/<br>\s*👀[\s\S]*$/,'');o.push(a);
       /* المدرب 6 نوفمبر: خطوة «تسجيل القراءة» لها صوت في التجارب المصوتة */o.push({st:s.st,rc:1,rec:s.rec,...(s.sp?{sp:'الْآنَ نَضْغَطُ زِرَّ التَّسْجِيلِ، فَتُضَافُ الْقِرَاءَةُ إِلَى نَتَائِجِ الْقِيَاسْ.',sx:'الْآنَ اضْغَطْ زِرَّ التَّسْجِيلِ، فَتُضَافُ الْقِرَاءَةُ إِلَى نَتَائِجِ الْقِيَاسْ.'}:{}),c:'<b>الخطوة 0: تسجيل القراءة.</b> '+(W?'نضغط «سجل القراءة» لتسجيل '+s.rec.name+' في سجل القراءات.':'اضغط «سجل القراءة» لتسجيل '+s.rec.name+' في سجل القراءات.')})});
       let n=0;return o.map(s=>Object.assign({},s,{c:String(s.c).replace(/الخطوة\s*\d+/,()=>'الخطوة '+(++n))}))})();let cur=null;
-    const stageOf=s=>{if(!s||!s.st)return null;const e=typeof s.st==='function'?s.st():q(s.st);return e?(e.closest('.stage')||e):null};
+    const stageOf=s=>{if(!s||!s.st)return null;const e=typeof s.st==='function'?s.st():q(s.st);if(!e)return null;const g=e.closest('.stage');if(g)return g;/* snapEnd69: بطاقة مخفية (القسم القديم) لا تعرض في المشغل؛ يبقى المشهد الحالي */if(e.closest('.lxWold'))return null;return e};
     function show(s){const st=stageOf(s);if(!st)return;if(cur&&cur!==st&&cur.parentElement===E('dmS'))dxRelease(cur);cur=st;dxTake(st,E('dmS'));E('dmS').querySelector('.dxEmpty')?.remove()}
-    function restore(){if(cur&&cur.parentElement===E('dmS'))dxRelease(cur);cur=null}
+    function restore(){if(cur&&cur.parentElement===E('dmS')){/* snapEnd69: المدرب 18 نوفمبر: عند إرجاع المشهد يبقى مكانه صورة ثابتة له، فلا يصير المشغل فارغا ولا تتحرك أزراره */try{E('dmS').querySelectorAll(':scope>.dxSnap').forEach(e=>e.remove());E('dmS').appendChild(dxSnapOf(cur))}catch(e){}dxRelease(cur)}cur=null}
     const fire=r=>{r.dispatchEvent(new Event('input',{bubbles:true}));r.dispatchEvent(new Event('change',{bubbles:true}))};
     const hudT=()=>{const h=cur&&cur.querySelector('.hud');return h?h.textContent.trim():''};
     const hitOf=(r,t)=>{if(typeof t==='number')return t;if(t==='max')return +(r.max||100);const v0=r.value,mn=+(r.min||0),mx=+(r.max||100),sp=+(r.step||1)||1;let hit=null;
