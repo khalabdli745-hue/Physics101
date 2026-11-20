@@ -75,7 +75,7 @@ $('gaClean').onclick=()=>{if(running){alert('أوقف التوليد أولا (�
   if(!confirm('تنظيف الطابور: يمسح القائمة القديمة والمكرر، ويضع جمل المنصة الحالية فقط، ثم يبدأ التوليد. المولد سابقا يتخطى مجانا. متابعة؟'))return;gen(true)};
 async function gen(clean){if(running)return;$('gaGen').disabled=true;$('gaClean').disabled=true;
   try{const s0=await call({a:'tgall'});if(!s0.ok){alert(err(s0));return}if(clean)s0.stat.total=0;
-    /*gq68: المدرب 17 نوفمبر: القائمة تضاف في كل مرة (الجديد فقط يدخل التوليد)، والبدء من جديد إذا كانت القائمة فارغة*/{const fresh=!s0.stat.total;$('gaSt').textContent='تحميل قائمة جمل المنصة…';const L=await fetch('gqall.json?v=11172210').then(r=>r.json());
+    /*gq68: المدرب 17 نوفمبر: القائمة تضاف في كل مرة (الجديد فقط يدخل التوليد)، والبدء من جديد إذا كانت القائمة فارغة*/{const fresh=!s0.stat.total;$('gaSt').textContent='تحميل قائمة جمل المنصة…';const L=await fetch('gqall.json?v=11192300').then(r=>r.json());
       for(let i=0;i<L.length;i+=700){const x=await call({a:'rqadd',reset:(fresh&&i===0)?1:0,texts:L.slice(i,i+700)});if(!x.ok){alert(err(x));return}show(x.stat,'تحميل القائمة '+Math.min(L.length,i+700)+' من '+L.length)}}
     await call({a:'rqctl',op:'go'});running=true;for(let k=0;k<5;k++){worker();await new Promise(r=>setTimeout(r,1500))}}
   finally{$('gaGen').disabled=false;$('gaClean').disabled=false}}
