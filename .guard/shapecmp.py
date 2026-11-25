@@ -7,6 +7,7 @@ REFD, NEWD, SCOPE = sys.argv[1], sys.argv[2], sys.argv[3]
 OUTMD = sys.argv[4] if len(sys.argv) > 4 else None
 scope = json.load(open(SCOPE, encoding='utf8'))
 ALLOW = scope.get('lessons', [])
+HIDE_OK = scope.get('hidden_ok', [])  # دروس أخفيت عمدا بموافقة المدرب: غيابها من النسخة الجديدة ليس خطأ
 
 def load(d, m):
     r, errs = {}, []
@@ -30,6 +31,8 @@ for m in ('lap', 'mob'):
         fails.append(f'{name[m]}: لم تنتج بصمات المرجع'); continue
     for k in sorted(A):
         if k not in B:
+            if k in HIDE_OK:
+                allowed_changes.append(f'{name[m]} {k}: مخفي عمدا (hidden_ok)'); continue
             fails.append(f'{name[m]} {k}: لم يفحص في النسخة الجديدة'); continue
         a, b = norm(A[k]), norm(B[k])
         if a != b:

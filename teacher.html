@@ -396,7 +396,7 @@ const API=(window.P101_API||'').trim();
 const UNITS=window.UNITS||[];
 const ORD=['الأولى','الثانية','الثالثة','الرابعة','الخامسة'];
 const LESSONS=[];UNITS.forEach((u,ui)=>u.l.forEach((l,li)=>{if(!l.hide)LESSONS.push({k:ui+'-'+li,u:ui,raw:l.t,t:l.pre?l.pre+'، و'+l.t:l.t})}));
-const LT=Object.fromEntries(LESSONS.map(x=>[x.k,x.t]));
+const LT=Object.fromEntries(LESSONS.map(x=>[x.k,x.t]));const HIDK=new Set();UNITS.forEach((u,ui)=>u.l.forEach((l,li)=>{if(l.hide&&/ورقة عمل|مراجعة وتمارين/.test(l.t))HIDK.add(ui+'-'+li)}));const HKK=k=>{const m=String(k==null?'':k).match(/^(\d+-\d+)(?:[.:]|$)/);return!!(m&&HIDK.has(m[1]))};function HREC(v,d){if(d>7||v==null||typeof v!=='object')return v;if(Array.isArray(v)){for(let i=v.length-1;i>=0;i--){const x=v[i];if((typeof x==='string'&&HKK(x))||(x&&typeof x==='object'&&!Array.isArray(x)&&(HKK(x.lessonKey)||HKK(x.lk)||(typeof x.k==='string'&&HKK(x.k)))))v.splice(i,1);else HREC(x,d+1)}return v}for(const k of Object.keys(v)){if(/^\d+-\d+([.:]\d+)?$/.test(k)&&HKK(k))delete v[k];else HREC(v[k],d+1)}return v}
 const TOTAL=LESSONS.length;
 const NONLES=/^مقدمة الوحدة|ورقة عمل|مراجعة وتمارين/,TEACH=LESSONS.filter(l=>!NONLES.test(l.raw||l.t)),TEACH_N=TEACH.length,N_INTRO=LESSONS.filter(l=>/^مقدمة الوحدة/.test(l.raw||l.t)).length,N_WS=LESSONS.filter(l=>/ورقة عمل/.test(l.t)).length,N_REV=LESSONS.filter(l=>/مراجعة وتمارين/.test(l.t)).length;
 const LES_NOTE=()=>(N_INTRO?AR(N_INTRO)+' مقدمات · ':'')+AR(N_WS)+' أوراق عمل محلولة · '+AR(N_REV)+' مراجعات';
@@ -411,7 +411,7 @@ const errText=e=>ERR[e]||('حدث خطأ: '+e);
 function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2600)}
 /* عند ضغط الخادم وقت الاختبار: يعاد الطلب تلقائيا حتى 3 مرات قبل إظهار الخطأ */
 async function apiR(o,n=3){for(let i=0;;i++){try{const r=await api(o);if(r&&(r.ok||r.error==='auth'||i>=n-1))return r}catch(e){if(i>=n-1)throw e}await new Promise(z=>setTimeout(z,1500*(i+1)))}}
-async function api(o){const r=await fetch(API,{method:'POST',body:JSON.stringify(o),redirect:'follow'});const j=await r.json();if(j.error==='auth'&&o.token){ls.del('p101-tauth');TOKEN=null;toast(ERR.auth);boot()}return j}
+async function api(o){const r=await fetch(API,{method:'POST',body:JSON.stringify(o),redirect:'follow'});const j=await r.json();/*hideRec74: إخفاء سجلات أوراق العمل ومراجعة الوحدات المخفية من عرض لوحة المدرب (للعرض فقط، لا يحذف من الخادم)*/try{if(/^(tstudents|tstudent|tstats|tratings|tresults|tweek)$/.test(o.a))HREC(j,0)}catch(e){}if(j.error==='auth'&&o.token){ls.del('p101-tauth');TOKEN=null;toast(ERR.auth);boot()}return j}
 const xd=d=>{if(!d)return '';const x=new Date(d),z=n=>String(n).padStart(2,'0');return `${x.getFullYear()}-${z(x.getMonth()+1)}-${z(x.getDate())} ${z(x.getHours())}:${z(x.getMinutes())}`};
 const fmtTime=s=>{s=+s||0;const h=Math.floor(s/3600),m=Math.round(s%3600/60);return h?`${h} س ${m} د`:`${m} د`};
 const fmtDate=d=>{if(!d)return '—';const x=new Date(d);return x.toLocaleDateString('ar-SA-u-ca-gregory',{day:'numeric',month:'short'})+' '+x.toLocaleTimeString('ar-SA',{hour:'2-digit',minute:'2-digit'})};
@@ -941,8 +941,8 @@ async function drawDur(){
   const uo=`<option value="all">☑ كل الوحدات</option>`+U.map(o=>`<option value="${o.ui}" ${DURU===String(o.ui)?'selected':''}>${esc('الوحدة '+(ORD[o.ui]||o.ui+1)+': '+o.t)}</option>`).join('');
   const lo=UU?`<option value="all">☑ كل دروس الوحدة</option>`+UU.ls.map(l=>`<option value="${l.k}" ${DURL===l.k?'selected':''}>${esc((isWs(l)||isRev(l)?typ(l)+': ':'')+l.t)}</option>`).join(''):'<option value="all">☑ كل الدروس</option>';
   let head,body;
-  if(!UU){head='<th>الوحدة</th><th>الدروس</th><th>أوراق العمل</th><th>المراجعة</th><th>المجموع</th>';
-    body=U.map(o=>`<tr><td class="ln"><a class="durU" data-u="${o.ui}">${esc('الوحدة '+(ORD[o.ui]||o.ui+1)+': '+o.t)}</a><small style="display:block;color:var(--muted)">${o.nl} دروس${o.nm?' · '+o.nm+' لم تحسب':''}</small></td><td><b>${hmz(o.les)}</b></td><td>${hmz(o.ws)}</td><td>${hmz(o.rev)}</td><td><b>${hmz(o.all)}</b></td></tr>`).join('')+`<tr class="lsTot"><td class="ln"><b>المجموع</b></td><td><b>${hmz(tot)}</b></td><td><b>${hmz(U.reduce((a,o)=>a+o.ws,0))}</b></td><td><b>${hmz(U.reduce((a,o)=>a+o.rev,0))}</b></td><td><b>${hmz(tot+tot2)}</b></td></tr>`}
+  /*durWS74: بلا عمودي أوراق العمل والمراجعة عند إخفائها*/const WSV=LESSONS.some(l=>NONLES.test(l.raw||l.t));if(!UU){head='<th>الوحدة</th><th>الدروس</th>'+(WSV?'<th>أوراق العمل</th><th>المراجعة</th>':'')+'<th>المجموع</th>';
+    body=U.map(o=>`<tr><td class="ln"><a class="durU" data-u="${o.ui}">${esc('الوحدة '+(ORD[o.ui]||o.ui+1)+': '+o.t)}</a><small style="display:block;color:var(--muted)">${o.nl} دروس${o.nm?' · '+o.nm+' لم تحسب':''}</small></td><td><b>${hmz(o.les)}</b></td>${WSV?`<td>${hmz(o.ws)}</td><td>${hmz(o.rev)}</td>`:''}<td><b>${hmz(o.all)}</b></td></tr>`).join('')+`<tr class="lsTot"><td class="ln"><b>المجموع</b></td><td><b>${hmz(tot)}</b></td>${WSV?`<td><b>${hmz(U.reduce((a,o)=>a+o.ws,0))}</b></td><td><b>${hmz(U.reduce((a,o)=>a+o.rev,0))}</b></td>`:''}<td><b>${hmz(tot+tot2)}</b></td></tr>`}
   else{head='<th>الدرس</th><th>النوع</th><th>مدة الشرح</th><th>آخر حساب</th>';const L=DURL==='all'?UU.ls:UU.ls.filter(l=>l.k===DURL);
     body=L.map(l=>`<tr><td class="ln">${esc(l.t)}</td><td>${typ(l)}</td><td><b>${fm(secOf(l.k))}</b></td><td>${dt(l.k)||'—'}</td></tr>`).join('')+(DURL==='all'?`<tr class="lsTot"><td class="ln"><b>مجموع الوحدة ${ORD[UU.ui]||UU.ui+1}</b></td><td></td><td><b>${hmz(UU.all)}</b></td><td></td></tr>`:'')}
   m.innerHTML=`<div class="card"><h2>⏱ مدة شرح الدروس على السبورة</h2>
